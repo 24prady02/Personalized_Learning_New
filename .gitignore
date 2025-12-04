@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Data
+data/
+!data/.gitkeep
+
+# Models
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# Cache
+*.cache
+.cache/
+cse_kg_cache/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# MongoDB
+mongodb_data/
+
+# API Keys and Sensitive Config
+config.yaml
+.env
+*.key
+*_key.txt
+
+# Output files (optional - uncomment if you don't want to commit outputs)
+# output/
+# *.png
+# *.json
+
+# Temporary files
+temp_*
+*.tmp
+*.bak

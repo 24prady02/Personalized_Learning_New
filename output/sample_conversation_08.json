@@ -1,0 +1,1943 @@
+{
+  "student_id": "student_sample_08",
+  "timestamp": "2025-12-03T18:09:36.997612",
+  "turns": [
+    {
+      "turn_number": 1,
+      "student_input": {
+        "question": "I'm trying to remove even numbers but getting an error. What's wrong?",
+        "code": "numbers = [1, 2, 3, 4, 5]\nfor i in range(len(numbers)):\n    if numbers[i] % 2 == 0:\n        numbers.remove(numbers[i])\nprint(numbers)",
+        "error_message": "IndexError: list index out of range",
+        "action_sequence": [
+          "code_edit",
+          "run_test",
+          "run_test",
+          "code_edit"
+        ],
+        "time_deltas": [
+          12.0,
+          2.0,
+          3.0,
+          20.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 37.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 0.0449, -0.0879, -0.0985, -0.1096,  0.0085, -0.1172,  0.0131,  0.0289,\n          0.0886, -0.0390, -0.0116, -0.0017,  0.0586,  0.1337, -0.0312, -0.0157,\n         -0.0228,  0.0162, -0.0896,  0.0164,  0.0416, -0.0241, -0.0654, -0.0363,\n         -0.0328, -0.0821,  0.0917, -0.0343, -0.0269,  0.1347,  0.0873,  0.0486,\n          0.1114,  0.0527,  0.1272,  0.0427, -0.0402,  0.0002,  0.0691,  0.0017,\n         -0.0965,  0.0326,  0.0246,  0.0123,  0.0543,  0.0549,  0.0452,  0.0578,\n         -0.0050,  0.0622, -0.0266, -0.0293, -0.0558, -0.0615, -0.0508, -0.0474,\n          0.0907,  0.0371, -0.0662,  0.0336, -0.0058, -0.0176, -0.0671, -0.0490,\n          0.0548,  0.0390,  0.0564, -0.0620, -0.1472,  0.1385,  0.0473,  0.0087,\n         -0.0624,  0.0346,  0.0160,  0.0427, -0.0842, -0.0105, -0.0264, -0.1225,\n         -0.0448, -0.0265,  0.0413,  0.0805, -0.0375, -0.0154, -0.0247,  0.0061,\n         -0.1512, -0.0204,  0.0202,  0.0363, -0.0318, -0.0078,  0.0373,  0.0161,\n         -0.1130, -0.0034,  0.0694,  0.0268, -0.0701, -0.0357, -0.0354,  0.0514,\n         -0.0092,  0.0225, -0.0810,  0.0483, -0.0694,  0.0390,  0.0114, -0.0280,\n         -0.0025, -0.0310, -0.0626, -0.0077, -0.0061,  0.0382, -0.0231,  0.0096,\n         -0.0655, -0.0787, -0.0717, -0.0187,  0.0977,  0.0292, -0.0143, -0.0747,\n         -0.1007, -0.0317, -0.0423,  0.0293,  0.0441,  0.0584,  0.0936,  0.0780,\n          0.0199,  0.0390, -0.0442, -0.0086, -0.0969, -0.0702, -0.1405,  0.0083,\n          0.0391,  0.0278,  0.0006, -0.0020, -0.0041, -0.0167, -0.0470,  0.0728,\n          0.0295, -0.0362, -0.1127, -0.0326, -0.0195, -0.0016,  0.0994, -0.0800,\n          0.0611, -0.0948,  0.0090,  0.0040,  0.0254,  0.1433,  0.0057, -0.0255,\n         -0.0004,  0.0456, -0.1068, -0.0168,  0.0462,  0.0773,  0.0949,  0.0376,\n          0.0612,  0.0302, -0.0398,  0.1297, -0.0441,  0.0386,  0.0007,  0.0783,\n         -0.0348,  0.0487, -0.0507,  0.0314,  0.0510,  0.0795, -0.1190, -0.0780,\n         -0.0650, -0.0095, -0.0201, -0.0337,  0.0053, -0.0110,  0.0553, -0.1615,\n         -0.1148,  0.0714,  0.0894, -0.0293, -0.0602, -0.0075, -0.0523, -0.0063,\n         -0.0658,  0.0683, -0.0397,  0.0711, -0.0530, -0.0106,  0.0176, -0.0044,\n         -0.0711,  0.0475, -0.0721, -0.0355,  0.0601, -0.1514,  0.0667, -0.0511,\n          0.0860, -0.0153, -0.0217, -0.1381,  0.0665,  0.0810, -0.0103,  0.1090,\n          0.0874, -0.0358,  0.1346,  0.0663, -0.0346, -0.0702,  0.0578, -0.0220,\n          0.0033,  0.0333,  0.1105,  0.0101,  0.1397, -0.0394, -0.0084, -0.0225,\n         -0.0450, -0.0239, -0.0413, -0.0623, -0.0262,  0.1517, -0.0226,  0.0460]])",
+          "kappa": 100.66664123535156,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.326424777507782,
+                  0.3283774256706238,
+                  0.34519776701927185
+                ],
+                [
+                  0.3345634341239929,
+                  0.3304532766342163,
+                  0.33498331904411316
+                ],
+                [
+                  0.3270977735519409,
+                  0.3335520327091217,
+                  0.3393501937389374
+                ]
+              ],
+              [
+                [
+                  0.33750391006469727,
+                  0.33559650182724,
+                  0.32689955830574036
+                ],
+                [
+                  0.33527833223342896,
+                  0.3403759002685547,
+                  0.32434582710266113
+                ],
+                [
+                  0.3223080337047577,
+                  0.325696736574173,
+                  0.3519952595233917
+                ]
+              ],
+              [
+                [
+                  0.33194124698638916,
+                  0.3353998363018036,
+                  0.33265891671180725
+                ],
+                [
+                  0.3345303237438202,
+                  0.32965609431266785,
+                  0.3358135223388672
+                ],
+                [
+                  0.336103230714798,
+                  0.32537201046943665,
+                  0.3385247588157654
+                ]
+              ],
+              [
+                [
+                  0.3365120589733124,
+                  0.3264620900154114,
+                  0.33702588081359863
+                ],
+                [
+                  0.33280396461486816,
+                  0.3315064013004303,
+                  0.3356895446777344
+                ],
+                [
+                  0.34273484349250793,
+                  0.3303705155849457,
+                  0.3268946409225464
+                ]
+              ],
+              [
+                [
+                  0.33383485674858093,
+                  0.32005584239959717,
+                  0.3461093604564667
+                ],
+                [
+                  0.3374263644218445,
+                  0.3283664584159851,
+                  0.33420711755752563
+                ],
+                [
+                  0.31977391242980957,
+                  0.3324725031852722,
+                  0.3477535545825958
+                ]
+              ],
+              [
+                [
+                  0.32122305035591125,
+                  0.3368423283100128,
+                  0.3419346511363983
+                ],
+                [
+                  0.32907581329345703,
+                  0.3329642415046692,
+                  0.337959885597229
+                ],
+                [
+                  0.32600313425064087,
+                  0.3402327299118042,
+                  0.3337641656398773
+                ]
+              ],
+              [
+                [
+                  0.33741849660873413,
+                  0.33538317680358887,
+                  0.3271982669830322
+                ],
+                [
+                  0.33174994587898254,
+                  0.3358173668384552,
+                  0.33243268728256226
+                ],
+                [
+                  0.3224102854728699,
+                  0.3228227198123932,
+                  0.3547670245170593
+                ]
+              ],
+              [
+                [
+                  0.3372393548488617,
+                  0.3312450349330902,
+                  0.3315155506134033
+                ],
+                [
+                  0.33454829454421997,
+                  0.33199989795684814,
+                  0.3334518074989319
+                ],
+                [
+                  0.32772672176361084,
+                  0.33540698885917664,
+                  0.3368662893772125
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.526897132396698,
+            "all_probs": {
+              "missing_base_case": 0.4749222695827484,
+              "incorrect_base_case": 0.5256224274635315,
+              "wrong_recursive_call": 0.48669981956481934,
+              "missing_condition": 0.4886111915111542,
+              "other": 0.5110194683074951
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 12.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I'm trying to remove even numbers but getting an error. What's wrong?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 1,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": "active",
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "confused",
+          "mental_activity": "confused",
+          "behavioral_response": "try_again",
+          "confidence": 1.0,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in confused state, likely to try_again",
+            "predicted_behavior": "try_again",
+            "cognitive_chain_used": "chain_confused_to_try_again",
+            "chain_confidence": 1.0,
+            "chain_frequency": 0.001,
+            "mental_activity": "confused",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 0.5,
+            "persistence": 0.12333333333333334,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.5,
+            "conscientiousness": 0.45699999999999996,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "verbal",
+            "sensing_intuitive": "sensing",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.38280000000000003,
+            "elaboration": 0.25,
+            "organization": 0.31989999999999996,
+            "metacognition": 0.37849999999999995
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "arrays",
+          "concept_info": {
+            "uri": "cskg:arrays",
+            "labels": [
+              "Arrays"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/loops",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/indexing",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/lists",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/dictionaries",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/tuples",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/strings",
+              "relation": "isPrerequisiteOf"
+            }
+          ],
+          "definition": "Arrays is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": {
+            "id": "mc_off_by_one",
+            "concept": "arrays",
+            "description": "Off-by-one errors in array access",
+            "severity": "high",
+            "frequency": 0.8,
+            "confidence": 0.85
+          },
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_08",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_arrays_indexerror",
+            "concept": "arrays",
+            "description": "Common arrays misconception - IndexError",
+            "error_type": "IndexError",
+            "severity": "high",
+            "frequency": 0.30000000000000016,
+            "common_indicators": [
+              "IndexError"
+            ],
+            "correction_strategy": "Practice with boundary cases. Show how to check array bounds before accessing.",
+            "learned_from": {
+              "error_message": "IndexError: list index out of range",
+              "code_snippet": "numbers = [1, 2, 3, 4, 5]\nfor i in range(len(numbers)):\n    if numbers[i] % 2 == 0:\n        numbers.",
+              "question": "I'm trying to remove even numbers but getting an error. What's wrong?",
+              "turn_context": "Student encountered IndexError while working on arrays"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499808, Requested 681. Please try again in 1m24.499199999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.1,
+            "logic_errors": 0.5,
+            "total_errors": 0.6,
+            "correctness_score": 0.66,
+            "code_quality": "good",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 43.0,
+            "turn_duration_minutes": 0.7166666666666667,
+            "time_stuck_seconds": 37.0,
+            "time_stuck_minutes": 0.6166666666666667,
+            "average_action_duration": 4.3,
+            "total_actions": 4,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 2,
+      "student_input": {
+        "question": "I created a new list instead. Is this better?",
+        "code": "numbers = [1, 2, 3, 4, 5]\nresult = []\nfor num in numbers:\n    if num % 2 != 0:\n        result.append(num)\nprint(result)",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          20.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 9.4781e-02, -5.5765e-02, -1.0070e-01, -1.3253e-01,  5.3598e-02,\n         -1.0430e-01,  8.6435e-03,  1.0149e-04,  8.9804e-02, -5.5940e-02,\n         -5.4122e-02, -2.8472e-02, -8.4601e-04,  8.9126e-02, -8.8292e-03,\n         -5.6856e-02, -7.9629e-02, -6.6867e-02, -7.5415e-02,  8.2006e-02,\n          1.9780e-02, -3.7418e-02, -1.0585e-01, -4.9145e-02, -5.5367e-03,\n         -6.4840e-02,  1.3806e-01, -7.6555e-02, -3.2890e-02,  1.1320e-01,\n          1.1392e-01,  3.9858e-02,  1.0909e-01,  7.1761e-02,  1.4107e-01,\n          3.1142e-02,  2.5385e-02, -1.2237e-02,  5.1247e-02,  1.4431e-02,\n         -8.3432e-02,  4.0696e-02, -1.4750e-02,  9.7661e-03,  1.3545e-02,\n          4.5056e-02,  1.6542e-02,  5.9935e-02, -3.0344e-02,  2.0401e-02,\n         -6.4752e-05, -3.8961e-02, -1.6787e-02, -6.7683e-02, -1.3918e-02,\n         -8.8087e-02,  6.1163e-02,  1.9842e-02, -4.7120e-02,  2.4318e-02,\n          1.3453e-02, -9.1991e-03, -4.8835e-02, -3.6049e-02,  2.5013e-02,\n          4.1764e-02,  5.4103e-02, -7.7223e-02, -1.5771e-01,  1.0466e-01,\n          4.7930e-02, -4.4506e-02, -6.8661e-02,  5.2094e-02, -1.4727e-02,\n          2.3906e-02, -4.3318e-02, -1.5920e-02, -1.6855e-02, -6.3317e-02,\n         -4.3707e-03, -4.3854e-02,  4.0779e-02,  1.0290e-01, -6.3697e-02,\n          2.9798e-02, -5.3102e-02,  2.7895e-02, -1.7105e-01, -4.5276e-02,\n          2.7161e-02,  6.0148e-02, -4.8756e-02, -3.2894e-03,  1.8653e-02,\n          2.2515e-02, -9.3657e-02, -7.6911e-03,  4.6593e-02, -2.0736e-02,\n         -5.9688e-02, -5.3070e-03, -1.9980e-02,  7.0317e-02,  2.6851e-02,\n         -3.0467e-02, -6.8519e-02,  4.9080e-02, -3.4129e-02,  3.9405e-02,\n          2.6784e-02, -3.0836e-02,  1.0333e-02, -2.0814e-02, -1.0958e-01,\n         -2.5325e-03, -2.5402e-02,  4.2102e-02, -1.0336e-02,  1.7420e-02,\n         -1.0301e-01, -9.6628e-02, -1.0875e-01,  1.5587e-02,  1.1745e-01,\n          6.2043e-02, -4.2538e-03, -9.0533e-02, -9.5532e-02, -3.9607e-02,\n         -6.9308e-02, -1.3785e-02,  3.3025e-02,  4.6045e-02,  5.8412e-02,\n          6.6310e-02,  4.3781e-02,  3.4013e-02, -3.7572e-02,  2.7853e-02,\n         -1.1201e-01, -1.9359e-02, -1.3631e-01,  5.0597e-02, -1.8685e-02,\n         -1.1021e-02,  2.0688e-03, -9.8191e-02, -2.7197e-02, -7.9696e-03,\n         -4.0285e-02,  1.2396e-01,  1.6996e-02, -2.8690e-02, -1.5469e-01,\n         -1.9888e-02, -2.8610e-02, -5.6518e-03,  6.3681e-02, -7.4382e-02,\n          4.2048e-02, -7.3842e-02, -3.2266e-02, -3.5625e-03,  4.2039e-02,\n          1.1055e-01,  2.9752e-02, -2.9741e-02, -2.5309e-02,  4.9532e-02,\n         -1.2943e-01,  4.1583e-02,  2.7172e-02,  7.7041e-02,  6.2623e-02,\n          4.9329e-03,  4.1073e-02,  3.4773e-02,  2.2663e-02,  1.1464e-01,\n         -4.4600e-02,  1.0428e-02,  8.6449e-04,  9.7027e-02, -1.8204e-02,\n          2.3213e-02, -4.4231e-02,  5.2441e-02,  5.5304e-02,  8.3640e-02,\n         -1.1788e-01, -3.8642e-02, -7.0723e-02,  2.6009e-04, -3.5804e-03,\n         -2.2696e-02,  2.2520e-02, -1.2871e-02, -3.5607e-02, -1.4472e-01,\n         -7.1964e-02,  7.9841e-02,  1.0647e-01, -5.0588e-02, -3.5620e-02,\n         -5.4841e-04, -9.3556e-02, -2.1504e-02, -6.6032e-02,  8.5726e-02,\n         -3.5520e-02,  7.2794e-02, -8.7371e-02,  1.1819e-02,  1.9792e-02,\n          4.8705e-02, -9.8470e-02,  3.2113e-02, -2.4584e-02, -6.1734e-02,\n          5.6351e-02, -1.4575e-01,  5.3844e-02, -5.1292e-02,  8.4475e-02,\n         -3.3919e-02, -6.6078e-02, -1.0215e-01,  1.1157e-02,  2.5591e-02,\n          5.8745e-03,  6.6853e-02,  5.9951e-02, -5.5899e-03,  1.3704e-01,\n          2.0851e-02, -3.5302e-02, -5.2042e-02,  5.4316e-02, -5.6408e-02,\n          3.4000e-02, -3.4410e-02,  8.6346e-02,  2.5923e-02,  1.3241e-01,\n         -4.8779e-02,  1.6909e-02,  1.4750e-02, -4.9848e-02, -2.3772e-02,\n         -5.5558e-02, -3.7942e-02, -2.1163e-02,  1.3887e-01, -5.8282e-02,\n          1.1949e-02]])",
+          "kappa": 100.64456939697266,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.3265574276447296,
+                  0.3279263973236084,
+                  0.345516175031662
+                ],
+                [
+                  0.3373095393180847,
+                  0.32918527722358704,
+                  0.333505243062973
+                ],
+                [
+                  0.3333006501197815,
+                  0.3326738774776459,
+                  0.334025502204895
+                ]
+              ],
+              [
+                [
+                  0.3369755446910858,
+                  0.33722636103630066,
+                  0.3257981240749359
+                ],
+                [
+                  0.3369784653186798,
+                  0.34253978729248047,
+                  0.3204817771911621
+                ],
+                [
+                  0.32194194197654724,
+                  0.32947349548339844,
+                  0.3485846221446991
+                ]
+              ],
+              [
+                [
+                  0.3317827582359314,
+                  0.3362324833869934,
+                  0.3319847881793976
+                ],
+                [
+                  0.33535224199295044,
+                  0.3308175802230835,
+                  0.3338302671909332
+                ],
+                [
+                  0.3356776833534241,
+                  0.32834726572036743,
+                  0.3359750807285309
+                ]
+              ],
+              [
+                [
+                  0.3369777202606201,
+                  0.3265465199947357,
+                  0.33647575974464417
+                ],
+                [
+                  0.32905471324920654,
+                  0.3338068425655365,
+                  0.33713841438293457
+                ],
+                [
+                  0.34352660179138184,
+                  0.32839086651802063,
+                  0.32808247208595276
+                ]
+              ],
+              [
+                [
+                  0.33385923504829407,
+                  0.3207695186138153,
+                  0.345371276140213
+                ],
+                [
+                  0.3384527266025543,
+                  0.33179450035095215,
+                  0.32975277304649353
+                ],
+                [
+                  0.3260177969932556,
+                  0.33302417397499084,
+                  0.3409580886363983
+                ]
+              ],
+              [
+                [
+                  0.3217882812023163,
+                  0.3399011492729187,
+                  0.3383105993270874
+                ],
+                [
+                  0.3241967260837555,
+                  0.3354524075984955,
+                  0.3403508961200714
+                ],
+                [
+                  0.32744044065475464,
+                  0.33687645196914673,
+                  0.33568310737609863
+                ]
+              ],
+              [
+                [
+                  0.33883029222488403,
+                  0.33438563346862793,
+                  0.32678407430648804
+                ],
+                [
+                  0.3309580981731415,
+                  0.33571216464042664,
+                  0.3333296477794647
+                ],
+                [
+                  0.3283016085624695,
+                  0.3070206344127655,
+                  0.3646777868270874
+                ]
+              ],
+              [
+                [
+                  0.33602991700172424,
+                  0.3347126245498657,
+                  0.32925739884376526
+                ],
+                [
+                  0.3345925509929657,
+                  0.3293113708496094,
+                  0.33609598875045776
+                ],
+                [
+                  0.3356570601463318,
+                  0.32725077867507935,
+                  0.3370921313762665
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5268978476524353,
+            "all_probs": {
+              "missing_base_case": 0.47451385855674744,
+              "incorrect_base_case": 0.5255098342895508,
+              "wrong_recursive_call": 0.4868716597557068,
+              "missing_condition": 0.48859140276908875,
+              "other": 0.5108019113540649
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 20.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I created a new list instead. Is this better?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "understanding",
+          "mental_activity": "understanding",
+          "behavioral_response": "continue",
+          "confidence": 0.17400000000000002,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in understanding state, likely to continue",
+            "predicted_behavior": "continue",
+            "cognitive_chain_used": "chain_understanding_to_continue",
+            "chain_confidence": 0.17400000000000002,
+            "chain_frequency": 0.13125418723102167,
+            "mental_activity": "understanding",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "loops",
+          "concept_info": {
+            "uri": "cskg:loops",
+            "labels": [
+              "Loops"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/conditional_statements",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/arrays",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/iteration",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/control_flow",
+              "relation": "relatedTo"
+            }
+          ],
+          "definition": "Loops is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_08",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_arrays_indexerror",
+            "concept": "arrays",
+            "description": "Common arrays misconception - IndexError",
+            "error_type": "N/A",
+            "severity": "high",
+            "frequency": 0.30000000000000016,
+            "common_indicators": [
+              "IndexError"
+            ],
+            "correction_strategy": "Practice with boundary cases. Show how to check array bounds before accessing.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "numbers = [1, 2, 3, 4, 5]\nresult = []\nfor num in numbers:\n    if num % 2 != 0:\n        result.append",
+              "question": "I created a new list instead. Is this better?",
+              "turn_context": "Student encountered an issue while working on arrays"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499799, Requested 622. Please try again in 1m12.7488s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.1,
+            "logic_errors": 0.2,
+            "total_errors": 0.30000000000000004,
+            "correctness_score": 0.84,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 30.0,
+            "turn_duration_minutes": 0.5,
+            "time_stuck_seconds": 20.0,
+            "time_stuck_minutes": 0.3333333333333333,
+            "average_action_duration": 3.0,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 3,
+      "student_input": {
+        "question": "I converted it to a list comprehension. Is this the Pythonic way?",
+        "code": "numbers = [1, 2, 3, 4, 5]\nresult = [num for num in numbers if num % 2 != 0]\nprint(result)",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          15.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 8.9865e-02, -4.3025e-02, -1.0302e-01, -1.3374e-01,  5.0708e-02,\n         -1.0530e-01,  8.3537e-03, -3.2574e-03,  8.6653e-02, -7.1206e-02,\n         -5.0293e-02, -2.4777e-02, -1.6038e-03,  8.1143e-02,  1.9247e-05,\n         -5.8002e-02, -8.6362e-02, -6.6541e-02, -7.2342e-02,  8.0367e-02,\n          7.1743e-03, -2.5118e-02, -9.8492e-02, -4.4900e-02, -1.2876e-02,\n         -5.2762e-02,  1.3828e-01, -7.5481e-02, -4.0921e-02,  1.1250e-01,\n          1.2689e-01,  4.3963e-02,  1.0866e-01,  6.7067e-02,  1.4605e-01,\n          3.4854e-02,  2.9568e-02, -1.2651e-02,  4.7956e-02,  1.3360e-02,\n         -8.0459e-02,  4.8231e-02, -2.4961e-02,  5.6563e-03,  1.2185e-02,\n          4.5194e-02,  2.1997e-02,  5.9999e-02, -3.0950e-02,  1.9782e-02,\n         -6.4071e-04, -2.9052e-02, -7.1898e-03, -7.8992e-02, -1.0460e-02,\n         -8.2840e-02,  4.9562e-02,  2.9895e-02, -4.2066e-02,  3.0713e-02,\n          1.6652e-02, -7.4815e-04, -5.0250e-02, -3.1457e-02,  2.8432e-02,\n          3.6590e-02,  4.8431e-02, -7.5981e-02, -1.5313e-01,  1.1330e-01,\n          5.1372e-02, -4.1442e-02, -6.8331e-02,  6.0940e-02, -1.7236e-02,\n          2.3393e-02, -3.6405e-02, -1.4131e-02, -1.5374e-02, -6.1108e-02,\n         -7.7426e-04, -3.5727e-02,  3.1272e-02,  1.0940e-01, -6.9219e-02,\n          2.5207e-02, -5.9177e-02,  3.3291e-02, -1.7794e-01, -3.8153e-02,\n          1.7803e-02,  5.9197e-02, -4.6416e-02, -1.0601e-03,  2.2988e-02,\n          2.0065e-02, -9.4834e-02, -1.6042e-02,  4.6673e-02, -2.7214e-02,\n         -5.2778e-02, -2.4478e-02, -1.8734e-02,  6.4258e-02,  3.4122e-02,\n         -2.8061e-02, -7.2485e-02,  5.8547e-02, -4.1992e-02,  3.3501e-02,\n          3.1132e-02, -3.1006e-02,  1.1902e-02, -1.3640e-02, -1.0781e-01,\n          1.5435e-03, -2.1086e-02,  4.5560e-02, -1.9828e-03,  2.2413e-02,\n         -1.0245e-01, -9.6927e-02, -1.0975e-01,  2.5882e-02,  1.2108e-01,\n          7.0606e-02, -4.4598e-03, -9.7502e-02, -8.4001e-02, -3.3723e-02,\n         -6.6472e-02, -1.4608e-02,  4.0479e-02,  3.1765e-02,  6.4211e-02,\n          6.7820e-02,  5.0071e-02,  2.8057e-02, -4.1136e-02,  2.8157e-02,\n         -1.1588e-01, -4.5465e-03, -1.3955e-01,  4.7054e-02, -2.5992e-02,\n         -1.3883e-02,  4.4075e-03, -9.9578e-02, -2.1947e-02, -8.4511e-03,\n         -5.6479e-02,  1.2228e-01,  2.2357e-02, -2.7240e-02, -1.4771e-01,\n         -2.2084e-02, -2.9359e-02, -7.6423e-03,  7.4174e-02, -7.2124e-02,\n          3.3906e-02, -7.8383e-02, -4.5201e-02,  1.8759e-04,  4.0791e-02,\n          1.1950e-01,  3.4955e-02, -2.4436e-02, -2.3372e-02,  4.5365e-02,\n         -1.3463e-01,  4.4672e-02,  3.1000e-02,  7.3021e-02,  7.6004e-02,\n          1.4720e-03,  4.2525e-02,  4.2691e-02,  1.7307e-02,  1.0150e-01,\n         -4.3802e-02,  4.5332e-03,  5.5536e-03,  9.7323e-02, -1.5304e-02,\n          2.0884e-02, -3.5292e-02,  5.9992e-02,  4.9878e-02,  8.5927e-02,\n         -1.1109e-01, -3.7585e-02, -5.7973e-02, -1.2730e-02,  9.9277e-03,\n         -1.1664e-02,  2.3463e-02, -1.4245e-02, -4.4391e-02, -1.4764e-01,\n         -8.0764e-02,  8.3860e-02,  1.0496e-01, -4.5188e-02, -4.1030e-02,\n         -2.0156e-03, -9.4441e-02, -1.4380e-02, -7.5165e-02,  7.2252e-02,\n         -3.2109e-02,  7.5241e-02, -8.9860e-02,  4.1382e-03,  1.7097e-02,\n          3.6637e-02, -9.9329e-02,  3.6313e-02, -2.6795e-02, -5.2027e-02,\n          5.7282e-02, -1.3867e-01,  5.9119e-02, -4.9452e-02,  7.9481e-02,\n         -4.4258e-02, -5.6531e-02, -9.2872e-02,  1.7064e-02,  2.9463e-02,\n          2.5230e-03,  5.8778e-02,  5.7949e-02, -1.2833e-03,  1.3513e-01,\n          2.0417e-02, -2.0913e-02, -5.8245e-02,  4.8583e-02, -6.2806e-02,\n          1.7360e-02, -3.0255e-02,  8.0932e-02,  1.8144e-02,  1.4233e-01,\n         -3.7683e-02,  1.4769e-02,  1.3718e-02, -5.2458e-02, -1.3127e-02,\n         -4.8060e-02, -3.1974e-02, -2.4974e-02,  1.3665e-01, -6.7238e-02,\n          2.8084e-02]])",
+          "kappa": 100.64341735839844,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.32571107149124146,
+                  0.32826995849609375,
+                  0.3460189402103424
+                ],
+                [
+                  0.3366501033306122,
+                  0.32914015650749207,
+                  0.33420974016189575
+                ],
+                [
+                  0.3322555720806122,
+                  0.33166778087615967,
+                  0.33607667684555054
+                ]
+              ],
+              [
+                [
+                  0.3370359539985657,
+                  0.3366028070449829,
+                  0.32636120915412903
+                ],
+                [
+                  0.3361978232860565,
+                  0.3431016504764557,
+                  0.3207005262374878
+                ],
+                [
+                  0.32071778178215027,
+                  0.3294453024864197,
+                  0.34983688592910767
+                ]
+              ],
+              [
+                [
+                  0.3324032127857208,
+                  0.3347766399383545,
+                  0.33282017707824707
+                ],
+                [
+                  0.33477818965911865,
+                  0.3310773968696594,
+                  0.3341444134712219
+                ],
+                [
+                  0.33233654499053955,
+                  0.32840052247047424,
+                  0.3392629325389862
+                ]
+              ],
+              [
+                [
+                  0.3365747928619385,
+                  0.3267149031162262,
+                  0.33671024441719055
+                ],
+                [
+                  0.32869699597358704,
+                  0.3338153064250946,
+                  0.33748766779899597
+                ],
+                [
+                  0.3422839045524597,
+                  0.327749103307724,
+                  0.3299669921398163
+                ]
+              ],
+              [
+                [
+                  0.33241036534309387,
+                  0.3199930191040039,
+                  0.3475966155529022
+                ],
+                [
+                  0.3388611674308777,
+                  0.3314571976661682,
+                  0.3296816051006317
+                ],
+                [
+                  0.327952116727829,
+                  0.3328361511230469,
+                  0.33921170234680176
+                ]
+              ],
+              [
+                [
+                  0.3202575445175171,
+                  0.3393253684043884,
+                  0.34041711688041687
+                ],
+                [
+                  0.3251124620437622,
+                  0.33615320920944214,
+                  0.3387342691421509
+                ],
+                [
+                  0.327149897813797,
+                  0.33812034130096436,
+                  0.33472979068756104
+                ]
+              ],
+              [
+                [
+                  0.33998143672943115,
+                  0.33425065875053406,
+                  0.3257679045200348
+                ],
+                [
+                  0.331584095954895,
+                  0.3357059955596924,
+                  0.3327098786830902
+                ],
+                [
+                  0.3275335431098938,
+                  0.30706489086151123,
+                  0.3654015362262726
+                ]
+              ],
+              [
+                [
+                  0.334085077047348,
+                  0.33498427271842957,
+                  0.3309306204319
+                ],
+                [
+                  0.33448418974876404,
+                  0.32885855436325073,
+                  0.3366572856903076
+                ],
+                [
+                  0.3348236680030823,
+                  0.3284788131713867,
+                  0.336697518825531
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5268927216529846,
+            "all_probs": {
+              "missing_base_case": 0.4746781885623932,
+              "incorrect_base_case": 0.5253909230232239,
+              "wrong_recursive_call": 0.4869469702243805,
+              "missing_condition": 0.48858803510665894,
+              "other": 0.5108422040939331
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 15.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I converted it to a list comprehension. Is this the Pythonic way?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "understanding",
+          "mental_activity": "understanding",
+          "behavioral_response": "continue",
+          "confidence": 0.17500000000000002,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in understanding state, likely to continue",
+            "predicted_behavior": "continue",
+            "cognitive_chain_used": "chain_understanding_to_continue",
+            "chain_confidence": 0.17500000000000002,
+            "chain_frequency": 0.13994164535871145,
+            "mental_activity": "understanding",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "loops",
+          "concept_info": {
+            "uri": "cskg:loops",
+            "labels": [
+              "Loops"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/conditional_statements",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/arrays",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/iteration",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/control_flow",
+              "relation": "relatedTo"
+            }
+          ],
+          "definition": "Loops is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_08",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_arrays_indexerror",
+            "concept": "arrays",
+            "description": "Common arrays misconception - IndexError",
+            "error_type": "N/A",
+            "severity": "high",
+            "frequency": 0.30000000000000016,
+            "common_indicators": [
+              "IndexError"
+            ],
+            "correction_strategy": "Practice with boundary cases. Show how to check array bounds before accessing.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "numbers = [1, 2, 3, 4, 5]\nresult = [num for num in numbers if num % 2 != 0]\nprint(result)",
+              "question": "I converted it to a list comprehension. Is this the Pythonic way?",
+              "turn_context": "Student encountered an issue while working on arrays"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499791, Requested 620. Please try again in 1m11.0208s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.0,
+            "logic_errors": 0.0,
+            "total_errors": 0.0,
+            "correctness_score": 1.0,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 25.0,
+            "turn_duration_minutes": 0.4166666666666667,
+            "time_stuck_seconds": 15.0,
+            "time_stuck_minutes": 0.25,
+            "average_action_duration": 2.5,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 4,
+      "student_input": {
+        "question": "Can I modify the original list this way?",
+        "code": "numbers = [1, 2, 3, 4, 5]\nnumbers = [num for num in numbers if num % 2 != 0]\nprint(numbers)",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          10.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 7.8931e-02, -4.1389e-02, -1.0343e-01, -1.3613e-01,  5.0263e-02,\n         -1.0188e-01,  8.5231e-03, -3.0604e-03,  9.1229e-02, -7.5231e-02,\n         -3.4123e-02, -2.9250e-02, -2.9223e-03,  7.9722e-02,  6.6017e-03,\n         -5.3352e-02, -9.3740e-02, -7.0328e-02, -6.6536e-02,  7.4344e-02,\n         -3.1271e-04, -2.6465e-02, -9.6574e-02, -3.7557e-02, -8.0897e-03,\n         -5.5345e-02,  1.3692e-01, -7.0726e-02, -4.0431e-02,  1.1329e-01,\n          1.2847e-01,  5.1398e-02,  1.0772e-01,  6.5237e-02,  1.4215e-01,\n          3.8544e-02,  2.8809e-02, -1.9274e-02,  3.5755e-02,  4.1629e-03,\n         -7.0419e-02,  4.4122e-02, -1.9877e-02,  8.0213e-03,  7.4301e-03,\n          4.1776e-02,  1.5278e-02,  6.9883e-02, -2.5361e-02,  1.6626e-02,\n          2.8734e-04, -3.0126e-02, -1.0576e-02, -9.0499e-02, -2.9633e-02,\n         -9.7299e-02,  3.3236e-02,  2.3119e-02, -3.6842e-02,  4.2222e-02,\n          1.2088e-02, -2.4982e-04, -5.1961e-02, -2.2158e-02,  4.1763e-02,\n          2.4941e-02,  5.3002e-02, -6.8903e-02, -1.5456e-01,  1.0996e-01,\n          5.1856e-02, -3.3130e-02, -7.1882e-02,  5.4090e-02, -1.5281e-02,\n          1.1064e-02, -2.4601e-02, -1.3522e-02, -7.2988e-03, -6.2744e-02,\n         -9.3885e-03, -3.8748e-02,  2.9165e-02,  1.1402e-01, -6.9931e-02,\n          1.8915e-02, -5.6554e-02,  3.3977e-02, -1.7940e-01, -4.0522e-02,\n          1.7043e-02,  6.0941e-02, -4.9670e-02, -2.0506e-03,  2.5616e-02,\n          2.6742e-02, -9.3995e-02, -1.9783e-02,  3.9110e-02, -2.6289e-02,\n         -4.9114e-02, -2.9279e-02, -8.7773e-03,  6.9912e-02,  4.1865e-02,\n         -2.1102e-02, -7.2506e-02,  6.1387e-02, -4.2313e-02,  2.8131e-02,\n          3.5495e-02, -3.7231e-02,  1.8287e-03, -2.0212e-02, -1.1079e-01,\n          8.2857e-04, -1.4934e-02,  4.4711e-02, -6.9846e-03,  2.2579e-02,\n         -8.6890e-02, -1.0837e-01, -9.9951e-02,  2.5908e-02,  1.1996e-01,\n          7.8496e-02, -5.5556e-03, -9.6138e-02, -7.7884e-02, -2.4883e-02,\n         -6.0982e-02, -1.8242e-02,  3.8357e-02,  2.1121e-02,  6.0674e-02,\n          6.2225e-02,  5.8372e-02,  3.7093e-02, -4.0624e-02,  2.3374e-02,\n         -1.1923e-01,  7.2789e-05, -1.4554e-01,  4.3125e-02, -2.2342e-02,\n         -5.2564e-03, -2.6289e-04, -1.0122e-01, -1.9636e-02, -9.1194e-03,\n         -6.0837e-02,  1.0600e-01,  3.2334e-02, -2.5662e-02, -1.3894e-01,\n         -2.4389e-02, -3.3857e-02,  5.3052e-03,  9.5562e-02, -6.2514e-02,\n          3.8266e-02, -7.9701e-02, -4.8042e-02, -2.3607e-03,  3.7920e-02,\n          1.2997e-01,  2.8191e-02, -2.8909e-02, -1.1110e-02,  5.4361e-02,\n         -1.4401e-01,  4.6264e-02,  3.6906e-02,  7.1041e-02,  8.6614e-02,\n          1.8925e-03,  4.0534e-02,  5.1028e-02,  1.5169e-02,  9.6424e-02,\n         -4.8156e-02, -7.1288e-04,  1.2387e-02,  1.0609e-01, -2.7876e-02,\n          1.6380e-02, -2.5106e-02,  6.0163e-02,  5.5536e-02,  8.2247e-02,\n         -9.7619e-02, -4.2592e-02, -6.0899e-02, -1.7220e-02,  1.3527e-02,\n         -1.0852e-02,  2.3304e-02, -7.3692e-03, -4.4279e-02, -1.4796e-01,\n         -9.3062e-02,  8.3082e-02,  1.0780e-01, -4.2507e-02, -4.7800e-02,\n         -2.6068e-03, -8.4002e-02, -1.6711e-02, -7.4980e-02,  6.8272e-02,\n         -2.4270e-02,  6.4522e-02, -8.4578e-02,  5.8321e-04,  2.4263e-02,\n          3.4892e-02, -9.5149e-02,  4.3240e-02, -2.8577e-02, -3.9923e-02,\n          5.1938e-02, -1.4126e-01,  5.5258e-02, -5.7394e-02,  7.8150e-02,\n         -5.2995e-02, -4.6003e-02, -8.5238e-02,  2.1298e-02,  3.0521e-02,\n         -9.3489e-03,  5.7631e-02,  5.5119e-02, -5.5484e-03,  1.3269e-01,\n          1.8508e-02, -2.5313e-02, -5.9077e-02,  4.6659e-02, -7.2210e-02,\n          1.1778e-02, -2.2725e-02,  6.8133e-02,  2.5567e-02,  1.5329e-01,\n         -3.3224e-02,  1.0980e-02,  5.7177e-03, -5.6541e-02, -4.0708e-03,\n         -5.1155e-02, -3.2623e-02, -2.7705e-02,  1.4210e-01, -7.3867e-02,\n          3.5941e-02]])",
+          "kappa": 100.6358413696289,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.3253944218158722,
+                  0.32737988233566284,
+                  0.34722572565078735
+                ],
+                [
+                  0.33621901273727417,
+                  0.32881835103034973,
+                  0.3349626660346985
+                ],
+                [
+                  0.3312966227531433,
+                  0.3313602805137634,
+                  0.33734315633773804
+                ]
+              ],
+              [
+                [
+                  0.3360256552696228,
+                  0.33574262261390686,
+                  0.32823166251182556
+                ],
+                [
+                  0.3365150988101959,
+                  0.3429281413555145,
+                  0.32055673003196716
+                ],
+                [
+                  0.3209238052368164,
+                  0.3287544846534729,
+                  0.3503217101097107
+                ]
+              ],
+              [
+                [
+                  0.3320941627025604,
+                  0.3347793221473694,
+                  0.3331265449523926
+                ],
+                [
+                  0.3352307975292206,
+                  0.3311746418476105,
+                  0.33359456062316895
+                ],
+                [
+                  0.32970088720321655,
+                  0.328685998916626,
+                  0.34161314368247986
+                ]
+              ],
+              [
+                [
+                  0.33756223320961,
+                  0.3275359869003296,
+                  0.3349018096923828
+                ],
+                [
+                  0.32878535985946655,
+                  0.3341902792453766,
+                  0.3370243012905121
+                ],
+                [
+                  0.3417552709579468,
+                  0.32536256313323975,
+                  0.33288219571113586
+                ]
+              ],
+              [
+                [
+                  0.3327232599258423,
+                  0.31991714239120483,
+                  0.3473595678806305
+                ],
+                [
+                  0.33823999762535095,
+                  0.331264853477478,
+                  0.33049511909484863
+                ],
+                [
+                  0.3298846483230591,
+                  0.333125501871109,
+                  0.3369898200035095
+                ]
+              ],
+              [
+                [
+                  0.32039353251457214,
+                  0.3396260738372803,
+                  0.33998042345046997
+                ],
+                [
+                  0.326251745223999,
+                  0.3375609815120697,
+                  0.33618730306625366
+                ],
+                [
+                  0.3272913992404938,
+                  0.3396153450012207,
+                  0.3330932855606079
+                ]
+              ],
+              [
+                [
+                  0.340747594833374,
+                  0.3350794315338135,
+                  0.3241729736328125
+                ],
+                [
+                  0.3319561779499054,
+                  0.33626091480255127,
+                  0.3317829668521881
+                ],
+                [
+                  0.327951043844223,
+                  0.30750328302383423,
+                  0.36454564332962036
+                ]
+              ],
+              [
+                [
+                  0.33455079793930054,
+                  0.33469900488853455,
+                  0.3307501971721649
+                ],
+                [
+                  0.3341686725616455,
+                  0.3287317156791687,
+                  0.337099552154541
+                ],
+                [
+                  0.33278876543045044,
+                  0.3298812508583069,
+                  0.3373299539089203
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5269097089767456,
+            "all_probs": {
+              "missing_base_case": 0.47465744614601135,
+              "incorrect_base_case": 0.5253896713256836,
+              "wrong_recursive_call": 0.48696935176849365,
+              "missing_condition": 0.4885697662830353,
+              "other": 0.5108343362808228
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 10.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "Can I modify the original list this way?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "engaged",
+          "mental_activity": "engaged",
+          "behavioral_response": "continue",
+          "confidence": 0.504,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in engaged state, likely to continue",
+            "predicted_behavior": "continue",
+            "cognitive_chain_used": "chain_engaged_to_continue",
+            "chain_confidence": 0.504,
+            "chain_frequency": 0.049009950100000005,
+            "mental_activity": "engaged",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "loops",
+          "concept_info": {
+            "uri": "cskg:loops",
+            "labels": [
+              "Loops"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/conditional_statements",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/arrays",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/iteration",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/control_flow",
+              "relation": "relatedTo"
+            }
+          ],
+          "definition": "Loops is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_08",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_arrays_indexerror",
+            "concept": "arrays",
+            "description": "Common arrays misconception - IndexError",
+            "error_type": "N/A",
+            "severity": "high",
+            "frequency": 0.30000000000000016,
+            "common_indicators": [
+              "IndexError"
+            ],
+            "correction_strategy": "Practice with boundary cases. Show how to check array bounds before accessing.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "numbers = [1, 2, 3, 4, 5]\nnumbers = [num for num in numbers if num % 2 != 0]\nprint(numbers)",
+              "question": "Can I modify the original list this way?",
+              "turn_context": "Student encountered an issue while working on arrays"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499782, Requested 614. Please try again in 1m8.428799999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.0,
+            "logic_errors": 0.0,
+            "total_errors": 0.0,
+            "correctness_score": 1.0,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 20.0,
+            "turn_duration_minutes": 0.3333333333333333,
+            "time_stuck_seconds": 0.0,
+            "time_stuck_minutes": 0.0,
+            "average_action_duration": 2.0,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total_turns": 4,
+    "concepts_covered": [],
+    "emotion_progression": [],
+    "mastery_progression": [],
+    "final_mastery": null
+  }
+}
