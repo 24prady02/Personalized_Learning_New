@@ -1,0 +1,163 @@
+{
+  "session_id": "test_20251126_132312",
+  "student_id": "test_student_001",
+  "timestamp": "2025-11-26T13:23:12.487254",
+  "input": {
+    "question": "I wrote this recursive function but it's not working. Can you help me?",
+    "code": "def factorial(n):\n    return n * factorial(n - 1)  # Missing base case!",
+    "error_message": "RecursionError: maximum recursion depth exceeded",
+    "conversation": [
+      "I don't understand why this isn't working",
+      "I keep getting RecursionError"
+    ]
+  },
+  "output": {
+    "response": "**Let's Break Down the Recursion Issue**\n\nYou're getting close to mastering recursion, but there's a crucial step that's missing from your `factorial` function. Can you take a look at this?\n\n**The Problem: Maximum Recursion Depth Exceeded**\n\n```python\ndef factorial(n):\n    return n * factorial(n - 1)  # Missing base case!\n```\n\nWhen you call `factorial(5)`, the function will keep calling itself with decreasing values of `n`. However, it will never stop because there's no base case to terminate the recursion. This leads to a `RecursionError: maximum recursion depth exceeded`.\n\n**Understanding Recursion**\n\nThink of recursion like a tree:\n\n```\n          factorial(5)\n         /           \\\n  factorial(4)     factorial(5)\n  /       \\          /       \\\nfactorial(3)  ...   factorial(4)  ...\n```\n\nEach recursive call branches out into smaller sub-problems. But without a base case, the tree grows infinitely, and the function eventually reaches the maximum recursion depth.\n\n**Fixing the Issue**\n\nTo fix this, you need to add a base case that returns a value when `n` reaches a certain point. For the factorial function, the base case is when `n` is 1, because the factorial of 1 is 1.\n\n```python\ndef factorial(n):\n    if n == 1:  # Base case\n        return 1\n    else:\n        return n * factorial(n - 1)\n```\n\nNow, the function will correctly calculate the factorial of any positive integer.\n\n**Tips for Mastering Recursion**\n\n* Always include a base case to terminate the recursion.\n* Use recursion when the problem can be broken down into smaller sub-problems.\n* Visualize the recursion tree to understand how the function is calling itself.\n\n**Progress Check**\n\nYou've made great progress in understanding recursion! This small fix will help you tackle more complex problems. Keep practicing, and you'll become a master of recursion in no time.\n\n**Next Steps**\n\nNow that you've fixed the issue, try experimenting with different inputs and edge cases. Can you spot any other potential issues with your `factorial` function?",
+    "response_length": 2029,
+    "analysis": {
+      "focus": "scaffold_gradually",
+      "emotion": "neutral",
+      "frustration_level": 0.3,
+      "mastery": 0.6507776975631714
+    }
+  },
+  "metrics": {
+    "quantitative": {
+      "dina_mastery": {
+        "overall_mastery": 0.6507776975631714,
+        "concept_specific_mastery": {
+          "variables": 0.6507776975631714,
+          "functions": 0.6507776975631714,
+          "conditional_statements": 0.6507776975631714,
+          "loops": 0.6507776975631714,
+          "recursion": 0.6507776975631714,
+          "base_case": 0.6507776975631714,
+          "data_structures": 0.6507776975631714,
+          "algorithms": 0.6507776975631714,
+          "object_oriented": 0.6507776975631714,
+          "error_handling": 0.6507776975631714
+        },
+        "strong_areas": [],
+        "weak_areas": [],
+        "mastery_delta": 0.0
+      },
+      "codebert_analysis": {
+        "syntax_errors": 0,
+        "logic_errors": 0,
+        "total_errors": 0,
+        "correctness_score": 1.0,
+        "code_quality": "excellent"
+      },
+      "bert_explanation_quality": {
+        "quality_score": 0.2776699029126214,
+        "completeness": 0.12944983818770228,
+        "clarity": 0.06472491909385114,
+        "key_points_covered": 0
+      },
+      "time_tracking": {
+        "turn_duration_seconds": 2.5,
+        "turn_duration_minutes": 0.04
+      },
+      "knowledge_graphs_used": {
+        "cse_kg": true,
+        "pedagogical_kg": true,
+        "coke": true,
+        "dina": true,
+        "nestor": true
+      },
+      "nestor_profile": {
+        "personality": {},
+        "learning_style": {},
+        "learning_strategy": "theory_then_example"
+      },
+      "coke_analysis": {
+        "cognitive_state": "neutral",
+        "confidence": 0.8,
+        "behavioral_response": "continue"
+      }
+    },
+    "qualitative": {
+      "explanation_style": "scaffold_gradually",
+      "complexity_level": 3,
+      "personalization_factors": {
+        "based_on_prior_knowledge": true,
+        "gaps_addressed": false,
+        "style_adapted": true,
+        "load_managed": true
+      },
+      "cognitive_state": "neutral",
+      "learning_style": {}
+    }
+  },
+  "intervention": {
+    "type": "visual_explanation",
+    "priority": 0.5
+  },
+  "knowledge_graphs_used": {
+    "cse_kg": true,
+    "pedagogical_kg": true,
+    "coke": true,
+    "dina": true,
+    "nestor": true
+  },
+  "adaptive_analysis": {
+    "explanation": "**Let's Break Down the Recursion Issue**\n\nYou're getting close to mastering recursion, but there's a crucial step that's missing from your `factorial` function. Can you take a look at this?\n\n**The Problem: Maximum Recursion Depth Exceeded**\n\n```python\ndef factorial(n):\n    return n * factorial(n - 1)  # Missing base case!\n```\n\nWhen you call `factorial(5)`, the function will keep calling itself with decreasing values of `n`. However, it will never stop because there's no base case to terminate the recursion. This leads to a `RecursionError: maximum recursion depth exceeded`.\n\n**Understanding Recursion**\n\nThink of recursion like a tree:\n\n```\n          factorial(5)\n         /           \\\n  factorial(4)     factorial(5)\n  /       \\          /       \\\nfactorial(3)  ...   factorial(4)  ...\n```\n\nEach recursive call branches out into smaller sub-problems. But without a base case, the tree grows infinitely, and the function eventually reaches the maximum recursion depth.\n\n**Fixing the Issue**\n\nTo fix this, you need to add a base case that returns a value when `n` reaches a certain point. For the factorial function, the base case is when `n` is 1, because the factorial of 1 is 1.\n\n```python\ndef factorial(n):\n    if n == 1:  # Base case\n        return 1\n    else:\n        return n * factorial(n - 1)\n```\n\nNow, the function will correctly calculate the factorial of any positive integer.\n\n**Tips for Mastering Recursion**\n\n* Always include a base case to terminate the recursion.\n* Use recursion when the problem can be broken down into smaller sub-problems.\n* Visualize the recursion tree to understand how the function is calling itself.\n\n**Progress Check**\n\nYou've made great progress in understanding recursion! This small fix will help you tackle more complex problems. Keep practicing, and you'll become a master of recursion in no time.\n\n**Next Steps**\n\nNow that you've fixed the issue, try experimenting with different inputs and edge cases. Can you spot any other potential issues with your `factorial` function?",
+    "prior_knowledge": {
+      "mastery_scores": {
+        "variables": 0.6507776975631714,
+        "functions": 0.6507776975631714,
+        "conditional_statements": 0.6507776975631714,
+        "loops": 0.6507776975631714,
+        "recursion": 0.6507776975631714,
+        "base_case": 0.6507776975631714,
+        "data_structures": 0.6507776975631714,
+        "algorithms": 0.6507776975631714,
+        "object_oriented": 0.6507776975631714,
+        "error_handling": 0.6507776975631714
+      },
+      "strong_areas": [],
+      "weak_areas": [],
+      "average_mastery": 0.6507776975631714
+    },
+    "prerequisites": [],
+    "knowledge_gaps": [],
+    "strategy": "scaffold_gradually",
+    "complexity": 3,
+    "learning_style_adaptation": {
+      "visual_verbal": "verbal",
+      "active_reflective": "reflective",
+      "sequential_global": "global",
+      "preferred_format": [
+        "detailed_text",
+        "explanations",
+        "definitions",
+        "big_picture_first",
+        "overview",
+        "connections"
+      ],
+      "avoid_format": [],
+      "order": "theory_then_example"
+    },
+    "cognitive_load": {
+      "intrinsic_load": 3,
+      "extraneous_load": 2,
+      "germane_load": 3,
+      "total_load": 3,
+      "target_load": 3,
+      "strategies": []
+    },
+    "personalization_factors": {
+      "based_on_prior_knowledge": true,
+      "gaps_addressed": false,
+      "style_adapted": true,
+      "load_managed": true
+    },
+    "knowledge_graphs_used": {
+      "cse_kg": true,
+      "pedagogical_kg": true,
+      "coke": true,
+      "dina": true,
+      "nestor": true
+    }
+  }
+}

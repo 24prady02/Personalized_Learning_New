@@ -1,0 +1,80 @@
+{
+  "nodes": [
+    {
+      "id": "http://cse.ckcest.cn/cskg/recursion",
+      "label": "Recursion",
+      "type": "Concept"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/base_case",
+      "label": "Base Case",
+      "type": "Concept"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/functions",
+      "label": "Functions",
+      "type": "Concept"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/linked_list",
+      "label": "Linked List",
+      "type": "Concept"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/node",
+      "label": "Node",
+      "type": "Concept"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/quicksort",
+      "label": "Quicksort",
+      "type": "Method"
+    },
+    {
+      "id": "http://cse.ckcest.cn/cskg/sorting",
+      "label": "Sorting",
+      "type": "Task"
+    }
+  ],
+  "edges": [
+    {
+      "source": "http://cse.ckcest.cn/cskg/recursion",
+      "target": "http://cse.ckcest.cn/cskg/functions",
+      "relation": "requiresKnowledge",
+      "source_label": "Recursion",
+      "target_label": "Functions"
+    },
+    {
+      "source": "http://cse.ckcest.cn/cskg/recursion",
+      "target": "http://cse.ckcest.cn/cskg/base_case",
+      "relation": "requiresKnowledge",
+      "source_label": "Recursion",
+      "target_label": "Base Case"
+    },
+    {
+      "source": "http://cse.ckcest.cn/cskg/linked_list",
+      "target": "http://cse.ckcest.cn/cskg/node",
+      "relation": "requiresKnowledge",
+      "source_label": "Linked List",
+      "target_label": "Node"
+    },
+    {
+      "source": "http://cse.ckcest.cn/cskg/quicksort",
+      "target": "http://cse.ckcest.cn/cskg/sorting",
+      "relation": "solvesTask",
+      "source_label": "Quicksort",
+      "target_label": "Sorting"
+    },
+    {
+      "source": "http://cse.ckcest.cn/cskg/recursion",
+      "target": "http://cse.ckcest.cn/cskg/linked_list",
+      "relation": "relatedTo",
+      "source_label": "Recursion",
+      "target_label": "Linked List"
+    }
+  ],
+  "metadata": {
+    "note": "Example structure - not from live query",
+    "namespace": "http://cse.ckcest.cn/cskg/"
+  }
+}
