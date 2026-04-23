@@ -63,6 +63,7 @@ cse_kg_cache/
 # OS
 .DS_Store
 Thumbs.db
+~$*
 
 # Testing
 .coverage
