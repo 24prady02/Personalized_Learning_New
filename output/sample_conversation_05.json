@@ -1,0 +1,1931 @@
+{
+  "student_id": "student_sample_05",
+  "timestamp": "2025-12-03T18:09:19.730762",
+  "turns": [
+    {
+      "turn_number": 1,
+      "student_input": {
+        "question": "Why do I need to provide both arguments? Can I make message optional?",
+        "code": "def greet(name, message):\n    return f\"{message}, {name}!\"\n\nprint(greet(\"Alice\"))",
+        "error_message": "TypeError: greet() missing 1 required positional argument: 'message'",
+        "action_sequence": [
+          "code_edit",
+          "run_test",
+          "search_documentation"
+        ],
+        "time_deltas": [
+          10.0,
+          2.0,
+          30.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 42.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 4.1579e-02, -6.8613e-02, -1.2465e-01, -7.3777e-02,  1.3025e-02,\n         -1.5060e-01, -2.2650e-02, -7.9666e-04,  4.8501e-02, -3.9575e-02,\n         -4.5665e-02, -3.8788e-02,  4.7796e-02,  1.0819e-01, -2.3464e-02,\n         -5.6752e-02, -2.9949e-03, -6.0617e-03, -9.7113e-02,  6.1071e-02,\n          3.4481e-02,  1.4969e-02, -4.7794e-02, -2.5575e-02, -2.7695e-02,\n         -8.8844e-02,  1.6627e-01, -2.8194e-02, -7.1870e-02,  1.6326e-01,\n          9.7772e-02,  4.2939e-02,  1.1029e-01,  2.6038e-02,  1.3363e-01,\n          2.3350e-03, -3.8215e-02,  2.9885e-02,  7.1667e-02, -2.7055e-02,\n         -7.4964e-02,  2.4269e-02,  9.8223e-03,  3.6097e-02,  5.1622e-02,\n          5.1424e-02,  3.9487e-02,  7.7187e-02, -2.1788e-02,  2.4358e-02,\n         -2.7778e-02, -1.8447e-02, -4.6361e-02, -6.2054e-02, -6.1626e-02,\n         -6.9374e-03,  3.2847e-02,  5.7308e-02, -4.8692e-02,  5.7457e-02,\n         -8.2559e-03, -1.2238e-02, -1.8569e-02, -6.3555e-02,  5.9934e-03,\n          6.7507e-02,  3.9752e-02, -6.3095e-02, -1.3596e-01,  9.2757e-02,\n          3.5497e-02,  2.3736e-02, -3.6052e-02,  1.1668e-02,  1.8546e-03,\n          6.3220e-02, -6.0708e-02,  7.3411e-03,  9.5014e-03, -1.2441e-01,\n         -4.6762e-02, -1.5685e-02, -7.6626e-03,  6.1225e-02, -5.3136e-02,\n         -2.4448e-02, -1.2079e-02,  3.4875e-02, -1.1015e-01, -7.1967e-02,\n          1.7370e-02,  5.3948e-02, -3.3647e-02,  1.4960e-02,  1.9147e-02,\n         -1.9717e-03, -1.2379e-01, -4.0154e-02,  4.7045e-02, -1.6701e-02,\n         -2.0715e-02, -3.5972e-02, -5.4685e-02,  2.7728e-02, -6.0556e-04,\n         -3.0796e-03, -9.0833e-02,  4.3473e-02, -5.6293e-02,  3.6177e-02,\n          3.4318e-02, -1.7072e-02, -2.0902e-02, -9.5372e-03, -8.9260e-02,\n         -2.6613e-02,  2.8010e-02,  7.0646e-02, -5.7732e-02,  2.5168e-02,\n         -8.3009e-02, -4.2485e-02, -9.6504e-02, -2.1671e-03,  5.3603e-02,\n          5.3484e-02, -2.1852e-02, -3.2216e-02, -1.2458e-01, -3.8417e-02,\n         -1.9272e-02, -3.0593e-02,  2.5331e-02,  8.4589e-02,  9.8174e-02,\n          4.2630e-02,  2.9326e-02,  4.3120e-02, -4.2662e-02, -4.6159e-03,\n         -1.4388e-01, -3.9517e-02, -8.1644e-02,  5.9677e-02,  5.7228e-02,\n          2.3351e-02, -3.5828e-02, -4.4207e-03, -4.6351e-03, -2.1984e-02,\n         -3.0583e-02,  7.5861e-02,  1.6451e-02, -4.8222e-02, -8.6706e-02,\n         -3.5243e-02, -1.7970e-02, -2.0504e-02,  7.7150e-02, -9.0910e-02,\n          6.5105e-02, -9.7430e-02, -2.5279e-02, -2.9191e-02,  5.4926e-02,\n          1.2732e-01,  3.3810e-02, -3.4658e-02,  6.9376e-03,  4.9297e-02,\n         -1.2693e-01, -1.6341e-02,  8.6281e-02,  7.4510e-02, -1.3185e-02,\n          3.2225e-02,  3.8898e-02,  1.0373e-02, -4.2118e-02,  1.0288e-01,\n         -4.4226e-02,  3.5521e-03,  2.0127e-03,  1.1081e-01, -3.7218e-05,\n          3.3477e-02, -6.9765e-02,  4.8093e-02,  6.8291e-02,  9.1388e-02,\n         -1.3136e-01, -8.6128e-02, -3.0128e-02,  3.2307e-03,  6.6788e-03,\n         -2.2027e-02,  2.6003e-02,  9.5559e-03,  3.8160e-02, -1.4377e-01,\n         -7.6724e-02,  1.0564e-01,  1.0412e-01, -5.4674e-02, -2.5188e-02,\n         -1.4801e-02, -3.2593e-02, -4.6306e-03, -7.7789e-02,  5.5988e-02,\n         -3.5977e-02,  9.7241e-02, -5.5348e-02, -2.8441e-02, -1.3087e-02,\n          2.2333e-03, -8.8312e-02,  2.7737e-02, -3.8118e-02, -5.5512e-02,\n          4.1420e-02, -1.4234e-01,  6.2811e-02, -8.9633e-02,  1.0415e-01,\n         -2.6982e-02, -3.9177e-02, -1.2983e-01,  4.2059e-02,  8.0698e-02,\n         -1.8494e-02,  8.1403e-02,  6.2132e-02, -1.1881e-02,  1.1941e-01,\n          6.2399e-02,  3.7491e-03, -6.6364e-02,  7.0353e-02, -6.2396e-02,\n          1.6130e-02,  2.3852e-02,  1.4310e-01,  1.4716e-02,  1.0894e-01,\n         -1.4033e-02, -1.0146e-02, -1.9716e-02, -4.9244e-02, -2.9885e-02,\n         -1.3113e-02, -1.1235e-01, -1.0579e-02,  1.8517e-01, -3.8244e-02,\n          7.4477e-02]])",
+          "kappa": 100.69303894042969,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.3269272446632385,
+                  0.33186671137809753,
+                  0.34120598435401917
+                ],
+                [
+                  0.3330216109752655,
+                  0.3252691924571991,
+                  0.3417092561721802
+                ],
+                [
+                  0.3344549238681793,
+                  0.33042535185813904,
+                  0.33511972427368164
+                ]
+              ],
+              [
+                [
+                  0.339417040348053,
+                  0.33650389313697815,
+                  0.32407912611961365
+                ],
+                [
+                  0.34194594621658325,
+                  0.33658820390701294,
+                  0.3214658200740814
+                ],
+                [
+                  0.3259202837944031,
+                  0.3244115710258484,
+                  0.34966811537742615
+                ]
+              ],
+              [
+                [
+                  0.3316159248352051,
+                  0.33470144867897034,
+                  0.3336825966835022
+                ],
+                [
+                  0.33512571454048157,
+                  0.3351227641105652,
+                  0.32975152134895325
+                ],
+                [
+                  0.33598148822784424,
+                  0.33427831530570984,
+                  0.32974013686180115
+                ]
+              ],
+              [
+                [
+                  0.3344467878341675,
+                  0.32758843898773193,
+                  0.337964802980423
+                ],
+                [
+                  0.3336929976940155,
+                  0.32683616876602173,
+                  0.33947086334228516
+                ],
+                [
+                  0.3469093441963196,
+                  0.3321860134601593,
+                  0.32090461254119873
+                ]
+              ],
+              [
+                [
+                  0.3334098756313324,
+                  0.31850504875183105,
+                  0.34808510541915894
+                ],
+                [
+                  0.3385651409626007,
+                  0.3307253420352936,
+                  0.3307094871997833
+                ],
+                [
+                  0.3156892657279968,
+                  0.3354794383049011,
+                  0.34883129596710205
+                ]
+              ],
+              [
+                [
+                  0.321632981300354,
+                  0.3386289179325104,
+                  0.3397381007671356
+                ],
+                [
+                  0.32834315299987793,
+                  0.32978782057762146,
+                  0.34186893701553345
+                ],
+                [
+                  0.3262787461280823,
+                  0.3443288207054138,
+                  0.3293924927711487
+                ]
+              ],
+              [
+                [
+                  0.3376730680465698,
+                  0.3328527510166168,
+                  0.32947421073913574
+                ],
+                [
+                  0.33155709505081177,
+                  0.3328045606613159,
+                  0.33563828468322754
+                ],
+                [
+                  0.33123043179512024,
+                  0.31442248821258545,
+                  0.3543470799922943
+                ]
+              ],
+              [
+                [
+                  0.33502858877182007,
+                  0.3353297710418701,
+                  0.3296416699886322
+                ],
+                [
+                  0.33348968625068665,
+                  0.3247571587562561,
+                  0.34175312519073486
+                ],
+                [
+                  0.3267434537410736,
+                  0.33144015073776245,
+                  0.34181633591651917
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5268659591674805,
+            "all_probs": {
+              "missing_base_case": 0.47483399510383606,
+              "incorrect_base_case": 0.5253844857215881,
+              "wrong_recursive_call": 0.48663753271102905,
+              "missing_condition": 0.4888460636138916,
+              "other": 0.5109449028968811
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 10.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "Why do I need to provide both arguments? Can I make message optional?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 1,
+              "reflective_score": 1,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": "active",
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "engaged",
+          "mental_activity": "engaged",
+          "behavioral_response": "continue",
+          "confidence": 0.502,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in engaged state, likely to continue",
+            "predicted_behavior": "continue",
+            "cognitive_chain_used": "chain_engaged_to_continue",
+            "chain_confidence": 0.502,
+            "chain_frequency": 0.029700999999999998,
+            "mental_activity": "engaged",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.14,
+            "organization": 0.6,
+            "social_interaction": 0.3333333333333333,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.46199999999999997,
+            "extraversion": 0.43333333333333335,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.5448000000000001,
+            "elaboration": 0.45,
+            "organization": 0.32339999999999997,
+            "metacognition": 0.501
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "type_system",
+          "concept_info": {
+            "uri": "cskg:type_system",
+            "labels": [
+              "Type_system"
+            ],
+            "types": []
+          },
+          "prerequisites": [],
+          "related_concepts": [],
+          "definition": "Type_system is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": {
+            "id": "mc_type_system_typeerror",
+            "concept": "type_system",
+            "description": "Confuses type compatibility and operations",
+            "severity": "high",
+            "frequency": 0.7,
+            "confidence": 0.8
+          },
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_05",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_type_system_typeerror",
+            "concept": "type_system",
+            "description": "Common type_system misconception - TypeError",
+            "error_type": "TypeError",
+            "severity": "medium",
+            "frequency": 0.2600000000000001,
+            "common_indicators": [
+              "TypeError"
+            ],
+            "correction_strategy": "Explain type checking and type conversion. Show examples of type errors.",
+            "learned_from": {
+              "error_message": "TypeError: greet() missing 1 required positional argument: 'message'",
+              "code_snippet": "def greet(name, message):\n    return f\"{message}, {name}!\"\n\nprint(greet(\"Alice\"))",
+              "question": "Why do I need to provide both arguments? Can I make message optional?",
+              "turn_context": "Student encountered TypeError while working on type_system"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499908, Requested 661. Please try again in 1m38.323199999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.1,
+            "logic_errors": 0.0,
+            "total_errors": 0.1,
+            "correctness_score": 0.96,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 49.0,
+            "turn_duration_minutes": 0.8166666666666667,
+            "time_stuck_seconds": 42.0,
+            "time_stuck_minutes": 0.7,
+            "average_action_duration": 4.9,
+            "total_actions": 3,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 2,
+      "student_input": {
+        "question": "I added a default value. Can you explain default parameters?",
+        "code": "def greet(name, message=\"Hello\"):\n    return f\"{message}, {name}!\"\n\nprint(greet(\"Alice\"))\nprint(greet(\"Bob\", \"Hi\"))",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          20.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 0.0926, -0.0446, -0.0959, -0.1298,  0.0451, -0.1139,  0.0062, -0.0004,\n          0.0771, -0.0627, -0.0588, -0.0300, -0.0073,  0.0763, -0.0002, -0.0621,\n         -0.0815, -0.0685, -0.0809,  0.0900,  0.0169, -0.0346, -0.1042, -0.0488,\n         -0.0065, -0.0715,  0.1433, -0.0770, -0.0359,  0.1129,  0.1127,  0.0308,\n          0.1062,  0.0719,  0.1471,  0.0288,  0.0207, -0.0066,  0.0461,  0.0240,\n         -0.0839,  0.0544, -0.0186,  0.0202,  0.0129,  0.0496,  0.0219,  0.0553,\n         -0.0270,  0.0126,  0.0061, -0.0331, -0.0093, -0.0696, -0.0025, -0.0808,\n          0.0549,  0.0279, -0.0380,  0.0329,  0.0162, -0.0035, -0.0452, -0.0381,\n          0.0178,  0.0430,  0.0571, -0.0773, -0.1533,  0.1065,  0.0407, -0.0495,\n         -0.0749,  0.0553, -0.0192,  0.0240, -0.0462, -0.0146, -0.0095, -0.0624,\n          0.0054, -0.0436,  0.0330,  0.1071, -0.0689,  0.0193, -0.0620,  0.0295,\n         -0.1691, -0.0411,  0.0180,  0.0589, -0.0375,  0.0053,  0.0200,  0.0183,\n         -0.0910, -0.0115,  0.0455, -0.0311, -0.0633, -0.0166, -0.0245,  0.0677,\n          0.0169, -0.0291, -0.0688,  0.0536, -0.0426,  0.0318,  0.0245, -0.0345,\n          0.0133, -0.0198, -0.1043, -0.0030, -0.0288,  0.0446, -0.0058,  0.0219,\n         -0.1078, -0.0842, -0.1118,  0.0294,  0.1264,  0.0587, -0.0113, -0.0897,\n         -0.0879, -0.0375, -0.0712, -0.0064,  0.0371,  0.0431,  0.0694,  0.0639,\n          0.0459,  0.0269, -0.0453,  0.0253, -0.1201, -0.0164, -0.1363,  0.0463,\n         -0.0161, -0.0063,  0.0037, -0.0970, -0.0215, -0.0133, -0.0457,  0.1280,\n          0.0098, -0.0323, -0.1522, -0.0202, -0.0237, -0.0071,  0.0616, -0.0752,\n          0.0411, -0.0776, -0.0434, -0.0022,  0.0366,  0.1181,  0.0425, -0.0360,\n         -0.0343,  0.0488, -0.1359,  0.0379,  0.0360,  0.0747,  0.0667,  0.0122,\n          0.0402,  0.0359,  0.0158,  0.1148, -0.0426,  0.0048,  0.0136,  0.0952,\n         -0.0165,  0.0240, -0.0454,  0.0555,  0.0459,  0.0795, -0.1242, -0.0367,\n         -0.0680, -0.0087,  0.0025, -0.0102,  0.0289, -0.0056, -0.0394, -0.1489,\n         -0.0704,  0.0799,  0.0993, -0.0455, -0.0323,  0.0050, -0.0989, -0.0152,\n         -0.0692,  0.0809, -0.0410,  0.0786, -0.0788,  0.0124,  0.0074,  0.0429,\n         -0.1019,  0.0366, -0.0239, -0.0564,  0.0612, -0.1464,  0.0546, -0.0513,\n          0.0853, -0.0251, -0.0628, -0.0931,  0.0151,  0.0310,  0.0017,  0.0573,\n          0.0611, -0.0011,  0.1321,  0.0186, -0.0298, -0.0513,  0.0550, -0.0560,\n          0.0274, -0.0308,  0.0831,  0.0172,  0.1310, -0.0417,  0.0142,  0.0119,\n         -0.0512, -0.0188, -0.0476, -0.0316, -0.0305,  0.1432, -0.0639,  0.0130]])",
+          "kappa": 100.64280700683594,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.3274655044078827,
+                  0.328332781791687,
+                  0.3442017436027527
+                ],
+                [
+                  0.3369216024875641,
+                  0.3293779492378235,
+                  0.33370041847229004
+                ],
+                [
+                  0.3334672152996063,
+                  0.3325907289981842,
+                  0.3339420258998871
+                ]
+              ],
+              [
+                [
+                  0.33840280771255493,
+                  0.3371206820011139,
+                  0.324476420879364
+                ],
+                [
+                  0.33776336908340454,
+                  0.3421342670917511,
+                  0.32010239362716675
+                ],
+                [
+                  0.32244887948036194,
+                  0.32922714948654175,
+                  0.3483240008354187
+                ]
+              ],
+              [
+                [
+                  0.3311239182949066,
+                  0.33550921082496643,
+                  0.33336690068244934
+                ],
+                [
+                  0.3352223336696625,
+                  0.33088219165802,
+                  0.3338954746723175
+                ],
+                [
+                  0.3357512354850769,
+                  0.32831090688705444,
+                  0.33593788743019104
+                ]
+              ],
+              [
+                [
+                  0.336014986038208,
+                  0.3272554874420166,
+                  0.3367295265197754
+                ],
+                [
+                  0.3287777006626129,
+                  0.3339446485042572,
+                  0.3372775912284851
+                ],
+                [
+                  0.3439733386039734,
+                  0.3281674087047577,
+                  0.32785919308662415
+                ]
+              ],
+              [
+                [
+                  0.3328867256641388,
+                  0.31997427344322205,
+                  0.3471389412879944
+                ],
+                [
+                  0.33907076716423035,
+                  0.33148449659347534,
+                  0.3294447064399719
+                ],
+                [
+                  0.32671743631362915,
+                  0.3326784670352936,
+                  0.34060415625572205
+                ]
+              ],
+              [
+                [
+                  0.32165029644966125,
+                  0.33956605195999146,
+                  0.3387836217880249
+                ],
+                [
+                  0.32424449920654297,
+                  0.3354286551475525,
+                  0.34032681584358215
+                ],
+                [
+                  0.32744354009628296,
+                  0.33687493205070496,
+                  0.33568158745765686
+                ]
+              ],
+              [
+                [
+                  0.33757033944129944,
+                  0.33320319652557373,
+                  0.32922643423080444
+                ],
+                [
+                  0.3311813473701477,
+                  0.33560019731521606,
+                  0.3332184851169586
+                ],
+                [
+                  0.3287698030471802,
+                  0.30680662393569946,
+                  0.36442357301712036
+                ]
+              ],
+              [
+                [
+                  0.3350837528705597,
+                  0.33384647965431213,
+                  0.3310697376728058
+                ],
+                [
+                  0.3344382345676422,
+                  0.32938775420188904,
+                  0.336173951625824
+                ],
+                [
+                  0.3357924222946167,
+                  0.3271840810775757,
+                  0.33702343702316284
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5269080996513367,
+            "all_probs": {
+              "missing_base_case": 0.4745064675807953,
+              "incorrect_base_case": 0.5254596471786499,
+              "wrong_recursive_call": 0.48693814873695374,
+              "missing_condition": 0.48864904046058655,
+              "other": 0.5108882188796997
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 20.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I added a default value. Can you explain default parameters?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [
+                "explain"
+              ],
+              "visual_score": 0,
+              "verbal_score": 1,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": "verbal",
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.85,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "chat_text",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "confused",
+          "mental_activity": "confused",
+          "behavioral_response": "try_again",
+          "confidence": 1.0,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in confused state, likely to try_again",
+            "predicted_behavior": "try_again",
+            "cognitive_chain_used": "chain_confused_to_try_again",
+            "chain_confidence": 1.0,
+            "chain_frequency": 0.001,
+            "mental_activity": "confused",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "functions",
+          "concept_info": {
+            "uri": "cskg:functions",
+            "labels": [
+              "Functions"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/parameters",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/methods",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/procedures",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/call_stack",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/object_oriented",
+              "relation": "isPrerequisiteOf"
+            }
+          ],
+          "definition": "Functions is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_05",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_prereq_functions_to_精确解",
+            "concept": "functions",
+            "description": "Believes 精确解 is a prerequisite for functions (incorrect)",
+            "error_type": "N/A",
+            "severity": "medium",
+            "frequency": 1.0,
+            "common_indicators": [
+              "confuses functions with 精确解",
+              "thinks 精确解 must be learned before functions",
+              "incorrect prerequisite relationship"
+            ],
+            "correction_strategy": "Clarify that 精确解 is not required before learning functions. Show correct prerequisite path.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "def greet(name, message=\"Hello\"):\n    return f\"{message}, {name}!\"\n\nprint(greet(\"Alice\"))\nprint(gree",
+              "question": "I added a default value. Can you explain default parameters?",
+              "turn_context": "Student encountered an issue while working on functions"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499900, Requested 616. Please try again in 1m29.1648s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.0,
+            "logic_errors": 0.0,
+            "total_errors": 0.0,
+            "correctness_score": 1.0,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 30.0,
+            "turn_duration_minutes": 0.5,
+            "time_stuck_seconds": 20.0,
+            "time_stuck_minutes": 0.3333333333333333,
+            "average_action_duration": 3.0,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 3,
+      "student_input": {
+        "question": "I made a calculator function with a default operation. Is this good design?",
+        "code": "def calculate(a, b, operation=\"add\"):\n    if operation == \"add\":\n        return a + b\n    elif operation == \"multiply\":\n        return a * b\n    return a - b\n\nprint(calculate(5, 3))\nprint(calculate(5, 3, \"multiply\"))",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          25.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 0.0928, -0.0656, -0.0932, -0.1286,  0.0468, -0.1097,  0.0057,  0.0025,\n          0.0832, -0.0532, -0.0647, -0.0350, -0.0070,  0.0800, -0.0078, -0.0657,\n         -0.0787, -0.0653, -0.0777,  0.0895,  0.0243, -0.0446, -0.1168, -0.0480,\n         -0.0017, -0.0769,  0.1413, -0.0822, -0.0329,  0.1123,  0.1004,  0.0278,\n          0.1011,  0.0755,  0.1474,  0.0299,  0.0240, -0.0046,  0.0500,  0.0238,\n         -0.0859,  0.0559, -0.0169,  0.0240,  0.0151,  0.0457,  0.0176,  0.0505,\n         -0.0217,  0.0168,  0.0129, -0.0371, -0.0225, -0.0608, -0.0082, -0.0814,\n          0.0652,  0.0223, -0.0439,  0.0248,  0.0166, -0.0105, -0.0444, -0.0462,\n          0.0216,  0.0349,  0.0638, -0.0808, -0.1581,  0.0957,  0.0379, -0.0516,\n         -0.0733,  0.0478, -0.0134,  0.0289, -0.0493, -0.0130, -0.0099, -0.0592,\n          0.0117, -0.0419,  0.0353,  0.0984, -0.0660,  0.0193, -0.0639,  0.0240,\n         -0.1603, -0.0389,  0.0260,  0.0614, -0.0361,  0.0094,  0.0112,  0.0229,\n         -0.0888, -0.0105,  0.0429, -0.0180, -0.0636,  0.0012, -0.0220,  0.0766,\n          0.0105, -0.0275, -0.0655,  0.0486, -0.0330,  0.0443,  0.0291, -0.0325,\n          0.0152, -0.0219, -0.1011,  0.0021, -0.0358,  0.0466, -0.0082,  0.0223,\n         -0.1166, -0.0883, -0.1133,  0.0260,  0.1257,  0.0504, -0.0125, -0.0832,\n         -0.0907, -0.0429, -0.0686, -0.0103,  0.0338,  0.0477,  0.0606,  0.0622,\n          0.0400,  0.0327, -0.0478,  0.0221, -0.1198, -0.0276, -0.1344,  0.0504,\n         -0.0183, -0.0078, -0.0066, -0.0949, -0.0221, -0.0098, -0.0331,  0.1274,\n          0.0056, -0.0289, -0.1585, -0.0161, -0.0254, -0.0026,  0.0550, -0.0807,\n          0.0451, -0.0744, -0.0354,  0.0009,  0.0413,  0.1126,  0.0399, -0.0299,\n         -0.0445,  0.0508, -0.1285,  0.0414,  0.0345,  0.0758,  0.0590,  0.0128,\n          0.0362,  0.0312,  0.0264,  0.1158, -0.0365,  0.0021,  0.0063,  0.0956,\n         -0.0199,  0.0244, -0.0526,  0.0547,  0.0425,  0.0819, -0.1309, -0.0372,\n         -0.0751,  0.0002, -0.0049, -0.0251,  0.0299, -0.0074, -0.0324, -0.1432,\n         -0.0655,  0.0815,  0.1009, -0.0474, -0.0270,  0.0049, -0.0971, -0.0126,\n         -0.0625,  0.0982, -0.0444,  0.0819, -0.0885,  0.0191,  0.0063,  0.0473,\n         -0.1046,  0.0258, -0.0224, -0.0585,  0.0555, -0.1490,  0.0510, -0.0514,\n          0.0869, -0.0245, -0.0631, -0.1016,  0.0080,  0.0199,  0.0114,  0.0661,\n          0.0588, -0.0050,  0.1295,  0.0121, -0.0343, -0.0467,  0.0581, -0.0520,\n          0.0332, -0.0330,  0.0909,  0.0212,  0.1250, -0.0492,  0.0155,  0.0095,\n         -0.0501, -0.0279, -0.0521, -0.0415, -0.0215,  0.1352, -0.0570, -0.0037]])",
+          "kappa": 100.65274810791016,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.32823508977890015,
+                  0.32841765880584717,
+                  0.3433471918106079
+                ],
+                [
+                  0.33787497878074646,
+                  0.3291817605495453,
+                  0.33294323086738586
+                ],
+                [
+                  0.3342294991016388,
+                  0.33372241258621216,
+                  0.33204808831214905
+                ]
+              ],
+              [
+                [
+                  0.33855965733528137,
+                  0.3379456400871277,
+                  0.32349467277526855
+                ],
+                [
+                  0.33754846453666687,
+                  0.3420739471912384,
+                  0.3203776776790619
+                ],
+                [
+                  0.3238598704338074,
+                  0.3289145231246948,
+                  0.3472256064414978
+                ]
+              ],
+              [
+                [
+                  0.3319917321205139,
+                  0.3362734019756317,
+                  0.33173489570617676
+                ],
+                [
+                  0.33553704619407654,
+                  0.3309004306793213,
+                  0.3335625231266022
+                ],
+                [
+                  0.33790382742881775,
+                  0.32870131731033325,
+                  0.333394855260849
+                ]
+              ],
+              [
+                [
+                  0.3367770314216614,
+                  0.3265470564365387,
+                  0.3366759419441223
+                ],
+                [
+                  0.32885992527008057,
+                  0.334271639585495,
+                  0.3368684947490692
+                ],
+                [
+                  0.3443892300128937,
+                  0.3283926844596863,
+                  0.32721805572509766
+                ]
+              ],
+              [
+                [
+                  0.33323630690574646,
+                  0.32192036509513855,
+                  0.3448432683944702
+                ],
+                [
+                  0.33796244859695435,
+                  0.3320465385913849,
+                  0.32999104261398315
+                ],
+                [
+                  0.3264574408531189,
+                  0.3322168290615082,
+                  0.3413257300853729
+                ]
+              ],
+              [
+                [
+                  0.3216724097728729,
+                  0.3398628234863281,
+                  0.33846476674079895
+                ],
+                [
+                  0.3229371905326843,
+                  0.3354699909687042,
+                  0.3415928781032562
+                ],
+                [
+                  0.32807978987693787,
+                  0.33589741587638855,
+                  0.33602282404899597
+                ]
+              ],
+              [
+                [
+                  0.33746472001075745,
+                  0.3335447609424591,
+                  0.32899054884910583
+                ],
+                [
+                  0.3314298689365387,
+                  0.335345983505249,
+                  0.33322417736053467
+                ],
+                [
+                  0.32960548996925354,
+                  0.3072476387023926,
+                  0.36314690113067627
+                ]
+              ],
+              [
+                [
+                  0.33657601475715637,
+                  0.33360326290130615,
+                  0.3298206627368927
+                ],
+                [
+                  0.33475375175476074,
+                  0.3296835124492645,
+                  0.33556270599365234
+                ],
+                [
+                  0.33699318766593933,
+                  0.3261845111846924,
+                  0.3368222415447235
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.526908278465271,
+            "all_probs": {
+              "missing_base_case": 0.4744255840778351,
+              "incorrect_base_case": 0.5255215167999268,
+              "wrong_recursive_call": 0.48690512776374817,
+              "missing_condition": 0.4885667562484741,
+              "other": 0.5108047127723694
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 25.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I made a calculator function with a default operation. Is this good design?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [],
+              "visual_score": 0,
+              "verbal_score": 0,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": null,
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.7,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "behavior",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "understanding",
+          "mental_activity": "understanding",
+          "behavioral_response": "continue",
+          "confidence": 0.168,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in understanding state, likely to continue",
+            "predicted_behavior": "continue",
+            "cognitive_chain_used": "chain_understanding_to_continue",
+            "chain_confidence": 0.168,
+            "chain_frequency": 0.0772553055720799,
+            "mental_activity": "understanding",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "functions",
+          "concept_info": {
+            "uri": "cskg:functions",
+            "labels": [
+              "Functions"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/parameters",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/methods",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/procedures",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/call_stack",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/object_oriented",
+              "relation": "isPrerequisiteOf"
+            }
+          ],
+          "definition": "Functions is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_05",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_prereq_functions_to_精确解",
+            "concept": "functions",
+            "description": "Believes 精确解 is a prerequisite for functions (incorrect)",
+            "error_type": "N/A",
+            "severity": "medium",
+            "frequency": 1.0,
+            "common_indicators": [
+              "confuses functions with 精确解",
+              "thinks 精确解 must be learned before functions",
+              "incorrect prerequisite relationship"
+            ],
+            "correction_strategy": "Clarify that 精确解 is not required before learning functions. Show correct prerequisite path.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "def calculate(a, b, operation=\"add\"):\n    if operation == \"add\":\n        return a + b\n    elif opera",
+              "question": "I made a calculator function with a default operation. Is this good design?",
+              "turn_context": "Student encountered an issue while working on functions"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499891, Requested 646. Please try again in 1m32.7936s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.1,
+            "logic_errors": 0.2,
+            "total_errors": 0.30000000000000004,
+            "correctness_score": 0.84,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 35.0,
+            "turn_duration_minutes": 0.5833333333333334,
+            "time_stuck_seconds": 25.0,
+            "time_stuck_minutes": 0.4166666666666667,
+            "average_action_duration": 3.5,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    },
+    {
+      "turn_number": 4,
+      "student_input": {
+        "question": "I learned about *args! Can you explain how it works?",
+        "code": "def process_data(*args):\n    return sum(args)\n\nprint(process_data(1, 2, 3, 4, 5))",
+        "error_message": "",
+        "action_sequence": [
+          "code_edit",
+          "run_test"
+        ],
+        "time_deltas": [
+          18.0,
+          2.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "time_stuck": 0.0
+      },
+      "system_analysis": {
+        "hvsae_encoding": {
+          "latent_dim": 256,
+          "mu": "tensor([[ 0.0931, -0.0523, -0.1027, -0.1320,  0.0497, -0.1115,  0.0069, -0.0027,\n          0.0868, -0.0633, -0.0632, -0.0329, -0.0015,  0.0840, -0.0035, -0.0563,\n         -0.0904, -0.0656, -0.0765,  0.0801,  0.0177, -0.0367, -0.1089, -0.0492,\n         -0.0062, -0.0693,  0.1425, -0.0825, -0.0405,  0.1041,  0.1145,  0.0276,\n          0.1040,  0.0711,  0.1485,  0.0329,  0.0249, -0.0100,  0.0462,  0.0213,\n         -0.0821,  0.0538, -0.0220,  0.0170,  0.0125,  0.0502,  0.0166,  0.0520,\n         -0.0236,  0.0170,  0.0057, -0.0334, -0.0107, -0.0676, -0.0135, -0.0852,\n          0.0547,  0.0294, -0.0429,  0.0280,  0.0143, -0.0081, -0.0474, -0.0377,\n          0.0255,  0.0339,  0.0562, -0.0784, -0.1512,  0.1025,  0.0419, -0.0472,\n         -0.0725,  0.0542, -0.0141,  0.0223, -0.0384, -0.0096, -0.0137, -0.0669,\n          0.0117, -0.0398,  0.0280,  0.1028, -0.0688,  0.0225, -0.0597,  0.0278,\n         -0.1688, -0.0414,  0.0188,  0.0600, -0.0429,  0.0055,  0.0213,  0.0185,\n         -0.0893, -0.0139,  0.0444, -0.0232, -0.0583, -0.0092, -0.0203,  0.0743,\n          0.0198, -0.0287, -0.0703,  0.0507, -0.0384,  0.0363,  0.0340, -0.0335,\n          0.0066, -0.0215, -0.0988,  0.0034, -0.0303,  0.0453, -0.0064,  0.0248,\n         -0.1057, -0.0881, -0.1113,  0.0274,  0.1230,  0.0561, -0.0064, -0.0918,\n         -0.0875, -0.0343, -0.0674, -0.0113,  0.0372,  0.0405,  0.0674,  0.0626,\n          0.0495,  0.0265, -0.0441,  0.0291, -0.1138, -0.0170, -0.1364,  0.0520,\n         -0.0231, -0.0100, -0.0025, -0.0989, -0.0227, -0.0049, -0.0506,  0.1243,\n          0.0148, -0.0269, -0.1487, -0.0188, -0.0273, -0.0008,  0.0692, -0.0822,\n          0.0402, -0.0773, -0.0405,  0.0030,  0.0401,  0.1219,  0.0399, -0.0302,\n         -0.0329,  0.0556, -0.1340,  0.0471,  0.0355,  0.0740,  0.0633,  0.0054,\n          0.0368,  0.0430,  0.0227,  0.1095, -0.0389,  0.0021,  0.0064,  0.0909,\n         -0.0223,  0.0261, -0.0414,  0.0570,  0.0481,  0.0856, -0.1244, -0.0384,\n         -0.0636, -0.0126,  0.0061, -0.0159,  0.0279, -0.0099, -0.0370, -0.1494,\n         -0.0718,  0.0840,  0.1015, -0.0499, -0.0350,  0.0019, -0.0949, -0.0116,\n         -0.0668,  0.0811, -0.0404,  0.0796, -0.0838,  0.0122,  0.0083,  0.0464,\n         -0.1021,  0.0371, -0.0260, -0.0520,  0.0575, -0.1502,  0.0543, -0.0501,\n          0.0793, -0.0320, -0.0597, -0.0939,  0.0068,  0.0236,  0.0095,  0.0651,\n          0.0635, -0.0030,  0.1310,  0.0132, -0.0276, -0.0529,  0.0493, -0.0563,\n          0.0291, -0.0306,  0.0827,  0.0204,  0.1305, -0.0445,  0.0176,  0.0035,\n         -0.0552, -0.0219, -0.0485, -0.0397, -0.0280,  0.1452, -0.0566,  0.0125]])",
+          "kappa": 100.64820098876953,
+          "attention_weights": [
+            [
+              [
+                [
+                  0.32722967863082886,
+                  0.3281230926513672,
+                  0.34464719891548157
+                ],
+                [
+                  0.3372437655925751,
+                  0.3290814459323883,
+                  0.3336747884750366
+                ],
+                [
+                  0.3323645293712616,
+                  0.33250707387924194,
+                  0.33512842655181885
+                ]
+              ],
+              [
+                [
+                  0.3381578028202057,
+                  0.3365909159183502,
+                  0.32525134086608887
+                ],
+                [
+                  0.3375081717967987,
+                  0.34233710169792175,
+                  0.32015472650527954
+                ],
+                [
+                  0.32217490673065186,
+                  0.32913920283317566,
+                  0.3486858010292053
+                ]
+              ],
+              [
+                [
+                  0.33209028840065,
+                  0.33493179082870483,
+                  0.33297792077064514
+                ],
+                [
+                  0.3349428176879883,
+                  0.33098334074020386,
+                  0.3340738117694855
+                ],
+                [
+                  0.3343697786331177,
+                  0.3283456265926361,
+                  0.3372846245765686
+                ]
+              ],
+              [
+                [
+                  0.33767008781433105,
+                  0.3266448676586151,
+                  0.3356851041316986
+                ],
+                [
+                  0.3288640081882477,
+                  0.3337915539741516,
+                  0.3373444080352783
+                ],
+                [
+                  0.34412670135498047,
+                  0.32771599292755127,
+                  0.32815733551979065
+                ]
+              ],
+              [
+                [
+                  0.3329985737800598,
+                  0.3208332359790802,
+                  0.3461682200431824
+                ],
+                [
+                  0.3385635316371918,
+                  0.33171355724334717,
+                  0.32972294092178345
+                ],
+                [
+                  0.32709774374961853,
+                  0.33277037739753723,
+                  0.3401319086551666
+                ]
+              ],
+              [
+                [
+                  0.3196517527103424,
+                  0.34027743339538574,
+                  0.34007084369659424
+                ],
+                [
+                  0.3236105144023895,
+                  0.3361262083053589,
+                  0.3402632772922516
+                ],
+                [
+                  0.3268296718597412,
+                  0.33756113052368164,
+                  0.3356092572212219
+                ]
+              ],
+              [
+                [
+                  0.3384811580181122,
+                  0.33388182520866394,
+                  0.32763710618019104
+                ],
+                [
+                  0.33166247606277466,
+                  0.33544981479644775,
+                  0.33288776874542236
+                ],
+                [
+                  0.3273967206478119,
+                  0.30722030997276306,
+                  0.36538299918174744
+                ]
+              ],
+              [
+                [
+                  0.3348930776119232,
+                  0.33456799387931824,
+                  0.33053892850875854
+                ],
+                [
+                  0.3344639241695404,
+                  0.32917237281799316,
+                  0.33636370301246643
+                ],
+                [
+                  0.33541280031204224,
+                  0.3276621103286743,
+                  0.33692505955696106
+                ]
+              ]
+            ]
+          ],
+          "misconception_detected": {
+            "detected": "other",
+            "confidence": 0.5269063711166382,
+            "all_probs": {
+              "missing_base_case": 0.474507212638855,
+              "incorrect_base_case": 0.5254576206207275,
+              "wrong_recursive_call": 0.48695579171180725,
+              "missing_condition": 0.48856112360954285,
+              "other": 0.5108678340911865
+            }
+          }
+        },
+        "behavioral_analysis": {
+          "rnn_analysis": {
+            "emotion": "neutral",
+            "emotion_confidence": 0.5,
+            "strategy_effectiveness": 0.5,
+            "productivity": "medium",
+            "indicators": []
+          },
+          "hmm_state_prediction": {
+            "hidden_state": "engaged",
+            "confidence": 0.5,
+            "next_action_prediction": "continue",
+            "state_transition_prob": 0.5
+          }
+        },
+        "learning_style_inference": {
+          "behavioral_pattern_analysis": {
+            "uses_visualization": false,
+            "time_before_first_run": 18.0,
+            "incremental_fixes": false,
+            "edit_run_pairs": 1
+          },
+          "behavioral_inference": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "chat_text_analysis": {
+            "chat_text": "I learned about *args! Can you explain how it works?",
+            "keyword_analysis": {
+              "visual_keywords": [],
+              "verbal_keywords": [
+                "explain"
+              ],
+              "visual_score": 0,
+              "verbal_score": 1,
+              "active_score": 0,
+              "reflective_score": 0,
+              "sequential_score": 0,
+              "global_score": 0
+            },
+            "chat_inference": {
+              "visual_verbal": "verbal",
+              "active_reflective": null,
+              "sequential_global": null
+            }
+          },
+          "final_learning_style": {
+            "visual_verbal": "verbal",
+            "active_reflective": "active",
+            "sequential_global": "global"
+          },
+          "inference_confidence": {
+            "visual_verbal": 0.85,
+            "active_reflective": 0.75,
+            "sequential_global": 0.7
+          },
+          "source_breakdown": {
+            "visual_verbal": "chat_text",
+            "active_reflective": "behavior",
+            "sequential_global": "behavior"
+          }
+        },
+        "coke_analysis": {
+          "cognitive_state": "confused",
+          "mental_activity": "confused",
+          "behavioral_response": "try_again",
+          "confidence": 1.0,
+          "theory_of_mind": {
+            "why_student_went_wrong": "Student is in confused state, likely to try_again",
+            "predicted_behavior": "try_again",
+            "cognitive_chain_used": "chain_confused_to_try_again",
+            "chain_confidence": 1.0,
+            "chain_frequency": 0.001,
+            "mental_activity": "confused",
+            "context": "working_on_problem",
+            "affective_response": "neutral"
+          },
+          "source": "coke_graph"
+        },
+        "cognitive_assessment": {
+          "overall_mastery": 0.5,
+          "concept_specific_mastery": {},
+          "strong_areas": [],
+          "weak_areas": [],
+          "mastery_delta": 0.0
+        },
+        "nestor_inference": {
+          "behavioral_indicators": {
+            "exploration_rate": 1.0,
+            "persistence": 0.0,
+            "organization": 0.6,
+            "social_interaction": 0.0,
+            "emotional_variability": 0.45
+          },
+          "personality_scores": {
+            "openness": 0.9,
+            "conscientiousness": 0.42,
+            "extraversion": 0.2,
+            "agreeableness": 0.52,
+            "neuroticism": 0.5700000000000001
+          },
+          "learning_styles": {
+            "visual_verbal": "visual",
+            "sensing_intuitive": "intuitive",
+            "active_reflective": "reflective",
+            "sequential_global": "global"
+          },
+          "learning_strategies": {
+            "deep_processing": 0.528,
+            "elaboration": 0.45,
+            "organization": 0.294,
+            "metacognition": 0.48
+          },
+          "learning_element_preferences": {
+            "VAM": 0.28,
+            "MS": 0.22,
+            "EX": 0.15,
+            "SU": 0.12,
+            "QU": 0.1
+          },
+          "recommended_elements": [
+            "VAM",
+            "MS",
+            "EX"
+          ],
+          "confidence": 0.75
+        },
+        "cse_kg_queries": {
+          "concept": "functions",
+          "concept_info": {
+            "uri": "cskg:functions",
+            "labels": [
+              "Functions"
+            ],
+            "types": []
+          },
+          "prerequisites": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/variables",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/parameters",
+              "mastery": 0.5,
+              "status": "critical_gap"
+            }
+          ],
+          "related_concepts": [
+            {
+              "concept": "http://cse.ckcest.cn/cskg/recursion",
+              "relation": "isPrerequisiteOf"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/methods",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/procedures",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/call_stack",
+              "relation": "relatedTo"
+            },
+            {
+              "concept": "http://cse.ckcest.cn/cskg/object_oriented",
+              "relation": "isPrerequisiteOf"
+            }
+          ],
+          "definition": "Functions is a programming concept.",
+          "query_source": "cse_kg_client"
+        },
+        "pedagogical_kg": {
+          "detected_misconception": null,
+          "related_misconceptions": [],
+          "query_source": "fallback"
+        },
+        "student_graph": {
+          "student_id": "student_sample_05",
+          "concept_mastery": {},
+          "concept_activations": {},
+          "mastered_concepts": [],
+          "weak_concepts": [],
+          "knowledge_gaps": [],
+          "learning_history": {
+            "total_interactions": 1,
+            "session_count": 1,
+            "mastery_history": [],
+            "learning_trajectory": "initial"
+          },
+          "source": "fallback"
+        },
+        "knowledge_gaps": [],
+        "learned_misconceptions": [
+          {
+            "id": "mc_prereq_functions_to_精确解",
+            "concept": "functions",
+            "description": "Believes 精确解 is a prerequisite for functions (incorrect)",
+            "error_type": "N/A",
+            "severity": "medium",
+            "frequency": 1.0,
+            "common_indicators": [
+              "confuses functions with 精确解",
+              "thinks 精确解 must be learned before functions",
+              "incorrect prerequisite relationship"
+            ],
+            "correction_strategy": "Clarify that 精确解 is not required before learning functions. Show correct prerequisite path.",
+            "learned_from": {
+              "error_message": null,
+              "code_snippet": "def process_data(*args):\n    return sum(args)\n\nprint(process_data(1, 2, 3, 4, 5))",
+              "question": "I learned about *args! Can you explain how it works?",
+              "turn_context": "Student encountered an issue while working on functions"
+            }
+          }
+        ]
+      },
+      "intervention_selected": {
+        "type": "visual_explanation",
+        "priority": 0.5
+      },
+      "system_response": {
+        "response_text": "[Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k9hxemdveq5rg48mbfjzbnyj` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499883, Requested 613. Please try again in 1m25.7088s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "model": "error",
+        "analysis_based": true
+      },
+      "metrics": {
+        "quantitative": {
+          "dina_mastery": {
+            "overall_mastery": 0.5,
+            "concept_specific_mastery": {
+              "functions": 0.6,
+              "variables": 0.6,
+              "conditional_statements": 0.5,
+              "unknown": 0.3
+            },
+            "strong_areas": [],
+            "weak_areas": [],
+            "mastery_delta": 0.0
+          },
+          "codebert_analysis": {
+            "syntax_errors": 0.1,
+            "logic_errors": 0.0,
+            "total_errors": 0.1,
+            "correctness_score": 0.96,
+            "code_quality": "excellent",
+            "codebert_embedding_dim": 768,
+            "model_used": "microsoft/codebert-base",
+            "analysis_method": "real_codebert_model"
+          },
+          "bert_explanation_quality": {
+            "quality_score": 0.8014285714285714,
+            "completeness": 0.6285714285714286,
+            "clarity": 1.0,
+            "coherence": 0.8,
+            "key_points_covered": 2,
+            "key_points": [
+              "Let's start with an example:\nExample code here",
+              "Now let's understand why this works:\nHere's how unknown works"
+            ],
+            "bert_embedding_dim": 768,
+            "model_used": "bert-base-uncased",
+            "analysis_method": "real_bert_model"
+          },
+          "time_tracking": {
+            "turn_duration_seconds": 28.0,
+            "turn_duration_minutes": 0.4666666666666667,
+            "time_stuck_seconds": 18.0,
+            "time_stuck_minutes": 0.3,
+            "average_action_duration": 2.8,
+            "total_actions": 2,
+            "calculation_method": "time_deltas"
+          },
+          "knowledge_graphs_used": {
+            "cse_kg": true,
+            "pedagogical_kg": true,
+            "coke": true,
+            "state_tracker": false,
+            "personality_profiler": false
+          },
+          "nestor_profile": {
+            "personality": {},
+            "learning_style": {},
+            "learning_strategy": "example_then_theory"
+          },
+          "coke_analysis": {
+            "cognitive_state": "neutral",
+            "confidence": 0.8,
+            "behavioral_response": "continue"
+          }
+        },
+        "qualitative": {
+          "explanation_style": "scaffold_gradually",
+          "complexity_level": 3,
+          "personalization_factors": {
+            "based_on_prior_knowledge": true,
+            "gaps_addressed": false,
+            "style_adapted": true,
+            "load_managed": true
+          },
+          "cognitive_state": "neutral",
+          "learning_style": {}
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total_turns": 4,
+    "concepts_covered": [],
+    "emotion_progression": [],
+    "mastery_progression": [],
+    "final_mastery": null
+  }
+}
