@@ -36,9 +36,14 @@ ENV/
 # Jupyter Notebooks
 .ipynb_checkpoints
 
-# Data
-data/
-!data/.gitkeep
+# Data — keep large/local datasets out of git; allow placeholders + this README
+/data/**
+!/data/
+!/data/README.md
+!/data/raw/
+!/data/raw/.gitkeep
+!/data/processed/
+!/data/processed/.gitkeep
 
 # Models
 models/
