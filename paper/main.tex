@@ -1,0 +1,787 @@
+﻿\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Toward Learning Progression-Grounded Code Comprehension Scaffolding:
+A Research Framework Connecting Science Education Assessment,
+Automated Scoring, and LLM Evaluation}
+
+
+
+\maketitle
+
+%-------------------------------------------------------------------
+\begin{abstract}
+The deployment of large language model (LLM) tools in computing education has
+substantially outpaced the psychometric and pedagogical frameworks needed to
+evaluate them. Chang et al.~\cite{chang2024survey} reviewed 46~LLM benchmarks
+and confirmed that none assessed developmental appropriateness or equity. This
+paper presents a midterm research report on a framework that bridges three
+converging research bodies: Learning Progression (LP) theory~\cite{jin2019validation},
+automated LP-based scoring~\cite{jin2025automated}, and a comprehensive LLM
+evaluation survey~\cite{chang2024survey}. The system, grounded in the
+Cognitive-Preference Adaptive Learning (CPAL) architecture, applies LP theory to
+code comprehension via a nine-component multi-modal pipeline integrating CodeBERT
+embeddings, a Hyperspherical Variational Self-Attention Autoencoder (HVSAE), COKE
+cognitive-state tracking, Nestor Bayesian personality profiling, a four-level
+hierarchical RL controller, and three dynamically updated knowledge graphs. The
+pipeline exposes a FastAPI REST interface, orchestrates nine parallel per-turn
+computations in 425--650\,ms, and implements ten adaptive personalization features.
+Preliminary results across 10~student conversations (45~interaction turns)
+demonstrate 100\% error detection accuracy, a 42.8\% improvement in evaluation
+accuracy using HVSAE semantic encoding over baseline keyword matching, and a mean
+concentration parameter $\kappa=91.1\%$ indicating highly discriminative latent
+representations. Four explicit Research Questions drawn from LP theory structure
+a twelve-week remaining programme culminating in a five-step LLM comparison
+pipeline and QWK-based ranking system.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Learning Progressions, Code Comprehension, Large Language Models, Adaptive
+Scaffolding, HVSAE, COKE, Automated Scoring, Quadratic Weighted Kappa,
+Educational Data Mining, Equity
+\end{IEEEkeywords}
+
+%===================================================================
+\section{Introduction}
+\label{sec:intro}
+
+The rapid adoption of AI coding assistants in computing classrooms has produced a
+fundamental mismatch between deployment velocity and evaluative rigor. Students
+write working code but cannot explain its internal reasoning mechanisms. LLM tools
+enter classrooms with no pedagogical validation, and no principled theory yet
+exists to evaluate whether AI-generated explanations develop reasoning ability
+rather than merely supplying syntactically correct answers~\cite{chang2023survey}.
+
+Three empirical facts sharpen this diagnosis. First, Chang et al.~\cite{chang2023survey}
+catalogued 46~LLM benchmarks and confirmed that none assessed developmental
+appropriateness. Second, Jin et al.~\cite{jin2025automated} showed that 25--32\%
+of correctly-reasoning student responses are misclassified due to informal language,
+and that one assessment item produced a QWK of~0.00 without item context, rising
+to~0.68 with context (Model~B strategy). Third, the SOLO taxonomy~\cite{biggs1982solo},
+applied in CS education since 2006~\cite{lister2006solo}, has never been subjected
+to Partial Credit Model (PCM) threshold-ordering verification.
+
+Learning Progression (LP) theory provides the missing construct infrastructure.
+Jin et al.~\cite{jin2019validation} established a five-stage validation
+framework grounded in Kane's~\cite{kane2006validation} validity argument structure
+and validated through PCM threshold ordering.
+
+This paper makes four contributions: (1)~adapts LP theory from science education
+to code comprehension; (2)~presents a working multi-modal personalized-learning
+pipeline; (3)~reports preliminary experimental results across 45~interaction turns;
+and (4)~introduces a twelve-week remaining-work programme for the first
+psychometrically rigorous evaluation of LLM-generated educational
+explanations~\cite{patel2025llmeval}.
+
+%===================================================================
+\section{Research Questions}
+\label{sec:rqs}
+
+\textbf{RQ1} --- \textit{Can a PCM-validated LP for code comprehension be
+constructed?} Specifically: can a four-level LP for recursive reasoning be
+empirically validated via PCM threshold ordering~\cite{jin2019validation} such that
+all inter-level thresholds are correctly ordered?
+
+\textbf{RQ2} --- \textit{How does informal language affect LP-level classification
+of code explanations by LLMs?} Specifically: what proportion of correctly-reasoning
+student code explanations are misclassified due to informal expression (e.g.,
+``the function remembers where it was'' for stack-frame preservation)? This extends
+the 25--32\% finding of Jin et al.~\cite{jin2025automated} to code comprehension.
+
+\textbf{RQ3} --- \textit{Does LP-grounded item description (Model~B context)
+improve developmental appropriateness of LLM explanations?} Specifically: does
+prepending a structured prompt encoding the target LP level,
+knowledge-component prerequisites, and the student's COKE cognitive state produce
+explanations scoring higher on the four-level LP rubric than question-only (Model~A)
+prompts?
+
+\textbf{RQ4} --- \textit{Do LP-calibrated explanations equitably serve diverse
+learners?} Specifically: does Differential Item Functioning (DIF) analysis across
+subgroups---native English speakers vs.\ emergent bilinguals; novice vs.\
+experienced programmers---reveal systematic LP-level underscoring for any subgroup?
+
+%===================================================================
+\section{Literature Review}
+\label{sec:lit}
+
+\subsection{Learning Progressions: Theory and Psychometric Validation}
+
+Learning progressions (LPs) are empirically validated sequences of reasoning levels
+describing student movement from naive to expert
+understanding~\cite{jin2019validation}. Jin et al.~\cite{jin2019validation}
+established the gold standard for LP validation through a five-stage framework:
+Development, Scoring, Generalisation, Extrapolation, and Use. The decisive
+statistical test is PCM threshold ordering: disordered thresholds require LP
+revision before any downstream use. The SOLO taxonomy~\cite{biggs1982solo},
+applied in CS education since Lister et al.~\cite{lister2006solo}, has never
+undergone PCM verification, leaving SOLO-based instructional inference on an
+unconfirmed psychometric foundation.
+
+\subsection{Automated Scoring and LP-Based Assessment}
+
+Jin et al.~\cite{jin2025automated} investigated transformer-based automated scoring
+for LP-grounded constructed-response items. Model~A achieved QWK~$=0.46$, $0.50$,
+and $0.00$ on three of four items, failing the operational threshold of
+0.70~\cite{williamson2012framework}. Model~B raised these to~$0.89$, $0.83$,
+and $0.68$. Three failure modes inform this research: informal language (25--32\%
+misclassification), terminological ambiguity, and systematic bilingual underscoring.
+
+\subsection{LLM Evaluation: Scope and Structural Gaps}
+
+Chang et al.~\cite{chang2023survey} surveyed 46~LLM benchmarks and found that none
+assessed developmental appropriateness or equity. LLMs showed limited ability in
+semantic similarity and paraphrase tasks---precisely the skills required to
+recognise informal-but-correct reasoning.
+
+\subsection{Knowledge Graphs and Ontologies in CS Education}
+
+Dessi et al.~\cite{dessi2025csekg} introduced CSE-KG~2.0, a large-scale knowledge
+graph from 14.5~million CS papers with prerequisite relationships and concept
+taxonomy. Abu-Salih and Alotaibi~\cite{abusalih2024kg} reviewed five KG application
+domains in education. The CPAL framework integrates CSE-KG~2.0 and augments it
+with dynamically updated student-specific and pedagogical KGs following the
+bidirectional update mechanism of Shengju et al.~\cite{shengju2025cross}.
+
+\subsection{Knowledge Tracing and Cognitive Diagnosis}
+
+Sun et al.~\cite{sun2024tcl4kt} proposed TCL4KT, a weighted heterogeneous
+graph-based three-view contrastive learning framework for knowledge tracing.
+Wei et al.~\cite{wei2025dakt} introduced DAKT-SSO-MRC, integrating educational
+psychology with deep learning. The DINA model~\cite{delatorre2009dina} provides
+interpretable mastery estimation via slip and guess probabilities estimated by
+EM algorithm on ASSISTments data. Wan et al.~\cite{wan2023rl} demonstrated RL
+agents trained on knowledge tracing simulators significantly improve student
+knowledge states.
+
+\subsection{Psychological Profiling and Behavioral Analysis}
+
+Nadimpalli et al.~\cite{nadimpalli2025nestor} introduced the Nestor algorithm
+integrating Big Five personality traits and Felder-Silverman learning styles into
+a Bayesian network for personalised path recommendation. Mai et al.~\cite{mai2023entropy}
+demonstrated that entropy-based behavioral analysis reveals higher-performing
+students exhibit lower behavioral entropy, supporting action-sequence modeling
+as a diagnostic signal.
+
+\subsection{Programming Pedagogy and Cognitive Transfer}
+
+Scherer et al.~\cite{scherer2021transfer} documented moderate-to-large effect
+sizes (Hedges' $g=0.47$--$0.73$) for cognitive transfer from programming to
+mathematical reasoning. Lowe~\cite{lowe2019debugging} proposed debugging-first
+pedagogy based on the Theory of Applied Mind for Programming (TAMP), arguing
+that debugging engages both System~1 and System~2 thinking.
+
+\subsection{Multi-Modal Learning Analytics and Systematic Reviews}
+
+Wang et al.~\cite{wang2024multimodal} integrated programming activity logs and
+video clickstream data into a visual analytics tool. Wang et al.~\cite{wang2024aireview}
+reviewed 2,223 AI-in-education articles, identifying adaptive learning as the most
+studied category while noting underutilisation of theoretical frameworks.
+Zhang and Sun~\cite{zhang2024genai} identified the ``diverse demands vs.\ limited
+practice'' paradox in Generative AI for education.
+
+\subsection{Hyperspherical Representation Learning}
+
+Han et al.~\cite{han2024hvsae} demonstrated that von Mises-Fisher distributions
+over the unit sphere provide superior discrimination between similar concepts
+compared to Euclidean embeddings. The CPAL system extends this to multi-modal
+learner modeling, achieving $\kappa=91.1\%$ in preliminary experiments.
+
+\subsection{Synthesis: Six Identified Gaps}
+
+The preceding review reveals six convergent gaps: (1)~no PCM-validated LP for
+code comprehension exists; (2)~informal reasoning in code explanations has never
+been characterised; (3)~prompt engineering for LLM code scaffolding lacks LP
+grounding; (4)~terminological ambiguity in code has never been mapped against
+LLM scoring failures; (5)~the five-stage LP validity argument has never been
+applied to LLM-generated outputs; (6)~equity gaps for emergent bilingual code
+learners remain unstudied.
+
+%===================================================================
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Architectural Overview and System Layers}
+
+The CPAL framework follows a six-layer architecture: Presentation (FastAPI REST,
+port~8000), Orchestration (Intervention Orchestrator, 11-step pipeline), Encoding
+(HVSAE~+~CodeBERT~+~BERT~+~BiLSTM), Analysis (DINA~+~Nestor~+~RNN/HMM),
+Reinforcement Learning (4-level Hierarchical Multi-Task RL), and Knowledge
+(CSE-KG~2.0~+~Student~KG~+~Pedagogical~KG). The implementation uses Python~3.10,
+PyTorch~2.0, Transformers~4.30, RDFLib~6.3, SPARQLWrapper~2.0, and
+Stable-Baselines3~2.0.
+
+Each student turn triggers the nine-component pipeline described in
+Algorithm~\ref{alg:pipeline}, completing in 425--650\,ms on NVIDIA~T4 hardware.
+The architecture is intentionally modular: the LLM backbone
+(Groq \texttt{llama-3.1-8b-instant}), the SPARQL endpoint, and the RL policy
+can each be swapped without modifying the encoding or analysis layers.
+
+\begin{algorithm}[t]
+\caption{Per-Turn Nine-Component Pipeline}
+\label{alg:pipeline}
+\begin{algorithmic}[1]
+\REQUIRE Turn $t$: code $c_t$, error $e_t$, actions $\mathbf{a}_t$, text $x_t$
+\ENSURE Response $r_t$, updated KG state
+\STATE $\mathbf{z}_t \leftarrow \mathrm{HVSAE}(c_t, e_t, \mathbf{a}_t)$ \hfill [150--200\,ms]
+\STATE $\boldsymbol{\alpha}_t \leftarrow \mathrm{DINA}(\mathbf{z}_t, Q)$ \hfill [50--100\,ms]
+\STATE $\boldsymbol{\pi}_t \leftarrow \mathrm{Nestor}(\mathbf{a}_t, x_t)$; $\ell_t \leftarrow \mathrm{LSI}(\mathbf{a}_t, x_t)$ \hfill [75--125\,ms]
+\STATE $\sigma_t \leftarrow \mathrm{COKE}(\mathbf{a}_t, \Delta\mathbf{t}_t)$ \hfill [BiLSTM 100--150\,ms]
+\STATE $\mathbf{k}_t \leftarrow \mathrm{SPARQL}(\mathrm{CSE\text{-}KG}, \mathrm{concept}(\mathbf{z}_t))$ \hfill [50--75\,ms]
+\STATE $m_t \leftarrow \mathrm{PedKG.detect}(c_t, e_t)$ \hfill [KG query]
+\STATE $s_t \leftarrow \mathrm{CodeBERT.score}(c_t)$ \hfill [within HVSAE]
+\STATE $\iota_t \leftarrow \mathrm{HierRL}(\boldsymbol{\alpha}_t, \sigma_t, \boldsymbol{\pi}_t)$
+\STATE $p_t \leftarrow \mathrm{Prompt9}(\sigma_t,\boldsymbol{\pi}_t,\ell_t,m_t,\mathbf{k}_t,\iota_t,s_t)$ \hfill [100--150\,ms]
+\STATE $r_t \leftarrow \mathrm{LLM}(p_t)$; $\mathrm{BidirectionalUpdate}(\mathbf{z}_t, r_t, m_t)$
+\RETURN $r_t$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Datasets and Preprocessing}
+
+Table~\ref{tab:datasets} summarises the four offline training datasets. All datasets
+were accessed through their official channels and preprocessed in isolated Docker
+containers to prevent data leakage between training phases.
+
+\begin{table}[t]
+\caption{Dataset Characteristics and Processing Methods}
+\label{tab:datasets}
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\raggedright}p{1.75cm}
+                >{\raggedright}p{1.7cm}
+                p{4.05cm}}
+\toprule
+\textbf{Dataset} & \textbf{Scale} & \textbf{Processing} \\
+\midrule
+CodeNet & 14M submissions &
+  CodeBERT tokenisation; 17-type error extraction;
+  correct/buggy pairs (4--6\,h) \\[3pt]
+ProgSnap2 & 4.45M events &
+  Action-sequence extraction; $\Delta t$ features;
+  COKE chain mining~\cite{mai2023entropy} (2--3\,h) \\[3pt]
+ASSISTments & 500k+ responses &
+  Q-matrix (997 skills); EM for DINA
+  slip/guess~\cite{delatorre2009dina} (1--2\,h) \\[3pt]
+MOOCCubeX & 1M+ interactions &
+  Concept-video pairs (624k);
+  prerequisite chains (3--4\,h) \\[3pt]
+Evaluation & 45 turns / 10 sessions &
+  Real-time; $<$500\,ms/turn;
+  temporal stratification \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{CodeNet Preprocessing}
+IBM CodeNet~\cite{puri2021codenet} provides 14~million code submissions across
+55~languages and 4,000~problems. The pipeline extracts correct/buggy program
+pairs, tokenises using the \texttt{codebert-base} vocabulary (50,265~tokens),
+and classifies errors into 17~semantic types spanning logic errors, off-by-one
+boundary violations, variable misuse, missing base cases, stack overflow patterns,
+null/index errors, scope violations, type mismatches, and syntax misconceptions
+across four severity levels.
+
+\subsubsection{ProgSnap2 Preprocessing}
+ProgSnap2~\cite{price2020progsnap2} contributes 4.45~million timestamped
+programming events (EventID, SubjectID, ProblemID, EventType, CodeState,
+ServerTimestamp). The pipeline groups events by (SubjectID, ProblemID) session,
+extracts action sequences $\mathbf{a}=(a_1,\ldots,a_T)$, computes inter-event
+time deltas $\Delta t_p$, and mines COKE cognitive-chain patterns using the
+entropy-based behavioral analysis of Mai et al.~\cite{mai2023entropy}. Frustration
+is operationalised as $\geq3$ consecutive \texttt{Run.Error} events with
+$\sum\Delta t>60$\,s time-stuck. The derived mean time-stuck of $71.3\pm9.2$\,s
+calibrates the 67.5\,s threshold in the real-time COKE module.
+
+\subsubsection{ASSISTments Preprocessing}
+The ASSISTments skill-builder dataset provides student-problem response records
+(UserID, ProblemID, SkillName, Correct, HintCount, AttemptCount). Preprocessing
+constructs a Q-matrix mapping 997~skill components to 4,217~problems, then
+estimates DINA slip ($s_p$) and guess ($g_p$) parameters via EM following
+de la Torre~\cite{delatorre2009dina}. Evidence strength weights from
+\texttt{hint\_count} and \texttt{attempt\_count} penalise guess-inflated mastery.
+
+\subsubsection{MOOCCubeX Preprocessing}
+MOOCCubeX contributes 624,038~concept-video relations and 33,412~concept-problem
+mappings extracted from 1M+ MOOC interaction logs. Preprocessing instantiates
+prerequisite chains for the CS concept taxonomy, builds learning-progression
+probability distributions per concept, and populates the Pedagogical~KG with
+cross-session misconception frequency counts.
+
+\subsection{HVSAE: Hyperspherical Variational Self-Attention Autoencoder}
+
+The HVSAE~\cite{han2024hvsae} is the central multi-modal encoder, fusing three
+parallel encoders through multi-head self-attention.
+
+\textbf{Code Encoder.} \texttt{microsoft/codebert-base} (125M parameters)
+pre-trained on CodeNet produces 768-dim code representations. Fine-tuning uses a
+contrastive objective separating semantically correct from incorrect implementations.
+
+\textbf{Error Encoder.} \texttt{bert-base-uncased} (110M parameters) fine-tuned
+on ProgSnap2 error messages with cross-entropy loss over the 17-type taxonomy;
+AdamW, $\text{lr}=2\times10^{-5}$, $\epsilon=10^{-8}$, 3~epochs.
+
+\textbf{Behavioral Encoder.} A bidirectional LSTM (2~layers, 256~hidden units per
+direction, dropout~0.2) with additive attention trained on action tuples
+$(a_p, \Delta t_p, o_p)$ from ProgSnap2. Higher attention weights are assigned to
+time-stuck events, operationalising the frustration signal of Mai et al.~\cite{mai2023entropy}.
+
+Modality fusion uses 8-head self-attention with $d_k=64$:
+\begin{equation}
+\text{Attention}(Q,K,V)=\text{softmax}\!\left(\tfrac{QK^\top}{\sqrt{d_k}}\right)V
+\label{eq:attention}
+\end{equation}
+
+The fused 512-dim vector is projected to the unit hypersphere via the von
+Mises-Fisher (vMF) distribution:
+\begin{equation}
+f(\mathbf{x}\mid\boldsymbol{\mu},\kappa)=C_d(\kappa)\exp(\kappa\boldsymbol{\mu}^\top\mathbf{x})
+\label{eq:vmf}
+\end{equation}
+where $C_d(\kappa)=\kappa^{d/2-1}\big/\!\left((2\pi)^{d/2}I_{d/2-1}(\kappa)\right)$.
+Higher $\kappa$ indicates more discriminative representations.
+
+The composite training objective is:
+\begin{equation}
+\mathcal{L}=\lambda_1\mathcal{L}_{\text{recon}}+\lambda_2\mathcal{L}_{\text{KL}}
++\lambda_3\mathcal{L}_{\text{cont}},
+\;\;(\lambda_1,\lambda_2,\lambda_3)=(0.5,0.3,0.2)
+\label{eq:loss}
+\end{equation}
+Training used AdamW ($\text{lr}=2\times10^{-4}$, weight decay~0.01, cosine
+annealing, 30~epochs, batch size~64, 10\% warm-up). An MLP misconception classifier
+on the 256-dim bottleneck outputs softmax probabilities over five types:
+(1)~missing base case, (2)~off-by-one errors, (3)~variable misuse,
+(4)~algorithm misunderstanding, (5)~syntax misconception.
+
+\subsection{COKE Cognitive-State Tracking}
+
+COKE infers student cognitive state from action tuples $(a_p,\Delta t_p,o_p)$ where
+$a_p$ is action type, $\Delta t_p$ is elapsed time, and
+$o_p\in\{\text{success,error,neutral}\}$. Four states are tracked:
+\textit{perceiving}, \textit{confused}, \textit{frustrated}, \textit{understanding},
+stored in a \texttt{CognitiveChain} directed graph with per-turn confidence and
+frequency updates.
+
+The frustration heuristic fires when the sequence contains $\geq3$ consecutive
+\texttt{run\_test} events with cumulative time-stuck $\geq67.5$\,s and no success
+outcome. The \texttt{frustrated} state triggers: (1)~de-escalating tone selection;
+(2)~one-level reduction in scaffolding complexity; (3)~emotional weight increase
+in the RL objective to $\geq50\%$ (Section~\ref{sec:rl}).
+
+In the traced session (\texttt{student\_sample\_03}), the five-turn COKE trajectory
+was: \textit{frustrated}~$\to$~\textit{confused}~$\to$~\textit{engaged}~$\to$
+\textit{understanding}~$\to$~\textit{confused}. The terminal dip corresponds to
+introduction of memoisation as a genuinely new concept, confirming correct scaffolding
+behaviour: the system did not assume recursion mastery transfers automatically.
+
+\subsection{Nestor Bayesian Personality Profiling}
+
+The Nestor module~\cite{nadimpalli2025nestor} infers Big Five traits (OCEAN) and
+Felder-Silverman learning styles via:
+\begin{equation}
+P(\text{Intervention}\mid\mathbf{E})\approx\text{softmax}
+(W_2\cdot\text{ReLU}(W_1\cdot\mathbf{E}+b_1)+b_2)
+\label{eq:nestor}
+\end{equation}
+Parameters minimise KL divergence from exact Bayesian inference on 10,000~synthetic
+student sequences.
+
+Dynamic learning-style inference combines three evidence sources in priority order:
+(1)~\textit{stored cross-session profile} from the Student~KG;
+(2)~\textit{behavioral inference}---visual vs.\ verbal inferred from debugger
+vs.\ print-statement frequency; active vs.\ reflective from time-before-first-run
+($<$30\,s = active; $\geq$30\,s = reflective); sequential vs.\ global from
+edit-run pair density;
+(3)~\textit{NLP keyword analysis}---visual (\textit{diagram, picture, show}),
+active (\textit{try, practice, run}), sequential (\textit{step, first, then}).
+
+At Turn~1 of the traced session, Nestor inferred Openness~$=0.58$,
+Extraversion~$=0.34$, Neuroticism~$=0.57$, prescribing: ``give examples first;
+do not assume follow-up questions; use supportive tone.'' This drove a response
+opening with ``Don't worry'' and an ASCII call-stack recursion diagram (visual style
+confirmed from chat keywords).
+
+\subsection{DINA Cognitive Diagnosis}
+
+The DINA model~\cite{delatorre2009dina} provides interpretable knowledge-component
+mastery estimation:
+\begin{equation}
+P(Y_{sp}=1\mid\boldsymbol{\alpha}_s)=(1-s_p)^{\eta_{sp}}g_p^{1-\eta_{sp}},
+\quad\eta_{sp}=\prod_{k=1}^{K}\alpha_{sk}^{q_{pk}}
+\label{eq:dina}
+\end{equation}
+where $\alpha_{sk}\in\{0,1\}$ is the latent mastery indicator, $q_{pk}$ is the
+Q-matrix entry, $s_p$ is slip probability, and $g_p$ is guess probability.
+Components with mastery $\hat{\alpha}_{sk}<0.70$ surface as \textit{knowledge\_gap}
+nodes in the Student~KG and trigger CSE-KG~2.0 prerequisite-path queries included
+in the nine-section prompt.
+
+\subsection{Hierarchical Multi-Task Reinforcement Learning}
+\label{sec:rl}
+
+A four-level Hierarchical Multi-Task RL controller (PPO via Stable-Baselines3~2.0)
+governs intervention selection~\cite{wan2023rl}:
+
+\textbf{Level~1 (Meta-Controller):} Learns general teaching strategy for the student
+type over the full curriculum horizon.
+
+\textbf{Level~2 (Curriculum Controller):} Selects which concept to address next,
+balancing prerequisite satisfaction against student engagement.
+
+\textbf{Level~3 (Session Multi-Task Controller):} Simultaneously optimises five
+objectives with adaptive weights: learning maximisation (40\% baseline), engagement
+optimisation (25\%), emotional state management (20\%), time efficiency (10\%),
+and long-term retention (5\%). When $\sigma_t=\text{frustrated}$, emotional weight
+increases to $\geq50\%$; when $\sigma_t=\text{engaged}$, learning weight increases
+to $\geq60\%$.
+
+\textbf{Level~4 (Intervention Executor):} Maps the Level~3 decision to one of five
+intervention types: \textit{visual\_explanation}, \textit{interactive\_exercise},
+\textit{guided\_practice}, \textit{conceptual\_deepdive},
+\textit{motivational\_support}.
+
+The reward function combines immediate mastery gain $\Delta\hat{\alpha}$, emotion
+transition quality (frustration-reduction bonus), engagement score, and a retention
+proxy (spaced-repetition alignment). Policies use PPO with $\gamma=0.99$,
+GAE $\lambda=0.95$, and a replay buffer of 10,000~transitions.
+
+\subsection{Knowledge Graph Integration}
+
+Three knowledge graphs are maintained and bidirectionally
+updated~\cite{abusalih2024kg,shengju2025cross}.
+
+\textbf{CSE-KG~2.0}~\cite{dessi2025csekg}: A live RDF/OWL domain knowledge base
+queried via SPARQL. Entity types include \texttt{cskg:Concept}, \texttt{cskg:Method},
+and \texttt{cskg:Task} with \texttt{requiresKnowledge} prerequisite edges.
+
+\textbf{Student KG}: A per-student directed graph tracking mastery-state nodes
+($\hat{\alpha}_{sk}$), misconception-pattern nodes, and cross-session
+learning-trajectory edges, updated bottom-up from behavioral data after each turn.
+
+\textbf{Pedagogical KG}: A misconception ontology with severity and frequency
+counters updated cross-session. Each node carries: concept link, severity
+(\textit{critical/high/medium}), detection frequency, correction strategy, and
+recommended intervention type. Across 10~evaluation conversations, the KG
+accumulated four persistent nodes including \texttt{mc\_recursion\_no\_base\_case}
+(frequency~$=0.86$, severity~$=\textit{critical}$) and \texttt{mc\_arrays\_indexerror}
+(frequency updated $0.28\!\to\!0.29$ on second occurrence).
+
+Updates follow a bidirectional mechanism: bottom-up (behavioral data $\to$
+Student~KG) and top-down (curriculum objectives $\to$ intervention selection).
+
+\subsection{Nine-Section Prompt and Ten Personalization Features}
+\label{sec:prompt}
+
+Each turn produces a 2,824--3,043-character nine-section structured prompt
+implementing the Model~B context strategy of Jin et al.~\cite{jin2025automated}.
+The nine sections encode: (1)~COKE state with confidence; (2)~Nestor Big Five
+vector; (3)~Felder-Silverman learning style with behavioral evidence; (4)~detected
+misconception type and correction strategy; (5)~CSE-KG prerequisite gap chain
+(mastery~$<0.70$); (6)~RL-selected intervention type; (7)~prior three-turn context;
+(8)~CodeBERT correctness score; (9)~LP-level target and rubric for the current topic.
+
+These sections drive ten adaptive personalization features at generation time:
+(F1)~Conversation Memory; (F2)~Emotional Tone Adaptation (gentle/supportive/
+enthusiastic/celebratory driven by frustration and engagement thresholds);
+(F3)~Learning Style Personalisation (visual analogies, numbered steps, hands-on
+exercises, or conceptual explanations matched to Nestor output);
+(F4)~Personality-Based Communication (extra reassurance for high Neuroticism;
+structured format for high Conscientiousness; advanced connections for high
+Openness); (F5)~Progress-Aware Scaffolding; (F6)~Interest-Based Examples;
+(F7)~Format Preference Adaptation (ASCII diagrams, code blocks, bulleted steps);
+(F8)~Error-Specific Feedback from Pedagogical~KG;
+(F9)~Metacognitive Guidance calibrated to LP level; and
+(F10)~Difficulty Adaptation via mastery gap and COKE state.
+
+\subsection{Three-Tier Evaluation Framework}
+
+\textbf{Tier~1 (Keyword Baseline):} Concept detection via keyword matching with
+morphological variation and WordNet synonym expansion; error detection maps
+17~error types to keyword patterns; six binary quality indicators.
+
+\textbf{Tier~2 (HVSAE-Enhanced Semantic):} Cosine distance in the 256-dim
+hyperspherical space; MLP misconception classifier; quality boost~$=\kappa\times0.3$.
+
+\textbf{Tier~3 (Standard NLP):} BLEU, ROUGE-1/2/L, and METEOR for comparison
+with other educational dialogue systems.
+
+The overall score integrates all three tiers:
+\begin{equation}
+\text{Score}=0.4C+0.3E+0.2Q+0.1\overline{\text{NLP}}
+\label{eq:score}
+\end{equation}
+where $C=$ concept coverage, $E=$ error coverage, $Q=$ quality score with HVSAE
+boost, $\overline{\text{NLP}}=$ mean of BLEU, ROUGE-L, and METEOR.
+
+\subsection{Training Hyperparameters and Latency Profile}
+
+\begin{table}[t]
+\caption{Component Latency Per Student Turn (NVIDIA T4, 16\,GB)}
+\label{tab:latency}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Component} & \textbf{Latency (ms)} \\
+\midrule
+HVSAE multi-modal encoding & 150--200 \\
+DINA cognitive diagnosis & 50--100 \\
+Nestor psychological profiling & 75--125 \\
+Behavioral RNN / HMM & 100--150 \\
+KG query and update & 50--75 \\
+Prompt build + LLM call & 100--150 \\
+\midrule
+\textbf{Total per turn} & \textbf{425--650} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+HVSAE: AdamW, $\text{lr}=2\times10^{-4}$, weight decay~0.01, $\beta_1=0.9$,
+$\beta_2=0.999$, batch~64, 30~epochs, cosine annealing with 10\% warm-up.
+Behavioral LSTM: SGD with momentum~0.9, cyclic LR (base $10^{-4}$, max $10^{-2}$).
+DINA~EM: converged in $\leq200$ iterations for all 997~skill components.
+RL: PPO with $\gamma=0.99$, GAE $\lambda=0.95$, replay buffer of 10,000~transitions.
+Table~\ref{tab:latency} reports latency profiling on the evaluation hardware.
+
+%===================================================================
+\section{Results and Findings}
+\label{sec:results}
+
+\subsection{Aggregate Performance}
+
+Table~\ref{tab:agg} reports performance across 10~conversations (45~turns). The
+42.8\% accuracy improvement from Tier~1 to Tier~2 directly mirrors the Model~A
+to Model~B QWK gains of Jin et al.~\cite{jin2025automated}, providing preliminary
+support for RQ3. Misconception detection confidence of 52.7\% (SD~$=12.4\%$)
+indicates moderate uncertainty: since $\kappa=91.1\%$ confirms the latent space
+is highly discriminative, the source of uncertainty lies at decision boundaries
+between misconception types sharing informal linguistic surface forms---consistent
+with the RQ2 hypothesis.
+
+\begin{table}[t]
+\caption{Aggregate System Performance ($N=10$, 45~Turns)}
+\label{tab:agg}
+\centering
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{SD} \\
+\midrule
+Overall accuracy (Tier~2) & 49.7\% & 4.2\% \\
+Tier~1 baseline accuracy & 34.8\% & 5.1\% \\
+HVSAE improvement & $+$42.8\% & --- \\
+Error accuracy & 100.0\% & 0.0\% \\
+Error precision / recall & 100.0\% & 0.0\% \\
+Concept detection rate & 62.3\% & 8.7\% \\
+Quality score & 48.7\% & 25.3\% \\
+Emotion matching accuracy & 100.0\% & 0.0\% \\
+Encoding quality ($\kappa$) & 91.1\% & 3.2\% \\
+Misconception confidence & 52.7\% & 12.4\% \\
+Semantic similarity & 0.78 & 0.09 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Quality Indicator and Misconception Analysis}
+
+Only 48.9\% of responses included code examples and 40.0\% used structural
+elements (Table~\ref{tab:quality})---both strong indicators of pedagogical quality
+in programming education~\cite{scherer2021transfer}. Improving code-example
+generation from 48.9\% to $\geq70\%$ is the primary engineering target.
+
+\begin{table}[t]
+\caption{Quality Indicators and Misconception Detection Gains}
+\label{tab:quality}
+\centering
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Indicator / Misconception Type} & \textbf{Baseline} & \textbf{HVSAE} \\
+\midrule
+Code example present & 48.9\% & --- \\
+Explanation (why, not just what) & 60.0\% & --- \\
+Actionable solution & 71.1\% & --- \\
+Structure (headings / bullets) & 40.0\% & --- \\
+\midrule
+Missing base case & 82\% & 91\% \\
+Off-by-one errors & 65\% & 73\% \\
+Variable misuse & 58\% & 66\% \\
+Algorithm misunderstanding & 47\% & 55\% \\
+Syntax misconception & 41\% & 49\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Greater relative gains on conceptual errors (base case, off-by-one) than syntactic
+errors confirm that hyperspherical encoding adds most value for semantically complex
+misconceptions, providing empirical direction for RQ2.
+
+\subsection{Single-Student Trace and RL Validation}
+
+The five-turn code-correctness trajectory for \texttt{student\_sample\_03} was:
+0.70 (T1: infinite recursion) $\to$ 0.84 (T2: base case added) $\to$ 0.96
+(T3: Fibonacci) $\to$ 0.84 (T4--T5: memoisation). The terminal correctness dip
+and COKE \textit{understanding}~$\to$~\textit{confused} transition on Turn~5
+confirm correct scaffolding: the system did not assume recursion mastery transfers
+to memoisation. The Level~3 RL controller correctly increased emotional weight
+from 20\% to 35\% between Turns~1--2 (frustration), then reduced it to 15\% by
+Turn~3 as COKE transitioned to \textit{engaged}, demonstrating adaptive multi-task
+weight adjustment.
+
+\subsection{Performance Distribution and Comparative Positioning}
+
+\begin{table}[t]
+\caption{Performance Distribution (45 Evaluation Turns)}
+\label{tab:dist}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Tier} & \textbf{Turns} & \textbf{\%} & \textbf{Interpretation} \\
+\midrule
+Excellent ($\geq$80\%) & 0 & 0.0\% & Not yet achieved \\
+Good (60--80\%) & 8 & 17.8\% & Strong error detection \\
+Fair (40--60\%) & 37 & 82.2\% & Consistent baseline \\
+Poor ($<$40\%) & 0 & 0.0\% & Robust lower bound \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Comparative Analysis with Representative Systems}
+\label{tab:comp}
+\centering
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{>{\raggedright}p{2.0cm}ccp{1.8cm}}
+\toprule
+\textbf{System} & \textbf{Err.} & \textbf{Pers.} & \textbf{Limitation} \\
+\midrule
+CPAL (Ours) & 100\% & Multi-dim. & Concept artifact \\
+Nestor BN~\cite{nadimpalli2025nestor} & N/A & Psych. only & Survey dep. \\
+KG Approaches~\cite{abusalih2024kg} & 85--90\% & KG-based & Static KG \\
+RL Path~\cite{wan2023rl} & N/A & Sequential & No error analysis \\
+Traditional ITS & 70--85\% & Limited & Single-modality \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Concentration in the Fair tier (82.2\%) with zero Poor turns confirms a robust
+baseline. The concept coverage data artifact (0.0\% evaluated accuracy alongside
+62.3\% system detection rate) indicates missing expected-concept annotation tags
+in the evaluation harness, not a pipeline failure; resolving this is expected to
+raise Tier~2 accuracy from 49.7\% to the 60--70\% range.
+
+%===================================================================
+\section{Remaining Work and Timeline}
+\label{sec:remaining}
+
+The remaining work implements and extends the LLM Explanation Evaluation
+Methodology~\cite{patel2025llmeval}.
+
+\subsection{Phase~1: PCM-Validated Learning Progression (Weeks~1--4)}
+
+\textbf{Milestone~1.1} (Weeks~1--2): Think-aloud interviews; 60+ written constructed
+responses from 15+ students across three experience levels on recursion, iteration,
+and scope.
+
+\textbf{Milestone~1.2} (Weeks~2--3): Grounded theory coding deriving four LP
+levels: (L1)~Heuristic---``it calls itself until it stops''; (L2)~Qualitative---
+``each call breaks the problem into a smaller version''; (L3)~Measurable Variables---
+``base case stops recursion; each frame holds local state''; (L4)~Scientific
+Explanation---$T(n)=T(n{-}1)+O(1)$; space $O(n)$.
+
+\textbf{Milestone~1.3} (Weeks~3--4): PCM threshold ordering via R \texttt{eRm}
+following Jin et al.~\cite{jin2019validation}. Disordered thresholds require LP
+revision before any subsequent milestone (non-negotiable gate for RQ1).
+
+\subsection{Phase~2: LLM Comparison Experiment (Weeks~4--9)}
+
+Four LLMs are compared under Model~A (question only) and Model~B (full nine-section
+CPAL context): GPT-4o, Claude~3.5 Sonnet, Gemini~1.5 Pro, and Llama-3.1-8b.
+The evaluation engine is the Anthropic API (\texttt{claude-sonnet-4-20250514}).
+
+The composite analytic score~\cite{patel2025llmeval} is:
+\begin{equation}
+S_{\text{analytic}}=0.35P+0.25L+0.25A+0.15C
+\label{eq:analytic}
+\end{equation}
+where $P=$ Pedagogical Value, $L=$ Language Clarity, $A=$ Technical Accuracy,
+$C=$ Context Alignment. Explanations are ranked by: LP Level $\succ$
+$S_{\text{analytic}}$ $\succ$ Error Flag Count. QWK is computed relative to an
+ideal Level~4 expert explanation using Williamson et al.\ thresholds~\cite{williamson2012framework}:
+$\geq0.85$ excellent, $0.70$--$0.85$ strong, $0.60$--$0.70$ moderate, $<0.60$ poor.
+Five error flags---Ambiguous Terminology, Logical Inconsistency, Jargon Without
+Grounding, Missing Contextual Grounding, Informal Language Obscuring Meaning---can
+each reduce the effective LP level.
+
+\subsection{Phase~3: Equity Analysis and Validity Argument (Weeks~9--12)}
+
+Informal language corpus construction (RQ2); terminological ambiguity QWK mapping
+on code synonym pairs (``higher-order function'' vs.\ ``function taking a function'';
+``closure'' vs.\ ``lexical scope''; ``memoisation'' vs.\ ``caching''); DIF analysis
+across bilingual/experience subgroups (RQ4); five-stage validity argument for the
+winning LLM; paper writing targeting EDM~2026, AIED~2026, SIGCSE~2026.
+
+\begin{table}[t]
+\caption{Remaining Work Timeline (Twelve Weeks)}
+\label{tab:timeline}
+\centering
+\begin{tabular}{cp{6.3cm}}
+\toprule
+\textbf{Week(s)} & \textbf{Milestone} \\
+\midrule
+1--2 & Clinical interviews; 60+ constructed responses \\
+2--3 & Thematic analysis; four-level code-LP derived \\
+3--4 & PCM threshold ordering; LP revision if needed (RQ1) \\
+4--5 & Model A/B conditions; explanations from 4~LLMs \\
+5--6 & LP level assigned per explanation (5 decision rules) \\
+6--7 & Analytic scoring ($P/L/A/C$); five error flags applied \\
+7--9 & QWK; three-tier ranking; winner identified (RQ3) \\
+9--10 & Informal language corpus; misclassification rate (RQ2) \\
+10 & Terminological ambiguity QWK degradation \\
+10--11 & DIF analysis across subgroups (RQ4) \\
+11 & Five-stage validity argument for winning LLM \\
+12 & Paper writing; advisor review; submission \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%===================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This midterm report presents a framework bridging Learning Progression theory,
+automated LP-based scoring, and LLM evaluation methodology. The CPAL
+implementation---a nine-component, ten-feature, six-layer system with four-level
+hierarchical RL and three dynamically updated knowledge graphs---is fully
+operational. Preliminary results across 45~interaction turns demonstrate perfect
+error and emotion detection (100\%), a 42.8\% accuracy improvement from LP-grounded
+context provision, and highly discriminative hyperspherical representations
+($\kappa=91.1\%$). Four Research Questions structure a twelve-week remaining
+programme culminating in PCM validation, a five-LLM comparison experiment, DIF
+equity analysis, and a five-stage validity argument for LLM-generated code
+explanations. The goal is AI tools that can be \textit{proven} to develop
+students' understanding of code---and the psychometric evidence to substantiate
+that claim.
+
+%===================================================================
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
