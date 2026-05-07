@@ -92,18 +92,8 @@ class InterventionOrchestrator:
             self.mental_models_catalogue = MentalModelsCatalogue(catalogue_path)
             # LPDiagnostician is the Stage 1 orchestrator; it holds the
             # catalogue and exposes .diagnose() for pre-session scoring.
-            # Pass the pretrained HVSAE so Stage 1 can semantically match
-            # student text against catalogue signals + rubric rather than
-            # relying solely on lexical overlap (handles diverse vocab).
-            hvsae_for_diag = self.models.get('hvsae')
-            self.lp_diagnostician = LPDiagnostician(
-                catalogue=self.mental_models_catalogue,
-                hvsae_model=hvsae_for_diag,
-            )
-            if hvsae_for_diag is not None:
-                print("[OK] LP Diagnostician initialized (HVSAE-powered semantic matcher)")
-            else:
-                print("[OK] LP Diagnostician initialized (overlap-matcher fallback — no HVSAE)")
+            self.lp_diagnostician = LPDiagnostician(self.mental_models_catalogue)
+            print("[OK] LP Diagnostician + Mental Models Catalogue initialized")
         except Exception as e:
             print(f"[WARN] LP Diagnostician failed: {e}")
             self.mental_models_catalogue = None
@@ -222,17 +212,12 @@ class InterventionOrchestrator:
                     or session_data.get("error_message")
                     or ""
                 )
-                # Forward HVSAE outputs computed at Step 1 so semantic
-                # matching has the latent + 20-class misconception vector.
-                # `encoding_results` is the dict _encode_session returned.
                 diagnosis = self.lp_diagnostician.diagnose(
                     student_id       = student_id,
                     concept          = concept_for_lp,
                     question_text    = student_text,
                     stored_lp_level  = lp_state_loaded.get("lp_level"),
                     stored_lp_streak = int(lp_state_loaded.get("lp_streak", 0)),
-                    hvsae_latent     = encoding_results.get("latent"),
-                    hvsae_misconception_probs = encoding_results.get("misconception_probs"),
                 )
                 lp_diagnostic = diagnosis.to_dict()
                 # log what fired

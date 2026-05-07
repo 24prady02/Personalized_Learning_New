@@ -171,25 +171,27 @@ misconceptions = client.get_common_misconceptions("cskg:null_pointer_exception")
 ## Project Structure
 
 ```
-personalized_learning/
-├── src/
-│   ├── models/
-│   │   ├── hvsae/          # Hyperspherical VAE implementation
-│   │   ├── dina/           # DINA cognitive diagnosis
-│   │   ├── nestor/         # Bayesian network
-│   │   └── behavioral/     # RNN/HMM models
-│   ├── knowledge_graph/
-│   │   ├── cse_kg_client.py
-│   │   ├── graph_fusion.py
-│   │   └── query_engine.py
+personalized_learning_system/
+├── src/                    # Production source modules
+│   ├── models/             # HVSAE, DINA, Nestor, behavioral
+│   ├── knowledge_graph/    # CSE-KG client, fusion, querying
 │   ├── orchestrator/       # Intervention selection
+│   ├── reinforcement_learning/
+│   ├── student_modeling/
+│   ├── teaching/           # 4-stage teaching pipeline
 │   ├── data/               # Data processing pipelines
 │   └── utils/
-├── configs/                # Configuration files
-├── api/                    # FastAPI server
-├── scripts/                # Utility scripts
-├── tests/
-└── notebooks/              # Jupyter notebooks
+├── api/                    # FastAPI server (server.py)
+├── scripts/                # Training, demos, dataset prep
+├── cpal_integration/       # CPAL integration module
+├── configs/                # config.yaml, config_smoke.yaml, KG schema
+├── checkpoints/            # Trained model weights (.pt files)
+├── data/                   # Datasets: codenet, progsnap2, nestor, etc.
+├── docs/                   # Documentation, paper, slides, project report
+├── examples/               # Worked examples and learning journeys
+├── notebooks/              # Jupyter notebooks
+├── README.md, QUICK_START.md, INSTALLATION.md, SETUP.md
+└── requirements.txt
 ```
 
 ## Process Flow

@@ -1,0 +1,867 @@
+{
+  "version": "1.0",
+  "source": "mental_models_cpal_methodology_revised.docx, Part 2",
+  "description": "20 Java CS1 concepts with documented wrong mental models, origins, conversation signals, and L1-L4 LP rubric. Used by LPDiagnostic (Stage 1) to match student question text against a specific wrong model, and by the prompt builder (Stage 3, Section LP-2) to feed the correct wrong-model context into the LLM.",
+  "concepts": {
+    "type_mismatch": {
+      "week": 1,
+      "error_class": "compile_error",
+      "java_concept": "Type system, concatenation. Error: cannot convert int to String (or vice versa).",
+      "wrong_models": [
+        {
+          "id": "TM-A",
+          "wrong_belief": "Type is a label for humans to read, not a constraint Java enforces. int and String are both 'data' and should be compatible.",
+          "origin": "Natural language - numbers and words are all 'things'",
+          "conversation_signals": [
+            "it's just a number",
+            "why won't it work with the string",
+            "I labelled it int so Java should know"
+          ]
+        },
+        {
+          "id": "TM-B",
+          "wrong_belief": "The + operator always concatenates. int + String should produce a string automatically the way Python does.",
+          "origin": "Python: str(x) is implicit in many contexts",
+          "conversation_signals": [
+            "I thought + would just make them into a string",
+            "in Python this just works",
+            "why won't + just combine them"
+          ]
+        },
+        {
+          "id": "TM-C",
+          "wrong_belief": "Java will automatically convert types when it needs to, the way a calculator does.",
+          "origin": "Calculator metaphor - machines handle type automatically",
+          "conversation_signals": [
+            "can't Java just convert it",
+            "why do I need to cast",
+            "Java should be smart enough"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Sees the compile error but cannot say why. Says 'it won't compile' with no explanation of the type constraint.",
+        "L2": "Knows int and String are different types and the + means something different for each. Cannot explain Java's type resolution at compile time.",
+        "L3": "Can trace: Java checks operand types at compile time. int + String is ambiguous - Java does not coerce. Explicit cast or toString() required. Can predict compile error for novel type combinations.",
+        "L4": "Understands Java's static type system - types are checked at compile time, not runtime. Can explain why Java chose this design (safety, performance). Applies to any type mismatch not just int/String."
+      }
+    },
+    "infinite_loop": {
+      "week": 1,
+      "error_class": "logic_error",
+      "java_concept": "Loop update step. Error: while loop runs forever because update step is missing or wrong.",
+      "wrong_models": [
+        {
+          "id": "IL-A",
+          "wrong_belief": "The loop condition is checked once at the start and then the loop runs until it finishes naturally. Conditions are entry tests not repeated tests.",
+          "origin": "Natural language 'while' - while I am doing X, do Y - implies the activity ends on its own",
+          "conversation_signals": [
+            "I set the condition so why doesn't it stop",
+            "the while checks at the beginning right",
+            "when does it check the condition"
+          ]
+        },
+        {
+          "id": "IL-B",
+          "wrong_belief": "The loop variable will change by itself because it is 'being used' in the loop body. Usage implies modification.",
+          "origin": "Anthropomorphism - things that are used change",
+          "conversation_signals": [
+            "i is in the loop so I thought it would increase",
+            "I use i in the condition so shouldn't it change",
+            "doesn't i update automatically"
+          ]
+        },
+        {
+          "id": "IL-C",
+          "wrong_belief": "The condition becoming false requires an external event, not an update in the loop body.",
+          "origin": "Confusion between event-driven and iterative models",
+          "conversation_signals": [
+            "what is supposed to make it stop",
+            "nothing in the loop changes the condition",
+            "how does it know when to stop"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Observes the program hangs but cannot identify why. Says 'it runs forever' without locating the missing update.",
+        "L2": "Knows the loop needs an update step. Can identify that i++ or i-- is missing. Cannot explain why Java re-evaluates the condition on each iteration.",
+        "L3": "Can trace: condition evaluated before each iteration -> body executes -> update runs -> condition re-evaluated. If update never changes the condition variable, condition is always true. Predicts infinite loop from code without running it.",
+        "L4": "Understands loop invariants. Can identify off-by-one vs infinite vs finite-but-wrong loop errors. Applies to while, for, and do-while with different update patterns."
+      }
+    },
+    "null_pointer": {
+      "week": 2,
+      "error_class": "runtime_error",
+      "java_concept": "References, object creation. Error: NullPointerException when calling method on uninitialised reference.",
+      "wrong_models": [
+        {
+          "id": "NP-A",
+          "wrong_belief": "Declaring a variable creates the object. String s; creates a String object named s. The name and the thing are the same act.",
+          "origin": "Python/scripting: name = thing is one act. Natural language: naming implies existence.",
+          "conversation_signals": [
+            "I declared it so why is it null",
+            "I created s right there at the top",
+            "didn't I make it already"
+          ]
+        },
+        {
+          "id": "NP-B",
+          "wrong_belief": "null means empty or zero. Calling a method on null should return empty/default result, not crash.",
+          "origin": "null is like 0 for numbers or empty string for strings - a valid default value",
+          "conversation_signals": [
+            "why does it crash I thought null was like an empty string",
+            "can't it just return nothing",
+            "isn't null basically zero"
+          ]
+        },
+        {
+          "id": "NP-C",
+          "wrong_belief": "The variable holds the object itself, not a pointer to it. There is no concept of indirection.",
+          "origin": "Variables contain values directly in mental model",
+          "conversation_signals": [
+            "s is the string why is it null",
+            "I put the string in s",
+            "the variable is the object"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Knows NPE happened, cannot say why. Cannot answer 'what does s hold after String s;'",
+        "L2": "Knows null means 'no object assigned'. Knows the fix is to initialise with new. Cannot trace the dereference mechanism.",
+        "L3": "Can trace: declaration creates a reference slot holding null. new allocates a heap object and returns its address. Method call dereferences the reference - follows the address to the heap object. null dereference fails because there is no address to follow -> NPE. Can predict which line throws NPE.",
+        "L4": "Applies to all reference types. Understands why null checks are necessary before method calls. Can write null-safe code. Understands Optional as a design pattern."
+      }
+    },
+    "string_equality": {
+      "week": 2,
+      "error_class": "logic_error",
+      "java_concept": "Reference equality. Error: == returns false for two Strings with identical content.",
+      "wrong_models": [
+        {
+          "id": "SE-A",
+          "wrong_belief": "== compares the content of strings. Two strings with the same characters are equal under ==.",
+          "origin": "Python: == calls __eq__ which compares content. Mathematics: equality means same value.",
+          "conversation_signals": [
+            "they're both hello so why is == false",
+            "I printed them both and they look identical",
+            "the text is the same"
+          ]
+        },
+        {
+          "id": "SE-B",
+          "wrong_belief": "new String() makes a copy of the literal. The copy and the original are the same thing.",
+          "origin": "Copying = equivalence. Making a copy of X gives you something equivalent to X.",
+          "conversation_signals": [
+            "I made two strings with the same text so they should be equal",
+            "new just copies the string right",
+            "a copy is the same thing"
+          ]
+        },
+        {
+          "id": "SE-C",
+          "wrong_belief": "== and .equals() are interchangeable syntax variants. One is shorthand for the other.",
+          "origin": "Syntactic variants in other languages (== and .equals() in some frameworks behave identically)",
+          "conversation_signals": [
+            "isn't .equals() just the longer way to write ==",
+            "they should do the same thing",
+            "what's the difference really"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Observes == returns false when content is same. Cannot explain why. Says 'they look the same to me'.",
+        "L2": "Knows to use .equals() for strings. Cannot explain why == fails. Uses the rule without the mechanism. Hedges: 'something about how strings are stored?'",
+        "L3": "Can trace: new String() allocates a heap object. Variable holds a reference (memory address). == compares addresses. Two new String() calls produce two different heap objects at different addresses. Therefore == returns false even when character content is identical.",
+        "L4": "Understands string interning. Explains why string literals can return true under == (JVM intern pool). Extends principle to all Java objects. Can write correct .equals() override for custom class."
+      }
+    },
+    "variable_scope": {
+      "week": 2,
+      "error_class": "compile_error",
+      "java_concept": "Block scope, braces. Error: cannot find symbol - variable used outside its declaring block.",
+      "wrong_models": [
+        {
+          "id": "VS-A",
+          "wrong_belief": "Variables exist for the whole method once declared. Braces are grouping for humans to read, not execution boundaries that destroy variables.",
+          "origin": "Natural language: once you name something it exists until you're done. Braces look like section headers.",
+          "conversation_signals": [
+            "I declared it in the if block why can't I use it after",
+            "the braces are just for organisation right",
+            "I already declared it"
+          ]
+        },
+        {
+          "id": "VS-B",
+          "wrong_belief": "Two variables with the same name in different scopes are the same variable. Same name = same storage.",
+          "origin": "Natural language: same word = same thing. Variable naming as global dictionary.",
+          "conversation_signals": [
+            "I have x in the method and x in the loop are they the same",
+            "I thought x was already defined",
+            "didn't I name it already"
+          ]
+        },
+        {
+          "id": "VS-C",
+          "wrong_belief": "Variables declared inside a loop are re-declared on each iteration but persist after the loop ends.",
+          "origin": "Loop as a 'section' that creates things that stay",
+          "conversation_signals": [
+            "I declared total inside the loop so it should be available after",
+            "I create it each time through",
+            "the loop made it"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Sees 'cannot find symbol' but cannot locate why. Cannot connect braces to scope boundaries.",
+        "L2": "Knows variables declared inside {} are scoped to that block. Cannot explain why the compiler enforces this. Applies the rule: 'declare it before the block'.",
+        "L3": "Can trace: Java uses lexical block scope. Each { opens a new scope frame. At } the frame is destroyed and its variables are gone. Compiler performs static scope analysis - detects out-of-scope access at compile time without running the code. Can predict scope errors in novel code.",
+        "L4": "Applies scope analysis to loops, if-else, try-catch, method parameters, class fields. Understands shadowing. Can reason about scope in nested blocks without running code."
+      }
+    },
+    "assignment_vs_compare": {
+      "week": 2,
+      "error_class": "compile_or_logic_error",
+      "java_concept": "Assignment vs comparison. Error: = used inside condition instead of ==.",
+      "wrong_models": [
+        {
+          "id": "AC-A",
+          "wrong_belief": "= means 'is equal to' because that is what it means in mathematics. if (x = 5) tests if x is 5.",
+          "origin": "Mathematics: = expresses equality. Universal equation symbol.",
+          "conversation_signals": [
+            "if x = 5 means if x is 5 that's what equals means",
+            "in math = means they're the same",
+            "equals is equals"
+          ]
+        },
+        {
+          "id": "AC-B",
+          "wrong_belief": "Java should be able to tell from context whether = is assignment or comparison.",
+          "origin": "Natural language: context disambiguates identical symbols",
+          "conversation_signals": [
+            "can't Java figure out I mean comparison from the if",
+            "it's obvious from context",
+            "Java should know what I mean"
+          ]
+        },
+        {
+          "id": "AC-C",
+          "wrong_belief": "if (x = 5) will always be true because assignment succeeds. Does not understand that assignment returns a value.",
+          "origin": "No mental model of assignment as an expression with a return value",
+          "conversation_signals": [
+            "why does it always go into the if I only set x to 5",
+            "the assignment worked so the if is true",
+            "it just sets it"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Sees unexpected behaviour (condition always fires or compile error) but cannot connect it to = vs ==.",
+        "L2": "Knows = is assignment and == is comparison. Cannot explain why if (x = 5) compiles in some languages or what value assignment returns.",
+        "L3": "Can trace: = assigns 5 to x and returns the assigned value (5, which is truthy as non-zero int). if evaluates this returned value. == compares without side effects and returns boolean. Assignment inside condition is almost always a bug. Can predict whether code compiles and what it does.",
+        "L4": "Understands Java's type system prevents boolean = 5 (compile error) but int = 5 inside if produces a warning not an error. Can write conditions using compound assignment intentionally and explain the semantics."
+      }
+    },
+    "integer_division": {
+      "week": 2,
+      "error_class": "logic_error",
+      "java_concept": "Type promotion, casting. Error: 5/2 produces 2 instead of 2.5.",
+      "wrong_models": [
+        {
+          "id": "ID-A",
+          "wrong_belief": "Division always produces a real number result. 5/2 = 2.5 universally because that is mathematical truth.",
+          "origin": "Mathematics: division always produces a ratio. Calculators always show decimals.",
+          "conversation_signals": [
+            "5 divided by 2 is 2.5 why does Java say 2",
+            "Java rounded it down for no reason",
+            "that's not the right answer"
+          ]
+        },
+        {
+          "id": "ID-B",
+          "wrong_belief": "Type is determined by the result, not the operands. If the answer is 2.5, Java should produce a double.",
+          "origin": "Result-driven type inference - the output determines its type",
+          "conversation_signals": [
+            "the answer is a decimal so shouldn't Java know to make it a double",
+            "the result is 2.5 why not return double",
+            "Java should pick the type that fits"
+          ]
+        },
+        {
+          "id": "ID-C",
+          "wrong_belief": "(double)(5/2) produces 2.5 because it casts the result to double.",
+          "origin": "Cast = conversion of output, not operand",
+          "conversation_signals": [
+            "I cast it to double but I still got 2.0 why",
+            "I added the cast already",
+            "why is the cast not working"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Observes wrong answer. Says Java 'rounded' the answer. Cannot explain truncation.",
+        "L2": "Knows int/int = int in Java. Knows to cast. Cannot explain type resolution order or why the truncation happens.",
+        "L3": "Can trace: Java determines result type from operand types before computing. int operand + int operand -> int result. JVM performs integer arithmetic, discards remainder. Cast must apply to an operand before division, not the result. (double)5/2 works. (double)(5/2) does not because division happens first.",
+        "L4": "Applies to all integer type combinations. Explains byte/short promotion to int. Understands why floating-point results can be imprecise. Connects to IEEE 754 at L4."
+      }
+    },
+    "scanner_buffer": {
+      "week": 2,
+      "error_class": "logic_error",
+      "java_concept": "Input buffer. Error: nextLine() after nextInt() reads the leftover newline instead of the next line of input.",
+      "wrong_models": [
+        {
+          "id": "SB-A",
+          "wrong_belief": "Each Scanner method reads fresh input. nextInt() reads a number. nextLine() after nextInt() reads the next line of user input.",
+          "origin": "Sequential method calls consume sequential input chunks. No model of a buffer.",
+          "conversation_signals": [
+            "I called nextLine() after nextInt() but it's reading nothing",
+            "why is my string empty",
+            "it's skipping the input"
+          ]
+        },
+        {
+          "id": "SB-B",
+          "wrong_belief": "nextInt() consumes the entire line including the newline character.",
+          "origin": "I/O reads complete units (lines) even when reading typed values",
+          "conversation_signals": [
+            "does nextInt() not read the whole line",
+            "I thought it moved past everything",
+            "nextInt should take the whole line"
+          ]
+        },
+        {
+          "id": "SB-C",
+          "wrong_belief": "The newline character does not exist as a separate token. Enter just signals end of input for the number.",
+          "origin": "Keyboard Enter = end of that input, not a character that persists in a buffer",
+          "conversation_signals": [
+            "I pressed Enter to finish the number why is that Enter being read as the next input",
+            "Enter is not a character",
+            "where did the newline come from"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "nextLine() reads empty string. Student cannot explain why. Thinks bug is in their nextLine() call.",
+        "L2": "Knows nextInt() leaves something behind. Knows to add an extra nextLine(). Cannot explain what was left behind or why.",
+        "L3": "Can trace: input is buffered as a character stream. nextInt() reads digits up to but not including the newline. The newline remains in the buffer. nextLine() reads the buffer up to and including the next newline - which is immediately the leftover one. Extra nextLine() after nextInt() consumes and discards the leftover newline.",
+        "L4": "Applies to all next*() methods. Understands the scanner buffer model for all token-based parsing. Can explain why nextLine() before nextInt() does not have this problem."
+      }
+    },
+    "array_index": {
+      "week": 3,
+      "error_class": "runtime_error",
+      "java_concept": "Zero-indexing, loops. Error: ArrayIndexOutOfBoundsException from 1-based indexing assumption.",
+      "wrong_models": [
+        {
+          "id": "AI-A",
+          "wrong_belief": "Arrays start at index 1. The first element is element 1, the last element of a 5-element array is element 5.",
+          "origin": "Natural language counting: first = 1. Most human counting systems start at 1.",
+          "conversation_signals": [
+            "I have 5 elements so I used arr[5] for the last one",
+            "index 0 is before the first element",
+            "the first element should be 1"
+          ]
+        },
+        {
+          "id": "AI-B",
+          "wrong_belief": "arr.length is the valid last index. A 5-element array's last valid index is arr.length = 5.",
+          "origin": "Length = last position. String length 5 means positions 1-5.",
+          "conversation_signals": [
+            "arr.length gives me 5 so I used arr[arr.length] but it crashed",
+            "length should be the last position",
+            "isn't length the last index"
+          ]
+        },
+        {
+          "id": "AI-C",
+          "wrong_belief": "The array boundary is checked before the loop, not on each access. One index-out-of-bounds is a fluke, not a systematic error.",
+          "origin": "Boundaries are properties of the array, not checked on each element access",
+          "conversation_signals": [
+            "it worked for most iterations but crashed on the last one must be a bug somewhere else",
+            "it mostly works",
+            "it was fine before"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "ArrayIndexOutOfBoundsException. Cannot locate which index is invalid or why.",
+        "L2": "Knows arrays are 0-indexed. Knows last valid index is length-1. Cannot explain why Java uses 0-indexing or trace which loop iteration causes the exception.",
+        "L3": "Can trace: array of size n has valid indices 0 through n-1. arr.length is n. arr[arr.length] accesses index n which does not exist -> AIOOBE. For loop with i <= arr.length goes one past the end. Can identify the off-by-one in any loop variant.",
+        "L4": "Understands 0-indexing as a design choice (memory address arithmetic). Applies to 2D arrays, ArrayList. Recognises off-by-one error patterns systematically."
+      }
+    },
+    "missing_return": {
+      "week": 3,
+      "error_class": "compile_error",
+      "java_concept": "Control flow, methods. Error: missing return statement - not all code paths return a value.",
+      "wrong_models": [
+        {
+          "id": "MR-A",
+          "wrong_belief": "A return statement inside an if block covers all cases. If the condition is true, it returns. If false... Java handles it.",
+          "origin": "Partial coverage is sufficient. The programmer thinks about the common path.",
+          "conversation_signals": [
+            "I have a return in the if why is it saying missing return",
+            "I return when the condition is true",
+            "I handled the main case"
+          ]
+        },
+        {
+          "id": "MR-B",
+          "wrong_belief": "return is only needed for the 'main' case. Else branches do not need return because they are the fallback.",
+          "origin": "Main path has return, fallback can fall through",
+          "conversation_signals": [
+            "the else is just the default case I don't need to return anything",
+            "the else just handles the other case",
+            "only the main path returns"
+          ]
+        },
+        {
+          "id": "MR-C",
+          "wrong_belief": "void and non-void methods work the same. If no return is needed, Java will return null or 0 automatically.",
+          "origin": "Methods return a default value when no return is given",
+          "conversation_signals": [
+            "if I don't return anything it'll just be null right",
+            "Java picks a default",
+            "won't it just be 0"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Sees compile error. Cannot identify which path is missing a return.",
+        "L2": "Knows all paths need a return. Cannot trace Java's static flow analysis or explain why the compiler cannot use runtime logic.",
+        "L3": "Can trace: Java performs static control flow analysis at compile time. It identifies all possible paths through the method. If any path can complete without executing a return statement, compile error. The compiler does not evaluate conditions - it finds paths structurally. Can identify every uncovered path.",
+        "L4": "Applies to all branching structures. Understands why throws counts as a return path. Can design method control flow with guaranteed coverage."
+      }
+    },
+    "array_not_allocated": {
+      "week": 3,
+      "error_class": "compile_or_runtime_error",
+      "java_concept": "Array creation, new keyword. Error: declaring int[] arr without allocating then using arr.length on null.",
+      "wrong_models": [
+        {
+          "id": "ANA-A",
+          "wrong_belief": "int[] arr; declares and creates the array. The type annotation int[] is sufficient to create empty storage.",
+          "origin": "Declaration = creation. Naming the array brings it into existence as an empty container.",
+          "conversation_signals": [
+            "I declared it as an array why is it null",
+            "int[] tells Java to make an array",
+            "didn't I already make the array"
+          ]
+        },
+        {
+          "id": "ANA-B",
+          "wrong_belief": "new int[5] creates 5 separate variables, not an array object. Each element is an independent variable.",
+          "origin": "Arrays as multiple named variables rather than a contiguous heap object",
+          "conversation_signals": [
+            "do I need new for each element",
+            "what does new int[5] actually do",
+            "is each element separate"
+          ]
+        },
+        {
+          "id": "ANA-C",
+          "wrong_belief": "The array size can be changed after allocation. int[] arr = new int[5] can later become size 10.",
+          "origin": "Arrays are resizable like Python lists",
+          "conversation_signals": [
+            "can I make it bigger later",
+            "why do I need to know the size ahead of time",
+            "can I just resize it"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "NPE when accessing arr[0] or arr.length. Cannot connect the NPE to the missing new.",
+        "L2": "Knows new is needed. Knows int[] arr; does not create the array object. Cannot trace what declaration vs allocation do at the memory level.",
+        "L3": "Can trace: int[] arr; creates a reference variable holding null. new int[5] allocates a contiguous block of 5 ints on the heap and returns the block's address. arr then holds that address. Accessing arr[0] dereferences arr - if null, NPE. Can predict which statements require new.",
+        "L4": "Extends to arrays of objects (each element also needs new). Understands why arrays are fixed-size (contiguous memory allocation). Connects to ArrayList as a resizable alternative."
+      }
+    },
+    "boolean_operators": {
+      "week": 3,
+      "error_class": "logic_error",
+      "java_concept": "AND vs OR logic. Error: using || when && is needed or vice versa, producing always-true or always-false conditions.",
+      "wrong_models": [
+        {
+          "id": "BO-A",
+          "wrong_belief": "|| means 'or either'. AND is the inclusive/strict version. Students use || when they want 'both conditions must hold'.",
+          "origin": "Natural language: 'or' is inclusive, 'and' is restrictive. Programming and natural language mapping is reversed.",
+          "conversation_signals": [
+            "I wanted both to be true so I used or",
+            "or means either one so both would definitely work",
+            "and is the strict one"
+          ]
+        },
+        {
+          "id": "BO-B",
+          "wrong_belief": "if (x < 0 || x > 100) can be written as if (x < 0 && x > 100). The two forms mean the same thing.",
+          "origin": "Both operators check multiple conditions, so they produce the same result",
+          "conversation_signals": [
+            "can't I use && here instead",
+            "what's the real difference",
+            "they check multiple conditions either way"
+          ]
+        },
+        {
+          "id": "BO-C",
+          "wrong_belief": "NOT operator flips the whole condition including the operator. !(x > 5) is the same as (x < 5).",
+          "origin": "Negation distributes naively. Does not know De Morgan's law.",
+          "conversation_signals": [
+            "I negated it but the condition isn't working",
+            "I put a ! in front",
+            "the opposite of greater than is less than"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Condition always true or always false. Cannot explain why. Tries different combinations of && and ||.",
+        "L2": "Knows && requires both conditions true, || requires at least one. Cannot reason about when a compound condition is logically equivalent to what they intend.",
+        "L3": "Can trace evaluation: for &&, both operands are evaluated (short-circuit on false). For ||, stops at first true. Can construct truth tables for simple compound conditions. Predicts always-true and always-false conditions from inspection.",
+        "L4": "Applies De Morgan's laws. Can simplify compound boolean expressions. Understands short-circuit evaluation and its implications for side effects."
+      }
+    },
+    "sentinel_loop": {
+      "week": 3,
+      "error_class": "logic_error",
+      "java_concept": "Priming read pattern. Error: first value is skipped because the priming read is missing.",
+      "wrong_models": [
+        {
+          "id": "SL-A",
+          "wrong_belief": "The loop reads input at the start of each iteration. No pre-loop read is needed because the loop will handle the first value.",
+          "origin": "Loop body handles all iterations symmetrically including the first",
+          "conversation_signals": [
+            "the loop reads input why do I need to read before the loop",
+            "won't the loop get the first one",
+            "the loop handles input"
+          ]
+        },
+        {
+          "id": "SL-B",
+          "wrong_belief": "Sentinel value detection works without a priming read. The condition will correctly identify the first non-sentinel value.",
+          "origin": "Condition can be checked before any reading occurs",
+          "conversation_signals": [
+            "I put the condition in the while it'll catch the sentinel",
+            "the while checks for the sentinel",
+            "the condition handles it"
+          ]
+        },
+        {
+          "id": "SL-C",
+          "wrong_belief": "Reading before the loop and reading inside the loop are redundant - the code reads twice. One of them is a mistake.",
+          "origin": "Two reads for one input = bug",
+          "conversation_signals": [
+            "why do I read input twice that seems wrong",
+            "I already read it once why read again",
+            "isn't that duplicated"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "First input value is skipped or sentinel never detected. Cannot explain what happens before first condition check.",
+        "L2": "Knows priming read is needed before the loop. Knows pattern: read, while(not sentinel), process, read. Cannot explain why this sequence is necessary.",
+        "L3": "Can trace: while condition is checked before first loop body execution. If no priming read, condition checks uninitialised variable. Priming read gives the condition a real value to check on first evaluation. At end of loop body, read prepares next value for next condition check. Can predict which value is skipped when priming read is missing.",
+        "L4": "Applies to all sentinel loop patterns. Can design sentinel loops for different data types. Understands do-while as an alternative for post-test loops."
+      }
+    },
+    "unreachable_code": {
+      "week": 3,
+      "error_class": "compile_error",
+      "java_concept": "Control flow analysis. Error: statement after return, break, or throw is flagged as unreachable.",
+      "wrong_models": [
+        {
+          "id": "UC-A",
+          "wrong_belief": "Code after return is a backup or fallback. If the return somehow fails, the code below runs.",
+          "origin": "Return can fail. Code below return = safety net.",
+          "conversation_signals": [
+            "I put extra code after the return just in case",
+            "is the code after return ignored",
+            "I added a backup"
+          ]
+        },
+        {
+          "id": "UC-B",
+          "wrong_belief": "The compiler is wrong. The code after return can run in some situations.",
+          "origin": "Compiler is overly strict. Programmer knows better than the compiler.",
+          "conversation_signals": [
+            "but there's a case where it might reach that line",
+            "the compiler is being too strict",
+            "it could happen"
+          ]
+        },
+        {
+          "id": "UC-C",
+          "wrong_belief": "Unreachable code is just a warning and can be ignored. The program will still work.",
+          "origin": "Warnings are suggestions, not errors. Unreachable code is cosmetically wrong but functionally harmless.",
+          "conversation_signals": [
+            "it compiles with a warning so it's fine",
+            "warnings don't break things",
+            "I can ignore the warning"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Sees compile error. Does not understand what 'unreachable' means in the context of code flow.",
+        "L2": "Knows code after return cannot run. Cannot explain how the compiler knows this without running the program.",
+        "L3": "Can trace: Java performs static control flow analysis. Once a return/break/throw is encountered on all paths, no subsequent statement can execute. The compiler detects this structurally, not by running the code. Can identify unreachable code in any control flow structure.",
+        "L4": "Applies control flow analysis to complex branching. Understands dead code elimination. Can reason about code paths in try-catch-finally."
+      }
+    },
+    "string_immutability": {
+      "week": 3,
+      "error_class": "logic_error",
+      "java_concept": "Immutable objects. Error: s = s + 'x' looks like it modifies s but creates a new object; original reference unchanged in some patterns.",
+      "wrong_models": [
+        {
+          "id": "SI-A",
+          "wrong_belief": "Strings can be modified in place. s.replace('a','b') changes s. The variable s now holds the modified string.",
+          "origin": "Strings are mutable like arrays. Method calls modify the object in place.",
+          "conversation_signals": [
+            "I called replace() but the string didn't change",
+            "why do I need to reassign",
+            "replace should modify it"
+          ]
+        },
+        {
+          "id": "SI-B",
+          "wrong_belief": "s = s + 'x' adds 'x' to the existing string s. The original string is extended.",
+          "origin": "Assignment to self = modification. s = s + x extends s.",
+          "conversation_signals": [
+            "I added to s but the original is gone",
+            "I thought I was just appending",
+            "I'm adding to the existing string"
+          ]
+        },
+        {
+          "id": "SI-C",
+          "wrong_belief": "Two string variables can share the same underlying string and both change when one is modified.",
+          "origin": "References share the underlying object and changes propagate",
+          "conversation_signals": [
+            "if I change s1 will s2 change too",
+            "they point to the same thing right",
+            "they share the string"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "String operation appears to do nothing. Student does not understand why the string 'didn't change'.",
+        "L2": "Knows strings are immutable. Knows to reassign: s = s.replace(). Cannot explain why immutability is enforced or what happens at the object level.",
+        "L3": "Can trace: String objects cannot be modified after creation. Every String method returns a new String object. s = s + 'x' creates a new String object containing the concatenated value and stores its address in s. The original object is unchanged and eligible for garbage collection. Can predict which operations return new objects vs modify in place.",
+        "L4": "Understands why Java made String immutable (thread safety, intern pool, security). Connects to StringBuilder for mutable string building. Applies to other immutable types."
+      }
+    },
+    "no_default_constructor": {
+      "week": 4,
+      "error_class": "compile_error",
+      "java_concept": "Constructors, OOP. Error: implicit no-arg constructor removed when explicit constructor is defined.",
+      "wrong_models": [
+        {
+          "id": "NDC-A",
+          "wrong_belief": "A class always has a no-argument constructor regardless of what constructors you define. Java provides one automatically forever.",
+          "origin": "Default constructor is always available. Defining new constructors doesn't affect the default.",
+          "conversation_signals": [
+            "I have a constructor but the default should still work",
+            "why can't I use new Student()",
+            "the default is always there"
+          ]
+        },
+        {
+          "id": "NDC-B",
+          "wrong_belief": "Constructors are optional. Objects can always be created without them. new ClassName() always works.",
+          "origin": "Object creation is always possible regardless of constructor definitions.",
+          "conversation_signals": [
+            "I don't need a constructor to create an object",
+            "new should always work",
+            "constructors are optional"
+          ]
+        },
+        {
+          "id": "NDC-C",
+          "wrong_belief": "Adding parameters to a constructor makes it work for both parameterised and no-arg calls.",
+          "origin": "One constructor handles all call signatures",
+          "conversation_signals": [
+            "my constructor takes two arguments but new Student() should still use it with defaults",
+            "it should just use defaults",
+            "I only wrote one constructor"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Compile error on new ClassName(). Cannot connect error to missing no-arg constructor.",
+        "L2": "Knows Java removes the default constructor when you define your own. Knows to add an explicit no-arg constructor. Cannot explain why Java makes this design choice.",
+        "L3": "Can trace: Java provides an implicit no-arg constructor only when no constructor is defined. Defining any constructor suppresses the implicit one. new Student() calls the no-arg constructor which no longer exists -> compile error. Can predict when no-arg constructor is available.",
+        "L4": "Understands constructor chaining with this(). Can design class hierarchies with appropriate constructor definitions. Understands super() requirement."
+      }
+    },
+    "static_vs_instance": {
+      "week": 4,
+      "error_class": "compile_error",
+      "java_concept": "Static context, objects. Error: non-static method/field cannot be referenced from static context.",
+      "wrong_models": [
+        {
+          "id": "SVI-A",
+          "wrong_belief": "static methods can access all methods and fields in the class. Being in the same class = having access to everything.",
+          "origin": "Same class = same scope. All members are peers.",
+          "conversation_signals": [
+            "I'm inside the class so I should be able to call any method",
+            "getName() is in the same class why can't I call it",
+            "everything in the class should be accessible"
+          ]
+        },
+        {
+          "id": "SVI-B",
+          "wrong_belief": "static means the method is important or primary. Instance methods are secondary. Static has more access, not less.",
+          "origin": "static = global = more powerful = more access",
+          "conversation_signals": [
+            "static means it's available everywhere so it should have access to everything",
+            "static is the main one",
+            "static has more power"
+          ]
+        },
+        {
+          "id": "SVI-C",
+          "wrong_belief": "this refers to the class, not a specific object. Static methods can use this to access the class.",
+          "origin": "this = the class definition, not an instance",
+          "conversation_signals": [
+            "I'll use this.name in my static method",
+            "this means the class",
+            "this is the class itself"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Compile error calling instance method from main. Cannot explain the static/instance distinction.",
+        "L2": "Knows static methods cannot directly call instance methods. Knows to create an object first. Cannot explain why - cannot describe the relationship between static context and object existence.",
+        "L3": "Can trace: static methods exist at the class level and can be called without any object instance. Instance methods exist at the object level and require a specific object to operate on (they have an implicit 'this'). Inside a static method, no object exists yet, so instance members are inaccessible. Must create an object: ClassName obj = new ClassName(); obj.method();",
+        "L4": "Understands when static is appropriate (utility methods, factory methods, constants). Applies static correctly across class hierarchies. Can explain the Singleton pattern."
+      }
+    },
+    "foreach_no_modify": {
+      "week": 4,
+      "error_class": "logic_error",
+      "java_concept": "Pass-by-value, iteration. Error: modifying the loop variable in a for-each does not modify the array element.",
+      "wrong_models": [
+        {
+          "id": "FNM-A",
+          "wrong_belief": "The for-each loop variable is the element itself. Modifying x in for(int x : arr) modifies arr[i].",
+          "origin": "Loop variable = array element. Same thing, different name.",
+          "conversation_signals": [
+            "I changed x in the loop but the array didn't change",
+            "x is the element so changing x changes the array",
+            "x should be the same as arr[i]"
+          ]
+        },
+        {
+          "id": "FNM-B",
+          "wrong_belief": "for-each creates a reference to each element. Modifying the variable updates the original through the reference.",
+          "origin": "Loop variable = reference to original. Works for objects, student assumes it works for primitives too.",
+          "conversation_signals": [
+            "I thought x was pointing to arr[i] so changing x would change the array",
+            "x is a reference to the element",
+            "it's the same slot"
+          ]
+        },
+        {
+          "id": "FNM-C",
+          "wrong_belief": "for-each is equivalent to for(int i=0; i<arr.length; i++) with direct element access. Both modify the array through the loop variable.",
+          "origin": "The two loop forms are interchangeable for all purposes",
+          "conversation_signals": [
+            "I can use either for loop and both will modify the array the same way",
+            "they do the same thing",
+            "isn't for-each just a shorter for"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Array unchanged after loop that should modify it. Cannot explain why modification did not persist.",
+        "L2": "Knows for-each cannot modify primitive array elements. Knows to use indexed for loop for modification. Cannot explain why - no model of pass-by-value for primitive loop variables.",
+        "L3": "Can trace: for-each copies each element's value into the loop variable. For primitives, this is a value copy - modifying x does not affect arr[i] because x and arr[i] are different memory locations. For objects, x holds a reference copy - modifying the object through x affects the original, but reassigning x does not. Can predict which modifications persist.",
+        "L4": "Applies pass-by-value principle across method parameters, assignment, and iteration. Distinguishes object state mutation (visible) from reference reassignment (not visible). Applies correctly to ArrayList iteration."
+      }
+    },
+    "overloading": {
+      "week": 4,
+      "error_class": "logic_error",
+      "java_concept": "Method selection. Error: wrong overload called because argument types are not what student expects.",
+      "wrong_models": [
+        {
+          "id": "OL-A",
+          "wrong_belief": "The most recently defined overload is called. Method selection is based on definition order not argument types.",
+          "origin": "Last definition wins. Overloading is like overwriting.",
+          "conversation_signals": [
+            "I defined the int version after the double version so it should use the int one",
+            "the last one defined wins",
+            "the newer one overwrites"
+          ]
+        },
+        {
+          "id": "OL-B",
+          "wrong_belief": "Java selects the overload based on the return type the programmer wants, not the argument types they provide.",
+          "origin": "Selection is based on intended output, not actual input",
+          "conversation_signals": [
+            "I want a double result so it should call the double version",
+            "the return type should decide",
+            "I need the double version because of the answer"
+          ]
+        },
+        {
+          "id": "OL-C",
+          "wrong_belief": "Overloads can have the same parameter types if they have different return types.",
+          "origin": "Return type distinguishes overloads the same way parameter types do",
+          "conversation_signals": [
+            "I made two methods with the same parameters but different return types why doesn't it compile",
+            "shouldn't return type distinguish them",
+            "different return types means different methods"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Wrong overload called. Student cannot explain why. May not know overloading exists.",
+        "L2": "Knows overloads are selected by parameter types. Cannot trace the exact resolution algorithm or explain what happens with type promotion.",
+        "L3": "Can trace: Java selects the most specific applicable overload based on argument types at compile time. If argument type is int and overloads exist for int and double, int overload is selected (most specific). If only double overload exists, int is promoted. Return type does not distinguish overloads - compile error if two methods have same parameter signature. Can predict which overload is selected.",
+        "L4": "Understands the full overload resolution algorithm including widening, autoboxing, and varargs precedence. Can design overloaded APIs correctly."
+      }
+    },
+    "generics_primitives": {
+      "week": 5,
+      "error_class": "compile_error",
+      "java_concept": "Generics, wrapper classes. Error: ArrayList<int> does not compile - must use ArrayList<Integer>.",
+      "wrong_models": [
+        {
+          "id": "GP-A",
+          "wrong_belief": "Generics work with all Java types including primitives. ArrayList<int> should work because int is a Java type.",
+          "origin": "Generics are universal - they work with all Java types without exception.",
+          "conversation_signals": [
+            "int is a type in Java why can't I put it in ArrayList",
+            "ArrayList should hold any type",
+            "int is a type right"
+          ]
+        },
+        {
+          "id": "GP-B",
+          "wrong_belief": "Integer and int are the same thing. One is just the 'class version' of the other and they are interchangeable everywhere.",
+          "origin": "Autoboxing makes int and Integer identical in all contexts.",
+          "conversation_signals": [
+            "I thought int and Integer were the same",
+            "Java converts between them automatically so why does it matter",
+            "aren't they the same thing"
+          ]
+        },
+        {
+          "id": "GP-C",
+          "wrong_belief": "Wrapper classes are needed only for explicit conversion (parseInt etc), not for storage.",
+          "origin": "Wrapper classes exist for utility methods only, not for type compatibility in generics.",
+          "conversation_signals": [
+            "I use Integer.parseInt() but I didn't know I needed Integer for ArrayList",
+            "Integer is for parsing",
+            "I thought Integer was just for methods"
+          ]
+        }
+      ],
+      "lp_rubric": {
+        "L1": "Compile error on ArrayList<int>. Cannot explain why int is not valid as a type parameter.",
+        "L2": "Knows to use ArrayList<Integer>. Knows Integer is the wrapper class for int. Cannot explain why generics require reference types or what autoboxing does.",
+        "L3": "Can trace: Java generics are implemented through type erasure - type parameters are replaced with Object at runtime. Primitives cannot be substituted for Object because they are not objects - they have no heap address. Integer is an object that wraps an int value. Autoboxing converts int to Integer automatically in assignments but not in type parameter declarations. Can predict when autoboxing fires and when explicit wrapper is required.",
+        "L4": "Understands type erasure and its implications (cannot create generic arrays, cannot use instanceof with generic types). Applies wrapper classes correctly across Collections framework."
+      }
+    }
+  }
+}

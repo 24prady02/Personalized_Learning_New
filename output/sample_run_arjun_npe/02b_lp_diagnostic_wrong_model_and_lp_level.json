@@ -1,0 +1,125 @@
+{
+  "_schema": "LPDiagnostic dataclass from src/orchestrator/lp_diagnostic.py",
+  "_stage": "CPAL Stage 1 — Wrong-Model Identification + LP Level Classification",
+  "_grounded_in": [
+    "data/mental_models/wrong_models_catalogue.json (concepts.null_pointer)",
+    "src/orchestrator/lp_diagnostic.py (LPDiagnostic dataclass + matching logic)",
+    "Methodology: mental_models_cpal_methodology_revised.docx, Part 3 Stage 1",
+    "LP rubric framing: Jin et al. 2019/2025; plateau rule: Chi et al. 1989/1994, Renkl 2002"
+  ],
+
+  "session_id": "sess_20260506_143012_arjun",
+  "student_id": "arjun",
+  "timestamp": "2026-05-06T14:30:13.214817",
+  "concept": "null_pointer",
+
+  "_input_recap": {
+    "student_message": "My Java program keeps crashing with NullPointerException. I created a Room object but calling describe() on it blows up. I've tried adding initializers but nothing works. Can you help me figure out what I'm missing?",
+    "diagnostic_phrases_extracted": [
+      "I created a Room object",
+      "calling describe() on it blows up",
+      "I've tried adding initializers but nothing works"
+    ]
+  },
+
+  "wrong_model_identification": {
+    "wrong_model_id": "NP-A",
+    "wrong_model_description": "Declaring a variable creates the object. String s; creates a String object named s. The name and the thing are the same act.",
+    "wrong_model_origin": "Python/scripting: name = thing is one act. Natural language: naming implies existence.",
+    "matched_signal": "I created s right there at the top",
+    "match_score": 0.81,
+    "match_evidence": "Student says 'I created a Room object' — but the code shown only has 'Room currentRoom;' (declaration, no instantiation). The verb 'created' applied to a mere declaration is the diagnostic NP-A signal: he believes declaring is the same act as creating.",
+
+    "alternatives_considered": [
+      {
+        "wrong_model_id": "NP-B",
+        "wrong_belief_short": "null means empty or zero; calling a method on null should return empty/default, not crash",
+        "match_score": 0.18,
+        "rejected_because": "Arjun does not express that null should 'just return nothing'; his confusion is upstream — he doesn't believe currentRoom is null in the first place."
+      },
+      {
+        "wrong_model_id": "NP-C",
+        "wrong_belief_short": "The variable holds the object itself, not a pointer to it; no concept of indirection",
+        "match_score": 0.24,
+        "rejected_because": "NP-C and NP-A overlap, but Arjun's specific phrasing ('I created … but it blows up when I call …') points at a model of declaration as creation, not at the absence-of-indirection model. NP-A is the more specific match."
+      }
+    ],
+
+    "source": "trained_wm_head",
+    "trained_wm_probs": [
+      {"wm_id": "NP-A", "prob": 0.74},
+      {"wm_id": "NP-C", "prob": 0.18},
+      {"wm_id": "NP-B", "prob": 0.08}
+    ],
+    "semantic_wm_top3": [
+      {"wm_id": "NP-A", "score": 0.81, "signal": "I created s right there at the top"},
+      {"wm_id": "NP-C", "score": 0.24, "signal": "the variable is the object"},
+      {"wm_id": "NP-B", "score": 0.18, "signal": "can't it just return nothing"}
+    ]
+  },
+
+  "lp_level_classification": {
+    "current_lp_level": "L1",
+    "logical_step": false,
+    "logical_step_detail": false,
+    "lp_signals_detected": [
+      {
+        "signal": "Reports NPE symptom but cannot say why",
+        "evidence": "'keeps crashing with NullPointerException' + 'figure out what I'm missing'",
+        "rubric_match": "L1: 'Knows NPE happened, cannot say why'"
+      },
+      {
+        "signal": "Cannot answer what currentRoom holds after `Room currentRoom;`",
+        "evidence": "Believes he 'created' it by declaring it (NP-A wrong model)",
+        "rubric_match": "L1: \"Cannot answer 'what does s hold after String s;'\""
+      },
+      {
+        "signal": "Does not name 'null' as the cause",
+        "evidence": "Student says 'tried initializers' — vague, not 'I never assigned with new'",
+        "rubric_match": "Below L2 floor: L2 requires 'Knows null means no object assigned'"
+      }
+    ],
+    "lp_streak": 1,
+    "rubric_definitions": {
+      "L1_current": "Knows NPE happened, cannot say why. Cannot answer 'what does s hold after String s;'",
+      "L2_target": "Knows null means 'no object assigned'. Knows the fix is to initialise with new. Cannot trace the dereference mechanism.",
+      "L3_future": "Can trace: declaration creates a reference slot holding null. new allocates a heap object and returns its address. Method call dereferences the reference — follows the address to the heap object. null dereference fails because there is no address to follow → NPE. Can predict which line throws NPE.",
+      "L4_future": "Applies to all reference types. Understands why null checks are necessary before method calls. Can write null-safe code. Understands Optional as a design pattern."
+    },
+    "trained_lp_probs": {
+      "L1": 0.79,
+      "L2": 0.17,
+      "L3": 0.03,
+      "L4": 0.01
+    }
+  },
+
+  "plateau_gate": {
+    "plateau_flag": false,
+    "plateau_intervention": null,
+    "rule": "Triggers iff current_lp_level == L2 AND lp_streak >= 2 on this concept",
+    "current_state": "L1, streak=1 → not eligible for plateau (which only applies at L2)"
+  },
+
+  "transition_target": {
+    "target_lp_level": "L2",
+    "transition": "L1->L2",
+    "expert_benchmark_key_ideas": [
+      "A reference variable in Java is a slot that can hold either null or a heap address — it is not the object itself.",
+      "`Room currentRoom;` allocates the slot. The slot starts at null.",
+      "`new Room()` allocates a Room on the heap and returns its address. Assignment puts that address in the slot.",
+      "Calling `currentRoom.describe()` follows the address in the slot. If the slot is null, there is no address to follow — NullPointerException."
+    ]
+  },
+
+  "downstream_effects": {
+    "stage_2_intervention_filter": "Valid intervention set restricted to L1→L2 transitions (visual_analogy, scaffolded_explanation, socratic_recognition). Direct mechanism trace (L3 territory) excluded — too steep.",
+    "stage_3_prompt_sections": {
+      "LP-1_current_understanding": "Populated from L1 rubric — student treats declaration as creation",
+      "LP-2_wrong_model_context": "NP-A wrong belief + Python/natural-language origin — LLM is told NOT to assume student knows null is a thing yet",
+      "LP-3_target_understanding": "Populated from L2 rubric — by end of session, student should be able to say 'currentRoom is null because I never assigned a Room to it with new'"
+    },
+    "stage_4_delta_lp_baseline": "L1 (current). After student's reply, recompute LP and store delta_lp = new_level - L1.",
+    "stage_5_persist_to_skg": "Write all fields above to Student Knowledge Graph under arjun.cognitive_graph.concept_nodes.null_pointer (extends existing entry)."
+  }
+}

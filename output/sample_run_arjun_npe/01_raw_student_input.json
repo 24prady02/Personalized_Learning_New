@@ -1,0 +1,38 @@
+{
+  "session_id": "sess_20260506_143012_arjun",
+  "student_id": "arjun",
+  "timestamp": "2026-05-06T14:30:12.487293",
+  "session_number": 1,
+  "raw_input": {
+    "student_message": "My Java program keeps crashing with NullPointerException. I created a Room object but calling describe() on it blows up. I've tried adding initializers but nothing works. Can you help me figure out what I'm missing?",
+    "student_code": "public class Game {\n    Room currentRoom;\n\n    public void start() {\n        currentRoom.describe();\n    }\n\n    public static void main(String[] args) {\n        Game g = new Game();\n        g.start();\n    }\n}\n\nclass Room {\n    String name;\n    public void describe() {\n        System.out.println(\"You are in: \" + name);\n    }\n}",
+    "language": "java",
+    "error_output": "Exception in thread \"main\" java.lang.NullPointerException: Cannot invoke \"Room.describe()\" because \"this.currentRoom\" is null\n\tat Game.start(Game.java:5)\n\tat Game.main(Game.java:10)"
+  },
+  "behavioral_signals": {
+    "action_sequence": [
+      {"action": "code_edit", "t": 0.0, "target": "Game.java:2"},
+      {"action": "run_test", "t": 12.4, "result": "fail"},
+      {"action": "read_error", "t": 14.1, "duration_s": 8.3},
+      {"action": "code_edit", "t": 22.6, "target": "Game.java:2"},
+      {"action": "run_test", "t": 38.2, "result": "fail"},
+      {"action": "read_error", "t": 39.9, "duration_s": 4.7},
+      {"action": "search_documentation", "t": 49.0, "query": "java NullPointerException fix"},
+      {"action": "code_edit", "t": 91.5, "target": "Game.java:2"},
+      {"action": "run_test", "t": 104.0, "result": "fail"},
+      {"action": "ask_for_help", "t": 118.3}
+    ],
+    "session_duration_s": 118.3,
+    "edit_count": 3,
+    "test_run_count": 3,
+    "consecutive_failures": 3,
+    "doc_searches": 1
+  },
+  "context": {
+    "course": "CS1: Introduction to Java",
+    "topic": "Object-Oriented Programming - References & Initialization",
+    "prior_concepts_completed": ["variables", "primitive_types", "control_flow", "methods", "classes_basic"],
+    "current_concept_being_taught": "object_initialization",
+    "related_concept_under_struggle": "null_pointer"
+  }
+}

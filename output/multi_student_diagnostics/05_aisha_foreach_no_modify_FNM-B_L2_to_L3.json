@@ -1,0 +1,137 @@
+{
+  "_schema": "LPDiagnostic dataclass from src/orchestrator/lp_diagnostic.py",
+  "_stage": "CPAL Stage 1 — Wrong-Model Identification + LP Level Classification",
+  "_special_case": "SUCCESSFUL PROGRESSION — student arrived at L2, advanced to L3 within session",
+  "_grounded_in": [
+    "data/mental_models/wrong_models_catalogue.json (concepts.foreach_no_modify)",
+    "src/orchestrator/lp_diagnostic.py"
+  ],
+
+  "session_id": "sess_20260506_134912_aisha",
+  "student_id": "aisha",
+  "timestamp": "2026-05-06T13:49:12.553418",
+  "concept": "foreach_no_modify",
+  "_concept_meta": {
+    "week": 4,
+    "error_class": "logic_error",
+    "java_concept": "Pass-by-value, iteration. Error: modifying the loop variable in a for-each does not modify the array element."
+  },
+
+  "_input_recap": {
+    "_round": 1,
+    "student_message_round_1": "I changed x in the loop but the array didn't change. I thought x was pointing to arr[i] so changing x would change the array. I know I should use an indexed for loop to actually modify it but I want to understand why for-each doesn't work.",
+    "student_code": "int[] nums = {1, 2, 3, 4, 5};\nfor (int x : nums) {\n    x = x * 2;   // hoping to double each element\n}\nSystem.out.println(Arrays.toString(nums));   // prints [1, 2, 3, 4, 5]",
+    "diagnostic_phrases_extracted_round_1": [
+      "I changed x in the loop but the array didn't change",
+      "I thought x was pointing to arr[i]",
+      "I know I should use an indexed for loop",
+      "I want to understand why for-each doesn't work"
+    ]
+  },
+
+  "wrong_model_identification": {
+    "wrong_model_id": "FNM-B",
+    "wrong_model_description": "for-each creates a reference to each element. Modifying the variable updates the original through the reference.",
+    "wrong_model_origin": "Loop variable = reference to original. Works for objects, student assumes it works for primitives too.",
+    "matched_signal": "I thought x was pointing to arr[i] so changing x would change the array",
+    "match_score": 0.95,
+    "match_evidence": "Verbatim match on the documented FNM-B signal. The 'pointing to' language is the FNM-B signature — this student has a reference model and is applying it to primitives where it doesn't hold.",
+
+    "alternatives_considered": [
+      {
+        "wrong_model_id": "FNM-A",
+        "wrong_belief_short": "Loop variable IS the array element (no indirection model)",
+        "match_score": 0.42,
+        "rejected_because": "FNM-A students don't use 'pointing to' language — they treat x and arr[i] as the same thing. Aisha already has a reference/indirection mental model; her bug is applying it where it doesn't apply."
+      },
+      {
+        "wrong_model_id": "FNM-C",
+        "wrong_belief_short": "for-each and indexed for are interchangeable for all purposes",
+        "match_score": 0.31,
+        "rejected_because": "Aisha already separates them ('I know I should use an indexed for loop'). She's not at FNM-C."
+      }
+    ],
+
+    "source": "trained_wm_head",
+    "trained_wm_probs": [
+      {"wm_id": "FNM-B", "prob": 0.83},
+      {"wm_id": "FNM-A", "prob": 0.12},
+      {"wm_id": "FNM-C", "prob": 0.05}
+    ]
+  },
+
+  "lp_level_classification": {
+    "current_lp_level_round_1": "L2",
+    "logical_step_round_1": true,
+    "logical_step_detail_round_1": false,
+    "lp_signals_detected_round_1": [
+      {
+        "signal": "Knows the rule (use indexed for to modify)",
+        "evidence": "'I know I should use an indexed for loop to actually modify it'",
+        "rubric_match": "L2: 'Knows for-each cannot modify primitive array elements. Knows to use indexed for loop for modification.'"
+      },
+      {
+        "signal": "Asks for the mechanism — primed for L3",
+        "evidence": "'I want to understand why for-each doesn't work'",
+        "rubric_match": "Boundary L2/L3: explicitly seeks the mechanism the L2 description says they cannot articulate"
+      }
+    ],
+    "lp_streak": 1
+  },
+
+  "_intervention_applied": {
+    "intervention": "memory_diagram_with_value_copy",
+    "selected_by": "RL teaching agent (Q=5.18) — not plateau-forced; not first session at L2",
+    "summary_of_what_system_did": "Drew two boxes side-by-side: the array slots (heap-allocated int[5] with values 1..5) and the loop variable x (a separate stack slot). Showed each iteration: 'JVM reads arr[i], copies the value into x, runs the loop body, discards x at end of iteration. Modification of x never travels back.' Distinguished primitive-value-copy from object-reference-copy explicitly."
+  },
+
+  "_round_2_followup": {
+    "student_message_round_2": "Oh — so x is its own little box, and the JVM copies the value 1 into it, then 2, then 3. Whatever I do to x doesn't matter because the array still has the originals. If I had an array of objects, x would hold a copy of the *reference*, so x would point at the same object — modifying the object's fields would persist, but reassigning x to a different object wouldn't. Is that right?",
+    "diagnostic_phrases_extracted_round_2": [
+      "x is its own little box",
+      "the JVM copies the value 1 into it, then 2, then 3",
+      "Whatever I do to x doesn't matter",
+      "x would hold a copy of the reference",
+      "modifying the object's fields would persist, but reassigning x to a different object wouldn't"
+    ],
+    "current_lp_level_round_2": "L3",
+    "logical_step_round_2": true,
+    "logical_step_detail_round_2": true,
+    "lp_signals_detected_round_2": [
+      {
+        "signal": "Articulates the value-copy mechanism step by step",
+        "evidence": "'JVM copies the value 1 into it, then 2, then 3'",
+        "rubric_match": "L3: 'for-each copies each element's value into the loop variable. For primitives, this is a value copy.'"
+      },
+      {
+        "signal": "Extends to object case correctly — distinguishes mutation-through-reference from reassignment",
+        "evidence": "'modifying the object's fields would persist, but reassigning x to a different object wouldn't'",
+        "rubric_match": "Reaches into L4 territory: 'Distinguishes object state mutation (visible) from reference reassignment.' Aisha is on the boundary L3/L4 by end of round 2."
+      }
+    ],
+    "delta_lp": "+1 (L2 → L3) within single session"
+  },
+
+  "plateau_gate": {
+    "plateau_flag": false,
+    "plateau_intervention": null,
+    "_note": "Aisha advanced on the first L2 attempt — plateau condition (lp_streak >= 2) never approached."
+  },
+
+  "transition_target_after_round_2": {
+    "target_lp_level": "L4",
+    "transition": "L3->L4",
+    "expert_benchmark_key_ideas": [
+      "Pass-by-value applies uniformly across method parameters, assignment, and for-each iteration: the receiving slot gets a copy of the source's bits.",
+      "For primitives, the bits are the value itself.",
+      "For object references, the bits are an address. Copying the address means both slots now point at the same heap object — mutating the object is visible everywhere; reassigning the local slot is not.",
+      "There is no pass-by-reference in Java. Every parameter binding is a value copy of either a primitive or an address."
+    ]
+  },
+
+  "downstream_effects": {
+    "stage_4_delta_lp": "+1 from L2 baseline → reward signal +3.5 to RL agent (delta_lp_bonus + within-session_advancement_bonus)",
+    "stage_5_skg_writes": "Update arjun-style cognitive_graph.concept_nodes.foreach_no_modify: mastery 0.55 → 0.84, encoding 'partial' → 'deep', dual_coding 'verbal_only' → 'verbal_and_visual', elaboration false → true. Append two encoding_history entries (round 1 and round 2 timestamps).",
+    "rl_reinforcement": "The action 'memory_diagram_with_value_copy' gets credit for the L2→L3 transition at this state class (high curiosity expressed by 'I want to understand why', moderate prior mastery, FNM-B wrong model). Q-value for this (state, action) pair updated upward."
+  }
+}
