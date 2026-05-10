@@ -1,0 +1,217 @@
+================================================================================
+FULL-STACK DEMO — every trained component fires on one session
+================================================================================
+[Nestor] Loaded CPTs from data\nestor\nestor_cpts.json (v2)
+[Nestor] text-personality classifier loaded from checkpoints\text_personality.pt (mean_F1=0.634)
+
+[1] TEXT-PERSONALITY
+    src   : checkpoints/text_personality.pt (MiniLM fine-tuned on Pennebaker Essays, mean F1=0.634)
+    Big Five : ope=0.52  con=0.53  ext=0.48  agr=0.51  neu=0.51
+
+[2] NESTOR CPTs v2
+    src   : data/nestor/nestor_cpts.json (Big-Five -> Felder-Silverman styles + LISTK strategies)
+    styles   : visual/intuitive/active/sequential
+    strat    : deep=0.35  elab=0.13  orga=0.28  meta=0.34
+    interv   : worked_example
+    elements : ['EX', 'LG', 'VAM']
+[HMM] Loaded checkpoint from checkpoints\behavioral_hmm.json
+
+[3] BEHAVIORAL HMM
+    src   : checkpoints/behavioral_hmm.json (Baum-Welch trained on ProgSnap2 action sequences)
+    final state    : understanding
+    confidence     : 0.950
+
+[4] EMOTION MLP
+    src   : checkpoints/emotion_classifier.pt (7-feature MLP on HMM windows, 5 classes)
+    predicted emotion : frustrated  (95% confidence)
+    distribution      : neutral:2%  confused:3%  frustrated:95%  engaged:0%  understanding:0%
+
+[5a] HVSAE TRI-STREAM ENCODER
+    src   : checkpoints/best.pt > hvsae_state (8-head attention, 256-dim vMF latent, 20 misconception heads)
+    latent shape          : (256,)
+    fusion attention      : code=0.31  text=0.34  action=0.35
+    top-3 misconception probs (of 20 concept heads): [(15, 0.592), (11, 0.568), (6, 0.568)]
+
+[5b] BEHAVIORAL RNN
+    src   : checkpoints/best.pt > behavioral_rnn_state (2-layer LSTM, 64 hidden, 20 action types)
+    emotion        : neutral (1.00)
+    effectiveness  : 0.55
+    productivity   : high
+
+[6] BKT MASTERY UPDATE
+    src           : src/student_modeling/bayesian_knowledge_tracing.py
+    target concept: null_pointer
+    before update : 0.300
+    after failure : 0.243
+
+[6b] DINA COGNITIVE DIAGNOSIS
+    src           : src/models/dina.py (20 Java CS1 skills, Q-matrix=I_20, slip=0.10, guess=0.25)
+    is_trained    : False  (uses default + per-concept difficulty priors)
+    target skill  : null_pointer
+    before update : 0.150
+    after failure : 0.000  (P(slip)=0.10, P(guess)=0.25)
+    top-3 skills  : assignment_vs_compare=0.22, unreachable_code=0.22, null_pointer=0.22
+    bottom-3      : static_vs_instance=0.12, generics_primitives=0.12, no_default_constructor=0.14
+[LP] loaded 9 progressions covering 25 concepts
+
+[7] LEARNING PROGRESSION
+    src   : data/pedagogical_kg/learning_progressions.json (9 progressions, 25 concepts)
+    progression   : prog_java_week2
+    target        : null_pointer
+    next concept  : null_pointer
+    on_track      : True  (enforcement will not fire)
+[MentalModels] loaded 20 concepts, 60 wrong models
+[LP-Diag] LP head (sentence-transformers) loaded: val_acc=0.743  on 1349 examples
+[LP-Diag] trained LP head loaded: 4 classes, trained on 1349 examples
+[LP-Diag] trained WM head loaded: 60 classes, trained on 784 examples
+
+[7b] LP DIAGNOSTIC + WRONG-MODEL
+    src   : data/mental_models/wrong_models_catalogue.json + checkpoints/cpal_lp_head_st.pt (val_acc=0.74) + cpal_wm_subhead.pt
+    matched wrong-model : NP-C  (score=0.6429197192192078)
+    matched signal      : "[trained-head match p=0.64]"
+    current LP level    : L1
+    target LP level     : L2
+    plateau flag        : False  (intervention=None)
+    trained WM head top-3: NP-C:0.64, NP-A:0.22, NP-B:0.14
+    trained LP head     : L1:0.69 L2:0.25 L3:0.01 L4:0.05
+
+[7c] KNOWLEDGE GRAPH + COKE + GIKT
+    pedagogical KG load (data/pedagogical_kg/):
+      misconceptions              21 entries
+      error_patterns               4 entries
+      root_causes                  5 entries
+      cognitive_loads             20 entries
+      interventions                8 entries
+      explanation_strategies       5 entries
+      lp_rubric                   20 entries
+      learning_progressions        9 entries
+    concept 'null_pointer' lookup:
+      misconceptions  : 1 match(es)
+        -> 'mc_null_pointer' (Student declares a reference variable but never instantiates the object...)
+      cognitive_loads : 1 match(es)
+        -> intrinsic=3 extraneous=2
+      interventions   : 0 match(es)
+    ErrorExplanationMapper.detect_error:
+      -> no pattern in current KG matches 'NullPointerException' (KG covers 4 patterns, all Python-flavored — Java NPE not in current data)
+Loading local CSE-KG graph from data\cse_kg_local\graph.pkl...
+  Loaded 14826 nodes, 103848 edges
+  Loaded 20 concepts
+  Loaded 6367 keyword mappings
+    LocalCSEKGClient:
+      src   : data/cse_kg_local/{graph.pkl, concepts.json, keyword_index.json}  (seed built from JAVA_SKILLS + wrong_models + LP)
+      graph         : nodes=14826 edges=103848
+      concept 'null_pointer' lookup:
+        prerequisites : []
+        related       : ['http://example.org/cskg#NP-A', 'http://example.org/cskg#NP-B', 'http://example.org/cskg#NP-C', 'http://example.org/cskg#mc_null_pointer', 'http://example.org/cskg#wikidata:Q19848926']
+        miscons (kg)  : 0 entries
+        extracted     : ['null_pointer', 'no_default_constructor', 'type_mismatch', 'assignment_vs_compare', 'array_not_allocated']
+        subgraph      : nodes=1 edges=3
+[COKE] No learned cognitive chains found, using hardcoded defaults
+[COKE] Learned new cognitive chain: chain_engaged_to_continue
+    COKECognitiveGraph:
+      cognitive state : engaged
+      chains for state: 1
+      theory of mind  : engaged -> continue  (conf=0.50)
+    GIKTKnowledgeTracer:
+      target skill_id  : 2 (null_pointer)
+      predicted P(correct on next attempt) : 0.493
+      total exercises  : 1
+      overall mastery  : 0.000
+
+[7d] STUDENT KNOWLEDGE GRAPH (per-session subgraph)
+    src   : data/cse_kg_local/graph.pkl  (filtered for student)
+    method: 1) graph -> wrong catalogues  2) graph -> correct concepts  3) build per-student subgraph
+    student      : demo_student
+    target       : null_pointer  (mastery_bkt=0.24, mastery_dina=0.00)
+    wrong-cat    : 3 catalogue entries; student holds: NP-C
+      NP-A   Declaring a variable creates the object. String s; creates a String object named...
+      NP-B   null means empty or zero. Calling a method on null should return empty/default r...
+      NP-C   The variable holds the object itself, not a pointer to it. There is no concept o... <- HELD
+    correct-cps  : 3 concepts to teach (target + 2 supporting)
+    aligned to   : ['wikidata:Q19848926']
+    student KG   : 8 nodes, 7 edges
+[RL] checkpoint loaded: checkpoints/rl_teaching_agent.pt  (steps=8138, eps=0.100)
+
+[8] RL TEACHING AGENT (checkpoints/rl_teaching_agent.pt, DQN)
+    epsilon        : 0.10 (exploit mode)
+    selected action: error_analysis
+    top-3 Q-values : error_analysis:+87.95, spaced_review:+87.68, motivational_support:+87.61
+
+[9] OLLAMA GENERATION  (model=qwen2.5-coder:7b, streaming)
+--------------------------------------------------------------------------------
+[LP] loaded 9 progressions covering 25 concepts
+[TTFT=12.9s] ### Response:
+
+Hey there! I'm sorry to hear your program is crashing with `NullPointerException`. Let's take a look at why that's happening and how we can fix it.
+
+#### Surface Observation:
+Your `Game` class has a field `currentRoom`, which you're trying to call the `describe()` method on. The crash happens when `currentRoom` is not initialized, so calling any method on it leads to a `NullPointerException`.
+
+#### Rule/Distinction:
+In Java, when you declare a reference (like `currentRoom`), it starts with a value of `null`. A `null` value means the reference doesn't point to any object. You need to allocate memory for an object and assign its address to your reference before using it.
+
+#### Worked Example:
+
+```java
+public class Game {
+    Room currentRoom; // Step 1: Declare a reference to a Room object
+
+    public void start() {
+        if (currentRoom == null) { // Check if the reference is null
+            System.out.println("No room set yet!");
+        } else {
+            currentRoom.describe(); // Dereference and call the describe method
+        }
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.start(); // This will print "No room set yet!" because currentRoom is null
+
+        Room myRoom = new Room("Living Room"); // Step 2: Allocate memory for a Room object and get its address
+        game.currentRoom = myRoom; // Step 3: Assign the address to our reference
+
+        game.start(); // Now this will call describe() on myRoom
+    }
+}
+```
+
+1. **Step 1**: Declare a reference (`currentRoom`) without initializing it.
+2. **Step 2**: Allocate memory for a `Room` object and get its address using the `new` keyword.
+3. **Step 3**: Assign this address to your reference.
+
+#### Walkthrough:
+- In `main`, we create an instance of `Game`.
+- We call `start()`. Since `currentRoom` is still `null`, it prints "No room set yet!".
+- Then, we create a new `Room` object and assign its address to `currentRoom`.
+- Now, calling `start()` will correctly dereference `currentRoom` and call the `describe()` method on our `Room`.
+
+#### Key Mechanism:
+The key mechanism is that references start as `null`. You need to allocate memory for an object using `new`, then assign its address to your reference.
+
+#### Check-For-Understanding Question:
+Try changing the `start()` method to handle the case where `currentRoom` might be `null`. What should it do instead of crashing?[Ollama] TTFT=0.0s  total=40.6s  chunks=563  model=qwen2.5-coder:7b
+
+--------------------------------------------------------------------------------
+TTFT=12.9s  total=53.5s  2428 chars
+
+================================================================================
+PROVENANCE — which trained component drove which part of the output
+================================================================================
+  TEXT-PERSONALITY   -> neuroticism=0.51 shaped opening tone
+  NESTOR CPTs        -> style/strategy drove format choices
+  HMM                -> state 'understanding' set psychological_graph
+  EMOTION MLP        -> 'frustrated' used as coke.cognitive_state
+  HVSAE              -> 256-dim latent fed to RL agent, gating code/text/action=(0.31, 0.34, 0.35)
+  BEHAVIORAL RNN     -> 'neutral' cross-check
+  BKT                -> null_pointer mastery 0.30 -> 0.24
+  DINA               -> null_pointer P(mastered)=0.00 (slip=0.10, guess=0.25)
+  LPINDEX            -> path to 'null_pointer', on_track=True
+  RL AGENT           -> chose 'error_analysis' -> generator intervention 'worked_example'
+  LP-DIAGNOSTIC      -> wrong-model=NP-C, LP=L1->L2, plateau=False
+  PEDAGOGICAL KG     -> misconceptions=1 cog_loads=1 interventions=0  for 'null_pointer'
+  CSE-KG (seed)      -> nodes=14826, prereqs=0, related=5, miscons=0
+  ERROR-MAPPER       -> no match in current KG
+  COKE GRAPH         -> state=engaged, chains=1
+  GIKT KT            -> P(correct)=0.493, overall_mastery=0.000
+  STUDENT KG         -> 8 nodes, 7 edges; wrong-cat held: NP-C; correct concepts: 3

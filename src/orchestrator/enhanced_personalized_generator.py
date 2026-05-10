@@ -907,6 +907,53 @@ class EnhancedPersonalizedGenerator:
             if benchmark:
                 prompt_parts.append(f"L3 expert benchmark: {benchmark}")
 
+        # ===== LP-2b: RETRIEVED CATALOGUE CONTEXT (RAG) =====
+        # Embedding-based retrieval over the wrong-models catalogue + LP
+        # rubric. Layered on top of the trained WM head (val_acc ~0.04)
+        # to make wrong-model selection more robust. When the hybrid top
+        # disagrees with the classifier top, both are surfaced so the
+        # LLM can pick or address the more coherent one.
+        if lp_diag and lp_diag.get('rag_top_wrong_models'):
+            prompt_parts.append("\n=== LP-2b: RETRIEVED CATALOGUE CONTEXT ===")
+            cls_top = lp_diag.get('wrong_model_id')
+            rag_top = lp_diag.get('rag_hybrid_top_id')
+            flipped = lp_diag.get('rag_flipped_classifier', False)
+            if flipped:
+                prompt_parts.append(
+                    f"NOTE: classifier picked '{cls_top}' but embedding-RAG "
+                    f"hybrid score put '{rag_top}' first. Treat the top-3 "
+                    f"below as candidates; if the student's exact phrasing "
+                    f"matches one verbatim, prefer that one over the "
+                    f"classifier pick."
+                )
+            else:
+                prompt_parts.append(
+                    f"Classifier and hybrid retrieval agree on '{cls_top}'. "
+                    f"Top-3 retrieval candidates below are for additional "
+                    f"context — the L3 benchmark in LP-2 above is still the "
+                    f"primary correction target."
+                )
+            prompt_parts.append("Top-3 wrong-model candidates (hybrid score):")
+            for w in lp_diag.get('rag_top_wrong_models', [])[:3]:
+                prompt_parts.append(
+                    f"  - {w.get('id')}  (hybrid={w.get('hybrid_score', 0):.3f}, "
+                    f"sim={w.get('similarity', 0):+.3f}, "
+                    f"cls_p={w.get('classifier_prob', 0):.3f})"
+                )
+                prompt_parts.append(
+                    f"    belief: {w.get('wrong_belief', '')[:140]}"
+                )
+            rubric_hits = lp_diag.get('rag_top_lp_rubric') or []
+            if rubric_hits:
+                prompt_parts.append("Top-3 LP rubric lines closest to "
+                                    "student's text (use to calibrate level):")
+                for r in rubric_hits[:3]:
+                    prompt_parts.append(
+                        f"  - [{r.get('concept')} {r.get('level')}] "
+                        f"(sim={r.get('similarity', 0):+.3f}) "
+                        f"{r.get('text', '')[:140]}"
+                    )
+
         # ===== LP-3: SIX-STEP INSTRUCTION =====
         # Translate the current LP level + intervention type into a
         # concrete six-step instruction for the LLM. Each step has a
