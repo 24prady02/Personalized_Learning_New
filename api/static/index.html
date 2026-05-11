@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Java Concept Check</title>
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Java Concept Check</h1>
+    <p class="subtitle">Read the code, pick the option that matches what's really happening, then write what you think.</p>
+  </header>
+
+  <main id="app">
+    <section id="step-quiz" class="card" hidden>
+      <div class="step-label">Step 1 of 3</div>
+      <h2 id="quiz-title"></h2>
+      <pre id="quiz-code" class="code"></pre>
+      <p id="quiz-question" class="question"></p>
+      <ol id="quiz-options" class="options"></ol>
+      <button id="submit-choice" class="primary" disabled>Submit answer</button>
+    </section>
+
+    <section id="step-belief" class="card" hidden>
+      <div class="step-label">Step 2 of 3</div>
+      <h2>In your own words</h2>
+      <p class="hint">What did you believe was happening in that code? A sentence or two is fine.</p>
+      <textarea id="belief-input" rows="5" placeholder="I thought..."></textarea>
+      <button id="submit-belief" class="primary" disabled>Show me the explanation</button>
+    </section>
+
+    <section id="step-correct" class="card" hidden>
+      <div class="step-label">Step 3 of 3</div>
+      <h2 id="correct-title"></h2>
+      <p id="correct-verdict" class="verdict"></p>
+      <div id="correct-explanation" class="explanation"></div>
+      <button id="next-question" class="primary">Next question</button>
+    </section>
+
+    <section id="step-done" class="card" hidden>
+      <h2>That's all the questions for now.</h2>
+      <p>Refresh the page to start a fresh round.</p>
+      <button onclick="location.reload()" class="primary">Start over</button>
+    </section>
+
+    <div id="loading" class="loading" hidden>Generating explanation…</div>
+    <div id="error" class="error" hidden></div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

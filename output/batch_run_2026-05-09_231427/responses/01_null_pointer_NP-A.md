@@ -16,7 +16,6 @@ public class Game {
 - Classifier WM: NP-C (score=0.688133180141449)
 - RAG hybrid WM: NP-B  (flipped=True)
 - BKT mastery: 0.25 -> 0.23
-- DINA mastery: 0.15 -> 0.00
 
 ## LLM response
 

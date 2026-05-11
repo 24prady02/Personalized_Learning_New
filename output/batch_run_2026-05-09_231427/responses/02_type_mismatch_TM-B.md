@@ -15,7 +15,6 @@ String msg = "Score: " + score + 5;
 - Classifier WM: TM-B (score=0.5152639746665955)
 - RAG hybrid WM: TM-B  (flipped=False)
 - BKT mastery: 0.20 -> 0.23
-- DINA mastery: 0.20 -> 0.00
 
 ## LLM response
 

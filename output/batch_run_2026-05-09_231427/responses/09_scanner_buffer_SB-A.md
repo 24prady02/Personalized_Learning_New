@@ -16,7 +16,6 @@ System.out.println("Hello " + name);
 - Classifier WM: SB-B (score=0.6486724019050598)
 - RAG hybrid WM: SB-A  (flipped=True)
 - BKT mastery: 0.20 -> 0.23
-- DINA mastery: 0.15 -> 0.00
 
 ## LLM response
 

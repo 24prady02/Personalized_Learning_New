@@ -17,7 +17,6 @@ while (i < 10) {
 - Classifier WM: IL-B (score=0.8760698437690735)
 - RAG hybrid WM: IL-B  (flipped=False)
 - BKT mastery: 0.15 -> 0.22
-- DINA mastery: 0.17 -> 0.00
 
 ## LLM response
 

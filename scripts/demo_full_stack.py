@@ -81,6 +81,11 @@ ACTION_SEQUENCE = [
 TIME_DELTAS = [10, 45, 2, 1, 60, 2, 1, 30, 120, 90, 2, 1, 30, 2, 1]
 TARGET_CONCEPT = "null_pointer"  # from concept extraction on code+error
 
+# Expected wrong-model id (ground truth for batch evaluation). When set,
+# DINA uses (classifier match == EXPECTED_WM) as the correctness signal so
+# correct diagnoses lift mastery and misses push it down.
+EXPECTED_WM = None
+
 # Prior BKT mastery on this student (what the system has learned about them)
 PRIOR_MASTERY = {
     "type_mismatch": 0.85,
@@ -296,26 +301,10 @@ def run():
     print(f"    before update : {PRIOR_MASTERY[TARGET_CONCEPT]:.3f}")
     print(f"    after failure : {new_mastery_dict[TARGET_CONCEPT]:.3f}")
 
-    # ── 6b. DINA cognitive diagnosis — Q-matrix-based per-skill mastery ──────
+    # DINA initialization — actual update happens in step 7c after the LP
+    # diagnostic gives us a correctness signal (classifier match vs EXPECTED_WM).
     dina = DINAModel({"dina": {"data_dir": "data/dina"}})
     dina_before = dina.get_mastery("demo_student", skill=TARGET_CONCEPT)
-    dina_update = dina.update("demo_student", TARGET_CONCEPT, is_correct=False)
-    dina_full   = dina.get_mastery("demo_student")
-    dina_top3   = sorted(dina_full.items(), key=lambda kv: -kv[1])[:3]
-    dina_bot3   = sorted(dina_full.items(), key=lambda kv: kv[1])[:3]
-    print(f"\n[6b] DINA COGNITIVE DIAGNOSIS")
-    print(f"    src           : src/models/dina.py "
-          f"(20 Java CS1 skills, Q-matrix=I_20, slip=0.10, guess=0.25)")
-    print(f"    is_trained    : {dina.is_trained}  "
-          f"(uses default + per-concept difficulty priors)")
-    print(f"    target skill  : {TARGET_CONCEPT}")
-    print(f"    before update : {dina_before[TARGET_CONCEPT]:.3f}")
-    print(f"    after failure : {dina_update.get(TARGET_CONCEPT, 0):.3f}  "
-          f"(P(slip)={dina.slip[2]:.2f}, P(guess)={dina.guess[2]:.2f})")
-    print(f"    top-3 skills  : "
-          + ", ".join(f"{k}={v:.2f}" for k, v in dina_top3))
-    print(f"    bottom-3      : "
-          + ", ".join(f"{k}={v:.2f}" for k, v in dina_bot3))
 
     # ── 7. LP query with the updated mastery ─────────────────────────────────
     lp_idx = LPIndex()
@@ -368,6 +357,34 @@ def run():
         print(f"    trained LP head     : "
               + " ".join(f"{k}:{v:.2f}"
                           for k, v in lp_diag_dict['trained_lp_probs'].items()))
+
+    # ── 7c. DINA cognitive diagnosis — Q-matrix-based per-skill mastery ──────
+    # Correctness signal: classifier's wrong-model id == EXPECTED_WM (ground
+    # truth). For batch eval this lets DINA reward correct diagnoses and
+    # penalize misses; outside the batch it falls back to is_correct=False
+    # (the student is presenting a misconception).
+    _classifier_wm = lp_diag_dict.get("wrong_model_id")
+    _is_correct = bool(EXPECTED_WM is not None and _classifier_wm == EXPECTED_WM)
+    dina_update = dina.update("demo_student", TARGET_CONCEPT, is_correct=_is_correct)
+    dina_full   = dina.get_mastery("demo_student")
+    dina_top3   = sorted(dina_full.items(), key=lambda kv: -kv[1])[:3]
+    dina_bot3   = sorted(dina_full.items(), key=lambda kv: kv[1])[:3]
+    _verdict = "correct" if _is_correct else "failure"
+    print(f"\n[7c] DINA COGNITIVE DIAGNOSIS")
+    print(f"    src           : src/models/dina.py "
+          f"(20 Java CS1 skills, Q-matrix=I_20, slip=0.10, guess=0.25)")
+    print(f"    is_trained    : {dina.is_trained}  "
+          f"(uses default + per-concept difficulty priors)")
+    print(f"    target skill  : {TARGET_CONCEPT}")
+    print(f"    correctness   : {_verdict}  "
+          f"(classifier={_classifier_wm}, expected={EXPECTED_WM})")
+    print(f"    before update : {dina_before[TARGET_CONCEPT]:.3f}")
+    print(f"    after update  : {dina_update.get('mastery_after', 0):.3f}  "
+          f"(P(slip)={dina.slip[2]:.2f}, P(guess)={dina.guess[2]:.2f})")
+    print(f"    top-3 skills  : "
+          + ", ".join(f"{k}={v:.2f}" for k, v in dina_top3))
+    print(f"    bottom-3      : "
+          + ", ".join(f"{k}={v:.2f}" for k, v in dina_bot3))
 
     # ── 7b'. CATALOGUE RAG (embedding retrieval + hybrid scoring) ────────────
     kg_artifacts = {}  # populated by both [7b'] and [7c]
@@ -622,7 +639,7 @@ def run():
     if TARGET_CONCEPT in g_full:
         skg.add_node(TARGET_CONCEPT, kind="concept",
                      mastery_bkt=new_mastery_dict.get(TARGET_CONCEPT, 0),
-                     mastery_dina=dina_update.get(TARGET_CONCEPT, 0))
+                     mastery_dina=dina_update.get("mastery_after", 0))
         for nbr in g_full.successors(TARGET_CONCEPT):
             ed = g_full.edges[TARGET_CONCEPT, nbr]
             if g_full.nodes[nbr].get("kind") == "wrong_model":
@@ -689,7 +706,7 @@ def run():
     print(f"    student      : demo_student")
     print(f"    target       : {TARGET_CONCEPT}  "
           f"(mastery_bkt={new_mastery_dict.get(TARGET_CONCEPT, 0):.2f}, "
-          f"mastery_dina={dina_update.get(TARGET_CONCEPT, 0):.2f})")
+          f"mastery_dina={dina_update.get('mastery_after', 0):.2f})")
     print(f"    wrong-cat    : {len(wrong_catalogues)} catalogue entries; "
           f"student holds: {matched_wm_id}")
     for wc in wrong_catalogues:
@@ -910,7 +927,7 @@ def run():
     print(f"  BKT                -> {TARGET_CONCEPT} mastery "
           f"{PRIOR_MASTERY[TARGET_CONCEPT]:.2f} -> {new_mastery_dict[TARGET_CONCEPT]:.2f}")
     print(f"  DINA               -> {TARGET_CONCEPT} P(mastered)="
-          f"{dina_update.get(TARGET_CONCEPT, 0):.2f} "
+          f"{dina_update.get('mastery_after', 0):.2f} "
           f"(slip={dina.slip[2]:.2f}, guess={dina.guess[2]:.2f})")
     print(f"  LPINDEX            -> path to '{TARGET_CONCEPT}', "
           f"on_track={lp_path['on_track']}")
@@ -973,7 +990,11 @@ def run():
         "dina": {
             "target_concept": TARGET_CONCEPT,
             "before": dina_before[TARGET_CONCEPT],
-            "after_failure": dina_update.get(TARGET_CONCEPT, 0),
+            "after_failure": dina_update.get("mastery_after", 0),
+            "after_update": dina_update.get("mastery_after", 0),
+            "is_correct": _is_correct,
+            "classifier_wm": _classifier_wm,
+            "expected_wm": EXPECTED_WM,
             "is_trained": dina.is_trained,
             "all_skills_after_update": dina_full,
         },

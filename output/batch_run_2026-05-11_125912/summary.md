@@ -1,19 +1,19 @@
 # Full-stack batch run summary
 
-Ran 10 scenarios at 2026-05-09_231427.
+Ran 10 scenarios at 2026-05-11_125912.
 
 ## Wrong-belief identification (classifier vs RAG hybrid)
 
 | # | id | expected | classifier | hybrid (RAG) | flipped | cls✓ | rag✓ |
 |---|---|---|---|---|---|---|---|
-| 1 | `01_null_pointer_NP-A` | **NP-A** | NP-C | NP-B | ⟲ | ✗ | ✗ |
-| 2 | `02_type_mismatch_TM-B` | **TM-B** | TM-B | TM-B |  | ✓ | ✓ |
-| 3 | `03_infinite_loop_IL-B` | **IL-B** | IL-B | IL-B |  | ✓ | ✓ |
-| 4 | `04_integer_division_ID-A` | **ID-A** | ID-A | ID-A |  | ✓ | ✓ |
+| 1 | `01_null_pointer_NP-A` | **NP-A** | NP-B | NP-B |  | ✗ | ✗ |
+| 2 | `02_type_mismatch_TM-B` | **TM-B** | TM-A | TM-B | ⟲ | ✗ | ✓ |
+| 3 | `03_infinite_loop_IL-B` | **IL-B** | IL-A | IL-A |  | ✗ | ✗ |
+| 4 | `04_integer_division_ID-A` | **ID-A** | ID-B | ID-A | ⟲ | ✗ | ✓ |
 | 5 | `05_array_index_AI-A` | **AI-A** | AI-C | AI-B | ⟲ | ✗ | ✗ |
-| 6 | `06_string_equality_SE-A` | **SE-A** | SE-C | SE-C |  | ✗ | ✗ |
-| 7 | `07_variable_scope_VS-A` | **VS-A** | VS-A | VS-A |  | ✓ | ✓ |
-| 8 | `08_assignment_vs_compare_AC-A` | **AC-A** | AC-A | AC-C | ⟲ | ✓ | ✗ |
+| 6 | `06_string_equality_SE-A` | **SE-A** | SE-B | SE-A | ⟲ | ✗ | ✓ |
+| 7 | `07_variable_scope_VS-A` | **VS-A** | VS-C | VS-C |  | ✗ | ✗ |
+| 8 | `08_assignment_vs_compare_AC-A` | **AC-A** | AC-B | AC-C | ⟲ | ✗ | ✗ |
 | 9 | `09_scanner_buffer_SB-A` | **SB-A** | SB-B | SB-A | ⟲ | ✗ | ✓ |
 | 10 | `10_null_pointer_NP-B` | **NP-B** | NP-B | NP-B |  | ✓ | ✓ |
 
@@ -51,20 +51,20 @@ Ran 10 scenarios at 2026-05-09_231427.
 
 | id | SKG nodes | SKG edges | TTFT (s) | Total (s) | Response chars |
 |---|---|---|---|---|---|
-| `01_null_pointer_NP-A` | 8 | 7 | 12.0 | 42.5 | 2159 |
-| `02_type_mismatch_TM-B` | 14 | 13 | 5.4 | 38.4 | 2136 |
-| `03_infinite_loop_IL-B` | 9 | 8 | 5.8 | 31.8 | 1602 |
-| `04_integer_division_ID-A` | 5 | 4 | 5.8 | 39.2 | 2097 |
-| `05_array_index_AI-A` | 8 | 7 | 5.6 | 47.9 | 2236 |
-| `06_string_equality_SE-A` | 8 | 7 | 6.1 | 54.7 | 3561 |
-| `07_variable_scope_VS-A` | 5 | 4 | 6.1 | 35.2 | 2091 |
-| `08_assignment_vs_compare_AC-A` | 5 | 4 | 6.2 | 37.7 | 1796 |
-| `09_scanner_buffer_SB-A` | 5 | 4 | 5.9 | 49.7 | 3054 |
-| `10_null_pointer_NP-B` | 8 | 7 | 5.5 | 58.0 | 3882 |
+| `01_null_pointer_NP-A` | 8 | 7 | 15.3 | 68.1 | 3116 |
+| `02_type_mismatch_TM-B` | 14 | 13 | 5.1 | 8.5 | 221 |
+| `03_infinite_loop_IL-B` | 9 | 8 | 5.3 | 20.1 | 930 |
+| `04_integer_division_ID-A` | 5 | 4 | 5.4 | 29.7 | 1456 |
+| `05_array_index_AI-A` | 8 | 7 | 4.9 | 58.9 | 2829 |
+| `06_string_equality_SE-A` | 8 | 7 | 5.6 | 39.7 | 1814 |
+| `07_variable_scope_VS-A` | 5 | 4 | 5.5 | 42.7 | 2340 |
+| `08_assignment_vs_compare_AC-A` | 5 | 4 | 5.4 | 69.8 | 3513 |
+| `09_scanner_buffer_SB-A` | 5 | 4 | 5.5 | 46.9 | 2333 |
+| `10_null_pointer_NP-B` | 8 | 7 | 50.1 | 79.4 | 1809 |
 
 ## Headline metrics
 
 - Scenarios completed: 10/10
-- Classifier wrong-model accuracy: 6/10 (60%)
-- RAG hybrid wrong-model accuracy: 6/10 (60%)
-- Times RAG flipped the classifier: 4
+- Classifier wrong-model accuracy: 1/10 (10%)
+- RAG hybrid wrong-model accuracy: 5/10 (50%)
+- Times RAG flipped the classifier: 6

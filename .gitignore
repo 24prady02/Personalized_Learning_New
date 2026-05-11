@@ -45,9 +45,10 @@ ENV/
 !/data/processed/
 !/data/processed/.gitkeep
 
-# Models
-models/
-checkpoints/
+# Models — only the repo-root models/ and checkpoints/ folders are excluded
+# (where pretrained weights live). The src/models/ Python package is tracked.
+/models/
+/checkpoints/
 *.pt
 *.pth
 *.ckpt
@@ -55,6 +56,7 @@ checkpoints/
 # Logs
 logs/
 *.log
+*.log.err
 
 # Cache
 *.cache

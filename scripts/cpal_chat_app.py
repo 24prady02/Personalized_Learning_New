@@ -278,42 +278,66 @@ def _format_diag(diag, concept_id):
 # =========================================================================
 # UI callbacks
 # =========================================================================
+_PICKED_STYLE = (
+    "display:block; background:#1e293b; color:#ffffff; font-style:italic; "
+    "padding:8px 12px; border-radius:0 0 8px 8px; margin-top:-2px; "
+    "border:1px solid #334155; border-top:none;"
+)
+
+def _quiz_card_md(q, picked_option_full=None):
+    md = (
+        f"**Quiz {q['id']} — `{q['concept']}`**  \n"
+        f"{q['question']}\n"
+        f"```java\n{q['code']}\n```"
+    )
+    if picked_option_full:
+        safe = picked_option_full.replace("<", "&lt;").replace(">", "&gt;")
+        md += f'\n<span style="{_PICKED_STYLE}">Your pick: {safe}</span>'
+    return md
+
+
 def on_select_quiz(quiz_id):
     q = QUIZ_BY_ID.get(quiz_id)
     if not q:
-        return "", "", gr.update(choices=[], value=None), ""
-    md = (
-        f"### 📝 Quiz {q['id']} — `{q['concept']}`\n"
-        f"**Question:** {q['question']}\n\n"
-        f"```java\n{q['code']}\n```"
-    )
+        return "", "", gr.update(choices=[], value=None), gr.update(value="", visible=False)
+    md = _quiz_card_md(q)
     choices = [f"{k}. {v}" for k, v in q["options"].items()]
-    return md, "", gr.update(choices=choices, value=None), ""
+    return md, "", gr.update(choices=choices, value=None), gr.update(value="", visible=False)
+
+
+def on_pick_option(quiz_id, picked_option_full):
+    """Re-render the quiz card so the picked option appears in white italic
+    directly under the code snippet."""
+    q = QUIZ_BY_ID.get(quiz_id)
+    if q is None:
+        return gr.update()
+    return _quiz_card_md(q, picked_option_full)
 
 
 def _render_user_bubble(q, picked_option_text, reasoning):
+    safe_pick = (picked_option_text or "").replace("<", "&lt;").replace(">", "&gt;")
     return (
         f"**Quiz {q['id']}** — *{q['concept']}*  \n"
-        f"**Q:** {q['question']}\n\n"
-        f"```java\n{q['code']}\n```\n\n"
-        f"**My pick:** {picked_option_text}\n\n"
+        f"{q['question']}\n"
+        f"```java\n{q['code']}\n```\n"
+        f'<span style="{_PICKED_STYLE}">My pick: {safe_pick}</span>\n\n'
         f"**My reasoning:** {reasoning}"
     )
 
 
 def stream_response(quiz_id, picked_option_full, reasoning, history):
     if not quiz_id:
-        yield history, "Select a quiz first.", ""
+        yield history, gr.update(value="⚠️ Select a quiz first.", visible=True)
         return
     q = QUIZ_BY_ID.get(quiz_id)
     if q is None:
-        yield history, "Unknown quiz.", ""
+        yield history, gr.update(value="⚠️ Unknown quiz.", visible=True)
         return
     if not picked_option_full:
-        yield history, "Pick an option (A/B/C/D) before submitting.", ""
+        yield history, gr.update(value="⚠️ Pick an option (A/B/C/D) before submitting.", visible=True)
         return
     if not reasoning.strip():
-        yield history, "Write your reasoning for this pick, then submit.", ""
+        yield history, gr.update(value="⚠️ Write your reasoning for this pick, then submit.", visible=True)
         return
 
     # Parse letter off the option string "A. ..."
@@ -321,10 +345,35 @@ def stream_response(quiz_id, picked_option_full, reasoning, history):
     picked_text   = q["options"].get(picked_letter, picked_option_full)
     correct = (picked_letter == q["correct_answer"])
 
-    # Diagnose
+    # Build the correct/wrong status pill text up front so we can show it
+    # IMMEDIATELY on submission — before diagnosis and the LLM run.
+    if correct:
+        status_template = "✅ **Correct!** Read your tutor's explanation below."
+    else:
+        status_template = (
+            f"❌ You picked **{picked_letter}**, but the correct answer is "
+            f"**{q['correct_answer']}** — {q['options'][q['correct_answer']]}. "
+            f"Your tutor will walk you through it below."
+        )
+
+    # Append user bubble + assistant placeholder. The assistant bubble is
+    # pre-filled with a typing indicator so it never shows up as an empty
+    # white block while the LLM is warming up.
+    thinking_placeholder = (
+        '<span style="color:#64748b; font-style:italic;">'
+        'Tutor is thinking…</span>'
+    )
+    history = list(history) + [
+        {"role": "user", "content": _render_user_bubble(q, picked_text, reasoning)},
+        {"role": "assistant", "content": thinking_placeholder},
+    ]
+
+    # First yield: show correct/wrong status + chat bubbles instantly.
+    yield history, gr.update(value=status_template, visible=True)
+
+    # Now do the heavier work: diagnosis (drives the generator).
     diag = _diagnose(reasoning, q["concept"], q["code"],
                      q["question"], picked_option_full)
-    diag_md = _format_diag(diag, q["concept"])
 
     # Intervention via LP-validity gate
     cands = [("transfer_task", 0.92), ("worked_example", 0.80),
@@ -346,12 +395,6 @@ def stream_response(quiz_id, picked_option_full, reasoning, history):
                              "confidence": 0.7},
                 "knowledge_gaps": [q["concept"]],
                 "pedagogical_kg": {}}
-
-    # Append user bubble + assistant placeholder
-    history = list(history) + [
-        {"role": "user", "content": _render_user_bubble(q, picked_text, reasoning)},
-        {"role": "assistant", "content": ""},
-    ]
 
     # Build the message the generator sees
     tutor_input = (
@@ -392,31 +435,23 @@ def stream_response(quiz_id, picked_option_full, reasoning, history):
     t.start()
 
     last_len = 0
-    status_template = (
-        f"**Answer**: {'✅ Correct!' if correct else '❌ Picked ' + picked_letter + ', correct is ' + q['correct_answer']} &nbsp;&nbsp; "
-        f"**Intervention**: `{chosen}` &nbsp;&nbsp; "
-        f"**LP**: {diag['current_lp_level']} → {diag['target_lp_level']} &nbsp;&nbsp; "
-        f"**Wrong model**: {diag.get('wrong_model_id', '—')}"
-    )
     while not done["flag"]:
         time.sleep(0.15)
         if len(buffer["text"]) > last_len:
             last_len = len(buffer["text"])
             history[-1]["content"] = buffer["text"]
-            yield history, diag_md, status_template + " · streaming..."
+            yield history, gr.update(value=status_template + "  ·  *tutor is typing…*", visible=True)
 
     if done["err"]:
         history[-1]["content"] = f"❌ Generation failed: {done['err']}"
     else:
         history[-1]["content"] = buffer["text"] or "(empty response)"
 
-    yield history, diag_md, status_template
+    yield history, gr.update(value=status_template, visible=True)
 
 
 def clear_chat():
-    return ([],
-            "### 🔍 Diagnosis\n\n*Submit a quiz answer to see diagnosis.*",
-            "")
+    return ([], gr.update(value="", visible=False))
 
 
 # =========================================================================
@@ -425,78 +460,160 @@ def clear_chat():
 def build_app():
     with gr.Blocks(
         title="CPAL Tutor",
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft(primary_hue="indigo", neutral_hue="slate"),
         css="""
-        .diag-panel { font-family: monospace; font-size: 12px; }
-        .quiz-card  { background: #f7f8fa; border-radius: 8px; padding: 12px; }
+        .gradio-container { max-width: 900px !important; margin: 0 auto !important; }
+        .quiz-card  { background: transparent !important;
+                      border: none !important; padding: 4px 0 !important; }
+        .quiz-card p           { margin: 4px 0 !important; }
+        .quiz-card pre         { margin: 6px 0 2px !important; }
+        .quiz-card h1, .quiz-card h2, .quiz-card h3, .quiz-card h4 {
+            margin: 0 0 6px !important;
+        }
+
+        /* ───── Kill the white code-block background EVERYWHERE ───── */
+        /* Cover every wrapper Gradio / Prism may put around a code block:
+           the <pre>, the <code> child, any div with code/codeblock/highlight
+           in its class, and every descendant element. */
+        .gradio-container pre,
+        .gradio-container pre *,
+        .gradio-container code,
+        .gradio-container pre code,
+        .gradio-container [class*="code"],
+        .gradio-container [class*="codeblock"],
+        .gradio-container [class*="code-block"],
+        .gradio-container [class*="highlight"],
+        .gradio-container .md pre,
+        .gradio-container .md pre *,
+        .gradio-container .message pre,
+        .gradio-container .message pre *,
+        .quiz-card pre,
+        .quiz-card pre * {
+            background: #1e293b !important;
+            background-color: #1e293b !important;
+            color: #f1f5f9 !important;
+        }
+        /* Outer pre keeps padding + rounded border; inner spans/code stay flat */
+        .gradio-container pre {
+            border: 1px solid #334155 !important;
+            border-radius: 8px !important;
+            padding: 12px !important;
+        }
+        .gradio-container pre code,
+        .gradio-container pre code * {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        /* The "picked option" line that sits with the code snippet */
+        .picked-option {
+            display: block;
+            background: #1e293b;
+            color: #ffffff;
+            font-style: italic;
+            padding: 8px 12px;
+            border-radius: 0 0 8px 8px;
+            margin-top: -2px;
+            border: 1px solid #334155;
+            border-top: none;
+        }
+        .status-pill { padding: 10px 14px; border-radius: 8px;
+                       background: #eef2ff; border: 1px solid #c7d2fe;
+                       font-size: 14px; }
+        .status-pill p { margin: 0 !important; }
+        .hero h1 { margin-bottom: 4px; }
+        .hero p  { color: #4b5563; margin-top: 0; }
+
+        /* ───── Kill the white "generating" overlay flash ─────
+           Gradio shows a translucent white loading layer over the chatbot
+           while a function is running. That's the white patch with no text.
+           Hide every loader / progress / status indicator. */
+        .gradio-container .progress,
+        .gradio-container .progress-bar,
+        .gradio-container .progress-text,
+        .gradio-container .status,
+        .gradio-container [class*="status-tracker"],
+        .gradio-container [class*="generating"],
+        .gradio-container [class*="loading"],
+        .gradio-container .eta-bar,
+        .gradio-container [data-testid="progress"] {
+            display: none !important;
+        }
+        /* Make sure the chatbot frame itself is transparent, not white */
+        .gradio-container .chatbot { background: transparent !important; }
         """,
     ) as app:
-        gr.Markdown("""
-        # CPAL Tutor — LP-grounded Java teaching assistant
+        gr.Markdown(
+            """
+            <div class="hero">
 
-        Pick a quiz, choose your answer, and explain your reasoning.
-        The system diagnoses your **learning progression level** (L1–L4)
-        and the specific **wrong mental model** you may be holding, then
-        generates a response grounded in those diagnoses.
-        """)
+            # 🎓 CPAL Tutor
 
+            Your personalized Java learning assistant. Pick a quiz, share your
+            thinking, and get a tailored explanation.
+
+            </div>
+            """
+        )
+
+        quiz_dd = gr.Dropdown(
+            choices=QUIZ_CHOICES,
+            value=QUIZ_CHOICES[0][1],
+            label="📝 Choose a quiz",
+            interactive=True,
+        )
+        quiz_card = gr.Markdown("", elem_classes=["quiz-card"])
+        option_radio = gr.Radio(
+            choices=[],
+            label="Your answer",
+            interactive=True,
+        )
+        reasoning_box = gr.Textbox(
+            label="Why did you pick that?",
+            lines=3,
+            placeholder="Tell the tutor what made you choose this answer…",
+        )
         with gr.Row():
-            # ─── Left: quiz + chat ───────────────────────────────────
-            with gr.Column(scale=3):
-                quiz_dd = gr.Dropdown(
-                    choices=QUIZ_CHOICES,
-                    value=QUIZ_CHOICES[0][1],
-                    label="📝 Pick a quiz",
-                    interactive=True,
-                )
-                quiz_card = gr.Markdown(
-                    "",
-                    elem_classes=["quiz-card"],
-                )
-                option_radio = gr.Radio(
-                    choices=[],
-                    label="Your answer",
-                    interactive=True,
-                )
-                reasoning_box = gr.Textbox(
-                    label="Why did you pick that option? (your reasoning)",
-                    lines=4,
-                    placeholder="Explain in your own words why you picked this answer...",
-                )
-                with gr.Row():
-                    submit_btn = gr.Button("Submit answer + get tutor response",
-                                            variant="primary")
-                    clear_btn  = gr.Button("Clear chat")
-                status = gr.Markdown("")
-                chatbot = gr.Chatbot(
-                    label="Tutor conversation",
-                    type="messages",
-                    height=480,
-                    show_copy_button=True,
-                )
+            submit_btn = gr.Button("Get tutor response  →",
+                                    variant="primary", scale=3)
+            clear_btn  = gr.Button("Clear chat", scale=1)
+        status = gr.Markdown("", elem_classes=["status-pill"], visible=False)
+        chatbot = gr.Chatbot(
+            label="Your tutor",
+            type="messages",
+            height=560,
+            show_copy_button=True,
+            avatar_images=(None, None),
+        )
 
-            # ─── Right: diagnosis panel ──────────────────────────────
-            with gr.Column(scale=2):
-                diag_panel = gr.Markdown(
-                    "### 🔍 Diagnosis\n\n*Submit a quiz answer to see "
-                    "LP + wrong-model diagnosis.*",
-                    elem_classes=["diag-panel"],
-                )
-
-        # Populate quiz card on load + on dropdown change
+        # Populate quiz card on load + on dropdown change.
+        # show_progress="hidden" kills Gradio's white loading overlay so the
+        # UI doesn't flash white while these events run.
         app.load(on_select_quiz, inputs=[quiz_dd],
-                 outputs=[quiz_card, reasoning_box, option_radio, status])
+                 outputs=[quiz_card, reasoning_box, option_radio, status],
+                 show_progress="hidden")
         quiz_dd.change(on_select_quiz, inputs=[quiz_dd],
-                       outputs=[quiz_card, reasoning_box, option_radio, status])
+                       outputs=[quiz_card, reasoning_box, option_radio, status],
+                       show_progress="hidden")
 
-        # Submit
+        # When the user picks an option, re-render the card to overlay the
+        # picked option in white italic right under the code snippet.
+        option_radio.change(on_pick_option,
+                            inputs=[quiz_dd, option_radio],
+                            outputs=[quiz_card],
+                            show_progress="hidden")
+
+        # Submit — this is the long one; the white "Generating…" overlay was
+        # Gradio's default progress widget. Hide it.
         submit_btn.click(
             stream_response,
             inputs=[quiz_dd, option_radio, reasoning_box, chatbot],
-            outputs=[chatbot, diag_panel, status],
+            outputs=[chatbot, status],
+            show_progress="hidden",
         )
 
-        clear_btn.click(clear_chat, None, [chatbot, diag_panel, status])
+        clear_btn.click(clear_chat, None, [chatbot, status],
+                        show_progress="hidden")
 
     return app
 

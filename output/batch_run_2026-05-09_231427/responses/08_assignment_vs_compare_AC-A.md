@@ -16,7 +16,6 @@ if (x = 5) {
 - Classifier WM: AC-A (score=0.47155532240867615)
 - RAG hybrid WM: AC-C  (flipped=True)
 - BKT mastery: 0.15 -> 0.22
-- DINA mastery: 0.22 -> 0.00
 
 ## LLM response
 

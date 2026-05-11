@@ -218,6 +218,7 @@ def run_scenario(s):
     dfs.STUDENT_CODE    = s["code"]
     dfs.TARGET_CONCEPT  = s["concept"]
     dfs.PRIOR_MASTERY   = s["prior_mastery"]
+    dfs.EXPECTED_WM     = s["expected_wm"]
 
     # Reset module-level state that might cache between runs (e.g. CSO
     # ontology/LP index could be cached, but they're singletons internally)
@@ -276,7 +277,8 @@ def main():
             "bkt_before":      bkt.get("before"),
             "bkt_after":       bkt.get("after_failure"),
             "dina_before":     dina.get("before"),
-            "dina_after":      dina.get("after_failure"),
+            "dina_after":      dina.get("after_update", dina.get("after_failure")),
+            "dina_is_correct": dina.get("is_correct"),
             "skg_nodes":       len(skg.get("subgraph_nodes", [])),
             "skg_edges":       len(skg.get("subgraph_edges", [])),
             "ollama_ttft_s":   (art.get("ollama") or {}).get("ttft_s"),

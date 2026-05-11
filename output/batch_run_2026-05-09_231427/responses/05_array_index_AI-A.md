@@ -14,7 +14,6 @@ int fifth = arr[5];   // crashes
 - Classifier WM: AI-C (score=0.46619606018066406)
 - RAG hybrid WM: AI-B  (flipped=True)
 - BKT mastery: 0.30 -> 0.24
-- DINA mastery: 0.17 -> 0.00
 
 ## LLM response
 

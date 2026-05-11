@@ -15,7 +15,6 @@ if (a == b) System.out.println("same");   // never prints
 - Classifier WM: SE-C (score=0.6428088545799255)
 - RAG hybrid WM: SE-C  (flipped=False)
 - BKT mastery: 0.20 -> 0.23
-- DINA mastery: 0.15 -> 0.00
 
 ## LLM response
 

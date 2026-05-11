@@ -16,7 +16,6 @@ System.out.println(total);  // compile error
 - Classifier WM: VS-A (score=1.0)
 - RAG hybrid WM: VS-A  (flipped=False)
 - BKT mastery: 0.20 -> 0.23
-- DINA mastery: 0.20 -> 0.00
 
 ## LLM response
 

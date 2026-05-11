@@ -17,7 +17,6 @@ public class Widget {
 - Classifier WM: NP-B (score=0.5275176167488098)
 - RAG hybrid WM: NP-B  (flipped=False)
 - BKT mastery: 0.30 -> 0.24
-- DINA mastery: 0.15 -> 0.00
 
 ## LLM response
 

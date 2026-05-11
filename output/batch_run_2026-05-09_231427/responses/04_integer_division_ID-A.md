@@ -14,7 +14,6 @@ System.out.println(half);   // expected 2.5, got 2.0
 - Classifier WM: ID-A (score=0.7906045317649841)
 - RAG hybrid WM: ID-A  (flipped=False)
 - BKT mastery: 0.20 -> 0.23
-- DINA mastery: 0.20 -> 0.00
 
 ## LLM response
 
