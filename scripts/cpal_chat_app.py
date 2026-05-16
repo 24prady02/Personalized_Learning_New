@@ -465,29 +465,10 @@ def _status_md(state: dict, diag: dict, other_concepts: list) -> str:
     )
     friendly_focus = _friendly_concept(focus)
 
-    # Friendly count of quick checks so far. "1 quick check in" feels normal;
-    # "facets 2/5 (L3 criterion)" does not.
-    probe_count = int(state.get("probe_count", 0))
-    if probe_count == 0:
-        progress = "starting fresh"
-    elif probe_count == 1:
-        progress = "1 quick check in"
-    else:
-        progress = f"{probe_count} quick checks in"
-
-    parts = [f"📚 Working on: **{friendly_focus}**", progress]
-    trig = state.get("stage_trigger")
-    if trig:
-        # Plain-language stage signal — student should understand WHY the
-        # tutor is now giving the comprehensive answer.
-        plain = {
-            "force":             "you asked for the full answer",
-            "student_request":   "you said you wanted the answer",
-            "high_confidence":   "your understanding looks solid",
-            "sub_criteria_done": "we've checked every key piece",
-            "cap":               "we've been at it a while",
-        }.get(trig, trig)
-        parts.append(f"⭐ ready for the full answer ({plain})")
+    # Multi-turn probe ladder is OFF — no "N quick checks in" counter to
+    # show. The student sees just the focus concept and (after diagnosis)
+    # the LP transition. Everything else lives in the details expander.
+    parts = [f"📚 Working on: **{friendly_focus}**"]
     if other_concepts:
         also = ", ".join(_friendly_concept(c) for c, _ in other_concepts[:2])
         parts.append(f"you also touched on: {also}")
@@ -811,8 +792,15 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
             f"Your tutor will walk you through it below."
         )
 
-    # Fresh chat state for this question (multi-turn + dynamic-depth +
-    # multi-concept keys).
+    # Fresh chat state for this question. Multi-turn probe ladder is now
+    # DISABLED — every first turn goes straight to comprehensive synthesis
+    # (force_comprehensive=True). All upstream diagnosis (ConceptResolver,
+    # LPDiagnostician, RubricGrader, CatalogueRAG, depth_probe,
+    # lp_sub_criteria) still runs and feeds the synthesis prompt — we just
+    # don't ping-pong with the student to iteratively elicit; we trust the
+    # diagnosis on the initial belief and produce a high-quality LP-shaped
+    # teaching reply once. Follow-up student messages are free-form Q&A
+    # against the same diagnosis.
     state = {
         "quiz_id":             quiz_id,
         "picked_option_full":  picked_option_full,
@@ -826,13 +814,15 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
         "user_bubble":         _render_user_bubble(q, picked_text, reasoning),
         "pending_probe_text":  None,
         "pending_probe_reason": None,
-        "force_comprehensive": False,
-        "stage_trigger":       None,
-        # Multi-concept ladder state
-        "concepts_done":            [],     # concepts whose ladder satisfied
-        "current_focus_concept":    None,   # set on first decide()
-        "_pivot_depth":             0,      # recursion guard within one turn
-        "bridge_message":           None,   # set when pivoting concepts
+        # >>> Probe ladder OFF — always go straight to comprehensive synthesis.
+        "force_comprehensive": True,
+        "stage_trigger":       "force",
+        # Vestigial multi-concept state (still tracked for the diagnosis
+        # picker, but no longer drives back-and-forth probes).
+        "concepts_done":            [],
+        "current_focus_concept":    None,
+        "_pivot_depth":             0,
+        "bridge_message":           None,
     }
 
     # Decide on the FIRST belief: probe or teach?
@@ -964,65 +954,122 @@ def _stream_teach(state, diag, history):
     rubric_target  = (diag or {}).get("lp_rubric_target")  or ""
     benchmark = "; ".join((diag or {}).get("expert_benchmark_key_ideas") or [])
 
+    # Per-concept "operative step" — the SINGLE Java mechanism name the L3
+    # section must explicitly use. Pulled from each concept's L3 rubric.
+    # Without naming this step the L3 explanation slides into narration
+    # ("Java tries to call .toUpperCase()") instead of mechanism naming
+    # ("Java DEREFERENCES the null reference").
+    _OPERATIVE_STEP = {
+        "null_pointer":        "DEREFERENCE — Java follows a reference's address to find the object; null has no address to follow.",
+        "string_equality":     "ADDRESS COMPARISON — == compares the two reference addresses, NOT the character content.",
+        "integer_division":    "INTEGER TRUNCATION — int / int returns int; the fractional part is dropped, not rounded.",
+        "array_index":         "BOUNDS CHECK — JVM verifies index < length BEFORE the read; out-of-bounds throws without touching memory.",
+        "infinite_loop":       "CONDITION RE-EVALUATION — the while condition is checked BEFORE EACH iteration; nothing in the body magically updates the loop variable.",
+        "variable_scope":      "BLOCK-SCOPE LIFETIME — a variable declared inside { } only exists between those braces; the compiler enforces this.",
+        "type_mismatch":       "STATIC TYPE CHECK — types are checked at COMPILE TIME; int + String has no implicit conversion in Java.",
+        "assignment_vs_compare":"ASSIGNMENT RETURNS A VALUE — = assigns AND returns the assigned value; == compares and returns boolean.",
+        "scanner_buffer":      "LEFTOVER NEWLINE — nextInt() reads digits but leaves the \\n in the buffer; the next nextLine() consumes that leftover.",
+        "missing_return":      "STATIC FLOW ANALYSIS — the compiler enumerates every path through the method; any path without a return is a compile error.",
+        "array_not_allocated": "DECLARATION VS ALLOCATION — int[] arr; reserves a reference slot holding null; new int[5] allocates the actual heap array.",
+        "boolean_operators":   "SHORT-CIRCUIT EVALUATION — && stops at the first false, || stops at the first true; operand order matters.",
+        "sentinel_loop":       "PRIMING READ — the condition needs a real value before the first check; that requires a read BEFORE the loop.",
+        "unreachable_code":    "FLOW TERMINATOR — return/break/throw end the path; statements after them are unreachable and rejected at compile time.",
+        "string_immutability": "RETURN-NEW vs MUTATE — String methods return a NEW String object; the original is unchanged.",
+        "no_default_constructor":"IMPLICIT-CONSTRUCTOR SUPPRESSION — defining ANY constructor removes the auto-generated no-arg one.",
+        "static_vs_instance":  "STATIC CONTEXT HAS NO 'this' — static methods can't reference instance fields because no specific object exists at the call site.",
+        "foreach_no_modify":   "VALUE COPY IN FOR-EACH — the loop variable is a COPY of the array element; mutating the copy doesn't mutate the array.",
+        "overloading":         "COMPILE-TIME RESOLUTION — Java picks the most specific overload based on ARGUMENT types, not return type, at compile time.",
+        "generics_primitives": "TYPE ERASURE — generics use Object at runtime; primitives aren't objects, so ArrayList<int> can't compile.",
+    }
+    operative_step = _OPERATIVE_STEP.get(
+        (diag or {}).get("concept", ""),
+        "the operative Java mechanism for this concept (name it explicitly)"
+    )
+
     comprehensive_header = ""
     if stage_trigger:
         wb_block = ""
         if wm_id and wm_desc:
             wb_block = (
-                "SPECIFIC WRONG BELIEF the student showed (address THIS ONE, "
-                "not the RAG candidates):\n"
-                f"  id: {wm_id}\n"
+                "MATCHED WRONG BELIEF (address THIS ONE, never the RAG "
+                "candidates):\n"
+                f"  id:     {wm_id}\n"
                 f"  belief: {wm_desc}\n"
                 f"  origin: {wm_origin}\n\n"
             )
+        student_belief_quoted = (state.get("accumulated_belief") or "").strip()
         comprehensive_header = (
-            "COMPREHENSIVE MODE — Learning Progression synthesis.\n"
-            f"Stage trigger: {stage_trigger}. "
+            "COMPREHENSIVE MODE — Learning Progression synthesis (NO multi-"
+            "probe; this is the ONE teaching turn).\n"
             f"Student is at {cur_lvl}, target {tgt_lvl}.\n\n"
+            f"STUDENT WROTE (verbatim, you must QUOTE FROM THIS in section 1 "
+            f"and in the misconception section):\n  \"{student_belief_quoted}\"\n\n"
             f"{wb_block}"
+            f"OPERATIVE MECHANISM (you MUST name this exact concept in "
+            f"section 3, not just narrate around it):\n  {operative_step}\n\n"
             "Produce a reply that EXPLICITLY walks the Learning Progression "
-            "from L1 to L4 — six sections, in this exact order, using these "
-            "exact friendly sub-headings (the student does not see the "
-            "L1/L2/L3/L4 labels but you must follow the progression):\n\n"
+            "from L1 to L4 — SIX sections, in this exact order, with these "
+            "exact friendly sub-headings (the student never sees L1/L2/L3/L4 "
+            "labels but you must follow the progression):\n\n"
             "  ### What you noticed\n"
-            "    (L1 — the symptom layer) Confirm in one sentence WHAT the "
-            "    program did or didn't do, in the student's own framing. "
-            "    Quote a phrase from their reasoning if you can.\n\n"
+            "    (L1 — symptom layer) Confirm in ONE sentence what the "
+            "    program did or didn't do. QUOTE a phrase from the student's "
+            "    verbatim text above. Do NOT just say 'that's correct'; "
+            "    confirm-by-quoting.\n\n"
             "  ### The rule\n"
-            "    (L2 — the rule layer) State the Java rule that applies, in "
-            "    one or two plain-language sentences. No mechanism yet.\n\n"
+            "    (L2 — rule layer) State the Java rule in ONE plain "
+            "    sentence. No mechanism yet — the next section is for that.\n\n"
             "  ### What Java actually does, step by step\n"
-            "    (L3 — the mechanism layer) Walk through the execution at "
-            "    the operative step: name the stack/heap/reference/address/"
-            "    compile-time/runtime distinction that fires here. Use a "
-            "    3-6 line annotated code trace if it helps. This is the "
-            "    CORE — be specific about what gets allocated, what address "
-            "    is followed, what dereference happens.\n"
-            f"    Use the rubric's key ideas as your anchor: {benchmark}\n\n"
+            "    (L3 — mechanism layer, the CORE) NAME the operative "
+            "    mechanism above EXPLICITLY in the first sentence (e.g. "
+            "    \"The operative step is DEREFERENCE — ...\"). Then walk "
+            "    through the execution at that step in 3-6 numbered lines, "
+            "    naming stack/heap/reference/address/compile-time/runtime "
+            "    as relevant. Include a small ASCII memory diagram for any "
+            "    concept involving references, allocation, or dereferencing "
+            "    (null_pointer, string_equality, array_not_allocated, "
+            "    static_vs_instance, foreach_no_modify). Anchor to the "
+            f"    rubric's key ideas: {benchmark}\n\n"
             "  ### Where else this shows up\n"
-            "    (L4 — the generalisation layer) Name the underlying "
-            "    principle and ONE other Java situation where the same "
-            "    mechanism fires. Keep it to 1-2 sentences.\n\n"
+            "    (L4 — generalisation layer — REQUIRED, do NOT skip).\n"
+            "    State the UNDERLYING PRINCIPLE in one sentence, then name "
+            "    ONE other Java situation where the same operative mechanism "
+            "    fires. This section is what separates 'the student passed "
+            "    this quiz' from 'the student can recognise this in any "
+            "    code'. If you find yourself wanting to stop after section "
+            "    3, you are NOT done — write this section.\n\n"
             "  ### The misconception we just untangled\n"
-            "    Quote the SPECIFIC wrong belief above (NOT one from the RAG "
-            "    candidates) and contrast it with the mechanism you just "
-            "    explained. One sentence each. Skip this section ENTIRELY "
-            "    if no specific wrong belief was matched.\n\n"
+            "    Skip ENTIRELY if no specific wrong belief was matched "
+            "    above. Otherwise: QUOTE the student's exact imprecise "
+            "    phrase from the verbatim text (look for the phrase that "
+            "    matches the matched wrong-belief's intuition) and contrast "
+            "    it with the corrected mechanism in ONE sentence each. "
+            "    Format: \"You wrote *'...'* — precise version: ...\". Do "
+            "    NOT paraphrase the student; quote them.\n\n"
             "  ### Predict this\n"
-            "    Pose ONE concrete predict-the-output question on a "
-            "    variation of the code. The student should only be able to "
-            "    answer it correctly if they grasped the L3 mechanism above.\n\n"
-            "RULES:\n"
-            "  - DO NOT emit one section per RAG candidate (no \"On "
-            "    null_pointer:\" repeated blocks). The wrong-belief section "
-            "    addresses ONE belief — the one above.\n"
-            "  - DO NOT repeat the L1/L2/L3/L4 labels in the student-visible "
+            "    ONE concrete predict-the-output question on a code variant "
+            "    that would ONLY be answered correctly by a student who "
+            "    grasped the operative mechanism. Bonus if the variant "
+            "    distinguishes a near-miss (e.g. for null_pointer: empty "
+            "    string vs null; for integer_division: 5/2 vs 5.0/2; for "
+            "    array_index: arr[arr.length-1] vs arr[arr.length]).\n\n"
+            "HARD RULES:\n"
+            "  - You MUST emit all six sub-headings (skip ONLY the "
+            "    misconception section if no wrong belief matched).\n"
+            "  - L4 section MUST be present — if your draft ends at L3, "
+            "    add L4 before sending.\n"
+            "  - L3 MUST name the OPERATIVE MECHANISM above explicitly.\n"
+            "  - Misconception section MUST quote the student verbatim.\n"
+            "  - NEVER emit per-candidate \"On null_pointer:\" blocks — "
+            "    one wrong-belief section, addressing one belief.\n"
+            "  - NEVER repeat the L1/L2/L3/L4 labels in the student-visible "
             "    text. Use the friendly sub-headings exactly as given.\n"
-            "  - Keep each section TIGHT: 2-4 sentences each except the "
-            "    mechanism section which can be 4-8 sentences + a code trace.\n"
-            "  - No praise filler, no \"great question\", no \"let's dive in\".\n\n"
-            f"Probe rounds you ran with the student so far: "
-            f"{len(probed_so_far)} (criteria touched: {probed_so_far[:5]})\n\n"
+            "  - Section length: L1 = 1 sentence; L2 = 1 sentence; L3 = "
+            "    4-8 lines + optional ASCII diagram; L4 = 2-3 sentences; "
+            "    misconception = 2 sentences; predict-this = 1 question.\n"
+            "  - No praise filler. No \"great question\", \"let's dive in\", "
+            "    \"let's break this down\", \"that's correct\" as a "
+            "    standalone opener.\n\n"
         )
     tutor_input = (
         f"{comprehensive_header}"
@@ -1080,14 +1127,13 @@ def _stream_teach(state, diag, history):
     else:
         history[-1]["content"] = buffer["text"] or "(empty response)"
 
-    # After a comprehensive answer, reset force_comprehensive (and the probe
-    # counter) so the student can keep following up — each new question
-    # re-runs the diagnose/probe/teach loop fresh.
-    if state.get("stage_trigger"):
-        state["force_comprehensive"] = False
-        state["stage_trigger"]       = None
-        state["probe_count"]         = 0
-    # Keep the chat panel visible for ongoing follow-ups.
+    # Multi-turn probe ladder is OFF: keep force_comprehensive=True for
+    # every subsequent follow-up too, so the student gets a fresh
+    # LP-shaped synthesis on each turn (no probe ping-pong). The
+    # accumulated_belief grows across turns so each synthesis takes the
+    # full conversation into account.
+    state["force_comprehensive"] = True
+    state["stage_trigger"]       = "force"
     enriched_final = _status_pill_with_diag(state, diag, status_template)
     yield (history,
            gr.update(value=enriched_final, visible=True),
@@ -1320,21 +1366,31 @@ def build_app():
         status = gr.Markdown("", elem_classes=["status-pill"], visible=False)
 
         # Ongoing chat panel — hidden until first submit, then always
-        # visible. Student-facing status (plain language, no L1-L4 jargon)
-        # is in the `status` pill above; the geeky internals (raw LP, conf,
-        # facet count) sit inside an optional collapsible details panel
-        # below so engineers/researchers can still inspect them.
+        # visible. Multi-turn probing is OFF, so this is now purely a
+        # follow-up-question chat. Student-facing status (plain language,
+        # no L1-L4 jargon) is in the `status` pill above; the geeky
+        # internals (raw LP, conf) sit inside the collapsible details
+        # panel below so engineers/researchers can still inspect them.
         with gr.Group(visible=False) as probe_panel:
-            probe_question_md = gr.Markdown("")   # mirrors last tutor probe
+            # Vestigial markdown slot kept invisible so handlers can still
+            # return the 6-tuple unchanged (avoids rewiring every event).
+            probe_question_md = gr.Markdown("", visible=False)
             probe_input = gr.Textbox(
-                label="Your message to the tutor",
+                label="Ask the tutor a follow-up",
                 lines=3,
-                placeholder="Reply, ask a follow-up, or paste more reasoning…",
+                placeholder=("Ask anything — \"why does Java do that?\", "
+                             "\"can you give another example?\", "
+                             "paste more code, etc."),
             )
             with gr.Row():
                 probe_submit_btn = gr.Button("Send  →", variant="primary",
-                                              scale=3)
-                reveal_btn = gr.Button("Reveal full answer", scale=1)
+                                              scale=4)
+                # `reveal_btn` is kept as a hidden no-op so its `.click()`
+                # wire below stays valid; multi-probe is OFF and the first
+                # turn already goes straight to comprehensive, so the
+                # student no longer needs an escape hatch.
+                reveal_btn = gr.Button("Reveal full answer", scale=1,
+                                       visible=False)
 
         chatbot = gr.Chatbot(
             label="Your tutor",
@@ -1345,15 +1401,15 @@ def build_app():
         )
 
         # Ongoing-chat state — accumulated belief grows with every turn;
-        # probed_criteria de-dups depth + sub-criterion probes;
-        # force_comprehensive triggers the "Reveal full answer" path.
+        # probed_criteria/probe_count are vestigial (multi-probe is OFF);
+        # force_comprehensive=True forces every turn to comprehensive.
         probe_state = gr.State({
             "quiz_id": None, "picked_option_full": None, "picked_letter": None,
             "picked_text": None, "is_correct": False, "status_template": "",
             "accumulated_belief": "", "probe_count": 0, "probed_criteria": [],
             "user_bubble": "",
             "pending_probe_text": None, "pending_probe_reason": None,
-            "force_comprehensive": False, "stage_trigger": None,
+            "force_comprehensive": True, "stage_trigger": "force",
             "concepts_done": [], "current_focus_concept": None,
             "_pivot_depth": 0, "bridge_message": None,
         })
