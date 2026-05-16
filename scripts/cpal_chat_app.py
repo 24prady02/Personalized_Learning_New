@@ -379,56 +379,146 @@ def _detect_other_concepts(student_text: str, quiz_concept: str) -> list:
 
 
 def _status_pill_with_diag(state: dict, diag: dict, base_status: str) -> str:
-    """Append a per-concept/per-facet diagnostic line to the status pill so
-    the student can see the ladder progressing in the UI. The base_status
-    is the existing correct/wrong template; this prepends a second line
-    with the live diagnostic state."""
+    """Append the STUDENT-FACING status line + a collapsible HTML <details>
+    block holding the geeky tutor internals (LP level, conf, facet count).
+    Native HTML <details> means no new Gradio component is needed; the
+    research/engineer view is one click away and the default view stays
+    beginner-friendly."""
     if not state or not diag:
         return base_status
     try:
-        # `other_concepts` empty when the student hasn't strayed; resolver
-        # call is cheap (signature scoring + RAG lazy).
         others = _detect_other_concepts(
             state.get("accumulated_belief", ""),
             QUIZ_BY_ID[state["quiz_id"]]["concept"] if state.get("quiz_id") else "",
         )
-        diag_line = _status_md(state, diag, others)
+        friendly_line = _status_md(state, diag, others)
+        details_block = _tutor_details_md(state, diag)
     except Exception:
-        diag_line = ""
-    if not diag_line:
+        friendly_line = ""
+        details_block = ""
+    if not friendly_line:
         return base_status
-    return f"{base_status}  \n<small>{diag_line}</small>"
+    return (
+        f"{base_status}  \n"
+        f"<small>{friendly_line}</small>\n\n"
+        f"<details><summary>"
+        f"<small style=\"color:#64748b\">"
+        f"Show tutor details (LP level, confidence, facets)</small>"
+        f"</summary>\n\n"
+        f"{details_block}\n\n"
+        f"</details>"
+    )
+
+
+# Plain-language mapping for catalogue concept_ids — used in the
+# student-facing status line so "null_pointer" reads as "NullPointerException"
+# rather than the snake_case internal id. Falls back to title-casing.
+_CONCEPT_FRIENDLY = {
+    "null_pointer":         "NullPointerException",
+    "string_equality":      "string equality (== vs .equals)",
+    "integer_division":     "integer division",
+    "array_index":          "array index out of bounds",
+    "infinite_loop":        "infinite loop",
+    "static_vs_instance":   "static vs instance",
+    "type_mismatch":        "type mismatch",
+    "variable_scope":       "variable scope",
+    "assignment_vs_compare":"= vs ==",
+    "scanner_buffer":       "Scanner.nextLine after nextInt",
+    "missing_return":       "missing return",
+    "array_not_allocated":  "uninitialised array",
+    "boolean_operators":    "boolean && and ||",
+    "sentinel_loop":        "sentinel-controlled loop",
+    "unreachable_code":     "unreachable code",
+    "string_immutability":  "string immutability",
+    "no_default_constructor":"missing default constructor",
+    "foreach_no_modify":    "for-each can't modify the array",
+    "overloading":          "method overloading",
+    "generics_primitives":  "generics with primitives",
+}
+
+# Plain-language label for LP levels — student never sees "L1/L2/L3/L4",
+# they see what the level MEANS pedagogically.
+_LP_FRIENDLY = {
+    "L1": "just starting",
+    "L2": "you know the rule",
+    "L3": "you can explain the mechanism",
+    "L4": "you can generalise",
+}
+
+
+def _friendly_concept(c: Optional[str]) -> str:
+    if not c:
+        return "this concept"
+    return _CONCEPT_FRIENDLY.get(c, c.replace("_", " ").title())
 
 
 def _status_md(state: dict, diag: dict, other_concepts: list) -> str:
-    """Compose the one-line status header shown above the chat input.
+    """Compose the STUDENT-FACING one-line status header.
 
-    Shows: focus concept · LP transition · facets probed · diagnostic
-    confidence · stage trigger (if set) · OTHER concepts the student touched
-    on in their free-form belief.
+    No L1/L2/L3/L4 jargon, no "conf 0.55", no snake_case concept_ids. The
+    geeky internal state (LP levels, raw confidences, criterion counts) is
+    moved into the optional collapsible 'Show tutor details' expander —
+    not shown by default.
     """
-    focus = state.get("pending_concept_id") or (state.get("quiz_id")
-                                                  and QUIZ_BY_ID[state["quiz_id"]]["concept"])
+    focus = state.get("pending_concept_id") or (
+        state.get("quiz_id") and QUIZ_BY_ID[state["quiz_id"]]["concept"]
+    )
+    friendly_focus = _friendly_concept(focus)
+
+    # Friendly count of quick checks so far. "1 quick check in" feels normal;
+    # "facets 2/5 (L3 criterion)" does not.
+    probe_count = int(state.get("probe_count", 0))
+    if probe_count == 0:
+        progress = "starting fresh"
+    elif probe_count == 1:
+        progress = "1 quick check in"
+    else:
+        progress = f"{probe_count} quick checks in"
+
+    parts = [f"📚 Working on: **{friendly_focus}**", progress]
+    trig = state.get("stage_trigger")
+    if trig:
+        # Plain-language stage signal — student should understand WHY the
+        # tutor is now giving the comprehensive answer.
+        plain = {
+            "force":             "you asked for the full answer",
+            "student_request":   "you said you wanted the answer",
+            "high_confidence":   "your understanding looks solid",
+            "sub_criteria_done": "we've checked every key piece",
+            "cap":               "we've been at it a while",
+        }.get(trig, trig)
+        parts.append(f"⭐ ready for the full answer ({plain})")
+    if other_concepts:
+        also = ", ".join(_friendly_concept(c) for c, _ in other_concepts[:2])
+        parts.append(f"you also touched on: {also}")
+    return "  ·  ".join(parts)
+
+
+def _tutor_details_md(state: dict, diag: dict) -> str:
+    """The geeky internals — LP level transition, facets probed/total,
+    diagnostic confidence, last probe reason. Shown inside the optional
+    'Show tutor details' expander so the engineer/researcher view is still
+    available without polluting the student-facing UI."""
+    focus = state.get("pending_concept_id") or (
+        state.get("quiz_id") and QUIZ_BY_ID[state["quiz_id"]]["concept"]
+    )
     cur   = diag.get("current_lp_level", "?")
     tgt   = diag.get("target_lp_level", "?")
+    cur_plain = _LP_FRIENDLY.get(cur, cur)
+    tgt_plain = _LP_FRIENDLY.get(tgt, tgt)
     target_sub = (diag.get("lp_sub_criteria") or {}).get(tgt) or []
     probed = [c for c in (state.get("probed_criteria") or [])
               if c in target_sub]
-    facets_done = len(probed)
-    facets_total = len(target_sub)
     conf  = float(diag.get("diagnostic_confidence", 0.0))
-
-    parts = [f"**{focus or '—'}** · {cur} → {tgt}"]
-    if facets_total:
-        parts.append(f"facets {facets_done}/{facets_total}")
-    parts.append(f"conf {conf:.2f}")
-    trig = state.get("stage_trigger")
-    if trig:
-        parts.append(f"_stage_: **{trig}**")
-    if other_concepts:
-        also = ", ".join(c for c, _ in other_concepts)
-        parts.append(f"also detected: {also}")
-    return " · ".join(parts)
+    rg = diag.get("rubric_grade") or {}
+    return (
+        f"- **Concept:** `{focus}`\n"
+        f"- **Level:** `{cur}` ({cur_plain}) → `{tgt}` ({tgt_plain})\n"
+        f"- **Facets at target level probed:** {len(probed)} / {len(target_sub)}\n"
+        f"- **Diagnostic confidence:** {conf:.2f}\n"
+        f"- **Grader verdict:** `{rg.get('level','?')}` (conf {rg.get('confidence',0):.2f})\n"
+        f"- **Last probe reason:** {state.get('pending_probe_reason') or '—'}\n"
+    )
 
 
 def _stage_reached(state: dict, diag: dict) -> Optional[str]:
@@ -458,35 +548,132 @@ def _stage_reached(state: dict, diag: dict) -> Optional[str]:
     return None
 
 
+def _pick_focus_concept(state: dict) -> str:
+    """Multi-concept focus picker. Cycles through concepts: the quiz's
+    tagged concept FIRST, then any others the student raised in their
+    free-form belief that haven't been satisfied yet. Returns the concept
+    the next probe should target.
+
+    Once a concept's ladder is satisfied (stage_reached fired for it), it
+    gets appended to state["concepts_done"]. The next call to this picker
+    pivots focus to the next unsatisfied concept — that's the multi-concept
+    probing the chat now actually runs (was just a 'also detected' list).
+    """
+    quiz_concept = QUIZ_BY_ID[state["quiz_id"]]["concept"]
+    done = list(state.get("concepts_done") or [])
+    # Candidate order: quiz concept first, then ConceptResolver hits.
+    others = _detect_other_concepts(
+        state.get("accumulated_belief", ""), quiz_concept,
+    )
+    candidates = [quiz_concept] + [c for c, _ in others
+                                     if c != quiz_concept]
+    # Keep current focus if it's still unsatisfied.
+    cur = state.get("current_focus_concept")
+    if cur and cur in candidates and cur not in done:
+        return cur
+    # Pivot to the first unsatisfied candidate.
+    for c in candidates:
+        if c not in done:
+            return c
+    # Everything satisfied — stay on the quiz concept (caller will detect
+    # all_concepts_done and produce the comprehensive synthesis).
+    return quiz_concept
+
+
 def _decide_probe_or_teach(state: dict):
     """Re-diagnose on the accumulated belief and decide probe vs teach.
 
-    Composes deep-diagnostic with multi-turn / multi-facet:
-      Tier 1 — DEPTH PROBE (jargon trap or embedding-similarity gate). Asks
-               the student what they actually mean before accepting a
-               vocabulary-rich belief at face value.
-      Tier 2 — sub-criterion probe (next un-probed sentence at target LP).
-      Tier 3 — teach.
+    Composes deep-diagnostic with multi-turn / multi-facet / MULTI-CONCEPT:
+      Step 0 — pick the focus CONCEPT (multi-concept ladder: quiz concept
+               first, then any others detected in free-form text that
+               haven't been satisfied yet).
+      Tier 1 — DEPTH PROBE for the focus concept (jargon trap / similarity).
+      Tier 2 — per-facet sub-criterion probe for the focus concept.
+      Tier 3 — teach (probe-cap reached / confidence satisfied / etc.).
 
-    All three share the same `probe_count` / `probed_criteria` bookkeeping
-    so depth probes naturally count toward the bounded ladder.
+    When a concept's ladder is satisfied, it's appended to concepts_done
+    and the next turn pivots to the next unsatisfied concept (with a
+    short bridge message in the chat). Only when EVERY concept is done
+    (or force-comprehensive fires) do we produce the full synthesis.
 
     Returns:
       ("probe", criterion_key_or_text, target_level, state, diag)
       ("teach", None,                   None,         state, diag)
+    Pivots between concepts recursively — when the current concept's ladder
+    is satisfied and another concept needs probing, this function recurses
+    on the new focus and sets state["bridge_message"] so the caller can
+    surface a short "Now let's look at <next>" line in the chat.
     """
+    # Recursion guard — never pivot more than 4 concepts in a single turn.
+    if state.get("_pivot_depth", 0) > 4:
+        state["stage_trigger"] = "all_concepts_done"
+        # Build a minimal diag so callers don't NPE.
+        diag_fallback = {"current_lp_level": "L1", "target_lp_level": "L2",
+                         "diagnostic_confidence": 1.0}
+        return ("teach", None, None, state, diag_fallback)
+    # Reset the pivot guard once per call from a real entry point.
+    # (Recursive pivots already increment it; this initialises on first call.)
+    state.setdefault("_pivot_depth", 0)
+
+    # Step 0 — multi-concept focus selection.
+    focus_concept = _pick_focus_concept(state)
+    previous_focus = state.get("current_focus_concept")
+    pivoted = (previous_focus is not None
+               and previous_focus != focus_concept)
+    state["current_focus_concept"] = focus_concept
+    if pivoted:
+        # New focus concept — reset the ladder counters so this concept gets
+        # its own probe budget. The accumulated belief stays (the student's
+        # whole reasoning is still graded for each concept).
+        state["probe_count"]     = 0
+        state["probed_criteria"] = []
+
     q = QUIZ_BY_ID[state["quiz_id"]]
+    # Diagnose against the FOCUS concept (not always the quiz's tagged one).
     diag = _diagnose(
-        state["accumulated_belief"], q["concept"], q["code"],
+        state["accumulated_belief"], focus_concept, q["code"],
         q["question"], state["picked_option_full"],
     )
     conf = float(diag.get("diagnostic_confidence", 1.0))
 
-    # Stage-reached check FIRST — covers high confidence, student request,
-    # sub-criteria exhausted, and the hard probe cap. When fired, the caller
-    # streams a comprehensive synthesis instead of another short probe.
+    # Stage-reached check FIRST. When fired for a NON-force trigger, mark
+    # the current focus concept as "done" and check if there are more
+    # concepts to probe — if so, return a 'pivot' decision so the caller
+    # emits a bridge message instead of the comprehensive synthesis. Only
+    # 'force' (or all concepts done) goes straight to comprehensive.
     stage = _stage_reached(state, diag)
     if stage is not None:
+        if stage != "force":
+            done = state.setdefault("concepts_done", [])
+            if focus_concept not in done:
+                done.append(focus_concept)
+            # Are there more concepts to cover?
+            quiz_concept = QUIZ_BY_ID[state["quiz_id"]]["concept"]
+            others = _detect_other_concepts(
+                state.get("accumulated_belief", ""), quiz_concept,
+            )
+            candidates = [quiz_concept] + [c for c, _ in others
+                                            if c != quiz_concept]
+            next_concept = next((c for c in candidates if c not in done), None)
+            if next_concept and next_concept != focus_concept:
+                # Pivot — set a bridge message the caller can prepend to the
+                # next probe, then RECURSE so the new focus's probe is
+                # selected immediately (no extra round-trip needed).
+                state["stage_trigger"]         = None
+                state["current_focus_concept"] = next_concept
+                state["probe_count"]           = 0
+                state["probed_criteria"]       = []
+                state["bridge_message"] = (
+                    f"👍 Got what we needed on "
+                    f"**{_friendly_concept(focus_concept)}**. "
+                    f"Now let's look at "
+                    f"**{_friendly_concept(next_concept)}**, "
+                    f"which you also touched on."
+                )
+                state["_pivot_depth"] = state.get("_pivot_depth", 0) + 1
+                return _decide_probe_or_teach(state)
+            # Every concept done — fall through to comprehensive synthesis.
+            stage = "all_concepts_done"
         state["stage_trigger"] = stage
         return ("teach", None, None, state, diag)
 
@@ -555,26 +742,25 @@ def _probe_question_md(criterion: str, target: str,
        **Quick check 3** · `string_equality` · depth check — vocabulary
        [LLM-generated probe text targeting the specific student wording]
     """
-    # Header line — concept + facet position make the multi-facet / multi-
-    # concept progression visible.
+    # Header line — student-friendly: plain concept name + "check N of M"
+    # (instead of "facet N/M (L3 criterion)" which is internal jargon).
     parts = [f"**Quick check {round_n}**"]
-    if concept_id:
-        parts.append(f"`{concept_id}`")
+    friendly = _friendly_concept(concept_id) if concept_id else ""
+    if friendly:
+        parts.append(friendly)
     if depth_text:
         tag = {
-            "jargon_trap":            "depth check — vocabulary",
-            "high_sim_to_wrong":      "depth check — commit to the mechanism",
-            "dynamic_sim_to_wrong":   "depth check — surface vs mechanism",
-            "dynamic_vocab_density":  "depth check — trace your terms",
-        }.get(depth_reason or "", "depth check")
+            "jargon_trap":            "let's check what you mean by this term",
+            "high_sim_to_wrong":      "let's pin down what's actually happening",
+            "dynamic_sim_to_wrong":   "let's pin down what's actually happening",
+            "dynamic_vocab_density":  "let's trace what you wrote",
+        }.get(depth_reason or "", "quick depth check")
         parts.append(f"<span style=\"color:#64748b\">({tag})</span>")
         header = " · ".join(parts)
         return f"{header}\n\n{depth_text}"
 
     if facet_pos and facet_total:
-        parts.append(f"facet {facet_pos}/{facet_total}")
-    if target:
-        parts.append(f"<span style=\"color:#64748b\">({target} criterion)</span>")
+        parts.append(f"check {facet_pos} of {facet_total}")
     header = " · ".join(parts)
     c = (criterion or "").strip().rstrip(".")
     return (
@@ -625,7 +811,8 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
             f"Your tutor will walk you through it below."
         )
 
-    # Fresh chat state for this question (multi-turn + dynamic-depth keys).
+    # Fresh chat state for this question (multi-turn + dynamic-depth +
+    # multi-concept keys).
     state = {
         "quiz_id":             quiz_id,
         "picked_option_full":  picked_option_full,
@@ -641,6 +828,11 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
         "pending_probe_reason": None,
         "force_comprehensive": False,
         "stage_trigger":       None,
+        # Multi-concept ladder state
+        "concepts_done":            [],     # concepts whose ladder satisfied
+        "current_focus_concept":    None,   # set on first decide()
+        "_pivot_depth":             0,      # recursion guard within one turn
+        "bridge_message":           None,   # set when pivoting concepts
     }
 
     # Decide on the FIRST belief: probe or teach?
@@ -648,18 +840,26 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
     if decision == "probe":
         # Push the user bubble so the conversation shows what the student wrote,
         # then surface the probe panel with the targeted question.
+        # If a multi-concept pivot happened during decide(), surface the
+        # bridge message in its OWN assistant bubble so the student sees
+        # "Now let's look at X" before the next probe question.
+        bridge = state.pop("bridge_message", None)
         history = list(history) + [
             {"role": "user", "content": state["user_bubble"]},
-            {"role": "assistant",
-             "content": _probe_question_md(
+        ]
+        if bridge:
+            history.append({"role": "assistant", "content": bridge})
+        history.append({
+            "role": "assistant",
+            "content": _probe_question_md(
                  criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
                  depth_text=state.get("pending_probe_text"),
                  depth_reason=state.get("pending_probe_reason"),
                  concept_id=state.get("pending_concept_id"),
                  facet_pos=state.get("pending_facet_pos"),
                  facet_total=state.get("pending_facet_total"),
-             )},
-        ]
+             ),
+        })
         enriched = _status_pill_with_diag(
             state, diag,
             status_template + "  ·  *quick check before the answer…*",
@@ -899,6 +1099,11 @@ def on_probe_answer(probe_answer, history, state):
             facet_pos=state.get("pending_facet_pos"),
             facet_total=state.get("pending_facet_total"),
         )
+        # Multi-concept pivot bridge — surfaced before the next probe so
+        # the student sees the transition between concepts in the chat.
+        bridge_in_answer = state.pop("bridge_message", None)
+        if bridge_in_answer:
+            next_q_md = f"{bridge_in_answer}\n\n{next_q_md}"
         if history and history[-1].get("role") == "assistant":
             history = list(history[:-1]) + [
                 {"role": "user",  "content": f"*(quick-check answer)* {ans}"},
@@ -929,9 +1134,11 @@ def clear_chat():
         "picked_text": None, "is_correct": False, "status_template": "",
         "accumulated_belief": "", "probe_count": 0, "probed_criteria": [],
         "user_bubble": "",
-        # Dynamic-chat additions
+        # Dynamic-chat + multi-concept additions
         "pending_probe_text": None, "pending_probe_reason": None,
         "force_comprehensive": False, "stage_trigger": None,
+        "concepts_done": [], "current_focus_concept": None,
+        "_pivot_depth": 0, "bridge_message": None,
     }
     return ([], gr.update(value="", visible=False),
             gr.update(visible=False), "", "", empty_state)
@@ -1063,9 +1270,10 @@ def build_app():
         status = gr.Markdown("", elem_classes=["status-pill"], visible=False)
 
         # Ongoing chat panel — hidden until first submit, then always
-        # visible. Per-concept / per-facet progress is shown in the status
-        # pill above the chatbot (focus concept · LP → target · facets
-        # probed / total · confidence · stage trigger · also-detected).
+        # visible. Student-facing status (plain language, no L1-L4 jargon)
+        # is in the `status` pill above; the geeky internals (raw LP, conf,
+        # facet count) sit inside an optional collapsible details panel
+        # below so engineers/researchers can still inspect them.
         with gr.Group(visible=False) as probe_panel:
             probe_question_md = gr.Markdown("")   # mirrors last tutor probe
             probe_input = gr.Textbox(
@@ -1096,6 +1304,8 @@ def build_app():
             "user_bubble": "",
             "pending_probe_text": None, "pending_probe_reason": None,
             "force_comprehensive": False, "stage_trigger": None,
+            "concepts_done": [], "current_focus_concept": None,
+            "_pivot_depth": 0, "bridge_message": None,
         })
 
         # Populate quiz card on load + on dropdown change.

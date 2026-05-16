@@ -225,9 +225,13 @@ def _llm_generate_probe(student_text: str, target_belief: str,
     """
     try:
         import requests
+        # Depth probe = one short question; small model is plenty and 3x
+        # faster on CPU. CPAL_DEPTH_MODEL overrides, else CPAL_GRADER_MODEL,
+        # else default to llama3.2 (~2 GB, fast).
         model = (
-            os.environ.get("CPAL_OLLAMA_MODEL")
-            or "llama3.1:8b"
+            os.environ.get("CPAL_DEPTH_MODEL")
+            or os.environ.get("CPAL_GRADER_MODEL")
+            or "llama3.2"
         )
         framing = {
             "embedding_sim_to_wrong":
@@ -260,11 +264,14 @@ def _llm_generate_probe(student_text: str, target_belief: str,
             " - Plain text only. No markdown, no JSON.\n\n"
             "Probe question:"
         )
+        # 10s cap — the chat must not stall waiting on probe generation.
+        # If the LLM is slow or busy we fall through to the templated
+        # depth-question text (still anchored to the matched wrong-belief).
         r = requests.post(
             "http://localhost:11434/api/generate",
             json={"model": model, "prompt": prompt, "stream": False,
-                  "options": {"temperature": 0.3, "num_predict": 140}},
-            timeout=30,
+                  "options": {"temperature": 0.3, "num_predict": 120}},
+            timeout=10,
         )
         r.raise_for_status()
         out = (r.json().get("response") or "").strip()

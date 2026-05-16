@@ -21,6 +21,7 @@ from __future__ import annotations
 from typing import Dict, Optional
 import hashlib
 import json
+import os
 import re
 
 LP_LEVELS = ("L1", "L2", "L3", "L4")
@@ -45,17 +46,26 @@ class RubricGrader:
     # -- setup -------------------------------------------------------------
 
     def _detect_model(self) -> str:
-        """Pick an installed Ollama model (prefer a code-specialised one)."""
+        """Pick an installed Ollama model.
+
+        Order: explicit env (CPAL_GRADER_MODEL) > smallest llama3.x available
+        > code-specialised > anything. The grader is a single JSON judgement
+        so we prefer the SMALLEST fast model (llama3.2 ~2 GB is ~3x faster
+        than qwen2.5-coder:7b ~4.7 GB on CPU). The bigger code-specialised
+        model is overkill for one-shot classification.
+        """
+        forced = os.environ.get("CPAL_GRADER_MODEL")
+        if forced:
+            return forced
         try:
             import requests
             r = requests.get(self.tags_url, timeout=2)
             names = [m.get("name") for m in r.json().get("models", [])
                      if m.get("name")]
             for pred in (
-                lambda n: "qwen" in n.lower() and "coder" in n.lower(),
-                lambda n: "deepseek" in n.lower() and "coder" in n.lower(),
-                lambda n: "llama3.1" in n.lower() or "llama3.3" in n.lower(),
+                lambda n: "llama3.2" in n.lower(),
                 lambda n: "llama3" in n.lower(),
+                lambda n: "qwen" in n.lower() and "coder" in n.lower(),
                 lambda n: True,
             ):
                 for n in names:
