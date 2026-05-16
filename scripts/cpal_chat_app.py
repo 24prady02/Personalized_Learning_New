@@ -952,26 +952,76 @@ def _stream_teach(state, diag, history):
     # short probe-style reply.
     stage_trigger = state.get("stage_trigger")
     probed_so_far = state.get("probed_criteria") or []
+    # Wrong-belief — pull the SINGLE matched one from the diagnosis. The
+    # comprehensive answer addresses THIS belief only, not the RAG top-3
+    # candidates (which are FYI context, NOT separate things to teach).
+    wm_id     = (diag or {}).get("wrong_model_id") or ""
+    wm_desc   = (diag or {}).get("wrong_model_description") or ""
+    wm_origin = (diag or {}).get("wrong_model_origin") or ""
+    cur_lvl   = (diag or {}).get("current_lp_level", "L1")
+    tgt_lvl   = (diag or {}).get("target_lp_level", "L3")
+    rubric_current = (diag or {}).get("lp_rubric_current") or ""
+    rubric_target  = (diag or {}).get("lp_rubric_target")  or ""
+    benchmark = "; ".join((diag or {}).get("expert_benchmark_key_ideas") or [])
+
     comprehensive_header = ""
     if stage_trigger:
+        wb_block = ""
+        if wm_id and wm_desc:
+            wb_block = (
+                "SPECIFIC WRONG BELIEF the student showed (address THIS ONE, "
+                "not the RAG candidates):\n"
+                f"  id: {wm_id}\n"
+                f"  belief: {wm_desc}\n"
+                f"  origin: {wm_origin}\n\n"
+            )
         comprehensive_header = (
-            "COMPREHENSIVE MODE — the student has reached the stage where "
-            f"a full synthesis is appropriate (trigger: {stage_trigger}). "
-            "Produce a multi-section reply with these parts, in order:\n"
-            "  1. **What you understood** — name SPECIFIC parts of the "
-            "     student's reasoning that were correct (quote them briefly).\n"
-            "  2. **Where you were close** — name any parts that were "
-            "     incomplete or partly wrong, in one or two short sentences.\n"
-            "  3. **The full mechanism** — walk through what Java actually "
-            "     does, end-to-end, in plain words. Use a short code trace "
-            "     if it helps.\n"
-            "  4. **Extension** — one question that would only be answerable "
-            "     after grasping the full mechanism (transfer to a related "
-            "     case, or design rationale).\n"
-            "Tone: confident, no praise filler. Skip section headers if the "
-            "student's answer was uniformly correct — go straight to the "
-            "full mechanism + extension.\n\n"
-            "Probe rounds so far: "
+            "COMPREHENSIVE MODE — Learning Progression synthesis.\n"
+            f"Stage trigger: {stage_trigger}. "
+            f"Student is at {cur_lvl}, target {tgt_lvl}.\n\n"
+            f"{wb_block}"
+            "Produce a reply that EXPLICITLY walks the Learning Progression "
+            "from L1 to L4 — six sections, in this exact order, using these "
+            "exact friendly sub-headings (the student does not see the "
+            "L1/L2/L3/L4 labels but you must follow the progression):\n\n"
+            "  ### What you noticed\n"
+            "    (L1 — the symptom layer) Confirm in one sentence WHAT the "
+            "    program did or didn't do, in the student's own framing. "
+            "    Quote a phrase from their reasoning if you can.\n\n"
+            "  ### The rule\n"
+            "    (L2 — the rule layer) State the Java rule that applies, in "
+            "    one or two plain-language sentences. No mechanism yet.\n\n"
+            "  ### What Java actually does, step by step\n"
+            "    (L3 — the mechanism layer) Walk through the execution at "
+            "    the operative step: name the stack/heap/reference/address/"
+            "    compile-time/runtime distinction that fires here. Use a "
+            "    3-6 line annotated code trace if it helps. This is the "
+            "    CORE — be specific about what gets allocated, what address "
+            "    is followed, what dereference happens.\n"
+            f"    Use the rubric's key ideas as your anchor: {benchmark}\n\n"
+            "  ### Where else this shows up\n"
+            "    (L4 — the generalisation layer) Name the underlying "
+            "    principle and ONE other Java situation where the same "
+            "    mechanism fires. Keep it to 1-2 sentences.\n\n"
+            "  ### The misconception we just untangled\n"
+            "    Quote the SPECIFIC wrong belief above (NOT one from the RAG "
+            "    candidates) and contrast it with the mechanism you just "
+            "    explained. One sentence each. Skip this section ENTIRELY "
+            "    if no specific wrong belief was matched.\n\n"
+            "  ### Predict this\n"
+            "    Pose ONE concrete predict-the-output question on a "
+            "    variation of the code. The student should only be able to "
+            "    answer it correctly if they grasped the L3 mechanism above.\n\n"
+            "RULES:\n"
+            "  - DO NOT emit one section per RAG candidate (no \"On "
+            "    null_pointer:\" repeated blocks). The wrong-belief section "
+            "    addresses ONE belief — the one above.\n"
+            "  - DO NOT repeat the L1/L2/L3/L4 labels in the student-visible "
+            "    text. Use the friendly sub-headings exactly as given.\n"
+            "  - Keep each section TIGHT: 2-4 sentences each except the "
+            "    mechanism section which can be 4-8 sentences + a code trace.\n"
+            "  - No praise filler, no \"great question\", no \"let's dive in\".\n\n"
+            f"Probe rounds you ran with the student so far: "
             f"{len(probed_so_far)} (criteria touched: {probed_so_far[:5]})\n\n"
         )
     tutor_input = (
