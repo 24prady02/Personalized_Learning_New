@@ -355,6 +355,82 @@ def _student_requested_answer(text: str) -> bool:
     return bool(_STUDENT_GIVE_UP.search(text or ""))
 
 
+def _detect_other_concepts(student_text: str, quiz_concept: str) -> list:
+    """Run ConceptResolver on the student's free-form text and return concept
+    IDs OTHER than the quiz's tagged concept that the student also mentioned
+    — so the chat can surface multi-concept awareness even though the quiz
+    item is single-concept by design.
+
+    Returns up to 3 other concepts, ranked by ConceptResolver confidence,
+    above a low floor. Empty list when nothing additional was detected.
+    """
+    try:
+        from src.orchestrator.concept_resolver import ConceptResolver
+        # Lazily build a resolver — cheap (signature scoring + RAG lazy).
+        global _CONCEPT_RESOLVER
+        if "_CONCEPT_RESOLVER" not in globals():
+            _CONCEPT_RESOLVER = ConceptResolver()
+        ranked = _CONCEPT_RESOLVER.resolve({"question": student_text or ""})
+    except Exception:
+        return []
+    others = [(c, s) for c, s in ranked
+              if c != quiz_concept and c != "unknown" and s >= 0.25]
+    return others[:3]
+
+
+def _status_pill_with_diag(state: dict, diag: dict, base_status: str) -> str:
+    """Append a per-concept/per-facet diagnostic line to the status pill so
+    the student can see the ladder progressing in the UI. The base_status
+    is the existing correct/wrong template; this prepends a second line
+    with the live diagnostic state."""
+    if not state or not diag:
+        return base_status
+    try:
+        # `other_concepts` empty when the student hasn't strayed; resolver
+        # call is cheap (signature scoring + RAG lazy).
+        others = _detect_other_concepts(
+            state.get("accumulated_belief", ""),
+            QUIZ_BY_ID[state["quiz_id"]]["concept"] if state.get("quiz_id") else "",
+        )
+        diag_line = _status_md(state, diag, others)
+    except Exception:
+        diag_line = ""
+    if not diag_line:
+        return base_status
+    return f"{base_status}  \n<small>{diag_line}</small>"
+
+
+def _status_md(state: dict, diag: dict, other_concepts: list) -> str:
+    """Compose the one-line status header shown above the chat input.
+
+    Shows: focus concept · LP transition · facets probed · diagnostic
+    confidence · stage trigger (if set) · OTHER concepts the student touched
+    on in their free-form belief.
+    """
+    focus = state.get("pending_concept_id") or (state.get("quiz_id")
+                                                  and QUIZ_BY_ID[state["quiz_id"]]["concept"])
+    cur   = diag.get("current_lp_level", "?")
+    tgt   = diag.get("target_lp_level", "?")
+    target_sub = (diag.get("lp_sub_criteria") or {}).get(tgt) or []
+    probed = [c for c in (state.get("probed_criteria") or [])
+              if c in target_sub]
+    facets_done = len(probed)
+    facets_total = len(target_sub)
+    conf  = float(diag.get("diagnostic_confidence", 0.0))
+
+    parts = [f"**{focus or '—'}** · {cur} → {tgt}"]
+    if facets_total:
+        parts.append(f"facets {facets_done}/{facets_total}")
+    parts.append(f"conf {conf:.2f}")
+    trig = state.get("stage_trigger")
+    if trig:
+        parts.append(f"_stage_: **{trig}**")
+    if other_concepts:
+        also = ", ".join(c for c, _ in other_concepts)
+        parts.append(f"also detected: {also}")
+    return " · ".join(parts)
+
+
 def _stage_reached(state: dict, diag: dict) -> Optional[str]:
     """Return a non-empty string naming the stage trigger, or None if not yet.
 
@@ -433,19 +509,29 @@ def _decide_probe_or_teach(state: dict):
         if dp is not None:
             state["probed_criteria"].append(dp.criterion_key)
             state["probe_count"] += 1
-            state["pending_probe_text"] = dp.question
+            state["pending_probe_text"]   = dp.question
             state["pending_probe_reason"] = dp.reason
+            state["pending_concept_id"]   = q["concept"]
+            state["pending_facet_pos"]    = None     # depth probes aren't facet-numbered
+            state["pending_facet_total"]  = None
             return ("probe", dp.criterion_key, target, state, diag)
 
         # Tier 2 — per-criterion sub-rubric (multi-facet ladder).
         sub_map = diag.get("lp_sub_criteria") or {}
         sub = sub_map.get(target) or []
-        for c in sub:
+        for i, c in enumerate(sub, start=1):
             if c not in state["probed_criteria"]:
                 state["probed_criteria"].append(c)
                 state["probe_count"] += 1
-                state["pending_probe_text"] = None    # render via wrapper
+                state["pending_probe_text"]   = None    # render via wrapper
                 state["pending_probe_reason"] = "sub_criterion"
+                state["pending_concept_id"]   = q["concept"]
+                # Position of THIS criterion in the target-level facet list,
+                # 1-indexed, plus total facets. Lets the UI show e.g.
+                # "facet 2/5" so the student sees the multi-facet ladder
+                # progressing.
+                state["pending_facet_pos"]    = i
+                state["pending_facet_total"]  = len(sub)
                 return ("probe", c, target, state, diag)
     return ("teach", None, None, state, diag)
 
@@ -453,27 +539,46 @@ def _decide_probe_or_teach(state: dict):
 def _probe_question_md(criterion: str, target: str,
                        round_n: int, round_max: int,
                        depth_text: Optional[str] = None,
-                       depth_reason: Optional[str] = None) -> str:
-    """Render the probe question. Depth probes (jargon traps, surface-paraphrase
-    flags) carry their own `depth_text` which is shown verbatim — they target a
-    specific misuse, not a generic 'why is this true' explanation. Sub-criterion
-    probes wrap the criterion in the standard 'in your own words' prompt."""
+                       depth_reason: Optional[str] = None,
+                       concept_id: Optional[str] = None,
+                       facet_pos: Optional[int] = None,
+                       facet_total: Optional[int] = None) -> str:
+    """Render the probe question with FULL per-facet / per-concept labelling
+    so the student can see which sub-skill of which concept is being probed.
+
+    Format (sub-criterion probe):
+       **Quick check 2** · `null_pointer` · facet 2/5 (L3 mechanism)
+       In your own words — can you explain *why* this is true?
+       > new allocates a heap object and returns its address
+
+    Format (depth probe — jargon / similarity):
+       **Quick check 3** · `string_equality` · depth check — vocabulary
+       [LLM-generated probe text targeting the specific student wording]
+    """
+    # Header line — concept + facet position make the multi-facet / multi-
+    # concept progression visible.
+    parts = [f"**Quick check {round_n}**"]
+    if concept_id:
+        parts.append(f"`{concept_id}`")
     if depth_text:
-        # Show a tiny tag so the student can see this is a depth check
-        # rather than a generic check.
         tag = {
-            "jargon_trap":         "depth check — vocabulary",
-            "high_sim_to_wrong":   "depth check — commit to the mechanism",
+            "jargon_trap":            "depth check — vocabulary",
+            "high_sim_to_wrong":      "depth check — commit to the mechanism",
+            "dynamic_sim_to_wrong":   "depth check — surface vs mechanism",
+            "dynamic_vocab_density":  "depth check — trace your terms",
         }.get(depth_reason or "", "depth check")
-        return (
-            f"**Quick check {round_n} of {round_max}** "
-            f"<span style=\"color:#64748b\">({tag})</span>\n\n"
-            f"{depth_text}"
-        )
+        parts.append(f"<span style=\"color:#64748b\">({tag})</span>")
+        header = " · ".join(parts)
+        return f"{header}\n\n{depth_text}"
+
+    if facet_pos and facet_total:
+        parts.append(f"facet {facet_pos}/{facet_total}")
+    if target:
+        parts.append(f"<span style=\"color:#64748b\">({target} criterion)</span>")
+    header = " · ".join(parts)
     c = (criterion or "").strip().rstrip(".")
     return (
-        f"**Quick check {round_n} of {round_max}** "
-        f"<span style=\"color:#64748b\">(targeting {target})</span>\n\n"
+        f"{header}\n\n"
         f"In your own words — can you explain *why* this is true?\n\n"
         f"> {c}"
     )
@@ -550,16 +655,25 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
                  criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
                  depth_text=state.get("pending_probe_text"),
                  depth_reason=state.get("pending_probe_reason"),
+                 concept_id=state.get("pending_concept_id"),
+                 facet_pos=state.get("pending_facet_pos"),
+                 facet_total=state.get("pending_facet_total"),
              )},
         ]
+        enriched = _status_pill_with_diag(
+            state, diag,
+            status_template + "  ·  *quick check before the answer…*",
+        )
         yield (history,
-               gr.update(value=status_template + "  ·  *quick check before the answer…*",
-                          visible=True),
+               gr.update(value=enriched, visible=True),
                gr.update(visible=True),
                _probe_question_md(
                    criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
                    depth_text=state.get("pending_probe_text"),
                    depth_reason=state.get("pending_probe_reason"),
+                   concept_id=state.get("pending_concept_id"),
+                   facet_pos=state.get("pending_facet_pos"),
+                   facet_total=state.get("pending_facet_total"),
                ),
                "",
                state)
@@ -605,8 +719,9 @@ def _stream_teach(state, diag, history):
     # Ongoing-chat mode: keep the chat panel VISIBLE through every teach
     # reply (was visible=False = hide-after-teach in the old one-shot mode).
     # The student can keep messaging until they start a new quiz.
+    enriched = _status_pill_with_diag(state, diag, status_template)
     yield (history,
-           gr.update(value=status_template, visible=True),
+           gr.update(value=enriched, visible=True),
            gr.update(visible=True), "", "", state)
 
     # Intervention via LP-validity gate
@@ -697,6 +812,9 @@ def _stream_teach(state, diag, history):
     t = threading.Thread(target=runner, daemon=True)
     t.start()
 
+    typing_enriched = _status_pill_with_diag(
+        state, diag, status_template + "  ·  *tutor is typing…*",
+    )
     last_len = 0
     while not done["flag"]:
         time.sleep(0.15)
@@ -704,8 +822,7 @@ def _stream_teach(state, diag, history):
             last_len = len(buffer["text"])
             history[-1]["content"] = buffer["text"]
             yield (history,
-                   gr.update(value=status_template + "  ·  *tutor is typing…*",
-                              visible=True),
+                   gr.update(value=typing_enriched, visible=True),
                    gr.update(visible=True), "", "", state)
 
     if done["err"]:
@@ -721,8 +838,9 @@ def _stream_teach(state, diag, history):
         state["stage_trigger"]       = None
         state["probe_count"]         = 0
     # Keep the chat panel visible for ongoing follow-ups.
+    enriched_final = _status_pill_with_diag(state, diag, status_template)
     yield (history,
-           gr.update(value=status_template, visible=True),
+           gr.update(value=enriched_final, visible=True),
            gr.update(visible=True), "", "", state)
 
 
@@ -777,6 +895,9 @@ def on_probe_answer(probe_answer, history, state):
             criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
             depth_text=state.get("pending_probe_text"),
             depth_reason=state.get("pending_probe_reason"),
+            concept_id=state.get("pending_concept_id"),
+            facet_pos=state.get("pending_facet_pos"),
+            facet_total=state.get("pending_facet_total"),
         )
         if history and history[-1].get("role") == "assistant":
             history = list(history[:-1]) + [
@@ -942,10 +1063,9 @@ def build_app():
         status = gr.Markdown("", elem_classes=["status-pill"], visible=False)
 
         # Ongoing chat panel — hidden until first submit, then always
-        # visible. Each student message is appended to the accumulated
-        # belief; the tutor re-decides probe / partial-teach / comprehensive
-        # on every turn. The "Reveal full answer" button forces the
-        # comprehensive synthesis, skipping any remaining probes.
+        # visible. Per-concept / per-facet progress is shown in the status
+        # pill above the chatbot (focus concept · LP → target · facets
+        # probed / total · confidence · stage trigger · also-detected).
         with gr.Group(visible=False) as probe_panel:
             probe_question_md = gr.Markdown("")   # mirrors last tutor probe
             probe_input = gr.Textbox(
