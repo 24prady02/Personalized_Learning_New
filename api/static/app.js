@@ -60,6 +60,7 @@ async function startSession() {
     state.currentItem = data.item;
     renderItem(data.item);
     hide("step-belief");
+    hide("step-probe");
     hide("step-correct");
     hide("step-done");
     show("step-quiz");
@@ -106,15 +107,61 @@ async function submitBelief() {
         belief,
       }),
     });
-    renderCorrection(data);
-    hide("step-belief");
-    show("step-correct");
+    handleCorrectResponse(data, "step-belief");
   } catch (e) {
     setError(e.message);
     $("submit-belief").disabled = false;
   } finally {
     hide("loading");
   }
+}
+
+async function submitProbe() {
+  const ans = $("probe-input").value.trim();
+  if (!ans) return;
+  setError(null);
+  $("submit-probe").disabled = true;
+  show("loading");
+  try {
+    const data = await api("/api/probe_answer", {
+      method: "POST",
+      body: JSON.stringify({
+        session_id: state.sessionId,
+        probe_answer: ans,
+      }),
+    });
+    handleCorrectResponse(data, "step-probe");
+  } catch (e) {
+    setError(e.message);
+    $("submit-probe").disabled = false;
+  } finally {
+    hide("loading");
+  }
+}
+
+// Branches on the backend's response type — show probe Step 2.5 when the
+// grader wants a follow-up, otherwise show the explanation Step 3.
+function handleCorrectResponse(data, hideStep) {
+  hide(hideStep);
+  if (data.type === "probe") {
+    renderProbe(data);
+    show("step-probe");
+    $("probe-input").focus();
+  } else {
+    renderCorrection(data);
+    show("step-correct");
+  }
+}
+
+function renderProbe(data) {
+  const round = data.probe_round || 1;
+  const cap = data.probe_round_max || 2;
+  $("probe-round-label").textContent =
+    `Quick check ${round} of ${cap}` +
+    (data.probe_target_level ? ` — target ${data.probe_target_level}` : "");
+  $("probe-question").textContent = data.probe_question || "";
+  $("probe-input").value = "";
+  $("submit-probe").disabled = true;
 }
 
 function renderCorrection(data) {
@@ -162,6 +209,11 @@ document.addEventListener("DOMContentLoaded", () => {
   $("submit-belief").addEventListener("click", submitBelief);
   $("belief-input").addEventListener("input", (e) => {
     $("submit-belief").disabled = e.target.value.trim().length === 0;
+  });
+  // Step 2.5 probe wiring
+  $("submit-probe").addEventListener("click", submitProbe);
+  $("probe-input").addEventListener("input", (e) => {
+    $("submit-probe").disabled = e.target.value.trim().length === 0;
   });
   startSession();
 });

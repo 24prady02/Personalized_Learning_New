@@ -20,7 +20,7 @@ Used by:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import json
@@ -37,6 +37,17 @@ class WrongModel:
 
 
 @dataclass
+class JargonTrap:
+    """A 'hollow vocabulary' pattern for a concept — student says the phrase
+    but means something wrong. Surfaced by the depth-probe layer to ask the
+    student what they actually mean, instead of accepting the jargon at
+    face value."""
+    phrase: str            # match pattern (substring, case-insensitive)
+    why_wrong: str         # short explanation of the misapplication
+    diagnostic_probe: str  # question to ask the student to surface the gap
+
+
+@dataclass
 class ConceptEntry:
     """Full catalogue entry for one Java CS1 concept."""
     concept_id: str
@@ -45,6 +56,9 @@ class ConceptEntry:
     java_concept: str                # short prose description
     wrong_models: List[WrongModel]
     lp_rubric: Dict[str, str]        # {"L1": ..., "L2": ..., "L3": ..., "L4": ...}
+    # CPAL deep-diagnostic addition — populated from data/mental_models/
+    # jargon_traps.json. Empty list if no traps authored for this concept yet.
+    jargon_traps: List[JargonTrap] = field(default_factory=list)
 
 
 @dataclass
@@ -63,11 +77,17 @@ class MentalModelsCatalogue:
     """Catalogue of wrong mental models, loaded once at init."""
 
     DEFAULT_PATH = "data/mental_models/wrong_models_catalogue.json"
+    JARGON_TRAPS_PATH = "data/mental_models/jargon_traps.json"
 
-    def __init__(self, json_path: Optional[str] = None):
+    def __init__(self, json_path: Optional[str] = None,
+                 jargon_traps_path: Optional[str] = None):
         self.json_path = Path(json_path or self.DEFAULT_PATH)
+        self.jargon_traps_path = Path(
+            jargon_traps_path or self.JARGON_TRAPS_PATH
+        )
         self._concepts: Dict[str, ConceptEntry] = {}
         self._load()
+        self._load_jargon_traps()
 
     def _load(self) -> None:
         if not self.json_path.exists():
@@ -96,6 +116,38 @@ class MentalModelsCatalogue:
         print(f"[MentalModels] loaded {len(self._concepts)} concepts, "
               f"{sum(len(c.wrong_models) for c in self._concepts.values())} wrong models")
 
+    def _load_jargon_traps(self) -> None:
+        """Attach per-concept jargon traps from jargon_traps.json. Optional;
+        absence is silent — the depth-probe layer simply falls through to
+        embedding-similarity checks when no trap matches."""
+        if not self.jargon_traps_path.exists():
+            return
+        try:
+            with open(self.jargon_traps_path, encoding="utf-8") as f:
+                raw = json.load(f)
+        except Exception as e:
+            print(f"[MentalModels] WARN: failed to read jargon_traps "
+                  f"({e}); skipping traps.")
+            return
+        total = 0
+        for cid, traps in (raw.get("concepts") or {}).items():
+            entry = self._concepts.get(cid)
+            if not entry:
+                continue
+            entry.jargon_traps = [
+                JargonTrap(
+                    phrase=t.get("phrase", ""),
+                    why_wrong=t.get("why_wrong", ""),
+                    diagnostic_probe=t.get("diagnostic_probe", ""),
+                )
+                for t in traps if t.get("phrase")
+            ]
+            total += len(entry.jargon_traps)
+        if total:
+            print(f"[MentalModels] loaded {total} jargon traps across "
+                  f"{sum(1 for c in self._concepts.values() if c.jargon_traps)} "
+                  f"concepts")
+
     # -- Public API --------------------------------------------------------
 
     def all_concepts(self) -> List[str]:
@@ -107,6 +159,11 @@ class MentalModelsCatalogue:
     def get_lp_rubric(self, concept_id: str) -> Optional[Dict[str, str]]:
         entry = self._concepts.get(concept_id)
         return dict(entry.lp_rubric) if entry else None
+
+    def get_jargon_traps(self, concept_id: str) -> List[JargonTrap]:
+        """Per-concept jargon traps (may be empty). Consumed by depth_probe."""
+        entry = self._concepts.get(concept_id)
+        return list(entry.jargon_traps) if entry else []
 
     def get_wrong_model(self, concept_id: str, wrong_model_id: str) -> Optional[WrongModel]:
         entry = self._concepts.get(concept_id)

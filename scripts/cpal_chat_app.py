@@ -18,6 +18,7 @@ Run:
 import os, sys, argparse
 from pathlib import Path
 from threading import Lock
+from typing import Optional
 import torch
 
 ROOT = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -325,19 +326,130 @@ def _render_user_bubble(q, picked_option_text, reasoning):
     )
 
 
-def stream_response(quiz_id, picked_option_full, reasoning, history):
+# =========================================================================
+# Multi-turn probe ladder (Phase 4 in the Gradio UI)
+# =========================================================================
+# When the rubric grader is uncertain about the student's belief, we ask
+# ONE targeted follow-up question (drawn from the catalogue's L1-L4 sub-
+# criteria) before generating the tutor reply. Up to CHAT_MAX_PROBES rounds
+# per question; the accumulated belief (original + probe answers) is fed
+# into the final generation so the reply acknowledges the whole trail.
+CHAT_PROBE_CONFIDENCE_FLOOR = 0.55
+CHAT_MAX_PROBES             = 2
+
+
+def _decide_probe_or_teach(state: dict):
+    """Re-diagnose on the accumulated belief and decide probe vs teach.
+
+    Composes deep-diagnostic with multi-turn / multi-facet:
+      Tier 1 — DEPTH PROBE (jargon trap or embedding-similarity gate). Asks
+               the student what they actually mean before accepting a
+               vocabulary-rich belief at face value.
+      Tier 2 — sub-criterion probe (next un-probed sentence at target LP).
+      Tier 3 — teach.
+
+    All three share the same `probe_count` / `probed_criteria` bookkeeping
+    so depth probes naturally count toward the bounded ladder.
+
+    Returns:
+      ("probe", criterion_key_or_text, target_level, state, diag)
+      ("teach", None,                   None,         state, diag)
+    """
+    q = QUIZ_BY_ID[state["quiz_id"]]
+    diag = _diagnose(
+        state["accumulated_belief"], q["concept"], q["code"],
+        q["question"], state["picked_option_full"],
+    )
+    conf = float(diag.get("diagnostic_confidence", 1.0))
+
+    if (conf < CHAT_PROBE_CONFIDENCE_FLOOR
+            and state["probe_count"] < CHAT_MAX_PROBES):
+        target = diag.get("target_lp_level") or "L3"
+
+        # Tier 1 — depth probe. select_depth_probe returns a DepthProbe whose
+        # `question` text is the ready-to-show probe. We stash it on `state`
+        # so _probe_question_md_for can render the depth question (not a
+        # generic "in your own words why is this true" wrapper).
+        try:
+            from src.orchestrator.depth_probe import select_depth_probe
+            dp = select_depth_probe(
+                state["accumulated_belief"], CATALOGUE, q["concept"],
+                already_probed=state["probed_criteria"],
+            )
+        except Exception as _e:
+            dp = None
+        if dp is not None:
+            state["probed_criteria"].append(dp.criterion_key)
+            state["probe_count"] += 1
+            state["pending_probe_text"] = dp.question
+            state["pending_probe_reason"] = dp.reason
+            return ("probe", dp.criterion_key, target, state, diag)
+
+        # Tier 2 — per-criterion sub-rubric (multi-facet ladder).
+        sub_map = diag.get("lp_sub_criteria") or {}
+        sub = sub_map.get(target) or []
+        for c in sub:
+            if c not in state["probed_criteria"]:
+                state["probed_criteria"].append(c)
+                state["probe_count"] += 1
+                state["pending_probe_text"] = None    # render via wrapper
+                state["pending_probe_reason"] = "sub_criterion"
+                return ("probe", c, target, state, diag)
+    return ("teach", None, None, state, diag)
+
+
+def _probe_question_md(criterion: str, target: str,
+                       round_n: int, round_max: int,
+                       depth_text: Optional[str] = None,
+                       depth_reason: Optional[str] = None) -> str:
+    """Render the probe question. Depth probes (jargon traps, surface-paraphrase
+    flags) carry their own `depth_text` which is shown verbatim — they target a
+    specific misuse, not a generic 'why is this true' explanation. Sub-criterion
+    probes wrap the criterion in the standard 'in your own words' prompt."""
+    if depth_text:
+        # Show a tiny tag so the student can see this is a depth check
+        # rather than a generic check.
+        tag = {
+            "jargon_trap":         "depth check — vocabulary",
+            "high_sim_to_wrong":   "depth check — commit to the mechanism",
+        }.get(depth_reason or "", "depth check")
+        return (
+            f"**Quick check {round_n} of {round_max}** "
+            f"<span style=\"color:#64748b\">({tag})</span>\n\n"
+            f"{depth_text}"
+        )
+    c = (criterion or "").strip().rstrip(".")
+    return (
+        f"**Quick check {round_n} of {round_max}** "
+        f"<span style=\"color:#64748b\">(targeting {target})</span>\n\n"
+        f"In your own words — can you explain *why* this is true?\n\n"
+        f"> {c}"
+    )
+
+
+def stream_response(quiz_id, picked_option_full, reasoning, history, state):
+    """Initial submit. Validates inputs, initialises the probe-ladder state,
+    then either fires a probe (showing the probe panel) or streams the tutor
+    teach reply. Outputs:
+      (history, status, probe_panel_visibility, probe_question_md,
+       probe_input_clear, state)
+    """
     if not quiz_id:
-        yield history, gr.update(value="⚠️ Select a quiz first.", visible=True)
+        yield (history, gr.update(value="⚠️ Select a quiz first.", visible=True),
+               gr.update(visible=False), "", "", state)
         return
     q = QUIZ_BY_ID.get(quiz_id)
     if q is None:
-        yield history, gr.update(value="⚠️ Unknown quiz.", visible=True)
+        yield (history, gr.update(value="⚠️ Unknown quiz.", visible=True),
+               gr.update(visible=False), "", "", state)
         return
     if not picked_option_full:
-        yield history, gr.update(value="⚠️ Pick an option (A/B/C/D) before submitting.", visible=True)
+        yield (history, gr.update(value="⚠️ Pick an option (A/B/C/D) before submitting.", visible=True),
+               gr.update(visible=False), "", "", state)
         return
     if not reasoning.strip():
-        yield history, gr.update(value="⚠️ Write your reasoning for this pick, then submit.", visible=True)
+        yield (history, gr.update(value="⚠️ Write your reasoning for this pick, then submit.", visible=True),
+               gr.update(visible=False), "", "", state)
         return
 
     # Parse letter off the option string "A. ..."
@@ -356,24 +468,87 @@ def stream_response(quiz_id, picked_option_full, reasoning, history):
             f"Your tutor will walk you through it below."
         )
 
-    # Append user bubble + assistant placeholder. The assistant bubble is
-    # pre-filled with a typing indicator so it never shows up as an empty
-    # white block while the LLM is warming up.
+    # Fresh probe-ladder state for this question.
+    state = {
+        "quiz_id":             quiz_id,
+        "picked_option_full":  picked_option_full,
+        "picked_letter":       picked_letter,
+        "picked_text":         picked_text,
+        "is_correct":          correct,
+        "status_template":     status_template,
+        "accumulated_belief":  reasoning.strip(),
+        "probe_count":         0,
+        "probed_criteria":     [],
+        "user_bubble":         _render_user_bubble(q, picked_text, reasoning),
+    }
+
+    # Decide on the FIRST belief: probe or teach?
+    decision, criterion, target_level, state, diag = _decide_probe_or_teach(state)
+    if decision == "probe":
+        # Push the user bubble so the conversation shows what the student wrote,
+        # then surface the probe panel with the targeted question.
+        history = list(history) + [
+            {"role": "user", "content": state["user_bubble"]},
+            {"role": "assistant",
+             "content": _probe_question_md(
+                 criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
+                 depth_text=state.get("pending_probe_text"),
+                 depth_reason=state.get("pending_probe_reason"),
+             )},
+        ]
+        yield (history,
+               gr.update(value=status_template + "  ·  *quick check before the answer…*",
+                          visible=True),
+               gr.update(visible=True),
+               _probe_question_md(
+                   criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
+                   depth_text=state.get("pending_probe_text"),
+                   depth_reason=state.get("pending_probe_reason"),
+               ),
+               "",
+               state)
+        return
+
+    # Otherwise stream the full teach reply.
+    yield from _stream_teach(state, diag, history)
+
+
+def _stream_teach(state, diag, history):
+    """Stream the LLM tutor reply using the accumulated belief in `state`.
+    Outputs the 6-tuple shape stream_response uses so Gradio reconciles it
+    with the same set of outputs."""
+    q = QUIZ_BY_ID[state["quiz_id"]]
+    correct        = state["is_correct"]
+    picked_letter  = state["picked_letter"]
+    picked_text    = state["picked_text"]
+    status_template = state["status_template"]
+    reasoning      = state["accumulated_belief"]
+
+    # Append user bubble + assistant placeholder. Skip user bubble if we
+    # already appended it during a prior probe round.
     thinking_placeholder = (
         '<span style="color:#64748b; font-style:italic;">'
         'Tutor is thinking…</span>'
     )
-    history = list(history) + [
-        {"role": "user", "content": _render_user_bubble(q, picked_text, reasoning)},
-        {"role": "assistant", "content": thinking_placeholder},
-    ]
+    already_has_user = (history and history[-1].get("role") == "assistant"
+                        and "Quick check" in (history[-1].get("content") or ""))
+    if already_has_user:
+        # Last turn was a probe — replace the probe question with the typing
+        # indicator and add a fresh user bubble for the probe answer trail.
+        history = list(history[:-1]) + [
+            {"role": "user",
+             "content": f"*(probe answers so far)* {reasoning}"},
+            {"role": "assistant", "content": thinking_placeholder},
+        ]
+    else:
+        history = list(history) + [
+            {"role": "user", "content": state["user_bubble"]},
+            {"role": "assistant", "content": thinking_placeholder},
+        ]
 
-    # First yield: show correct/wrong status + chat bubbles instantly.
-    yield history, gr.update(value=status_template, visible=True)
-
-    # Now do the heavier work: diagnosis (drives the generator).
-    diag = _diagnose(reasoning, q["concept"], q["code"],
-                     q["question"], picked_option_full)
+    yield (history,
+           gr.update(value=status_template, visible=True),
+           gr.update(visible=False), "", "", state)
 
     # Intervention via LP-validity gate
     cands = [("transfer_task", 0.92), ("worked_example", 0.80),
@@ -440,18 +615,85 @@ def stream_response(quiz_id, picked_option_full, reasoning, history):
         if len(buffer["text"]) > last_len:
             last_len = len(buffer["text"])
             history[-1]["content"] = buffer["text"]
-            yield history, gr.update(value=status_template + "  ·  *tutor is typing…*", visible=True)
+            yield (history,
+                   gr.update(value=status_template + "  ·  *tutor is typing…*",
+                              visible=True),
+                   gr.update(visible=False), "", "", state)
 
     if done["err"]:
         history[-1]["content"] = f"❌ Generation failed: {done['err']}"
     else:
         history[-1]["content"] = buffer["text"] or "(empty response)"
 
-    yield history, gr.update(value=status_template, visible=True)
+    yield (history,
+           gr.update(value=status_template, visible=True),
+           gr.update(visible=False), "", "", state)
+
+
+def on_probe_answer(probe_answer, history, state):
+    """Multi-turn probe ladder — the student answered a Quick check. Append
+    to the accumulated belief, re-diagnose, then either probe again (up to
+    CHAT_MAX_PROBES) or stream the final tutor reply with the whole trail."""
+    if not state or not state.get("quiz_id"):
+        yield (history, gr.update(value="(no active question)", visible=True),
+               gr.update(visible=False), "", "", state)
+        return
+    ans = (probe_answer or "").strip()
+    if not ans:
+        yield (history, gr.update(value="⚠️ Write your answer to the quick check first.",
+                                   visible=True),
+               gr.update(visible=True),    # keep panel visible
+               "",                          # don't overwrite the question
+               "",                          # clear input
+               state)
+        return
+
+    # Append the probe answer to accumulated belief.
+    state["accumulated_belief"] = (
+        (state["accumulated_belief"] + "  " + ans).strip()
+    )
+
+    decision, criterion, target_level, state, diag = _decide_probe_or_teach(state)
+    if decision == "probe":
+        # Replace the last assistant bubble (the previous probe question)
+        # with the next probe question.
+        next_q_md = _probe_question_md(
+            criterion, target_level, state["probe_count"], CHAT_MAX_PROBES,
+            depth_text=state.get("pending_probe_text"),
+            depth_reason=state.get("pending_probe_reason"),
+        )
+        if history and history[-1].get("role") == "assistant":
+            history = list(history[:-1]) + [
+                {"role": "user",  "content": f"*(quick-check answer)* {ans}"},
+                {"role": "assistant", "content": next_q_md},
+            ]
+        else:
+            history = list(history) + [
+                {"role": "user",  "content": f"*(quick-check answer)* {ans}"},
+                {"role": "assistant", "content": next_q_md},
+            ]
+        yield (history,
+               gr.update(value=state["status_template"]
+                                + "  ·  *one more check before the answer…*",
+                          visible=True),
+               gr.update(visible=True),
+               next_q_md, "", state)
+        return
+
+    # Teach — stream the full reply using the accumulated belief.
+    yield from _stream_teach(state, diag, history)
 
 
 def clear_chat():
-    return ([], gr.update(value="", visible=False))
+    # Also resets the probe-ladder state and hides the probe panel.
+    empty_state = {
+        "quiz_id": None, "picked_option_full": None, "picked_letter": None,
+        "picked_text": None, "is_correct": False, "status_template": "",
+        "accumulated_belief": "", "probe_count": 0, "probed_criteria": [],
+        "user_bubble": "",
+    }
+    return ([], gr.update(value="", visible=False),
+            gr.update(visible=False), "", "", empty_state)
 
 
 # =========================================================================
@@ -578,6 +820,19 @@ def build_app():
                                     variant="primary", scale=3)
             clear_btn  = gr.Button("Clear chat", scale=1)
         status = gr.Markdown("", elem_classes=["status-pill"], visible=False)
+
+        # Multi-turn probe panel — hidden by default; shown when the rubric
+        # grader is not yet confident about the student's belief. Up to
+        # CHAT_MAX_PROBES rounds; then the tutor reply streams in below.
+        with gr.Group(visible=False) as probe_panel:
+            probe_question_md = gr.Markdown("")
+            probe_input = gr.Textbox(
+                label="Your answer to the quick check",
+                lines=3,
+                placeholder="In your own words…",
+            )
+            probe_submit_btn = gr.Button("Send answer  →", variant="primary")
+
         chatbot = gr.Chatbot(
             label="Your tutor",
             type="messages",
@@ -585,6 +840,15 @@ def build_app():
             show_copy_button=True,
             avatar_images=(None, None),
         )
+
+        # Probe-ladder state — per-question accumulated belief, probe count,
+        # already-probed criteria, quiz/option carried across rounds.
+        probe_state = gr.State({
+            "quiz_id": None, "picked_option_full": None, "picked_letter": None,
+            "picked_text": None, "is_correct": False, "status_template": "",
+            "accumulated_belief": "", "probe_count": 0, "probed_criteria": [],
+            "user_bubble": "",
+        })
 
         # Populate quiz card on load + on dropdown change.
         # show_progress="hidden" kills Gradio's white loading overlay so the
@@ -603,17 +867,32 @@ def build_app():
                             outputs=[quiz_card],
                             show_progress="hidden")
 
-        # Submit — this is the long one; the white "Generating…" overlay was
-        # Gradio's default progress widget. Hide it.
+        # Submit — initial belief. Either fires a probe (shows probe_panel)
+        # or streams the tutor reply. The 6-tuple output reconciles
+        # chatbot/status/probe_panel/probe_question_md/probe_input/state.
         submit_btn.click(
             stream_response,
-            inputs=[quiz_dd, option_radio, reasoning_box, chatbot],
-            outputs=[chatbot, status],
+            inputs=[quiz_dd, option_radio, reasoning_box, chatbot, probe_state],
+            outputs=[chatbot, status, probe_panel, probe_question_md,
+                     probe_input, probe_state],
             show_progress="hidden",
         )
 
-        clear_btn.click(clear_chat, None, [chatbot, status],
-                        show_progress="hidden")
+        # Probe answer — appends to accumulated belief, re-decides.
+        probe_submit_btn.click(
+            on_probe_answer,
+            inputs=[probe_input, chatbot, probe_state],
+            outputs=[chatbot, status, probe_panel, probe_question_md,
+                     probe_input, probe_state],
+            show_progress="hidden",
+        )
+
+        clear_btn.click(
+            clear_chat, None,
+            [chatbot, status, probe_panel, probe_question_md,
+             probe_input, probe_state],
+            show_progress="hidden",
+        )
 
     return app
 

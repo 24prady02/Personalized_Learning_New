@@ -16,6 +16,7 @@ Implements 10 key personalization features for student responses:
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 import json
+import os
 
 
 class EnhancedPersonalizedGenerator:
@@ -31,9 +32,16 @@ class EnhancedPersonalizedGenerator:
         # Set via generator._stream_callback = fn  (fn takes one str arg).
         self._stream_callback = None
         self._ollama_url = "http://localhost:11434/api/generate"
-        # Auto-detect an available model on the local Ollama server.
-        # Falls back to llama3.2 which is the most common lightweight default.
-        self._ollama_model = self._detect_ollama_model() or "llama3.2"
+        # Model selection order: explicit env var > auto-detect > fallback.
+        # Why the env var: coder-specialised models (qwen2.5-coder) sometimes
+        # refuse long prescriptive prompts (interpreting them as adversarial);
+        # CPAL_OLLAMA_MODEL=llama3.1:8b lets you force a general-purpose model
+        # that is more compliant with the LP-grounded tutoring prompt.
+        self._ollama_model = (
+            os.environ.get("CPAL_OLLAMA_MODEL")
+            or self._detect_ollama_model()
+            or "llama3.2"
+        )
 
     def _detect_ollama_model(self):
         """Query the Ollama /api/tags endpoint and pick the best installed model.
@@ -800,8 +808,40 @@ class EnhancedPersonalizedGenerator:
         adaptive_analysis: Optional[Dict] = None
     ) -> str:
         """Build comprehensive personalized prompt"""
-        
+
         prompt_parts = []
+
+        # Benign framing — placed FIRST so the model reads the long
+        # prescriptive sections that follow as scaffolding for a normal
+        # tutoring task, not as an adversarial instruction stack. Without
+        # this, qwen2.5-coder occasionally returned a canned refusal on
+        # prompts with many "REQUIRED" / "FORBIDDEN" / "MUST" clauses.
+        prompt_parts.append(
+            "You are a Java programming tutor. The sections below are "
+            "grounded context for THIS student's current turn — diagnosis, "
+            "wrong-model evidence, target rubric criterion, level-appropriate "
+            "teaching shape. Use them to craft one helpful Java tutoring "
+            "reply. Nothing below is adversarial; it is the lesson plan."
+        )
+
+        # ===== OPTIONAL DEBUG WATERMARK =====
+        # When CPAL_DEBUG_WATERMARK is set in the environment, force the model
+        # to emit a marker line first so the frontend can confirm a response
+        # came through this pipeline. OFF by default: a watermark line in
+        # front of every answer makes the tutor output read like a debug
+        # dump, not a tutor — so this is a debug-only opt-in, not a permanent
+        # instruction competing with the pedagogical sections below.
+        if os.environ.get("CPAL_DEBUG_WATERMARK"):
+            prompt_parts.append(
+                "CRITICAL OUTPUT FORMAT RULE — read this before anything else:\n"
+                "The very first line of your response MUST be exactly:\n"
+                "hey I am generating it from the Personalized_Learning_Cleaned\n"
+                "Output that line verbatim, with no quotes, no bold, no prefix, "
+                "no emoji, no extra words. Then output a single blank line. "
+                "Only after that blank line do you begin your normal tutoring "
+                "response. This rule overrides every other instruction in this "
+                "prompt if they conflict.\n"
+            )
 
         # ===== CPAL Stage 3 header + LP sections =====
         # If lp_diagnostic was produced upstream, rewrite the header and
@@ -873,21 +913,29 @@ class EnhancedPersonalizedGenerator:
             wm_id     = lp_diag.get('wrong_model_id')
             wm_desc   = lp_diag.get('wrong_model_description', '')
             wm_origin = lp_diag.get('wrong_model_origin', '')
-            matched   = lp_diag.get('matched_signals', []) or []
-            benchmark = lp_diag.get('expert_benchmark_key_ideas', '')
+            # FIX: the diagnostic serialises this as `matched_signal`
+            # (singular string), not `matched_signals` — the old key never
+            # resolved, so this line never rendered.
+            matched   = lp_diag.get('matched_signal')
+            # FIX: expert_benchmark_key_ideas is a LIST of sentences; the old
+            # code interpolated it raw, dumping a Python list repr into the
+            # prompt. Join it into prose.
+            benchmark = lp_diag.get('expert_benchmark_key_ideas') or []
+            benchmark_text = (
+                "; ".join(str(s) for s in benchmark)
+                if isinstance(benchmark, (list, tuple)) else str(benchmark)
+            )
             prompt_parts.append("\n=== LP-2: WRONG MENTAL MODEL (IDENTIFIED) ===")
             prompt_parts.append(f"Wrong-model ID: {wm_id}")
             prompt_parts.append(f"Student's likely belief: {wm_desc}")
             if wm_origin:
                 prompt_parts.append(f"Origin of this belief: {wm_origin}")
             if matched:
-                # Keep it compact — 2 signals max to avoid prompt bloat.
-                snippet = '; '.join(str(s) for s in matched[:2])
-                prompt_parts.append(f"Matched conversation signals: {snippet}")
-            if benchmark:
+                prompt_parts.append(f"Matched conversation signal: {matched}")
+            if benchmark_text:
                 prompt_parts.append(
                     f"L3 expert benchmark (the correct mechanism to convey): "
-                    f"{benchmark}"
+                    f"{benchmark_text}"
                 )
             prompt_parts.append(
                 "MUST: address this specific wrong belief directly — name it "
@@ -903,9 +951,14 @@ class EnhancedPersonalizedGenerator:
                 "straight, using the L3 expert benchmark below as your "
                 "target mental model."
             )
-            benchmark = lp_diag.get('expert_benchmark_key_ideas', '')
-            if benchmark:
-                prompt_parts.append(f"L3 expert benchmark: {benchmark}")
+            # FIX: join the key-ideas list into prose (see LP-2 above).
+            benchmark = lp_diag.get('expert_benchmark_key_ideas') or []
+            benchmark_text = (
+                "; ".join(str(s) for s in benchmark)
+                if isinstance(benchmark, (list, tuple)) else str(benchmark)
+            )
+            if benchmark_text:
+                prompt_parts.append(f"L3 expert benchmark: {benchmark_text}")
 
         # ===== LP-2b: RETRIEVED CATALOGUE CONTEXT (RAG) =====
         # Embedding-based retrieval over the wrong-models catalogue + LP
@@ -954,11 +1007,62 @@ class EnhancedPersonalizedGenerator:
                         f"{r.get('text', '')[:140]}"
                     )
 
+        # _is_probe / _probe_intv: computed here so PROBE MODE (next), the
+        # LP-3 gate, AND the LP-Multi block (relocated to AFTER LP-3 below)
+        # can all read the same value. The LP-Multi mini-replies block now
+        # appears AT THE END of the LP section series so it is the last
+        # teaching instruction the model reads — earlier placement caused
+        # small models (qwen 7B) to finish the focus lesson and never come
+        # back to address the non-focus concepts.
+        per_concept_mini_enabled = os.environ.get(
+            "CPAL_PER_CONCEPT_MINI", "1") != "0"
+        _probe_intv = (student_state.get('recommended_intervention')
+                       or {}) if student_state else {}
+        _is_probe = bool(lp_diag) and _probe_intv.get('type') == 'diagnostic_probe'
+
+        # ===== PROBE MODE (CPAL Phase 4) =====
+        # When this turn's intervention is a diagnostic_probe, the system is
+        # not yet confident about the student's level — so the LLM must ASK,
+        # not TEACH. This block replaces the LP-3 six-step teaching
+        # instruction for this turn (the six-step is gated off below).
+        # _is_probe / _probe_intv were already computed at the top of the
+        # LP-Multi block above and are reused here.
+        if _is_probe:
+            _target    = lp_diag.get('target_lp_level', 'L2')
+            _criterion = lp_diag.get('lp_rubric_target') or ''
+            prompt_parts.append("\n=== PROBE MODE — ASK, DO NOT TEACH ===")
+            prompt_parts.append(
+                f"We are not yet confident about the student's level on "
+                f"'{lp_diag.get('concept', 'this concept')}' (current estimate "
+                f"{lp_diag.get('current_lp_level', 'L1')}). This turn is a "
+                f"DIAGNOSTIC PROBE, not a lesson."
+            )
+            prompt_parts.append(
+                "1. Do NOT explain, do NOT give a worked example, do NOT give "
+                "the answer."
+            )
+            prompt_parts.append(
+                "2. Ask exactly ONE short, specific question that would reveal "
+                "whether the student can do this:"
+            )
+            if _criterion:
+                prompt_parts.append(f"   TARGET ({_target}): {_criterion}")
+            prompt_parts.append(
+                "3. The question must be answerable in 1-3 sentences and target "
+                "that specific capability — not yes/no, not a vague 'do you "
+                "understand?'."
+            )
+            prompt_parts.append(
+                "4. Keep it warm and low-pressure: one sentence of framing, "
+                "then the question. Nothing else."
+            )
+
         # ===== LP-3: SIX-STEP INSTRUCTION =====
         # Translate the current LP level + intervention type into a
         # concrete six-step instruction for the LLM. Each step has a
-        # clear role that matches the level's pedagogical need.
-        if lp_diag:
+        # clear role that matches the level's pedagogical need. Skipped on
+        # probe turns — PROBE MODE above replaces it.
+        if lp_diag and not _is_probe:
             lp_lvl = lp_diag.get('current_lp_level', 'L1')
             # Pull the intervention type from the recommended_intervention
             # field of the student_state (set upstream in orchestrator).
@@ -967,8 +1071,27 @@ class EnhancedPersonalizedGenerator:
 
             prompt_parts.append("\n=== LP-3: SIX-STEP INSTRUCTION ===")
             prompt_parts.append(f"Pedagogical strategy: {intv} at level {lp_lvl}.")
+            # Level legend — give the model an explicit anchor for what each
+            # level MEANS so it cannot blur the levels together (small models
+            # otherwise default to "L1 explain everything" on every turn).
+            prompt_parts.append(
+                "LP level legend (THIS turn targets the bolded one):\n"
+                "  - L1 = symptom-only; needs CORRECTION via worked example.\n"
+                "  - L2 = knows the rule but not the mechanism; needs "
+                "MECHANISM SCAFFOLD via a runtime/compile-time trace.\n"
+                "  - L3 = can trace the mechanism; needs TRANSFER PROMPT via "
+                "a novel application — DO NOT re-explain the mechanism.\n"
+                "  - L4 = generalises spontaneously; needs DESIGN/TRANSFER "
+                "TASK via an edge case + a design-rationale question — DO "
+                "NOT teach basics."
+            )
 
             if lp_lvl == "L1":
+                prompt_parts.append(
+                    "** L1 — symptom-only, CORRECTION via worked example. "
+                    "The student sees the bug but cannot say why. Teach the "
+                    "rule with a concrete annotated example. **"
+                )
                 # L1 needs structure and grounding
                 prompt_parts.append(
                     "1. Start with the surface observation the student has "
@@ -996,6 +1119,11 @@ class EnhancedPersonalizedGenerator:
                     "answer. Do NOT ask for the mechanism yet — L1 -> L2."
                 )
             elif lp_lvl == "L2":
+                prompt_parts.append(
+                    "** L2 — knows the rule but not the mechanism. MECHANISM "
+                    "SCAFFOLD via a runtime/compile-time trace. Do not just "
+                    "restate the rule. **"
+                )
                 # L2 plateau-break or mechanism scaffolding
                 if lp_diag.get('plateau_flag'):
                     prompt_parts.append(
@@ -1033,6 +1161,12 @@ class EnhancedPersonalizedGenerator:
                     "— the target is L3."
                 )
             elif lp_lvl == "L3":
+                prompt_parts.append(
+                    "** L3 — can trace the mechanism. TRANSFER PROMPT via a "
+                    "novel application. DO NOT re-explain the mechanism the "
+                    "student already articulated; that would patronise them. "
+                    "DO NOT write a worked example of the basic concept. **"
+                )
                 # L3 needs application / transfer, not re-explanation
                 prompt_parts.append(
                     "1. Explicitly confirm the mechanism the student just "
@@ -1062,6 +1196,13 @@ class EnhancedPersonalizedGenerator:
                 )
             else:   # L4
                 prompt_parts.append(
+                    "** L4 — generalises spontaneously. DESIGN/TRANSFER "
+                    "TASK via an edge case + a design-rationale question. "
+                    "DO NOT teach basics. DO NOT re-explain the principle "
+                    "the student already named. The reply should EXTEND "
+                    "their thinking, not REDUCE it. **"
+                )
+                prompt_parts.append(
                     "1. Do NOT re-teach the concept — the student has it at "
                     "scientific/transfer level."
                 )
@@ -1087,6 +1228,215 @@ class EnhancedPersonalizedGenerator:
                     "design principle or invariant the student has mastered."
                 )
 
+
+        # ===== LP-Multi: PER-CONCEPT MINI-REPLIES (CPAL Phase 3 / 4) =====
+        # Placed AFTER LP-3 so this is the last teaching instruction the model
+        # reads — earlier placement caused small models (qwen 7B) to finish
+        # the focus lesson and never come back to address the non-focus
+        # concepts. Each mini-reply is built from THAT concept's diagnosed
+        # wrong-model belief + L+1 rubric criterion. Suppressed in PROBE MODE.
+        # Toggle: env CPAL_PER_CONCEPT_MINI=0 reverts to a no-op.
+        lp_multi = student_state.get('lp_diagnostic_multi') if student_state else None
+        if (per_concept_mini_enabled and not _is_probe
+                and lp_multi and isinstance(lp_multi, dict)):
+            diags   = lp_multi.get('diagnostics') or {}
+            focus_c = lp_multi.get('focus_concept')
+            non_focus = [(c, d) for c, d in diags.items() if c != focus_c]
+            non_focus.sort(key=lambda t: -float(t[1].get('concept_confidence', 0)))
+            non_focus = non_focus[:2]   # cap at top-2 to keep load sane
+
+            if non_focus:
+                prompt_parts.append(
+                    "\n=== LP-Multi: REQUIRED MINI-REPLIES "
+                    "(append to the end of your reply, one per concept) ==="
+                )
+                prompt_parts.append(
+                    f"After the focus lesson on '{focus_c}' (LP-3 above), "
+                    f"your reply MUST continue with a separate, clearly "
+                    f"sub-headed mini-reply for EACH non-focus concept "
+                    f"listed below. The reply is INCOMPLETE without them. "
+                    f"This is not optional context — it is required output."
+                )
+                prompt_parts.append(
+                    f"Mini-reply count required this turn: "
+                    f"{len(non_focus)} (one per concept below)."
+                )
+                prompt_parts.append(
+                    "Format each as a Markdown sub-heading the student can "
+                    "see, e.g.:  \"**On <concept_id>:**\""
+                )
+                for c, d in non_focus:
+                    cur_lvl = d.get('current_lp_level', 'L1')
+                    tgt_lvl = d.get('target_lp_level', 'L2')
+                    wm_id   = d.get('wrong_model_id')
+                    wm_desc = (d.get('wrong_model_description') or '').strip()
+                    wm_org  = (d.get('wrong_model_origin') or '').strip()
+                    rt      = (d.get('lp_rubric_target') or '').strip()
+                    rc      = (d.get('lp_rubric_current') or '').strip()
+                    benchmark_ideas = d.get('expert_benchmark_key_ideas') or []
+                    benchmark = "; ".join(benchmark_ideas) if benchmark_ideas else ""
+
+                    prompt_parts.append(
+                        f"\n  -- REQUIRED MINI-REPLY for '{c}'  "
+                        f"(level {cur_lvl} -> target {tgt_lvl}, "
+                        f"wm={wm_id or 'none-specific'}) --"
+                    )
+
+                    # --- LEVEL-AWARE TEMPLATE BRANCH -----------------------
+                    # L1/L2 students need CORRECTION (false belief -> mechanism
+                    # -> predict-this). L3/L4 students need EXTENSION (confirm
+                    # what they already understand -> novel case / stretch ->
+                    # transfer or design-rationale question). Forcing the L1/L2
+                    # template on an L4 student makes the model FABRICATE a
+                    # false belief and contradict correct reasoning — which is
+                    # the exact failure mode the previous run exposed.
+                    if cur_lvl in ("L3", "L4"):
+                        # Extension shape — the student is right; build on it.
+                        if wm_id:
+                            # Rare: WM matched but level is L3/L4. Flag it but
+                            # treat as a residual edge — do NOT center the
+                            # reply on a "false belief" the student has shown
+                            # signs of having outgrown.
+                            prompt_parts.append(
+                                f"     Residual wrong-model trace : {wm_desc} "
+                                f"(low priority — student is at {cur_lvl})"
+                            )
+                        else:
+                            prompt_parts.append(
+                                f"     Confirmed reasoning : the student is "
+                                f"at {cur_lvl} on this concept — they have "
+                                f"already shown the relevant mechanism / "
+                                f"generalisation. Do NOT invent a false "
+                                f"belief; do NOT contradict their statement."
+                            )
+                        if rc:
+                            prompt_parts.append(
+                                f"     Current ({cur_lvl}) rubric : {rc}"
+                            )
+                        if rt:
+                            prompt_parts.append(
+                                f"     Target ({tgt_lvl}) criterion : {rt}"
+                            )
+                        if benchmark:
+                            prompt_parts.append(
+                                f"     L3 expert benchmark : {benchmark}"
+                            )
+
+                        if cur_lvl == "L3":
+                            prompt_parts.append(
+                                "     Mini-reply shape — EXTENSION (EXACTLY "
+                                "2-3 sentences):"
+                            )
+                            prompt_parts.append(
+                                "       (1) Confirm the MECHANISM the student "
+                                "articulated for this concept (\"You traced "
+                                "<X> correctly — <Y> is exactly what is "
+                                "happening at <stage>\"). Be specific; do not "
+                                "just say \"good job\"."
+                            )
+                            prompt_parts.append(
+                                "       (2) Present a NOVEL application of "
+                                "the same mechanism — a different concept or "
+                                "code pattern where the same underlying "
+                                "principle fires. One concrete example."
+                            )
+                            prompt_parts.append(
+                                "       (3) Ask the student to name the "
+                                "SHARED MECHANISM between the two cases — a "
+                                "single question that would only be answered "
+                                "correctly if they see the generalisation."
+                            )
+                        else:   # L4
+                            prompt_parts.append(
+                                "     Mini-reply shape — DESIGN/TRANSFER "
+                                "(EXACTLY 2-3 sentences):"
+                            )
+                            prompt_parts.append(
+                                "       (1) Confirm the GENERALISATION the "
+                                "student made for this concept and NAME the "
+                                "principle explicitly (\"You generalised <X> "
+                                "to <Y> — that principle is <name>\"). Do "
+                                "NOT contradict a correct statement."
+                            )
+                            prompt_parts.append(
+                                "       (2) Present a STRETCH/EDGE case "
+                                "where the principle limits or interacts "
+                                "with another feature (e.g., string interning, "
+                                "autoboxing identity, primitive vs reference "
+                                "rules). One concrete example."
+                            )
+                            prompt_parts.append(
+                                "       (3) Ask a DESIGN-RATIONALE question "
+                                "— why did Java's designers make this choice, "
+                                "what is the trade-off, or what would break "
+                                "if it were reversed."
+                            )
+                    else:
+                        # L1/L2 — CORRECTION shape (false belief -> mechanism
+                        # -> predict-this). When no specific WM matched, the
+                        # L+1 rubric criterion IS the implicit "thing not yet
+                        # understood" we address.
+                        belief = wm_desc or (
+                            f"the student has not yet reached: {rt}" if rt
+                            else "a generic version of this misconception"
+                        )
+                        origin = wm_org or "common beginner intuition for this concept"
+                        prompt_parts.append(f"     Likely false belief : {belief}")
+                        prompt_parts.append(f"     Origin of belief    : {origin}")
+                        if rt:
+                            prompt_parts.append(
+                                f"     Target ({tgt_lvl}) criterion : {rt}"
+                            )
+                        prompt_parts.append(
+                            "     Mini-reply shape — CORRECTION (EXACTLY 2-3 "
+                            "sentences):"
+                        )
+                        prompt_parts.append(
+                            "       (1) Name the false belief IN THE "
+                            "STUDENT'S VOICE  (\"You're treating ... as if "
+                            "...\"). Concrete, not paraphrased generically."
+                        )
+                        prompt_parts.append(
+                            "       (2) Correct it with the SPECIFIC Java "
+                            "mechanism from the target criterion above — "
+                            "name the operative step (compile-time vs "
+                            "runtime, heap vs reference, condition checked "
+                            "before/after each iteration, length-1 vs "
+                            "length, etc.)."
+                        )
+                        prompt_parts.append(
+                            "       (3) End with ONE concrete \"predict "
+                            "this\" question on THIS concept — something a "
+                            "student who got the correction could answer "
+                            "in one line."
+                        )
+                prompt_parts.append(
+                    "\n  Anti-cliche rules (this block AND the focus reply):"
+                )
+                prompt_parts.append(
+                    "    - FORBIDDEN phrases: \"great question\", "
+                    "\"no worries\", \"don't worry\", \"let's dive in\", "
+                    "\"let's dive deeper\", \"dive into\", \"delve into\", "
+                    "\"let's go deeper\", \"go deeper\", \"look into\", "
+                    "\"let's understand\", \"let us\", \"we'll come back\", "
+                    "\"as a beginner\", \"it's important to know\", "
+                    "\"remember\", \"hopefully\", \"this might be happening\"."
+                )
+                prompt_parts.append(
+                    "    - Do NOT restate the concept name as if naming it "
+                    "teaches it. Do NOT reassure before teaching."
+                )
+                prompt_parts.append(
+                    "    - Each mini-reply must be something the student "
+                    "could ONLY have written AFTER the correction landed — "
+                    "if a still-confused student could have written it, it "
+                    "is too generic; rewrite."
+                )
+                prompt_parts.append(
+                    f"    - Mini-replies stay SHORT (2-3 sentences each). "
+                    f"The focus concept '{focus_c}' is the main lesson per "
+                    f"LP-3 above; these are FOCUSED PIVOTS, not lessons."
+                )
 
         # ===== LP ENFORCEMENT GATE =====
         # If the learning progression says the student is not yet ready for the
@@ -1264,6 +1614,14 @@ class EnhancedPersonalizedGenerator:
 
         # ===== FIX 2: INTERVENTION INSTRUCTION — translate type to Groq instructions
         intervention_map = {
+            'diagnostic_probe': (
+                "CPAL Phase 4 active probe — we are NOT confident about the "
+                "student's level yet, so this turn elicits evidence instead of "
+                "teaching. Ask exactly ONE short, specific question targeting "
+                "the capability named in PROBE MODE above. Do NOT explain, do "
+                "NOT give a worked example, do NOT give the answer. One "
+                "sentence of warm framing, then the question — nothing else."
+            ),
             'attribution_reframe': (
                 "CRITICAL — this student believes they are fundamentally bad at programming. "
                 "Do NOT advance the concept yet. First: acknowledge that this specific error trips up "
@@ -1390,50 +1748,68 @@ class EnhancedPersonalizedGenerator:
             prompt_parts.append(f"Error type: {kg.get('error_type', 'N/A')}")
         
         # Emphasize knowledge graph usage
-        prompt_parts.append("\n=== CRITICAL INSTRUCTION: KNOWLEDGE GRAPH INTEGRATION ===")
-        prompt_parts.append("Your response MUST be grounded in and reference the knowledge graphs above:")
-        prompt_parts.append("")
-        prompt_parts.append("1. CSE-KG 2.0 (Computer Science Knowledge Graph):")
-        prompt_parts.append("   - Use the concept definition and prerequisites from CSE-KG")
-        prompt_parts.append("   - Reference related concepts when explaining connections")
-        prompt_parts.append("   - Ensure technical accuracy based on CSE-KG domain knowledge")
-        prompt_parts.append("")
-        prompt_parts.append("2. Pedagogical Knowledge Graph (Learning Science):")
-        prompt_parts.append("   - Explicitly address the common misconceptions listed above")
-        prompt_parts.append("   - Follow the learning progression to structure your explanation")
-        prompt_parts.append("   - Manage cognitive load according to the level indicated")
-        prompt_parts.append("   - Consider the recommended interventions when choosing your approach")
-        prompt_parts.append("")
-        prompt_parts.append("3. COKE (Cognitive Knowledge Graph - Theory of Mind):")
-        prompt_parts.append("   - Adapt your explanation tone and complexity based on the cognitive state")
-        prompt_parts.append("   - If student is 'confused', use simpler language and more examples")
-        prompt_parts.append("   - If student is 'frustrated', provide extra reassurance and break into smaller steps")
-        prompt_parts.append("   - If student is 'understanding', you can use more advanced concepts")
-        prompt_parts.append("   - Consider the behavioral response prediction when framing your explanation")
-        prompt_parts.append("")
-        prompt_parts.append("4. INTEGRATION REQUIREMENT:")
-        prompt_parts.append("   - Your explanation must show evidence of using all three knowledge graphs")
-        prompt_parts.append("   - Reference specific insights (e.g., 'Based on common misconceptions about recursion...')")
-        prompt_parts.append("   - Use CSE-KG prerequisites to build understanding step-by-step")
-        prompt_parts.append("   - Adapt to COKE cognitive state in your language and approach")
-        
-        # Final instructions
+        # NOTE: the old "CRITICAL INSTRUCTION: KNOWLEDGE GRAPH INTEGRATION"
+        # block was a third recap of KG content already provided above. On
+        # qwen2.5-coder it tipped the prompt into "this looks adversarial"
+        # territory and triggered a canned refusal. Dropped — the KG content
+        # is still injected once via the KNOWLEDGE GRAPHS section above and
+        # referenced by the LP-3 + LP-Multi instructions.
+
+        # ===== STYLE GUARDRAIL (compact) =====
+        # One short rule + one banned-phrase list. Replaces the previous
+        # multi-paragraph ANTI-CLICHE GUARDRAILS block — the long version
+        # contributed to the prompt-refusal failure on small coder models.
+        prompt_parts.append("\n=== STYLE ===")
+        prompt_parts.append(
+            "Open with the diagnosis or the example, never a preamble. "
+            "Every sentence must either name a specific false belief, name "
+            "the specific Java mechanism, show concrete code/trace, or ask a "
+            "concrete predict-this question. Reassurance (if any) comes after "
+            "teaching, one short sentence."
+        )
+        prompt_parts.append(
+            "Banned phrases: \"great question\", \"good question\", "
+            "\"let's dive\", \"let's dive deeper\", \"dive into\", "
+            "\"delve into\", \"let's go deeper\", \"go deeper\", "
+            "\"look into\", \"let's break this down\", \"let's understand\", "
+            "\"let's see\", \"let us\", \"don't worry\", \"no worries\", "
+            "\"as a beginner\", \"it's important to know\", \"remember that\", "
+            "\"hopefully\", \"we'll come back to that\", \"in summary\", "
+            "\"to recap\", \"great job\", \"doing a great job\"."
+        )
+
+        # ===== YOUR RESPONSE MUST (compact, 5 items) =====
+        # Trimmed from 12 to 5. The dropped items were either restatements
+        # of sections above (KG integration, psychological state, difficulty)
+        # or pure exhortations ("be encouraging"). What remains are the
+        # decisions the model can actually act on this turn.
         prompt_parts.append("\n=== YOUR RESPONSE MUST ===")
-        prompt_parts.append("1. Follow the INTERVENTION INSTRUCTION above exactly — it overrides general advice")
-        prompt_parts.append("2. Address the student's specific Java question")
-        prompt_parts.append("3. Use tone and style matching the PSYCHOLOGICAL STATE above")
-        prompt_parts.append("4. Include Java-specific examples grounded in the knowledge graphs")
-        prompt_parts.append("5. Acknowledge progress if there is evidence of improvement")
-        prompt_parts.append("6. Match difficulty and scaffolding to the DEVELOPMENTAL STAGE above")
-        prompt_parts.append("7. Be encouraging — adapt warmth to the emotional state detected")
-        prompt_parts.append("8. CRITICAL: Ground explanation in the knowledge graphs provided")
-        prompt_parts.append("   - Reference CSE-KG Java concepts and prerequisites explicitly")
-        prompt_parts.append("   - Address Pedagogical KG Java misconceptions directly")
-        prompt_parts.append("   - Adapt to COKE cognitive state")
-        prompt_parts.append("   - Use knowledge graph information to build accurate mental models")
-        prompt_parts.append("9. NEVER just output a code solution — always explain the WHY behind it")
-        prompt_parts.append("10. Respond in Java (not Python) unless the student's code is in another language")
-        
+        prompt_parts.append(
+            "1. Follow the LP-3 instruction above (level-appropriate teaching "
+            "shape for the focus concept)."
+        )
+        prompt_parts.append(
+            "2. Address the student's specific Java question — name the "
+            "mechanism, do not just state the rule."
+        )
+        prompt_parts.append(
+            "3. If LP-2 named a wrong-model belief, correct THAT belief "
+            "specifically (don't invent misconceptions the student hasn't shown)."
+        )
+        prompt_parts.append(
+            "4. If LP-Multi above lists non-focus concepts, end with one "
+            "mini-reply per concept in the (1)/(2)/(3) shape that block "
+            "specifies, each under a \"**On <concept>:**\" sub-heading."
+        )
+        prompt_parts.append(
+            "5. Use Java (not Python). Never output a bare code solution — "
+            "always explain the WHY."
+        )
+        # (Items 11-12 — the LP-Multi mandate and self-check — were folded
+        # into item 4 above when we trimmed the prompt; the LP-Multi block
+        # itself still carries its own count + required-output language.)
+
+
         # Add adaptive analysis knowledge graph info if available
         if adaptive_analysis:
             # Extract additional KG info from adaptive analysis

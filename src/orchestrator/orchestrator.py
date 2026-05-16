@@ -20,6 +20,18 @@ from datetime import datetime
 import time
 
 
+# Concept detection lives in concept_resolver.py — the single source of
+# truth for the 20 catalogue concept IDs, so concept detection and the
+# wrong-models catalogue can never drift apart again. ConceptResolver does
+# multi-label detection (one message can mention several concepts);
+# CONCEPT_SIGNATURES is re-exported under its old private name for any
+# legacy reference.
+from src.orchestrator.concept_resolver import (
+    ConceptResolver,
+    CONCEPT_SIGNATURES as _CONCEPT_SIGNATURES,
+)
+
+
 class InterventionOrchestrator:
     """
     Central orchestrator that coordinates:
@@ -30,7 +42,21 @@ class InterventionOrchestrator:
     - Intervention recommender for selection
     - Content generator for personalized delivery
     """
-    
+
+    # CPAL Phase 4 active-probe loop: when the focus concept's
+    # diagnostic_confidence falls below this, the orchestrator does not yet
+    # know the student's level well enough to teach — so this turn's
+    # intervention becomes an elicitation probe instead (see
+    # docs/cpal_trainable_dynamic_design.md §5).
+    PROBE_CONFIDENCE_THRESHOLD = 0.45
+    # Multi-turn probe ladder: maximum probes we will issue per concept per
+    # student before bailing out to teach. Beyond this the student is just
+    # being interrogated; pedagogically we should switch back to scaffolding.
+    MAX_PROBES_PER_CONCEPT = 3
+    # If the latest probe answer lifted diagnostic_confidence above this, we
+    # stop probing and teach — the student has shown enough.
+    PROBE_SATISFIED_THRESHOLD = 0.70
+
     def __init__(self, config: Dict, models: Dict, use_rl: bool = True, use_hierarchical_rl: bool = False):
         """
         Args:
@@ -108,6 +134,16 @@ class InterventionOrchestrator:
             print(f"[WARN] LP Diagnostician failed: {e}")
             self.mental_models_catalogue = None
             self.lp_diagnostician = None
+
+        # ⭐ CPAL Phase 3 — ConceptResolver (multi-label concept detection).
+        # Always available (pure signature scoring, no model deps). One
+        # student message can mention several concepts; the resolver ranks
+        # them so diagnose_multi() can level and probe each independently.
+        try:
+            self.concept_resolver = ConceptResolver()
+        except Exception as e:
+            print(f"[WARN] ConceptResolver failed: {e}")
+            self.concept_resolver = None
 
         # ⭐ CPAL Stage 2 — LPProgressionRanker (RNN-backed or heuristic).
         # Wraps LPProgressionRNN; falls back to a heuristic ranker when
@@ -201,51 +237,79 @@ class InterventionOrchestrator:
             except Exception as e:
                 print(f"[WARN] Three-channel analysis failed: {e}")
 
-        # === STEP 1c: CPAL STAGE 1 — LP DIAGNOSTIC LAYER ===
-        # See mental_models_cpal_methodology.docx Part 3 Stage 1.
-        # Runs wrong-model identification, LP level classification (L1-L4
-        # on logical_step / logical_step_detail), and the plateau check
-        # before any intervention is selected. The resulting lp_diagnostic
-        # object threads through Stages 2-5.
+        # === STEP 1c: CPAL STAGE 1 — LP DIAGNOSTIC LAYER (MULTI-CONCEPT) ===
+        # See mental_models_cpal_methodology.docx Part 3 Stage 1 and
+        # docs/cpal_trainable_dynamic_design.md §5 (multi-concept probing).
+        # A single student message can mention several concepts. The
+        # ConceptResolver ranks them; diagnose_multi() runs wrong-model
+        # identification, LP-level classification, the plateau check, and a
+        # diagnostic-confidence score for EACH concept, then picks one focus
+        # concept to teach this turn.
+        #   lp_diagnostic       — the FOCUS concept's diagnostic (Stages 2-5
+        #                         consume this single dict unchanged).
+        #   lp_diagnostic_multi — the full per-concept map (additive — for the
+        #                         prompt builder and multi-concept persistence).
         lp_diagnostic: Optional[Dict] = None
-        if self.lp_diagnostician is not None and self.state_tracker is not None:
+        lp_diagnostic_multi: Optional[Dict] = None
+        pending_probe_concept: Optional[str] = None   # set if mid-probe (Phase 4)
+        if (self.lp_diagnostician is not None
+                and self.state_tracker is not None
+                and self.concept_resolver is not None):
             try:
-                concept_for_lp = self._extract_concept(session_data)
-                # Stage 5 persistence hook — pull the student's stored LP
-                # level and streak for this concept so the plateau rule
-                # has history to reason over.
-                lp_state_loaded = self.state_tracker.load_lp_state(
-                    student_id, concept_for_lp
-                ) or {}
                 student_text = (
                     session_data.get("question")
                     or session_data.get("error_message")
                     or ""
                 )
+                # Resolve EVERY concept the message touches (ranked, with
+                # per-concept confidence).
+                resolved = self.concept_resolver.resolve(session_data)
+
+                # Stage 5 persistence hook — pull stored LP level + streak for
+                # every resolved concept so the plateau rule and focus
+                # selection have history to reason over.
+                stored_lp = {
+                    c: (self.state_tracker.load_lp_state(student_id, c) or {})
+                    for c, _conf in resolved if c != "unknown"
+                }
+                # Probe-loop continuity (Phase 4): if a probe was asked last
+                # turn for some concept, finish probing it before moving on.
+                pending_probe_concept = next(
+                    (c for c, st in stored_lp.items() if st.get("pending_probe")),
+                    None,
+                )
+
                 # Forward HVSAE outputs computed at Step 1 so semantic
                 # matching has the latent + 20-class misconception vector.
-                # `encoding_results` is the dict _encode_session returned.
-                diagnosis = self.lp_diagnostician.diagnose(
-                    student_id       = student_id,
-                    concept          = concept_for_lp,
-                    question_text    = student_text,
-                    stored_lp_level  = lp_state_loaded.get("lp_level"),
-                    stored_lp_streak = int(lp_state_loaded.get("lp_streak", 0)),
-                    hvsae_latent     = encoding_results.get("latent"),
+                multi = self.lp_diagnostician.diagnose_multi(
+                    student_id        = student_id,
+                    question_text     = student_text,
+                    resolved_concepts = resolved,
+                    stored_lp         = stored_lp,
+                    hvsae_latent      = encoding_results.get("latent"),
                     hvsae_misconception_probs = encoding_results.get("misconception_probs"),
+                    pending_probe_concept = pending_probe_concept,
                 )
-                lp_diagnostic = diagnosis.to_dict()
+                lp_diagnostic_multi = multi
+                # Back-compat: Stages 2-5 consume a single lp_diagnostic dict —
+                # that dict is the FOCUS concept's diagnostic.
+                lp_diagnostic = multi["focus"]
                 # log what fired
                 wm = lp_diagnostic.get("wrong_model_id") or "-"
                 plateau = "PLATEAU" if lp_diagnostic["plateau_flag"] else "ok"
-                print(f"[LP-Diag] concept={concept_for_lp} "
+                others = [c for c in multi["diagnostics"]
+                          if c != multi["focus_concept"]]
+                print(f"[LP-Diag] focus={multi['focus_concept']} "
                       f"level={lp_diagnostic['current_lp_level']} "
                       f"streak={lp_diagnostic['lp_streak']} "
-                      f"wm={wm} {plateau}")
+                      f"conf={lp_diagnostic['diagnostic_confidence']:.2f} "
+                      f"wm={wm} {plateau}"
+                      + (f"  also={others}" if others else ""))
             except Exception as e:
                 print(f"[WARN] LP Diagnostic failed: {e}")
                 import traceback; traceback.print_exc()
                 lp_diagnostic = None
+                lp_diagnostic_multi = None
 
 
         # === STEP 2: COGNITIVE DIAGNOSIS ===
@@ -299,6 +363,34 @@ class InterventionOrchestrator:
             print(f"[LP-Gate] Plateau override -> {intervention_type} "
                   f"(concept={lp_diagnostic['concept']}, "
                   f"streak={lp_diagnostic['lp_streak']})")
+        # LP DIAGNOSTIC PROBE — CPAL Phase 4 (active probing).
+        # docs/cpal_trainable_dynamic_design.md §5: when confidence in the
+        # focus concept's LP level is low, we don't yet know enough to teach
+        # it well — so this turn's "intervention" is an elicitation question,
+        # and the student's reply is graded against the target rubric
+        # criterion next turn (diagnose -> probe -> re-diagnose, instead of a
+        # one-shot guess). The psychological gate and plateau still win above.
+        elif (lp_diagnostic is not None
+              and self._should_probe(lp_diagnostic, pending_probe_concept,
+                                     student_id=student_id)):
+            intervention = {
+                "type":         "diagnostic_probe",
+                "priority":     0.95,
+                "confidence":   1.0,
+                "rationale":    (
+                    f"CPAL Phase 4 active probe: diagnostic confidence on "
+                    f"'{lp_diagnostic['concept']}' is "
+                    f"{lp_diagnostic.get('diagnostic_confidence', 0):.2f} "
+                    f"(< {self.PROBE_CONFIDENCE_THRESHOLD}) — eliciting "
+                    f"evidence before teaching."
+                ),
+                "alternatives": [],
+                "lp_driven":    True,
+                "probe":        True,
+            }
+            print(f"[LP-Probe] focus={lp_diagnostic['concept']} "
+                  f"conf={lp_diagnostic.get('diagnostic_confidence', 0):.2f} "
+                  f"-> diagnostic_probe")
         # Can use either standard selection or hierarchical multi-task RL
         elif self.use_hierarchical_rl:
             intervention = self._select_intervention_hierarchical(
@@ -339,8 +431,11 @@ class InterventionOrchestrator:
                     'avg_mastery':       avg_mastery,
                     # CPAL Stage 2 — LP diagnostic flows into the selector
                     # so the LP-validity gate can filter the ranked output.
-                    'lp_diagnostic':     lp_diagnostic,
-                    'student_id':        student_id,
+                    # lp_diagnostic is the focus concept; lp_diagnostic_multi
+                    # carries the full per-concept map.
+                    'lp_diagnostic':       lp_diagnostic,
+                    'lp_diagnostic_multi': lp_diagnostic_multi,
+                    'student_id':          student_id,
                 },
             )
 
@@ -357,11 +452,12 @@ class InterventionOrchestrator:
             behavioral_analysis=behavioral_analysis,
             three_channel_result=three_channel_result,
             lp_diagnostic=lp_diagnostic,
+            lp_diagnostic_multi=lp_diagnostic_multi,
         )
-        
+
         # === RECORD SESSION ===
         self._record_session(student_id, session_data, intervention, content)
-        
+
         # === DYNAMIC LEARNING: Learn from this session ===
         self._learn_from_session(
             session_data,
@@ -370,6 +466,7 @@ class InterventionOrchestrator:
             knowledge_gaps,
             intervention,  # Pass intervention to track effectiveness
             lp_diagnostic=lp_diagnostic,
+            lp_diagnostic_multi=lp_diagnostic_multi,
             student_id=student_id,
         )
 
@@ -384,7 +481,8 @@ class InterventionOrchestrator:
                 'behavioral':       behavioral_analysis,
                 'knowledge_gaps':   knowledge_gaps,
                 'three_channel':    three_channel_result,
-                'lp_diagnostic':    lp_diagnostic,
+                'lp_diagnostic':       lp_diagnostic,
+                'lp_diagnostic_multi': lp_diagnostic_multi,
             },
             'encoding': encoding_results
         }
@@ -393,6 +491,7 @@ class InterventionOrchestrator:
                            behavioral_analysis: Dict, knowledge_gaps: List[Dict],
                            intervention: Dict = None,
                            lp_diagnostic: Dict = None,
+                           lp_diagnostic_multi: Dict = None,
                            student_id: str = None):
         """
         DYNAMIC LEARNING: Learn misconceptions and cognitive chains from session
@@ -494,6 +593,136 @@ class InterventionOrchestrator:
             traceback.print_exc()
             # Don't fail the session if learning fails
 
+    def _should_probe(self, lp_diagnostic: Dict,
+                      pending_probe_concept: Optional[str],
+                      student_id: Optional[str] = None) -> bool:
+        """Decide whether this turn should be a diagnostic probe (Phase 4).
+
+        Bounded-ladder version. Probe when ALL of the following hold:
+          - the focus concept is known (not 'unknown'),
+          - the latest diagnostic_confidence is below PROBE_CONFIDENCE_THRESHOLD,
+          - we haven't already exhausted MAX_PROBES_PER_CONCEPT for this
+            (student, concept),
+          - the student isn't ANSWERING a probe THIS turn (continuity case —
+            grade their reply and decide to re-probe or teach AFTER the grade,
+            not before).
+          - the latest probe answer hasn't already lifted confidence above
+            PROBE_SATISFIED_THRESHOLD (the student has shown enough).
+          - there is still at least one un-probed criterion at the target level.
+
+        This lets the ladder run multiple rounds (probe -> answer -> probe
+        deeper) instead of the original single shot, while still terminating
+        cleanly so the student is never trapped in endless questioning.
+        """
+        if not lp_diagnostic:
+            return False
+        focus = lp_diagnostic.get("concept")
+        if not focus or focus == "unknown":
+            return False
+        # Continuity: student is answering an open probe THIS turn — do not
+        # re-probe; let Stage 4 grade the answer and decide on the NEXT turn.
+        if pending_probe_concept and pending_probe_concept == focus:
+            return False
+        conf = float(lp_diagnostic.get("diagnostic_confidence", 1.0))
+        if conf >= self.PROBE_CONFIDENCE_THRESHOLD:
+            return False
+
+        # Bounded ladder: read past-probe state for this (student, concept).
+        if student_id is None or self.state_tracker is None:
+            # No state available — fall back to single-probe behaviour.
+            return True
+        try:
+            lp_state = self.state_tracker.load_lp_state(student_id, focus) or {}
+        except Exception:
+            return True
+        probe_count = int(lp_state.get("probe_count", 0))
+        if probe_count >= self.MAX_PROBES_PER_CONCEPT:
+            return False
+        history = lp_state.get("probe_confidence_history") or []
+        if history and float(history[-1]) >= self.PROBE_SATISFIED_THRESHOLD:
+            return False
+        # Probe ladder still has runway.
+        return True
+
+    def _pick_unprobed_criterion(self, lp_diagnostic: Dict,
+                                  student_id: str,
+                                  student_text: Optional[str] = None
+                                  ) -> Optional[str]:
+        """Pick the next probe target for the focus concept.
+
+        Priority (composes deep-diagnostic with multi-turn / multi-facet):
+          1. DEPTH PROBE — jargon trap or embedding-similarity gate on the
+             student's text. Highest priority because depth signals indicate
+             the level grader may have been fooled by surface vocabulary.
+          2. SUB-CRITERION — next un-probed sentence-sized sub-criterion at
+             the target LP level (per-facet ladder).
+          3. WHOLE-LEVEL RUBRIC — last-resort single-sentence concepts.
+        Returns None when every option has been probed already.
+
+        The returned string is ALSO the de-dup key written to
+        probed_criteria, so the ladder's bookkeeping naturally prevents
+        the same probe from firing twice — depth probes and sub-criteria
+        share the same probed_criteria list.
+        """
+        if self.state_tracker is None:
+            return lp_diagnostic.get("lp_rubric_target")
+        focus = lp_diagnostic.get("concept")
+        if not focus:
+            return lp_diagnostic.get("lp_rubric_target")
+        try:
+            lp_state = self.state_tracker.load_lp_state(student_id, focus) or {}
+        except Exception:
+            lp_state = {}
+        probed = list(lp_state.get("probed_criteria") or [])
+
+        # ---- Tier 1: depth probe -----------------------------------------
+        # Uses jargon traps + embedding-similarity gate. Returns a DepthProbe
+        # whose `question` is the text to show the student and `criterion_key`
+        # is the de-dup key to record. Scoped to the focus concept (multi-
+        # concept turns route each concept through its own depth check).
+        try:
+            from src.orchestrator.depth_probe import select_depth_probe
+            cat = getattr(self.lp_diagnostician, "catalogue", None)
+            if cat is not None and student_text:
+                dp = select_depth_probe(student_text, cat, focus,
+                                         already_probed=probed)
+                if dp is not None:
+                    # Attach the DepthProbe to the lp_diagnostic so callers
+                    # (prompt builder, log lines) can surface BOTH the
+                    # question text AND the trigger reason.
+                    lp_diagnostic["depth_probe"] = {
+                        "question":       dp.question,
+                        "reason":         dp.reason,
+                        "detail":         dp.detail,
+                        "criterion_key": dp.criterion_key,
+                    }
+                    # criterion_key (not the question text) is the de-dup key
+                    return dp.criterion_key
+        except Exception as e:
+            print(f"[Depth] select_depth_probe failed: {e}")
+
+        # ---- Tier 2: per-level sub-criteria (multi-facet ladder) ---------
+        target = lp_diagnostic.get("target_lp_level")
+        sub_criteria_map = lp_diagnostic.get("lp_sub_criteria") or {}
+        sub_criteria = sub_criteria_map.get(target) or []
+        # Backward compat: older diagnostics only carry expert_benchmark_key_ideas
+        # (which is the L3 split). Use it when target is L3 and the new map is
+        # empty.
+        if not sub_criteria and target == "L3":
+            sub_criteria = lp_diagnostic.get("expert_benchmark_key_ideas") or []
+
+        probed_set = set(probed)
+        for c in sub_criteria:
+            if c not in probed_set:
+                return c
+
+        # ---- Tier 3: whole-level rubric (single-sentence fallback) -------
+        rt = lp_diagnostic.get("lp_rubric_target")
+        if rt and rt not in probed_set:
+            return rt
+        return None
+
+
     def _cpal_stage4_5(self, student_id: str,
                         session_data: Dict,
                         lp_diagnostic: Optional[Dict],
@@ -502,6 +731,14 @@ class InterventionOrchestrator:
                         cognitive: Dict) -> None:
         """Run the CPAL Stage 4 post-reply classification and Stage 5
         persistence. Safe to call with missing inputs — it no-ops.
+
+        Also drives the Phase 4 active-probe loop:
+          - if this turn's intervention was a `diagnostic_probe`, record a
+            pending_probe on the focus concept so next session keeps focus
+            continuity and grades the reply against the target criterion;
+          - if the focus concept already had a pending_probe and a student
+            reply arrived this turn, that reply has now been graded (above) —
+            clear the probe so the loop closes.
         """
         if (lp_diagnostic is None
                 or self.state_tracker is None
@@ -522,9 +759,17 @@ class InterventionOrchestrator:
         if reply_text:
             # Module-level helper on the on-disk lp_diagnostic — thin
             # wrapper around classify_lp_level that returns the 3-tuple
-            # we need here.
+            # we need here. Pass the concept's L1-L4 rubric so the
+            # post-reply level is scored on the same concept-grounded
+            # basis as the pre-session diagnosis.
             from src.orchestrator.lp_diagnostic import classify_post_reply
-            ls, lsd, post_lvl = classify_post_reply(reply_text)
+            try:
+                concept_rubric = self.lp_diagnostician.catalogue.get_lp_rubric(concept)
+            except Exception:
+                concept_rubric = None
+            ls, lsd, post_lvl = classify_post_reply(
+                reply_text, concept_rubric=concept_rubric
+            )
         else:
             # No reply yet — persist the pre-level as the recorded level
             # (the delta will be computed on the next session when a
@@ -603,6 +848,70 @@ class InterventionOrchestrator:
                   f"intv={(intervention or {}).get('type')}")
         except Exception as e:
             print(f"[WARN] persist_lp_state failed: {e}")
+
+        # -- CPAL Phase 4: pending-probe set / clear ----------------------
+        # This runs AFTER persist so it operates on the freshly-saved node.
+        try:
+            intv_type = (intervention or {}).get("type")
+            had_open_probe = bool(
+                self.state_tracker.load_lp_state(student_id, concept)
+                    .get("pending_probe")
+            )
+            if intv_type == "diagnostic_probe":
+                # Pick a criterion that hasn't been probed yet at the target
+                # level (Phase 4 deepening) — falls back to whole-level rubric
+                # when no per-criterion decomposition is available.
+                # Pass the original student text so the depth-probe tier
+                # can scan for jargon traps and surface-similarity patterns
+                # before falling through to the per-facet sub-criterion picker.
+                student_text_for_probe = (
+                    session_data.get("question") or
+                    session_data.get("error_message") or ""
+                )
+                criterion = self._pick_unprobed_criterion(
+                    lp_diagnostic, student_id,
+                    student_text=student_text_for_probe,
+                ) or lp_diagnostic.get("lp_rubric_target")
+                # We just asked a probe — record it so next session keeps
+                # focus continuity and knows what criterion to grade against.
+                self.state_tracker.set_pending_probe(student_id, concept, {
+                    "target_level": lp_diagnostic.get("target_lp_level"),
+                    "criterion":    criterion,
+                    "asked_ts":     datetime.now().isoformat(),
+                })
+                # Update the multi-turn ladder bookkeeping.
+                self.state_tracker.update_probe_ladder(
+                    student_id, concept, criterion=criterion,
+                )
+                lp_state_now = self.state_tracker.load_lp_state(
+                    student_id, concept) or {}
+                print(f"[LP-Probe] pending_probe SET on '{concept}' "
+                      f"(target {lp_diagnostic.get('target_lp_level')}, "
+                      f"probe #{lp_state_now.get('probe_count', 1)}/"
+                      f"{self.MAX_PROBES_PER_CONCEPT})")
+            elif had_open_probe and reply_text:
+                # The student replied to an open probe and we just graded that
+                # reply (post_lvl above) — record the post-grade confidence on
+                # the ladder so _should_probe can decide whether to probe
+                # again deeper next turn or to teach.
+                post_conf = float(lp_diagnostic.get("diagnostic_confidence", 0.0))
+                self.state_tracker.update_probe_ladder(
+                    student_id, concept, post_confidence=post_conf,
+                )
+                self.state_tracker.set_pending_probe(student_id, concept, None)
+                # If concept advanced (post_lvl > pre_lvl) reset the ladder —
+                # the next ladder starts fresh at the new level.
+                if {"L1":1,"L2":2,"L3":3,"L4":4}.get(post_lvl, 1) > \
+                   {"L1":1,"L2":2,"L3":3,"L4":4}.get(pre_lvl, 1):
+                    self.state_tracker.update_probe_ladder(
+                        student_id, concept, reset=True)
+                    print(f"[LP-Probe] ladder RESET on '{concept}' "
+                          f"(advanced {pre_lvl} -> {post_lvl})")
+                else:
+                    print(f"[LP-Probe] pending_probe CLEARED on '{concept}' "
+                          f"(reply graded -> {post_lvl}, conf={post_conf:.2f})")
+        except Exception as e:
+            print(f"[WARN] pending-probe update failed: {e}")
 
     def _encode_session(self, session_data: Dict) -> Dict:
         """Encode session.
@@ -1331,7 +1640,8 @@ class InterventionOrchestrator:
                          cognitive_assessment: Dict = None,
                          behavioral_analysis: Dict = None,
                          three_channel_result: Dict = None,
-                         lp_diagnostic: Dict = None) -> Dict:
+                         lp_diagnostic: Dict = None,
+                         lp_diagnostic_multi: Dict = None) -> Dict:
         # Fix 1+2: three_channel_result carries psychological graph, progression graph,
         # content channel, and recommended intervention into the prompt builder.
         # CPAL Stage 3: lp_diagnostic carries the wrong-model + LP level +
@@ -1414,9 +1724,17 @@ class InterventionOrchestrator:
                             'progression_graph':   tc.get('progression_graph', {}),
                             'content_channel':     tc.get('content_channel', {}),
                             'language_channel':    tc.get('language_channel', {}),
-                            'recommended_intervention': tc.get('recommended_intervention', {}),
-                            # CPAL Stage 3: LP diagnostic for the prompt builder
+                            # Use the ACTUALLY-selected intervention (plateau
+                            # override, diagnostic probe, RL pick, ...) — not
+                            # the raw three-channel suggestion — so the
+                            # prompt's intervention sections match what Stage 2
+                            # actually chose this turn.
+                            'recommended_intervention': intervention or tc.get('recommended_intervention', {}),
+                            # CPAL Stage 3: LP diagnostic for the prompt builder.
+                            # lp_diagnostic is the focus concept; lp_diagnostic_multi
+                            # carries every concept the message mentioned.
                             'lp_diagnostic': lp_diagnostic,
+                            'lp_diagnostic_multi': lp_diagnostic_multi,
                         }
                         
                         # Get COKE cognitive state (QUERY ACTUALLY)
@@ -1722,22 +2040,29 @@ class InterventionOrchestrator:
         }
     
     def _extract_concept(self, session_data: Dict) -> str:
-        """Extract concept from code/error"""
-        code = session_data.get("code", "").lower()
-        error = session_data.get("error_message", "").lower()
-        
-        # Simple concept extraction
-        if "recursion" in code or "recursion" in error or "recursive" in code:
-            return "recursion"
-        elif "loop" in code or "for" in code or "while" in code:
-            return "loops"
-        elif "function" in code or "def" in code:
-            return "functions"
-        elif "class" in code or "object" in code:
-            return "object_oriented"
-        else:
-            return "programming"
-    
+        """Resolve the session to a single wrong-models-catalogue concept ID.
+
+        Back-compat single-concept accessor — thin wrapper over
+        ConceptResolver.top_concept(). Returns one of the 20 catalogue concept
+        keys so the CPAL LP-diagnostic, the wrong-model matcher, and the
+        per-concept L1-L4 rubric all have a valid key to look up; returns
+        'unknown' only when nothing matches (LP layer then degrades
+        gracefully).
+
+        Step 1c no longer uses this — it calls ConceptResolver.resolve()
+        directly for the full multi-concept list. This wrapper survives for
+        the other call sites (`current_concept`, `_extract_concepts_dynamically`
+        fallback) that still expect a single concept.
+
+        NOTE: this used to be defined twice in the class — the second
+        definition (returning `problem_id` / 'unknown', never a catalogue key)
+        shadowed the first and silently disabled the whole wrong-models
+        catalogue layer. The duplicate has been removed; detection logic now
+        lives in concept_resolver.py.
+        """
+        resolver = getattr(self, "concept_resolver", None) or ConceptResolver()
+        return resolver.top_concept(session_data)
+
     def _extract_concepts_dynamically(self, session_data: Dict, adaptive_result: Dict) -> List[str]:
         """
         Dynamically extract concepts from code, error, and conversation
@@ -2445,10 +2770,6 @@ Enhanced explanation:"""
         """Get student's learning goals"""
         # Would be stored in profile
         return ["master_current_concept"]
-    
-    def _extract_concept(self, session_data: Dict) -> str:
-        """Extract concept from session"""
-        return session_data.get('problem_id', 'unknown')
     
     def _get_average_mastery(self, cognitive_assessment: Dict) -> float:
         """Get average mastery level"""

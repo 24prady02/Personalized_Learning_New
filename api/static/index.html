@@ -30,6 +30,16 @@
       <button id="submit-belief" class="primary" disabled>Show me the explanation</button>
     </section>
 
+    <!-- Step 2.5 — diagnostic probe. Appears only when the grader is not
+         confident yet about the student's level; capped at 2 follow-ups. -->
+    <section id="step-probe" class="card" hidden>
+      <div class="step-label" id="probe-round-label">Quick check</div>
+      <h2 id="probe-question">…</h2>
+      <p class="hint">A short answer in your own words is fine — this helps us pitch the explanation right.</p>
+      <textarea id="probe-input" rows="4" placeholder="I think..."></textarea>
+      <button id="submit-probe" class="primary" disabled>Send</button>
+    </section>
+
     <section id="step-correct" class="card" hidden>
       <div class="step-label">Step 3 of 3</div>
       <h2 id="correct-title"></h2>

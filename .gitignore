@@ -95,3 +95,9 @@ config.yaml
 temp_*
 *.tmp
 *.bak
+
+# Runtime artifacts — chat-app + cloudflared
+.app.pid
+.tunnel.pid
+cloudflared.err
+cloudflared.log

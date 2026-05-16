@@ -465,6 +465,10 @@ class StudentStateTracker:
                     "last_intervention":    None,
                     "delta_lp_last":        0,
                     "session_state_vectors": [],   # historical 12-d vectors
+                    "pending_probe":        None,  # CPAL Phase 4 active-probe loop
+                    "probe_count":              0,
+                    "probed_criteria":          [],
+                    "probe_confidence_history": [],
                 }}
             for c in CONCEPT_NODES
         }
@@ -707,6 +711,19 @@ class StudentStateTracker:
         "last_intervention":     None,
         "delta_lp_last":         0,
         "session_state_vectors": [],
+        # CPAL Phase 4 active-probe loop: when the tutor asks a diagnostic
+        # probe for this concept, this holds {target_level, criterion,
+        # asked_ts}; focus selection on the next session keeps continuity
+        # with this concept until the probe is answered. None = no open probe.
+        "pending_probe":         None,
+        # --- Multi-turn probe ladder (Phase 4 deepening) ---
+        # Track how many probes we've already issued for this concept and
+        # which criteria have been touched, so the next probe targets an
+        # un-probed criterion at the target level and the ladder terminates
+        # cleanly (after MAX_PROBES) rather than looping forever.
+        "probe_count":               0,
+        "probed_criteria":           [],   # list of criterion text strings
+        "probe_confidence_history":  [],   # diag_conf after each probe round
     }
 
     def _ensure_lp_state(self, node: Dict) -> Dict:
@@ -811,6 +828,52 @@ class StudentStateTracker:
             if len(lp["session_state_vectors"]) > max_history:
                 lp["session_state_vectors"] = lp["session_state_vectors"][-max_history:]
 
+        state["last_updated"] = datetime.now().isoformat()
+        self._save_states()
+
+    def update_probe_ladder(self, student_id: str, concept: str,
+                             criterion: Optional[str] = None,
+                             post_confidence: Optional[float] = None,
+                             reset: bool = False) -> None:
+        """Track multi-turn probe ladder progress (Phase 4 deepening).
+
+        Call when ISSUING a probe (criterion = the one just asked) — appends
+        it to probed_criteria and increments probe_count.
+        Call when GRADING a probe answer (post_confidence = the new
+        diagnostic_confidence after the answer) — appends to history so
+        _should_probe can decide whether to keep probing or stop.
+        reset=True clears the ladder (call once the concept advances to L+1).
+        """
+        lp = self.load_lp_state(student_id, concept)
+        if reset:
+            lp["probe_count"] = 0
+            lp["probed_criteria"] = []
+            lp["probe_confidence_history"] = []
+        if criterion is not None:
+            lp.setdefault("probed_criteria", []).append(str(criterion))
+            lp["probe_count"] = int(lp.get("probe_count", 0)) + 1
+        if post_confidence is not None:
+            lp.setdefault("probe_confidence_history", []).append(
+                round(float(post_confidence), 3)
+            )
+        state = self.get_student_state(student_id)
+        state["last_updated"] = datetime.now().isoformat()
+        self._save_states()
+
+    def set_pending_probe(self, student_id: str, concept: str,
+                          probe: Optional[Dict]) -> None:
+        """Set or clear the pending diagnostic probe for a concept (CPAL
+        Phase 4 active-probe loop).
+
+        probe = {"target_level", "criterion", "asked_ts"} when the tutor has
+        just asked a diagnostic probe for this concept; probe = None clears
+        it once the student's reply has been graded. While a probe is set,
+        LPDiagnostician._select_focus keeps this concept as the focus on the
+        next session so the diagnose -> probe -> re-diagnose loop closes.
+        """
+        lp = self.load_lp_state(student_id, concept)   # live reference
+        lp["pending_probe"] = probe
+        state = self.get_student_state(student_id)
         state["last_updated"] = datetime.now().isoformat()
         self._save_states()
 
