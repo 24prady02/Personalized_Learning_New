@@ -629,6 +629,11 @@ class LPDiagnostician:
         # --- Load sentence-transformers LP head if present (preferred) ---
         self.lp_st_encoder = None   # sentence_transformers model
         self.lp_st_head    = None
+        # WM ST head is loaded AFTER LP ST so we can share the MiniLM backbone.
+        self.wm_st_encoder = None
+        self.wm_st_head    = None
+        self.wm_st_labels  = None
+        default_wm_st = "checkpoints/cpal_wm_subhead_st.pt"
         if _os.path.exists(default_lp_st):
             try:
                 ck = _t.load(default_lp_st, map_location="cpu",
@@ -650,6 +655,51 @@ class LPDiagnostician:
                 print(f"[LP-Diag] failed to load ST LP head: {e}")
                 self.lp_st_encoder = None
                 self.lp_st_head    = None
+
+        # --- Load sentence-transformers WM head if present (preferred) ---
+        # Same backbone as LP ST head; shares the MiniLM encoder when possible
+        # to avoid double-loading ~22 MB into RAM. Takes precedence over the
+        # HVSAE-latent wm_head in diagnose() when this loads cleanly.
+        if _os.path.exists(default_wm_st):
+            try:
+                ck = _t.load(default_wm_st, map_location="cpu",
+                             weights_only=False)
+                from sentence_transformers import SentenceTransformer
+                want_encoder = ck.get(
+                    "encoder", "sentence-transformers/all-MiniLM-L6-v2")
+                if (self.lp_st_encoder is not None
+                        and getattr(self.lp_st_encoder,
+                                    "model_name_or_path",
+                                    "") == want_encoder):
+                    self.wm_st_encoder = self.lp_st_encoder
+                else:
+                    self.wm_st_encoder = SentenceTransformer(want_encoder)
+                # Wider hidden (256) than the LP head — 60-class WM benefits.
+                hidden = 256
+                h = _nn.Sequential(
+                    _nn.Linear(ck["in_dim"], hidden), _nn.ReLU(), _nn.Dropout(0.4),
+                    _nn.Linear(hidden, hidden // 2), _nn.ReLU(), _nn.Dropout(0.4),
+                    _nn.Linear(hidden // 2, ck["num_classes"]),
+                )
+                sd = {k.replace("net.", ""): v
+                      for k, v in ck["state_dict"].items()}
+                h.load_state_dict(sd)
+                h.eval()
+                self.wm_st_head   = h
+                self.wm_st_labels = [tuple(x) for x in ck["labels"]]
+                va = ck.get("val_acc", None)
+                if isinstance(va, (int, float)):
+                    print(f"[LP-Diag] WM head (sentence-transformers) loaded: "
+                          f"val_acc={va:.3f}  on "
+                          f"{ck.get('num_examples', '?')} examples")
+                else:
+                    print(f"[LP-Diag] WM head (sentence-transformers) loaded "
+                          f"on {ck.get('num_examples', '?')} examples")
+            except Exception as e:
+                print(f"[LP-Diag] failed to load ST WM head: {e}")
+                self.wm_st_encoder = None
+                self.wm_st_head    = None
+                self.wm_st_labels  = None
 
         for tag, p, attr_head, attr_lbl in [
             ("LP", lp_head_path, "lp_head", "lp_head_labels"),
@@ -804,12 +854,63 @@ class LPDiagnostician:
             except Exception as _e:
                 print(f"[LP-Diag] ST LP head inference failed: {_e}")
 
+        # --- Sentence-transformers WM head (preferred if present) ---
+        # Same pattern as the ST LP head: runs on question_text directly so
+        # it doesn't need a HVSAE latent. When this is confident it sets
+        # trained_wm_hit and the HVSAE-latent head below is skipped.
+        if (self.wm_st_head is not None
+                and self.wm_st_encoder is not None
+                and self.wm_st_labels is not None):
+            try:
+                import torch as _t
+                emb = self.wm_st_encoder.encode(
+                    [question_text], convert_to_tensor=True
+                ).cpu().float()
+                with _t.no_grad():
+                    logits = self.wm_st_head(emb).squeeze(0)
+                this_concept_idx = [
+                    i for i, (c, _w) in enumerate(self.wm_st_labels)
+                    if c == concept
+                ]
+                if this_concept_idx:
+                    sub_logits = logits[this_concept_idx]
+                    sub_probs = _t.softmax(sub_logits, dim=-1)
+                    top = int(sub_probs.argmax().item())
+                    chosen_concept, chosen_wm = self.wm_st_labels[
+                        this_concept_idx[top]]
+                    confidence = float(sub_probs[top].item())
+                    wm_top_for_concept = [
+                        {"wm_id": self.wm_st_labels[this_concept_idx[i]][1],
+                         "prob":  float(sub_probs[i].item())}
+                        for i in range(len(this_concept_idx))
+                    ]
+                    wm_top_for_concept.sort(key=lambda d: d["prob"], reverse=True)
+                    diag.trained_wm_probs = wm_top_for_concept
+                    if confidence >= 0.45:
+                        wm_obj = self.catalogue.get_wrong_model(
+                            concept, chosen_wm)
+                        if wm_obj is not None:
+                            trained_wm_hit = {
+                                "wm_id":  chosen_wm,
+                                "belief": wm_obj.wrong_belief,
+                                "origin": wm_obj.origin,
+                                "signal": f"[st-wm-head match p={confidence:.2f}]",
+                                "score":  confidence,
+                            }
+            except Exception as _e:
+                print(f"[LP-Diag] ST WM head inference failed: {_e}")
+
         if hvsae_latent is not None:
             try:
                 import torch as _t
                 latent_flat = hvsae_latent.detach().view(1, -1).float()
                 # --- Wrong-model sub-head (60-class over (concept, wm)) --
-                if self.wm_head is not None and self.wm_head_labels is not None:
+                # Skip if the ST WM head already produced a confident hit —
+                # we don't need to overwrite a 0.7+ ST decision with a 0.04
+                # HVSAE-latent decision.
+                if (trained_wm_hit is None
+                        and self.wm_head is not None
+                        and self.wm_head_labels is not None):
                     with _t.no_grad():
                         logits = self.wm_head(latent_flat).squeeze(0)
                     # Restrict to classes belonging to this concept

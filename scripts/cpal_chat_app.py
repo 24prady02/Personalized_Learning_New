@@ -175,19 +175,21 @@ QUIZ_CHOICES = [(f"{q['id']} — {q['concept']} — {q['question'][:48]}", q["id
 
 
 # =========================================================================
-# Load models once
+# Load models once — via the system registry so DINA, BKT, behavioral,
+# CSE-KG, pedagogical KG, CoKE, graph fusion, RL teaching agent,
+# hierarchical RL, dynamic KG updater, error mapper, and the orchestrator
+# all fire alongside the LP diagnostician. Nestor is intentionally
+# excluded (per scope).
 # =========================================================================
-print("Loading HVSAE + catalogue + heads + generator...")
-_ck = torch.load(ROOT / "checkpoints" / "best.pt",
-                 map_location="cpu", weights_only=False)
-HVSAE_MODEL = HVSAE(_ck["config"])
-HVSAE_MODEL.load_state_dict(_ck["hvsae_state"])
-HVSAE_MODEL.eval()
-CATALOGUE = get_catalogue(
-    ROOT / "data" / "mental_models" / "wrong_models_catalogue.json"
-)
-DX = LPDiagnostician(catalogue=CATALOGUE, hvsae_model=HVSAE_MODEL)
-GEN = EnhancedPersonalizedGenerator()
+print("Loading full CPAL stack via system_registry...")
+from src.system_registry import get_registry
+REG = get_registry()
+# Module-level handles preserve the rest of this file's existing references
+# (HVSAE_MODEL, CATALOGUE, DX, GEN) without rewriting every call site.
+HVSAE_MODEL = REG.hvsae
+CATALOGUE   = REG.catalogue
+DX          = REG.lp_diagnostician
+GEN         = REG.enhanced_generator
 try:
     from transformers import AutoTokenizer
     TOKENIZER = AutoTokenizer.from_pretrained("bert-base-uncased")
@@ -195,6 +197,457 @@ except Exception:
     TOKENIZER = None
 _GEN_LOCK = Lock()
 print("Ready.")
+
+
+# =========================================================================
+# Registry-component glue
+# -------------------------------------------------------------------------
+# These helpers thread the chat app through every non-Nestor CPAL component
+# so each turn:
+#   - DINA and BKT update real per-student mastery and write to disk
+#   - Pedagogical KG and CSE-KG retrieval supplies KG-grounded context
+#     that gets injected into the LLM prompt
+#   - ErrorExplanationMapper resolves code/error symptoms to root causes
+#   - TeachingRLAgent picks an intervention type from the learned policy
+#   - DynamicKGUpdater learns prerequisite + misconception patterns from
+#     observed (concept, correct/incorrect) interactions
+# All calls are wrapped in try/except so a missing/dead component never
+# breaks the chat — it just silently drops that enrichment for the turn.
+# =========================================================================
+
+def _update_mastery(student_id: str, concept: str, is_correct: bool) -> dict:
+    """Update DINA + BKT and return the post-update mastery dict so the
+    LLM prompt can be shaped by REAL student state instead of the
+    hard-coded 0.30 placeholder."""
+    out = {}
+    try:
+        if REG.dina is not None:
+            REG.dina.update(student_id, concept, bool(is_correct))
+            # get_mastery returns a {skill: probability} dict even when
+            # `skill` is specified — extract the float for the focus skill.
+            mdict = REG.dina.get_mastery(student_id, concept) or {}
+            if concept in mdict:
+                out["dina_mastery"] = float(mdict[concept])
+    except Exception as e:
+        print(f"[CPAL/mastery] DINA update failed: {e}")
+    try:
+        if REG.bkt is not None:
+            REG.bkt.update_knowledge(student_id, concept, bool(is_correct))
+            st = REG.bkt.get_student_knowledge_state(student_id) or {}
+            if concept in st:
+                out["bkt_mastery"] = float(st[concept])
+    except Exception as e:
+        print(f"[CPAL/mastery] BKT update failed: {e}")
+    return out
+
+
+def _kg_context_block(concept: str, code: str = "",
+                      error_message: str = "") -> str:
+    """Build a KG-grounded context block to inject into the tutor prompt.
+    Pulls from pedagogical KG (misconceptions/cognitive load), CSE-KG
+    (related concepts/prerequisites), and ErrorExplanationMapper (root
+    causes for code/error symptoms). Returns '' if nothing useful is
+    available so the prompt stays clean."""
+    parts = []
+    try:
+        if REG.pedagogical_kg is not None:
+            info = REG.pedagogical_kg.get_concept_full_info(concept) or {}
+            ped = info.get("pedagogical_data") or {}
+            misc = ped.get("common_misconceptions") or []
+            if misc:
+                names = [
+                    (m.get("description") or m.get("id") or "").strip()[:80]
+                    for m in misc[:3]
+                ]
+                names = [n for n in names if n]
+                if names:
+                    parts.append(
+                        "Pedagogical-KG misconceptions: "
+                        + " | ".join(names))
+            load = ped.get("cognitive_load") or {}
+            if load:
+                total = load.get("total")
+                factors = load.get("factors") or []
+                if total is not None or factors:
+                    parts.append(
+                        f"Pedagogical-KG cognitive load: total={total}"
+                        + (f"  factors={', '.join(factors[:4])}"
+                           if factors else ""))
+            dom = info.get("domain_knowledge") or {}
+            rel = dom.get("related_concepts") or []
+            if rel:
+                # The KG stores URIs like http://cse-kg.org/ontology/NP-A
+                # — strip the prefix so the prompt stays readable.
+                short = []
+                for r in rel[:4]:
+                    uri = r.get("concept", "") if isinstance(r, dict) else str(r)
+                    short.append(uri.rsplit("/", 1)[-1])
+                parts.append("CSE-KG related concepts: " + ", ".join(short))
+    except Exception as e:
+        print(f"[CPAL/KG] pedagogical_kg lookup failed: {e}")
+    try:
+        if REG.concept_retriever is not None and (code or error_message):
+            related = REG.concept_retriever.retrieve_from_code(
+                code or "", error_message or "", top_k=5) or []
+            if related:
+                parts.append(
+                    "CSE-KG retrieved from code: " + ", ".join(related[:5]))
+    except Exception as e:
+        print(f"[CPAL/KG] CSE-KG retrieval failed: {e}")
+    try:
+        if (REG.error_explanation_mapper is not None
+                and (code or error_message)):
+            expl = REG.error_explanation_mapper.generate_explanation(
+                code=code or None,
+                error_message=error_message or None,
+                student_data={"concept": concept},
+            ) or {}
+            # Schema: when an error pattern is matched, expl has fields
+            # like 'root_cause', 'explanation', 'strategy'. When no pattern
+            # matches, expl is {"error_detected": False, ...} — skip then.
+            if expl.get("error_detected", True):
+                root = (expl.get("root_cause")
+                        or expl.get("explanation")
+                        or expl.get("strategy"))
+                if root:
+                    root_str = str(root).strip().split("\n")[0][:280]
+                    if root_str:
+                        parts.append(f"Error-mapper root cause: {root_str}")
+    except Exception as e:
+        print(f"[CPAL/KG] error_explanation_mapper failed: {e}")
+    if not parts:
+        return ""
+    return "KG-GROUNDED CONTEXT (use to anchor your explanation; do not " \
+           "recite verbatim):\n  - " + "\n  - ".join(parts) + "\n\n"
+
+
+def _rl_recommended_intervention(student_id: str, concept: str,
+                                 mastery: float = 0.3,
+                                 emotion: str = "neutral",
+                                 lp_level: str = "L1",
+                                 hvsae_latent=None) -> tuple:
+    """Ask the trained RL teaching agent which intervention type to use
+    this turn. Returns (action_str, action_id, q_value, state_vec) so
+    callers can later feed the (state_vec, action_id, reward) triple back
+    into the agent's replay buffer via store_experience() — enabling the
+    policy to LEARN from chat interactions, not just infer.
+
+    Falls back to ('worked_example', 5, 0.0, None) if anything goes
+    wrong so the chat keeps working without RL.
+    """
+    fallback = ("worked_example", 5, 0.0, None)
+    try:
+        import torch as _t
+        agent = REG.teaching_rl_agent
+        if agent is None:
+            return fallback
+        if hvsae_latent is None:
+            hvsae_latent = _t.zeros(256)
+        session_data = {
+            "student_id":      student_id,
+            "time_stuck":      0.0,
+            "action_sequence": [],
+        }
+        analysis = {
+            "encoding":   {"latent": hvsae_latent.detach().view(-1).float()},
+            "cognitive":  {"knowledge_gaps": [{"concept": concept,
+                                                 "mastery": float(mastery)}]},
+            "behavioral": {"emotional_state": emotion},
+            "psychological": {"personality": {}},
+            "history":    {"interventions": []},
+        }
+        try:
+            state_vec = agent.get_state_representation(session_data, analysis)
+        except Exception:
+            state_vec = _t.zeros(agent.state_dim)
+        # training=False → no epsilon exploration on inference; we still
+        # capture (state, action, q) for the replay buffer.
+        action_id, q_value = agent.select_action(state_vec, training=False)
+        action_str = agent.actions.get(int(action_id), "worked_example")
+        return (action_str, int(action_id), float(q_value), state_vec)
+    except Exception as e:
+        print(f"[CPAL/RL] teaching agent action selection failed: {e}")
+        return fallback
+
+
+def _rl_finalise_previous(state: dict, current_dina: float,
+                          current_emotion: str, current_lp: str,
+                          current_state_vec=None,
+                          engagement_signal: float = 0.5) -> None:
+    """Close out the previous turn's RL step: compute reward from the
+    delta between (pending_rl snapshot) and (current signals), push the
+    (s, a, r, s') experience into the replay buffer, and run one DQN
+    update. Called at the START of each new student turn before picking
+    the next action — so the agent's Q-net actually learns from chat.
+
+    Reward heuristic (no graded answer mid-chat, so we approximate):
+      learning_gain  = clamp((dina_now - dina_before) * 4, -1, 1)
+      engagement     = 2 * (engagement_signal - 0.5)
+      emotion_delta  = +0.5 if confused->engaged, -0.5 if engaged->confused
+      lp_gain        = +1.0 if LP level advanced, -0.5 if regressed
+    Combined: weighted average (weights mirror reward_function.py roughly).
+    """
+    try:
+        pending = state.get("pending_rl") or {}
+        if not pending or REG.teaching_rl_agent is None:
+            return
+        import torch as _t
+
+        agent = REG.teaching_rl_agent
+        s_before     = pending.get("state_vec")
+        action_id    = int(pending.get("action_id", 5))
+        dina_before  = float(pending.get("dina", 0.3))
+        emotion_before = pending.get("emotion", "neutral")
+        lp_before    = pending.get("lp_level", "L1")
+
+        if s_before is None:
+            state.pop("pending_rl", None)
+            return
+        if current_state_vec is None:
+            current_state_vec = _t.zeros(agent.state_dim)
+
+        # ── reward components ──────────────────────────────────────────
+        gain     = float(current_dina) - dina_before
+        learning_gain = max(-1.0, min(1.0, gain * 4.0))
+
+        engagement    = max(-1.0, min(1.0, 2.0 * (engagement_signal - 0.5)))
+
+        emo_score = {"frustrated": -1.0, "confused": -0.5, "neutral": 0.0,
+                     "engaged": 0.5, "confident": 1.0}
+        emotion_delta = (emo_score.get(current_emotion, 0.0)
+                          - emo_score.get(emotion_before, 0.0))
+
+        lp_order = {"L1": 1, "L2": 2, "L3": 3, "L4": 4}
+        lp_delta = lp_order.get(current_lp, 1) - lp_order.get(lp_before, 1)
+        if lp_delta > 0:    lp_gain =  1.0
+        elif lp_delta < 0:  lp_gain = -0.5
+        else:               lp_gain =  0.0
+
+        # Weights roughly match reward_function.py's split.
+        reward = (0.30 * learning_gain
+                  + 0.20 * engagement
+                  + 0.20 * emotion_delta
+                  + 0.30 * lp_gain)
+
+        # Store + learn.
+        agent.store_experience(s_before, action_id, float(reward),
+                                current_state_vec, done=False)
+        loss = None
+        try:
+            loss = agent.learn_from_experience()
+        except Exception as _e:
+            print(f"[CPAL/RL] learn_from_experience failed: {_e}")
+
+        steps = getattr(agent, "steps", None)
+        loss_str = f"loss={loss:.3f}" if isinstance(loss, (int, float)) else "loss=skip"
+        print(f"[CPAL/RL] store_experience action={agent.actions.get(action_id)} "
+              f"reward={reward:+.3f} ({loss_str}) buffer={len(agent.memory)} "
+              f"steps={steps}", flush=True)
+
+        # Stash the latest reward/loss/steps so the status pill can show them.
+        state["last_rl_reward"] = float(reward)
+        state["last_rl_loss"]   = loss if isinstance(loss, (int, float)) else None
+        state["last_rl_steps"]  = int(steps) if isinstance(steps, int) else None
+
+        # Pending RL slot is now consumed.
+        state.pop("pending_rl", None)
+    except Exception as e:
+        print(f"[CPAL/RL] _rl_finalise_previous failed: {e}")
+
+
+def _dynamic_kg_learn(student_id: str, concept: str, is_correct: bool,
+                      intervention_type: str = "worked_example") -> None:
+    """Feed this turn's outcome into the dynamic KG updater so prerequisite
+    strengths, misconception frequencies, and intervention effectiveness
+    accumulate across sessions."""
+    try:
+        updater = REG.dynamic_kg_updater
+        if updater is None:
+            return
+        updater.update_from_interaction(
+            session_data={
+                "student_id":  student_id,
+                "concept":     concept,
+                "intervention": intervention_type,
+            },
+            student_outcome={"mastery_delta": 0.1 if is_correct else -0.05},
+            success=bool(is_correct),
+        )
+    except Exception as e:
+        print(f"[CPAL/RL] dynamic_kg update failed: {e}")
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# CPAL teach-turn context builders — populate the `analysis` dict so the
+# generator's KNOWLEDGE GRAPHS (MUST REFERENCE IN RESPONSE) section, LP-Multi
+# mini-replies block, and 3-channel psychological state section all fire
+# with real data instead of empty dicts.
+# ──────────────────────────────────────────────────────────────────────────
+
+def _build_cse_kg_block(concept: str) -> dict:
+    """Pull concept info + prerequisites + related concepts from CSE-KG.
+    Shape matches what enhanced_personalized_generator expects in
+    analysis['cse_kg']: {concept, prerequisites, related_concepts, definition}.
+    """
+    out = {}
+    try:
+        if REG.cse_kg_client is None:
+            return out
+        info = REG.cse_kg_client.get_concept_info(concept) or {}
+        out["concept"]    = concept
+        out["definition"] = (info.get("description")
+                              or info.get("label")
+                              or "")
+        try:
+            prereqs = REG.cse_kg_client.get_prerequisites(concept) or []
+            # Strip URI prefix for readability
+            out["prerequisites"] = [
+                (p.rsplit("/", 1)[-1] if isinstance(p, str) else str(p))
+                for p in prereqs[:5]
+            ]
+        except Exception:
+            out["prerequisites"] = []
+        related = info.get("related_concepts") or []
+        out["related_concepts"] = [
+            (r.get("concept", "").rsplit("/", 1)[-1]
+             if isinstance(r, dict) else str(r))
+            for r in related[:5]
+        ]
+    except Exception as e:
+        print(f"[CPAL/CSE-KG] build failed: {e}")
+    return out
+
+
+def _build_pedagogical_kg_block(concept: str) -> dict:
+    """Shape pedagogical KG output into the structure the generator's
+    Pedagogical-KG section reads: {progression, misconceptions,
+    cognitive_load, interventions, learning_path}.
+    """
+    out = {}
+    try:
+        if REG.pedagogical_kg is None:
+            return out
+        info = REG.pedagogical_kg.get_concept_full_info(concept) or {}
+        ped  = info.get("pedagogical_data") or {}
+        out["progression"] = ped.get("progression") or ped.get(
+            "difficulty_level", "")
+        miscs = ped.get("common_misconceptions") or []
+        out["misconceptions"] = [
+            (m.get("description") or m.get("id") or "")[:120]
+            for m in miscs[:3]
+            if (m.get("description") or m.get("id"))
+        ]
+        load = ped.get("cognitive_load") or {}
+        if load:
+            out["cognitive_load"] = (
+                f"total={load.get('total', '?')} "
+                f"intrinsic={load.get('intrinsic', '?')} "
+                f"germane={load.get('germane', '?')}")
+        else:
+            out["cognitive_load"] = ""
+        interventions = ped.get("recommended_interventions") or []
+        if isinstance(interventions, list):
+            out["interventions"] = [str(i)[:60] for i in interventions[:4]]
+        else:
+            out["interventions"] = []
+    except Exception as e:
+        print(f"[CPAL/Ped-KG] build failed: {e}")
+    return out
+
+
+def _build_coke_block(session_data: dict) -> dict:
+    """Run COKECognitiveGraph theory-of-mind inference on this turn's
+    text + code; shape into analysis['coke']."""
+    out = {}
+    try:
+        if REG.coke_graph is None:
+            return out
+        tom = REG.coke_graph.infer_theory_of_mind(session_data) or {}
+        out["cognitive_state"]     = tom.get("predicted_cognitive_state",
+                                              tom.get("cognitive_state", ""))
+        out["mental_activity"]     = tom.get("mental_activity", "")
+        out["behavioral_response"] = tom.get("predicted_behavioral_response",
+                                              tom.get("behavioral_response", ""))
+        out["confidence"]          = float(tom.get("confidence", 0.5))
+        chain = tom.get("cognitive_chain") or {}
+        if chain:
+            out["cognitive_chain"] = {
+                "description": chain.get("description", "")
+            }
+    except Exception as e:
+        print(f"[CPAL/COKE] build failed: {e}")
+    return out
+
+
+def _run_three_channel(student_id: str, session_data: dict) -> dict:
+    """Run the language/structure/content three-channel analysis via the
+    orchestrator's state_tracker. Populates analysis['psychological_state']
+    so the generator's PSYCHOLOGICAL STATE section fires."""
+    try:
+        tracker = getattr(REG.orchestrator, "state_tracker", None)
+        if tracker is None:
+            return {}
+        result = tracker.analyse_prompt(student_id, session_data) or {}
+        return result
+    except Exception as e:
+        print(f"[CPAL/3-Channel] analyse_prompt failed: {e}")
+        return {}
+
+
+def _run_diagnose_multi(student_id: str,
+                        question_text: str,
+                        session_data: dict,
+                        hvsae_latent=None,
+                        hvsae_misconception_probs=None) -> dict:
+    """Run multi-concept diagnosis so the generator's LP-Multi
+    PER-CONCEPT MINI-REPLIES block has data to fire on. Returns the
+    {focus, focus_concept, diagnostics: {concept: diag_dict}} shape."""
+    try:
+        resolver = getattr(REG.orchestrator, "concept_resolver", None)
+        diagn    = REG.lp_diagnostician
+        tracker  = getattr(REG.orchestrator, "state_tracker", None)
+        if resolver is None or diagn is None:
+            return {}
+        resolved = resolver.resolve(session_data) or []
+        # Pull stored LP per resolved concept
+        stored_lp = {}
+        if tracker is not None:
+            for c, _conf in resolved:
+                if c and c != "unknown":
+                    try:
+                        stored_lp[c] = tracker.load_lp_state(
+                            student_id, c) or {}
+                    except Exception:
+                        stored_lp[c] = {}
+        multi = diagn.diagnose_multi(
+            student_id=student_id,
+            question_text=question_text,
+            resolved_concepts=resolved,
+            stored_lp=stored_lp,
+            hvsae_latent=hvsae_latent,
+            hvsae_misconception_probs=hvsae_misconception_probs,
+        )
+        # diagnose_multi returns an object with .to_dict() OR a dict already;
+        # normalise to dict-of-dicts for downstream consumption.
+        if hasattr(multi, "to_dict"):
+            return multi.to_dict()
+        if isinstance(multi, dict):
+            # Per-concept diag objects → dicts
+            diags = multi.get("diagnostics") or {}
+            normalised = {}
+            for c, d in diags.items():
+                normalised[c] = d.to_dict() if hasattr(d, "to_dict") else d
+            return {
+                "focus_concept": multi.get("focus_concept"),
+                "focus":         (multi.get("focus").to_dict()
+                                   if hasattr(multi.get("focus"), "to_dict")
+                                   else multi.get("focus")),
+                "diagnostics":   normalised,
+            }
+        return {}
+    except Exception as e:
+        print(f"[CPAL/LP-Multi] diagnose_multi failed: {e}")
+        return {}
 
 
 # =========================================================================
@@ -492,6 +945,32 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
               if c in target_sub]
     conf  = float(diag.get("diagnostic_confidence", 0.0))
     rg = diag.get("rubric_grade") or {}
+    # RL agent footer — surfaces the trained policy's per-turn action,
+    # Q-value, last reward, training-step counter, and last DQN loss so
+    # the user can see RL firing AND learning across turns. Hidden when
+    # no RL data is on `state` (e.g. first message after clear_chat).
+    rl_action = state.get("last_rl_action")
+    rl_q      = state.get("last_rl_q")
+    rl_reward = state.get("last_rl_reward")
+    rl_steps  = state.get("last_rl_steps")
+    rl_loss   = state.get("last_rl_loss")
+    rl_lines  = ""
+    if rl_action is not None:
+        rl_lines += f"- **RL action chosen:** `{rl_action}`"
+        if isinstance(rl_q, (int, float)):
+            rl_lines += f"  (Q = {rl_q:+.3f})"
+        rl_lines += "\n"
+    if rl_steps is not None:
+        rl_lines += (
+            f"- **RL training steps:** {rl_steps}"
+            + (f"  (last reward {rl_reward:+.3f})"
+               if isinstance(rl_reward, (int, float)) else "")
+            + (f"  (loss {rl_loss:.3f})"
+               if isinstance(rl_loss, (int, float)) else "")
+            + "\n")
+    elif isinstance(rl_reward, (int, float)):
+        rl_lines += f"- **Last RL reward:** {rl_reward:+.3f}\n"
+
     return (
         f"- **Concept:** `{focus}`\n"
         f"- **Level:** `{cur}` ({cur_plain}) → `{tgt}` ({tgt_plain})\n"
@@ -499,6 +978,7 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         f"- **Diagnostic confidence:** {conf:.2f}\n"
         f"- **Grader verdict:** `{rg.get('level','?')}` (conf {rg.get('confidence',0):.2f})\n"
         f"- **Last probe reason:** {state.get('pending_probe_reason') or '—'}\n"
+        + rl_lines
     )
 
 
@@ -701,6 +1181,14 @@ def _decide_probe_or_teach(state: dict):
                 state["pending_facet_pos"]    = i
                 state["pending_facet_total"]  = len(sub)
                 return ("probe", c, target, state, diag)
+    # Catch-all teach: confidence is in the "between" zone (>= probe floor
+    # but < comprehensive floor) AND no probe candidate was found, OR
+    # probe_count is at cap. Either way, mark this as a default-trigger
+    # teach so _stream_teach still builds the LP-shaped comprehensive
+    # header (with rubric/sub-criteria/plateau/etc. wired in) instead of
+    # falling back to the EnhancedPersonalizedGenerator's generic
+    # per-intervention template.
+    state["stage_trigger"] = "default"
     return ("teach", None, None, state, diag)
 
 
@@ -781,6 +1269,11 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
     picked_text   = q["options"].get(picked_letter, picked_option_full)
     correct = (picked_letter == q["correct_answer"])
 
+    # Update DINA + BKT mastery now that we know correctness for this MCQ.
+    # The returned dict is stashed on `state` and threaded into the LLM
+    # prompt so the tutor reply is shaped by REAL mastery, not a 0.30 stub.
+    mastery_now = _update_mastery("chat_user", q["concept"], correct)
+
     # Build the correct/wrong status pill text up front so we can show it
     # IMMEDIATELY on submission — before diagnosis and the LLM run.
     if correct:
@@ -814,15 +1307,27 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
         "user_bubble":         _render_user_bubble(q, picked_text, reasoning),
         "pending_probe_text":  None,
         "pending_probe_reason": None,
-        # >>> Probe ladder OFF — always go straight to comprehensive synthesis.
-        "force_comprehensive": True,
-        "stage_trigger":       "force",
+        # Multi-probe RE-ENABLED — every first turn now runs the probe
+        # ladder when diagnostic_confidence is below CHAT_PROBE_CONFIDENCE_FLOOR.
+        # _stage_reached fires the comprehensive synthesis only when one of:
+        #   force / student_request / high_confidence / sub_criteria_done / cap.
+        "force_comprehensive": False,
+        "stage_trigger":       None,
+        # awaiting_followup is False at the start of every quiz item — the
+        # first message is always a Quick-check answer or initial reasoning,
+        # never a follow-up. _stream_teach sets it to True after a teach.
+        "awaiting_followup":   False,
+        "last_diag":           None,
         # Vestigial multi-concept state (still tracked for the diagnosis
         # picker, but no longer drives back-and-forth probes).
         "concepts_done":            [],
         "current_focus_concept":    None,
         "_pivot_depth":             0,
         "bridge_message":           None,
+        # Registry-driven turn state — read by _stream_teach to shape the
+        # prompt (real mastery, RL action) and by _stream_teach's tail to
+        # feed the dynamic KG updater.
+        "mastery_now":              mastery_now,
     }
 
     # Decide on the FIRST belief: probe or teach?
@@ -873,6 +1378,68 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state):
     yield from _stream_teach(state, diag, history)
 
 
+_MISCONCEPTION_QUOTE_RE = re.compile(
+    # "You wrote" (optionally with colon) followed by an opening quote
+    # marker — single, double, smart-quote, or markdown-bold-italic wrap
+    # — then the candidate quote, then a matching closing quote marker.
+    r"You wrote\s*[:]?\s*"
+    r"(?:\*+\s*[‘'\"]|[‘'\"])"
+    r"(?P<quote>[^*\"‘’']{6,400}?)"
+    r"(?:[’'\"]\s*\*+|[’'\"])",
+    re.IGNORECASE,
+)
+_WS_RE = re.compile(r"\s+")
+
+
+def _sanitise_misconception_quote(reply_text: str, student_text: str) -> str:
+    """Catch LLM-fabricated misconception quotes.
+
+    The COMPREHENSIVE MODE prompt demands the misconception section quote
+    the student verbatim, but llama3.x sometimes paraphrases the wrong-
+    belief catalogue entry and puts THAT inside quote marks instead —
+    pretending the student wrote it. That's worse than no quote: it
+    misattributes a sentence the student didn't write.
+
+    This validator scans the LLM reply for `You wrote "X"` (or `*'X'*`)
+    patterns and checks whether X is a contiguous substring of the
+    student's actual reasoning (whitespace + case + trailing-punctuation
+    tolerant). If X is genuine, it's left alone. If X is fabricated, the
+    attribution is rewritten to an honest "you didn't say this in so many
+    words, but your answer implies it" — so the following "— precise
+    version: ..." still reads naturally.
+
+    Idempotent. Safe on text with no misconception section.
+    """
+    if not reply_text or not student_text:
+        return reply_text
+    student_norm = _WS_RE.sub(" ", student_text.lower()).strip()
+    if not student_norm:
+        return reply_text
+
+    def _is_verbatim(quote: str) -> bool:
+        q = _WS_RE.sub(" ", quote.lower()).strip().strip(".;:!?\"'")
+        if len(q) < 8:
+            # Too short to be a meaningful fabrication risk — let it pass.
+            return True
+        if q in student_norm:
+            return True
+        # Tolerate trailing-fragment edits (LLM dropped a final word).
+        if len(q) > 30 and q[:-10] in student_norm:
+            return True
+        return False
+
+    def _replace(m: "re.Match") -> str:
+        if _is_verbatim(m.group("quote")):
+            return m.group(0)
+        # Fabricated — rewrite the attribution prefix. The text after the
+        # match (typically "— precise version: ...") remains intact and
+        # reads cleanly after this honest opener.
+        return ("You didn't say this in so many words, but your answer "
+                "treats it as if it were true")
+
+    return _MISCONCEPTION_QUOTE_RE.sub(_replace, reply_text)
+
+
 def _stream_teach(state, diag, history):
     """Stream the LLM tutor reply using the accumulated belief in `state`.
     Outputs the 6-tuple shape stream_response uses so Gradio reconciles it
@@ -914,26 +1481,141 @@ def _stream_teach(state, diag, history):
            gr.update(value=enriched, visible=True),
            gr.update(visible=True), "", "", state)
 
-    # Intervention via LP-validity gate
+    # Intervention via LP-validity gate (static LP filter — preserved)
+    # then refined by the trained RL teaching agent if it picks a different
+    # type that still passes the LP gate.
     cands = [("transfer_task", 0.92), ("worked_example", 0.80),
              ("socratic_prompt", 0.70), ("trace_scaffold", 0.65)]
     filt = filter_interventions_by_lp(cands, diag["current_lp_level"])
     chosen = filt[0][0] if filt else "worked_example"
+    dina_now = float((state.get("mastery_now") or {}).get(
+        "dina_mastery", 0.30))
+    bkt_now  = float((state.get("mastery_now") or {}).get(
+        "bkt_mastery", dina_now))
+    emotion_now = "confused" if not correct else "engaged"
+    # Re-encode the student's accumulated belief with HVSAE so the RL agent
+    # gets a real latent (matches what get_state_representation expects).
+    try:
+        latent_for_rl, _mp = _hvsae_forward(reasoning)
+        latent_for_rl = latent_for_rl.squeeze(0)
+    except Exception:
+        latent_for_rl = None
+
+    # CLOSE the PREVIOUS RL step first (if there is one) — compute reward
+    # from the delta between then and now, push (s, a, r, s') into the
+    # replay buffer, run one DQN update. This is what turns "RL inference"
+    # into "RL learning" inside the chat.
+    _curr_state_vec = None
+    try:
+        if REG.teaching_rl_agent is not None and latent_for_rl is not None:
+            _sd_tmp = {"student_id": "chat_user",
+                        "time_stuck": 0.0, "action_sequence": []}
+            _an_tmp = {
+                "encoding":   {"latent": latent_for_rl.detach().view(-1).float()},
+                "cognitive":  {"knowledge_gaps":
+                                [{"concept": q["concept"], "mastery": dina_now}]},
+                "behavioral": {"emotional_state": emotion_now},
+                "psychological": {"personality": {}},
+                "history":    {"interventions": []},
+            }
+            _curr_state_vec = REG.teaching_rl_agent.get_state_representation(
+                _sd_tmp, _an_tmp)
+    except Exception:
+        _curr_state_vec = None
+    # engagement_signal = 1.0 if student wrote a substantive reasoning,
+    # 0.3 if "i dont know"-style. Length is a coarse proxy.
+    _eng = 0.7 if len((reasoning or "").split()) >= 8 else 0.3
+    _rl_finalise_previous(state, current_dina=dina_now,
+                          current_emotion=emotion_now,
+                          current_lp=diag["current_lp_level"],
+                          current_state_vec=_curr_state_vec,
+                          engagement_signal=_eng)
+
+    rl_action, rl_action_id, rl_q, rl_state_vec = _rl_recommended_intervention(
+        "chat_user", q["concept"],
+        mastery=dina_now, emotion=emotion_now,
+        lp_level=diag["current_lp_level"],
+        hvsae_latent=latent_for_rl,
+    )
+    rl_valid = {t for t, _ in filt}
+    if rl_action in rl_valid:
+        chosen = rl_action
+    # Stash for NEXT turn's _rl_finalise_previous (so we learn from this
+    # action's outcome).
+    state["pending_rl"] = {
+        "state_vec": rl_state_vec, "action_id": rl_action_id,
+        "dina": dina_now, "emotion": emotion_now,
+        "lp_level": diag["current_lp_level"],
+    }
+    state["last_rl_action"] = rl_action
+    state["last_rl_q"]      = rl_q
+    print(f"[CPAL/Teach-RL] action={rl_action} (id={rl_action_id}) "
+          f"q={rl_q:+.3f} lp={diag['current_lp_level']} dina={dina_now:.2f}",
+          flush=True)
+
+    # ── Build the session_data dict the registry components expect ──────
+    # Used by analyse_prompt (3-channel), infer_theory_of_mind (COKE),
+    # and diagnose_multi (LP-Multi). Same shape the orchestrator uses.
+    session_data_for_ctx = {
+        "student_id": "chat_user",
+        "question":   reasoning,
+        "code":       q["code"],
+        "error_message": "",
+        "conversation": [{"role": "user", "content": reasoning}],
+        "action_sequence": [],
+        "time_stuck": 0.0,
+    }
+
+    # ── Populate the analysis dict so the generator's KNOWLEDGE GRAPHS
+    #    (MUST REFERENCE) section + 3-channel block fire with real data.
+    cse_kg_block        = _build_cse_kg_block(q["concept"])
+    pedagogical_kg_block = _build_pedagogical_kg_block(q["concept"])
+    coke_block          = _build_coke_block(session_data_for_ctx)
+    three_channel_block = _run_three_channel("chat_user", session_data_for_ctx)
+
+    # ── Run multi-concept diagnosis so the LP-Multi mini-replies block
+    #    has data when the student touches more than one concept.
+    try:
+        _latent_for_multi, _mp_for_multi = _hvsae_forward(reasoning)
+        _latent_for_multi = _latent_for_multi.squeeze(0)
+    except Exception:
+        _latent_for_multi, _mp_for_multi = None, None
+    lp_diagnostic_multi = _run_diagnose_multi(
+        "chat_user", reasoning, session_data_for_ctx,
+        hvsae_latent=_latent_for_multi,
+        hvsae_misconception_probs=_mp_for_multi,
+    )
+
+    print(f"[CPAL/Teach] cse_kg={'OK' if cse_kg_block else 'empty'}  "
+          f"ped_kg={'OK' if pedagogical_kg_block else 'empty'}  "
+          f"coke={'OK' if coke_block else 'empty'}  "
+          f"3ch={'OK' if three_channel_block else 'empty'}  "
+          f"lp_multi={len((lp_diagnostic_multi or {}).get('diagnostics', {}))} concepts",
+          flush=True)
 
     student_state = {
         "student_id": "chat_user",
         "lp_diagnostic": diag,
-        "recommended_intervention": {"type": chosen},
+        "lp_diagnostic_multi": lp_diagnostic_multi,
+        "recommended_intervention": {"type": chosen, "rl_action": rl_action},
         "personality_profile": {"communication_style": "direct",
                                 "learning_preference": "visual"},
-        "bkt_mastery": {q["concept"]: 0.30},
-        "emotional_state": "confused" if not correct else "engaged",
+        "bkt_mastery":  {q["concept"]: bkt_now},
+        "dina_mastery": {q["concept"]: dina_now},
+        "emotional_state": emotion_now,
         "interaction_count": len(history) + 1,
     }
-    analysis = {"emotion": {"primary": "confused" if not correct else "engaged",
-                             "confidence": 0.7},
-                "knowledge_gaps": [q["concept"]],
-                "pedagogical_kg": {}}
+    analysis = {
+        "emotion": {"primary": "confused" if not correct else "engaged",
+                    "confidence": 0.7},
+        "knowledge_gaps":  [q["concept"]],
+        "cse_kg":          cse_kg_block,
+        "pedagogical_kg":  pedagogical_kg_block,
+        "coke":            coke_block,
+        "psychological_state": three_channel_block,
+        "encoding":        {"latent": _latent_for_multi}
+                            if _latent_for_multi is not None else {},
+    }
 
     # Build the message the generator sees. When stage_trigger is set we
     # inject COMPREHENSIVE MODE instructions so the generator produces a
@@ -945,134 +1627,36 @@ def _stream_teach(state, diag, history):
     # Wrong-belief — pull the SINGLE matched one from the diagnosis. The
     # comprehensive answer addresses THIS belief only, not the RAG top-3
     # candidates (which are FYI context, NOT separate things to teach).
-    wm_id     = (diag or {}).get("wrong_model_id") or ""
-    wm_desc   = (diag or {}).get("wrong_model_description") or ""
-    wm_origin = (diag or {}).get("wrong_model_origin") or ""
-    cur_lvl   = (diag or {}).get("current_lp_level", "L1")
-    tgt_lvl   = (diag or {}).get("target_lp_level", "L3")
-    rubric_current = (diag or {}).get("lp_rubric_current") or ""
-    rubric_target  = (diag or {}).get("lp_rubric_target")  or ""
-    benchmark = "; ".join((diag or {}).get("expert_benchmark_key_ideas") or [])
+    # Chat-app no longer builds its own comprehensive_header. All LP-grounded
+    # prompt construction (LP-1 diagnostic context, LP-2 wrong-model, LP-2b
+    # RAG, LP-3 per-level six-step, LP-Multi per-concept mini-replies) lives
+    # in src/orchestrator/enhanced_personalized_generator.py:_build_enhanced_prompt
+    # and pulls every field it needs from student_state['lp_diagnostic'] (the
+    # `diag` dict assigned to student_state below). The INLINE LP RUBRIC
+    # rendering instruction is added inside the generator's LP-1 section so
+    # the prompt has a single, coherent LP teaching structure (not two
+    # competing ones — the duplication was confusing the LLM into honoring
+    # neither). Fields the generator reads from diag: current_lp_level,
+    # target_lp_level, wrong_model_id/description/origin, matched_signal,
+    # expert_benchmark_key_ideas, lp_rubric_current, lp_rubric_target,
+    # lp_sub_criteria, plateau_flag, plateau_intervention,
+    # diagnostic_confidence, rag_top_wrong_models, rubric_grade.
 
-    # Per-concept "operative step" — the SINGLE Java mechanism name the L3
-    # section must explicitly use. Pulled from each concept's L3 rubric.
-    # Without naming this step the L3 explanation slides into narration
-    # ("Java tries to call .toUpperCase()") instead of mechanism naming
-    # ("Java DEREFERENCES the null reference").
-    _OPERATIVE_STEP = {
-        "null_pointer":        "DEREFERENCE — Java follows a reference's address to find the object; null has no address to follow.",
-        "string_equality":     "ADDRESS COMPARISON — == compares the two reference addresses, NOT the character content.",
-        "integer_division":    "INTEGER TRUNCATION — int / int returns int; the fractional part is dropped, not rounded.",
-        "array_index":         "BOUNDS CHECK — JVM verifies index < length BEFORE the read; out-of-bounds throws without touching memory.",
-        "infinite_loop":       "CONDITION RE-EVALUATION — the while condition is checked BEFORE EACH iteration; nothing in the body magically updates the loop variable.",
-        "variable_scope":      "BLOCK-SCOPE LIFETIME — a variable declared inside { } only exists between those braces; the compiler enforces this.",
-        "type_mismatch":       "STATIC TYPE CHECK — types are checked at COMPILE TIME; int + String has no implicit conversion in Java.",
-        "assignment_vs_compare":"ASSIGNMENT RETURNS A VALUE — = assigns AND returns the assigned value; == compares and returns boolean.",
-        "scanner_buffer":      "LEFTOVER NEWLINE — nextInt() reads digits but leaves the \\n in the buffer; the next nextLine() consumes that leftover.",
-        "missing_return":      "STATIC FLOW ANALYSIS — the compiler enumerates every path through the method; any path without a return is a compile error.",
-        "array_not_allocated": "DECLARATION VS ALLOCATION — int[] arr; reserves a reference slot holding null; new int[5] allocates the actual heap array.",
-        "boolean_operators":   "SHORT-CIRCUIT EVALUATION — && stops at the first false, || stops at the first true; operand order matters.",
-        "sentinel_loop":       "PRIMING READ — the condition needs a real value before the first check; that requires a read BEFORE the loop.",
-        "unreachable_code":    "FLOW TERMINATOR — return/break/throw end the path; statements after them are unreachable and rejected at compile time.",
-        "string_immutability": "RETURN-NEW vs MUTATE — String methods return a NEW String object; the original is unchanged.",
-        "no_default_constructor":"IMPLICIT-CONSTRUCTOR SUPPRESSION — defining ANY constructor removes the auto-generated no-arg one.",
-        "static_vs_instance":  "STATIC CONTEXT HAS NO 'this' — static methods can't reference instance fields because no specific object exists at the call site.",
-        "foreach_no_modify":   "VALUE COPY IN FOR-EACH — the loop variable is a COPY of the array element; mutating the copy doesn't mutate the array.",
-        "overloading":         "COMPILE-TIME RESOLUTION — Java picks the most specific overload based on ARGUMENT types, not return type, at compile time.",
-        "generics_primitives": "TYPE ERASURE — generics use Object at runtime; primitives aren't objects, so ArrayList<int> can't compile.",
-    }
-    operative_step = _OPERATIVE_STEP.get(
-        (diag or {}).get("concept", ""),
-        "the operative Java mechanism for this concept (name it explicitly)"
-    )
-
+    # comprehensive_header retired (commit history: 8c88a37 added it,
+    # 4d87f99 made it the only mode, today's commit reverts it once the
+    # generator's _build_enhanced_prompt was confirmed to cover the same
+    # ground via LP-1/LP-2/LP-2b/LP-3/LP-Multi/PROBE MODE sections).
     comprehensive_header = ""
-    if stage_trigger:
-        wb_block = ""
-        if wm_id and wm_desc:
-            wb_block = (
-                "MATCHED WRONG BELIEF (address THIS ONE, never the RAG "
-                "candidates):\n"
-                f"  id:     {wm_id}\n"
-                f"  belief: {wm_desc}\n"
-                f"  origin: {wm_origin}\n\n"
-            )
-        student_belief_quoted = (state.get("accumulated_belief") or "").strip()
-        comprehensive_header = (
-            "COMPREHENSIVE MODE — Learning Progression synthesis (NO multi-"
-            "probe; this is the ONE teaching turn).\n"
-            f"Student is at {cur_lvl}, target {tgt_lvl}.\n\n"
-            f"STUDENT WROTE (verbatim, you must QUOTE FROM THIS in section 1 "
-            f"and in the misconception section):\n  \"{student_belief_quoted}\"\n\n"
-            f"{wb_block}"
-            f"OPERATIVE MECHANISM (you MUST name this exact concept in "
-            f"section 3, not just narrate around it):\n  {operative_step}\n\n"
-            "Produce a reply that EXPLICITLY walks the Learning Progression "
-            "from L1 to L4 — SIX sections, in this exact order, with these "
-            "exact friendly sub-headings (the student never sees L1/L2/L3/L4 "
-            "labels but you must follow the progression):\n\n"
-            "  ### What you noticed\n"
-            "    (L1 — symptom layer) Confirm in ONE sentence what the "
-            "    program did or didn't do. QUOTE a phrase from the student's "
-            "    verbatim text above. Do NOT just say 'that's correct'; "
-            "    confirm-by-quoting.\n\n"
-            "  ### The rule\n"
-            "    (L2 — rule layer) State the Java rule in ONE plain "
-            "    sentence. No mechanism yet — the next section is for that.\n\n"
-            "  ### What Java actually does, step by step\n"
-            "    (L3 — mechanism layer, the CORE) NAME the operative "
-            "    mechanism above EXPLICITLY in the first sentence (e.g. "
-            "    \"The operative step is DEREFERENCE — ...\"). Then walk "
-            "    through the execution at that step in 3-6 numbered lines, "
-            "    naming stack/heap/reference/address/compile-time/runtime "
-            "    as relevant. Include a small ASCII memory diagram for any "
-            "    concept involving references, allocation, or dereferencing "
-            "    (null_pointer, string_equality, array_not_allocated, "
-            "    static_vs_instance, foreach_no_modify). Anchor to the "
-            f"    rubric's key ideas: {benchmark}\n\n"
-            "  ### Where else this shows up\n"
-            "    (L4 — generalisation layer — REQUIRED, do NOT skip).\n"
-            "    State the UNDERLYING PRINCIPLE in one sentence, then name "
-            "    ONE other Java situation where the same operative mechanism "
-            "    fires. This section is what separates 'the student passed "
-            "    this quiz' from 'the student can recognise this in any "
-            "    code'. If you find yourself wanting to stop after section "
-            "    3, you are NOT done — write this section.\n\n"
-            "  ### The misconception we just untangled\n"
-            "    Skip ENTIRELY if no specific wrong belief was matched "
-            "    above. Otherwise: QUOTE the student's exact imprecise "
-            "    phrase from the verbatim text (look for the phrase that "
-            "    matches the matched wrong-belief's intuition) and contrast "
-            "    it with the corrected mechanism in ONE sentence each. "
-            "    Format: \"You wrote *'...'* — precise version: ...\". Do "
-            "    NOT paraphrase the student; quote them.\n\n"
-            "  ### Predict this\n"
-            "    ONE concrete predict-the-output question on a code variant "
-            "    that would ONLY be answered correctly by a student who "
-            "    grasped the operative mechanism. Bonus if the variant "
-            "    distinguishes a near-miss (e.g. for null_pointer: empty "
-            "    string vs null; for integer_division: 5/2 vs 5.0/2; for "
-            "    array_index: arr[arr.length-1] vs arr[arr.length]).\n\n"
-            "HARD RULES:\n"
-            "  - You MUST emit all six sub-headings (skip ONLY the "
-            "    misconception section if no wrong belief matched).\n"
-            "  - L4 section MUST be present — if your draft ends at L3, "
-            "    add L4 before sending.\n"
-            "  - L3 MUST name the OPERATIVE MECHANISM above explicitly.\n"
-            "  - Misconception section MUST quote the student verbatim.\n"
-            "  - NEVER emit per-candidate \"On null_pointer:\" blocks — "
-            "    one wrong-belief section, addressing one belief.\n"
-            "  - NEVER repeat the L1/L2/L3/L4 labels in the student-visible "
-            "    text. Use the friendly sub-headings exactly as given.\n"
-            "  - Section length: L1 = 1 sentence; L2 = 1 sentence; L3 = "
-            "    4-8 lines + optional ASCII diagram; L4 = 2-3 sentences; "
-            "    misconception = 2 sentences; predict-this = 1 question.\n"
-            "  - No praise filler. No \"great question\", \"let's dive in\", "
-            "    \"let's break this down\", \"that's correct\" as a "
-            "    standalone opener.\n\n"
-        )
+    kg_context = _kg_context_block(
+        concept=q["concept"], code=q["code"], error_message="")
+    mastery_line = (
+        f"DINA mastery on '{q['concept']}': {dina_now:.2f}  |  "
+        f"BKT: {bkt_now:.2f}  |  RL-recommended intervention: {rl_action}\n\n"
+    )
     tutor_input = (
         f"{comprehensive_header}"
+        f"{kg_context}"
+        f"{mastery_line}"
         f"Student was given this quiz:\n"
         f"Q: {q['question']}\n\n"
         f"Code:\n```java\n{q['code']}\n```\n\n"
@@ -1125,15 +1709,37 @@ def _stream_teach(state, diag, history):
     if done["err"]:
         history[-1]["content"] = f"❌ Generation failed: {done['err']}"
     else:
-        history[-1]["content"] = buffer["text"] or "(empty response)"
+        final_text = buffer["text"] or "(empty response)"
+        # Post-generation guardrail — catch fabricated misconception
+        # quotes the LLM still produces despite the prompt rule.
+        final_text = _sanitise_misconception_quote(
+            final_text, state.get("accumulated_belief") or ""
+        )
+        history[-1]["content"] = final_text
 
-    # Multi-turn probe ladder is OFF: keep force_comprehensive=True for
-    # every subsequent follow-up too, so the student gets a fresh
-    # LP-shaped synthesis on each turn (no probe ping-pong). The
-    # accumulated_belief grows across turns so each synthesis takes the
-    # full conversation into account.
-    state["force_comprehensive"] = True
-    state["stage_trigger"]       = "force"
+    # Multi-probe RE-ENABLED. After a comprehensive synthesis, the next
+    # follow-up turn re-runs the diagnostic on the accumulated belief and
+    # may either probe again (if confidence dropped) or land in another
+    # synthesis. Don't pin force_comprehensive=True any more — let
+    # _stage_reached decide each turn from real diagnostic confidence.
+    state["force_comprehensive"] = False
+    state["stage_trigger"]       = None
+    # Mark that the next student message is a free-form follow-up, not a
+    # probe answer. on_probe_answer reads this and routes to
+    # _stream_followup (which doesn't re-diagnose against the LP rubric
+    # and doesn't re-fire the probe ladder — it just answers the question
+    # using the chat history as context).
+    state["awaiting_followup"] = True
+    # Stash the diagnostic so _stream_followup can reference the wrong-model
+    # + LP level without re-running diagnose() on every follow-up turn.
+    state["last_diag"] = diag
+
+    # Feed this turn's outcome into the dynamic KG updater so prerequisite
+    # strengths, misconception frequencies, and intervention effectiveness
+    # accumulate across sessions.
+    _dynamic_kg_learn("chat_user", q["concept"], correct,
+                      intervention_type=chosen)
+
     enriched_final = _status_pill_with_diag(state, diag, status_template)
     yield (history,
            gr.update(value=enriched_final, visible=True),
@@ -1160,24 +1766,331 @@ def on_reveal_answer(history, state):
     yield from _stream_teach(state, diag, history)
 
 
+_FOLLOWUP_OLLAMA_URL = "http://localhost:11434/api/generate"
+
+# Map every RL teaching-agent action to a follow-up-specific reply shape.
+# These are the actions in TeachingRLAgent.actions (0-9). The trained
+# policy picks one per turn; the matching instruction here shapes the
+# follow-up reply so the policy's decision affects what the student
+# actually sees, not just an internal log line.
+_RL_ACTION_SHAPING = {
+    "visual_explanation":  ("Include a small ASCII diagram or visual "
+                             "layout (memory cells, stack/heap, control "
+                             "flow) so the answer is partly visual."),
+    "guided_practice":     ("Walk through the answer in clearly numbered "
+                             "1-2-3 steps; pause after the key step with "
+                             "\"so far, are you with me?\"-style framing."),
+    "interactive_exercise":("Ask the student to predict / trace ONE small "
+                             "concrete thing before giving the full answer "
+                             "— turn it into a mini-exchange."),
+    "conceptual_deepdive": ("Go deeper on the WHY: name the underlying "
+                             "Java language design principle and connect "
+                             "it to the broader concept family."),
+    "motivational_support":("Open with one sentence acknowledging the "
+                             "specific thing the student got right in "
+                             "the prior turn, then answer the question."),
+    "worked_example":      ("Show a short Java code snippet (5-10 lines) "
+                             "that directly answers the question; "
+                             "annotate the load-bearing line."),
+    "peer_comparison":     ("Frame as \"a common student belief is X, but "
+                             "actually Y\" — name the misconception, then "
+                             "correct it."),
+    "spaced_review":       ("Briefly recap the key mechanism from the "
+                             "previous turn (one sentence) before "
+                             "answering, so the student's working memory "
+                             "is loaded."),
+    "challenge_problem":   ("After answering the question in 2 sentences, "
+                             "raise the bar with one harder variant or "
+                             "edge case for the student to think about."),
+    "error_analysis":      ("Address the question by walking through what "
+                             "would go wrong if the student's intuition "
+                             "were applied — then show the correct path."),
+}
+
+
+def _stream_followup(state, history, question):
+    """Stream a focused reply to a free-form follow-up question after the
+    comprehensive teach turn has fired. The reply is shaped by:
+
+      * the trained RL teaching agent's chosen action (10 actions; the
+        policy was trained over 8138 prior teaching steps),
+      * current DINA + BKT mastery (re-fetched per turn — they don't
+        change on a follow-up but the values shape tone/depth),
+      * the LP diagnostic stashed from the previous teach turn (current
+        level, target level, matched wrong-model, target sub-criteria —
+        no re-diagnosis runs on a follow-up because the rubric is for
+        graded answers, not free-form questions),
+      * pedagogical KG misconceptions + CSE-KG related concepts via
+        the registry's _kg_context_block helper.
+
+    Output goes through a direct Ollama stream (not the EnhancedPersonal-
+    izedGenerator's heavy LP-3 template — that fires once per teach turn,
+    not per follow-up).
+    """
+    import json, threading, time as _time
+    import requests as _req
+    import torch as _torch
+
+    q = QUIZ_BY_ID.get(state.get("quiz_id")) or {}
+    concept = q.get("concept", "this concept")
+    friendly = _friendly_concept(concept)
+    code = q.get("code", "")
+    diag = state.get("last_diag") or {}
+    wm_id   = diag.get("wrong_model_id") or ""
+    wm_desc = diag.get("wrong_model_description") or ""
+    cur_lvl = diag.get("current_lp_level") or "L1"
+    tgt_lvl = diag.get("target_lp_level") or "L3"
+    sub_target = (diag.get("lp_sub_criteria") or {}).get(tgt_lvl) or []
+    diag_conf  = float(diag.get("diagnostic_confidence", 0.0))
+    benchmark = "; ".join(diag.get("expert_benchmark_key_ideas") or [])
+
+    # Per-turn mastery refresh (mastery may have updated since the teach
+    # turn if any quiz answers happened in between — defensive read).
+    try:
+        dina_dict = REG.dina.get_mastery("chat_user", concept) or {}
+        dina_now = float(dina_dict.get(concept, 0.30))
+    except Exception:
+        dina_now = 0.30
+    try:
+        bkt_state = REG.bkt.get_student_knowledge_state("chat_user") or {}
+        bkt_now = float(bkt_state.get(concept, dina_now))
+    except Exception:
+        bkt_now = dina_now
+
+    # RL action selection — use HVSAE latent of the follow-up question
+    # text so the policy sees this turn's content, not a stale latent.
+    try:
+        latent_for_rl, _mp = _hvsae_forward(question)
+        latent_for_rl = latent_for_rl.squeeze(0)
+    except Exception:
+        latent_for_rl = None
+    # Emotion proxy: low mastery + a "why doesn't this work" style
+    # question implies frustration; high mastery + a probing question
+    # implies engagement.
+    emotion = "confused" if dina_now < 0.4 else "engaged"
+
+    # CLOSE the previous RL step (the teach turn's action). engagement_signal
+    # is high here because the student took the trouble to ask a follow-up
+    # rather than abandoning the chat.
+    _curr_state_vec_fu = None
+    try:
+        if REG.teaching_rl_agent is not None and latent_for_rl is not None:
+            _sd_tmp = {"student_id": "chat_user",
+                        "time_stuck": 0.0, "action_sequence": []}
+            _an_tmp = {
+                "encoding":   {"latent": latent_for_rl.detach().view(-1).float()},
+                "cognitive":  {"knowledge_gaps":
+                                [{"concept": concept, "mastery": dina_now}]},
+                "behavioral": {"emotional_state": emotion},
+                "psychological": {"personality": {}},
+                "history":    {"interventions": []},
+            }
+            _curr_state_vec_fu = REG.teaching_rl_agent.get_state_representation(
+                _sd_tmp, _an_tmp)
+    except Exception:
+        _curr_state_vec_fu = None
+    _rl_finalise_previous(state, current_dina=dina_now,
+                          current_emotion=emotion, current_lp=cur_lvl,
+                          current_state_vec=_curr_state_vec_fu,
+                          engagement_signal=0.85)
+
+    rl_action, rl_action_id, rl_q, rl_state_vec = _rl_recommended_intervention(
+        "chat_user", concept,
+        mastery=dina_now, emotion=emotion, lp_level=cur_lvl,
+        hvsae_latent=latent_for_rl,
+    )
+    action_shape = _RL_ACTION_SHAPING.get(
+        rl_action,
+        "Reply directly to the question in 3-6 sentences.")
+    # Stash for the NEXT turn's _rl_finalise_previous.
+    state["pending_rl"] = {
+        "state_vec": rl_state_vec, "action_id": rl_action_id,
+        "dina": dina_now, "emotion": emotion, "lp_level": cur_lvl,
+    }
+    state["last_rl_action"] = rl_action
+    state["last_rl_q"]      = rl_q
+    print(f"[CPAL/Followup] concept={concept} lp={cur_lvl}->{tgt_lvl} "
+          f"dina={dina_now:.2f} bkt={bkt_now:.2f} emotion={emotion} "
+          f"rl_action={rl_action} q={rl_q:+.3f}", flush=True)
+
+    # KG-grounded context (pedagogical KG + CSE-KG + error mapper).
+    kg_context = _kg_context_block(
+        concept=concept, code=code, error_message="")
+
+    # Trim chat history to the most recent exchanges so the prompt stays
+    # within the model's effective window. Strip the user_bubble markdown
+    # framing so the model sees clean conversational text.
+    convo_lines = []
+    for msg in (history or [])[-10:]:
+        role = msg.get("role", "")
+        content = (msg.get("content") or "").strip()
+        if not content:
+            continue
+        if role == "user" and "**My reasoning:**" in content:
+            content = content.split("**My reasoning:**", 1)[1].strip()
+        convo_lines.append(
+            f"{'Student' if role == 'user' else 'Tutor'}: {content[:1200]}")
+    convo_text = "\n\n".join(convo_lines)
+
+    wb_line = ""
+    if wm_id and wm_desc:
+        wb_line = (
+            f"Earlier diagnosed wrong-belief (refer to it only if the "
+            f"follow-up relates): id={wm_id} — {wm_desc[:160]}\n")
+    sub_line = ""
+    if sub_target:
+        sub_line = (
+            f"Target-level ({tgt_lvl}) facets the student still needs to "
+            f"demonstrate: " + "; ".join(c.strip().rstrip(".")
+                                          for c in sub_target[:4]) + "\n")
+    conf_line = ""
+    if diag_conf:
+        hedge = ("  (LOW diagnostic confidence — soften assertions; "
+                  "invite the student to push back)") if diag_conf < 0.5 else ""
+        conf_line = f"Diagnostic confidence: {diag_conf:.2f}{hedge}\n"
+
+    followup_prompt = (
+        f"You are the Java tutor in an ongoing conversation about "
+        f"'{friendly}'. The student already received the comprehensive "
+        f"teach reply and is now asking a follow-up.\n\n"
+        f"=== STUDENT STATE (use to shape depth/tone, don't recite) ===\n"
+        f"LP level: {cur_lvl} → target {tgt_lvl}\n"
+        f"DINA mastery on '{concept}': {dina_now:.2f}  |  BKT: {bkt_now:.2f}\n"
+        f"{conf_line}"
+        f"{wb_line}"
+        f"{sub_line}"
+        + (f"L3 expert benchmark (anchor): {benchmark}\n" if benchmark else "")
+        + (f"\n{kg_context}" if kg_context else "")
+        + f"\n=== RL TEACHING-AGENT DECISION (FOLLOW THIS SHAPE) ===\n"
+        f"Action chosen by the trained RL policy: **{rl_action}**\n"
+        f"Reply shape required by this action: {action_shape}\n\n"
+        f"=== RECENT CONVERSATION (most recent at the bottom) ===\n"
+        f"{convo_text}\n\n"
+        f"=== STUDENT'S NEW FOLLOW-UP MESSAGE ===\n"
+        f"{question}\n\n"
+        f"=== HOW TO REPLY ===\n"
+        f"- Answer the follow-up directly. Do NOT restart the lesson.\n"
+        f"- Honor the RL-chosen reply shape above.\n"
+        f"- Match the depth of the question — short questions get short "
+        f"answers (2-4 sentences); 'show me' questions get a small code "
+        f"snippet; 'why' questions get the underlying reason.\n"
+        f"- If the question is off-topic, gently redirect back to "
+        f"'{friendly}' in one sentence then answer.\n"
+        f"- If the student's mastery is below 0.40, prefer one concrete "
+        f"example over abstract principle. Above 0.70, you can name the "
+        f"design rationale and skip the basics.\n"
+    )
+
+    # Push user bubble + thinking placeholder
+    thinking = ('<span style="color:#64748b; font-style:italic;">'
+                'Tutor is thinking…</span>')
+    history = list(history) + [
+        {"role": "user",       "content": question},
+        {"role": "assistant",  "content": thinking},
+    ]
+    enriched = _status_pill_with_diag(
+        state, state.get("last_diag") or {},
+        state.get("status_template", "") + "  ·  *tutor is typing…*",
+    )
+    yield (history,
+           gr.update(value=enriched, visible=True),
+           gr.update(visible=True), "", "", state)
+
+    # Stream via direct Ollama call (skip EnhancedPersonalizedGenerator's
+    # heavy LP-3 template — this is post-teach Q&A, not a teach turn).
+    buf = {"text": "", "err": None, "done": False}
+    model = (os.environ.get("CPAL_OLLAMA_MODEL")
+             or getattr(GEN, "_ollama_model", None)
+             or "llama3.1:8b")
+
+    def _runner():
+        try:
+            r = _req.post(
+                _FOLLOWUP_OLLAMA_URL,
+                json={"model": model, "prompt": followup_prompt,
+                       "stream": True,
+                       "options": {"temperature": 0.6,
+                                    "num_predict": 600}},
+                stream=True, timeout=120,
+            )
+            r.raise_for_status()
+            for line in r.iter_lines(decode_unicode=True):
+                if not line:
+                    continue
+                try:
+                    chunk = json.loads(line)
+                except Exception:
+                    continue
+                piece = chunk.get("response", "")
+                if piece:
+                    buf["text"] += piece
+                if chunk.get("done"):
+                    break
+        except Exception as e:
+            buf["err"] = str(e)
+        finally:
+            buf["done"] = True
+
+    t = threading.Thread(target=_runner, daemon=True)
+    t.start()
+    last_len = 0
+    while not buf["done"]:
+        _time.sleep(0.15)
+        if len(buf["text"]) > last_len:
+            last_len = len(buf["text"])
+            history[-1]["content"] = buf["text"]
+            yield (history,
+                   gr.update(value=enriched, visible=True),
+                   gr.update(visible=True), "", "", state)
+
+    if buf["err"]:
+        history[-1]["content"] = f"❌ Follow-up generation failed: {buf['err']}"
+    else:
+        history[-1]["content"] = buf["text"] or "(empty response)"
+
+    # Chain: the next student message is also a follow-up.
+    state["awaiting_followup"] = True
+    final_enriched = _status_pill_with_diag(
+        state, state.get("last_diag") or {}, state.get("status_template", ""))
+    yield (history,
+           gr.update(value=final_enriched, visible=True),
+           gr.update(visible=True), "", "", state)
+
+
 def on_probe_answer(probe_answer, history, state):
-    """Multi-turn probe ladder — the student answered a Quick check. Append
-    to the accumulated belief, re-diagnose, then either probe again (up to
-    CHAT_MAX_PROBES) or stream the final tutor reply with the whole trail."""
+    """Two-mode handler:
+      (a) If state.awaiting_followup is True (set after a teach turn), the
+          student's message is treated as a free-form follow-up — route to
+          _stream_followup which answers the question using chat history
+          as context (no LP re-diagnosis, no probe ladder).
+      (b) Otherwise the student is in the multi-turn probe ladder and the
+          message is graded as a Quick-check answer — re-diagnose, then
+          either probe again or fire the teach reply.
+    """
     if not state or not state.get("quiz_id"):
         yield (history, gr.update(value="(no active question)", visible=True),
                gr.update(visible=False), "", "", state)
         return
     ans = (probe_answer or "").strip()
     if not ans:
-        yield (history, gr.update(value="⚠️ Write your answer to the quick check first.",
+        yield (history, gr.update(value="⚠️ Write a message before sending.",
                                    visible=True),
                gr.update(visible=True),    # keep panel visible
-               "",                          # don't overwrite the question
+               "",                          # don't overwrite
                "",                          # clear input
                state)
         return
 
+    # Mode (a) — free-form follow-up after the comprehensive teach turn.
+    if state.get("awaiting_followup"):
+        # Reset the flag immediately so a follow-up that itself triggers
+        # another follow-up doesn't recurse on stale state. _stream_followup
+        # sets awaiting_followup=True again at the end of a successful turn.
+        state["awaiting_followup"] = False
+        yield from _stream_followup(state, history, ans)
+        return
+
+    # Mode (b) — Quick-check answer in the probe ladder. Existing behavior.
     # Append the probe answer to accumulated belief.
     state["accumulated_belief"] = (
         (state["accumulated_belief"] + "  " + ans).strip()
@@ -1235,6 +2148,7 @@ def clear_chat():
         "force_comprehensive": False, "stage_trigger": None,
         "concepts_done": [], "current_focus_concept": None,
         "_pivot_depth": 0, "bridge_message": None,
+        "awaiting_followup": False, "last_diag": None,
     }
     return ([], gr.update(value="", visible=False),
             gr.update(visible=False), "", "", empty_state)
@@ -1372,25 +2286,27 @@ def build_app():
         # internals (raw LP, conf) sit inside the collapsible details
         # panel below so engineers/researchers can still inspect them.
         with gr.Group(visible=False) as probe_panel:
-            # Vestigial markdown slot kept invisible so handlers can still
-            # return the 6-tuple unchanged (avoids rewiring every event).
-            probe_question_md = gr.Markdown("", visible=False)
+            # Multi-probe RE-ENABLED — probe_question_md shows the current
+            # Quick-check question above the input. Handlers fill it via
+            # gr.update(value=..., visible=True) when a probe fires.
+            probe_question_md = gr.Markdown("", visible=True)
             probe_input = gr.Textbox(
                 label="Ask the tutor a follow-up",
                 lines=3,
-                placeholder=("Ask anything — \"why does Java do that?\", "
+                placeholder=("Answer the Quick-check above, or ask anything — "
+                             "\"why does Java do that?\", "
                              "\"can you give another example?\", "
                              "paste more code, etc."),
             )
             with gr.Row():
                 probe_submit_btn = gr.Button("Send  →", variant="primary",
                                               scale=4)
-                # `reveal_btn` is kept as a hidden no-op so its `.click()`
-                # wire below stays valid; multi-probe is OFF and the first
-                # turn already goes straight to comprehensive, so the
-                # student no longer needs an escape hatch.
+                # Multi-probe back on — reveal_btn lets the student jump
+                # straight to the comprehensive synthesis (skip remaining
+                # Quick-checks). Sets force_comprehensive=True and routes
+                # through _decide_probe_or_teach → teach branch.
                 reveal_btn = gr.Button("Reveal full answer", scale=1,
-                                       visible=False)
+                                       visible=True)
 
         chatbot = gr.Chatbot(
             label="Your tutor",
@@ -1401,17 +2317,18 @@ def build_app():
         )
 
         # Ongoing-chat state — accumulated belief grows with every turn;
-        # probed_criteria/probe_count are vestigial (multi-probe is OFF);
-        # force_comprehensive=True forces every turn to comprehensive.
+        # multi-probe RE-ENABLED so probed_criteria/probe_count are live;
+        # force_comprehensive defaults False (each turn re-decides).
         probe_state = gr.State({
             "quiz_id": None, "picked_option_full": None, "picked_letter": None,
             "picked_text": None, "is_correct": False, "status_template": "",
             "accumulated_belief": "", "probe_count": 0, "probed_criteria": [],
             "user_bubble": "",
             "pending_probe_text": None, "pending_probe_reason": None,
-            "force_comprehensive": True, "stage_trigger": "force",
+            "force_comprehensive": False, "stage_trigger": None,
             "concepts_done": [], "current_focus_concept": None,
             "_pivot_depth": 0, "bridge_message": None,
+            "awaiting_followup": False, "last_diag": None,
         })
 
         # Populate quiz card on load + on dropdown change.

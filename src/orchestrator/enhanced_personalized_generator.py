@@ -903,6 +903,76 @@ class EnhancedPersonalizedGenerator:
                     f"overridden upstream to {lp_diag.get('plateau_intervention', 'trace_scaffold')}."
                 )
 
+            # ----- LP rubric prose (current + target levels) -----
+            # The catalogue's rubric text for the student's CURRENT and
+            # TARGET levels — surfaced here so the LLM has the exact prose
+            # to render in the INLINE LP RUBRIC BLOCK below. Without this,
+            # the LLM only sees logical_step booleans and has to invent
+            # rubric prose, which drifts from the catalogue's wording.
+            rubric_current = (lp_diag.get('lp_rubric_current') or '').strip()
+            rubric_target  = (lp_diag.get('lp_rubric_target')  or '').strip()
+            if rubric_current or rubric_target:
+                prompt_parts.append(
+                    "LP rubric prose (verbatim from catalogue — use these "
+                    "exact sentences in the INLINE LP RUBRIC BLOCK below):"
+                )
+                if rubric_current:
+                    prompt_parts.append(
+                        f"  Current-level ({lp_lvl}) rubric: {rubric_current}")
+                if rubric_target:
+                    prompt_parts.append(
+                        f"  Target-level ({target}) rubric: {rubric_target}")
+            # Optional: target-level sub-criteria (when the diagnostician
+            # decomposed the target rubric into discrete facets).
+            sub_target = (lp_diag.get('lp_sub_criteria') or {}).get(target) or []
+            if sub_target:
+                prompt_parts.append(
+                    f"  Target-level ({target}) sub-criteria to demonstrate:")
+                for c in sub_target[:6]:
+                    prompt_parts.append(f"    - {c}")
+            # Diagnostic-confidence hedge cue (so the model softens tone
+            # when our LP-level estimate is shaky).
+            diag_conf = float(lp_diag.get('diagnostic_confidence', 0.0))
+            if diag_conf and diag_conf < 0.5:
+                prompt_parts.append(
+                    f"  Diagnostic confidence: {diag_conf:.2f}  (LOW — hedge "
+                    f"tone slightly; ask the student to confirm rather than "
+                    f"assuming they're stuck at {lp_lvl}).")
+
+            # ----- INLINE LP RUBRIC RENDERING (student-visible) -----
+            # The student needs to see WHERE they are on the LP ladder for
+            # this concept and WHAT the next level requires. This block
+            # tells the LLM to render a blockquote near the top of its
+            # reply using the rubric prose above. Skipped silently when no
+            # rubric text is available.
+            if rubric_current or rubric_target:
+                bullet_lines = []
+                if rubric_current:
+                    bullet_lines.append(
+                        f"  > **Now:** {rubric_current}")
+                if rubric_target:
+                    bullet_lines.append(
+                        f"  > **Climbing toward:** {rubric_target}")
+                if sub_target:
+                    bullet_lines.append(
+                        "  > **Next-step facets:** "
+                        + "; ".join(c.strip().rstrip(".")
+                                     for c in sub_target[:3]))
+                rendered = "\n".join(bullet_lines)
+                prompt_parts.append(
+                    "\nINLINE LP RUBRIC BLOCK (REQUIRED — render this "
+                    "blockquote AT THE TOP of your reply, before any other "
+                    "section, so the student sees where they are on the "
+                    "learning ladder for this concept). Use this EXACT "
+                    "format, do NOT add the L1/L2/L3/L4 label, do NOT "
+                    "paraphrase the rubric prose:\n\n"
+                    "  > **Where you are on this concept**\n"
+                    f"{rendered}\n\n"
+                    "After the blockquote, continue with your normal "
+                    "tutoring response (the LP-3 six-step instruction "
+                    "below)."
+                )
+
         # ===== LP-2: WRONG MENTAL MODEL =====
         # If Stage 1 identified a specific wrong model from the
         # mental-models catalogue, surface the exact belief + origin +

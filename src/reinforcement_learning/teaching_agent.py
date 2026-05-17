@@ -196,12 +196,20 @@ class TeachingRLAgent:
         
         # Sample batch from memory
         batch = random.sample(self.memory, self.batch_size)
-        
-        states = torch.stack([exp[0] for exp in batch])
-        actions = torch.tensor([exp[1] for exp in batch], dtype=torch.long)
-        rewards = torch.tensor([exp[2] for exp in batch], dtype=torch.float)
-        next_states = torch.stack([exp[3] for exp in batch])
-        dones = torch.tensor([exp[4] for exp in batch], dtype=torch.float)
+
+        # Defensive coerce: replay buffer loaded from checkpoint stores
+        # state vectors as numpy.ndarray, while live chat-app stores
+        # store them as torch.Tensor. torch.stack() requires uniform
+        # type, so coerce both to float tensors here.
+        def _as_tensor(x):
+            if isinstance(x, torch.Tensor):
+                return x.float()
+            return torch.as_tensor(x, dtype=torch.float)
+        states      = torch.stack([_as_tensor(exp[0]) for exp in batch])
+        actions     = torch.tensor([exp[1] for exp in batch], dtype=torch.long)
+        rewards     = torch.tensor([exp[2] for exp in batch], dtype=torch.float)
+        next_states = torch.stack([_as_tensor(exp[3]) for exp in batch])
+        dones       = torch.tensor([exp[4] for exp in batch], dtype=torch.float)
         
         # Current Q-values
         current_q_values = self.policy_net(states).gather(1, actions.unsqueeze(1))
