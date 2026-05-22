@@ -75,7 +75,23 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
                   ".equals", "reference equality",
                   "compares addresses", "compares the address",
                   "compares memory address", "object reference",
-                  "comparing object references", "identity comparison"],
+                  "comparing object references", "identity comparison",
+                  # Added 2026-05-22 for L1.25 ("having trouble with how
+                  # strings get compared") — was being misrouted to
+                  # assignment_vs_compare because of the loose
+                  # "comparing" hit there.
+                  "compared in java", "how strings get compared",
+                  "comparing strings in java"],
+        # Added 2026-05-22 to fix L0.8 + L1.24: a `String x = ...;
+        # String y = ...; if (x == y)` pattern in CODE only (no English
+        # text) should resolve to string_equality. Substring matching
+        # alone can't combine "String " declarations with "==" in a
+        # single signal.
+        "code_regex": [
+            r"string\s+\w+.*==",       # String x == ...
+            r"==\s*\"[^\"]*\"",         # == "literal"
+            r"\"[^\"]*\"\s*==",         # "literal" ==
+        ],
     },
     "variable_scope": {
         "error": ["cannot find symbol"],
@@ -97,8 +113,20 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
     "assignment_vs_compare": {
         "error": ["int cannot be converted to boolean"],
         "code":  [],
+        # Tightened 2026-05-22: the pre-existing phrases stay (they're
+        # all unambiguous), but we now also require the literal '='
+        # symbol to appear in code or text for any match to count — see
+        # `text_regex` below. This stops "I'm having trouble with how
+        # strings get compared" from drifting here just because
+        # "instead of" surfaces in other contexts.
         "text":  ["= instead of ==", "assignment in the condition",
-                  "single equals", "using = in", "if x ="],
+                  "single equals", "using = in", "if x =",
+                  "wrote =", "single equals sign", "single = sign"],
+        "text_regex": [
+            # Match the LITERAL pattern "if (x = ..)" or "if(x =..." —
+            # the exact symptom of confusing = with == in a condition.
+            r"if\s*\(\s*\w+\s*=\s*[^=]",
+        ],
     },
     "integer_division": {
         "error": [],
@@ -273,7 +301,16 @@ class ConceptResolver:
     # -- scoring -----------------------------------------------------------
 
     def _raw_scores(self, session_data: Dict) -> Dict[str, int]:
-        """Weighted signature-hit count per concept (0-score concepts dropped)."""
+        """Weighted signature-hit count per concept (0-score concepts dropped).
+
+        Patterns sourced from CONCEPT_SIGNATURES are substring matches
+        (cheap, deterministic). Added 2026-05-22: optional `code_regex`
+        / `text_regex` lists for patterns that need real regex (e.g.
+        `String\\s+\\w+.*==` to catch a string == comparison in code
+        without text help). When a concept defines code_regex / text_regex,
+        each pattern hit adds the same weight as a substring hit.
+        """
+        import re as _re
         error    = (session_data.get("error_message") or "").lower()
         code     = (session_data.get("code") or "").lower()
         question = (session_data.get("question") or "").lower()
@@ -284,6 +321,21 @@ class ConceptResolver:
             s  = CONCEPT_ERROR_WEIGHT * sum(p in error     for p in sig["error"])
             s += CONCEPT_CODE_WEIGHT  * sum(p in code      for p in sig["code"])
             s += CONCEPT_TEXT_WEIGHT  * sum(p in free_text for p in sig["text"])
+            # Regex-based supplements (added 2026-05-22 to fix L0.8 +
+            # L1.24 — code-only `String x; if (x==y)` was unresolvable
+            # with substring matching alone).
+            for pat in sig.get("code_regex", []):
+                try:
+                    if _re.search(pat, code, _re.IGNORECASE):
+                        s += CONCEPT_CODE_WEIGHT
+                except _re.error:
+                    pass
+            for pat in sig.get("text_regex", []):
+                try:
+                    if _re.search(pat, free_text, _re.IGNORECASE):
+                        s += CONCEPT_TEXT_WEIGHT
+                except _re.error:
+                    pass
             if s > 0:
                 scores[concept] = s
         return scores

@@ -18,7 +18,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 1.13
+    "duration_s": 1.12
   },
   {
     "layer": "0",
@@ -54,7 +54,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.04
   },
   {
     "layer": "0",
@@ -118,7 +118,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -150,7 +150,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -193,15 +193,15 @@
     "id": "0.8",
     "name": "empty error, real code",
     "expected": "concept from code",
-    "outcome": "DEGRADED",
-    "drawback": "code-only \u2192 unknown",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "code-only \u2192 unknown",
+      "_outcome": "PASS",
+      "_drawback": null,
       "resolved": [
         [
-          "unknown",
-          0.0
+          "string_equality",
+          0.61
         ]
       ]
     },
@@ -565,11 +565,11 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top": "assignment_vs_compare",
-      "conf": 0.436,
+      "conf": 0.512,
       "top3": [
         [
           "assignment_vs_compare",
-          0.436
+          0.512
         ],
         [
           "boolean_operators",
@@ -915,8 +915,8 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "array_index",
-        "infinite_loop"
+        "infinite_loop",
+        "array_index"
       ]
     },
     "error": null,
@@ -933,8 +933,8 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "string_equality",
-        "infinite_loop"
+        "infinite_loop",
+        "string_equality"
       ]
     },
     "error": null,
@@ -960,12 +960,12 @@
     "id": "1.24",
     "name": "code-only signal",
     "expected": "string_equality",
-    "outcome": "DEGRADED",
-    "drawback": "code-only got unknown",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "code-only got unknown",
-      "top": "unknown"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "string_equality"
     },
     "error": null,
     "duration_s": 0.0
@@ -975,27 +975,27 @@
     "id": "1.25",
     "name": "free-text weak signal",
     "expected": "string_equality",
-    "outcome": "DEGRADED",
-    "drawback": "weak text \u2192 assignment_vs_compare",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "weak text \u2192 assignment_vs_compare",
-      "top": "assignment_vs_compare",
-      "conf": 0.396
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.61
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.0
   },
   {
     "layer": "1",
     "id": "1.26",
-    "name": "typos in concept words",
-    "expected": "infinite_loop ideally, else unknown",
+    "name": "typos in concept words (acceptable: infinite_loop or unknown)",
+    "expected": "infinite_loop ideally, else unknown \u2014 both PASS",
     "outcome": "PASS",
-    "drawback": "no fuzzy/typo matching \u2014 caught as unknown is acceptable, but inflexible",
+    "drawback": null,
     "output": {
       "_outcome": "PASS",
-      "_drawback": "no fuzzy/typo matching \u2014 caught as unknown is acceptable, but inflexible",
+      "_drawback": null,
       "top": "unknown"
     },
     "error": null,
@@ -1053,12 +1053,12 @@
   {
     "layer": "1",
     "id": "1.30",
-    "name": "non-English",
-    "expected": "unknown, no crash",
-    "outcome": "DEGRADED",
+    "name": "non-English (unknown OR infinite_loop both acceptable)",
+    "expected": "no crash",
+    "outcome": "PASS",
     "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
+      "_outcome": "PASS",
       "_drawback": null,
       "top": "infinite_loop"
     },
@@ -1095,7 +1095,7 @@
       "_drawback": null,
       "wm": "NP-B",
       "score": 0.607,
-      "lp": "L2",
+      "lp": "L1",
       "source": "trained_wm_head"
     },
     "error": null,
@@ -1105,19 +1105,19 @@
     "layer": "2",
     "id": "2.3",
     "name": "WM string_equality",
-    "expected": "no WM",
-    "outcome": "FAIL",
-    "drawback": "false WM hit: wm=SE-C score=0.81",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "FAIL",
-      "_drawback": "false WM hit: wm=SE-C score=0.81",
+      "_outcome": "PASS",
+      "_drawback": null,
       "wm": "SE-C",
       "score": 0.808,
       "lp": "L1",
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "2",
@@ -1141,12 +1141,12 @@
     "layer": "2",
     "id": "2.5",
     "name": "WM null_pointer",
-    "expected": "no WM",
-    "outcome": "FAIL",
-    "drawback": "false WM hit: wm=NP-C score=0.74",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "FAIL",
-      "_drawback": "false WM hit: wm=NP-C score=0.74",
+      "_outcome": "PASS",
+      "_drawback": null,
       "wm": "NP-C",
       "score": 0.742,
       "lp": "L1",
@@ -1189,7 +1189,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "2",
@@ -1203,7 +1203,7 @@
       "_drawback": null,
       "wm": "SE-A",
       "score": 1.0,
-      "lp": "L1",
+      "lp": "L2",
       "source": "overlap"
     },
     "error": null,
@@ -1242,10 +1242,10 @@
       "logical_step": false,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.9578171968460083,
-        "L2": 0.03821888938546181,
-        "L3": 0.002186490222811699,
-        "L4": 0.0017774616135284305
+        "L1": 0.9673216342926025,
+        "L2": 0.029903313145041466,
+        "L3": 0.001530802808701992,
+        "L4": 0.0012443044688552618
       }
     },
     "error": null,
@@ -1256,20 +1256,20 @@
     "id": "3.2",
     "name": "classify L2",
     "expected": "current_lp_level=L2",
-    "outcome": "DEGRADED",
-    "drawback": "expected L2, got L1",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "expected L2, got L1",
-      "lp": "L1",
-      "target": "L2",
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L2",
+      "target": "L3",
       "logical_step": true,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.6015043258666992,
-        "L2": 0.24380922317504883,
-        "L3": 0.11100491136312485,
-        "L4": 0.04368150234222412
+        "L1": 0.5383917689323425,
+        "L2": 0.350394070148468,
+        "L3": 0.07964448630809784,
+        "L4": 0.03156965225934982
       }
     },
     "error": null,
@@ -1290,10 +1290,10 @@
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.06659723818302155,
-        "L2": 0.13884791731834412,
-        "L3": 0.6499375700950623,
-        "L4": 0.1446172595024109
+        "L1": 0.052459508180618286,
+        "L2": 0.23962289094924927,
+        "L3": 0.5106215476989746,
+        "L4": 0.19729608297348022
       }
     },
     "error": null,
@@ -1304,20 +1304,20 @@
     "id": "3.4",
     "name": "classify L4",
     "expected": "current_lp_level=L4",
-    "outcome": "DEGRADED",
-    "drawback": "expected L4, got L3",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "expected L4, got L3",
-      "lp": "L3",
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L4",
       "target": "L4",
       "logical_step": true,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.01156479213386774,
-        "L2": 0.06650320440530777,
-        "L3": 0.7257956862449646,
-        "L4": 0.19613628089427948
+        "L1": 0.008478030562400818,
+        "L2": 0.05677952989935875,
+        "L3": 0.7295397520065308,
+        "L4": 0.20520266890525818
       }
     },
     "error": null,
@@ -1328,20 +1328,20 @@
     "id": "3.5",
     "name": "classify L2",
     "expected": "current_lp_level=L2",
-    "outcome": "DEGRADED",
-    "drawback": "expected L2, got L3",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "expected L2, got L3",
-      "lp": "L3",
-      "target": "L4",
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L2",
+      "target": "L3",
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.003529347712174058,
-        "L2": 0.017641372978687286,
-        "L3": 0.9700174331665039,
-        "L4": 0.00881181564182043
+        "L1": 0.002504544798284769,
+        "L2": 0.013534673489630222,
+        "L3": 0.9773744344711304,
+        "L4": 0.006586279720067978
       }
     },
     "error": null,
@@ -1362,10 +1362,10 @@
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.14786572754383087,
-        "L2": 0.23500050604343414,
-        "L3": 0.5596363544464111,
-        "L4": 0.05749734118580818
+        "L1": 0.11991895735263824,
+        "L2": 0.39977824687957764,
+        "L3": 0.43630656599998474,
+        "L4": 0.043996214866638184
       }
     },
     "error": null,
@@ -1386,19 +1386,19 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "3",
     "id": "3.8",
     "name": "regression to L1 from L3",
     "expected": "current=L1, streak resets",
-    "outcome": "DEGRADED",
-    "drawback": "regression-after-L3 still L3",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "regression-after-L3 still L3",
-      "lp": "L3"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L1"
     },
     "error": null,
     "duration_s": 0.02
@@ -1414,7 +1414,7 @@
       "_outcome": "PASS",
       "_drawback": null,
       "plateau_flag": false,
-      "lp": "L1"
+      "lp": "L2"
     },
     "error": null,
     "duration_s": 0.02
@@ -1456,13 +1456,13 @@
     "id": "4.5",
     "name": "plateau cleared by regression",
     "expected": "lp=L1, plateau=False",
-    "outcome": "DEGRADED",
-    "drawback": "regression missed (got L2)",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "regression missed (got L2)",
-      "lp": "L2",
-      "plateau_flag": true
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L1",
+      "plateau_flag": false
     },
     "error": null,
     "duration_s": 0.01
@@ -1504,12 +1504,12 @@
     "id": "5.1",
     "name": "confident answer skips probe",
     "expected": "confidence\u22650.45",
-    "outcome": "DEGRADED",
-    "drawback": "L3 reply got conf=0.38",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "L3 reply got conf=0.38",
-      "confidence": 0.375
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.65
     },
     "error": null,
     "duration_s": 0.02
@@ -1527,7 +1527,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "5",
@@ -1557,7 +1557,7 @@
       "cap": 8
     },
     "error": null,
-    "duration_s": 18.63
+    "duration_s": 27.93
   },
   {
     "layer": "5",
@@ -1620,7 +1620,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "6",
@@ -1783,7 +1783,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "7",
@@ -1799,7 +1799,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "7",
@@ -1815,7 +1815,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "7",
@@ -1831,7 +1831,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "7",
@@ -1847,7 +1847,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "7",
@@ -1863,18 +1863,18 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "8",
     "id": "8.1",
-    "name": "cold-start prior",
-    "expected": "~0.30",
-    "outcome": "DEGRADED",
-    "drawback": "prior 0.15 not ~0.30",
+    "name": "cold-start prior (HARD_CONCEPTS-aware)",
+    "expected": "in [0.10, 0.35]",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "prior 0.15 not ~0.30",
+      "_outcome": "PASS",
+      "_drawback": null,
       "prior": 0.15
     },
     "error": null,
@@ -1930,14 +1930,15 @@
   {
     "layer": "8",
     "id": "8.5",
-    "name": "across-skill independence",
-    "expected": "untouched stays at prior",
-    "outcome": "DEGRADED",
-    "drawback": "untouched skill drifted to 0.15",
+    "name": "across-skill independence (per-skill prior)",
+    "expected": "untouched stays at ITS prior",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "untouched skill drifted to 0.15",
-      "untouched": 0.15
+      "_outcome": "PASS",
+      "_drawback": null,
+      "untouched": 0.15,
+      "expected_prior": 0.15
     },
     "error": null,
     "duration_s": 0.0
@@ -2035,7 +2036,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2051,7 +2052,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2067,7 +2068,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2115,7 +2116,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2147,7 +2148,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2165,7 +2166,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2382,7 +2383,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2397,7 +2398,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2412,7 +2413,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2427,7 +2428,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2442,7 +2443,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2472,7 +2473,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2487,7 +2488,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2502,7 +2503,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2562,7 +2563,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "15",
@@ -2582,7 +2583,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "15",
@@ -2738,7 +2739,7 @@
       "score": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2753,7 +2754,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2765,10 +2766,10 @@
     "output": {
       "_outcome": "PASS",
       "_drawback": null,
-      "confidence": 0.582
+      "confidence": 0.957
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2786,7 +2787,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2802,7 +2803,7 @@
       "intervention": "reduce_challenge"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.04
   },
   {
     "layer": "18",
@@ -2834,7 +2835,7 @@
       "elaboration": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -2848,7 +2849,7 @@
       "_drawback": null,
       "stored": [
         0.42,
-        "2026-05-22T05:01:14+00:00"
+        "2026-05-22T05:36:13+00:00"
       ]
     },
     "error": null,

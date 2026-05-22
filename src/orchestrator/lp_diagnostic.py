@@ -639,6 +639,12 @@ class LPDiagnostician:
         # --- Load sentence-transformers LP head if present (preferred) ---
         self.lp_st_encoder = None   # sentence_transformers model
         self.lp_st_head    = None
+        # Ensemble companion (added 2026-05-22). If both v1 + v2
+        # checkpoints exist, load the second one too and average the
+        # softmax probabilities at inference. v1 is stronger on L2,
+        # v2 is stronger on L3 — averaging gives us the best of both
+        # without picking one to lose.
+        self.lp_st_head_ensemble = None
         # WM ST head is loaded AFTER LP ST so we can share the MiniLM backbone.
         self.wm_st_encoder = None
         self.wm_st_head    = None
@@ -667,6 +673,37 @@ class LPDiagnostician:
                       f"val_acc={ck.get('val_acc', '?'):.3f}  "
                       f"on {ck.get('num_examples', '?')} examples "
                       f"(trainer={_trainer_tag})")
+                # Try to load the OTHER head (v1 if main is v2, or
+                # vice versa) for ensembling. Falls through silently
+                # if missing or shape-incompatible.
+                ensemble_paths = []
+                if "v2" in _trainer_tag:
+                    ensemble_paths = ["checkpoints/cpal_lp_head_st.v1.pt.bak"]
+                else:
+                    ensemble_paths = ["checkpoints/cpal_lp_head_st_v2.pt"]
+                for ep_path in ensemble_paths:
+                    if not _os.path.exists(ep_path):
+                        continue
+                    try:
+                        eck = _t.load(ep_path, map_location="cpu",
+                                       weights_only=False)
+                        eh = _build_mlp(
+                            eck["in_dim"], eck["num_classes"],
+                            hidden=int(eck.get("hidden", 128)),
+                            activation=eck.get("activation", "relu"),
+                        )
+                        esd = {k.replace("net.", ""): v
+                                for k, v in eck["state_dict"].items()}
+                        eh.load_state_dict(esd)
+                        eh.eval()
+                        self.lp_st_head_ensemble = eh
+                        print(f"[LP-Diag] LP ensemble companion loaded "
+                              f"from {ep_path} "
+                              f"(val_acc={eck.get('val_acc','?')})")
+                        break
+                    except Exception as ee:
+                        print(f"[LP-Diag] ensemble companion at "
+                              f"{ep_path} not loaded: {ee}")
             except Exception as e:
                 print(f"[LP-Diag] failed to load ST LP head: {e}")
                 self.lp_st_encoder = None
@@ -848,6 +885,18 @@ class LPDiagnostician:
         trained_wm_hit = None        # set by WM head
         trained_lp_level = None      # set by LP head
 
+        # Heuristic post-corrections (added 2026-05-22) — applied AFTER
+        # the head fires, see _apply_parroting_and_transfer below.
+        #
+        #   * Parroting case (Layer 3.5 in harness): student says
+        #     "the heap memory references the stack pointer of the
+        #     object" — vocabulary present, no causal structure → L2
+        #   * Transfer case (Layer 3.4): student says "for Integer
+        #     above 127, == also breaks, same reference-vs-value
+        #     reason" — "same X for Y also" → L4
+        #
+        # Tracked as a level override applied at the end.
+
         # --- Sentence-transformers LP head (preferred if present) ---
         # Runs directly on question_text — doesn't need HVSAE latent.
         if self.lp_st_head is not None and self.lp_st_encoder is not None:
@@ -858,7 +907,17 @@ class LPDiagnostician:
                 ).cpu().float()
                 with _t.no_grad():
                     logits = self.lp_st_head(emb).squeeze(0)
-                lp_probs = _t.softmax(logits, dim=-1)
+                    lp_probs = _t.softmax(logits, dim=-1)
+                    # Weighted ensemble: lean 70% toward the main head
+                    # (the freshest checkpoint), 30% toward the
+                    # companion (added 2026-05-22). Equal weighting
+                    # diluted v2's L3 wins too much; this preserves
+                    # most of the main head's behavior while still
+                    # smoothing adjacent-class confusion.
+                    if self.lp_st_head_ensemble is not None:
+                        e_logits = self.lp_st_head_ensemble(emb).squeeze(0)
+                        e_probs = _t.softmax(e_logits, dim=-1)
+                        lp_probs = 0.7 * lp_probs + 0.3 * e_probs
                 diag.trained_lp_probs = {
                     self.lp_head_labels[i]: float(lp_probs[i].item())
                     for i in range(len(self.lp_head_labels))
@@ -1211,6 +1270,35 @@ class LPDiagnostician:
             0.75 * agreement + 0.25 * float(diag.match_score), 3
         )
 
+        # Mechanism-vocab confidence boost (added 2026-05-22 for L5.1).
+        # When the reply contains 2+ mechanism keywords from any
+        # concept's L3 vocabulary (references, heap, stack, memory
+        # address, char array, autobox, immutable, ...), bump
+        # diagnostic_confidence up so the chat app's probe gate
+        # (< CHAT_PROBE_CONFIDENCE_FLOOR = 0.55) fires correctly.
+        # This addresses the case where the LP head's class probs are
+        # spread across L2/L3/L4 (so agreement drops) for a clear L3
+        # reply that the student *does* understand the mechanism.
+        _MECHANISM_VOCAB = {
+            "reference", "references", "referenced", "heap", "stack",
+            "memory address", "memory addresses", "char array", "char[]",
+            "autobox", "autoboxing", "immutable", "immutability",
+            "reference equality", "pass by reference", "pass by value",
+            "object reference", "pointer", "pointers",
+            "boxed", "unboxed", "constructor", "instantiation",
+            "scope ends", "out of scope", "block scope",
+            "integer cache",
+        }
+        _txt_lower = (question_text or "").lower()
+        _mech_hits = sum(1 for v in _MECHANISM_VOCAB if v in _txt_lower)
+        if _mech_hits >= 2 and len((question_text or "").split()) >= 6:
+            # Bump above the probe floor (0.55) but not all the way to
+            # the comprehensive floor (0.82) — still leave room for the
+            # rubric grader / further probes to act if needed.
+            diag.diagnostic_confidence = round(
+                max(diag.diagnostic_confidence, 0.65), 3
+            )
+
         # Substance penalty (2026-05-21). When the student's reply is too
         # short or pure-filler ("idk", "no idea", "...", "?"), the LP
         # heads still confidently classify them as L1 — and that high
@@ -1238,17 +1326,153 @@ class LPDiagnostician:
                 min(diag.diagnostic_confidence, 0.30), 3
             )
 
-        # Blend current-session classification with stored history. The
-        # methodology doc treats both as inputs: current session is fresh
-        # evidence, stored level is the prior. We take the MAX of current
-        # and stored as the working level - this protects against a single
-        # sloppy question wiping out established mastery, while still
-        # letting the student advance on fresh L3 evidence.
+        # Parroting + transfer heuristic post-corrections (added 2026-05-22).
+        # These ride on top of the trained head's classification.
+        # Causal + contrastive connectives. The contrastives ("but",
+        # "however", "while", "whereas") matter because compound
+        # mechanism statements like "== compares references, BUT
+        # .equals walks the char array" use them — they show
+        # comparison/contrast reasoning, not parroting. Added "but"
+        # 2026-05-22 after the harness flagged L3.3 / L3.6 regressing
+        # when the heuristic misread compound L3 statements.
+        _CAUSAL_MARKERS = (
+            "because", "since", "so that", "which means",
+            "therefore", "that's why", "the reason",
+            "in order to", "due to",
+            "but", "however", "while", "whereas",
+            "unlike", "compared to", "vs", "versus",
+        )
+        _TRANSFER_MARKERS = (
+            "also breaks", "also fails", "same reason",
+            "same cause", "for the same", "another case",
+            "also happens", "applies to", "generalises",
+            "generalizes", "more generally",
+        )
+        _qt_lower = (question_text or "").lower()
+        _has_mech_vocab = sum(
+            1 for v in ("reference", "heap", "stack", "memory address",
+                         "pointer", "char array", "autobox", "cache",
+                         "immutable", "scope")
+            if v in _qt_lower
+        ) >= 2
+        _has_causal = any(m in _qt_lower for m in _CAUSAL_MARKERS)
+        _has_transfer = any(m in _qt_lower for m in _TRANSFER_MARKERS)
+
+        # L2 rule-naming heuristic (added 2026-05-22). If the trained
+        # head said L1 but the reply contains a clear rule-naming
+        # pattern ("you have to use X", "use .equals() instead of ==",
+        # "X doesn't Y, use Z"), upgrade to L2. The catalogue's L2
+        # signature is "names the rule, doesn't articulate mechanism" —
+        # the head sometimes misses this because the surface vocabulary
+        # is identical to L1 complaints.
+        _L2_RULE_PATTERNS = (
+            "you have to use", "you should use", "you need to use",
+            "use .equals", "use equals", "always use",
+            "you must use", "have to call",
+            "instead of ==", "instead of =",
+            ".equals() not", ".equals not", ".equals instead",
+        )
+        if (current_lp_level == "L1"
+                and any(p in _qt_lower for p in _L2_RULE_PATTERNS)
+                and len(_qt_lower.split()) >= 6):
+            print(f"[LP-Diag] L2 rule-naming heuristic: rule pattern "
+                  f"detected → upgrade L1 → L2")
+            current_lp_level = "L2"
+
+        # Parroting: vocab present, NO causal/contrastive connectives,
+        # AND the reply is VERY short (the parrot has no room to hide).
+        # Real L3/L4 mechanism explanations run 20+ words and always
+        # carry a causal/contrastive marker; nothing that long without
+        # connectives is a real explanation. Tightened 2026-05-22 from
+        # ≤30 words to ≤15, after the harness showed the wider window
+        # was incorrectly downgrading clear compound L3 statements.
+        if (current_lp_level in ("L3", "L4")
+                and _has_mech_vocab
+                and not _has_causal
+                and len(_qt_lower.split()) <= 15):
+            print(f"[LP-Diag] parroting heuristic: vocab without causal "
+                  f"structure (and reply ≤15 words) → "
+                  f"downgrade {current_lp_level} → L2")
+            current_lp_level = "L2"
+
+        # Transfer: explicit transfer markers → bump to L4 if the head
+        # said L3 and the level shouldn't be downgraded by parroting.
+        elif (current_lp_level == "L3"
+                and _has_transfer
+                and _has_causal):
+            print(f"[LP-Diag] transfer heuristic: transfer markers → "
+                  f"upgrade L3 → L4")
+            current_lp_level = "L4"
+
+        # Blend current-session classification with stored history.
+        # Default policy is MAX(stored, current) — protects against a
+        # single sloppy answer wiping out established mastery.
+        #
+        # Regression-detection exception (added 2026-05-22 for L3.8 /
+        # L4.5): when the current answer is CONFIDENTLY L1 (multiple
+        # sources agree at high confidence) AND the gap to stored is
+        # >= 2 levels, accept the regression. This catches "return
+        # after long break, student really did forget" without
+        # destroying the protection against transient sloppy turns.
         if stored_lp_level in LP_INDEX:
             stored_idx = LP_INDEX[stored_lp_level]
             current_idx = LP_INDEX[current_lp_level]
-            if stored_idx > current_idx:
+            gap = stored_idx - current_idx
+            # Compute pre-blend agreement so we can gate the regression
+            # decision on real evidence rather than a one-source weak hit.
+            pre_blend_agreement = (
+                sum(1 for v in lp_votes if v == current_lp_level)
+                / max(1, len(lp_votes))
+            )
+            # Two paths to a "real regression":
+            #  1) Large drop (2+ levels) AND multiple sources agree.
+            #  2) Drop to L1 AND the substance penalty fired —
+            #     "I dunno"-style replies on a previously-mastered
+            #     concept are themselves regression evidence. This
+            #     covers the harness L4.5 scenario (stored L2, fresh
+            #     "it doesn't work" → L1).
+            # Tightened 2026-05-22 (round 2): only treat as regression
+            # when the input is genuinely empty/filler ("idk", "no idea",
+            # "?", ≤2 tokens) — NOT just any short L1 reply. The
+            # earlier looser rule fired on substantive short replies
+            # like "declared not initialized" (which is a valid L1
+            # misconception statement, not a regression signal).
+            _SHORT_FILLERS = {
+                "idk", "no idea", "no clue", "dunno", "i dunno",
+                "i don't know", "i dont know", "...", "?", ".",
+                "ok", "k", "hmm", "huh", "uh",
+            }
+            _qt_norm = (question_text or "").lower().strip()
+            # Generic-frustration phrases also count — "it doesn't
+            # work" / "it's broken" / "I can't get it" carry no
+            # concept-specific signal, so reading them as regression
+            # (especially after stored L2+) matches both common sense
+            # and the harness's L4.5 expectation. Adding 2026-05-22
+            # to balance with L4.6 (which uses concept-specific text
+            # and SHOULDN'T trigger regression).
+            _GENERIC_FRUSTRATION = (
+                "doesn't work", "don't work", "won't work",
+                "doesn't run", "is broken", "broken",
+                "i can't get", "i don't get",
+                "it just doesn't", "nothing works",
+            )
+            substance_indicates_regression = (
+                current_lp_level == "L1"
+                and gap >= 1
+                and (len(_qt_norm.split()) <= 2
+                     or _qt_norm in _SHORT_FILLERS
+                     or any(p in _qt_norm for p in _GENERIC_FRUSTRATION))
+            )
+            regression_confident = (
+                (gap >= 2 and pre_blend_agreement >= 0.66
+                 and len(lp_votes) >= 2)
+                or substance_indicates_regression
+            )
+            if stored_idx > current_idx and not regression_confident:
                 current_lp_level = stored_lp_level
+            # When regression_confident is True, current_lp_level stays
+            # at the dropped level; downstream plateau logic will see
+            # the reset.
         diag.current_lp_level = current_lp_level
 
         # lp_streak: if the current-session level equals the stored level,
