@@ -347,6 +347,102 @@ class DBStore:
             ).fetchall()
         return [(r[0], int(r[1]), float(r[2])) for r in rows]
 
+    # ── Progression queries (added 2026-05-22) ─────────────────────────
+    def progression_for(self, student_id: str, skill: str
+                        ) -> List[Dict[str, Any]]:
+        """All turn_completed audit rows for this (student, skill),
+        oldest → newest. Each row is `{ts, lp_before, lp_after,
+        mastery_before, mastery_after, intervention, conf, ...}`."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT ts_iso, payload_json FROM audit_log "
+                "WHERE student_id=? AND event='turn_completed' "
+                "ORDER BY id",
+                (student_id,),
+            ).fetchall()
+        out = []
+        for ts, pl in rows:
+            try:
+                p = json.loads(pl) if pl else {}
+            except Exception:
+                p = {}
+            if p.get("skill") != skill:
+                continue
+            p["_ts"] = ts
+            out.append(p)
+        return out
+
+    def forecast_lp_advance(self, student_id: str, skill: str
+                            ) -> Optional[Dict[str, Any]]:
+        """Estimate turns until the next LP level, based on the recent
+        rate of LP advance. Returns None when there isn't enough data
+        (< 3 turns recorded for this skill).
+
+        Algorithm: count LP level advances (deltas > 0) in the most
+        recent N turns; if rate is >0, project at that rate to next
+        level. If rate is 0, return "plateau — unknown ETA".
+        """
+        rows = self.progression_for(student_id, skill)
+        if len(rows) < 3:
+            return None
+        recent = rows[-10:]
+        # LP_INDEX ordering
+        lp_order = ["L1", "L2", "L3", "L4"]
+        advances = 0
+        for r in recent:
+            try:
+                if (lp_order.index(r.get("lp_after", "L1"))
+                        > lp_order.index(r.get("lp_before", "L1"))):
+                    advances += 1
+            except ValueError:
+                continue
+        n = len(recent)
+        if advances == 0:
+            return {"status": "plateau", "turns_recent": n, "advances": 0,
+                    "current_lp": recent[-1].get("lp_after", "?"),
+                    "eta_turns_to_next": None}
+        rate = advances / n   # advances per turn
+        current = recent[-1].get("lp_after", "L1")
+        try:
+            steps_remaining = 3 - lp_order.index(current)
+        except ValueError:
+            steps_remaining = 1
+        eta = int(round(steps_remaining / rate)) if rate > 0 else None
+        return {"status": "advancing", "turns_recent": n,
+                "advances": advances, "rate_per_turn": round(rate, 3),
+                "current_lp": current, "eta_turns_to_next": eta}
+
+    def cohort_percentile(self, student_id: str, skill: str
+                          ) -> Optional[float]:
+        """Percentile of this student's CURRENT mastery in the cohort
+        for `skill`. 0.0 = worst, 1.0 = best. None if no mastery row."""
+        own = self.get_mastery(student_id, skill)
+        if not own:
+            return None
+        own_p = own[0]
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p_mastered FROM mastery WHERE skill=?", (skill,),
+            ).fetchall()
+        ps = [float(r[0]) for r in rows]
+        if not ps:
+            return None
+        below = sum(1 for p in ps if p < own_p)
+        return round(below / len(ps), 3)
+
+    def mastery_trajectory(self, student_id: str, skill: str
+                           ) -> List[Tuple[str, float]]:
+        """List of (ts_iso, mastery_after) points for sparkline rendering."""
+        rows = self.progression_for(student_id, skill)
+        return [(r["_ts"], float(r.get("mastery_after", 0.0)))
+                for r in rows if "mastery_after" in r]
+
+    def lp_trajectory(self, student_id: str, skill: str
+                      ) -> List[Tuple[str, str]]:
+        rows = self.progression_for(student_id, skill)
+        return [(r["_ts"], r.get("lp_after", "?")) for r in rows
+                if "lp_after" in r]
+
     def intervention_counts(self) -> Dict[str, int]:
         """{intervention_type: count} from audit events with event='intervention_picked'."""
         with self._lock:

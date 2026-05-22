@@ -1076,6 +1076,63 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
     elif isinstance(rl_reward, (int, float)):
         rl_lines += f"- **Last RL reward:** {rl_reward:+.3f}\n"
 
+    # Progression block (added 2026-05-22). Renders:
+    #   - mastery sparkline (last 12 turns on this skill)
+    #   - LP trajectory (e.g. "L1 → L2 → L2 → L3")
+    #   - cohort percentile
+    #   - forecast ETA to next LP level (if data sufficient)
+    # All read from the turn_completed audit rows. Soft-fail keeps the
+    # rest of the panel rendering if the DB is unreachable.
+    progression_block = ""
+    sid_pg = state.get("student_id") or "chat_user"
+    if focus and sid_pg and sid_pg != "chat_user":
+        try:
+            from src.persistence.db_store import get_db
+            db = get_db()
+            mast_traj = db.mastery_trajectory(sid_pg, focus)[-12:]
+            lp_traj   = db.lp_trajectory(sid_pg, focus)[-8:]
+            pct       = db.cohort_percentile(sid_pg, focus)
+            fcst      = db.forecast_lp_advance(sid_pg, focus)
+            if mast_traj or lp_traj or pct is not None or fcst:
+                progression_block += "- **Progression on this concept:**\n"
+            if mast_traj:
+                # Simple unicode sparkline — 8 levels.
+                bars = " ▁▂▃▄▅▆▇█"
+                vals = [v for _, v in mast_traj]
+                spark = "".join(
+                    bars[min(8, max(0, int(round(v * 8))))] for v in vals
+                )
+                progression_block += (
+                    f"    - mastery (last {len(vals)} turns): "
+                    f"`{spark}`  "
+                    f"({vals[0]:.2f} → {vals[-1]:.2f})\n"
+                )
+            if lp_traj:
+                arc = " → ".join(lvl for _, lvl in lp_traj)
+                progression_block += f"    - LP arc: `{arc}`\n"
+            if pct is not None:
+                progression_block += (
+                    f"    - cohort rank on `{focus}`: "
+                    f"**{int(pct*100)}th percentile** "
+                    f"({'above' if pct >= 0.5 else 'below'} median)\n"
+                )
+            if fcst:
+                if fcst["status"] == "plateau":
+                    progression_block += (
+                        f"    - forecast: plateaued at `{fcst['current_lp']}` "
+                        f"(no advances in last {fcst['turns_recent']} turns)\n"
+                    )
+                else:
+                    eta = fcst.get("eta_turns_to_next")
+                    progression_block += (
+                        f"    - forecast: ~{eta} turns to next LP level "
+                        f"at current rate ({fcst['rate_per_turn']} advances/turn)\n"
+                    )
+        except Exception as _e:
+            progression_block = (
+                f"- **Progression:** _(unavailable — {_e})_\n"
+            )
+
     # LP-vote breakdown (added 2026-05-21) — "Why this level?"
     # explainability. Surfaces the agreement signal that
     # diagnostic_confidence is computed from: which classifiers fired,
@@ -1190,6 +1247,7 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         f"- **Diagnostic confidence:** {conf:.2f}\n"
         f"- **Grader verdict:** `{rg.get('level','?')}` (conf {rg.get('confidence',0):.2f})\n"
         f"- **Last probe reason:** {state.get('pending_probe_reason') or '—'}\n"
+        + progression_block
         + lp_lines
         + substance_note
         + psych_lines
@@ -1467,6 +1525,19 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state,
     2026-05-21).
     """
     _resolve_student_id(request, state)
+    # Session id + per-turn dwell tracking (added 2026-05-22 for
+    # progression reporting). One UUID per browser session; survives
+    # across submits within the same chat. Dwell = wall-clock seconds
+    # between previous tutor reply and this submit (None on first turn).
+    import uuid, time as _t
+    if not state.get("session_id"):
+        state["session_id"] = uuid.uuid4().hex[:12]
+        state["session_started_iso"] = _t.strftime("%Y-%m-%dT%H:%M:%SZ", _t.gmtime())
+    now_t = _t.time()
+    last_reply_t = state.get("_last_reply_ts")
+    dwell_s = round(now_t - last_reply_t, 2) if last_reply_t else None
+    state["_submit_ts"] = now_t
+    state["last_dwell_s"] = dwell_s
     # A/B variant assignment (2026-05-21). Sticky per (student,
     # experiment) — first call assigns + persists, every subsequent
     # call returns the same variant. Used downstream to branch prompt
@@ -1983,6 +2054,64 @@ def _stream_teach(state, diag, history):
     # Stash the diagnostic so _stream_followup can reference the wrong-model
     # + LP level without re-running diagnose() on every follow-up turn.
     state["last_diag"] = diag
+
+    # Per-turn progression audit (added 2026-05-22). One audit_log
+    # row per submit with everything a longitudinal analysis needs:
+    # LP transition, mastery transition, intervention, RL Q, dwell,
+    # session_id, variant. progression_for / forecast_lp_advance /
+    # cohort_percentile / mastery_trajectory all read from these
+    # rows. Soft-fail — if DB is down we still teach the student.
+    try:
+        from src.persistence.db_store import get_db
+        import time as _t
+        _sid_audit = state.get("student_id") or "chat_user"
+        _lp_history = (state.get("last_diag") or {}).get("classification") or {}
+        _mastery_after = float((state.get("mastery_now") or {}).get(
+            "dina_mastery", 0.0))
+        # mastery_before: fetch the prior DB row (before our update)
+        prev_row = get_db().get_mastery(_sid_audit, q["concept"])
+        _mastery_before = float(prev_row[0]) if prev_row else 0.30
+        _payload = {
+            "session_id":      state.get("session_id"),
+            "skill":           q["concept"],
+            "lp_before":       state.get("_lp_before") or "L1",
+            "lp_after":        diag.get("current_lp_level"),
+            "lp_target":       diag.get("target_lp_level"),
+            "lp_delta":        diag.get("delta_lp"),
+            "diagnostic_conf": diag.get("diagnostic_confidence"),
+            "wrong_model_id":  diag.get("wrong_model_id"),
+            "wrong_model_conf": diag.get("match_score"),
+            "intervention":    chosen,
+            "rl_q":            rl_q,
+            "rl_action":       rl_action,
+            "mastery_before":  round(_mastery_before, 4),
+            "mastery_after":   round(_mastery_after, 4),
+            "mastery_delta":   round(_mastery_after - _mastery_before, 4),
+            "is_correct":      correct,
+            "dwell_s":         state.get("last_dwell_s"),
+            "variant_teach":   state.get("variant_teach_prompt"),
+            "variant_probe":   state.get("variant_probe_cap"),
+            "probe_count":     state.get("probe_count"),
+            "plateau_flag":    diag.get("plateau_flag"),
+        }
+        # Add psych signals if three-channel ran
+        _tc = state.get("last_three_channel") or {}
+        _pg = _tc.get("psychological_graph") or {}
+        if _pg:
+            _payload["attribution"]   = _pg.get("attribution")
+            _payload["self_efficacy"] = _pg.get("self_efficacy")
+            _payload["imposter"]      = _pg.get("imposter_flag")
+            _payload["anxiety"]       = _pg.get("high_anxiety")
+        get_db().audit("turn_completed", student_id=_sid_audit,
+                        payload=_payload)
+        get_db().audit("intervention_picked", student_id=_sid_audit,
+                        payload={"type": chosen, "skill": q["concept"]})
+        # Snapshot for next turn's lp_before
+        state["_lp_before"] = diag.get("current_lp_level")
+        # Mark when our reply ended so the next submit's dwell is correct.
+        state["_last_reply_ts"] = _t.time()
+    except Exception as _e:
+        print(f"[CPAL/Audit] turn_completed write failed: {_e}")
 
     # Feed this turn's outcome into the dynamic KG updater so prerequisite
     # strengths, misconception frequencies, and intervention effectiveness

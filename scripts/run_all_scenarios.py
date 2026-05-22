@@ -1485,6 +1485,267 @@ run_scenario("19","19.15","decay after 100 days approaches prior",s19_15,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# Layer 20 — Progression reporting (added 2026-05-22). Verifies the
+# turn_completed audit + progression query helpers + forecasting +
+# cohort percentile.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 20 — Progression reporting")
+
+def _fresh_db(tag):
+    import tempfile, os as _os, pathlib as _pl
+    tmp = _pl.Path(tempfile.gettempdir()) / f"cpal_test_db_l20_{tag}.db"
+    if tmp.exists(): _os.remove(tmp)
+    import src.persistence.db_store as dbm
+    dbm._DB_INSTANCE = dbm.DBStore(tmp)
+    return dbm._DB_INSTANCE
+
+def _seed_turn(db, sid, skill, payload):
+    """Drop a fake turn_completed row matching the shape the chat app writes."""
+    full = {"skill": skill, **payload}
+    db.audit("turn_completed", student_id=sid, payload=full)
+
+# 20.1 — progression_for returns turns in order for the right skill
+def s20_1():
+    try:
+        db = _fresh_db("20_1")
+        for i, lp in enumerate(["L1","L1","L2","L2","L3"]):
+            _seed_turn(db, "alice", "null_pointer",
+                       {"lp_before":"L1","lp_after":lp,
+                        "mastery_before":0.30,"mastery_after":0.30+i*0.1})
+        # noise: a different skill shouldn't pollute
+        _seed_turn(db, "alice", "string_equality",
+                   {"lp_before":"L1","lp_after":"L1",
+                    "mastery_before":0.30,"mastery_after":0.30})
+        rows = db.progression_for("alice","null_pointer")
+        ok = len(rows) == 5 and rows[0]["lp_after"] == "L1" and rows[-1]["lp_after"] == "L3"
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {len(rows)} rows, expected 5",
+                "n":len(rows),"arc":[r["lp_after"] for r in rows]}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.1","progression_for filters by skill + preserves order",s20_1,
+             "5 rows, L1→L1→L2→L2→L3")
+
+# 20.2 — mastery_trajectory returns (ts, mastery_after) pairs
+def s20_2():
+    try:
+        db = _fresh_db("20_2")
+        for v in [0.30, 0.42, 0.55, 0.71, 0.86]:
+            _seed_turn(db, "bob", "null_pointer",
+                       {"lp_before":"L1","lp_after":"L2",
+                        "mastery_after":v})
+        traj = db.mastery_trajectory("bob","null_pointer")
+        ok = len(traj) == 5 and traj[-1][1] == 0.86
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {traj}",
+                "n":len(traj),"first":traj[0][1] if traj else None,"last":traj[-1][1] if traj else None}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.2","mastery_trajectory points roundtrip",s20_2,
+             "5 ascending points")
+
+# 20.3 — forecast_lp_advance: advancing student
+def s20_3():
+    try:
+        db = _fresh_db("20_3")
+        # 4 of 8 turns showed an advance
+        levels = [("L1","L1"),("L1","L2"),("L2","L2"),("L2","L3"),
+                  ("L3","L3"),("L3","L3"),("L3","L4"),("L4","L4")]
+        for lb, la in levels:
+            _seed_turn(db, "alice", "string_equality",
+                       {"lp_before":lb,"lp_after":la,"mastery_after":0.5})
+        fcst = db.forecast_lp_advance("alice","string_equality")
+        ok = fcst and fcst["status"] == "advancing" and fcst["advances"] >= 3
+        return {"_outcome":"PASS" if ok else "DEGRADED",
+                "_drawback":None if ok else f"got {fcst}",
+                "forecast":fcst}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.3","forecast: advancing student",s20_3,
+             "status=advancing, ETA estimable")
+
+# 20.4 — forecast_lp_advance: plateaued student
+def s20_4():
+    try:
+        db = _fresh_db("20_4")
+        for _ in range(8):
+            _seed_turn(db, "stuck", "null_pointer",
+                       {"lp_before":"L2","lp_after":"L2","mastery_after":0.5})
+        fcst = db.forecast_lp_advance("stuck","null_pointer")
+        ok = fcst and fcst["status"] == "plateau" and fcst["advances"] == 0
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {fcst}",
+                "forecast":fcst}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.4","forecast: plateaued student",s20_4,
+             "status=plateau, 0 advances")
+
+# 20.5 — forecast: insufficient data returns None
+def s20_5():
+    try:
+        db = _fresh_db("20_5")
+        _seed_turn(db, "newbie", "null_pointer",
+                   {"lp_before":"L1","lp_after":"L1","mastery_after":0.3})
+        fcst = db.forecast_lp_advance("newbie","null_pointer")
+        ok = fcst is None
+        return {"_outcome":"PASS" if ok else "DEGRADED",
+                "_drawback":None if ok else f"got {fcst} with only 1 turn",
+                "forecast":fcst}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.5","forecast: insufficient data → None",s20_5,
+             "None when <3 rows")
+
+# 20.6 — cohort_percentile: middle student
+def s20_6():
+    try:
+        db = _fresh_db("20_6")
+        for sid, p in [("s1",0.20),("s2",0.40),("alice",0.55),("s4",0.75),("s5",0.90)]:
+            db.upsert_mastery(sid,"null_pointer",p)
+        pct = db.cohort_percentile("alice","null_pointer")
+        ok = pct == 0.4   # 2 of 5 below alice
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got percentile {pct}, expected 0.4",
+                "percentile":pct}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.6","cohort_percentile basic",s20_6,
+             "2 of 5 below → 0.4")
+
+# 20.7 — cohort_percentile: top student
+def s20_7():
+    try:
+        db = _fresh_db("20_7")
+        for sid, p in [("s1",0.20),("s2",0.40),("s3",0.55),("s4",0.75),("alice",0.95)]:
+            db.upsert_mastery(sid,"null_pointer",p)
+        pct = db.cohort_percentile("alice","null_pointer")
+        ok = pct == 0.8
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {pct}",
+                "percentile":pct}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.7","cohort_percentile top student",s20_7,
+             "4 of 5 below → 0.8")
+
+# 20.8 — mastery_trajectory empty when no turn data
+def s20_8():
+    try:
+        db = _fresh_db("20_8")
+        traj = db.mastery_trajectory("ghost","null_pointer")
+        ok = traj == []
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {traj}",
+                "trajectory":traj}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.8","trajectory empty for unknown student",s20_8,
+             "[] when no turn rows")
+
+# 20.9 — Full progression flow: simulate a session, query each turn
+def s20_9():
+    try:
+        db = _fresh_db("20_9")
+        # Simulate 6 turns: L1, L1, L2, L2, L3, L3 with rising mastery
+        sequence = [("L1","L1",0.30,0.32,False),
+                    ("L1","L2",0.32,0.50,True),
+                    ("L2","L2",0.50,0.62,True),
+                    ("L2","L3",0.62,0.75,True),
+                    ("L3","L3",0.75,0.78,False),
+                    ("L3","L3",0.78,0.85,True)]
+        for lb, la, mb, ma, correct in sequence:
+            _seed_turn(db, "journey", "null_pointer", {
+                "lp_before":lb,"lp_after":la,
+                "mastery_before":mb,"mastery_after":ma,
+                "is_correct":correct,"intervention":"worked_example",
+                "session_id":"sess1","dwell_s":12.5,
+            })
+            db.upsert_mastery("journey","null_pointer", ma)
+        rows = db.progression_for("journey","null_pointer")
+        traj = db.mastery_trajectory("journey","null_pointer")
+        fcst = db.forecast_lp_advance("journey","null_pointer")
+        ok = (len(rows) == 6
+              and rows[0]["mastery_after"] == 0.32
+              and rows[-1]["mastery_after"] == 0.85
+              and len(traj) == 6
+              and fcst and fcst["status"] == "advancing"
+              and fcst["advances"] >= 1)
+        return {"_outcome":"PASS" if ok else "DEGRADED",
+                "_drawback":None if ok else "full-flow query failed",
+                "n_turns":len(rows),
+                "mastery_arc":[round(r['mastery_after'],2) for r in rows],
+                "lp_arc":[r['lp_after'] for r in rows],
+                "forecast":fcst}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.9","full simulated 6-turn session flow",s20_9,
+             "rows + trajectory + forecast all consistent")
+
+# 20.10 — Per-turn audit captures intervention type
+def s20_10():
+    try:
+        db = _fresh_db("20_10")
+        for it in ["worked_example","worked_example","socratic_prompt",
+                   "attribution_reframe","worked_example"]:
+            db.audit("turn_completed", student_id="iv", payload={
+                "skill":"null_pointer","intervention":it,
+                "lp_before":"L1","lp_after":"L2","mastery_after":0.5})
+            db.audit("intervention_picked", student_id="iv",
+                     payload={"type":it,"skill":"null_pointer"})
+        counts = db.intervention_counts()
+        rows = db.progression_for("iv","null_pointer")
+        ints = [r.get("intervention") for r in rows]
+        ok = counts.get("worked_example") == 3 and len(rows) == 5
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"counts={counts} rows={ints}",
+                "counts":counts,"interventions_per_turn":ints}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.10","intervention captured per-turn AND aggregated",s20_10,
+             "intervention visible per-turn + counted in aggregate")
+
+# 20.11 — Session_id grouping
+def s20_11():
+    try:
+        db = _fresh_db("20_11")
+        for sess in ["s1","s1","s1","s2","s2"]:
+            db.audit("turn_completed", student_id="multi", payload={
+                "skill":"null_pointer","session_id":sess,
+                "lp_before":"L1","lp_after":"L2","mastery_after":0.4})
+        rows = db.progression_for("multi","null_pointer")
+        sessions = [r.get("session_id") for r in rows]
+        from collections import Counter
+        ok = Counter(sessions) == Counter(["s1","s1","s1","s2","s2"])
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"sessions={sessions}",
+                "sessions":sessions}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.11","session_id preserved in turn audit",s20_11,
+             "[s1,s1,s1,s2,s2]")
+
+# 20.12 — Dwell time captured per turn
+def s20_12():
+    try:
+        db = _fresh_db("20_12")
+        for d in [None, 8.4, 32.1, 60.0, 5.2]:
+            db.audit("turn_completed", student_id="dwell", payload={
+                "skill":"null_pointer","dwell_s":d,
+                "lp_before":"L1","lp_after":"L1","mastery_after":0.3})
+        rows = db.progression_for("dwell","null_pointer")
+        dwells = [r.get("dwell_s") for r in rows]
+        ok = dwells[0] is None and dwells[2] == 32.1
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"dwells={dwells}",
+                "dwells":dwells}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("20","20.12","dwell_s preserved per turn",s20_12,
+             "first None, later turns numeric")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Wrap up
 # ═══════════════════════════════════════════════════════════════════════════
 section("Summary")
