@@ -619,10 +619,20 @@ class LPDiagnostician:
         import torch as _t
         import torch.nn as _nn
 
-        def _build_mlp(in_dim, num_classes, hidden=128):
+        def _build_mlp(in_dim, num_classes, hidden=128, activation="relu",
+                        dropout=0.3):
+            """Build a 3-layer MLP matching the checkpoint's architecture.
+
+            Added 2026-05-22: the v2 trainer (cpal_train_lp_st_v2.py)
+            saves checkpoints with `hidden` and may switch activation
+            to GELU. Reading those fields out of the checkpoint lets
+            us load both v1 (hidden=128, ReLU) and v2 (hidden=192,
+            GELU) checkpoints with the same loader.
+            """
+            act_cls = _nn.GELU if str(activation).lower() == "gelu" else _nn.ReLU
             return _nn.Sequential(
-                _nn.Linear(in_dim, hidden), _nn.ReLU(), _nn.Dropout(0.3),
-                _nn.Linear(hidden, hidden // 2), _nn.ReLU(), _nn.Dropout(0.3),
+                _nn.Linear(in_dim, hidden), act_cls(), _nn.Dropout(dropout),
+                _nn.Linear(hidden, hidden // 2), act_cls(), _nn.Dropout(dropout),
                 _nn.Linear(hidden // 2, num_classes),
             )
 
@@ -642,15 +652,21 @@ class LPDiagnostician:
                 self.lp_st_encoder = SentenceTransformer(
                     ck.get("encoder", "sentence-transformers/all-MiniLM-L6-v2")
                 )
-                h = _build_mlp(ck["in_dim"], ck["num_classes"])
+                h = _build_mlp(
+                    ck["in_dim"], ck["num_classes"],
+                    hidden=int(ck.get("hidden", 128)),
+                    activation=ck.get("activation", "relu"),
+                )
                 sd = {k.replace("net.", ""): v for k, v in ck["state_dict"].items()}
                 h.load_state_dict(sd)
                 h.eval()
                 self.lp_st_head    = h
                 self.lp_head_labels = ck["labels"]   # shared labels
+                _trainer_tag = ck.get("trainer", "v1")
                 print(f"[LP-Diag] LP head (sentence-transformers) loaded: "
                       f"val_acc={ck.get('val_acc', '?'):.3f}  "
-                      f"on {ck.get('num_examples', '?')} examples")
+                      f"on {ck.get('num_examples', '?')} examples "
+                      f"(trainer={_trainer_tag})")
             except Exception as e:
                 print(f"[LP-Diag] failed to load ST LP head: {e}")
                 self.lp_st_encoder = None

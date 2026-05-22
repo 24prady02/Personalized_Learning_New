@@ -18,7 +18,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 2.66
+    "duration_s": 1.13
   },
   {
     "layer": "0",
@@ -54,7 +54,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.12
+    "duration_s": 0.05
   },
   {
     "layer": "0",
@@ -70,7 +70,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -86,7 +86,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.09
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -102,7 +102,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -118,7 +118,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.11
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -134,7 +134,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -150,7 +150,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -166,7 +166,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -221,7 +221,7 @@
       "encoding_strength": "surface"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -237,7 +237,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -267,7 +267,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -282,7 +282,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -297,7 +297,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -312,7 +312,7 @@
       "logical_step": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -327,7 +327,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -360,7 +360,7 @@
       "high_anxiety": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -452,7 +452,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -478,7 +478,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -500,7 +500,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -530,7 +530,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -582,7 +582,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -604,7 +604,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -648,7 +648,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -692,7 +692,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -714,7 +714,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -762,7 +762,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -806,7 +806,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -828,7 +828,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -850,7 +850,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -876,7 +876,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -902,7 +902,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -915,12 +915,12 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "infinite_loop",
-        "array_index"
+        "array_index",
+        "infinite_loop"
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -938,7 +938,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -984,7 +984,7 @@
       "conf": 0.396
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -999,7 +999,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1029,7 +1029,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1048,7 +1048,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1063,7 +1063,7 @@
       "top": "infinite_loop"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "2",
@@ -1081,7 +1081,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1095,11 +1095,11 @@
       "_drawback": null,
       "wm": "NP-B",
       "score": 0.607,
-      "lp": "L1",
+      "lp": "L2",
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1117,7 +1117,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1135,7 +1135,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1153,7 +1153,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1167,11 +1167,11 @@
       "_drawback": null,
       "wm": null,
       "score": 0.0,
-      "lp": "L1",
+      "lp": "L2",
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1189,7 +1189,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1203,11 +1203,11 @@
       "_drawback": null,
       "wm": "SE-A",
       "score": 1.0,
-      "lp": "L2",
+      "lp": "L1",
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "2",
@@ -1225,7 +1225,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1242,62 +1242,62 @@
       "logical_step": false,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.9894986152648926,
-        "L2": 0.01050030067563057,
-        "L3": 8.657730177219491e-07,
-        "L4": 2.7122550250169297e-07
+        "L1": 0.9578171968460083,
+        "L2": 0.03821888938546181,
+        "L3": 0.002186490222811699,
+        "L4": 0.0017774616135284305
       }
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "3",
     "id": "3.2",
     "name": "classify L2",
     "expected": "current_lp_level=L2",
-    "outcome": "PASS",
-    "drawback": null,
+    "outcome": "DEGRADED",
+    "drawback": "expected L2, got L1",
     "output": {
-      "_outcome": "PASS",
-      "_drawback": null,
-      "lp": "L2",
-      "target": "L3",
+      "_outcome": "DEGRADED",
+      "_drawback": "expected L2, got L1",
+      "lp": "L1",
+      "target": "L2",
       "logical_step": true,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.39112916588783264,
-        "L2": 0.5990920066833496,
-        "L3": 0.006470147054642439,
-        "L4": 0.003308670362457633
+        "L1": 0.6015043258666992,
+        "L2": 0.24380922317504883,
+        "L3": 0.11100491136312485,
+        "L4": 0.04368150234222412
       }
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "3",
     "id": "3.3",
     "name": "classify L3",
     "expected": "current_lp_level=L3",
-    "outcome": "DEGRADED",
-    "drawback": "expected L3, got L2",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "expected L3, got L2",
-      "lp": "L2",
-      "target": "L3",
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L3",
+      "target": "L4",
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.01947147771716118,
-        "L2": 0.47476449608802795,
-        "L3": 0.18555083870887756,
-        "L4": 0.32021331787109375
+        "L1": 0.06659723818302155,
+        "L2": 0.13884791731834412,
+        "L3": 0.6499375700950623,
+        "L4": 0.1446172595024109
       }
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1314,14 +1314,14 @@
       "logical_step": true,
       "logical_step_detail": false,
       "trained_probs": {
-        "L1": 0.001275587361305952,
-        "L2": 0.03409096226096153,
-        "L3": 0.7382758855819702,
-        "L4": 0.22635754942893982
+        "L1": 0.01156479213386774,
+        "L2": 0.06650320440530777,
+        "L3": 0.7257956862449646,
+        "L4": 0.19613628089427948
       }
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1338,38 +1338,38 @@
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.00011333839211147279,
-        "L2": 0.003952374681830406,
-        "L3": 0.9945408701896667,
-        "L4": 0.0013933631125837564
+        "L1": 0.003529347712174058,
+        "L2": 0.017641372978687286,
+        "L3": 0.9700174331665039,
+        "L4": 0.00881181564182043
       }
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "3",
     "id": "3.6",
     "name": "classify L3",
     "expected": "current_lp_level=L3",
-    "outcome": "DEGRADED",
-    "drawback": "expected L3, got L2",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "DEGRADED",
-      "_drawback": "expected L3, got L2",
-      "lp": "L2",
-      "target": "L3",
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L3",
+      "target": "L4",
       "logical_step": true,
       "logical_step_detail": true,
       "trained_probs": {
-        "L1": 0.054709844291210175,
-        "L2": 0.784259557723999,
-        "L3": 0.1485370397567749,
-        "L4": 0.012493588030338287
+        "L1": 0.14786572754383087,
+        "L2": 0.23500050604343414,
+        "L3": 0.5596363544464111,
+        "L4": 0.05749734118580818
       }
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1382,11 +1382,11 @@
       "_outcome": "PASS",
       "_drawback": null,
       "per_concept_lp": {
-        "null_pointer": "L4"
+        "null_pointer": "L2"
       }
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1401,7 +1401,7 @@
       "lp": "L3"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1417,7 +1417,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1433,7 +1433,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1449,7 +1449,7 @@
       "plateau_flag": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1465,7 +1465,7 @@
       "plateau_flag": true
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.01
   },
   {
     "layer": "4",
@@ -1481,7 +1481,7 @@
       "se.plateau": false
     },
     "error": null,
-    "duration_s": 0.09
+    "duration_s": 0.03
   },
   {
     "layer": "4",
@@ -1497,7 +1497,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1512,7 +1512,7 @@
       "confidence": 0.375
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1527,7 +1527,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1542,7 +1542,7 @@
       "confidence": 0.75
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1557,7 +1557,7 @@
       "cap": 8
     },
     "error": null,
-    "duration_s": 42.75
+    "duration_s": 18.63
   },
   {
     "layer": "5",
@@ -1620,7 +1620,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1641,7 +1641,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1662,7 +1662,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1683,7 +1683,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1704,7 +1704,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1725,7 +1725,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1746,7 +1746,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "6",
@@ -1767,7 +1767,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "7",
@@ -1783,7 +1783,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1799,7 +1799,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1815,7 +1815,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1831,7 +1831,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1847,7 +1847,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1863,7 +1863,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.1
+    "duration_s": 0.03
   },
   {
     "layer": "8",
@@ -2035,7 +2035,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2051,7 +2051,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2067,7 +2067,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2083,7 +2083,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2099,7 +2099,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2115,7 +2115,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2131,7 +2131,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2147,7 +2147,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "11",
@@ -2165,7 +2165,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2183,7 +2183,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2201,7 +2201,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2219,7 +2219,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2237,7 +2237,7 @@
       "attribution": "fixed"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "11",
@@ -2255,7 +2255,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "12",
@@ -2382,7 +2382,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2397,7 +2397,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2412,7 +2412,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2427,7 +2427,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2442,7 +2442,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2472,7 +2472,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2487,7 +2487,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2502,7 +2502,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "15",
@@ -2522,7 +2522,7 @@
       "lang_imposter": true
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2542,7 +2542,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2562,7 +2562,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2582,7 +2582,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2602,7 +2602,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2622,7 +2622,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "15",
@@ -2642,7 +2642,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2658,7 +2658,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2675,7 +2675,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2691,7 +2691,7 @@
       "self_efficacy": "neutral"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2707,7 +2707,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2722,7 +2722,7 @@
       "high_anxiety": true
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2738,7 +2738,7 @@
       "score": 0.0
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2753,7 +2753,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2765,10 +2765,10 @@
     "output": {
       "_outcome": "PASS",
       "_drawback": null,
-      "confidence": 0.957
+      "confidence": 0.582
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2786,7 +2786,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "18",
@@ -2802,7 +2802,7 @@
       "intervention": "reduce_challenge"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2834,7 +2834,7 @@
       "elaboration": false
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "19",
@@ -2848,11 +2848,11 @@
       "_drawback": null,
       "stored": [
         0.42,
-        "2026-05-22T03:51:07+00:00"
+        "2026-05-22T05:01:14+00:00"
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -2868,7 +2868,7 @@
       "rows_present": 10
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -2885,7 +2885,7 @@
       "expected_factor": 0.25
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "19",
@@ -2904,7 +2904,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -2922,7 +2922,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.11
+    "duration_s": 0.04
   },
   {
     "layer": "19",
@@ -2944,7 +2944,7 @@
       "tombstone_rows": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -2967,7 +2967,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -2986,7 +2986,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.0
   },
   {
     "layer": "19",
@@ -3036,7 +3036,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -3055,7 +3055,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -3072,7 +3072,7 @@
       "revoked": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -3089,7 +3089,7 @@
       "last": "event_9"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "19",
@@ -3106,7 +3106,7 @@
       "prior": 0.15
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.02
   },
   {
     "layer": "20",
@@ -3128,7 +3128,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3145,7 +3145,7 @@
       "last": 0.86
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3167,7 +3167,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3188,7 +3188,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3203,7 +3203,7 @@
       "forecast": null
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3218,7 +3218,7 @@
       "percentile": 0.4
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3233,7 +3233,7 @@
       "percentile": 0.8
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3248,7 +3248,7 @@
       "trajectory": []
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3287,7 +3287,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3313,7 +3313,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3334,7 +3334,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "20",
@@ -3355,7 +3355,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3379,7 +3379,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3409,7 +3409,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3436,7 +3436,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3455,7 +3455,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3473,7 +3473,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "21",
@@ -3502,6 +3502,6 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   }
 ]
