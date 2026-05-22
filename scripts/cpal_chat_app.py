@@ -2102,6 +2102,38 @@ def _stream_teach(state, diag, history):
             _payload["self_efficacy"] = _pg.get("self_efficacy")
             _payload["imposter"]      = _pg.get("imposter_flag")
             _payload["anxiety"]       = _pg.get("high_anxiety")
+        # Behavioral signals (added 2026-05-22). Closes Layer 7 gap.
+        # In the chat-app context "behavior" = reasoning length +
+        # complexity + correctness pattern (we don't get raw
+        # compile/run action sequences like the orchestrator does).
+        _words = (reasoning or "").split()
+        _wc = len(_words)
+        _avg_w_len = (sum(len(w) for w in _words) / _wc) if _wc else 0.0
+        _sent_count = max(1,
+            (reasoning or "").count(".") + (reasoning or "").count("!")
+            + (reasoning or "").count("?"))
+        _complexity = round(0.5 * _avg_w_len + 0.5 * _sent_count, 2)
+        _prev_streak = state.get("correct_streak", 0)
+        _new_streak = (_prev_streak + 1) if correct else 0
+        state["correct_streak"] = _new_streak
+        _payload["reasoning_length_words"] = _wc
+        _payload["reasoning_complexity"]   = _complexity
+        _payload["correct_streak"]         = _new_streak
+        # KG signals (added 2026-05-22). Closes Layer 13 gap. Captures
+        # which concept the KG was queried for, how many prereqs/related/
+        # misconceptions/interventions came back, and the COKE TOM
+        # prediction. Lets us answer "did the KG actually surface
+        # useful context this turn, or was it empty?"
+        _payload["kg_concept_queried"]      = q["concept"]
+        _payload["cse_prerequisites_count"] = len((cse_kg_block or {}).get("prerequisites", []))
+        _payload["cse_related_count"]       = len((cse_kg_block or {}).get("related_concepts", []))
+        _payload["ped_misconceptions_count"]= len((pedagogical_kg_block or {}).get("misconceptions", []))
+        _payload["ped_interventions_count"] = len((pedagogical_kg_block or {}).get("interventions", []))
+        _payload["coke_cognitive_state"]    = (coke_block or {}).get("cognitive_state")
+        _payload["coke_confidence"]         = (coke_block or {}).get("confidence")
+        _payload["three_channel_fired"]     = bool(three_channel_block)
+        _payload["cse_kg_block_chars"]      = len(json.dumps(cse_kg_block or {}))
+        _payload["ped_kg_block_chars"]      = len(json.dumps(pedagogical_kg_block or {}))
         get_db().audit("turn_completed", student_id=_sid_audit,
                         payload=_payload)
         get_db().audit("intervention_picked", student_id=_sid_audit,

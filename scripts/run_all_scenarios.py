@@ -1746,6 +1746,167 @@ run_scenario("20","20.12","dwell_s preserved per turn",s20_12,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# Layer 21 — Behavioral + KG signals per turn (added 2026-05-22).
+# Closes the Layer 7 (no per-turn behavior strategy) and Layer 13 (no
+# per-turn KG context tracking) gaps identified in the prior review.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 21 — Behavioral + KG signals per turn")
+
+def _seed_full_turn(db, sid, skill, payload):
+    """Mirror the turn_completed shape the chat app now writes."""
+    full = {"skill": skill, **payload}
+    db.audit("turn_completed", student_id=sid, payload=full)
+
+# 21.1 — Reasoning length + complexity captured
+def s21_1():
+    try:
+        db = _fresh_db("21_1")
+        for r_len, r_cplx in [(3, 1.5), (47, 4.2), (220, 7.8)]:
+            _seed_full_turn(db, "u", "null_pointer", {
+                "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
+                "reasoning_length_words":r_len,"reasoning_complexity":r_cplx,
+            })
+        rows = db.progression_for("u","null_pointer")
+        ok = (rows[0]["reasoning_length_words"] == 3
+              and rows[-1]["reasoning_length_words"] == 220
+              and rows[-1]["reasoning_complexity"] == 7.8)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got lengths {[r.get('reasoning_length_words') for r in rows]}",
+                "lengths":[r.get("reasoning_length_words") for r in rows],
+                "complexities":[r.get("reasoning_complexity") for r in rows]}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.1","reasoning length+complexity per turn",s21_1,
+             "3/47/220 lengths preserved")
+
+# 21.2 — Correct-streak grows on correct, resets on wrong
+def s21_2():
+    try:
+        db = _fresh_db("21_2")
+        pattern = [True, True, True, False, True, True]
+        expected_streaks = [1, 2, 3, 0, 1, 2]
+        for c, s in zip(pattern, expected_streaks):
+            _seed_full_turn(db, "u", "null_pointer", {
+                "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
+                "is_correct":c,"correct_streak":s,
+            })
+        rows = db.progression_for("u","null_pointer")
+        got = [r.get("correct_streak") for r in rows]
+        ok = got == expected_streaks
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"streak pattern wrong: {got}",
+                "expected":expected_streaks,"got":got}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.2","correct_streak grows + resets",s21_2,
+             "[1,2,3,0,1,2]")
+
+# 21.3 — KG concept queried + counts per turn
+def s21_3():
+    try:
+        db = _fresh_db("21_3")
+        _seed_full_turn(db, "u", "null_pointer", {
+            "lp_before":"L1","lp_after":"L2","mastery_after":0.4,
+            "kg_concept_queried":"null_pointer",
+            "cse_prerequisites_count":3, "cse_related_count":5,
+            "ped_misconceptions_count":2, "ped_interventions_count":4,
+            "three_channel_fired":True,
+        })
+        row = db.progression_for("u","null_pointer")[0]
+        ok = (row.get("kg_concept_queried") == "null_pointer"
+              and row.get("cse_prerequisites_count") == 3
+              and row.get("ped_misconceptions_count") == 2
+              and row.get("three_channel_fired") is True)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else "KG fields missing",
+                "row_keys":sorted(row.keys())}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.3","KG concept + counts per turn",s21_3,
+             "all KG fields preserved")
+
+# 21.4 — COKE cognitive_state captured
+def s21_4():
+    try:
+        db = _fresh_db("21_4")
+        for cs, cf in [("confused", 0.72), ("engaged", 0.85), ("frustrated", 0.61)]:
+            _seed_full_turn(db, "u", "null_pointer", {
+                "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
+                "coke_cognitive_state":cs, "coke_confidence":cf,
+            })
+        rows = db.progression_for("u","null_pointer")
+        states = [r.get("coke_cognitive_state") for r in rows]
+        ok = states == ["confused","engaged","frustrated"]
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"states={states}",
+                "states":states}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.4","COKE cognitive_state per turn",s21_4,
+             "states preserved in order")
+
+# 21.5 — KG block sizes (proxy for context volume)
+def s21_5():
+    try:
+        db = _fresh_db("21_5")
+        # Simulate one rich-context turn and one sparse turn
+        _seed_full_turn(db, "u", "null_pointer", {
+            "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
+            "cse_kg_block_chars":1200, "ped_kg_block_chars":850,
+        })
+        _seed_full_turn(db, "u", "null_pointer", {
+            "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
+            "cse_kg_block_chars":40, "ped_kg_block_chars":20,
+        })
+        rows = db.progression_for("u","null_pointer")
+        ok = (rows[0]["cse_kg_block_chars"] == 1200
+              and rows[1]["cse_kg_block_chars"] == 40)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else "sizes not captured",
+                "sizes":[r.get("cse_kg_block_chars") for r in rows]}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.5","KG block sizes per turn",s21_5,
+             "1200 / 40 sizes preserved")
+
+# 21.6 — All new fields coexist with old fields in one turn audit
+def s21_6():
+    try:
+        db = _fresh_db("21_6")
+        _seed_full_turn(db, "u", "null_pointer", {
+            # OLD fields (Layer 19/20 already covered)
+            "session_id":"s1","lp_before":"L1","lp_after":"L2",
+            "mastery_after":0.50,"intervention":"worked_example",
+            "rl_q":0.42,"dwell_s":18.3,
+            "attribution":"adaptive","imposter":False,
+            # NEW Layer 21 fields
+            "reasoning_length_words":42,"reasoning_complexity":3.8,
+            "correct_streak":2,
+            "kg_concept_queried":"null_pointer",
+            "cse_prerequisites_count":3,"cse_related_count":5,
+            "ped_misconceptions_count":2,"ped_interventions_count":4,
+            "coke_cognitive_state":"engaged","coke_confidence":0.78,
+            "three_channel_fired":True,
+            "cse_kg_block_chars":900,"ped_kg_block_chars":650,
+        })
+        row = db.progression_for("u","null_pointer")[0]
+        required = {"session_id","lp_after","mastery_after","intervention",
+                    "rl_q","dwell_s","attribution","reasoning_length_words",
+                    "reasoning_complexity","correct_streak",
+                    "kg_concept_queried","cse_prerequisites_count",
+                    "coke_cognitive_state","three_channel_fired"}
+        missing = required - set(row.keys())
+        ok = not missing
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"missing fields: {missing}",
+                "n_fields":len(row),"sample_keys":sorted(row.keys())[:12]}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("21","21.6","old + new fields coexist in one turn",s21_6,
+             "all 14 expected fields present")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Wrap up
 # ═══════════════════════════════════════════════════════════════════════════
 section("Summary")
