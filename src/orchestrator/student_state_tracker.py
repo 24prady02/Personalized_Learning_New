@@ -503,9 +503,26 @@ class StudentStateTracker:
                 print(f"[WARN] Failed to load student states: {e}")
 
     def _save_states(self):
+        # Atomic write — under concurrent load (multiple students in the
+        # same Gradio process) the previous direct-overwrite pattern
+        # could leave a partially-serialised JSON behind, breaking every
+        # subsequent student-state read. We write to a sibling tmp file
+        # then os.replace() — atomic on both POSIX and NTFS.
+        # Added 2026-05-21 as part of the production-hardening pass.
         try:
-            with open(self.state_file, "w") as f:
-                json.dump(self.student_states, f, indent=2, default=str)
+            import os, tempfile
+            self.state_file.parent.mkdir(parents=True, exist_ok=True)
+            with tempfile.NamedTemporaryFile(
+                "w", encoding="utf-8", delete=False,
+                dir=str(self.state_file.parent),
+                prefix=self.state_file.name + ".",
+                suffix=".tmp",
+            ) as tf:
+                json.dump(self.student_states, tf, indent=2, default=str)
+                tf.flush()
+                os.fsync(tf.fileno())
+                tmp_path = tf.name
+            os.replace(tmp_path, str(self.state_file))
         except Exception as e:
             print(f"[WARN] Failed to save student states: {e}")
 

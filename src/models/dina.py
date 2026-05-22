@@ -30,9 +30,40 @@ Usage in orchestrator:
 """
 
 import json
+import os
+import tempfile
 import numpy as np
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+
+def _atomic_write_json(path: Path, payload) -> None:
+    """Write `payload` as JSON to `path` atomically.
+
+    Concurrent students writing the DINA / mastery JSON simultaneously
+    used to corrupt the file (Layer 8.7 in the scenario harness flagged
+    this as NOT_RUNNABLE specifically because the single-process harness
+    couldn't reproduce it — but in production it WILL happen). We write
+    to a temp file in the same directory then os.replace() — atomic on
+    both POSIX and NTFS. A reader will always see either the old file
+    or the new file, never a half-written one.
+
+    Added 2026-05-21 as part of the production-hardening pass.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # NamedTemporaryFile in the destination dir guarantees os.replace is
+    # cross-device-safe (same filesystem).
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", delete=False,
+        dir=str(path.parent),
+        prefix=path.name + ".",
+        suffix=".tmp",
+    ) as tf:
+        json.dump(payload, tf, indent=2)
+        tf.flush()
+        os.fsync(tf.fileno())
+        tmp_path = tf.name
+    os.replace(tmp_path, str(path))
 
 
 # ─── Java CSCI 1301 skill definitions ─────────────────────────────────────────
@@ -251,16 +282,15 @@ class DINAModel:
     # ── Checkpoint I/O ────────────────────────────────────────────────────────
 
     def _save(self):
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        data = {
+        # Atomic write — concurrent students used to corrupt the file.
+        # See _atomic_write_json docstring (added 2026-05-21).
+        _atomic_write_json(self.ckpt, {
             'skills':     JAVA_SKILLS,
             'slip':       self.slip.tolist(),
             'guess':      self.guess.tolist(),
             'prior':      self.prior.tolist(),
             'is_trained': self.is_trained,
-        }
-        with open(self.ckpt, 'w') as f:
-            json.dump(data, f, indent=2)
+        })
 
     def _try_load(self):
         if self.ckpt.exists():
@@ -278,10 +308,9 @@ class DINAModel:
     def save_student_states(self, path: Optional[str] = None):
         """Persist per-student mastery to JSON (called on session end)."""
         p = Path(path or self.data_dir / 'student_mastery.json')
-        p.parent.mkdir(parents=True, exist_ok=True)
-        with open(p, 'w') as f:
-            json.dump({sid: m.tolist()
-                       for sid, m in self._student_mastery.items()}, f, indent=2)
+        _atomic_write_json(p, {
+            sid: m.tolist() for sid, m in self._student_mastery.items()
+        })
 
     def load_student_states(self, path: Optional[str] = None):
         p = Path(path or self.data_dir / 'student_mastery.json')
