@@ -142,18 +142,85 @@ class DINAModel:
         return m
 
     def get_mastery(self, student_id: str,
-                    skill: Optional[str] = None) -> Dict:
+                    skill: Optional[str] = None,
+                    apply_decay: bool = True) -> Dict:
         """
         Returns mastery dict for a student.
         If skill is given, returns only that skill's probability.
+
+        Decay (added 2026-05-21): when apply_decay is True we pull the
+        last-seen timestamp from SQLite and decay the in-memory
+        mastery toward the per-skill prior at MASTERY_HALF_LIFE_DAYS
+        cadence. This makes "return after 30 days" actually
+        reassess — previously mastered concepts gradually need
+        re-verification. Decay is applied on read (not stored back)
+        so a fresh interaction immediately overrides via the regular
+        Bayes update.
         """
         if student_id not in self._student_mastery:
             self._init_student(student_id)
         m = self._student_mastery[student_id]
         if skill:
             idx = SKILL_INDEX.get(skill, -1)
-            return {skill: float(m[idx]) if idx >= 0 else _DEFAULT_PRIOR}
-        return {s: float(m[i]) for i, s in enumerate(JAVA_SKILLS)}
+            if idx < 0:
+                return {skill: _DEFAULT_PRIOR}
+            val = float(m[idx])
+            if apply_decay:
+                val = self._apply_decay(student_id, skill, val)
+            return {skill: val}
+        out = {s: float(m[i]) for i, s in enumerate(JAVA_SKILLS)}
+        if apply_decay:
+            for s in list(out.keys()):
+                out[s] = self._apply_decay(student_id, s, out[s])
+        return out
+
+    # Half-life for mastery decay, in days. After this much time without
+    # interaction, mastery decays half-way toward the per-skill prior.
+    # 14 days is a reasonable default for an academic-term-paced course;
+    # adjust for shorter / longer review cycles.
+    MASTERY_HALF_LIFE_DAYS = 14.0
+
+    def _apply_decay(self, student_id: str, skill: str,
+                      p_current: float) -> float:
+        """Decay `p_current` toward the per-skill prior based on how
+        long since this (student, skill) was last updated. Quiet
+        soft-fail if SQLite isn't available (treat as fresh)."""
+        try:
+            from src.persistence.db_store import get_db
+            from datetime import datetime, timezone
+            row = get_db().get_mastery(student_id, skill)
+            if not row:
+                return p_current
+            _, last_iso = row
+            last = datetime.fromisoformat(last_iso)
+            now  = datetime.now(timezone.utc)
+            # Make naive datetimes tz-aware as UTC for safe subtraction.
+            if last.tzinfo is None:
+                last = last.replace(tzinfo=timezone.utc)
+            age_days = max(0.0, (now - last).total_seconds() / 86400.0)
+            if age_days < 0.1:
+                return p_current   # cheap: no decay for fresh writes
+            idx = SKILL_INDEX.get(skill, -1)
+            prior = float(self.prior[idx]) if idx >= 0 else _DEFAULT_PRIOR
+            # Exponential decay toward prior with half-life of N days:
+            #   p(t) = prior + (p_current - prior) * 0.5 ** (t / half_life)
+            decay_factor = 0.5 ** (age_days / self.MASTERY_HALF_LIFE_DAYS)
+            decayed = prior + (p_current - prior) * decay_factor
+            return float(np.clip(decayed, 0.01, 0.99))
+        except Exception:
+            return p_current
+
+    def _mirror_to_db(self, student_id: str, skill: str,
+                       p_mastered: float) -> None:
+        """Write the per-(student, skill) mastery to SQLite. Soft-fail —
+        the JSON file remains the source of truth on startup, so if DB
+        write fails we still have the old persistence path. Added
+        2026-05-21."""
+        try:
+            from src.persistence.db_store import get_db
+            get_db().upsert_mastery(student_id, skill, p_mastered)
+        except Exception as e:
+            print(f"[DINA] DB mirror write failed: {e}")
 
     def update(self, student_id: str, skill: str,
                is_correct: bool,
@@ -194,6 +261,12 @@ class DINAModel:
 
         p_l_new = float(np.clip(p_l_new, 0.01, 0.99))
         m[idx]  = p_l_new
+
+        # Mirror to SQLite (2026-05-21). Per-(student, skill) row so
+        # concurrent students don't clobber each other and so the
+        # teacher dashboard / GDPR endpoints can query without parsing
+        # the whole JSON.
+        self._mirror_to_db(student_id, skill, p_l_new)
 
         return {
             'skill':         skill,

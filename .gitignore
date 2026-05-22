@@ -99,5 +99,15 @@ temp_*
 # Runtime artifacts — chat-app + cloudflared
 .app.pid
 .tunnel.pid
+.scenario.pid
 cloudflared.err
 cloudflared.log
+scenario_run.log
+scenario_run.err
+
+# Local SQLite store (per-deployment data, not source)
+data/cpal.db
+data/cpal.db-*
+
+# Dev-only auth secret. Production uses CPAL_AUTH_SECRET env var.
+src/persistence/.auth_secret_dev

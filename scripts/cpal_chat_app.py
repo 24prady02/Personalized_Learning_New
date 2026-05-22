@@ -837,10 +837,26 @@ def _resolve_student_id(request, state: dict) -> str:
     persistence key.
     """
     sid = None
+    role = "student"
+    course = "default"
     try:
         if request is not None:
             qp = getattr(request, "query_params", {}) or {}
-            sid = (qp.get("student") or qp.get("student_id") or "").strip() or None
+            # Token-based auth (added 2026-05-21). If ?token=... is
+            # present and validates, use the embedded student_id +
+            # role. Falls back to ?student=... (unauthenticated) so
+            # demo sessions still work without an issued token.
+            tok = (qp.get("token") or "").strip()
+            if tok:
+                try:
+                    from src.persistence.auth import validate_token
+                    parsed = validate_token(tok)
+                    if parsed:
+                        sid, role, course = parsed
+                except Exception as _e:
+                    print(f"[auth] token validation fell through: {_e}")
+            if not sid:
+                sid = (qp.get("student") or qp.get("student_id") or "").strip() or None
     except Exception:
         sid = None
     if not sid:
@@ -851,6 +867,8 @@ def _resolve_student_id(request, state: dict) -> str:
     sid = _r.sub(r"[^a-zA-Z0-9_\-]", "_", sid)[:64] or "chat_user"
     if state is not None:
         state["student_id"] = sid
+        state["role"]       = role
+        state["course"]     = course
     return sid
 
 
@@ -1140,6 +1158,17 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         psych_lines += " " + ", ".join(bits) + "\n"
     if rec_intervention:
         psych_lines += f"- **Intervention picked:** `{rec_intervention}`\n"
+    # A/B variant footer (added 2026-05-21). Surface the experiment
+    # variants assigned to this student so a researcher / teacher
+    # reviewing a transcript can attribute behavioral differences to
+    # the right arm of the experiment.
+    v_teach = state.get("variant_teach_prompt")
+    v_probe = state.get("variant_probe_cap")
+    if v_teach or v_probe:
+        psych_lines += (
+            f"- **A/B variants:** teach_prompt=`{v_teach or '-'}`, "
+            f"probe_cap=`{v_probe or '-'}`\n"
+        )
     # Substance-penalty annotation: confidence was forced down because
     # the student gave a filler-only reply ("idk", "?"). Helps the user
     # understand why we're probing rather than teaching.
@@ -1438,6 +1467,17 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state,
     2026-05-21).
     """
     _resolve_student_id(request, state)
+    # A/B variant assignment (2026-05-21). Sticky per (student,
+    # experiment) — first call assigns + persists, every subsequent
+    # call returns the same variant. Used downstream to branch prompt
+    # phrasing / probe cap.
+    try:
+        from src.persistence.ab_testing import assign_variant
+        sid_for_ab = state.get("student_id") or "chat_user"
+        state["variant_teach_prompt"] = assign_variant(sid_for_ab, "teach_prompt_v2")
+        state["variant_probe_cap"]    = assign_variant(sid_for_ab, "probe_cap_v1")
+    except Exception as _e:
+        print(f"[AB] variant assignment fell through: {_e}")
     if not quiz_id:
         yield (history, gr.update(value="⚠️ Select a quiz first.", visible=True),
                gr.update(visible=False), "", "", state)
@@ -2406,6 +2446,114 @@ def clear_chat():
 
 
 # =========================================================================
+# Teacher dashboard (added 2026-05-21)
+# =========================================================================
+def _render_teacher_dashboard() -> str:
+    """Markdown rendering of the class-level dashboard. Pulls from
+    SQLite via DBStore — soft-fails to an explanatory message if the
+    DB isn't reachable.
+
+    Shows:
+      * Mastery heatmap (student × skill, hashed student_ids).
+      * Top struggling concepts (skills where ≥ N students are below
+        threshold, sorted by N descending).
+      * Intervention picks distribution (counts by type).
+
+    Aggregate-only — no individual student PII (student_ids are
+    hash-truncated). Treat this as read-only for the operator /
+    classroom teacher.
+    """
+    try:
+        from src.persistence.db_store import get_db
+        db = get_db()
+        heatmap   = db.mastery_heatmap()
+        struggle  = db.struggling_concepts(threshold=0.40, limit=8)
+        interv    = db.intervention_counts()
+        students  = db.list_students()
+    except Exception as e:
+        return f"_(dashboard unavailable: {e})_"
+
+    if not students:
+        return ("_No student data yet. Once students start using the "
+                "tutor, this panel will show class-level mastery and "
+                "struggle patterns._")
+
+    lines = []
+    lines.append(f"**Students seen:** `{len(students)}`")
+    lines.append("")
+
+    # ── Struggling concepts ───────────────────────────────────────────
+    if struggle:
+        lines.append("### Top struggling concepts")
+        lines.append("| Skill | # below 0.40 | mean mastery |")
+        lines.append("|---|---:|---:|")
+        for skill, n_low, mean_p in struggle:
+            friendly = _CONCEPT_FRIENDLY.get(
+                skill, skill.replace("_", " ").title())
+            lines.append(f"| {friendly} | {n_low} | {mean_p:.2f} |")
+        lines.append("")
+    else:
+        lines.append("_(no skills below the 0.40 threshold yet)_")
+
+    # ── Intervention picks ────────────────────────────────────────────
+    if interv:
+        lines.append("### Intervention picks (across all sessions)")
+        total = sum(interv.values())
+        for k in sorted(interv.keys(), key=lambda x: -interv[x]):
+            v = interv[k]
+            pct = 100.0 * v / total
+            lines.append(f"- `{k}` — **{v}** ({pct:.0f}%)")
+        lines.append("")
+
+    # ── Mastery heatmap (top 20 students × top 8 concepts) ────────────
+    if heatmap:
+        # Hash truncate student_ids for the table (privacy-friendly).
+        import hashlib
+        def _hash8(s): return hashlib.sha1(s.encode("utf-8")).hexdigest()[:8]
+
+        all_skills = set()
+        for sk_map in heatmap.values():
+            all_skills.update(sk_map.keys())
+        # Pick the 8 skills with the LOWEST average mastery so the
+        # heatmap surfaces problem areas, not strengths.
+        skill_avg = {sk: (sum(heatmap[s].get(sk, 0.30) for s in heatmap) /
+                          max(1, len(heatmap))) for sk in all_skills}
+        focus_skills = sorted(skill_avg, key=lambda k: skill_avg[k])[:8]
+        sample_students = sorted(heatmap.keys())[:20]
+
+        lines.append("### Mastery heatmap (sample — lowest-avg 8 skills)")
+        header = "| student | " + " | ".join(
+            (_CONCEPT_FRIENDLY.get(s, s).split(" ")[0]) for s in focus_skills
+        ) + " |"
+        sep = "|---|" + "---:|" * len(focus_skills)
+        lines.append(header)
+        lines.append(sep)
+        for sid in sample_students:
+            row = "| `" + _hash8(sid) + "` | "
+            cells = []
+            for sk in focus_skills:
+                v = heatmap[sid].get(sk)
+                if v is None:
+                    cells.append("—")
+                else:
+                    # Coloured-cell hack via emoji density (Gradio
+                    # markdown doesn't support cell colours).
+                    if v < 0.30:   cell = f"🔴 {v:.2f}"
+                    elif v < 0.55: cell = f"🟡 {v:.2f}"
+                    elif v < 0.80: cell = f"🟢 {v:.2f}"
+                    else:          cell = f"⭐ {v:.2f}"
+                    cells.append(cell)
+            row += " | ".join(cells) + " |"
+            lines.append(row)
+        lines.append("")
+
+    lines.append("---")
+    lines.append("_Refresh to re-query. Student ids are hashed in this "
+                  "view — use the GDPR admin script for full export._")
+    return "\n".join(lines)
+
+
+# =========================================================================
 # UI
 # =========================================================================
 def build_app():
@@ -2638,6 +2786,21 @@ def build_app():
              probe_input, probe_state],
             show_progress="hidden",
         )
+
+        # ── Teacher dashboard accordion (added 2026-05-21) ───────────
+        # Closed by default. Anyone can open it but it shows aggregate
+        # data only — student_ids are hashed. Real role-gating would
+        # require dynamic UI based on the role embedded in the auth
+        # token, which is more invasive than this MVP allows.
+        with gr.Accordion("👨‍🏫 Teacher dashboard (class-level view)",
+                          open=False):
+            dashboard_md = gr.Markdown(_render_teacher_dashboard())
+            refresh_dash_btn = gr.Button("Refresh dashboard", size="sm")
+            refresh_dash_btn.click(
+                lambda: _render_teacher_dashboard(),
+                inputs=None, outputs=dashboard_md,
+                show_progress="hidden",
+            )
 
     return app
 

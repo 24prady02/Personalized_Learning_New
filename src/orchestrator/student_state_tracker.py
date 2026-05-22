@@ -502,6 +502,16 @@ class StudentStateTracker:
             except Exception as e:
                 print(f"[WARN] Failed to load student states: {e}")
 
+    def _mirror_states_to_db(self):
+        """Mirror student_states to SQLite. Soft-fail. Added 2026-05-21."""
+        try:
+            from src.persistence.db_store import get_db
+            db = get_db()
+            for sid, st in self.student_states.items():
+                db.upsert_student_state(sid, st)
+        except Exception as e:
+            print(f"[StateTracker] DB mirror failed: {e}")
+
     def _save_states(self):
         # Atomic write — under concurrent load (multiple students in the
         # same Gradio process) the previous direct-overwrite pattern
@@ -523,6 +533,10 @@ class StudentStateTracker:
                 os.fsync(tf.fileno())
                 tmp_path = tf.name
             os.replace(tmp_path, str(self.state_file))
+            # Mirror to SQLite (2026-05-21). Per-student row so the
+            # teacher dashboard + GDPR endpoints can query without
+            # parsing the whole JSON.
+            self._mirror_states_to_db()
         except Exception as e:
             print(f"[WARN] Failed to save student states: {e}")
 

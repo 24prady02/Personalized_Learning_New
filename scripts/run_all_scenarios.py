@@ -1109,6 +1109,382 @@ run_scenario("18","18.12","essay reply → solid/deep encoding",s18_12,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# Layer 19 — Production hardening (SQLite + decay + A/B + GDPR + auth +
+#            dashboard). Added 2026-05-21 alongside the features.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 19 — Production-hardening features")
+
+# 19.1 — DBStore basic upsert/read
+def s19_1():
+    try:
+        from src.persistence.db_store import get_db
+        # Use a tmp path so this doesn't touch the prod DB.
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_1.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        db.upsert_mastery("alice", "null_pointer", 0.42)
+        row = db.get_mastery("alice", "null_pointer")
+        ok = row is not None and abs(row[0] - 0.42) < 1e-6
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"DB roundtrip failed: {row}",
+                "stored":row}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.1","DBStore upsert+read roundtrip",s19_1,
+             "round-trip mastery to SQLite")
+
+# 19.2 — Concurrent writes don't corrupt (10 threads × 50 upserts each)
+def s19_2():
+    try:
+        import tempfile, os as _os, pathlib as _pl, threading
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_2.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        errs = []
+        def writer(thread_id):
+            try:
+                for i in range(50):
+                    db.upsert_mastery(f"student_{thread_id}",
+                                       "null_pointer", i / 50.0)
+            except Exception as e:
+                errs.append(str(e))
+        ts = [threading.Thread(target=writer, args=(i,)) for i in range(10)]
+        for t in ts: t.start()
+        for t in ts: t.join()
+        rows = db.get_all_mastery
+        all_rows = [db.get_mastery(f"student_{i}", "null_pointer") for i in range(10)]
+        ok = not errs and all(r is not None for r in all_rows)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"errs={errs[:3]} or missing rows",
+                "concurrent_writers":10,"rows_present":sum(1 for r in all_rows if r)}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.2","DB handles 10-thread concurrent writes",s19_2,
+             "no corruption, all rows present")
+
+# 19.3 — Mastery decay over time
+def s19_3():
+    try:
+        from src.models.dina import DINAModel
+        from src.persistence.db_store import DBStore
+        import tempfile, os as _os, pathlib as _pl, yaml
+        from datetime import datetime, timezone, timedelta
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_3.db"
+        if tmp.exists(): _os.remove(tmp)
+        # Replace the singleton with our test DB.
+        import src.persistence.db_store as dbm
+        dbm._DB_INSTANCE = DBStore(tmp)
+        with open(ROOT / "configs" / "config.yaml") as f:
+            cfg = yaml.safe_load(f)
+        d = DINAModel(cfg)
+        # Bump mastery, then manually backdate last_seen_iso to 28 days ago
+        d.update("decay_test_user", "null_pointer", True)
+        d.update("decay_test_user", "null_pointer", True)
+        d.update("decay_test_user", "null_pointer", True)
+        fresh = d.get_mastery("decay_test_user","null_pointer",apply_decay=False)["null_pointer"]
+        # Manually overwrite last_seen to 28 days ago (= 2x half-life)
+        old_iso = (datetime.now(timezone.utc) - timedelta(days=28)).isoformat(timespec="seconds")
+        dbm._DB_INSTANCE.upsert_mastery("decay_test_user","null_pointer", fresh, old_iso)
+        decayed = d.get_mastery("decay_test_user","null_pointer",apply_decay=True)["null_pointer"]
+        # After 28 days = 2x half-life, decay factor = 0.25 → should fall significantly
+        ok = decayed < fresh - 0.05
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"mastery didn't decay: fresh={fresh:.3f} → 28d={decayed:.3f}",
+                "fresh":round(fresh,3),"after_28d":round(decayed,3),
+                "expected_factor":0.25}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.3","mastery decay after 28 days (2x half-life)",s19_3,
+             "p decays significantly toward prior")
+
+# 19.4 — A/B variant is sticky per student
+def s19_4():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_4.db"
+        if tmp.exists(): _os.remove(tmp)
+        import src.persistence.db_store as dbm
+        dbm._DB_INSTANCE = dbm.DBStore(tmp)
+        from src.persistence.ab_testing import assign_variant
+        v1 = assign_variant("alice_ab", "teach_prompt_v2")
+        v2 = assign_variant("alice_ab", "teach_prompt_v2")
+        v3 = assign_variant("alice_ab", "teach_prompt_v2")
+        ok = v1 == v2 == v3 and v1 in ("control","verbose")
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"sticky broken: {v1},{v2},{v3}",
+                "calls":[v1,v2,v3]}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.4","A/B assignment is sticky per student",s19_4,
+             "same variant on repeated calls")
+
+# 19.5 — A/B assignment is balanced across students (~50/50)
+def s19_5():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_5.db"
+        if tmp.exists(): _os.remove(tmp)
+        import src.persistence.db_store as dbm
+        dbm._DB_INSTANCE = dbm.DBStore(tmp)
+        from src.persistence.ab_testing import assign_variant
+        counts = {}
+        for i in range(200):
+            v = assign_variant(f"student_{i}", "teach_prompt_v2")
+            counts[v] = counts.get(v,0) + 1
+        # Expect ~100/100 ±20 for a fair coin
+        a = counts.get("control",0); b = counts.get("verbose",0)
+        ok = abs(a - b) < 40
+        return {"_outcome":"PASS" if ok else "DEGRADED",
+                "_drawback":None if ok else f"imbalanced: {counts}",
+                "counts":counts}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.5","A/B balanced across 200 students",s19_5,
+             "control ≈ verbose within ±20 of 100")
+
+# 19.6 — GDPR delete wipes all DB traces + writes tombstone
+def s19_6():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_6.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        # Populate
+        db.upsert_mastery("bob", "null_pointer", 0.5)
+        db.upsert_mastery("bob", "string_equality", 0.7)
+        db.upsert_student_state("bob", {"foo":"bar"})
+        db.set_variant("bob","teach_prompt_v2","verbose")
+        db.set_consent("bob", True)
+        db.audit("test_event", student_id="bob", payload={"x":1})
+        # Verify present
+        pre_mastery = db.get_all_mastery("bob")
+        pre_state   = db.get_student_state("bob")
+        # Delete
+        counts = db.delete_student("bob")
+        # Verify wiped
+        post_mastery = db.get_all_mastery("bob")
+        post_state   = db.get_student_state("bob")
+        # Verify tombstone present
+        with db._lock:
+            tomb = db._conn.execute(
+                "SELECT COUNT(*) FROM audit_log WHERE event='gdpr_delete'"
+            ).fetchone()[0]
+        ok = (pre_mastery and not post_mastery
+              and pre_state and not post_state
+              and tomb >= 1)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else
+                  f"wipe incomplete: post_mastery={post_mastery}, "
+                  f"post_state={post_state}, tomb={tomb}",
+                "delete_counts":counts, "tombstone_rows":tomb}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.6","GDPR delete wipes all traces + tombstone",s19_6,
+             "all rows gone, tombstone present")
+
+# 19.7 — GDPR export contains everything we have
+def s19_7():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_7.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        db.upsert_mastery("carol", "null_pointer", 0.55)
+        db.upsert_student_state("carol", {"k":"v"})
+        db.set_variant("carol","teach_prompt_v2","control")
+        exp = db.export_student("carol")
+        ok = ("null_pointer" in exp["mastery"]
+              and exp["state"] == {"k":"v"}
+              and exp["variants"].get("teach_prompt_v2") == "control")
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"export incomplete: {list(exp.keys())}",
+                "export_keys":list(exp.keys())}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.7","GDPR export contains all fields",s19_7,
+             "mastery + state + variants + audit")
+
+# 19.8 — Token issue + validate roundtrip
+def s19_8():
+    try:
+        from src.persistence.auth import issue_token, validate_token
+        tok = issue_token("dave","student","CSCI1301", ttl_seconds=60)
+        parsed = validate_token(tok)
+        ok = parsed == ("dave","student","CSCI1301")
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"got {parsed}",
+                "parsed":parsed}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.8","auth token roundtrip",s19_8,
+             "issue+validate returns (student,role,course)")
+
+# 19.9 — Token rejects tampering
+def s19_9():
+    try:
+        from src.persistence.auth import issue_token, validate_token
+        tok = issue_token("eve","student","CSCI1301", ttl_seconds=60)
+        # Flip one char in the middle of the token
+        idx = len(tok) // 2
+        tampered = tok[:idx] + ("A" if tok[idx] != "A" else "B") + tok[idx+1:]
+        parsed = validate_token(tampered)
+        ok = parsed is None
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"tamper accepted: {parsed}",
+                "tampered_accepted":parsed is not None}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.9","auth token rejects tampering",s19_9,
+             "altered bytes → None")
+
+# 19.10 — Token rejects expiry
+def s19_10():
+    try:
+        from src.persistence.auth import issue_token, validate_token
+        tok = issue_token("frank","student","CSCI1301", ttl_seconds=-10)
+        parsed = validate_token(tok)
+        ok = parsed is None
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"expired token accepted: {parsed}",
+                "accepted":parsed is not None}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.10","auth token rejects expiry",s19_10,
+             "ttl_seconds=-10 → None")
+
+# 19.11 — Mastery heatmap aggregation correctness
+def s19_11():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_11.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        # 3 students × 2 skills each
+        for sid, sk, p in [
+            ("s1","null_pointer",0.20), ("s1","string_equality",0.80),
+            ("s2","null_pointer",0.30), ("s2","string_equality",0.30),
+            ("s3","null_pointer",0.10), ("s3","string_equality",0.95),
+        ]:
+            db.upsert_mastery(sid, sk, p)
+        hm = db.mastery_heatmap()
+        struggle = db.struggling_concepts(threshold=0.40, limit=5)
+        # null_pointer should be top struggle (3 students below 0.40)
+        ok = (len(hm) == 3
+              and struggle and struggle[0][0] == "null_pointer"
+              and struggle[0][1] == 3)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"heatmap or struggle wrong",
+                "n_students":len(hm),"top_struggle":struggle[0] if struggle else None}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.11","heatmap + struggle aggregation",s19_11,
+             "n_students=3, top struggle=null_pointer with n=3")
+
+# 19.12 — Intervention counts aggregation
+def s19_12():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_12.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        for t in ["worked_example","worked_example","worked_example",
+                  "socratic_prompt","attribution_reframe"]:
+            db.audit("intervention_picked", student_id="x", payload={"type":t})
+        counts = db.intervention_counts()
+        ok = counts.get("worked_example") == 3 and counts.get("socratic_prompt") == 1
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"counts wrong: {counts}",
+                "counts":counts}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.12","intervention counts aggregation",s19_12,
+             "worked_example=3, socratic_prompt=1")
+
+# 19.13 — Consent default = False; set+read works
+def s19_13():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_13.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        before = db.has_consent("zoe")  # never set
+        db.set_consent("zoe", True)
+        after = db.has_consent("zoe")
+        db.set_consent("zoe", False)
+        revoked = db.has_consent("zoe")
+        ok = (before is False and after is True and revoked is False)
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"unexpected: before={before}, after={after}, revoked={revoked}",
+                "before":before,"after":after,"revoked":revoked}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.13","consent default false + set + revoke",s19_13,
+             "default false, can set/revoke")
+
+# 19.14 — Audit log preserves order
+def s19_14():
+    try:
+        import tempfile, os as _os, pathlib as _pl
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_14.db"
+        if tmp.exists(): _os.remove(tmp)
+        from src.persistence.db_store import DBStore
+        db = DBStore(tmp)
+        for i in range(10):
+            db.audit(f"event_{i}", student_id="user", payload={"i":i})
+        rows = db.audit_for_student("user")
+        ok = (len(rows) == 10 and rows[0]["event"] == "event_0"
+              and rows[-1]["event"] == "event_9")
+        return {"_outcome":"PASS" if ok else "FAIL",
+                "_drawback":None if ok else f"order wrong: {[r['event'] for r in rows[:3]]}",
+                "n":len(rows),"first":rows[0]["event"] if rows else None,
+                "last":rows[-1]["event"] if rows else None}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.14","audit log preserves insertion order",s19_14,
+             "10 events, order preserved")
+
+# 19.15 — Decay over 100 days approaches prior
+def s19_15():
+    try:
+        from src.models.dina import DINAModel
+        import tempfile, os as _os, pathlib as _pl, yaml
+        from datetime import datetime, timezone, timedelta
+        tmp = _pl.Path(tempfile.gettempdir()) / "cpal_test_db_19_15.db"
+        if tmp.exists(): _os.remove(tmp)
+        import src.persistence.db_store as dbm
+        dbm._DB_INSTANCE = dbm.DBStore(tmp)
+        with open(ROOT / "configs" / "config.yaml") as f:
+            cfg = yaml.safe_load(f)
+        d = DINAModel(cfg)
+        for _ in range(5):
+            d.update("centuryuser","null_pointer",True)
+        fresh = d.get_mastery("centuryuser","null_pointer",apply_decay=False)["null_pointer"]
+        old_iso = (datetime.now(timezone.utc) - timedelta(days=100)).isoformat(timespec="seconds")
+        dbm._DB_INSTANCE.upsert_mastery("centuryuser","null_pointer", fresh, old_iso)
+        decayed = d.get_mastery("centuryuser","null_pointer",apply_decay=True)["np_check" if False else "null_pointer"]
+        # After 100 days = ~7 half-lives, decay factor < 0.01 → near prior
+        prior = float(d.prior[0])  # null_pointer is idx 2 actually
+        from src.models.dina import SKILL_INDEX
+        prior = float(d.prior[SKILL_INDEX["null_pointer"]])
+        ok = abs(decayed - prior) < 0.05
+        return {"_outcome":"PASS" if ok else "DEGRADED",
+                "_drawback":None if ok else f"decayed={decayed:.3f}, prior={prior:.3f}",
+                "fresh":round(fresh,3),"after_100d":round(decayed,3),"prior":round(prior,3)}
+    except Exception as e:
+        return {"_outcome":"ERROR","_drawback":str(e)}
+run_scenario("19","19.15","decay after 100 days approaches prior",s19_15,
+             "near prior (±0.05)")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Wrap up
 # ═══════════════════════════════════════════════════════════════════════════
 section("Summary")
