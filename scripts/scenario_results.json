@@ -1,0 +1,2839 @@
+[
+  {
+    "layer": "0",
+    "id": "0.1",
+    "name": "completely empty",
+    "expected": "unknown, elicitation",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "resolved": [
+        [
+          "unknown",
+          0.0
+        ]
+      ],
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 2.49
+  },
+  {
+    "layer": "0",
+    "id": "0.2",
+    "name": "whitespace-only",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "resolved": [
+        [
+          "unknown",
+          0.0
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.3a",
+    "name": "single token '?'",
+    "expected": "unknown, low encoding",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "encoding_strength": "partial"
+    },
+    "error": null,
+    "duration_s": 0.1
+  },
+  {
+    "layer": "0",
+    "id": "0.3b",
+    "name": "single token '\ud83d\ude2d'",
+    "expected": "unknown, low encoding",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "encoding_strength": "partial"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "0",
+    "id": "0.3c",
+    "name": "single token '.'",
+    "expected": "unknown, low encoding",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "encoding_strength": "partial"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "0",
+    "id": "0.3d",
+    "name": "single token 'k'",
+    "expected": "unknown, low encoding",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "encoding_strength": "partial"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "0",
+    "id": "0.5a",
+    "name": "idk variant 'idk'",
+    "expected": "conf<0.45 \u2192 probe, L1",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3,
+      "lp": "L1"
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "0",
+    "id": "0.5b",
+    "name": "idk variant \"i don't know\"",
+    "expected": "conf<0.45 \u2192 probe, L1",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3,
+      "lp": "L1"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "0",
+    "id": "0.5c",
+    "name": "idk variant 'no clue'",
+    "expected": "conf<0.45 \u2192 probe, L1",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3,
+      "lp": "L1"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "0",
+    "id": "0.5d",
+    "name": "idk variant 'no idea'",
+    "expected": "conf<0.45 \u2192 probe, L1",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3,
+      "lp": "L1"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "0",
+    "id": "0.7",
+    "name": "empty code, real error",
+    "expected": "null_pointer via error channel",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "resolved": [
+        [
+          "null_pointer",
+          0.675
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.8",
+    "name": "empty error, real code",
+    "expected": "concept from code",
+    "outcome": "DEGRADED",
+    "drawback": "code-only \u2192 unknown",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "code-only \u2192 unknown",
+      "resolved": [
+        [
+          "unknown",
+          0.0
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.9",
+    "name": "code dump no question",
+    "expected": "ask clarifying question",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "encoding_strength": "surface"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "0",
+    "id": "0.10",
+    "name": "text only no actions",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "string_equality",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "0",
+    "id": "0.11",
+    "name": "actions only no text",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.12a",
+    "name": "filler '...'",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "0",
+    "id": "0.12b",
+    "name": "filler 'ok'",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "0",
+    "id": "0.12c",
+    "name": "filler 'hmm'",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "0",
+    "id": "0.13",
+    "name": "reply is code only",
+    "expected": "logical_step=False",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "logical_step": false
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "0",
+    "id": "0.14",
+    "name": "refusal",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "0",
+    "id": "0.15",
+    "name": "screenshot empty-text fallthrough",
+    "expected": "elicitation",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "note": "same as 0.1"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.20",
+    "name": "disengagement / quit",
+    "expected": "motivational_support",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "worked_example",
+      "self_efficacy": "neutral",
+      "attribution": "neutral",
+      "high_anxiety": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "0",
+    "id": "0.4",
+    "name": "idle session timer",
+    "expected": "needs api/timer infra",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "needs wall-clock or REST API",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "needs wall-clock or REST API"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.16",
+    "name": "tab closed mid-probe",
+    "expected": "needs api/timer infra",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "needs wall-clock or REST API",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "needs wall-clock or REST API"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.17",
+    "name": "return after long absence",
+    "expected": "needs api/timer infra",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "needs wall-clock or REST API",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "needs wall-clock or REST API"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.18",
+    "name": "missing API fields",
+    "expected": "needs api/timer infra",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "needs wall-clock or REST API",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "needs wall-clock or REST API"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "0",
+    "id": "0.19",
+    "name": "null API fields",
+    "expected": "needs api/timer infra",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "needs wall-clock or REST API",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "needs wall-clock or REST API"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.1",
+    "name": "detect type_mismatch",
+    "expected": "resolve \u2192 type_mismatch",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "type_mismatch",
+      "conf": 0.22,
+      "top3": [
+        [
+          "type_mismatch",
+          0.22
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.2",
+    "name": "detect infinite_loop",
+    "expected": "resolve \u2192 infinite_loop",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "infinite_loop",
+      "conf": 0.512,
+      "top3": [
+        [
+          "infinite_loop",
+          0.512
+        ],
+        [
+          "variable_scope",
+          0.216
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.3",
+    "name": "detect null_pointer",
+    "expected": "resolve \u2192 null_pointer",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer",
+      "conf": 0.141,
+      "top3": [
+        [
+          "null_pointer",
+          0.141
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.4",
+    "name": "detect string_equality",
+    "expected": "resolve \u2192 string_equality",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.647,
+      "top3": [
+        [
+          "string_equality",
+          0.647
+        ],
+        [
+          "assignment_vs_compare",
+          0.436
+        ],
+        [
+          "boolean_operators",
+          0.23
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.5",
+    "name": "detect variable_scope",
+    "expected": "resolve \u2192 variable_scope",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "variable_scope",
+      "conf": 0.675,
+      "top3": [
+        [
+          "variable_scope",
+          0.675
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.6",
+    "name": "detect assignment_vs_compare",
+    "expected": "resolve \u2192 assignment_vs_compare",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "assignment_vs_compare",
+      "conf": 0.436,
+      "top3": [
+        [
+          "assignment_vs_compare",
+          0.436
+        ],
+        [
+          "boolean_operators",
+          0.319
+        ],
+        [
+          "string_equality",
+          0.29
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.7",
+    "name": "detect integer_division",
+    "expected": "resolve \u2192 integer_division",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "integer_division",
+      "conf": 0.512,
+      "top3": [
+        [
+          "integer_division",
+          0.512
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.8",
+    "name": "detect scanner_buffer",
+    "expected": "resolve \u2192 scanner_buffer",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "scanner_buffer",
+      "conf": 0.61,
+      "top3": [
+        [
+          "scanner_buffer",
+          0.61
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.9",
+    "name": "detect array_index",
+    "expected": "resolve \u2192 array_index",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "array_index",
+      "conf": 0.315,
+      "top3": [
+        [
+          "array_index",
+          0.315
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.10",
+    "name": "detect missing_return",
+    "expected": "resolve \u2192 missing_return",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "missing_return",
+      "conf": 0.61,
+      "top3": [
+        [
+          "missing_return",
+          0.61
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.11",
+    "name": "detect array_not_allocated",
+    "expected": "resolve \u2192 array_not_allocated",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "array_not_allocated",
+      "conf": 0.287,
+      "top3": [
+        [
+          "array_not_allocated",
+          0.287
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.12",
+    "name": "detect boolean_operators",
+    "expected": "resolve \u2192 boolean_operators",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "boolean_operators",
+      "conf": 0.122,
+      "top3": [
+        [
+          "boolean_operators",
+          0.122
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.13",
+    "name": "detect sentinel_loop",
+    "expected": "resolve \u2192 sentinel_loop",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "sentinel_loop",
+      "conf": 0.61,
+      "top3": [
+        [
+          "sentinel_loop",
+          0.61
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.14",
+    "name": "detect unreachable_code",
+    "expected": "resolve \u2192 unreachable_code",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unreachable_code",
+      "conf": 0.544,
+      "top3": [
+        [
+          "unreachable_code",
+          0.544
+        ],
+        [
+          "missing_return",
+          0.333
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.15",
+    "name": "detect string_immutability",
+    "expected": "resolve \u2192 string_immutability",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "string_immutability",
+      "conf": 0.675,
+      "top3": [
+        [
+          "string_immutability",
+          0.675
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.16",
+    "name": "detect no_default_constructor",
+    "expected": "resolve \u2192 no_default_constructor",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "no_default_constructor",
+      "conf": 0.362,
+      "top3": [
+        [
+          "no_default_constructor",
+          0.362
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.17",
+    "name": "detect static_vs_instance",
+    "expected": "resolve \u2192 static_vs_instance",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "static_vs_instance",
+      "conf": 0.238,
+      "top3": [
+        [
+          "static_vs_instance",
+          0.238
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.18",
+    "name": "detect foreach_no_modify",
+    "expected": "resolve \u2192 foreach_no_modify",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "foreach_no_modify",
+      "conf": 0.512,
+      "top3": [
+        [
+          "foreach_no_modify",
+          0.512
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.19",
+    "name": "detect overloading",
+    "expected": "resolve \u2192 overloading",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "overloading",
+      "conf": 0.207,
+      "top3": [
+        [
+          "overloading",
+          0.207
+        ],
+        [
+          "variable_scope",
+          0.206
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.20",
+    "name": "detect generics_primitives",
+    "expected": "resolve \u2192 generics_primitives",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "generics_primitives",
+      "conf": 0.512,
+      "top3": [
+        [
+          "generics_primitives",
+          0.512
+        ],
+        [
+          "array_not_allocated",
+          0.255
+        ]
+      ]
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.21",
+    "name": "two concepts in one msg",
+    "expected": "\u22652 concepts ranked",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "infinite_loop",
+        "array_index"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.22",
+    "name": "three concepts in one msg",
+    "expected": "3 concepts ranked",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "infinite_loop",
+        "string_equality"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.23",
+    "name": "error-only signal",
+    "expected": "type_mismatch",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "type_mismatch"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.24",
+    "name": "code-only signal",
+    "expected": "string_equality",
+    "outcome": "DEGRADED",
+    "drawback": "code-only got unknown",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "code-only got unknown",
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "1",
+    "id": "1.25",
+    "name": "free-text weak signal",
+    "expected": "string_equality",
+    "outcome": "DEGRADED",
+    "drawback": "weak text \u2192 assignment_vs_compare",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "weak text \u2192 assignment_vs_compare",
+      "top": "assignment_vs_compare",
+      "conf": 0.396
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.26",
+    "name": "typos in concept words",
+    "expected": "infinite_loop ideally, else unknown",
+    "outcome": "PASS",
+    "drawback": "no fuzzy/typo matching \u2014 caught as unknown is acceptable, but inflexible",
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": "no fuzzy/typo matching \u2014 caught as unknown is acceptable, but inflexible",
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.27",
+    "name": "off-topic",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "1",
+    "id": "1.28",
+    "name": "out-of-catalogue concept",
+    "expected": "unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "1",
+    "id": "1.29",
+    "name": "ambiguous concepts",
+    "expected": "deterministic ordering",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "string_equality",
+        "assignment_vs_compare",
+        "boolean_operators"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "1",
+    "id": "1.30",
+    "name": "non-English",
+    "expected": "unknown, no crash",
+    "outcome": "DEGRADED",
+    "drawback": null,
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": null,
+      "top": "infinite_loop"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "2",
+    "id": "2.1",
+    "name": "WM null_pointer",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": "NP-A",
+      "score": 0.927,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.2",
+    "name": "WM null_pointer",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": "NP-B",
+      "score": 0.607,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.07
+  },
+  {
+    "layer": "2",
+    "id": "2.3",
+    "name": "WM string_equality",
+    "expected": "no WM",
+    "outcome": "FAIL",
+    "drawback": "false WM hit: wm=SE-C score=0.81",
+    "output": {
+      "_outcome": "FAIL",
+      "_drawback": "false WM hit: wm=SE-C score=0.81",
+      "wm": "SE-C",
+      "score": 0.808,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.4",
+    "name": "WM string_equality",
+    "expected": "no WM",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": null,
+      "score": 0.0,
+      "lp": "L3",
+      "source": "overlap"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.5",
+    "name": "WM null_pointer",
+    "expected": "no WM",
+    "outcome": "FAIL",
+    "drawback": "false WM hit: wm=NP-C score=0.74",
+    "output": {
+      "_outcome": "FAIL",
+      "_drawback": "false WM hit: wm=NP-C score=0.74",
+      "wm": "NP-C",
+      "score": 0.742,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.6",
+    "name": "WM string_equality",
+    "expected": "no WM",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": null,
+      "score": 0.0,
+      "lp": "L1",
+      "source": "overlap"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.7",
+    "name": "WM infinite_loop",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": "IL-A",
+      "score": 0.653,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "2",
+    "id": "2.8",
+    "name": "WM string_equality",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": "SE-A",
+      "score": 1.0,
+      "lp": "L2",
+      "source": "overlap"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "2",
+    "id": "2.9",
+    "name": "WM integer_division",
+    "expected": "WM detected",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": "ID-A",
+      "score": 0.657,
+      "lp": "L1",
+      "source": "trained_wm_head"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "3",
+    "id": "3.1",
+    "name": "classify L1",
+    "expected": "current_lp_level=L1",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L1",
+      "target": "L2",
+      "logical_step": false,
+      "logical_step_detail": false,
+      "trained_probs": {
+        "L1": 0.9894986152648926,
+        "L2": 0.01050030067563057,
+        "L3": 8.657730177219491e-07,
+        "L4": 2.7122550250169297e-07
+      }
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "3",
+    "id": "3.2",
+    "name": "classify L2",
+    "expected": "current_lp_level=L2",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L2",
+      "target": "L3",
+      "logical_step": true,
+      "logical_step_detail": false,
+      "trained_probs": {
+        "L1": 0.39112916588783264,
+        "L2": 0.5990920066833496,
+        "L3": 0.006470147054642439,
+        "L4": 0.003308670362457633
+      }
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "3",
+    "id": "3.3",
+    "name": "classify L3",
+    "expected": "current_lp_level=L3",
+    "outcome": "DEGRADED",
+    "drawback": "expected L3, got L2",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "expected L3, got L2",
+      "lp": "L2",
+      "target": "L3",
+      "logical_step": true,
+      "logical_step_detail": true,
+      "trained_probs": {
+        "L1": 0.01947147771716118,
+        "L2": 0.47476449608802795,
+        "L3": 0.18555083870887756,
+        "L4": 0.32021331787109375
+      }
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "3",
+    "id": "3.4",
+    "name": "classify L4",
+    "expected": "current_lp_level=L4",
+    "outcome": "DEGRADED",
+    "drawback": "expected L4, got L3",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "expected L4, got L3",
+      "lp": "L3",
+      "target": "L4",
+      "logical_step": true,
+      "logical_step_detail": false,
+      "trained_probs": {
+        "L1": 0.001275587361305952,
+        "L2": 0.03409096226096153,
+        "L3": 0.7382758855819702,
+        "L4": 0.22635754942893982
+      }
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "3",
+    "id": "3.5",
+    "name": "classify L2",
+    "expected": "current_lp_level=L2",
+    "outcome": "DEGRADED",
+    "drawback": "expected L2, got L3",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "expected L2, got L3",
+      "lp": "L3",
+      "target": "L4",
+      "logical_step": true,
+      "logical_step_detail": true,
+      "trained_probs": {
+        "L1": 0.00011333839211147279,
+        "L2": 0.003952374681830406,
+        "L3": 0.9945408701896667,
+        "L4": 0.0013933631125837564
+      }
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "3",
+    "id": "3.6",
+    "name": "classify L3",
+    "expected": "current_lp_level=L3",
+    "outcome": "DEGRADED",
+    "drawback": "expected L3, got L2",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "expected L3, got L2",
+      "lp": "L2",
+      "target": "L3",
+      "logical_step": true,
+      "logical_step_detail": true,
+      "trained_probs": {
+        "L1": 0.054709844291210175,
+        "L2": 0.784259557723999,
+        "L3": 0.1485370397567749,
+        "L4": 0.012493588030338287
+      }
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "3",
+    "id": "3.7",
+    "name": "multi-concept differential LP",
+    "expected": "different LP per concept",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "per_concept_lp": {
+        "null_pointer": "L4"
+      }
+    },
+    "error": null,
+    "duration_s": 0.08
+  },
+  {
+    "layer": "3",
+    "id": "3.8",
+    "name": "regression to L1 from L3",
+    "expected": "current=L1, streak resets",
+    "outcome": "DEGRADED",
+    "drawback": "regression-after-L3 still L3",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "regression-after-L3 still L3",
+      "lp": "L3"
+    },
+    "error": null,
+    "duration_s": 0.07
+  },
+  {
+    "layer": "4",
+    "id": "4.1",
+    "name": "first L2",
+    "expected": "plateau=False",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "plateau_flag": false,
+      "lp": "L1"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "4",
+    "id": "4.2",
+    "name": "second L2 \u2192 plateau",
+    "expected": "plateau=True",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "plateau_flag": true,
+      "intervention": "trace_scaffold"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "4",
+    "id": "4.4",
+    "name": "plateau cleared by L3 jump",
+    "expected": "lp=L3+, plateau=False",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "lp": "L3",
+      "plateau_flag": false
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "4",
+    "id": "4.5",
+    "name": "plateau cleared by regression",
+    "expected": "lp=L1, plateau=False",
+    "outcome": "DEGRADED",
+    "drawback": "regression missed (got L2)",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "regression missed (got L2)",
+      "lp": "L2",
+      "plateau_flag": true
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "4",
+    "id": "4.6",
+    "name": "per-concept plateau independence",
+    "expected": "only null_pointer plateaued",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "np.plateau": true,
+      "se.plateau": false
+    },
+    "error": null,
+    "duration_s": 0.11
+  },
+  {
+    "layer": "4",
+    "id": "4.7",
+    "name": "very long L2 plateau",
+    "expected": "plateau intervention surfaces",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "plateau_flag": true,
+      "intervention": "trace_scaffold"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "5",
+    "id": "5.1",
+    "name": "confident answer skips probe",
+    "expected": "confidence\u22650.45",
+    "outcome": "DEGRADED",
+    "drawback": "L3 reply got conf=0.38",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "L3 reply got conf=0.38",
+      "confidence": 0.375
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "5",
+    "id": "5.2",
+    "name": "vague answer triggers probe",
+    "expected": "confidence<0.45",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "5",
+    "id": "5.3",
+    "name": "probe answered well",
+    "expected": "confidence rises",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.75
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "5",
+    "id": "5.4",
+    "name": "probe cap constant",
+    "expected": "MAX_PROBES_PER_CONCEPT defined",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "cap": 8
+    },
+    "error": null,
+    "duration_s": 36.0
+  },
+  {
+    "layer": "5",
+    "id": "5.5",
+    "name": "probe continuity across turns",
+    "expected": "multi-turn",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "5",
+    "id": "5.6",
+    "name": "pick unprobed sub-criterion",
+    "expected": "multi-turn",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "5",
+    "id": "5.7",
+    "name": "credit different-sub-criterion answer",
+    "expected": "multi-turn",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "6",
+    "id": "6.1",
+    "name": "label=frustrated",
+    "expected": "psych signals consistent with frustrated",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "frustrated",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": true,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "6",
+    "id": "6.2",
+    "name": "label=confused",
+    "expected": "psych signals consistent with confused",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "confused",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "6",
+    "id": "6.3",
+    "name": "label=anxious",
+    "expected": "psych signals consistent with anxious",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "anxious",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": true,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "6",
+    "id": "6.4",
+    "name": "label=engaged",
+    "expected": "psych signals consistent with engaged",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "engaged",
+      "attribution": "neutral",
+      "self_efficacy": "growth",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "6",
+    "id": "6.5",
+    "name": "label=neutral",
+    "expected": "psych signals consistent with neutral",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "neutral",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "6",
+    "id": "6.6",
+    "name": "label=frustrated",
+    "expected": "psych signals consistent with frustrated",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "frustrated",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "6",
+    "id": "6.7",
+    "name": "label=engaged",
+    "expected": "psych signals consistent with engaged",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "engaged",
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "6",
+    "id": "6.8",
+    "name": "label=engaged",
+    "expected": "psych signals consistent with engaged",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected_label": "engaged",
+      "attribution": "neutral",
+      "self_efficacy": "growth",
+      "high_anxiety": false,
+      "imposter_flag": true,
+      "srl_phase": "unknown",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "7",
+    "id": "7.1",
+    "name": "trial-and-error",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "7",
+    "id": "7.2",
+    "name": "systematic debug",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "7",
+    "id": "7.3",
+    "name": "long pause stuck",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "7",
+    "id": "7.5",
+    "name": "manic burst",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "7",
+    "id": "7.6",
+    "name": "read-only",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "7",
+    "id": "7.7",
+    "name": "help-avoidant",
+    "expected": "no crash, no actionchannel needed",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "stage": 1
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "8",
+    "id": "8.1",
+    "name": "cold-start prior",
+    "expected": "~0.30",
+    "outcome": "DEGRADED",
+    "drawback": "prior 0.15 not ~0.30",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "prior 0.15 not ~0.30",
+      "prior": 0.15
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.2",
+    "name": "5x correct climbs",
+    "expected": "0.80-0.99",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "after": 0.99
+    },
+    "error": null,
+    "duration_s": 0.01
+  },
+  {
+    "layer": "8",
+    "id": "8.3",
+    "name": "slip case",
+    "expected": "slight dip, no crash to 0",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "pre": 0.99,
+      "post": 0.9295774647887324
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.4",
+    "name": "guess case",
+    "expected": "modest rise",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "before": 0.15,
+      "after": 0.5107913669064748
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.5",
+    "name": "across-skill independence",
+    "expected": "untouched stays at prior",
+    "outcome": "DEGRADED",
+    "drawback": "untouched skill drifted to 0.15",
+    "output": {
+      "_outcome": "DEGRADED",
+      "_drawback": "untouched skill drifted to 0.15",
+      "untouched": 0.15
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.8",
+    "name": "unknown skill key",
+    "expected": "graceful no-op",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "result": {
+        "skill": "totally_made_up_skill",
+        "mastery": 0.3,
+        "updated": false
+      }
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.6",
+    "name": "persistence across restart",
+    "expected": "out of scope",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires restart/threading harness",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires restart/threading harness"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "8",
+    "id": "8.7",
+    "name": "concurrent updates race",
+    "expected": "out of scope",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires restart/threading harness",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires restart/threading harness"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "9",
+    "id": "9.1",
+    "name": "compile error",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "variable_scope",
+      "conf": 0.675
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "9",
+    "id": "9.2",
+    "name": "runtime error",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer",
+      "conf": 0.675
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "9",
+    "id": "9.3",
+    "name": "logic error no exception",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "9",
+    "id": "9.4",
+    "name": "no code text only",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "9",
+    "id": "9.5",
+    "name": "huge code paste",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "9",
+    "id": "9.6",
+    "name": "no error keywords",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "9",
+    "id": "9.7",
+    "name": "mixed lang python",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "9",
+    "id": "9.8",
+    "name": "pseudocode",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "9",
+    "id": "9.9",
+    "name": "sql/script text",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "9",
+    "id": "9.10",
+    "name": "odd unicode",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.1",
+    "name": "L1 should not get challenge_problem",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "worked_example",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.3",
+    "name": "frustrated low mastery",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "reduce_challenge",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.4",
+    "name": "high mastery engaged",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "worked_example",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.5",
+    "name": "wrong-model identified",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "worked_example",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.6",
+    "name": "imposter syndrome",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "attribution_reframe",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "fixed"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "11",
+    "id": "11.7",
+    "name": "new concept first encounter",
+    "expected": "intervention surfaces",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "intervention": "worked_example",
+      "imposter_flag": true,
+      "self_efficacy": "neutral",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "12",
+    "id": "12.8",
+    "name": "RL module importable",
+    "expected": "no import crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.1",
+    "name": "positive learning gain",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.2",
+    "name": "negative gain",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.3",
+    "name": "delta_lp positive",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.4",
+    "name": "plateau-broken",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.5",
+    "name": "engagement signal",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.6",
+    "name": "ZPD reward",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "12",
+    "id": "12.7",
+    "name": "attribution reward",
+    "expected": "live in chat app",
+    "outcome": "NOT_RUNNABLE",
+    "drawback": "requires full session\u2192reward loop",
+    "output": {
+      "_outcome": "NOT_RUNNABLE",
+      "_drawback": "requires full session\u2192reward loop"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "14",
+    "id": "14.1",
+    "name": "extremely long input",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "14",
+    "id": "14.2",
+    "name": "emoji-heavy",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "14",
+    "id": "14.3",
+    "name": "prompt-injection",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.4",
+    "name": "html/sql injection",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.5",
+    "name": "duplicate submission",
+    "expected": "no crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.8",
+    "name": "massive action_sequence",
+    "expected": "no OOM/crash",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.9",
+    "name": "time_deltas length mismatch",
+    "expected": "graceful",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.10",
+    "name": "negative time_stuck",
+    "expected": "clamped or ignored",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "14",
+    "id": "14.11",
+    "name": "NaN time_stuck",
+    "expected": "sanitized",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "15",
+    "id": "15.1",
+    "name": "imposter language",
+    "expected": "imposter_flag=True",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "imposter_flag=True",
+      "imposter_flag": true,
+      "attribution": "fixed",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": true
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "15",
+    "id": "15.2",
+    "name": "external attribution",
+    "expected": "attribution=external",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "attribution=external",
+      "imposter_flag": true,
+      "attribution": "external",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "15",
+    "id": "15.3",
+    "name": "internal healthy",
+    "expected": "internal, not imposter",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "internal, not imposter",
+      "imposter_flag": true,
+      "attribution": "adaptive",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "15",
+    "id": "15.4",
+    "name": "internal unhealthy",
+    "expected": "internal + imposter",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "internal + imposter",
+      "imposter_flag": true,
+      "attribution": "fixed",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "15",
+    "id": "15.5",
+    "name": "high encoding",
+    "expected": "encoding=high",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "encoding=high",
+      "imposter_flag": true,
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "15",
+    "id": "15.6",
+    "name": "low encoding",
+    "expected": "encoding=low",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "encoding=low",
+      "imposter_flag": true,
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "15",
+    "id": "15.8",
+    "name": "factual question",
+    "expected": "neutral psych",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "expected": "neutral psych",
+      "imposter_flag": true,
+      "attribution": "neutral",
+      "self_efficacy": "neutral",
+      "encoding_strength": "partial",
+      "lang_imposter": false
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "18",
+    "id": "18.1",
+    "name": "external attribution \u2192 reframe gate",
+    "expected": "attribution=external + intervention=attribution_reframe",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "attribution": "external",
+      "intervention": "attribution_reframe"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "18",
+    "id": "18.2",
+    "name": "imposter + external combo",
+    "expected": "both flagged, reframe gate fires",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "imposter": true,
+      "attribution": "fixed",
+      "intervention": "attribution_reframe"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "18",
+    "id": "18.3",
+    "name": "self-correction reads as adaptive",
+    "expected": "attribution=adaptive",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "attribution": "adaptive",
+      "self_efficacy": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "18",
+    "id": "18.4",
+    "name": "breakthrough \u2192 growth_efficacy",
+    "expected": "self_efficacy=growth",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "self_efficacy": "growth",
+      "attribution": "neutral"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "18",
+    "id": "18.5",
+    "name": "prolonged grind \u2192 high_anxiety",
+    "expected": "high_anxiety=True",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "high_anxiety": true
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "18",
+    "id": "18.6",
+    "name": "WM threshold boundary",
+    "expected": "wm=None OR score>=0.55",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "wm": null,
+      "score": 0.0
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "18",
+    "id": "18.7",
+    "name": "substance penalty fires on 2 tokens",
+    "expected": "conf<=0.30",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.3
+    },
+    "error": null,
+    "duration_s": 0.1
+  },
+  {
+    "layer": "18",
+    "id": "18.8",
+    "name": "short legit answer NOT floored",
+    "expected": "conf>0.30",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confidence": 0.957
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "18",
+    "id": "18.9",
+    "name": "code comment doesn't leak to wrong concept",
+    "expected": "string_equality or unknown",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "unknown",
+      "top3": [
+        "unknown"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "18",
+    "id": "18.10",
+    "name": "anxiety + L1 \u2192 de-escalation",
+    "expected": "reduce_challenge or attribution_reframe",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "anxiety": true,
+      "intervention": "reduce_challenge"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "18",
+    "id": "18.11",
+    "name": "stack trace alone",
+    "expected": "array_index",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top": "array_index",
+      "conf": 0.783
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "18",
+    "id": "18.12",
+    "name": "essay reply \u2192 solid/deep encoding",
+    "expected": "encoding=solid or deep",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "encoding_strength": "solid",
+      "elaboration": false
+    },
+    "error": null,
+    "duration_s": 0.05
+  }
+]

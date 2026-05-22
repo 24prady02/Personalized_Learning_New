@@ -82,7 +82,17 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
         "code":  [],
         "text":  ["out of scope", "variable scope", "block scope",
                   "declared in the if", "declared inside the loop",
-                  "use it after the", "use it outside"],
+                  "use it after the", "use it outside",
+                  # Added 2026-05-21: catch natural phrasings of "the var
+                  # is gone after the block ends" — the harness's L1
+                  # scenario "the variable disappears after the if block"
+                  # was previously misclassified as assignment_vs_compare.
+                  "disappears after", "variable disappears",
+                  "after the if block", "after the loop",
+                  "after the for", "after the while",
+                  "outside the block", "outside the if",
+                  "loses the variable", "variable is gone",
+                  "scope of the variable", "scope ends"],
     },
     "assignment_vs_compare": {
         "error": ["int cannot be converted to boolean"],
@@ -113,7 +123,16 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
         "error": ["missing return statement"],
         "code":  [],
         "text":  ["missing return", "not all paths return",
-                  "missing a return"],
+                  "missing a return",
+                  # Added 2026-05-21: the harness scenario "compiler says
+                  # missing return statement" was tied with unreachable_code
+                  # because both signatures fired weakly. Stronger phrases
+                  # specific to "the function doesn't return on every path"
+                  # tip the balance toward missing_return.
+                  "missing return statement",
+                  "function doesn't return", "method doesn't return",
+                  "doesn't return a value", "no return at the end",
+                  "no return statement"],
     },
     "array_not_allocated": {
         "error": [],
@@ -135,7 +154,18 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
         "error": [],
         "code":  [],
         "text":  ["sentinel", "priming read", "first value skipped",
-                  "read before the loop", "read input twice"],
+                  "read before the loop", "read input twice",
+                  # Added 2026-05-21: sentinel-loop bugs usually surface
+                  # as "the loop doesn't catch the stop value" rather than
+                  # in the technical "sentinel/priming" vocab. Harness
+                  # scenario "while loop doesn't catch the -1 to stop" was
+                  # misclassified as infinite_loop because none of the
+                  # original phrases matched.
+                  "doesn't catch the -1", "doesn't catch -1",
+                  "catches the -1", "the -1 to stop",
+                  "stop value", "stop condition",
+                  "doesn't stop on", "doesn't stop at",
+                  "loop doesn't end on", "loop never ends on"],
     },
     "unreachable_code": {
         "error": ["unreachable statement", "unreachable code"],
@@ -148,7 +178,17 @@ CONCEPT_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
         "code":  [".replace(", ".substring(", ".touppercase("],
         "text":  ["immutable", "string didn't change",
                   "string did not change", "replace didn't",
-                  "modify the string", "modify a string"],
+                  "modify the string", "modify a string",
+                  # Added 2026-05-21: code-method names appear in plain
+                  # text replies, not just code field. Harness scenario
+                  # "I called s.toUpperCase() but s is still lowercase"
+                  # had ".touppercase(" only in question, not code, so
+                  # the original code-only check missed it.
+                  "touppercase", "tolowercase", ".touppercase",
+                  ".tolowercase", ".replace", ".substring",
+                  "still lowercase", "still uppercase",
+                  "still the same after", "still the same string",
+                  "didn't get changed", "didn't get modified"],
     },
     "no_default_constructor": {
         "error": ["no suitable constructor",

@@ -886,7 +886,27 @@ class LPDiagnostician:
                     ]
                     wm_top_for_concept.sort(key=lambda d: d["prob"], reverse=True)
                     diag.trained_wm_probs = wm_top_for_concept
-                    if confidence >= 0.45:
+                    # WM-head calibration (2026-05-21):
+                    #   - raised threshold 0.45 -> 0.55 (the WM head's
+                    #     val_acc is 0.55 on a 3-way sub-head — 0.45 was
+                    #     too close to chance and produced false hits
+                    #     on neutral text)
+                    #   - LP-aware suppression: when the LP head says the
+                    #     student is already at L3/L4 (articulating
+                    #     mechanism) AND WM confidence is < 0.85, suppress
+                    #     the WM emission. A student who explains the
+                    #     correct mental model doesn't *hold* a wrong
+                    #     model — surface keyword overlap is misleading.
+                    #     The harness scenario "I know .equals() checks
+                    #     content, == checks reference" was a false SE-C
+                    #     hit at 0.67 with LP=L3 — this guard kills it
+                    #     while still letting confident (>=0.85) hits
+                    #     through.
+                    suppress_high_lp = (
+                        trained_lp_level in ("L3", "L4")
+                        and confidence < 0.85
+                    )
+                    if confidence >= 0.55 and not suppress_high_lp:
                         wm_obj = self.catalogue.get_wrong_model(
                             concept, chosen_wm)
                         if wm_obj is not None:
@@ -933,8 +953,13 @@ class LPDiagnostician:
                         ]
                         wm_top_for_concept.sort(key=lambda d: d["prob"], reverse=True)
                         diag.trained_wm_probs = wm_top_for_concept
-                        # Accept head's decision if reasonably confident
-                        if confidence >= 0.45:
+                        # Same WM-head calibration as the ST head above
+                        # (2026-05-21): 0.45 -> 0.55 + LP-aware suppression.
+                        suppress_high_lp = (
+                            trained_lp_level in ("L3", "L4")
+                            and confidence < 0.85
+                        )
+                        if confidence >= 0.55 and not suppress_high_lp:
                             wm_obj = self.catalogue.get_wrong_model(
                                 concept, chosen_wm)
                             if wm_obj is not None:
@@ -1169,6 +1194,33 @@ class LPDiagnostician:
         diag.diagnostic_confidence = round(
             0.75 * agreement + 0.25 * float(diag.match_score), 3
         )
+
+        # Substance penalty (2026-05-21). When the student's reply is too
+        # short or pure-filler ("idk", "no idea", "...", "?"), the LP
+        # heads still confidently classify them as L1 — and that high
+        # agreement was previously driving diagnostic_confidence into the
+        # 0.9+ band, causing the chat app to skip probing and stream a
+        # teach reply against essentially-no belief. We dampen confidence
+        # when the input doesn't carry meaningful signal so the chat
+        # app's probe gate ( < CHAT_PROBE_CONFIDENCE_FLOOR ) fires.
+        _SUBSTANCE_FILLERS = {
+            "idk", "i", "dont", "don't", "know", "i dont know", "i don't know",
+            "no", "idea", "clue", "no idea", "no clue", "dunno", "i dunno",
+            "ok", "hmm", "k", "...", "?", ".", "huh", "uh",
+            "maybe", "i guess", "guess",
+        }
+        _txt = (question_text or "").lower().strip()
+        _tokens = [w for w in _txt.replace("?", " ").replace("!", " ")
+                                  .replace(".", " ").replace(",", " ").split()
+                   if w]
+        _non_filler = [w for w in _tokens if w not in _SUBSTANCE_FILLERS]
+        if len(_tokens) <= 2 or _txt in _SUBSTANCE_FILLERS or len(_non_filler) <= 1:
+            # Force confidence under the probe floor (0.55 in chat app),
+            # but keep some spread so audit logs still show relative
+            # agreement.
+            diag.diagnostic_confidence = round(
+                min(diag.diagnostic_confidence, 0.30), 3
+            )
 
         # Blend current-session classification with stored history. The
         # methodology doc treats both as inputs: current session is fresh

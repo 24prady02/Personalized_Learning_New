@@ -107,12 +107,37 @@ class LanguageChannelAnalyser:
             r"\b(can't|cannot) (do|learn|understand) (this|it|coding|programming)",
             r"\bstupid( mistake| me)",
             r"\b(it's|it is) (just |always )?(too hard|impossible)",
+            # Added 2026-05-21: self-deprecating slurs ("I'm dumb/stupid")
+            # were missed because the original "bad|terrible|hopeless|awful"
+            # set didn't include them, and "stupid" only matched as
+            # "stupid mistake/me". Harness L15.4 ("I'm just bad at this")
+            # already worked; L15.1 ("I'm probably too dumb for this")
+            # didn't.
+            r"\bi('m| am) (just |probably |maybe |kinda |kind of )?(too )?(dumb|stupid|slow|thick|dense)\b",
+            r"\b(too |probably |maybe )(dumb|stupid|slow|thick|dense)( for| at)\b",
+            r"\bi('m| am) not smart enough\b",
         ],
         "adaptive_attr": [
             r"\b(let me|i('ll| will)) try (a |another |different )?approach",
             r"\b(next time|from now on) i('ll| will)",
             r"\bi (need to|should) (study|practice|review|learn) (more|better|this)",
             r"\b(my approach|my strategy) (was|is) wrong",
+            # Added 2026-05-21: "I keep making the same mistake — I need to
+            # read errors more carefully" — healthy internal attribution
+            # (the L15.3 scenario).
+            r"\bi keep making (the same |this )?mistake\b",
+            r"\bi (need|have) to (read|check|watch|look at) .{0,30} (more|better|carefully)",
+        ],
+        "external_attr": [
+            # New 2026-05-21: external attribution (blaming the tool, the
+            # language, the system rather than oneself). Harness L15.2
+            # ("Java is just badly designed, this is stupid") came back as
+            # attribution=neutral because the original code only knew
+            # fixed/adaptive (both internal).
+            r"\b(java|python|c\+\+|this language|the language|this tool|this thing|the compiler)\b.*\b(sucks|is (just |so |really )?(stupid|bad|terrible|broken|garbage))",
+            r"\b(badly|poorly) designed\b",
+            r"\b(this|the) (language|tool|library|framework) is (just |so |really )?(bad|stupid|terrible|broken|awful)",
+            r"\bwhy (does|do) (java|python|c\+\+|this language)\b",
         ],
         "low_efficacy": [
             r"\bi (don't|do not) (think|believe) (i|i'll|i can)",
@@ -125,6 +150,12 @@ class LanguageChannelAnalyser:
             r"\b(that makes|makes a lot of) sense( now)?",
             r"\bnow i (understand|get|see|know)",
             r"\bi (can|could) (do|try|figure) (this|it) out",
+            # Added 2026-05-21: breakthrough-moment phrasings ("OH I get
+            # it now!!", "i get it now") didn't match the strict
+            # "I think/believe I" frame.
+            r"\b(oh+|ahh?|wait,?|ok,?|okay,?)? ?i (get|see|understand|know) (it|this|now|why)\b",
+            r"\bi get it now\b",
+            r"\b(it makes sense|got it|i see it)\b",
         ],
         "forethought": [
             r"\b(before|first)(,| i| let me) (plan|think|figure|understand)",
@@ -147,12 +178,24 @@ class LanguageChannelAnalyser:
             r"\b(they('ll| will)|someone will) (find out|know|realize) (i'm|that i'm)",
             r"\bi don't (deserve|belong|know why i)",
             r"\bit (was|is) an (accident|fluke|coincidence)",
+            # Added 2026-05-21: "too dumb/stupid for this" reads to humans
+            # as classic imposter phrasing. Harness L15.1 / L15.4 both
+            # missed.
+            r"\b(too |probably (too )?)(dumb|stupid|slow|thick)( for| to (do|learn) this)?\b",
+            r"\bi('m| am) not smart enough\b",
         ],
         "high_anxiety": [
             r"\bi('m| am) (panicking|freaking out|stressed|overwhelmed|scared)",
             r"\b(deadline|exam|test) (is|in) (tomorrow|today|soon)",
             r"\b(please|urgent|asap) help",
             r"\bwhat do i do",
+            # Added 2026-05-21: long-grind frustration. Harness L6.1
+            # ("I've been at this for 3 hours, I hate this stupid
+            # language") didn't match the original panic/exam patterns.
+            r"\bi('ve| have) been (at this|stuck|working on this|trying) for (\d+|a few|several|many|hours|days|forever)",
+            r"\b(been at this|stuck on this) for (\d+|a few|several|many)\b",
+            r"\bi hate (this|java|python|c\+\+|the (language|compiler|tool))",
+            r"\bnothing (is|seems|appears to be)? ?working\b",
         ],
     }
 
@@ -173,6 +216,7 @@ class LanguageChannelAnalyser:
 
         fixed_s    = self._score(t, "fixed_attr")
         adaptive_s = self._score(t, "adaptive_attr")
+        external_s = self._score(t, "external_attr")   # added 2026-05-21
         low_s      = self._score(t, "low_efficacy")
         growth_s   = self._score(t, "growth_efficacy")
         f_s        = self._score(t, "forethought")
@@ -181,7 +225,24 @@ class LanguageChannelAnalyser:
         imp_s      = self._score(t, "imposter")
         anx_s      = self._score(t, "high_anxiety")
 
-        attribution   = "fixed" if fixed_s > 0 and fixed_s >= adaptive_s else ("adaptive" if adaptive_s > 0 else "neutral")
+        # Attribution: pick the strongest of fixed (internal-fixed),
+        # adaptive (internal-adaptive), or external (blaming the tool).
+        # Tie-break: prefer the more actionable signal — fixed and
+        # external both block progress and need different interventions;
+        # adaptive is the healthy state.
+        attr_scores = {
+            "fixed": fixed_s, "adaptive": adaptive_s, "external": external_s,
+        }
+        max_attr_score = max(attr_scores.values())
+        if max_attr_score == 0:
+            attribution = "neutral"
+        else:
+            # Deterministic order when scores tie: fixed > external > adaptive
+            # (fixed_attr is the highest-priority gate for InterventionSelector).
+            for k in ("fixed", "external", "adaptive"):
+                if attr_scores[k] == max_attr_score:
+                    attribution = k
+                    break
         self_efficacy = "low"   if low_s > 0   and low_s   >= growth_s   else ("growth"   if growth_s > 0   else "neutral")
         max_srl = max(f_s, m_s, r_s)
         srl_phase = "unknown" if max_srl == 0 else (
@@ -192,6 +253,7 @@ class LanguageChannelAnalyser:
 
         nodes = []
         if attribution   == "fixed":       nodes.append("fixed_attribution")
+        elif attribution == "external":    nodes.append("external_attribution")  # 2026-05-21
         elif attribution == "adaptive":    nodes.append("adaptive_attribution")
         if self_efficacy == "low":         nodes.append("low_self_efficacy")
         elif self_efficacy == "growth":    nodes.append("growth_self_efficacy")
@@ -345,9 +407,13 @@ class InterventionSelector:
         anx   = psychological.get("high_anxiety", False)
 
         # GATE 1 — Non-negotiable: Attribution or Imposter
-        if attr == "fixed" or imp:
+        # Both "fixed" (internal blame) and "external" (blaming the tool)
+        # block instructional progress and need reframing first. Added
+        # "external" gate 2026-05-21 once the language analyser learned
+        # to detect "Java is just badly designed" etc.
+        if attr in ("fixed", "external") or imp:
             return {"type": "attribution_reframe", "priority": 1.0, "gate_triggered": True,
-                    "rationale": f"Fixed Attribution ({attr=='fixed'}) OR Imposter ({imp}) — must clear before advance.",
+                    "rationale": f"Attribution={attr} OR Imposter ({imp}) — must clear before advance.",
                     "blocks_advance": True}
 
         # GATE 2 — Crisis de-escalation

@@ -971,6 +971,50 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
     elif isinstance(rl_reward, (int, float)):
         rl_lines += f"- **Last RL reward:** {rl_reward:+.3f}\n"
 
+    # Psychological-state footer (2026-05-21). Shows the three-channel
+    # analyser's outputs so the user can see when imposter/external/
+    # anxiety patterns fire and which intervention was selected. Only
+    # rendered when there's a non-trivial signal to surface — keeps the
+    # panel quiet for neutral students.
+    psych_lines = ""
+    tc = state.get("last_three_channel") or {}
+    pg = tc.get("psychological_graph") or {}
+    rec_intervention = state.get("last_chosen_intervention")
+    attr = pg.get("attribution")
+    imposter = pg.get("imposter_flag")
+    anxiety = pg.get("high_anxiety")
+    eff = pg.get("self_efficacy")
+    has_psych_signal = (attr and attr != "neutral") or imposter or anxiety or (eff and eff != "neutral")
+    if has_psych_signal or rec_intervention:
+        psych_lines += "- **Psych state:**"
+        bits = []
+        if attr and attr != "neutral":
+            tag = {"fixed": "fixed (internal blame — GATE)",
+                   "external": "external (blaming the tool — GATE)",
+                   "adaptive": "adaptive (healthy internal)"}.get(attr, attr)
+            bits.append(f"attribution=`{tag}`")
+        if imposter:
+            bits.append("imposter=`true` — GATE")
+        if anxiety:
+            bits.append("high_anxiety=`true`")
+        if eff and eff != "neutral":
+            bits.append(f"self_efficacy=`{eff}`")
+        psych_lines += " " + ", ".join(bits) + "\n"
+    if rec_intervention:
+        psych_lines += f"- **Intervention picked:** `{rec_intervention}`\n"
+    # Substance-penalty annotation: confidence was forced down because
+    # the student gave a filler-only reply ("idk", "?"). Helps the user
+    # understand why we're probing rather than teaching.
+    substance_note = ""
+    belief = (state.get("accumulated_belief") or "").strip().lower()
+    if belief in {"idk","i dont know","i don't know","no idea","no clue",
+                   "...","?",".","ok","k","hmm","huh","dunno"} or (
+        len(belief.split()) <= 2 and conf <= 0.30):
+        substance_note = (
+            "- **Note:** confidence floored at 0.30 because the reply was "
+            "too short / pure filler — probing rather than teaching.\n"
+        )
+
     return (
         f"- **Concept:** `{focus}`\n"
         f"- **Level:** `{cur}` ({cur_plain}) → `{tgt}` ({tgt_plain})\n"
@@ -978,6 +1022,8 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         f"- **Diagnostic confidence:** {conf:.2f}\n"
         f"- **Grader verdict:** `{rg.get('level','?')}` (conf {rg.get('confidence',0):.2f})\n"
         f"- **Last probe reason:** {state.get('pending_probe_reason') or '—'}\n"
+        + substance_note
+        + psych_lines
         + rl_lines
     )
 
@@ -1572,6 +1618,13 @@ def _stream_teach(state, diag, history):
     pedagogical_kg_block = _build_pedagogical_kg_block(q["concept"])
     coke_block          = _build_coke_block(session_data_for_ctx)
     three_channel_block = _run_three_channel("chat_user", session_data_for_ctx)
+    # Stash three-channel + intervention on state so the tutor-details
+    # panel can render the psych signals (attribution, imposter,
+    # anxiety) and the chosen intervention type. Added 2026-05-21 after
+    # extending LanguageChannelAnalyser with external_attr + dumb/stupid
+    # patterns so users can see when those signals actually fire.
+    state["last_three_channel"] = three_channel_block or {}
+    state["last_chosen_intervention"] = chosen
 
     # ── Run multi-concept diagnosis so the LP-Multi mini-replies block
     #    has data when the student touches more than one concept.
