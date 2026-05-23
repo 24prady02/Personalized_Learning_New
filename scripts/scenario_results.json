@@ -18,7 +18,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 1.12
+    "duration_s": 2.3
   },
   {
     "layer": "0",
@@ -54,7 +54,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.14
   },
   {
     "layer": "0",
@@ -70,7 +70,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.1
   },
   {
     "layer": "0",
@@ -86,7 +86,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.1
   },
   {
     "layer": "0",
@@ -102,7 +102,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.11
   },
   {
     "layer": "0",
@@ -118,7 +118,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.08
   },
   {
     "layer": "0",
@@ -134,7 +134,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "0",
@@ -150,7 +150,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "0",
@@ -166,7 +166,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "0",
@@ -221,7 +221,7 @@
       "encoding_strength": "surface"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "0",
@@ -237,7 +237,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.1
   },
   {
     "layer": "0",
@@ -267,7 +267,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -282,7 +282,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -297,7 +297,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -312,7 +312,7 @@
       "logical_step": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.08
   },
   {
     "layer": "0",
@@ -327,7 +327,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -360,77 +360,93 @@
       "high_anxiety": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "0",
     "id": "0.4",
     "name": "idle session timer",
-    "expected": "needs api/timer infra",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "needs wall-clock or REST API",
+    "expected": "no crash across idle gap",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "needs wall-clock or REST API"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "turns": 3,
+      "state_recovered": true
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.25
   },
   {
     "layer": "0",
     "id": "0.16",
     "name": "tab closed mid-probe",
-    "expected": "needs api/timer infra",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "needs wall-clock or REST API",
+    "expected": "fresh state, probe re-armed",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "needs wall-clock or REST API"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "fresh_probe_count": 0,
+      "vague_conf": 0.3
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.08
   },
   {
     "layer": "0",
     "id": "0.17",
     "name": "return after long absence",
-    "expected": "needs api/timer infra",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "needs wall-clock or REST API",
+    "expected": "mastery decayed toward prior",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "needs wall-clock or REST API"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "fresh": 0.99,
+      "after_60d": 0.193
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.05
   },
   {
     "layer": "0",
     "id": "0.18",
     "name": "missing API fields",
-    "expected": "needs api/timer infra",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "needs wall-clock or REST API",
+    "expected": "graceful when fields absent",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "needs wall-clock or REST API"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "resolved_len": 1,
+      "tracker_keys": [
+        "avg_mastery",
+        "cognitive_graph",
+        "concept",
+        "content_channel",
+        "language_channel"
+      ]
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.11
   },
   {
     "layer": "0",
     "id": "0.19",
     "name": "null API fields",
-    "expected": "needs api/timer infra",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "needs wall-clock or REST API",
+    "expected": "graceful when fields are None",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "needs wall-clock or REST API"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "resolved_len": 1,
+      "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.08
   },
   {
     "layer": "1",
@@ -452,7 +468,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -478,7 +494,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -500,7 +516,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -530,7 +546,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "1",
@@ -582,7 +598,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "1",
@@ -604,7 +620,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -648,7 +664,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -692,7 +708,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -714,7 +730,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -762,7 +778,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "1",
@@ -806,7 +822,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "1",
@@ -828,7 +844,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -850,7 +866,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -876,7 +892,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -902,7 +918,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "1",
@@ -915,12 +931,12 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "infinite_loop",
-        "array_index"
+        "array_index",
+        "infinite_loop"
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -933,12 +949,12 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "infinite_loop",
-        "string_equality"
+        "string_equality",
+        "infinite_loop"
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -999,7 +1015,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "1",
@@ -1014,7 +1030,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "1",
@@ -1029,7 +1045,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.05
   },
   {
     "layer": "1",
@@ -1048,7 +1064,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.06
   },
   {
     "layer": "1",
@@ -1063,7 +1079,7 @@
       "top": "infinite_loop"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1081,7 +1097,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1099,7 +1115,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1117,7 +1133,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1135,7 +1151,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.08
   },
   {
     "layer": "2",
@@ -1153,7 +1169,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1171,7 +1187,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "2",
@@ -1189,7 +1205,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.08
   },
   {
     "layer": "2",
@@ -1207,7 +1223,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1225,7 +1241,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "3",
@@ -1249,7 +1265,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "3",
@@ -1273,7 +1289,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "3",
@@ -1297,7 +1313,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "3",
@@ -1321,7 +1337,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "3",
@@ -1345,7 +1361,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "3",
@@ -1369,7 +1385,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "3",
@@ -1386,7 +1402,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.11
   },
   {
     "layer": "3",
@@ -1401,7 +1417,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "4",
@@ -1417,7 +1433,7 @@
       "lp": "L2"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "4",
@@ -1433,7 +1449,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "4",
@@ -1449,7 +1465,7 @@
       "plateau_flag": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "4",
@@ -1465,7 +1481,7 @@
       "plateau_flag": false
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.08
   },
   {
     "layer": "4",
@@ -1481,7 +1497,7 @@
       "se.plateau": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.12
   },
   {
     "layer": "4",
@@ -1497,7 +1513,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "5",
@@ -1512,7 +1528,7 @@
       "confidence": 0.65
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "5",
@@ -1527,7 +1543,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.06
   },
   {
     "layer": "5",
@@ -1542,7 +1558,7 @@
       "confidence": 0.75
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "5",
@@ -1557,49 +1573,65 @@
       "cap": 8
     },
     "error": null,
-    "duration_s": 27.93
+    "duration_s": 38.3
   },
   {
     "layer": "5",
     "id": "5.5",
     "name": "probe continuity across turns",
-    "expected": "multi-turn",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "expected": "confidence climbs across 3 turns, final \u2265 floor",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "confs": [
+        0.3,
+        0.559,
+        0.65
+      ],
+      "monotone_up": true,
+      "final_strong": true
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.37
   },
   {
     "layer": "5",
     "id": "5.6",
     "name": "pick unprobed sub-criterion",
-    "expected": "multi-turn",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "expected": "selector picks an unprobed facet",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "target": "L3",
+      "first_two_sub": [
+        "Can trace: new String() allocates a heap object.",
+        "Variable holds a reference (memory address)."
+      ],
+      "picked_next": "Variable holds a reference (memory address)."
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.07
   },
   {
     "layer": "5",
     "id": "5.7",
     "name": "credit different-sub-criterion answer",
-    "expected": "multi-turn",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness",
+    "expected": "strong off-facet reply still credited",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "multi-turn \u2014 covered by chat app flow, not single-call harness"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "vague_conf": 0.572,
+      "strong_conf": 0.75,
+      "strong_lp": "L3"
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.16
   },
   {
     "layer": "6",
@@ -1620,7 +1652,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.1
   },
   {
     "layer": "6",
@@ -1641,7 +1673,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "6",
@@ -1662,7 +1694,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "6",
@@ -1683,7 +1715,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.05
   },
   {
     "layer": "6",
@@ -1704,7 +1736,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "6",
@@ -1725,7 +1757,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "6",
@@ -1746,7 +1778,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "6",
@@ -1767,7 +1799,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "7",
@@ -1847,7 +1879,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.05
   },
   {
     "layer": "7",
@@ -1966,29 +1998,37 @@
     "layer": "8",
     "id": "8.6",
     "name": "persistence across restart",
-    "expected": "out of scope",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires restart/threading harness",
+    "expected": "mastery survives save\u2192load on fresh DINA",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires restart/threading harness"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "pre_np": 0.99,
+      "post_np": 0.99,
+      "pre_se": 0.8319,
+      "post_se": 0.8319
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.02
   },
   {
     "layer": "8",
     "id": "8.7",
     "name": "concurrent updates race",
-    "expected": "out of scope",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires restart/threading harness",
+    "expected": "no exception, mastery in [0,1]",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires restart/threading harness"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "threads": 8,
+      "iters_per_thread": 20,
+      "errors": [],
+      "final_mastery": 0.99
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2036,7 +2076,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2052,7 +2092,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2068,7 +2108,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2084,7 +2124,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2116,7 +2156,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2148,7 +2188,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "11",
@@ -2184,7 +2224,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2202,7 +2242,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2220,7 +2260,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2238,7 +2278,7 @@
       "attribution": "fixed"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2256,7 +2296,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "12",
@@ -2276,12 +2316,13 @@
     "layer": "12",
     "id": "12.1",
     "name": "positive learning gain",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "reward > 0",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward": 0.19
     },
     "error": null,
     "duration_s": 0.0
@@ -2290,12 +2331,14 @@
     "layer": "12",
     "id": "12.2",
     "name": "negative gain",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "drop reward < flat reward",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_drop": -0.586,
+      "reward_flat": 0.15
     },
     "error": null,
     "duration_s": 0.0
@@ -2304,12 +2347,14 @@
     "layer": "12",
     "id": "12.3",
     "name": "delta_lp positive",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "+1 LP > 0 LP",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_delta0": 0.15,
+      "reward_delta1": 0.275
     },
     "error": null,
     "duration_s": 0.0
@@ -2318,12 +2363,14 @@
     "layer": "12",
     "id": "12.4",
     "name": "plateau-broken",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "plateau-broken reward > regular advance reward",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_no_plateau": 0.391,
+      "reward_plateau_broken": 0.466
     },
     "error": null,
     "duration_s": 0.0
@@ -2332,12 +2379,14 @@
     "layer": "12",
     "id": "12.5",
     "name": "engagement signal",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "hi-eng > lo-eng",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_low_eng": 0.086,
+      "reward_high_eng": 0.296
     },
     "error": null,
     "duration_s": 0.0
@@ -2346,12 +2395,14 @@
     "layer": "12",
     "id": "12.6",
     "name": "ZPD reward",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "in-ZPD > overwhelmed",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_in_zpd": 0.24,
+      "reward_overwhelmed": 0.212
     },
     "error": null,
     "duration_s": 0.0
@@ -2360,12 +2411,14 @@
     "layer": "12",
     "id": "12.7",
     "name": "attribution reward",
-    "expected": "live in chat app",
-    "outcome": "NOT_RUNNABLE",
-    "drawback": "requires full session\u2192reward loop",
+    "expected": "fixed\u2192adaptive + imposter cleared > flat",
+    "outcome": "PASS",
+    "drawback": null,
     "output": {
-      "_outcome": "NOT_RUNNABLE",
-      "_drawback": "requires full session\u2192reward loop"
+      "_outcome": "PASS",
+      "_drawback": null,
+      "reward_shift": 0.336,
+      "reward_flat": 0.266
     },
     "error": null,
     "duration_s": 0.0
@@ -2383,7 +2436,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2398,7 +2451,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2413,7 +2466,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2428,7 +2481,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2443,7 +2496,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2458,7 +2511,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2473,7 +2526,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2488,7 +2541,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "14",
@@ -2503,7 +2556,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "15",
@@ -2523,7 +2576,7 @@
       "lang_imposter": true
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "15",
@@ -2543,7 +2596,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "15",
@@ -2603,7 +2656,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "15",
@@ -2643,7 +2696,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2659,7 +2712,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2676,7 +2729,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2692,7 +2745,7 @@
       "self_efficacy": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2708,7 +2761,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2723,7 +2776,7 @@
       "high_anxiety": true
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2739,7 +2792,7 @@
       "score": 0.0
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2754,7 +2807,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2769,7 +2822,7 @@
       "confidence": 0.957
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "18",
@@ -2787,7 +2840,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "18",
@@ -2803,7 +2856,7 @@
       "intervention": "reduce_challenge"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.03
   },
   {
     "layer": "18",
@@ -2849,7 +2902,7 @@
       "_drawback": null,
       "stored": [
         0.42,
-        "2026-05-22T05:36:13+00:00"
+        "2026-05-23T06:19:00+00:00"
       ]
     },
     "error": null,
@@ -2869,7 +2922,7 @@
       "rows_present": 10
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.04
   },
   {
     "layer": "19",
@@ -3234,7 +3287,7 @@
       "percentile": 0.8
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "20",
@@ -3335,7 +3388,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "20",
@@ -3356,7 +3409,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3380,7 +3433,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3410,7 +3463,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3437,7 +3490,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3456,7 +3509,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3474,7 +3527,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "21",
@@ -3503,6 +3556,6 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.05
   }
 ]

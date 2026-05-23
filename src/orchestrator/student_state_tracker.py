@@ -991,9 +991,9 @@ class StudentStateTracker:
 
     def _infer_concept(self, session_data: Dict) -> Optional[str]:
         """Infer Java concept from code, error, and question using CONCEPT_KEYWORDS."""
-        text = (session_data.get("code", "") + " "
-                + session_data.get("error_message", "") + " "
-                + session_data.get("question", "")).lower()
+        text = ((session_data.get("code") or "") + " "
+                + (session_data.get("error_message") or "") + " "
+                + (session_data.get("question") or "")).lower()
         # Score each concept by keyword hit count — pick highest
         best_concept, best_score = None, 0
         for concept, kws in CONCEPT_KEYWORDS.items():

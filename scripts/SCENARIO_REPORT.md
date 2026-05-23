@@ -2,213 +2,213 @@
 
 ## Layer 0 — Silence / non-response
 
-- [OK] **0.1** _completely empty_  (1.12s)
+- [OK] **0.1** _completely empty_  (2.3s)
     - output: `{"resolved": [["unknown", 0.0]], "stage": 1}`
 - [OK] **0.2** _whitespace-only_  (0.0s)
     - output: `{"resolved": [["unknown", 0.0]]}`
-- [OK] **0.3a** _single token '?'_  (0.04s)
+- [OK] **0.3a** _single token '?'_  (0.14s)
     - output: `{"top": "unknown", "encoding_strength": "partial"}`
-- [OK] **0.3b** _single token '😭'_  (0.03s)
+- [OK] **0.3b** _single token '😭'_  (0.1s)
     - output: `{"top": "unknown", "encoding_strength": "partial"}`
-- [OK] **0.3c** _single token '.'_  (0.03s)
+- [OK] **0.3c** _single token '.'_  (0.1s)
     - output: `{"top": "unknown", "encoding_strength": "partial"}`
-- [OK] **0.3d** _single token 'k'_  (0.03s)
+- [OK] **0.3d** _single token 'k'_  (0.11s)
     - output: `{"top": "unknown", "encoding_strength": "partial"}`
-- [OK] **0.5a** _idk variant 'idk'_  (0.02s)
+- [OK] **0.5a** _idk variant 'idk'_  (0.08s)
     - output: `{"confidence": 0.3, "lp": "L1"}`
-- [OK] **0.5b** _idk variant "i don't know"_  (0.02s)
+- [OK] **0.5b** _idk variant "i don't know"_  (0.06s)
     - output: `{"confidence": 0.3, "lp": "L1"}`
-- [OK] **0.5c** _idk variant 'no clue'_  (0.02s)
+- [OK] **0.5c** _idk variant 'no clue'_  (0.06s)
     - output: `{"confidence": 0.3, "lp": "L1"}`
-- [OK] **0.5d** _idk variant 'no idea'_  (0.02s)
+- [OK] **0.5d** _idk variant 'no idea'_  (0.06s)
     - output: `{"confidence": 0.3, "lp": "L1"}`
 - [OK] **0.7** _empty code, real error_  (0.0s)
     - output: `{"resolved": [["null_pointer", 0.675]]}`
 - [OK] **0.8** _empty error, real code_  (0.0s)
     - output: `{"resolved": [["string_equality", 0.61]]}`
-- [ok] **0.9** _code dump no question_  (0.02s)
+- [ok] **0.9** _code dump no question_  (0.07s)
     - output: `{"encoding_strength": "surface"}`
-- [OK] **0.10** _text only no actions_  (0.03s)
+- [OK] **0.10** _text only no actions_  (0.1s)
     - output: `{"top": "string_equality", "stage": 1}`
 - [OK] **0.11** _actions only no text_  (0.0s)
     - output: `{"top": "unknown"}`
-- [OK] **0.12a** _filler '...'_  (0.01s)
+- [OK] **0.12a** _filler '...'_  (0.03s)
     - output: `{"top": "unknown"}`
-- [OK] **0.12b** _filler 'ok'_  (0.01s)
+- [OK] **0.12b** _filler 'ok'_  (0.03s)
     - output: `{"top": "unknown"}`
-- [OK] **0.12c** _filler 'hmm'_  (0.01s)
+- [OK] **0.12c** _filler 'hmm'_  (0.03s)
     - output: `{"top": "unknown"}`
-- [OK] **0.13** _reply is code only_  (0.02s)
+- [OK] **0.13** _reply is code only_  (0.08s)
     - output: `{"logical_step": false}`
-- [OK] **0.14** _refusal_  (0.01s)
+- [OK] **0.14** _refusal_  (0.03s)
     - output: `{"top": "unknown"}`
 - [OK] **0.15** _screenshot empty-text fallthrough_  (0.0s)
     - output: `{"note": "same as 0.1"}`
-- [ok] **0.20** _disengagement / quit_  (0.02s)
+- [ok] **0.20** _disengagement / quit_  (0.07s)
     - output: `{"intervention": "worked_example", "self_efficacy": "neutral", "attribution": "neutral", "high_anxiety": false}`
-- [-] **0.4** _idle session timer_  (0.0s)
-    - drawback: needs wall-clock or REST API
-- [-] **0.16** _tab closed mid-probe_  (0.0s)
-    - drawback: needs wall-clock or REST API
-- [-] **0.17** _return after long absence_  (0.0s)
-    - drawback: needs wall-clock or REST API
-- [-] **0.18** _missing API fields_  (0.0s)
-    - drawback: needs wall-clock or REST API
-- [-] **0.19** _null API fields_  (0.0s)
-    - drawback: needs wall-clock or REST API
+- [OK] **0.4** _idle session timer_  (0.25s)
+    - output: `{"turns": 3, "state_recovered": true}`
+- [OK] **0.16** _tab closed mid-probe_  (0.08s)
+    - output: `{"fresh_probe_count": 0, "vague_conf": 0.3}`
+- [OK] **0.17** _return after long absence_  (0.05s)
+    - output: `{"fresh": 0.99, "after_60d": 0.193}`
+- [OK] **0.18** _missing API fields_  (0.11s)
+    - output: `{"resolved_len": 1, "tracker_keys": ["avg_mastery", "cognitive_graph", "concept", "content_channel", "language_channel"]}`
+- [OK] **0.19** _null API fields_  (0.08s)
+    - output: `{"resolved_len": 1, "top": "unknown"}`
 
 ## Layer 1 — Concept detection
 
-- [OK] **1.1** _detect type_mismatch_  (0.01s)
+- [OK] **1.1** _detect type_mismatch_  (0.03s)
     - output: `{"top": "type_mismatch", "conf": 0.22, "top3": [["type_mismatch", 0.22]]}`
-- [OK] **1.2** _detect infinite_loop_  (0.01s)
+- [OK] **1.2** _detect infinite_loop_  (0.03s)
     - output: `{"top": "infinite_loop", "conf": 0.512, "top3": [["infinite_loop", 0.512], ["variable_scope", 0.216]]}`
-- [OK] **1.3** _detect null_pointer_  (0.01s)
+- [OK] **1.3** _detect null_pointer_  (0.03s)
     - output: `{"top": "null_pointer", "conf": 0.141, "top3": [["null_pointer", 0.141]]}`
-- [OK] **1.4** _detect string_equality_  (0.01s)
+- [OK] **1.4** _detect string_equality_  (0.02s)
     - output: `{"top": "string_equality", "conf": 0.647, "top3": [["string_equality", 0.647], ["assignment_vs_compare", 0.436], ["boolean_operators", 0.23]]}`
 - [OK] **1.5** _detect variable_scope_  (0.0s)
     - output: `{"top": "variable_scope", "conf": 0.675, "top3": [["variable_scope", 0.675]]}`
-- [OK] **1.6** _detect assignment_vs_compare_  (0.01s)
+- [OK] **1.6** _detect assignment_vs_compare_  (0.04s)
     - output: `{"top": "assignment_vs_compare", "conf": 0.512, "top3": [["assignment_vs_compare", 0.512], ["boolean_operators", 0.319], ["string_equality", 0.29]]}`
-- [OK] **1.7** _detect integer_division_  (0.01s)
+- [OK] **1.7** _detect integer_division_  (0.03s)
     - output: `{"top": "integer_division", "conf": 0.512, "top3": [["integer_division", 0.512]]}`
 - [OK] **1.8** _detect scanner_buffer_  (0.0s)
     - output: `{"top": "scanner_buffer", "conf": 0.61, "top3": [["scanner_buffer", 0.61]]}`
-- [OK] **1.9** _detect array_index_  (0.01s)
+- [OK] **1.9** _detect array_index_  (0.03s)
     - output: `{"top": "array_index", "conf": 0.315, "top3": [["array_index", 0.315]]}`
 - [OK] **1.10** _detect missing_return_  (0.0s)
     - output: `{"top": "missing_return", "conf": 0.61, "top3": [["missing_return", 0.61]]}`
-- [OK] **1.11** _detect array_not_allocated_  (0.01s)
+- [OK] **1.11** _detect array_not_allocated_  (0.03s)
     - output: `{"top": "array_not_allocated", "conf": 0.287, "top3": [["array_not_allocated", 0.287]]}`
-- [OK] **1.12** _detect boolean_operators_  (0.01s)
+- [OK] **1.12** _detect boolean_operators_  (0.03s)
     - output: `{"top": "boolean_operators", "conf": 0.122, "top3": [["boolean_operators", 0.122]]}`
 - [OK] **1.13** _detect sentinel_loop_  (0.0s)
     - output: `{"top": "sentinel_loop", "conf": 0.61, "top3": [["sentinel_loop", 0.61]]}`
-- [OK] **1.14** _detect unreachable_code_  (0.01s)
+- [OK] **1.14** _detect unreachable_code_  (0.04s)
     - output: `{"top": "unreachable_code", "conf": 0.544, "top3": [["unreachable_code", 0.544], ["missing_return", 0.333]]}`
 - [OK] **1.15** _detect string_immutability_  (0.0s)
     - output: `{"top": "string_immutability", "conf": 0.675, "top3": [["string_immutability", 0.675]]}`
-- [OK] **1.16** _detect no_default_constructor_  (0.01s)
+- [OK] **1.16** _detect no_default_constructor_  (0.04s)
     - output: `{"top": "no_default_constructor", "conf": 0.362, "top3": [["no_default_constructor", 0.362]]}`
-- [OK] **1.17** _detect static_vs_instance_  (0.01s)
+- [OK] **1.17** _detect static_vs_instance_  (0.03s)
     - output: `{"top": "static_vs_instance", "conf": 0.238, "top3": [["static_vs_instance", 0.238]]}`
-- [OK] **1.18** _detect foreach_no_modify_  (0.01s)
+- [OK] **1.18** _detect foreach_no_modify_  (0.03s)
     - output: `{"top": "foreach_no_modify", "conf": 0.512, "top3": [["foreach_no_modify", 0.512]]}`
-- [OK] **1.19** _detect overloading_  (0.01s)
+- [OK] **1.19** _detect overloading_  (0.03s)
     - output: `{"top": "overloading", "conf": 0.207, "top3": [["overloading", 0.207], ["variable_scope", 0.206]]}`
-- [OK] **1.20** _detect generics_primitives_  (0.01s)
+- [OK] **1.20** _detect generics_primitives_  (0.02s)
     - output: `{"top": "generics_primitives", "conf": 0.512, "top3": [["generics_primitives", 0.512], ["array_not_allocated", 0.255]]}`
-- [OK] **1.21** _two concepts in one msg_  (0.01s)
-    - output: `{"top3": ["infinite_loop", "array_index"]}`
-- [OK] **1.22** _three concepts in one msg_  (0.01s)
-    - output: `{"top3": ["infinite_loop", "string_equality"]}`
+- [OK] **1.21** _two concepts in one msg_  (0.03s)
+    - output: `{"top3": ["array_index", "infinite_loop"]}`
+- [OK] **1.22** _three concepts in one msg_  (0.03s)
+    - output: `{"top3": ["string_equality", "infinite_loop"]}`
 - [OK] **1.23** _error-only signal_  (0.0s)
     - output: `{"top": "type_mismatch"}`
 - [OK] **1.24** _code-only signal_  (0.0s)
     - output: `{"top": "string_equality"}`
 - [OK] **1.25** _free-text weak signal_  (0.0s)
     - output: `{"top": "string_equality", "conf": 0.61}`
-- [OK] **1.26** _typos in concept words (acceptable: infinite_loop or unknown)_  (0.01s)
+- [OK] **1.26** _typos in concept words (acceptable: infinite_loop or unknown)_  (0.04s)
     - output: `{"top": "unknown"}`
-- [OK] **1.27** _off-topic_  (0.01s)
+- [OK] **1.27** _off-topic_  (0.04s)
     - output: `{"top": "unknown"}`
-- [OK] **1.28** _out-of-catalogue concept_  (0.01s)
+- [OK] **1.28** _out-of-catalogue concept_  (0.05s)
     - output: `{"top": "unknown"}`
-- [OK] **1.29** _ambiguous concepts_  (0.01s)
+- [OK] **1.29** _ambiguous concepts_  (0.06s)
     - output: `{"top3": ["string_equality", "assignment_vs_compare", "boolean_operators"]}`
-- [OK] **1.30** _non-English (unknown OR infinite_loop both acceptable)_  (0.01s)
+- [OK] **1.30** _non-English (unknown OR infinite_loop both acceptable)_  (0.02s)
     - output: `{"top": "infinite_loop"}`
 
 ## Layer 2 — Wrong-model identification (overlap matcher only — no HVSAE)
 
-- [OK] **2.1** _WM null_pointer_  (0.02s)
+- [OK] **2.1** _WM null_pointer_  (0.06s)
     - output: `{"wm": "NP-A", "score": 0.927, "lp": "L1", "source": "trained_wm_head"}`
-- [OK] **2.2** _WM null_pointer_  (0.02s)
+- [OK] **2.2** _WM null_pointer_  (0.06s)
     - output: `{"wm": "NP-B", "score": 0.607, "lp": "L1", "source": "trained_wm_head"}`
-- [OK] **2.3** _WM string_equality_  (0.01s)
+- [OK] **2.3** _WM string_equality_  (0.06s)
     - output: `{"wm": "SE-C", "score": 0.808, "lp": "L1", "source": "trained_wm_head"}`
-- [OK] **2.4** _WM string_equality_  (0.02s)
+- [OK] **2.4** _WM string_equality_  (0.08s)
     - output: `{"wm": null, "score": 0.0, "lp": "L3", "source": "overlap"}`
-- [OK] **2.5** _WM null_pointer_  (0.02s)
+- [OK] **2.5** _WM null_pointer_  (0.06s)
     - output: `{"wm": "NP-C", "score": 0.742, "lp": "L1", "source": "trained_wm_head"}`
-- [OK] **2.6** _WM string_equality_  (0.02s)
+- [OK] **2.6** _WM string_equality_  (0.07s)
     - output: `{"wm": null, "score": 0.0, "lp": "L2", "source": "overlap"}`
-- [OK] **2.7** _WM infinite_loop_  (0.01s)
+- [OK] **2.7** _WM infinite_loop_  (0.08s)
     - output: `{"wm": "IL-A", "score": 0.653, "lp": "L1", "source": "trained_wm_head"}`
-- [OK] **2.8** _WM string_equality_  (0.01s)
+- [OK] **2.8** _WM string_equality_  (0.06s)
     - output: `{"wm": "SE-A", "score": 1.0, "lp": "L2", "source": "overlap"}`
-- [OK] **2.9** _WM integer_division_  (0.02s)
+- [OK] **2.9** _WM integer_division_  (0.06s)
     - output: `{"wm": "ID-A", "score": 0.657, "lp": "L1", "source": "trained_wm_head"}`
 
 ## Layer 3 — LP-level classification
 
-- [OK] **3.1** _classify L1_  (0.02s)
+- [OK] **3.1** _classify L1_  (0.07s)
     - output: `{"lp": "L1", "target": "L2", "logical_step": false, "logical_step_detail": false, "trained_probs": {"L1": 0.9673216342926025, "L2": 0.029903313145041466, "L3": 0.001530802808701992, "L4": 0.0012443044688552618}}`
-- [OK] **3.2** _classify L2_  (0.02s)
+- [OK] **3.2** _classify L2_  (0.07s)
     - output: `{"lp": "L2", "target": "L3", "logical_step": true, "logical_step_detail": false, "trained_probs": {"L1": 0.5383917689323425, "L2": 0.350394070148468, "L3": 0.07964448630809784, "L4": 0.03156965225934982}}`
-- [OK] **3.3** _classify L3_  (0.02s)
+- [OK] **3.3** _classify L3_  (0.06s)
     - output: `{"lp": "L3", "target": "L4", "logical_step": true, "logical_step_detail": true, "trained_probs": {"L1": 0.052459508180618286, "L2": 0.23962289094924927, "L3": 0.5106215476989746, "L4": 0.19729608297348022}}`
-- [OK] **3.4** _classify L4_  (0.02s)
+- [OK] **3.4** _classify L4_  (0.07s)
     - output: `{"lp": "L4", "target": "L4", "logical_step": true, "logical_step_detail": false, "trained_probs": {"L1": 0.008478030562400818, "L2": 0.05677952989935875, "L3": 0.7295397520065308, "L4": 0.20520266890525818}}`
-- [OK] **3.5** _classify L2_  (0.02s)
+- [OK] **3.5** _classify L2_  (0.07s)
     - output: `{"lp": "L2", "target": "L3", "logical_step": true, "logical_step_detail": true, "trained_probs": {"L1": 0.002504544798284769, "L2": 0.013534673489630222, "L3": 0.9773744344711304, "L4": 0.006586279720067978}}`
-- [OK] **3.6** _classify L3_  (0.02s)
+- [OK] **3.6** _classify L3_  (0.06s)
     - output: `{"lp": "L3", "target": "L4", "logical_step": true, "logical_step_detail": true, "trained_probs": {"L1": 0.11991895735263824, "L2": 0.39977824687957764, "L3": 0.43630656599998474, "L4": 0.043996214866638184}}`
-- [OK] **3.7** _multi-concept differential LP_  (0.03s)
+- [OK] **3.7** _multi-concept differential LP_  (0.11s)
     - output: `{"per_concept_lp": {"null_pointer": "L2"}}`
-- [OK] **3.8** _regression to L1 from L3_  (0.02s)
+- [OK] **3.8** _regression to L1 from L3_  (0.07s)
     - output: `{"lp": "L1"}`
 
 ## Layer 4 — Plateau / streak
 
-- [OK] **4.1** _first L2_  (0.02s)
+- [OK] **4.1** _first L2_  (0.07s)
     - output: `{"plateau_flag": false, "lp": "L2"}`
-- [OK] **4.2** _second L2 → plateau_  (0.02s)
+- [OK] **4.2** _second L2 → plateau_  (0.06s)
     - output: `{"plateau_flag": true, "intervention": "trace_scaffold"}`
-- [OK] **4.4** _plateau cleared by L3 jump_  (0.02s)
+- [OK] **4.4** _plateau cleared by L3 jump_  (0.06s)
     - output: `{"lp": "L3", "plateau_flag": false}`
-- [OK] **4.5** _plateau cleared by regression_  (0.01s)
+- [OK] **4.5** _plateau cleared by regression_  (0.08s)
     - output: `{"lp": "L1", "plateau_flag": false}`
-- [OK] **4.6** _per-concept plateau independence_  (0.03s)
+- [OK] **4.6** _per-concept plateau independence_  (0.12s)
     - output: `{"np.plateau": true, "se.plateau": false}`
-- [OK] **4.7** _very long L2 plateau_  (0.02s)
+- [OK] **4.7** _very long L2 plateau_  (0.07s)
     - output: `{"plateau_flag": true, "intervention": "trace_scaffold"}`
 
 ## Layer 5 — Probe loop confidence branches
 
-- [OK] **5.1** _confident answer skips probe_  (0.02s)
+- [OK] **5.1** _confident answer skips probe_  (0.06s)
     - output: `{"confidence": 0.65}`
-- [OK] **5.2** _vague answer triggers probe_  (0.01s)
+- [OK] **5.2** _vague answer triggers probe_  (0.06s)
     - output: `{"confidence": 0.3}`
-- [OK] **5.3** _probe answered well_  (0.02s)
+- [OK] **5.3** _probe answered well_  (0.07s)
     - output: `{"confidence": 0.75}`
-- [OK] **5.4** _probe cap constant_  (27.93s)
+- [OK] **5.4** _probe cap constant_  (38.3s)
     - output: `{"cap": 8}`
-- [-] **5.5** _probe continuity across turns_  (0.0s)
-    - drawback: multi-turn — covered by chat app flow, not single-call harness
-- [-] **5.6** _pick unprobed sub-criterion_  (0.0s)
-    - drawback: multi-turn — covered by chat app flow, not single-call harness
-- [-] **5.7** _credit different-sub-criterion answer_  (0.0s)
-    - drawback: multi-turn — covered by chat app flow, not single-call harness
+- [OK] **5.5** _probe continuity across turns_  (0.37s)
+    - output: `{"confs": [0.3, 0.559, 0.65], "monotone_up": true, "final_strong": true}`
+- [OK] **5.6** _pick unprobed sub-criterion_  (0.07s)
+    - output: `{"target": "L3", "first_two_sub": ["Can trace: new String() allocates a heap object.", "Variable holds a reference (memory address)."], "picked_next": "Variable holds a reference (memory address)."}`
+- [OK] **5.7** _credit different-sub-criterion answer_  (0.16s)
+    - output: `{"vague_conf": 0.572, "strong_conf": 0.75, "strong_lp": "L3"}`
 
 ## Layer 6 — Emotion / behavioral surface signals
 
-- [ok] **6.1** _label=frustrated_  (0.03s)
+- [ok] **6.1** _label=frustrated_  (0.1s)
     - output: `{"expected_label": "frustrated", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": true, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.2** _label=confused_  (0.02s)
+- [ok] **6.2** _label=confused_  (0.07s)
     - output: `{"expected_label": "confused", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.3** _label=anxious_  (0.02s)
+- [ok] **6.3** _label=anxious_  (0.06s)
     - output: `{"expected_label": "anxious", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": true, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.4** _label=engaged_  (0.02s)
+- [ok] **6.4** _label=engaged_  (0.05s)
     - output: `{"expected_label": "engaged", "attribution": "neutral", "self_efficacy": "growth", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.5** _label=neutral_  (0.02s)
+- [ok] **6.5** _label=neutral_  (0.03s)
     - output: `{"expected_label": "neutral", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.6** _label=frustrated_  (0.02s)
+- [ok] **6.6** _label=frustrated_  (0.03s)
     - output: `{"expected_label": "frustrated", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.7** _label=engaged_  (0.02s)
+- [ok] **6.7** _label=engaged_  (0.03s)
     - output: `{"expected_label": "engaged", "attribution": "neutral", "self_efficacy": "neutral", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
-- [ok] **6.8** _label=engaged_  (0.02s)
+- [ok] **6.8** _label=engaged_  (0.03s)
     - output: `{"expected_label": "engaged", "attribution": "neutral", "self_efficacy": "growth", "high_anxiety": false, "imposter_flag": true, "srl_phase": "unknown", "lang_imposter": false}`
 
 ## Layer 7 — Behavioral actions (resolver smoke)
@@ -221,7 +221,7 @@
     - output: `{"top": "unknown", "stage": 1}`
 - [OK] **7.5** _manic burst_  (0.04s)
     - output: `{"top": "unknown", "stage": 1}`
-- [OK] **7.6** _read-only_  (0.04s)
+- [OK] **7.6** _read-only_  (0.05s)
     - output: `{"top": "unknown", "stage": 1}`
 - [OK] **7.7** _help-avoidant_  (0.04s)
     - output: `{"top": "unknown", "stage": 1}`
@@ -240,10 +240,10 @@
     - output: `{"untouched": 0.15, "expected_prior": 0.15}`
 - [OK] **8.8** _unknown skill key_  (0.0s)
     - output: `{"result": {"skill": "totally_made_up_skill", "mastery": 0.3, "updated": false}}`
-- [-] **8.6** _persistence across restart_  (0.0s)
-    - drawback: requires restart/threading harness
-- [-] **8.7** _concurrent updates race_  (0.0s)
-    - drawback: requires restart/threading harness
+- [OK] **8.6** _persistence across restart_  (0.02s)
+    - output: `{"pre_np": 0.99, "post_np": 0.99, "pre_se": 0.8319, "post_se": 0.8319}`
+- [OK] **8.7** _concurrent updates race_  (0.02s)
+    - output: `{"threads": 8, "iters_per_thread": 20, "errors": [], "final_mastery": 0.99}`
 
 ## Layer 9 — Code input variations
 
@@ -251,115 +251,115 @@
     - output: `{"top": "variable_scope", "conf": 0.675}`
 - [OK] **9.2** _runtime error_  (0.0s)
     - output: `{"top": "null_pointer", "conf": 0.675}`
-- [OK] **9.3** _logic error no exception_  (0.02s)
+- [OK] **9.3** _logic error no exception_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
-- [OK] **9.4** _no code text only_  (0.02s)
+- [OK] **9.4** _no code text only_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
-- [OK] **9.5** _huge code paste_  (0.02s)
+- [OK] **9.5** _huge code paste_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
-- [OK] **9.6** _no error keywords_  (0.01s)
+- [OK] **9.6** _no error keywords_  (0.02s)
     - output: `{"top": "unknown", "conf": 0.0}`
 - [OK] **9.7** _mixed lang python_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
-- [OK] **9.8** _pseudocode_  (0.02s)
+- [OK] **9.8** _pseudocode_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
 - [OK] **9.9** _sql/script text_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
-- [OK] **9.10** _odd unicode_  (0.02s)
+- [OK] **9.10** _odd unicode_  (0.01s)
     - output: `{"top": "unknown", "conf": 0.0}`
 
 ## Layer 11 — Intervention selection
 
 - [ok] **11.1** _L1 should not get challenge_problem_  (0.03s)
     - output: `{"intervention": "worked_example", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "neutral"}`
-- [ok] **11.3** _frustrated low mastery_  (0.02s)
+- [ok] **11.3** _frustrated low mastery_  (0.03s)
     - output: `{"intervention": "reduce_challenge", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "neutral"}`
-- [ok] **11.4** _high mastery engaged_  (0.02s)
+- [ok] **11.4** _high mastery engaged_  (0.03s)
     - output: `{"intervention": "worked_example", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "neutral"}`
-- [ok] **11.5** _wrong-model identified_  (0.02s)
+- [ok] **11.5** _wrong-model identified_  (0.03s)
     - output: `{"intervention": "worked_example", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "neutral"}`
-- [ok] **11.6** _imposter syndrome_  (0.02s)
+- [ok] **11.6** _imposter syndrome_  (0.03s)
     - output: `{"intervention": "attribution_reframe", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "fixed"}`
-- [ok] **11.7** _new concept first encounter_  (0.02s)
+- [ok] **11.7** _new concept first encounter_  (0.03s)
     - output: `{"intervention": "worked_example", "imposter_flag": true, "self_efficacy": "neutral", "attribution": "neutral"}`
 
 ## Layer 12 — RL module
 
 - [OK] **12.8** _RL module importable_  (0.0s)
-- [-] **12.1** _positive learning gain_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.2** _negative gain_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.3** _delta_lp positive_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.4** _plateau-broken_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.5** _engagement signal_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.6** _ZPD reward_  (0.0s)
-    - drawback: requires full session→reward loop
-- [-] **12.7** _attribution reward_  (0.0s)
-    - drawback: requires full session→reward loop
+- [OK] **12.1** _positive learning gain_  (0.0s)
+    - output: `{"reward": 0.19}`
+- [OK] **12.2** _negative gain_  (0.0s)
+    - output: `{"reward_drop": -0.586, "reward_flat": 0.15}`
+- [OK] **12.3** _delta_lp positive_  (0.0s)
+    - output: `{"reward_delta0": 0.15, "reward_delta1": 0.275}`
+- [OK] **12.4** _plateau-broken_  (0.0s)
+    - output: `{"reward_no_plateau": 0.391, "reward_plateau_broken": 0.466}`
+- [OK] **12.5** _engagement signal_  (0.0s)
+    - output: `{"reward_low_eng": 0.086, "reward_high_eng": 0.296}`
+- [OK] **12.6** _ZPD reward_  (0.0s)
+    - output: `{"reward_in_zpd": 0.24, "reward_overwhelmed": 0.212}`
+- [OK] **12.7** _attribution reward_  (0.0s)
+    - output: `{"reward_shift": 0.336, "reward_flat": 0.266}`
 
 ## Layer 14 — Adversarial / robustness
 
-- [OK] **14.1** _extremely long input_  (0.03s)
+- [OK] **14.1** _extremely long input_  (0.02s)
     - output: `{"top": "unknown"}`
-- [OK] **14.2** _emoji-heavy_  (0.02s)
+- [OK] **14.2** _emoji-heavy_  (0.01s)
     - output: `{"top": "unknown"}`
-- [OK] **14.3** _prompt-injection_  (0.02s)
+- [OK] **14.3** _prompt-injection_  (0.01s)
     - output: `{"top": "unknown"}`
-- [OK] **14.4** _html/sql injection_  (0.02s)
+- [OK] **14.4** _html/sql injection_  (0.01s)
     - output: `{"top": "unknown"}`
-- [OK] **14.5** _duplicate submission_  (0.02s)
+- [OK] **14.5** _duplicate submission_  (0.01s)
     - output: `{"top": "unknown"}`
-- [OK] **14.8** _massive action_sequence_  (0.02s)
+- [OK] **14.8** _massive action_sequence_  (0.01s)
     - output: `{"top": "null_pointer"}`
-- [OK] **14.9** _time_deltas length mismatch_  (0.02s)
+- [OK] **14.9** _time_deltas length mismatch_  (0.01s)
     - output: `{"top": "null_pointer"}`
-- [OK] **14.10** _negative time_stuck_  (0.02s)
+- [OK] **14.10** _negative time_stuck_  (0.01s)
     - output: `{"top": "null_pointer"}`
-- [OK] **14.11** _NaN time_stuck_  (0.02s)
+- [OK] **14.11** _NaN time_stuck_  (0.01s)
     - output: `{"top": "null_pointer"}`
 
 ## Layer 15 — Three-channel analysis
 
-- [ok] **15.1** _imposter language_  (0.02s)
+- [ok] **15.1** _imposter language_  (0.03s)
     - output: `{"expected": "imposter_flag=True", "imposter_flag": true, "attribution": "fixed", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": true}`
-- [ok] **15.2** _external attribution_  (0.02s)
+- [ok] **15.2** _external attribution_  (0.03s)
     - output: `{"expected": "attribution=external", "imposter_flag": true, "attribution": "external", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
 - [ok] **15.3** _internal healthy_  (0.03s)
     - output: `{"expected": "internal, not imposter", "imposter_flag": true, "attribution": "adaptive", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
 - [ok] **15.4** _internal unhealthy_  (0.03s)
     - output: `{"expected": "internal + imposter", "imposter_flag": true, "attribution": "fixed", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
-- [ok] **15.5** _high encoding_  (0.02s)
+- [ok] **15.5** _high encoding_  (0.03s)
     - output: `{"expected": "encoding=high", "imposter_flag": true, "attribution": "neutral", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
 - [ok] **15.6** _low encoding_  (0.02s)
     - output: `{"expected": "encoding=low", "imposter_flag": true, "attribution": "neutral", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
-- [ok] **15.8** _factual question_  (0.02s)
+- [ok] **15.8** _factual question_  (0.03s)
     - output: `{"expected": "neutral psych", "imposter_flag": true, "attribution": "neutral", "self_efficacy": "neutral", "encoding_strength": "partial", "lang_imposter": false}`
 
 ## Layer 18 — Added scenarios (post-fix gap coverage)
 
-- [OK] **18.1** _external attribution → reframe gate_  (0.02s)
+- [OK] **18.1** _external attribution → reframe gate_  (0.03s)
     - output: `{"attribution": "external", "intervention": "attribution_reframe"}`
-- [OK] **18.2** _imposter + external combo_  (0.02s)
+- [OK] **18.2** _imposter + external combo_  (0.03s)
     - output: `{"imposter": true, "attribution": "fixed", "intervention": "attribution_reframe"}`
-- [OK] **18.3** _self-correction reads as adaptive_  (0.02s)
+- [OK] **18.3** _self-correction reads as adaptive_  (0.03s)
     - output: `{"attribution": "adaptive", "self_efficacy": "neutral"}`
-- [OK] **18.4** _breakthrough → growth_efficacy_  (0.02s)
+- [OK] **18.4** _breakthrough → growth_efficacy_  (0.03s)
     - output: `{"self_efficacy": "growth", "attribution": "neutral"}`
-- [OK] **18.5** _prolonged grind → high_anxiety_  (0.02s)
+- [OK] **18.5** _prolonged grind → high_anxiety_  (0.03s)
     - output: `{"high_anxiety": true}`
-- [OK] **18.6** _WM threshold boundary_  (0.03s)
+- [OK] **18.6** _WM threshold boundary_  (0.02s)
     - output: `{"wm": null, "score": 0.0}`
-- [OK] **18.7** _substance penalty fires on 2 tokens_  (0.03s)
+- [OK] **18.7** _substance penalty fires on 2 tokens_  (0.02s)
     - output: `{"confidence": 0.3}`
-- [OK] **18.8** _short legit answer NOT floored_  (0.03s)
+- [OK] **18.8** _short legit answer NOT floored_  (0.02s)
     - output: `{"confidence": 0.957}`
-- [OK] **18.9** _code comment doesn't leak to wrong concept_  (0.02s)
+- [OK] **18.9** _code comment doesn't leak to wrong concept_  (0.01s)
     - output: `{"top": "unknown", "top3": ["unknown"]}`
-- [OK] **18.10** _anxiety + L1 → de-escalation_  (0.04s)
+- [OK] **18.10** _anxiety + L1 → de-escalation_  (0.03s)
     - output: `{"anxiety": true, "intervention": "reduce_challenge"}`
 - [OK] **18.11** _stack trace alone_  (0.0s)
     - output: `{"top": "array_index", "conf": 0.783}`
@@ -369,8 +369,8 @@
 ## Layer 19 — Production-hardening features
 
 - [OK] **19.1** _DBStore upsert+read roundtrip_  (0.01s)
-    - output: `{"stored": [0.42, "2026-05-22T05:36:13+00:00"]}`
-- [OK] **19.2** _DB handles 10-thread concurrent writes_  (0.03s)
+    - output: `{"stored": [0.42, "2026-05-23T06:19:00+00:00"]}`
+- [OK] **19.2** _DB handles 10-thread concurrent writes_  (0.04s)
     - output: `{"concurrent_writers": 10, "rows_present": 10}`
 - [OK] **19.3** _mastery decay after 28 days (2x half-life)_  (0.02s)
     - output: `{"fresh": 0.957, "after_28d": 0.352, "expected_factor": 0.25}`
@@ -413,7 +413,7 @@
     - output: `{"forecast": null}`
 - [OK] **20.6** _cohort_percentile basic_  (0.01s)
     - output: `{"percentile": 0.4}`
-- [OK] **20.7** _cohort_percentile top student_  (0.01s)
+- [OK] **20.7** _cohort_percentile top student_  (0.02s)
     - output: `{"percentile": 0.8}`
 - [OK] **20.8** _trajectory empty for unknown student_  (0.01s)
     - output: `{"trajectory": []}`
@@ -421,50 +421,50 @@
     - output: `{"n_turns": 6, "mastery_arc": [0.32, 0.5, 0.62, 0.75, 0.78, 0.85], "lp_arc": ["L1", "L2", "L2", "L3", "L3", "L3"], "forecast": {"status": "advancing", "turns_recent": 6, "advances": 2, "rate_per_turn": 0.333, "current_lp": "L3", "eta_turns_to_next": 3}}`
 - [OK] **20.10** _intervention captured per-turn AND aggregated_  (0.01s)
     - output: `{"counts": {"worked_example": 3, "socratic_prompt": 1, "attribution_reframe": 1}, "interventions_per_turn": ["worked_example", "worked_example", "socratic_prompt", "attribution_reframe", "worked_example"]}`
-- [OK] **20.11** _session_id preserved in turn audit_  (0.01s)
+- [OK] **20.11** _session_id preserved in turn audit_  (0.04s)
     - output: `{"sessions": ["s1", "s1", "s1", "s2", "s2"]}`
-- [OK] **20.12** _dwell_s preserved per turn_  (0.01s)
+- [OK] **20.12** _dwell_s preserved per turn_  (0.03s)
     - output: `{"dwells": [null, 8.4, 32.1, 60.0, 5.2]}`
 
 ## Layer 21 — Behavioral + KG signals per turn
 
-- [OK] **21.1** _reasoning length+complexity per turn_  (0.01s)
+- [OK] **21.1** _reasoning length+complexity per turn_  (0.03s)
     - output: `{"lengths": [3, 47, 220], "complexities": [1.5, 4.2, 7.8]}`
-- [OK] **21.2** _correct_streak grows + resets_  (0.01s)
+- [OK] **21.2** _correct_streak grows + resets_  (0.03s)
     - output: `{"expected": [1, 2, 3, 0, 1, 2], "got": [1, 2, 3, 0, 1, 2]}`
-- [OK] **21.3** _KG concept + counts per turn_  (0.01s)
+- [OK] **21.3** _KG concept + counts per turn_  (0.03s)
     - output: `{"row_keys": ["_ts", "cse_prerequisites_count", "cse_related_count", "kg_concept_queried", "lp_after", "lp_before", "mastery_after", "ped_interventions_count", "ped_misconceptions_count", "skill", "three_channel_fired"]}`
-- [OK] **21.4** _COKE cognitive_state per turn_  (0.01s)
+- [OK] **21.4** _COKE cognitive_state per turn_  (0.03s)
     - output: `{"states": ["confused", "engaged", "frustrated"]}`
-- [OK] **21.5** _KG block sizes per turn_  (0.01s)
+- [OK] **21.5** _KG block sizes per turn_  (0.03s)
     - output: `{"sizes": [1200, 40]}`
-- [OK] **21.6** _old + new fields coexist in one turn_  (0.01s)
+- [OK] **21.6** _old + new fields coexist in one turn_  (0.05s)
     - output: `{"n_fields": 24, "sample_keys": ["_ts", "attribution", "coke_cognitive_state", "coke_confidence", "correct_streak", "cse_kg_block_chars", "cse_prerequisites_count", "cse_related_count", "dwell_s", "imposter", "intervention", "kg_concept_queried"]}`
 
 ## Summary
 
 - **Components loaded:** {'ConceptResolver': True, 'MentalModelsCatalogue': True, 'DINAModel': True, 'StudentStateTracker': True, 'LPDiagnostician': True}
 - **Total scenarios:** 194
-  - PASS: 154
+  - PASS: 171
   - OK: 23
   - DEGRADED: 0
   - FAIL: 0
   - ERROR: 0
-  - NOT_RUNNABLE: 17
+  - NOT_RUNNABLE: 0
 
 **Per-layer breakdown:**
-- L0: NOT_RUNNABLE=5, OK=2, PASS=20
+- L0: OK=2, PASS=25
 - L1: PASS=30
 - L2: PASS=9
 - L3: PASS=8
 - L4: PASS=6
-- L5: NOT_RUNNABLE=3, PASS=4
+- L5: PASS=7
 - L6: OK=8
 - L7: PASS=6
-- L8: NOT_RUNNABLE=2, PASS=6
+- L8: PASS=8
 - L9: PASS=10
 - L11: OK=6
-- L12: NOT_RUNNABLE=7, PASS=1
+- L12: PASS=8
 - L14: PASS=9
 - L15: OK=7
 - L18: PASS=12
