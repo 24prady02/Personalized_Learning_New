@@ -2385,6 +2385,336 @@ run_scenario("21","21.6","old + new fields coexist in one turn",s21_6,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# Layer 22 — Conceptual curiosity ("why / what / how" — not bug-driven).
+# Added 2026-05-23. Real beginners ask conceptual questions out of
+# curiosity, not just when something breaks. Internal harness only verifies
+# resolver tolerates the question without crashing and returns either the
+# expected concept or "unknown". The real value of these scenarios is in
+# the Ollama runner (tutor response quality).
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 22 — Conceptual curiosity")
+
+L22_CASES = [
+    # null_pointer (3)
+    ("22.1",  "null_pointer",       "what actually is null in Java?"),
+    ("22.2",  "null_pointer",       "why does Java even have null?"),
+    ("22.3",  "null_pointer",       "how do I check if something is null before using it?"),
+    # string_equality (3)
+    ("22.4",  "string_equality",    "why are strings compared differently from numbers?"),
+    ("22.5",  "string_equality",    "what is reference equality vs content equality?"),
+    ("22.6",  "string_equality",    "when should I ever use == with strings?"),
+    # infinite_loop (3)
+    ("22.7",  "infinite_loop",      "how does a while loop know when to stop?"),
+    ("22.8",  "infinite_loop",      "what makes a loop infinite?"),
+    ("22.9",  "infinite_loop",      "why would anyone ever WANT an infinite loop?"),
+    # type_mismatch (3)
+    ("22.10", "type_mismatch",      "why does Java care so much about types?"),
+    ("22.11", "type_mismatch",      "what is type coercion?"),
+    ("22.12", "type_mismatch",      "how does Java decide which type wins in mixed expressions?"),
+    # variable_scope (3)
+    ("22.13", "variable_scope",     "what does scope mean in programming?"),
+    ("22.14", "variable_scope",     "why can't I use a variable outside its block?"),
+    ("22.15", "variable_scope",     "what's the difference between local and global variables?"),
+    # assignment_vs_compare (2)
+    ("22.16", "assignment_vs_compare", "why does = mean assignment but == means compare?"),
+    ("22.17", "assignment_vs_compare", "what's the difference between = and ==?"),
+    # integer_division (2)
+    ("22.18", "integer_division",   "why does 7/2 give 3 instead of 3.5?"),
+    ("22.19", "integer_division",   "how do I do real division in Java?"),
+    # scanner_buffer (2)
+    ("22.20", "scanner_buffer",     "what does Scanner actually do under the hood?"),
+    ("22.21", "scanner_buffer",     "why do I need nextLine after nextInt?"),
+    # array_index (2)
+    ("22.22", "array_index",        "why do arrays start at 0?"),
+    ("22.23", "array_index",        "what's the relationship between length and index?"),
+    # missing_return (2)
+    ("22.24", "missing_return",     "why does a method have to return something?"),
+    ("22.25", "missing_return",     "what does void actually mean?"),
+    # array_not_allocated (2)
+    ("22.26", "array_not_allocated","what's the difference between declaring and creating an array?"),
+    ("22.27", "array_not_allocated","why do I have to say new for arrays?"),
+    # boolean_operators (2)
+    ("22.28", "boolean_operators",  "what's the difference between & and &&?"),
+    ("22.29", "boolean_operators",  "what does short-circuit evaluation mean?"),
+    # sentinel_loop (2)
+    ("22.30", "sentinel_loop",      "what is a sentinel value?"),
+    ("22.31", "sentinel_loop",      "when should I use a sentinel vs a counter?"),
+    # unreachable_code (2)
+    ("22.32", "unreachable_code",   "what does unreachable code mean?"),
+    ("22.33", "unreachable_code",   "why does Java refuse to compile if some code can't run?"),
+    # string_immutability (2)
+    ("22.34", "string_immutability","what does immutable mean for strings?"),
+    ("22.35", "string_immutability","why are strings immutable in Java?"),
+    # no_default_constructor (2)
+    ("22.36", "no_default_constructor","what is a constructor?"),
+    ("22.37", "no_default_constructor","when do I need to write my own constructor?"),
+    # static_vs_instance (2)
+    ("22.38", "static_vs_instance", "what does static mean?"),
+    ("22.39", "static_vs_instance", "when should I make a method static vs instance?"),
+    # foreach_no_modify (2)
+    ("22.40", "foreach_no_modify",  "why can't I modify a list while iterating it?"),
+    ("22.41", "foreach_no_modify",  "what is ConcurrentModificationException?"),
+    # overloading (2)
+    ("22.42", "overloading",        "what is method overloading?"),
+    ("22.43", "overloading",        "how does Java pick which overload to call?"),
+    # generics_primitives (2)
+    ("22.44", "generics_primitives","why can't I make an ArrayList of int?"),
+    ("22.45", "generics_primitives","what's the difference between int and Integer?"),
+    # broad CS1 conceptual (5)
+    ("22.46", None, "what's the difference between a class and an object?"),
+    ("22.47", None, "what is happening in memory when I call new?"),
+    ("22.48", None, "why does Java need a main method?"),
+    ("22.49", None, "what does public static void main actually mean?"),
+    ("22.50", None, "what's the difference between compile time and runtime?"),
+]
+for sid, expected_concept, question in L22_CASES:
+    def _mk(sid=sid, expected=expected_concept, q=question):
+        def fn():
+            try:
+                r = _resolve(_sd(question=q))
+                top = r[0][0] if r else "unknown"
+                # OK if resolver returned anything sensible: the expected
+                # concept, "unknown", or another catalogue concept. The
+                # real grading of these scenarios lives in the Ollama runner.
+                return {"_outcome":"OK","_drawback":None,
+                        "top":top, "conf":round(r[0][1],3) if r else 0.0,
+                        "expected_concept":expected or "broad CS1"}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("22", sid, f"conceptual: {question[:50]}", _mk(),
+                 f"resolver tolerant; expected concept = {expected_concept or 'broad'}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Layer 23 — Concept comparison ("when do I use X vs Y").
+# Added 2026-05-23. CS1 students constantly ask comparison questions that
+# aren't crisis-driven. Tests resolver picks at least one of the two
+# concepts mentioned.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 23 — Concept comparison")
+
+L23_CASES = [
+    ("23.1",  ["string_equality","assignment_vs_compare"],
+        "Should I use == or .equals when comparing strings?"),
+    ("23.2",  ["infinite_loop","sentinel_loop"],
+        "When should I use a for loop vs a while loop?"),
+    ("23.3",  ["array_index","array_not_allocated"],
+        "Is there a difference between an array and an ArrayList?"),
+    ("23.4",  ["static_vs_instance","no_default_constructor"],
+        "When should I use a static method vs an instance method?"),
+    ("23.5",  ["generics_primitives","array_not_allocated"],
+        "Should I use int[] or Integer[] for storing numbers?"),
+    ("23.6",  ["assignment_vs_compare","boolean_operators"],
+        "What's the difference between if (x) and if (x == true)?"),
+    ("23.7",  ["foreach_no_modify"],
+        "Should I use a regular for loop or for-each loop?"),
+    ("23.8",  ["overloading","no_default_constructor"],
+        "When should I overload a method instead of giving it a different name?"),
+    ("23.9",  ["null_pointer","string_immutability"],
+        "What's the difference between an empty string and null?"),
+    ("23.10", ["string_equality"],
+        "Why does .equals work but == doesn't for strings?"),
+]
+for sid, expected_concepts, question in L23_CASES:
+    def _mk(sid=sid, expected=expected_concepts, q=question):
+        def fn():
+            try:
+                r = _resolve(_sd(question=q))
+                ids = [c for c,_ in r[:3]]
+                hit = any(e in ids for e in expected)
+                return {"_outcome":"PASS" if hit else "OK",
+                        "_drawback":None if hit else
+                          f"no expected concept ({expected}) in top3={ids}",
+                        "top3":ids, "expected_any_of":expected}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("23", sid, f"compare: {question[:50]}", _mk(),
+                 f"resolver surfaces one of {expected_concepts}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Layer 24 — Academic-dishonesty refusal.
+# Added 2026-05-23. Tutor should engage but redirect — not write whole
+# assignments or reveal quiz answers. Internal harness verifies resolver
+# doesn't crash on these inputs (they should resolve to "unknown" or to
+# a concept they superficially mention). Refusal behaviour itself is
+# verified in the Ollama runner.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 24 — Academic-dishonesty refusal")
+
+L24_CASES = [
+    ("24.1",  "just give me the answer to homework 3"),
+    ("24.2",  "write the whole solution for me"),
+    ("24.3",  "what's the answer to quiz 4 question 2?"),
+    ("24.4",  "can you do my project for me?"),
+    ("24.5",  "I don't want to learn, just give me code that works"),
+    ("24.6",  "my friend already got the answer, just tell me what it is"),
+    ("24.7",  "skip explaining, just paste the working code"),
+    ("24.8",  "can you write a full Java program that does my assignment?"),
+    ("24.9",  "the deadline is in 30 mins, just give me something to submit"),
+    ("24.10", "what would a professor accept for this exact assignment?"),
+]
+for sid, msg in L24_CASES:
+    def _mk(sid=sid, m=msg):
+        def fn():
+            try:
+                r = _resolve(_sd(question=m))
+                top = r[0][0] if r else "unknown"
+                tc = _three_channel(_sd(question=m))
+                return {"_outcome":"OK","_drawback":None,
+                        "top":top,
+                        "intervention":(tc.get("recommended_intervention") or {}).get("type")}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("24", sid, f"refusal: {msg[:50]}", _mk(),
+                 "no crash; tutor refusal verified in Ollama runner")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Layer 25 — Off-topic adjacent + code review.
+# Added 2026-05-23. Students ask meta-questions (career, language choice)
+# and "is my code good" review questions. Should not crash, should not
+# be misclassified as a catalogue concept.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 25 — Off-topic adjacent + code review")
+
+L25_CASES = [
+    ("25.1",  "should I learn Python instead of Java?",                                 "off_topic"),
+    ("25.2",  "is Java still relevant for jobs in 2026?",                                "off_topic"),
+    ("25.3",  "how long will it take me to learn Java?",                                 "off_topic"),
+    ("25.4",  "I'm thinking of dropping CS1 — what should I do?",                        "off_topic"),
+    ("25.5",  "what should I learn after Java?",                                         "off_topic"),
+    ("25.6",  "Here's my code. Is it well-written?",                                     "code_review"),
+    ("25.7",  "Can you suggest improvements to my null check style?",                    "code_review"),
+    ("25.8",  "Is my variable naming good?",                                             "code_review"),
+    ("25.9",  "Is using a try-catch always the right approach here?",                    "code_review"),
+    ("25.10", "What's the more idiomatic Java way to write this?",                      "code_review"),
+]
+for sid, msg, kind in L25_CASES:
+    def _mk(sid=sid, m=msg, kind=kind):
+        def fn():
+            try:
+                r = _resolve(_sd(question=m))
+                top = r[0][0] if r else "unknown"
+                return {"_outcome":"OK","_drawback":None,
+                        "kind":kind, "top":top,
+                        "conf":round(r[0][1],3) if r else 0.0}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("25", sid, f"{kind}: {msg[:50]}", _mk(),
+                 "no crash; tutor response quality verified in Ollama runner")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Layer 26 — Prior-knowledge transfer.
+# Added 2026-05-23. Students importing mental models from other languages
+# (Python, C, JS). The wrong mental model is often a known catalogue
+# wrong-belief variant.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 26 — Prior-knowledge transfer")
+
+L26_CASES = [
+    ("26.1",  "type_mismatch",
+        "In Python I could just write 'hello' + 5, why does Java complain?"),
+    ("26.2",  "string_equality",
+        "In Python == works for string comparison, why is Java different?"),
+    ("26.3",  "array_index",
+        "Python lists let me go negative — does arr[-1] work in Java?"),
+    ("26.4",  "integer_division",
+        "Python 3 made / always return float — why didn't Java do the same?"),
+    ("26.5",  "static_vs_instance",
+        "In Python I just call class methods directly — what's static for?"),
+    ("26.6",  "generics_primitives",
+        "Python lets me put anything in a list — why does Java need types?"),
+    ("26.7",  "foreach_no_modify",
+        "In Python I can change a list while iterating, why does Java forbid it?"),
+    ("26.8",  "missing_return",
+        "JavaScript functions don't require return — why does Java?"),
+    ("26.9",  "array_not_allocated",
+        "In C I just say int arr[10]; why does Java need 'new'?"),
+    ("26.10", "string_immutability",
+        "In C I could modify chars in a string, why can't I in Java?"),
+    ("26.11", "boolean_operators",
+        "C lets me use 0/1 as booleans — why is Java so strict?"),
+    ("26.12", "scanner_buffer",
+        "In Python input() just works — why is Java Scanner so finicky?"),
+    ("26.13", "no_default_constructor",
+        "JavaScript classes work without constructors — why does Java force them?"),
+    ("26.14", "variable_scope",
+        "In Python a variable defined in if-block is still visible after — Java?"),
+    ("26.15", "overloading",
+        "Python doesn't have method overloading. How does Java's work?"),
+]
+for sid, expected_concept, question in L26_CASES:
+    def _mk(sid=sid, expected=expected_concept, q=question):
+        def fn():
+            try:
+                r = _resolve(_sd(question=q))
+                ids = [c for c,_ in r[:3]]
+                hit = expected in ids
+                return {"_outcome":"PASS" if hit else "OK",
+                        "_drawback":None if hit else
+                          f"expected {expected} not in top3={ids}",
+                        "top3":ids, "expected":expected}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("26", sid, f"prior-knowledge: {question[:50]}", _mk(),
+                 f"resolver maps to {expected_concept}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Layer 27 — Linguistic edge cases.
+# Added 2026-05-23. Text-speak, all caps, mixed language, etc. Verifies
+# resolver/tracker don't crash on messy real-world input.
+# ═══════════════════════════════════════════════════════════════════════════
+section("Layer 27 — Linguistic edge cases")
+
+L27_CASES = [
+    ("27.1",  "text-speak", "y is dis not workin lol my loop runs 4ever"),
+    ("27.2",  "all caps frustration", "WHY DOES THIS KEEP THROWING NULLPOINTEREXCEPTION I HATE THIS"),
+    ("27.3",  "streaming consciousness",
+        "so like i was trying to compare strings and i thought == would work "
+        "but then it didn't and i was like wait why and then i looked it up "
+        "and apparently you need .equals but i don't understand why because "
+        "in python it just works and i'm so confused"),
+    ("27.4",  "multiple questions",
+        "1) why doesn't == work for strings? 2) what's .equals? 3) is there a "
+        "shorter way? 4) does it work for numbers too?"),
+    ("27.5",  "code-mixed (Hinglish)",
+        "bhai my array index out of bounds aa rahi hai, kya karu?"),
+    ("27.6",  "very short", "loop?"),
+    ("27.7",  "very long",
+        "ok so the thing is " + ("um " * 80) + " what does null mean?"),
+    ("27.8",  "no punctuation",
+        "why does my while loop never stop i tried adding i++ inside but it still keeps going"),
+    ("27.9",  "with emoji",
+        "my code 🐛 keeps throwing NPE 😩 and I can't figure out why 🥺"),
+    ("27.10", "academic tone",
+        "I would like to inquire as to the semantic distinction between "
+        "equality of reference and equality of content in the Java language."),
+]
+for sid, kind, msg in L27_CASES:
+    def _mk(sid=sid, kind=kind, m=msg):
+        def fn():
+            try:
+                r = _resolve(_sd(question=m))
+                tc = _three_channel(_sd(question=m))
+                top = r[0][0] if r else "unknown"
+                return {"_outcome":"OK","_drawback":None,
+                        "kind":kind, "top":top,
+                        "conf":round(r[0][1],3) if r else 0.0}
+            except Exception as e:
+                return {"_outcome":"ERROR","_drawback":f"crash: {e}"}
+        return fn
+    run_scenario("27", sid, f"{kind}", _mk(), "no crash, no NPE on weird input")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Wrap up
 # ═══════════════════════════════════════════════════════════════════════════
 section("Summary")

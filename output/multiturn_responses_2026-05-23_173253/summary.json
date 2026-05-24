@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mt.1.clarify_npe",
+    "kind": "clarification",
+    "name": "Student doesn't understand NPE explanation, asks for re-explanation",
+    "n_turns": 4,
+    "ok_turns": 4,
+    "total_s": 46.67,
+    "total_chars": 1764,
+    "total_tokens": 436
+  },
+  {
+    "id": "mt.2.clarify_strings",
+    "kind": "clarification",
+    "name": "Student needs concept re-explained 3 ways",
+    "n_turns": 4,
+    "ok_turns": 4,
+    "total_s": 46.74,
+    "total_chars": 2366,
+    "total_tokens": 584
+  },
+  {
+    "id": "mt.3.clarify_loops",
+    "kind": "clarification",
+    "name": "Student asks for another example",
+    "n_turns": 4,
+    "ok_turns": 4,
+    "total_s": 38.09,
+    "total_chars": 1707,
+    "total_tokens": 441
+  }
+]

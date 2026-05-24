@@ -1,0 +1,26 @@
+[
+  {
+    "id": "0.1",
+    "layer": "0",
+    "name": "completely empty",
+    "kind": "student",
+    "expected": "unknown, elicitation",
+    "ok": true,
+    "total_s": 127.84,
+    "tokens": 43,
+    "err": null,
+    "response_chars": 196
+  },
+  {
+    "id": "0.2",
+    "layer": "0",
+    "name": "whitespace-only",
+    "kind": "student",
+    "expected": "unknown",
+    "ok": true,
+    "total_s": 7.67,
+    "tokens": 61,
+    "err": null,
+    "response_chars": 283
+  }
+]

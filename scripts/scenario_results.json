@@ -18,7 +18,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 2.3
+    "duration_s": 1.4
   },
   {
     "layer": "0",
@@ -54,7 +54,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.14
+    "duration_s": 0.06
   },
   {
     "layer": "0",
@@ -70,7 +70,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.1
+    "duration_s": 0.04
   },
   {
     "layer": "0",
@@ -86,7 +86,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.1
+    "duration_s": 0.04
   },
   {
     "layer": "0",
@@ -102,7 +102,7 @@
       "encoding_strength": "partial"
     },
     "error": null,
-    "duration_s": 0.11
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -118,7 +118,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.04
   },
   {
     "layer": "0",
@@ -134,7 +134,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -150,7 +150,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -166,7 +166,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -221,7 +221,7 @@
       "encoding_strength": "surface"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -237,7 +237,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.1
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -267,7 +267,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -282,7 +282,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -297,7 +297,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -312,7 +312,7 @@
       "logical_step": false
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -327,7 +327,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "0",
@@ -360,7 +360,7 @@
       "high_anxiety": false
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.03
   },
   {
     "layer": "0",
@@ -376,7 +376,7 @@
       "state_recovered": true
     },
     "error": null,
-    "duration_s": 0.25
+    "duration_s": 0.08
   },
   {
     "layer": "0",
@@ -392,7 +392,7 @@
       "vague_conf": 0.3
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -408,7 +408,7 @@
       "after_60d": 0.193
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.02
   },
   {
     "layer": "0",
@@ -430,7 +430,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.11
+    "duration_s": 0.04
   },
   {
     "layer": "0",
@@ -446,7 +446,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.03
   },
   {
     "layer": "1",
@@ -468,7 +468,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -494,7 +494,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -516,7 +516,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -546,7 +546,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -598,7 +598,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -620,7 +620,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -664,7 +664,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -708,7 +708,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -730,7 +730,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -778,7 +778,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -822,7 +822,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -844,7 +844,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -866,7 +866,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -892,7 +892,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -918,7 +918,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -931,12 +931,12 @@
       "_outcome": "PASS",
       "_drawback": null,
       "top3": [
-        "array_index",
-        "infinite_loop"
+        "infinite_loop",
+        "array_index"
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -954,7 +954,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1015,7 +1015,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1030,7 +1030,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1045,7 +1045,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1064,7 +1064,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.01
   },
   {
     "layer": "1",
@@ -1079,7 +1079,7 @@
       "top": "infinite_loop"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "2",
@@ -1097,7 +1097,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1115,7 +1115,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1133,7 +1133,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1151,7 +1151,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.02
   },
   {
     "layer": "2",
@@ -1169,7 +1169,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.03
   },
   {
     "layer": "2",
@@ -1205,7 +1205,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.06
   },
   {
     "layer": "2",
@@ -1223,7 +1223,7 @@
       "source": "overlap"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.03
   },
   {
     "layer": "2",
@@ -1241,7 +1241,7 @@
       "source": "trained_wm_head"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1265,7 +1265,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1289,7 +1289,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1313,7 +1313,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1337,7 +1337,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1361,7 +1361,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1385,7 +1385,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "3",
@@ -1402,7 +1402,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.11
+    "duration_s": 0.03
   },
   {
     "layer": "3",
@@ -1417,7 +1417,7 @@
       "lp": "L1"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1433,7 +1433,7 @@
       "lp": "L2"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1449,7 +1449,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1465,7 +1465,7 @@
       "plateau_flag": false
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1481,7 +1481,7 @@
       "plateau_flag": false
     },
     "error": null,
-    "duration_s": 0.08
+    "duration_s": 0.02
   },
   {
     "layer": "4",
@@ -1497,7 +1497,7 @@
       "se.plateau": false
     },
     "error": null,
-    "duration_s": 0.12
+    "duration_s": 0.03
   },
   {
     "layer": "4",
@@ -1513,7 +1513,7 @@
       "intervention": "trace_scaffold"
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1528,7 +1528,7 @@
       "confidence": 0.65
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1543,7 +1543,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1558,7 +1558,7 @@
       "confidence": 0.75
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.02
   },
   {
     "layer": "5",
@@ -1573,7 +1573,7 @@
       "cap": 8
     },
     "error": null,
-    "duration_s": 38.3
+    "duration_s": 41.88
   },
   {
     "layer": "5",
@@ -1594,7 +1594,7 @@
       "final_strong": true
     },
     "error": null,
-    "duration_s": 0.37
+    "duration_s": 0.21
   },
   {
     "layer": "5",
@@ -1614,7 +1614,7 @@
       "picked_next": "Variable holds a reference (memory address)."
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.06
   },
   {
     "layer": "5",
@@ -1631,7 +1631,7 @@
       "strong_lp": "L3"
     },
     "error": null,
-    "duration_s": 0.16
+    "duration_s": 0.12
   },
   {
     "layer": "6",
@@ -1652,7 +1652,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.1
+    "duration_s": 0.07
   },
   {
     "layer": "6",
@@ -1673,7 +1673,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.07
+    "duration_s": 0.09
   },
   {
     "layer": "6",
@@ -1694,7 +1694,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.06
+    "duration_s": 0.07
   },
   {
     "layer": "6",
@@ -1715,7 +1715,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.09
   },
   {
     "layer": "6",
@@ -1736,7 +1736,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "6",
@@ -1757,7 +1757,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "6",
@@ -1778,7 +1778,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "6",
@@ -1799,7 +1799,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.07
   },
   {
     "layer": "7",
@@ -1815,7 +1815,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.11
   },
   {
     "layer": "7",
@@ -1831,7 +1831,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.09
   },
   {
     "layer": "7",
@@ -1847,7 +1847,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.12
   },
   {
     "layer": "7",
@@ -1863,7 +1863,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.11
   },
   {
     "layer": "7",
@@ -1879,7 +1879,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.05
+    "duration_s": 0.12
   },
   {
     "layer": "7",
@@ -1895,7 +1895,7 @@
       "stage": 1
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.11
   },
   {
     "layer": "8",
@@ -2010,7 +2010,7 @@
       "post_se": 0.8319
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "8",
@@ -2028,7 +2028,7 @@
       "final_mastery": 0.99
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "9",
@@ -2076,7 +2076,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "9",
@@ -2092,7 +2092,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "9",
@@ -2108,7 +2108,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "9",
@@ -2124,7 +2124,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.01
   },
   {
     "layer": "9",
@@ -2140,7 +2140,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.05
   },
   {
     "layer": "9",
@@ -2156,7 +2156,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "9",
@@ -2172,7 +2172,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "9",
@@ -2188,7 +2188,7 @@
       "conf": 0.0
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "11",
@@ -2206,7 +2206,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.1
   },
   {
     "layer": "11",
@@ -2224,7 +2224,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "11",
@@ -2242,7 +2242,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "11",
@@ -2260,7 +2260,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "11",
@@ -2278,7 +2278,7 @@
       "attribution": "fixed"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "11",
@@ -2296,7 +2296,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "12",
@@ -2436,7 +2436,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.08
   },
   {
     "layer": "14",
@@ -2451,7 +2451,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2466,7 +2466,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2481,7 +2481,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2496,7 +2496,7 @@
       "top": "unknown"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "14",
@@ -2511,7 +2511,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "14",
@@ -2526,7 +2526,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2541,7 +2541,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "14",
@@ -2556,7 +2556,7 @@
       "top": "null_pointer"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "15",
@@ -2576,7 +2576,7 @@
       "lang_imposter": true
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.09
   },
   {
     "layer": "15",
@@ -2596,7 +2596,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "15",
@@ -2616,7 +2616,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "15",
@@ -2636,7 +2636,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "15",
@@ -2656,7 +2656,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.07
   },
   {
     "layer": "15",
@@ -2676,7 +2676,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "15",
@@ -2696,7 +2696,7 @@
       "lang_imposter": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "18",
@@ -2712,7 +2712,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "18",
@@ -2729,7 +2729,7 @@
       "intervention": "attribution_reframe"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "18",
@@ -2745,7 +2745,7 @@
       "self_efficacy": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "18",
@@ -2761,7 +2761,7 @@
       "attribution": "neutral"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.09
   },
   {
     "layer": "18",
@@ -2776,7 +2776,7 @@
       "high_anxiety": true
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.07
   },
   {
     "layer": "18",
@@ -2792,7 +2792,7 @@
       "score": 0.0
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.16
   },
   {
     "layer": "18",
@@ -2807,7 +2807,7 @@
       "confidence": 0.3
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.12
   },
   {
     "layer": "18",
@@ -2822,7 +2822,7 @@
       "confidence": 0.957
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "18",
@@ -2840,7 +2840,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.05
   },
   {
     "layer": "18",
@@ -2856,7 +2856,7 @@
       "intervention": "reduce_challenge"
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.07
   },
   {
     "layer": "18",
@@ -2888,7 +2888,7 @@
       "elaboration": false
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.08
   },
   {
     "layer": "19",
@@ -2902,11 +2902,11 @@
       "_drawback": null,
       "stored": [
         0.42,
-        "2026-05-23T06:19:00+00:00"
+        "2026-05-23T21:31:59+00:00"
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "19",
@@ -2922,7 +2922,7 @@
       "rows_present": 10
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.12
   },
   {
     "layer": "19",
@@ -2939,7 +2939,7 @@
       "expected_factor": 0.25
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.06
   },
   {
     "layer": "19",
@@ -2958,7 +2958,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -2976,7 +2976,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.12
   },
   {
     "layer": "19",
@@ -2998,7 +2998,7 @@
       "tombstone_rows": 1
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -3021,7 +3021,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -3040,7 +3040,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.0
+    "duration_s": 0.04
   },
   {
     "layer": "19",
@@ -3090,7 +3090,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -3109,7 +3109,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "19",
@@ -3126,7 +3126,7 @@
       "revoked": false
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -3143,7 +3143,7 @@
       "last": "event_9"
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "19",
@@ -3160,7 +3160,7 @@
       "prior": 0.15
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.07
   },
   {
     "layer": "20",
@@ -3182,7 +3182,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.04
   },
   {
     "layer": "20",
@@ -3199,7 +3199,7 @@
       "last": 0.86
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3221,7 +3221,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3242,7 +3242,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3257,7 +3257,7 @@
       "forecast": null
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3272,7 +3272,7 @@
       "percentile": 0.4
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3287,7 +3287,7 @@
       "percentile": 0.8
     },
     "error": null,
-    "duration_s": 0.02
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3302,7 +3302,7 @@
       "trajectory": []
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.02
   },
   {
     "layer": "20",
@@ -3341,7 +3341,7 @@
       }
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3367,7 +3367,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.01
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3388,7 +3388,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.04
+    "duration_s": 0.03
   },
   {
     "layer": "20",
@@ -3463,7 +3463,7 @@
       ]
     },
     "error": null,
-    "duration_s": 0.03
+    "duration_s": 0.02
   },
   {
     "layer": "21",
@@ -3556,6 +3556,1845 @@
       ]
     },
     "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.1",
+    "name": "conceptual: what actually is null in Java?",
+    "expected": "resolver tolerant; expected concept = null_pointer",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "null_pointer",
+      "conf": 0.556,
+      "expected_concept": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.2",
+    "name": "conceptual: why does Java even have null?",
+    "expected": "resolver tolerant; expected concept = null_pointer",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "null_pointer",
+      "conf": 0.487,
+      "expected_concept": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "22",
+    "id": "22.3",
+    "name": "conceptual: how do I check if something is null before using i",
+    "expected": "resolver tolerant; expected concept = null_pointer",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "null_pointer",
+      "conf": 0.512,
+      "expected_concept": "null_pointer"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.4",
+    "name": "conceptual: why are strings compared differently from numbers?",
+    "expected": "resolver tolerant; expected concept = string_equality",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.304,
+      "expected_concept": "string_equality"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.5",
+    "name": "conceptual: what is reference equality vs content equality?",
+    "expected": "resolver tolerant; expected concept = string_equality",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.512,
+      "expected_concept": "string_equality"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.6",
+    "name": "conceptual: when should I ever use == with strings?",
+    "expected": "resolver tolerant; expected concept = string_equality",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.516,
+      "expected_concept": "string_equality"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.7",
+    "name": "conceptual: how does a while loop know when to stop?",
+    "expected": "resolver tolerant; expected concept = infinite_loop",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "infinite_loop",
+      "conf": 0.56,
+      "expected_concept": "infinite_loop"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.8",
+    "name": "conceptual: what makes a loop infinite?",
+    "expected": "resolver tolerant; expected concept = infinite_loop",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "infinite_loop",
+      "conf": 0.335,
+      "expected_concept": "infinite_loop"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.9",
+    "name": "conceptual: why would anyone ever WANT an infinite loop?",
+    "expected": "resolver tolerant; expected concept = infinite_loop",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "infinite_loop",
+      "conf": 0.512,
+      "expected_concept": "infinite_loop"
+    },
+    "error": null,
     "duration_s": 0.05
+  },
+  {
+    "layer": "22",
+    "id": "22.10",
+    "name": "conceptual: why does Java care so much about types?",
+    "expected": "resolver tolerant; expected concept = type_mismatch",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "type_mismatch",
+      "conf": 0.549,
+      "expected_concept": "type_mismatch"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.11",
+    "name": "conceptual: what is type coercion?",
+    "expected": "resolver tolerant; expected concept = type_mismatch",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "overloading",
+      "conf": 0.175,
+      "expected_concept": "type_mismatch"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "22",
+    "id": "22.12",
+    "name": "conceptual: how does Java decide which type wins in mixed expr",
+    "expected": "resolver tolerant; expected concept = type_mismatch",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "type_mismatch",
+      "conf": 0.369,
+      "expected_concept": "type_mismatch"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.13",
+    "name": "conceptual: what does scope mean in programming?",
+    "expected": "resolver tolerant; expected concept = variable_scope",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "variable_scope",
+      "conf": 0.065,
+      "expected_concept": "variable_scope"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.14",
+    "name": "conceptual: why can't I use a variable outside its block?",
+    "expected": "resolver tolerant; expected concept = variable_scope",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "variable_scope",
+      "conf": 0.311,
+      "expected_concept": "variable_scope"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.15",
+    "name": "conceptual: what's the difference between local and global var",
+    "expected": "resolver tolerant; expected concept = variable_scope",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "variable_scope",
+      "conf": 0.171,
+      "expected_concept": "variable_scope"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.16",
+    "name": "conceptual: why does = mean assignment but == means compare?",
+    "expected": "resolver tolerant; expected concept = assignment_vs_compare",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.631,
+      "expected_concept": "assignment_vs_compare"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.17",
+    "name": "conceptual: what's the difference between = and ==?",
+    "expected": "resolver tolerant; expected concept = assignment_vs_compare",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_equality",
+      "conf": 0.708,
+      "expected_concept": "assignment_vs_compare"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.18",
+    "name": "conceptual: why does 7/2 give 3 instead of 3.5?",
+    "expected": "resolver tolerant; expected concept = integer_division",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "integer_division",
+      "conf": 0.437,
+      "expected_concept": "integer_division"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.19",
+    "name": "conceptual: how do I do real division in Java?",
+    "expected": "resolver tolerant; expected concept = integer_division",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "integer_division",
+      "conf": 0.544,
+      "expected_concept": "integer_division"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.20",
+    "name": "conceptual: what does Scanner actually do under the hood?",
+    "expected": "resolver tolerant; expected concept = scanner_buffer",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "scanner_buffer",
+      "conf": 0.512,
+      "expected_concept": "scanner_buffer"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.21",
+    "name": "conceptual: why do I need nextLine after nextInt?",
+    "expected": "resolver tolerant; expected concept = scanner_buffer",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "scanner_buffer",
+      "conf": 0.61,
+      "expected_concept": "scanner_buffer"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "22",
+    "id": "22.22",
+    "name": "conceptual: why do arrays start at 0?",
+    "expected": "resolver tolerant; expected concept = array_index",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "array_index",
+      "conf": 0.327,
+      "expected_concept": "array_index"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.23",
+    "name": "conceptual: what's the relationship between length and index?",
+    "expected": "resolver tolerant; expected concept = array_index",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "array_index",
+      "conf": 0.206,
+      "expected_concept": "array_index"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.24",
+    "name": "conceptual: why does a method have to return something?",
+    "expected": "resolver tolerant; expected concept = missing_return",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "missing_return",
+      "conf": 0.33,
+      "expected_concept": "missing_return"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.25",
+    "name": "conceptual: what does void actually mean?",
+    "expected": "resolver tolerant; expected concept = missing_return",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "missing_return",
+      "conf": 0.249,
+      "expected_concept": "missing_return"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.26",
+    "name": "conceptual: what's the difference between declaring and creati",
+    "expected": "resolver tolerant; expected concept = array_not_allocated",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "array_not_allocated",
+      "conf": 0.506,
+      "expected_concept": "array_not_allocated"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.27",
+    "name": "conceptual: why do I have to say new for arrays?",
+    "expected": "resolver tolerant; expected concept = array_not_allocated",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "array_not_allocated",
+      "conf": 0.472,
+      "expected_concept": "array_not_allocated"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "22",
+    "id": "22.28",
+    "name": "conceptual: what's the difference between & and &&?",
+    "expected": "resolver tolerant; expected concept = boolean_operators",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "boolean_operators",
+      "conf": 0.275,
+      "expected_concept": "boolean_operators"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.29",
+    "name": "conceptual: what does short-circuit evaluation mean?",
+    "expected": "resolver tolerant; expected concept = boolean_operators",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "boolean_operators",
+      "conf": 0.512,
+      "expected_concept": "boolean_operators"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "22",
+    "id": "22.30",
+    "name": "conceptual: what is a sentinel value?",
+    "expected": "resolver tolerant; expected concept = sentinel_loop",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "sentinel_loop",
+      "conf": 0.512,
+      "expected_concept": "sentinel_loop"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.31",
+    "name": "conceptual: when should I use a sentinel vs a counter?",
+    "expected": "resolver tolerant; expected concept = sentinel_loop",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "sentinel_loop",
+      "conf": 0.512,
+      "expected_concept": "sentinel_loop"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.32",
+    "name": "conceptual: what does unreachable code mean?",
+    "expected": "resolver tolerant; expected concept = unreachable_code",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unreachable_code",
+      "conf": 0.623,
+      "expected_concept": "unreachable_code"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.33",
+    "name": "conceptual: why does Java refuse to compile if some code can't",
+    "expected": "resolver tolerant; expected concept = unreachable_code",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "type_mismatch",
+      "conf": 0.214,
+      "expected_concept": "unreachable_code"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.34",
+    "name": "conceptual: what does immutable mean for strings?",
+    "expected": "resolver tolerant; expected concept = string_immutability",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_immutability",
+      "conf": 0.512,
+      "expected_concept": "string_immutability"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.35",
+    "name": "conceptual: why are strings immutable in Java?",
+    "expected": "resolver tolerant; expected concept = string_immutability",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "string_immutability",
+      "conf": 0.512,
+      "expected_concept": "string_immutability"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.36",
+    "name": "conceptual: what is a constructor?",
+    "expected": "resolver tolerant; expected concept = no_default_constructor",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "no_default_constructor",
+      "conf": 0.462,
+      "expected_concept": "no_default_constructor"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.37",
+    "name": "conceptual: when do I need to write my own constructor?",
+    "expected": "resolver tolerant; expected concept = no_default_constructor",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "no_default_constructor",
+      "conf": 0.498,
+      "expected_concept": "no_default_constructor"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.38",
+    "name": "conceptual: what does static mean?",
+    "expected": "resolver tolerant; expected concept = static_vs_instance",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "static_vs_instance",
+      "conf": 0.56,
+      "expected_concept": "static_vs_instance"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "22",
+    "id": "22.39",
+    "name": "conceptual: when should I make a method static vs instance?",
+    "expected": "resolver tolerant; expected concept = static_vs_instance",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "static_vs_instance",
+      "conf": 0.512,
+      "expected_concept": "static_vs_instance"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.40",
+    "name": "conceptual: why can't I modify a list while iterating it?",
+    "expected": "resolver tolerant; expected concept = foreach_no_modify",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "foreach_no_modify",
+      "conf": 0.204,
+      "expected_concept": "foreach_no_modify"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.41",
+    "name": "conceptual: what is ConcurrentModificationException?",
+    "expected": "resolver tolerant; expected concept = foreach_no_modify",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0,
+      "expected_concept": "foreach_no_modify"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "22",
+    "id": "22.42",
+    "name": "conceptual: what is method overloading?",
+    "expected": "resolver tolerant; expected concept = overloading",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "overloading",
+      "conf": 0.61,
+      "expected_concept": "overloading"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "22",
+    "id": "22.43",
+    "name": "conceptual: how does Java pick which overload to call?",
+    "expected": "resolver tolerant; expected concept = overloading",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "overloading",
+      "conf": 0.512,
+      "expected_concept": "overloading"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.44",
+    "name": "conceptual: why can't I make an ArrayList of int?",
+    "expected": "resolver tolerant; expected concept = generics_primitives",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "generics_primitives",
+      "conf": 0.462,
+      "expected_concept": "generics_primitives"
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "22",
+    "id": "22.45",
+    "name": "conceptual: what's the difference between int and Integer?",
+    "expected": "resolver tolerant; expected concept = generics_primitives",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "generics_primitives",
+      "conf": 0.626,
+      "expected_concept": "generics_primitives"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.46",
+    "name": "conceptual: what's the difference between a class and an objec",
+    "expected": "resolver tolerant; expected concept = broad",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "static_vs_instance",
+      "conf": 0.227,
+      "expected_concept": "broad CS1"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.47",
+    "name": "conceptual: what is happening in memory when I call new?",
+    "expected": "resolver tolerant; expected concept = broad",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "array_not_allocated",
+      "conf": 0.288,
+      "expected_concept": "broad CS1"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.48",
+    "name": "conceptual: why does Java need a main method?",
+    "expected": "resolver tolerant; expected concept = broad",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "type_mismatch",
+      "conf": 0.153,
+      "expected_concept": "broad CS1"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "22",
+    "id": "22.49",
+    "name": "conceptual: what does public static void main actually mean?",
+    "expected": "resolver tolerant; expected concept = broad",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "static_vs_instance",
+      "conf": 0.231,
+      "expected_concept": "broad CS1"
+    },
+    "error": null,
+    "duration_s": 0.02
+  },
+  {
+    "layer": "22",
+    "id": "22.50",
+    "name": "conceptual: what's the difference between compile time and run",
+    "expected": "resolver tolerant; expected concept = broad",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "conf": 0.0,
+      "expected_concept": "broad CS1"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "23",
+    "id": "23.1",
+    "name": "compare: Should I use == or .equals when comparing strings?",
+    "expected": "resolver surfaces one of ['string_equality', 'assignment_vs_compare']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "string_equality"
+      ],
+      "expected_any_of": [
+        "string_equality",
+        "assignment_vs_compare"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "23",
+    "id": "23.2",
+    "name": "compare: When should I use a for loop vs a while loop?",
+    "expected": "resolver surfaces one of ['infinite_loop', 'sentinel_loop']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "infinite_loop"
+      ],
+      "expected_any_of": [
+        "infinite_loop",
+        "sentinel_loop"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "23",
+    "id": "23.3",
+    "name": "compare: Is there a difference between an array and an Arra",
+    "expected": "resolver surfaces one of ['array_index', 'array_not_allocated']",
+    "outcome": "OK",
+    "drawback": "no expected concept (['array_index', 'array_not_allocated']) in top3=['generics_primitives']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "no expected concept (['array_index', 'array_not_allocated']) in top3=['generics_primitives']",
+      "top3": [
+        "generics_primitives"
+      ],
+      "expected_any_of": [
+        "array_index",
+        "array_not_allocated"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "23",
+    "id": "23.4",
+    "name": "compare: When should I use a static method vs an instance m",
+    "expected": "resolver surfaces one of ['static_vs_instance', 'no_default_constructor']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "static_vs_instance"
+      ],
+      "expected_any_of": [
+        "static_vs_instance",
+        "no_default_constructor"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "23",
+    "id": "23.5",
+    "name": "compare: Should I use int[] or Integer[] for storing number",
+    "expected": "resolver surfaces one of ['generics_primitives', 'array_not_allocated']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "generics_primitives"
+      ],
+      "expected_any_of": [
+        "generics_primitives",
+        "array_not_allocated"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "23",
+    "id": "23.6",
+    "name": "compare: What's the difference between if (x) and if (x == ",
+    "expected": "resolver surfaces one of ['assignment_vs_compare', 'boolean_operators']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "assignment_vs_compare",
+        "string_equality",
+        "boolean_operators"
+      ],
+      "expected_any_of": [
+        "assignment_vs_compare",
+        "boolean_operators"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "23",
+    "id": "23.7",
+    "name": "compare: Should I use a regular for loop or for-each loop?",
+    "expected": "resolver surfaces one of ['foreach_no_modify']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "foreach_no_modify"
+      ],
+      "expected_any_of": [
+        "foreach_no_modify"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "23",
+    "id": "23.8",
+    "name": "compare: When should I overload a method instead of giving ",
+    "expected": "resolver surfaces one of ['overloading', 'no_default_constructor']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "overloading"
+      ],
+      "expected_any_of": [
+        "overloading",
+        "no_default_constructor"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.05
+  },
+  {
+    "layer": "23",
+    "id": "23.9",
+    "name": "compare: What's the difference between an empty string and ",
+    "expected": "resolver surfaces one of ['null_pointer', 'string_immutability']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "null_pointer",
+        "missing_return"
+      ],
+      "expected_any_of": [
+        "null_pointer",
+        "string_immutability"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "23",
+    "id": "23.10",
+    "name": "compare: Why does .equals work but == doesn't for strings?",
+    "expected": "resolver surfaces one of ['string_equality']",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "string_equality",
+        "assignment_vs_compare"
+      ],
+      "expected_any_of": [
+        "string_equality"
+      ]
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "24",
+    "id": "24.1",
+    "name": "refusal: just give me the answer to homework 3",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.13
+  },
+  {
+    "layer": "24",
+    "id": "24.2",
+    "name": "refusal: write the whole solution for me",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "24",
+    "id": "24.3",
+    "name": "refusal: what's the answer to quiz 4 question 2?",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.1
+  },
+  {
+    "layer": "24",
+    "id": "24.4",
+    "name": "refusal: can you do my project for me?",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.11
+  },
+  {
+    "layer": "24",
+    "id": "24.5",
+    "name": "refusal: I don't want to learn, just give me code that work",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.11
+  },
+  {
+    "layer": "24",
+    "id": "24.6",
+    "name": "refusal: my friend already got the answer, just tell me wha",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "24",
+    "id": "24.7",
+    "name": "refusal: skip explaining, just paste the working code",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.15
+  },
+  {
+    "layer": "24",
+    "id": "24.8",
+    "name": "refusal: can you write a full Java program that does my ass",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "assignment_vs_compare",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.14
+  },
+  {
+    "layer": "24",
+    "id": "24.9",
+    "name": "refusal: the deadline is in 30 mins, just give me something",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.09
+  },
+  {
+    "layer": "24",
+    "id": "24.10",
+    "name": "refusal: what would a professor accept for this exact assig",
+    "expected": "no crash; tutor refusal verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "top": "unknown",
+      "intervention": "worked_example"
+    },
+    "error": null,
+    "duration_s": 0.14
+  },
+  {
+    "layer": "25",
+    "id": "25.1",
+    "name": "off_topic: should I learn Python instead of Java?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "off_topic",
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "25",
+    "id": "25.2",
+    "name": "off_topic: is Java still relevant for jobs in 2026?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "off_topic",
+      "top": "type_mismatch",
+      "conf": 0.126
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "25",
+    "id": "25.3",
+    "name": "off_topic: how long will it take me to learn Java?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "off_topic",
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "25",
+    "id": "25.4",
+    "name": "off_topic: I'm thinking of dropping CS1 \u2014 what should I do?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "off_topic",
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.09
+  },
+  {
+    "layer": "25",
+    "id": "25.5",
+    "name": "off_topic: what should I learn after Java?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "off_topic",
+      "top": "assignment_vs_compare",
+      "conf": 0.068
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "25",
+    "id": "25.6",
+    "name": "code_review: Here's my code. Is it well-written?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code_review",
+      "top": "unknown",
+      "conf": 0.0
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "25",
+    "id": "25.7",
+    "name": "code_review: Can you suggest improvements to my null check styl",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code_review",
+      "top": "null_pointer",
+      "conf": 0.214
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "25",
+    "id": "25.8",
+    "name": "code_review: Is my variable naming good?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code_review",
+      "top": "variable_scope",
+      "conf": 0.233
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "25",
+    "id": "25.9",
+    "name": "code_review: Is using a try-catch always the right approach her",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code_review",
+      "top": "unreachable_code",
+      "conf": 0.049
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "25",
+    "id": "25.10",
+    "name": "code_review: What's the more idiomatic Java way to write this?",
+    "expected": "no crash; tutor response quality verified in Ollama runner",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code_review",
+      "top": "assignment_vs_compare",
+      "conf": 0.24
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.1",
+    "name": "prior-knowledge: In Python I could just write 'hello' + 5, why does",
+    "expected": "resolver maps to type_mismatch",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "type_mismatch"
+      ],
+      "expected": "type_mismatch"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.2",
+    "name": "prior-knowledge: In Python == works for string comparison, why is J",
+    "expected": "resolver maps to string_equality",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "string_equality",
+        "assignment_vs_compare",
+        "type_mismatch"
+      ],
+      "expected": "string_equality"
+    },
+    "error": null,
+    "duration_s": 0.04
+  },
+  {
+    "layer": "26",
+    "id": "26.3",
+    "name": "prior-knowledge: Python lists let me go negative \u2014 does arr[-1] wor",
+    "expected": "resolver maps to array_index",
+    "outcome": "OK",
+    "drawback": "expected array_index not in top3=['foreach_no_modify']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "expected array_index not in top3=['foreach_no_modify']",
+      "top3": [
+        "foreach_no_modify"
+      ],
+      "expected": "array_index"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.4",
+    "name": "prior-knowledge: Python 3 made / always return float \u2014 why didn't J",
+    "expected": "resolver maps to integer_division",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "integer_division"
+      ],
+      "expected": "integer_division"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.5",
+    "name": "prior-knowledge: In Python I just call class methods directly \u2014 wha",
+    "expected": "resolver maps to static_vs_instance",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "static_vs_instance"
+      ],
+      "expected": "static_vs_instance"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.6",
+    "name": "prior-knowledge: Python lets me put anything in a list \u2014 why does J",
+    "expected": "resolver maps to generics_primitives",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "generics_primitives",
+        "type_mismatch"
+      ],
+      "expected": "generics_primitives"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.7",
+    "name": "prior-knowledge: In Python I can change a list while iterating, why",
+    "expected": "resolver maps to foreach_no_modify",
+    "outcome": "OK",
+    "drawback": "expected foreach_no_modify not in top3=['string_immutability']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "expected foreach_no_modify not in top3=['string_immutability']",
+      "top3": [
+        "string_immutability"
+      ],
+      "expected": "foreach_no_modify"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.8",
+    "name": "prior-knowledge: JavaScript functions don't require return \u2014 why do",
+    "expected": "resolver maps to missing_return",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "missing_return",
+        "unreachable_code"
+      ],
+      "expected": "missing_return"
+    },
+    "error": null,
+    "duration_s": 0.13
+  },
+  {
+    "layer": "26",
+    "id": "26.9",
+    "name": "prior-knowledge: In C I just say int arr[10]; why does Java need 'n",
+    "expected": "resolver maps to array_not_allocated",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "array_not_allocated",
+        "no_default_constructor"
+      ],
+      "expected": "array_not_allocated"
+    },
+    "error": null,
+    "duration_s": 0.06
+  },
+  {
+    "layer": "26",
+    "id": "26.10",
+    "name": "prior-knowledge: In C I could modify chars in a string, why can't I",
+    "expected": "resolver maps to string_immutability",
+    "outcome": "OK",
+    "drawback": "expected string_immutability not in top3=['type_mismatch']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "expected string_immutability not in top3=['type_mismatch']",
+      "top3": [
+        "type_mismatch"
+      ],
+      "expected": "string_immutability"
+    },
+    "error": null,
+    "duration_s": 0.07
+  },
+  {
+    "layer": "26",
+    "id": "26.11",
+    "name": "prior-knowledge: C lets me use 0/1 as booleans \u2014 why is Java so str",
+    "expected": "resolver maps to boolean_operators",
+    "outcome": "OK",
+    "drawback": "expected boolean_operators not in top3=['integer_division', 'assignment_vs_compare', 'overloading']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "expected boolean_operators not in top3=['integer_division', 'assignment_vs_compare', 'overloading']",
+      "top3": [
+        "integer_division",
+        "assignment_vs_compare",
+        "overloading"
+      ],
+      "expected": "boolean_operators"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.12",
+    "name": "prior-knowledge: In Python input() just works \u2014 why is Java Scanner",
+    "expected": "resolver maps to scanner_buffer",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "scanner_buffer"
+      ],
+      "expected": "scanner_buffer"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.13",
+    "name": "prior-knowledge: JavaScript classes work without constructors \u2014 why",
+    "expected": "resolver maps to no_default_constructor",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "no_default_constructor"
+      ],
+      "expected": "no_default_constructor"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.14",
+    "name": "prior-knowledge: In Python a variable defined in if-block is still ",
+    "expected": "resolver maps to variable_scope",
+    "outcome": "OK",
+    "drawback": "expected variable_scope not in top3=['missing_return']",
+    "output": {
+      "_outcome": "OK",
+      "_drawback": "expected variable_scope not in top3=['missing_return']",
+      "top3": [
+        "missing_return"
+      ],
+      "expected": "variable_scope"
+    },
+    "error": null,
+    "duration_s": 0.03
+  },
+  {
+    "layer": "26",
+    "id": "26.15",
+    "name": "prior-knowledge: Python doesn't have method overloading. How does J",
+    "expected": "resolver maps to overloading",
+    "outcome": "PASS",
+    "drawback": null,
+    "output": {
+      "_outcome": "PASS",
+      "_drawback": null,
+      "top3": [
+        "overloading"
+      ],
+      "expected": "overloading"
+    },
+    "error": null,
+    "duration_s": 0.0
+  },
+  {
+    "layer": "27",
+    "id": "27.1",
+    "name": "text-speak",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "text-speak",
+      "top": "infinite_loop",
+      "conf": 0.19
+    },
+    "error": null,
+    "duration_s": 0.11
+  },
+  {
+    "layer": "27",
+    "id": "27.2",
+    "name": "all caps frustration",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "all caps frustration",
+      "top": "null_pointer",
+      "conf": 0.195
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "27",
+    "id": "27.3",
+    "name": "streaming consciousness",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "streaming consciousness",
+      "top": "string_equality",
+      "conf": 0.686
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "27",
+    "id": "27.4",
+    "name": "multiple questions",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "multiple questions",
+      "top": "string_equality",
+      "conf": 0.524
+    },
+    "error": null,
+    "duration_s": 0.11
+  },
+  {
+    "layer": "27",
+    "id": "27.5",
+    "name": "code-mixed (Hinglish)",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "code-mixed (Hinglish)",
+      "top": "array_index",
+      "conf": 0.61
+    },
+    "error": null,
+    "duration_s": 0.08
+  },
+  {
+    "layer": "27",
+    "id": "27.6",
+    "name": "very short",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "very short",
+      "top": "infinite_loop",
+      "conf": 0.208
+    },
+    "error": null,
+    "duration_s": 0.16
+  },
+  {
+    "layer": "27",
+    "id": "27.7",
+    "name": "very long",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "very long",
+      "top": "null_pointer",
+      "conf": 0.132
+    },
+    "error": null,
+    "duration_s": 0.13
+  },
+  {
+    "layer": "27",
+    "id": "27.8",
+    "name": "no punctuation",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "no punctuation",
+      "top": "infinite_loop",
+      "conf": 0.512
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "27",
+    "id": "27.9",
+    "name": "with emoji",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "with emoji",
+      "top": "null_pointer",
+      "conf": 0.512
+    },
+    "error": null,
+    "duration_s": 0.12
+  },
+  {
+    "layer": "27",
+    "id": "27.10",
+    "name": "academic tone",
+    "expected": "no crash, no NPE on weird input",
+    "outcome": "OK",
+    "drawback": null,
+    "output": {
+      "_outcome": "OK",
+      "_drawback": null,
+      "kind": "academic tone",
+      "top": "assignment_vs_compare",
+      "conf": 0.452
+    },
+    "error": null,
+    "duration_s": 0.12
   }
 ]
