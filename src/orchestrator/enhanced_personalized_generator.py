@@ -1012,6 +1012,41 @@ class EnhancedPersonalizedGenerator:
                 "briefly, then correct it with the L3 mechanism above. Do not "
                 "correct misconceptions the student hasn't shown."
             )
+
+            # ===== LP-2.5: FORMAL GROUNDING (ProgMiscon / JLS) =====
+            # Surfaced 2026-05-25. When the matched WrongModel carries a
+            # ProgMiscon refutation (ITiCSE 2021, Chiodini et al.,
+            # https://progmiscon.org, CC BY 4.0), inject the formal
+            # JLS-grounded correction so the LLM can explain WHY the
+            # belief is wrong, not just THAT it is wrong. Additive: this
+            # block does not emit when refutation_text is absent (v1
+            # catalogue path is unchanged).
+            refutation = lp_diag.get('wrong_model_refutation')
+            jls_ref    = lp_diag.get('wrong_model_jls_ref')
+            pm_id      = lp_diag.get('wrong_model_progmiscon_id')
+            if refutation:
+                prompt_parts.append(
+                    "\n=== LP-2.5: FORMAL GROUNDING "
+                    "(from ProgMiscon / Java Language Specification) ==="
+                )
+                prompt_parts.append(
+                    "The student's apparent belief contradicts the Java "
+                    "Language Specification. Specifically: " + refutation
+                )
+                if jls_ref:
+                    prompt_parts.append(f"Reference: {jls_ref}")
+                if pm_id:
+                    prompt_parts.append(
+                        f"ProgMiscon misconception ID: {pm_id} "
+                        f"(see https://progmiscon.org)"
+                    )
+                prompt_parts.append(
+                    "Use this grounding to explain WHY the belief is wrong, "
+                    "not just THAT it is. Cite the spec language above only "
+                    "if the student's level (LP-1 above) warrants it — at "
+                    "L1/L2 paraphrase the correction; at L3/L4 you may "
+                    "reference the spec section directly."
+                )
         elif lp_diag:
             # Catalogue concept but no specific wrong model matched
             prompt_parts.append("\n=== LP-2: WRONG MENTAL MODEL ===")

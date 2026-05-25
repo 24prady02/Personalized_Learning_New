@@ -29,11 +29,21 @@ import re
 
 @dataclass
 class WrongModel:
-    """One wrong mental model for a concept."""
+    """One wrong mental model for a concept.
+
+    Extended 2026-05-25 with optional ProgMiscon (Chiodini et al., ITiCSE
+    2021) grounding fields. All defaults are None / [] so pre-ProgMiscon
+    catalogue entries load and behave identically.
+    """
     id: str
     wrong_belief: str
     origin: str
     conversation_signals: List[str]
+    # -- ProgMiscon integration (CC BY 4.0, https://progmiscon.org) --
+    progmiscon_id: Optional[str] = None       # e.g. "EqualsComparesReferences"
+    jls_reference: Optional[str] = None       # e.g. "JLS21 §15.21.1"
+    refutation_text: Optional[str] = None     # ProgMiscon shortCorrection
+    textbook_refs: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -59,6 +69,15 @@ class ConceptEntry:
     # CPAL deep-diagnostic addition — populated from data/mental_models/
     # jargon_traps.json. Empty list if no traps authored for this concept yet.
     jargon_traps: List[JargonTrap] = field(default_factory=list)
+    # ProgMiscon imports without hand-authored conversation_signals.
+    # These won't match in match_wrong_model() but are surfaced in LP-2c
+    # as supplementary "alternative misconceptions to be aware of".
+    # Added 2026-05-25.
+    progmiscon_only: List[WrongModel] = field(default_factory=list)
+    # Lifecycle flag for catalogue entries whose rubric is still
+    # provisional (e.g. new concepts seeded from ProgMiscon imports
+    # before a domain expert authors L1-L4 properly).
+    rubric_status: str = "approved"  # "approved" | "draft_needs_review"
 
 
 @dataclass
@@ -95,15 +114,24 @@ class MentalModelsCatalogue:
             return
         with open(self.json_path) as f:
             raw = json.load(f)
+        def _mk_wm(wm: dict) -> WrongModel:
+            """Build a WrongModel from a JSON dict, tolerating both v1
+            (no ProgMiscon fields) and v2 (with ProgMiscon fields)."""
+            return WrongModel(
+                id=wm["id"],
+                wrong_belief=wm["wrong_belief"],
+                origin=wm["origin"],
+                conversation_signals=wm.get("conversation_signals", []),
+                progmiscon_id=wm.get("progmiscon_id"),
+                jls_reference=wm.get("jls_reference"),
+                refutation_text=wm.get("refutation_text"),
+                textbook_refs=list(wm.get("textbook_refs", [])),
+            )
+
         for cid, entry in raw.get("concepts", {}).items():
-            wrong_models = [
-                WrongModel(
-                    id=wm["id"],
-                    wrong_belief=wm["wrong_belief"],
-                    origin=wm["origin"],
-                    conversation_signals=wm["conversation_signals"],
-                )
-                for wm in entry.get("wrong_models", [])
+            wrong_models = [_mk_wm(wm) for wm in entry.get("wrong_models", [])]
+            progmiscon_only = [
+                _mk_wm(wm) for wm in entry.get("progmiscon_only", [])
             ]
             self._concepts[cid] = ConceptEntry(
                 concept_id=cid,
@@ -112,9 +140,19 @@ class MentalModelsCatalogue:
                 java_concept=entry.get("java_concept", ""),
                 wrong_models=wrong_models,
                 lp_rubric=dict(entry.get("lp_rubric", {})),
+                progmiscon_only=progmiscon_only,
+                rubric_status=entry.get("rubric_status", "approved"),
             )
+        n_pm_main = sum(1 for c in self._concepts.values()
+                        for w in c.wrong_models if w.progmiscon_id)
+        n_pm_only = sum(len(c.progmiscon_only)
+                        for c in self._concepts.values())
         print(f"[MentalModels] loaded {len(self._concepts)} concepts, "
-              f"{sum(len(c.wrong_models) for c in self._concepts.values())} wrong models")
+              f"{sum(len(c.wrong_models) for c in self._concepts.values())} "
+              f"wrong models"
+              + (f" ({n_pm_main} with ProgMiscon grounding"
+                 f", {n_pm_only} progmiscon-only)"
+                 if (n_pm_main or n_pm_only) else ""))
 
     def _load_jargon_traps(self) -> None:
         """Attach per-concept jargon traps from jargon_traps.json. Optional;

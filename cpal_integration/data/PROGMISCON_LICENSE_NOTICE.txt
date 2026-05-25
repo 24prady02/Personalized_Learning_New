@@ -1,0 +1,11 @@
+ProgMiscon misconception catalogue
+==================================
+
+Source: https://progmiscon.org
+Reference: Chiodini, L. et al. (2021). 'A Curated Inventory of Programming Language Misconceptions.' Proceedings of the 26th ACM Conference on Innovation and Technology in Computer Science Education (ITiCSE '21). https://doi.org/10.1145/3430665.3456343
+
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0). https://creativecommons.org/licenses/by/4.0/
+
+This project uses the Java subset of ProgMiscon's misconception catalogue (specifically the `shortCorrection` refutation text and the JLS section references) to enrich the CPAL wrong-mental-models catalogue. Cached snapshot: data/mental_models/progmiscon_raw.json.
+
+Attribution: When CPAL surfaces a ProgMiscon refutation in a tutor response (LP-2.5 prompt block), the ProgMiscon misconception ID is included so the source is traceable.

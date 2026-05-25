@@ -87,6 +87,12 @@ class LPDiagnostic:
     wrong_model_origin: Optional[str] = None
     matched_signal: Optional[str] = None
     match_score: float = 0.0
+    # ProgMiscon grounding (populated 2026-05-25 from catalogue v2 when the
+    # matched WrongModel has progmiscon_id/refutation_text/jls_reference).
+    # All None on v1-only catalogues — back-compat preserved.
+    wrong_model_refutation: Optional[str] = None
+    wrong_model_jls_ref: Optional[str] = None
+    wrong_model_progmiscon_id: Optional[str] = None
 
     # LP-level classification
     current_lp_level: str = LP_L1
@@ -160,6 +166,9 @@ class LPDiagnostic:
             "wrong_model_origin": self.wrong_model_origin,
             "matched_signal": self.matched_signal,
             "match_score": self.match_score,
+            "wrong_model_refutation": self.wrong_model_refutation,
+            "wrong_model_jls_ref": self.wrong_model_jls_ref,
+            "wrong_model_progmiscon_id": self.wrong_model_progmiscon_id,
             "current_lp_level": self.current_lp_level,
             "logical_step": self.logical_step,
             "logical_step_detail": self.logical_step_detail,
@@ -1107,6 +1116,19 @@ class LPDiagnostician:
             diag.matched_signal          = match.matched_signal
             diag.match_score             = match.match_score
             diag.source = "overlap" if self.semantic is None else "hvsae+overlap"
+
+        # ProgMiscon grounding: regardless of which path picked the wrong
+        # model above, look up the catalogue entry and surface the
+        # refutation_text/jls_reference so _build_enhanced_prompt's LP-2.5
+        # block can emit them. No-op when the matched WrongModel has no
+        # ProgMiscon fields (i.e. when the v1 catalogue is loaded).
+        # Added 2026-05-25.
+        if diag.wrong_model_id:
+            wm_obj = self.catalogue.get_wrong_model(concept, diag.wrong_model_id)
+            if wm_obj is not None:
+                diag.wrong_model_refutation    = wm_obj.refutation_text
+                diag.wrong_model_jls_ref       = wm_obj.jls_reference
+                diag.wrong_model_progmiscon_id = wm_obj.progmiscon_id
 
         # -- Dynamic wrong-model tier: catalogue retrieval ----------------
         # docs/cpal_trainable_dynamic_design.md §4c — embedding retrieval over
