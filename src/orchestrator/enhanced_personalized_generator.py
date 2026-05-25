@@ -903,42 +903,6 @@ class EnhancedPersonalizedGenerator:
                     f"\n[LP-0 narrative skipped: {type(_e).__name__}]"
                 )
 
-            # ===== LP-0.5: PSYCHOLOGICAL CONTEXT (Nestor) =====
-            # Added 2026-05-25. When Nestor was able to infer a learner
-            # profile from the student's prompt text, surface it here so
-            # the LLM can adapt tone, scaffold density, and example
-            # choice to the student's personality + learning style.
-            nestor = (student_state.get("nestor_profile")
-                      if isinstance(student_state, dict) else None) or {}
-            if nestor.get("personality") or nestor.get("learning_styles"):
-                prompt_parts.append("\n=== LP-0.5: PSYCHOLOGICAL CONTEXT "
-                                    "(Nestor Bayesian profile) ===")
-                pers = nestor.get("personality") or {}
-                if pers:
-                    pers_str = ", ".join(
-                        f"{k}={v:.2f}" if isinstance(v, (int, float)) else f"{k}={v}"
-                        for k, v in list(pers.items())[:6]
-                    )
-                    prompt_parts.append(f"Personality (Big Five): {pers_str}")
-                styles = nestor.get("learning_styles") or {}
-                if styles:
-                    styles_str = ", ".join(f"{k}={v}" for k, v in list(styles.items())[:4])
-                    prompt_parts.append(f"Learning style (Felder-Silverman): {styles_str}")
-                strategies = nestor.get("learning_strategies") or {}
-                if strategies:
-                    strat_str = ", ".join(f"{k}={v}" for k, v in list(strategies.items())[:4])
-                    prompt_parts.append(f"Strategies (LISTK): {strat_str}")
-                pref = nestor.get("intervention_preference")
-                if pref:
-                    prompt_parts.append(
-                        f"Nestor's intervention preference: {pref} "
-                        f"(advisory — defer to LP-validity gate)"
-                    )
-                prompt_parts.append(
-                    "Adapt tone and scaffold density to this profile. "
-                    "Do NOT mention the profile to the student."
-                )
-
             # ===== LP-0.6: BEHAVIORAL CONTEXT (HMM) =====
             # Added 2026-05-25. Surface the BehavioralHMM's read of the
             # student's cognitive state from their action sequence

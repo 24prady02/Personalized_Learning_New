@@ -39,9 +39,10 @@ ROOT = Path(__file__).resolve().parent.parent
 class SystemRegistry:
     """Container for every CPAL component the chat app needs.
 
-    History (2026-05-25): Nestor and LPProgressionRanker were previously
-    excluded by design. Re-enabled this revision so the runtime stack
-    matches the methodology described in the paper. Components that fail
+    History (2026-05-25): LPProgressionRanker was previously dormant;
+    re-enabled this revision so the runtime stack matches the
+    methodology described in the paper. Nestor remains out of scope
+    (see scripts/cpal_chat_app.py header note). Components that fail
     to load no-op gracefully (the _try wrapper records the failure and
     callers handle None)."""
     config: Dict[str, Any] = field(default_factory=dict)
@@ -54,9 +55,6 @@ class SystemRegistry:
     # Cognitive student modeling
     dina: Any = None
     bkt: Any = None  # BayesianKnowledgeTracer
-
-    # Psychological profiling (Nestor — re-enabled 2026-05-25)
-    nestor: Any = None
 
     # Knowledge graphs
     cse_kg_client: Any = None
@@ -122,7 +120,7 @@ def _build_registry() -> SystemRegistry:
     reg.config = _load_config()
     cfg = reg.config
     print("[Registry] Building full CPAL stack "
-          "(Nestor + LPProgressionRanker re-enabled 2026-05-25)...")
+          "(LPProgressionRanker re-enabled 2026-05-25; Nestor excluded)...")
 
     # ── HVSAE + behavioral ────────────────────────────────────────────────
     from src.models.hvsae import HVSAE
@@ -165,21 +163,6 @@ def _build_registry() -> SystemRegistry:
         parents=True, exist_ok=True)
     reg.dina = _try(reg, "dina", lambda: DINAModel(cfg))
     reg.bkt = _try(reg, "bkt", lambda: BayesianKnowledgeTracer())
-
-    # ── Nestor Bayesian psychological profiler ────────────────────────────
-    # Re-enabled 2026-05-25 so the runtime stack matches the paper. Uses
-    # data/nestor/nestor_cpts.json (v2) for CPTs. If anything fails the
-    # _try wrapper returns None and the chat app's psych-augmentation
-    # path falls back to a "no psychological context" stub.
-    from src.models.nestor.nestor_bayesian_profiler import (
-        NestorBayesianProfiler,
-    )
-    reg.nestor = _try(
-        reg, "nestor",
-        lambda: NestorBayesianProfiler(
-            {"nestor": {"data_dir": str(ROOT / "data" / "nestor")}}
-        ),
-    )
 
     # ── Knowledge graphs ─────────────────────────────────────────────────
     from src.knowledge_graph.cse_kg_client import CSEKGClient
@@ -318,9 +301,8 @@ def _build_registry() -> SystemRegistry:
         lambda: LPProgressionRanker(),
     )
 
-    # Include Nestor + LPProgressionRanker in the models dict so the
-    # orchestrator and hierarchical_rl can pick them up via .get().
-    models["nestor_profiler"]       = reg.nestor
+    # Include LPProgressionRanker in the models dict so the
+    # orchestrator and hierarchical_rl can pick it up via .get().
     models["teaching_rl_agent"]     = reg.teaching_rl_agent
     models["hierarchical_rl"]       = reg.hierarchical_rl
     models["lp_progression_ranker"] = reg.lp_progression_ranker
