@@ -867,6 +867,41 @@ class EnhancedPersonalizedGenerator:
                 f"instructions below — they override the generic tutoring "
                 f"advice later in the prompt when the two conflict."
             )
+
+            # ===== LP-0: STUDENT STATE (narrative) =====
+            # Coherent prose summary of everything the diagnostic
+            # computed. Added 2026-05-25. Replaces the burden of
+            # reasoning over scattered structured fields with a single
+            # paragraph the LLM can read top-down. The structured LP-1
+            # / LP-2 / LP-2.5 sections still follow below as reference
+            # detail — narrative on top + structured below mirrors
+            # abstract+methods in academic papers.
+            #
+            # CRITICAL: this paragraph is INPUT to the LLM, never shown
+            # to the student. The "do NOT reveal this summary" line in
+            # the prose makes that explicit to the model.
+            try:
+                from src.orchestrator.student_state_explainer import (
+                    explain_state,
+                )
+                mastery_now = None
+                if isinstance(student_state, dict):
+                    mastery_dict = student_state.get("dina_mastery") or {}
+                    concept_id = lp_diag.get("concept")
+                    if isinstance(mastery_dict, dict) and concept_id:
+                        mastery_now = mastery_dict.get(concept_id)
+                narrative = explain_state(
+                    lp_diag, mastery=mastery_now, audience="llm",
+                )
+                prompt_parts.append("\n=== LP-0: STUDENT STATE (narrative) ===")
+                prompt_parts.append(narrative)
+            except Exception as _e:
+                # Defensive: explainer must never break the prompt.
+                # If it fails, fall back silently to the structured-only
+                # path (existing LP-1/2/3 sections do the heavy lifting).
+                prompt_parts.append(
+                    f"\n[LP-0 narrative skipped: {type(_e).__name__}]"
+                )
         else:
             # Existing header preserved verbatim
             prompt_parts.append(

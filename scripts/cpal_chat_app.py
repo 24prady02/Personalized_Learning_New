@@ -28,6 +28,7 @@ import gradio as gr
 
 from src.models.hvsae import HVSAE
 from src.knowledge_graph.mental_models import get_catalogue
+from src.orchestrator.student_state_explainer import explain_state
 from src.orchestrator.lp_diagnostic import (
     LPDiagnostician, filter_interventions_by_lp, LP_INDEX, LP_ORDER,
 )
@@ -1314,6 +1315,26 @@ def _pick_focus_concept(state: dict) -> str:
     return quiz_concept
 
 
+def _log_student_state(state: dict, diag, decision: str) -> None:
+    """Emit a human-readable narrative of the student's current state to
+    the chat-app log. Called after every _decide_probe_or_teach so the log
+    shows prose ('Student is at L2, holds SE-A misconception, plateau
+    detected') instead of dict dumps. Added 2026-05-25.
+
+    Silent on any exception — logging must never break a turn."""
+    try:
+        prior_lp = (state.get("last_diag") or {}).get("current_lp_level")
+        # diag is the LPDiagnosis dict (from .to_dict()) or sometimes the
+        # dataclass; explain_state handles both.
+        narrative = explain_state(diag, prior_lp_level=prior_lp,
+                                  audience="instructor")
+        print(f"\n[student-state] decision={decision}\n{narrative}\n",
+              flush=True)
+    except Exception as e:
+        print(f"[student-state] (explainer skipped: {type(e).__name__}: {e})",
+              flush=True)
+
+
 def _decide_probe_or_teach(state: dict):
     """Re-diagnose on the accumulated belief and decide probe vs teach.
 
@@ -1644,6 +1665,7 @@ def stream_response(quiz_id, picked_option_full, reasoning, history, state,
 
     # Decide on the FIRST belief: probe or teach?
     decision, criterion, target_level, state, diag = _decide_probe_or_teach(state)
+    _log_student_state(state, diag, decision)
     if decision == "probe":
         # Push the user bubble so the conversation shows what the student wrote,
         # then surface the probe panel with the targeted question.
@@ -2173,6 +2195,7 @@ def on_reveal_answer(history, state):
     # Re-decide with the force flag — will land in the teach branch with
     # stage_trigger="force".
     decision, criterion, target_level, state, diag = _decide_probe_or_teach(state)
+    _log_student_state(state, diag, decision)
     # decision is always "teach" when force_comprehensive is True.
     yield from _stream_teach(state, diag, history)
 
@@ -2549,6 +2572,7 @@ def on_probe_answer(probe_answer, history, state,
     )
 
     decision, criterion, target_level, state, diag = _decide_probe_or_teach(state)
+    _log_student_state(state, diag, decision)
     if decision == "probe":
         # Replace the last assistant bubble (the previous probe question)
         # with the next probe question.
