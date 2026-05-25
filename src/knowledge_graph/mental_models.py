@@ -95,7 +95,10 @@ class WrongModelMatch:
 class MentalModelsCatalogue:
     """Catalogue of wrong mental models, loaded once at init."""
 
-    DEFAULT_PATH = "data/mental_models/wrong_models_catalogue.json"
+    # v2 (2026-05-25): default points at the ProgMiscon-enriched catalogue.
+    # v1 (wrong_models_catalogue.json) is preserved alongside as a
+    # baseline / revert target — pass `json_path=` explicitly to load it.
+    DEFAULT_PATH = "data/mental_models/wrong_models_catalogue_v2.json"
     JARGON_TRAPS_PATH = "data/mental_models/jargon_traps.json"
 
     def __init__(self, json_path: Optional[str] = None,
