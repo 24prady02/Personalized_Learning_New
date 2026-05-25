@@ -902,6 +902,67 @@ class EnhancedPersonalizedGenerator:
                 prompt_parts.append(
                     f"\n[LP-0 narrative skipped: {type(_e).__name__}]"
                 )
+
+            # ===== LP-0.5: PSYCHOLOGICAL CONTEXT (Nestor) =====
+            # Added 2026-05-25. When Nestor was able to infer a learner
+            # profile from the student's prompt text, surface it here so
+            # the LLM can adapt tone, scaffold density, and example
+            # choice to the student's personality + learning style.
+            nestor = (student_state.get("nestor_profile")
+                      if isinstance(student_state, dict) else None) or {}
+            if nestor.get("personality") or nestor.get("learning_styles"):
+                prompt_parts.append("\n=== LP-0.5: PSYCHOLOGICAL CONTEXT "
+                                    "(Nestor Bayesian profile) ===")
+                pers = nestor.get("personality") or {}
+                if pers:
+                    pers_str = ", ".join(
+                        f"{k}={v:.2f}" if isinstance(v, (int, float)) else f"{k}={v}"
+                        for k, v in list(pers.items())[:6]
+                    )
+                    prompt_parts.append(f"Personality (Big Five): {pers_str}")
+                styles = nestor.get("learning_styles") or {}
+                if styles:
+                    styles_str = ", ".join(f"{k}={v}" for k, v in list(styles.items())[:4])
+                    prompt_parts.append(f"Learning style (Felder-Silverman): {styles_str}")
+                strategies = nestor.get("learning_strategies") or {}
+                if strategies:
+                    strat_str = ", ".join(f"{k}={v}" for k, v in list(strategies.items())[:4])
+                    prompt_parts.append(f"Strategies (LISTK): {strat_str}")
+                pref = nestor.get("intervention_preference")
+                if pref:
+                    prompt_parts.append(
+                        f"Nestor's intervention preference: {pref} "
+                        f"(advisory — defer to LP-validity gate)"
+                    )
+                prompt_parts.append(
+                    "Adapt tone and scaffold density to this profile. "
+                    "Do NOT mention the profile to the student."
+                )
+
+            # ===== LP-0.6: BEHAVIORAL CONTEXT (HMM) =====
+            # Added 2026-05-25. Surface the BehavioralHMM's read of the
+            # student's cognitive state from their action sequence
+            # (engaged / confused / frustrated / exploring / systematic)
+            # so the LLM can pace and tone the response accordingly.
+            behav = (student_state.get("behavioral_state")
+                     if isinstance(student_state, dict) else None) or {}
+            if behav.get("final_state"):
+                prompt_parts.append("\n=== LP-0.6: BEHAVIORAL CONTEXT "
+                                    "(RNN-HMM hybrid) ===")
+                prompt_parts.append(
+                    f"Current cognitive state: {behav['final_state']} "
+                    f"(confidence {behav.get('final_confidence', 0):.2f})."
+                )
+                seq = behav.get("state_sequence") or []
+                if seq:
+                    prompt_parts.append(
+                        f"Recent state trace: {' -> '.join(seq[-5:])}"
+                    )
+                prompt_parts.append(
+                    "If the student is frustrated or stuck, de-escalate and "
+                    "scaffold; if engaged or systematic, you can ask a "
+                    "deeper question."
+                )
         else:
             # Existing header preserved verbatim
             prompt_parts.append(
@@ -1099,6 +1160,54 @@ class EnhancedPersonalizedGenerator:
             )
             if benchmark_text:
                 prompt_parts.append(f"L3 expert benchmark: {benchmark_text}")
+
+        # ===== LP-2c: HISTORICAL-SEQUENCE INTERVENTION ADVICE =====
+        # Added 2026-05-25. When LPProgressionRanker (S2's historical-
+        # sequence RNN) and/or the Hierarchical 4-level RL controller
+        # have an opinion on what intervention to deliver, log them as
+        # advisory context. These are SECOND OPINIONS — the primary
+        # intervention pick is already in `recommended_intervention`.
+        # We surface them here so the LLM has the full RL context, not
+        # to force-override.
+        lp_ranker = (student_state.get("lp_ranker_choice")
+                     if isinstance(student_state, dict) else None) or {}
+        hier_rl   = (student_state.get("hierarchical_rl")
+                     if isinstance(student_state, dict) else None) or {}
+        if lp_ranker.get("intervention") or hier_rl:
+            prompt_parts.append(
+                "\n=== LP-2c: HISTORICAL-SEQUENCE + HIERARCHICAL-RL ADVICE ==="
+            )
+            if lp_ranker.get("intervention"):
+                top3 = lp_ranker.get("top3") or []
+                top3_str = "; ".join(
+                    f"{name}({s:.2f})" for name, s in top3[:3]
+                )
+                prompt_parts.append(
+                    f"LPProgressionRanker (GRU over {lp_ranker.get('history_len', 0)} "
+                    f"turn history) top pick: "
+                    f"**{lp_ranker['intervention']}** "
+                    f"({lp_ranker.get('score', 0):.2f}). Top-3: {top3_str}."
+                )
+            if hier_rl:
+                # Hierarchical RL returns a structured plan; render
+                # whatever fields it produced compactly.
+                hkeys = [k for k in ("strategy", "concept", "intervention",
+                                      "scaffold_level")
+                          if k in hier_rl]
+                if hkeys:
+                    summary = ", ".join(
+                        f"{k}={hier_rl[k]}" for k in hkeys
+                    )
+                    prompt_parts.append(
+                        f"Hierarchical 4-level RL plan: {summary} "
+                        f"(advisory)."
+                    )
+            prompt_parts.append(
+                "Use these as second opinions. Do not contradict the "
+                "primary intervention named in LP-3 below unless the "
+                "student's reply makes the original choice clearly "
+                "wrong."
+            )
 
         # ===== LP-2b: RETRIEVED CATALOGUE CONTEXT (RAG) =====
         # Embedding-based retrieval over the wrong-models catalogue + LP

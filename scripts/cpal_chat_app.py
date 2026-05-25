@@ -1320,6 +1320,115 @@ def _pick_focus_concept(state: dict) -> str:
 _LAST_NARRATIVE_FILE = Path(__file__).resolve().parents[1] / ".last_narrative.md"
 
 
+# Module-level cache of session_state_vector history per (student, concept)
+# for LPProgressionRanker. Bounded — keep last 20 turns per pair to keep
+# the GRU input small.
+from collections import deque as _deque
+_SESSION_STATE_HISTORY: dict = {}   # key = (student_id, concept) -> deque
+
+def _push_session_state_vector(student_id: str, concept: str,
+                                vec: list, max_len: int = 20) -> None:
+    key = (student_id, concept)
+    if key not in _SESSION_STATE_HISTORY:
+        _SESSION_STATE_HISTORY[key] = _deque(maxlen=max_len)
+    _SESSION_STATE_HISTORY[key].append(list(vec))
+
+
+def _get_session_state_history(student_id: str, concept: str) -> list:
+    key = (student_id, concept)
+    if key not in _SESSION_STATE_HISTORY:
+        return []
+    return list(_SESSION_STATE_HISTORY[key])
+
+
+def _compute_aux_signals(student_id: str, concept: str, text: str,
+                          action_sequence: list, diag_dict: dict) -> dict:
+    """Single place that gathers Nestor + behavioral + LP-progression
+    signals per turn. Added 2026-05-25 when the formerly-dormant Nestor,
+    BehavioralRNN/HMM, LPProgressionRanker were re-enabled. Each branch
+    is defensive — any failure returns a `None` for that signal so the
+    rest of the per-turn pipeline keeps working.
+
+    Returns:
+        {
+          'nestor_profile':   {personality, learning_styles, ...} | None,
+          'behavioral_state': {final_state, final_confidence}     | None,
+          'lp_ranker_choice': {intervention, score, source}       | None,
+        }
+    """
+    out: dict = {"nestor_profile": None,
+                 "behavioral_state": None,
+                 "lp_ranker_choice": None}
+
+    # ── Nestor: psychological profile from prompt text ──────────────
+    try:
+        if REG.nestor is not None and text and len(text.strip()) > 5:
+            out["nestor_profile"] = REG.nestor.infer_from_prompt(text)
+    except Exception as e:
+        print(f"[CPAL/Nestor] infer_from_prompt failed: {e}", flush=True)
+
+    # ── Behavioral HMM: cognitive state from action sequence ─────────
+    try:
+        if REG.behavioral_hmm is not None and action_sequence:
+            out["behavioral_state"] = REG.behavioral_hmm.analyze_session(
+                [str(a) for a in action_sequence]
+            )
+    except Exception as e:
+        print(f"[CPAL/HMM] analyze_session failed: {e}", flush=True)
+
+    # ── LPProgressionRanker: historical-sequence intervention ranking ─
+    try:
+        if REG.lp_progression_ranker is not None and diag_dict:
+            from src.reinforcement_learning.lp_progression_rnn import (
+                build_state_vector,
+            )
+            vec = build_state_vector(
+                lp_state={
+                    "current_lp_level": diag_dict.get("current_lp_level", "L1"),
+                    "lp_streak":        diag_dict.get("lp_streak", 0),
+                    "logical_step":     diag_dict.get("logical_step", False),
+                    "logical_step_detail": diag_dict.get("logical_step_detail", False),
+                    "plateau_flag":     diag_dict.get("plateau_flag", False),
+                },
+                mastery=None, last_intervention=None,
+            )
+            _push_session_state_vector(student_id, concept, vec)
+            history = _get_session_state_history(student_id, concept)
+            ranked = REG.lp_progression_ranker.rank(history, top_k=3)
+            if ranked:
+                out["lp_ranker_choice"] = {
+                    "intervention": ranked[0][0],
+                    "score":        float(ranked[0][1]),
+                    "top3":         [(name, float(s)) for name, s in ranked[:3]],
+                    "source":       "lp_progression_rnn",
+                    "history_len":  len(history),
+                }
+    except Exception as e:
+        print(f"[CPAL/LPRanker] rank failed: {e}", flush=True)
+
+    # ── Hierarchical RL: log its decision, don't override ────────────
+    try:
+        if REG.hierarchical_rl is not None and diag_dict:
+            sarah_state = {
+                "current_lp_level": diag_dict.get("current_lp_level", "L1"),
+                "concept":          concept,
+                "wrong_model_id":   diag_dict.get("wrong_model_id"),
+                "mastery":          0.5,   # caller can refine later
+            }
+            try:
+                hier_out = REG.hierarchical_rl.teach_sarah(
+                    sarah_state, _get_session_state_history(student_id, concept)
+                )
+                out["hierarchical_rl"] = hier_out
+            except TypeError:
+                # Older signature — try with positional args.
+                pass
+    except Exception as e:
+        print(f"[CPAL/HierRL] teach_sarah failed: {e}", flush=True)
+
+    return out
+
+
 def _log_student_state(state: dict, diag, decision: str) -> None:
     """Emit a human-readable narrative of the student's current state to
     the chat-app log AND mirror it to .last_narrative.md so the debug
@@ -1328,7 +1437,42 @@ def _log_student_state(state: dict, diag, decision: str) -> None:
     same content in three places (LLM context, instructor log, debug
     panel). Added 2026-05-25.
 
+    Side effect (2026-05-25): also computes Nestor + behavioral +
+    LPProgressionRanker + Hierarchical-RL aux signals via
+    _compute_aux_signals and stashes them on `state['aux_signals']` so
+    the prompt builder can read them via student_state['aux_signals'].
+
     Silent on any exception — logging must never break a turn."""
+    # First — compute aux signals (Nestor, BehavioralHMM, LPRanker, HierRL).
+    # Stash on state so downstream prompt build can pick them up via
+    # student_state['aux_signals']. Defensive: any per-component failure
+    # is logged and the corresponding key becomes None.
+    try:
+        d_dict = diag if isinstance(diag, dict) else (
+            diag.to_dict() if hasattr(diag, "to_dict") else {}
+        )
+        concept = d_dict.get("concept") or state.get("current_focus_concept") or ""
+        student_id = d_dict.get("student_id") or "chat_user"
+        text = state.get("accumulated_belief") or state.get("user_bubble") or ""
+        actions = state.get("action_sequence") or []
+        aux = _compute_aux_signals(student_id, concept, text, actions, d_dict)
+        state["aux_signals"] = aux
+        nestor_loaded   = aux.get("nestor_profile") is not None
+        behav_loaded    = aux.get("behavioral_state") is not None
+        ranker_loaded   = aux.get("lp_ranker_choice") is not None
+        hier_loaded     = aux.get("hierarchical_rl") is not None
+        print(f"[aux-signals] nestor={'✓' if nestor_loaded else '-'}  "
+              f"behavioral={'✓' if behav_loaded else '-'}  "
+              f"lp_ranker={'✓' if ranker_loaded else '-'}  "
+              f"hier_rl={'✓' if hier_loaded else '-'}", flush=True)
+    except Exception as e:
+        state["aux_signals"] = {"nestor_profile": None,
+                                "behavioral_state": None,
+                                "lp_ranker_choice": None,
+                                "hierarchical_rl": None}
+        print(f"[aux-signals] (computation skipped: {type(e).__name__}: {e})",
+              flush=True)
+
     try:
         prior_lp = (state.get("last_diag") or {}).get("current_lp_level")
         # Use the LLM-audience variant so log + prompt + panel all show
@@ -1971,13 +2115,30 @@ def _stream_teach(state, diag, history):
           f"lp_multi={len((lp_diagnostic_multi or {}).get('diagnostics', {}))} concepts",
           flush=True)
 
+    # Aux signals (Nestor, BehavioralHMM, LPProgressionRanker,
+    # HierarchicalRL) — computed in _log_student_state and stashed on
+    # `state` by the helper. Forward into student_state so the
+    # prompt builder's LP-0.5/LP-0.6/LP-2c blocks can read them.
+    aux_signals = state.get("aux_signals") or {}
+    nestor_profile = aux_signals.get("nestor_profile") or {}
+    nestor_personality = nestor_profile.get("personality") or {}
+    nestor_styles      = nestor_profile.get("learning_styles") or {}
+
     student_state = {
         "student_id": "chat_user",
         "lp_diagnostic": diag,
         "lp_diagnostic_multi": lp_diagnostic_multi,
         "recommended_intervention": {"type": chosen, "rl_action": rl_action},
-        "personality_profile": {"communication_style": "direct",
-                                "learning_preference": "visual"},
+        # Replace the hardcoded personality stub with whatever Nestor
+        # inferred. Falls back to the old stub when Nestor is offline.
+        "personality_profile": (nestor_personality
+            or {"communication_style": "direct",
+                "learning_preference": "visual"}),
+        "learning_style":          nestor_styles,
+        "nestor_profile":          nestor_profile,
+        "behavioral_state":        aux_signals.get("behavioral_state"),
+        "lp_ranker_choice":        aux_signals.get("lp_ranker_choice"),
+        "hierarchical_rl":         aux_signals.get("hierarchical_rl"),
         "bkt_mastery":  {q["concept"]: bkt_now},
         "dina_mastery": {q["concept"]: dina_now},
         "emotional_state": emotion_now,

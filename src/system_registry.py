@@ -37,7 +37,13 @@ ROOT = Path(__file__).resolve().parent.parent
 
 @dataclass
 class SystemRegistry:
-    """Container for every non-Nestor component the chat app needs."""
+    """Container for every CPAL component the chat app needs.
+
+    History (2026-05-25): Nestor and LPProgressionRanker were previously
+    excluded by design. Re-enabled this revision so the runtime stack
+    matches the methodology described in the paper. Components that fail
+    to load no-op gracefully (the _try wrapper records the failure and
+    callers handle None)."""
     config: Dict[str, Any] = field(default_factory=dict)
 
     # Encoder + behavioral
@@ -48,6 +54,9 @@ class SystemRegistry:
     # Cognitive student modeling
     dina: Any = None
     bkt: Any = None  # BayesianKnowledgeTracer
+
+    # Psychological profiling (Nestor — re-enabled 2026-05-25)
+    nestor: Any = None
 
     # Knowledge graphs
     cse_kg_client: Any = None
@@ -70,6 +79,8 @@ class SystemRegistry:
     teaching_rl_agent: Any = None
     hierarchical_rl: Any = None
     dynamic_kg_updater: Any = None
+    # LP-progression historical-sequence ranker — added 2026-05-25
+    lp_progression_ranker: Any = None
 
     # Catalogue + diagnostician + orchestrator
     catalogue: Any = None
@@ -110,7 +121,8 @@ def _build_registry() -> SystemRegistry:
     reg = SystemRegistry()
     reg.config = _load_config()
     cfg = reg.config
-    print("[Registry] Building full CPAL stack (Nestor excluded)...")
+    print("[Registry] Building full CPAL stack "
+          "(Nestor + LPProgressionRanker re-enabled 2026-05-25)...")
 
     # ── HVSAE + behavioral ────────────────────────────────────────────────
     from src.models.hvsae import HVSAE
@@ -153,6 +165,21 @@ def _build_registry() -> SystemRegistry:
         parents=True, exist_ok=True)
     reg.dina = _try(reg, "dina", lambda: DINAModel(cfg))
     reg.bkt = _try(reg, "bkt", lambda: BayesianKnowledgeTracer())
+
+    # ── Nestor Bayesian psychological profiler ────────────────────────────
+    # Re-enabled 2026-05-25 so the runtime stack matches the paper. Uses
+    # data/nestor/nestor_cpts.json (v2) for CPTs. If anything fails the
+    # _try wrapper returns None and the chat app's psych-augmentation
+    # path falls back to a "no psychological context" stub.
+    from src.models.nestor.nestor_bayesian_profiler import (
+        NestorBayesianProfiler,
+    )
+    reg.nestor = _try(
+        reg, "nestor",
+        lambda: NestorBayesianProfiler(
+            {"nestor": {"data_dir": str(ROOT / "data" / "nestor")}}
+        ),
+    )
 
     # ── Knowledge graphs ─────────────────────────────────────────────────
     from src.knowledge_graph.cse_kg_client import CSEKGClient
@@ -279,8 +306,24 @@ def _build_registry() -> SystemRegistry:
     reg.dynamic_kg_updater = _try(reg, "dynamic_kg_updater",
                                    lambda: DynamicKGUpdater(cfg, models))
 
-    models["teaching_rl_agent"] = reg.teaching_rl_agent
-    models["hierarchical_rl"]   = reg.hierarchical_rl
+    # LPProgressionRanker — S2's historical-sequence ranker. Has a
+    # heuristic fallback so it runs even without a PyTorch checkpoint.
+    # Added to the registry 2026-05-25 so the chat app can consult it
+    # per turn (was previously only used by demo scripts).
+    from src.reinforcement_learning.lp_progression_rnn import (
+        LPProgressionRanker,
+    )
+    reg.lp_progression_ranker = _try(
+        reg, "lp_progression_ranker",
+        lambda: LPProgressionRanker(),
+    )
+
+    # Include Nestor + LPProgressionRanker in the models dict so the
+    # orchestrator and hierarchical_rl can pick them up via .get().
+    models["nestor_profiler"]       = reg.nestor
+    models["teaching_rl_agent"]     = reg.teaching_rl_agent
+    models["hierarchical_rl"]       = reg.hierarchical_rl
+    models["lp_progression_ranker"] = reg.lp_progression_ranker
 
     # ── Orchestrator (last — depends on everything above) ────────────────
     from src.orchestrator.orchestrator import InterventionOrchestrator
