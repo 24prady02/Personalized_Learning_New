@@ -1315,24 +1315,59 @@ def _pick_focus_concept(state: dict) -> str:
     return quiz_concept
 
 
+# Where _log_student_state mirrors the most-recent narrative on disk —
+# read by the instructor debug panel (gr.Accordion gated on ?debug=1).
+_LAST_NARRATIVE_FILE = Path(__file__).resolve().parents[1] / ".last_narrative.md"
+
+
 def _log_student_state(state: dict, diag, decision: str) -> None:
     """Emit a human-readable narrative of the student's current state to
-    the chat-app log. Called after every _decide_probe_or_teach so the log
-    shows prose ('Student is at L2, holds SE-A misconception, plateau
-    detected') instead of dict dumps. Added 2026-05-25.
+    the chat-app log AND mirror it to .last_narrative.md so the debug
+    UI panel can render it live. The narrative is identical to what
+    gets injected into the LLM prompt — one single coherent paragraph,
+    same content in three places (LLM context, instructor log, debug
+    panel). Added 2026-05-25.
 
     Silent on any exception — logging must never break a turn."""
     try:
         prior_lp = (state.get("last_diag") or {}).get("current_lp_level")
-        # diag is the LPDiagnosis dict (from .to_dict()) or sometimes the
-        # dataclass; explain_state handles both.
+        # Use the LLM-audience variant so log + prompt + panel all show
+        # the same narrative. diag is the LPDiagnosis dict or dataclass;
+        # explain_state handles both.
         narrative = explain_state(diag, prior_lp_level=prior_lp,
-                                  audience="instructor")
-        print(f"\n[student-state] decision={decision}\n{narrative}\n",
-              flush=True)
+                                  audience="llm")
+        print(f"\n[student-state] decision={decision}  "
+              f"(this is the LP-0 narrative the LLM also reads)\n"
+              f"{narrative}\n", flush=True)
+        # Mirror for the debug UI panel. Single-write, atomic via
+        # write_text — debug panel reads with a stale-tolerant fallback.
+        try:
+            from datetime import datetime as _dt
+            stamp = _dt.now().strftime("%H:%M:%S")
+            student_id = (diag.get("student_id") if isinstance(diag, dict)
+                          else getattr(diag, "student_id", "?"))
+            _LAST_NARRATIVE_FILE.write_text(
+                f"**Last turn at {stamp}** · decision: `{decision}` · "
+                f"student: `{student_id}`\n\n{narrative}\n",
+                encoding="utf-8",
+            )
+        except Exception:
+            pass  # debug-panel mirror is best-effort
     except Exception as e:
         print(f"[student-state] (explainer skipped: {type(e).__name__}: {e})",
               flush=True)
+
+
+def _read_last_narrative_md() -> str:
+    """Read the mirrored narrative for the debug panel. Stale-tolerant
+    (returns a placeholder if no turn has run yet)."""
+    try:
+        if _LAST_NARRATIVE_FILE.exists():
+            return _LAST_NARRATIVE_FILE.read_text(encoding="utf-8")
+    except Exception:
+        pass
+    return ("_(No turn yet — narrative will appear here as soon as a "
+            "student submits their first reasoning.)_")
 
 
 def _decide_probe_or_teach(state: dict):
@@ -2986,6 +3021,38 @@ def build_app():
                 inputs=None, outputs=dashboard_md,
                 show_progress="hidden",
             )
+
+        # ── Instructor debug panel (added 2026-05-25) ────────────────
+        # Hidden by default; visible only when the URL contains
+        # ?debug=1. Renders the same LP-0 narrative that gets injected
+        # into the LLM prompt, so the instructor can SEE what context
+        # the model is reasoning from — live, alongside the student's
+        # session. The narrative is read from .last_narrative.md which
+        # _log_student_state mirrors every turn.
+        debug_panel = gr.Accordion(
+            "🔍 Instructor debug — LP-0 narrative (what the LLM sees)",
+            open=True, visible=False,
+        )
+        with debug_panel:
+            debug_md = gr.Markdown(_read_last_narrative_md())
+            refresh_debug_btn = gr.Button("Refresh narrative", size="sm")
+            refresh_debug_btn.click(
+                lambda: _read_last_narrative_md(),
+                inputs=None, outputs=debug_md,
+                show_progress="hidden",
+            )
+
+        # Gate visibility on ?debug=1 in the URL. gr.Request gives us
+        # query_params; toggle the accordion's visibility on load.
+        def _toggle_debug(request: gr.Request):
+            try:
+                qp = dict(request.query_params or {})
+                show = qp.get("debug") in ("1", "true", "yes")
+            except Exception:
+                show = False
+            return gr.update(visible=show)
+        app.load(_toggle_debug, inputs=None, outputs=debug_panel,
+                 show_progress="hidden")
 
     return app
 
