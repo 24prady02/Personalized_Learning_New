@@ -10,6 +10,7 @@
   <header>
     <h1>Java Concept Check</h1>
     <p class="subtitle">Read the code, pick the option that matches what's really happening, then write what you think.</p>
+    <p class="identity" id="identity" hidden></p>
   </header>
 
   <main id="app">
@@ -57,6 +58,29 @@
     <div id="loading" class="loading" hidden>Generating explanation…</div>
     <div id="error" class="error" hidden></div>
   </main>
+
+  <footer>
+    <button id="open-privacy" class="link-btn" type="button">Your data</button>
+  </footer>
+
+  <!-- Privacy / GDPR drawer (added 2026-05-30 — wires to /api/me/consent
+       and /api/me/delete). -->
+  <div id="privacy-modal" class="modal" hidden>
+    <div class="modal-card">
+      <h3>Your data</h3>
+      <p id="privacy-id" class="hint"></p>
+      <label class="consent-row">
+        <input type="checkbox" id="consent-toggle" />
+        Allow storing my progression data
+      </label>
+      <p class="hint small">Used to personalise questions and track improvement. Off = your answers update mastery only in-memory this session.</p>
+      <div class="modal-actions">
+        <button id="delete-data" class="danger" type="button">Delete all my data</button>
+        <button id="close-privacy" class="primary" type="button">Done</button>
+      </div>
+      <p id="privacy-status" class="hint small"></p>
+    </div>
+  </div>
 
   <script src="/static/app.js"></script>
 </body>

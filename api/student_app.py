@@ -19,11 +19,13 @@ for _stream in (_sys.stdout, _sys.stderr):
 
 import json
 import random
+import re
+import time
 import uuid
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -33,6 +35,75 @@ ROOT = Path(__file__).resolve().parent.parent
 _sys.path.insert(0, str(ROOT))
 
 from src.models.dina import DINAModel  # noqa: E402
+# Production-hardening additions wired in 2026-05-30 — see
+# scripts/cpal_chat_app.py for the chat-flow equivalents.
+from src.persistence.auth import validate_token            # noqa: E402
+from src.persistence.db_store import get_db                # noqa: E402
+from src.persistence.ab_testing import assign_variant      # noqa: E402
+
+
+# ── Injection guard (mirror of cpal_chat_app._INJECTION_PATTERNS) ────────────
+_INJECTION_PATTERNS = [
+    re.compile(p, re.IGNORECASE) for p in [
+        r"\bignore (previous|all|prior|the above|your) (instructions?|prompts?|rules?)\b",
+        r"\b(system|developer) (prompt|mode|message)\b",
+        r"\byou (are|will be) now\b.*\b(dan|developer|jailbreak|unrestricted)\b",
+        r"\b(reveal|show|tell me) (your|the) (system prompt|instructions|hidden)\b",
+        r"\bact as (if you (are|were)|though)\b.*\b(no longer|not bound|free|jailbroken)\b",
+        r"\bjust (give|tell) me the (answer|solution|code)\b",
+        r"\bpretend (you are|to be)\b.*\b(no rules|no restrictions)\b",
+    ]
+]
+
+
+def _sanitise_student_input(text: str) -> str:
+    """Wrap obvious prompt-injection markers in [STUDENT-QUOTE: ...] so the
+    LLM prompt-builder downstream treats them as the student's words, not
+    instructions. Idempotent. Mirrors cpal_chat_app._sanitise_student_input.
+    """
+    if not text or "[STUDENT-QUOTE" in text:
+        return text or ""
+    out = text
+    matched = False
+    for pat in _INJECTION_PATTERNS:
+        if pat.search(out):
+            matched = True
+            out = pat.sub(lambda m: f"[STUDENT-QUOTE: {m.group(0)}]", out)
+    if matched:
+        out = "[contains-quoted-instruction] " + out
+    return out
+
+
+def _resolve_student_id(request: Optional[Request]) -> Dict[str, str]:
+    """Pick the student identity for this session, in priority order:
+       1. ?token=...  (issued by scripts/issue_token.py — validated HMAC)
+       2. ?student=... (unauthenticated, demo-mode)
+       3. fallback "anon"
+    Returns {"student_id", "role", "course"}. Mirrors cpal_chat_app's
+    resolver so the two surfaces share the same per-student persistence key.
+    """
+    sid: Optional[str] = None
+    role = "student"
+    course = "default"
+    try:
+        if request is not None:
+            qp = dict(request.query_params)
+            tok = (qp.get("token") or "").strip()
+            if tok:
+                parsed = validate_token(tok)
+                if parsed:
+                    sid, role, course = parsed
+            if not sid:
+                sid = (qp.get("student") or qp.get("student_id") or "").strip() or None
+    except Exception as e:
+        print(f"[student_app] resolve fell through: {e}")
+        sid = None
+    if not sid:
+        sid = "anon"
+    # Sanitise: alphanumeric + dash/underscore only (avoids path-injection
+    # into per-student state keys).
+    sid = re.sub(r"[^a-zA-Z0-9_\-]", "_", sid)[:64] or "anon"
+    return {"student_id": sid, "role": role, "course": course}
 
 
 # ── data loading ──────────────────────────────────────────────────────────────
@@ -148,10 +219,14 @@ QUIZ_MAX_PROBES = 2
 QUIZ_PROBE_CONFIDENCE_FLOOR = 0.55
 
 
-def _new_session(student_id: str = "anon") -> str:
+def _new_session(student_id: str = "anon",
+                  role: str = "student",
+                  course: str = "default") -> str:
     sid = uuid.uuid4().hex[:12]
     _sessions[sid] = {
         "student_id": student_id,
+        "role":       role,
+        "course":     course,
         "current_item_id": None,
         "choice": None,
         "is_correct": None,
@@ -161,6 +236,8 @@ def _new_session(student_id: str = "anon") -> str:
         "probed_criteria":  [],          # criterion text strings already asked
         "probe_answers":    [],          # student's probe-answer texts in order
         "history": [],
+        # --- per-turn telemetry (wired to audit_log for progression queries) ---
+        "item_started_at":  time.time(),
     }
     return sid
 
@@ -406,6 +483,7 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
         correct_opt=correct_opt,
         chosen_wm=chosen_wm,
         diag_dict=diag_dict,
+        teach_variant=sess.get("teach_variant", "control"),
     )
     return {
         "type":            "explanation",
@@ -434,11 +512,37 @@ def _pick_next_item(used: List[str]) -> Optional[Dict]:
 # ── endpoints ─────────────────────────────────────────────────────────────────
 
 @app.get("/api/start", response_model=StartResp)
-def start():
-    """Start a new session and return the first MCQ (without answer keys)."""
-    sid = _new_session()
+def start(request: Request):
+    """Start a new session and return the first MCQ (without answer keys).
+
+    Resolves the student from ?token=... (HMAC-validated) or ?student=...
+    (demo-mode) so DINA mastery and progression are scoped per-student
+    instead of clobbering the shared "anon" key. Wired 2026-05-30 — see
+    _resolve_student_id."""
+    ident = _resolve_student_id(request)
+    sid = _new_session(student_id=ident["student_id"],
+                        role=ident["role"],
+                        course=ident["course"])
     item = _pick_next_item([])
-    _sessions[sid]["current_item_id"] = item["id"]
+    sess = _sessions[sid]
+    sess["current_item_id"] = item["id"]
+    sess["item_started_at"] = time.time()
+    # A/B variant for explanation phrasing (sticky-per-student).
+    try:
+        sess["teach_variant"] = assign_variant(
+            ident["student_id"], "teach_prompt_v2") or "control"
+    except Exception:
+        sess["teach_variant"] = "control"
+    # Audit the session-start event so the cohort/dashboard queries can
+    # see active sessions per student.
+    try:
+        get_db().audit("quiz_session_start",
+                       student_id=ident["student_id"],
+                       payload={"session_id": sid, "role": ident["role"],
+                                 "course": ident["course"],
+                                 "first_item_id": item["id"]})
+    except Exception as e:
+        print(f"[student_app] audit fell through: {e}")
     return StartResp(session_id=sid, item=_safe_item(item))
 
 
@@ -459,21 +563,75 @@ def answer(req: AnswerReq):
     is_correct = bool(opt.get("correct"))
     sess["choice"] = req.choice
     sess["is_correct"] = is_correct
-    sess["belief"] = (req.belief or "").strip()
+    # Sanitise belief BEFORE any downstream LLM concatenation — quoted
+    # injection markers are wrapped so the prompt builder treats them as
+    # student-quoted text rather than instructions.
+    sess["belief"] = _sanitise_student_input((req.belief or "").strip())
+
+    # Capture mastery BEFORE the update so the audit row carries both
+    # mastery_before and mastery_after for progression queries.
+    try:
+        m_before = float(_dina.get_mastery(
+            sess["student_id"], item["concept"]).get(item["concept"], 0.0))
+    except Exception:
+        m_before = 0.0
 
     # Update DINA silently — the student never sees mastery.
-    _dina.update(
+    update_result = _dina.update(
         student_id=sess["student_id"],
         skill=item["concept"],
         is_correct=is_correct,
     )
+    sess["mastery_before"] = m_before
+    sess["mastery_after"]  = float(update_result.get("mastery_after", m_before))
 
     return AnswerResp(accepted=True, needs_belief=True)
 
 
+def _log_turn_completed(sess: Dict, item: Dict) -> None:
+    """Write a `turn_completed` audit row so progression / forecast /
+    cohort queries (db_store.progression_for, forecast_lp_advance,
+    cohort_percentile) include quiz turns alongside chat-flow turns.
+
+    Schema matches what the chat-flow writes (06a58ae / 11e38b0 commits)
+    so the dashboard joins cleanly across surfaces.
+    """
+    diag = sess.get("lp_diagnosis") or {}
+    payload = {
+        "session_id":      None,  # quiz sessions don't have a chat session_id
+        "surface":         "quiz",
+        "skill":           item.get("concept"),
+        "item_id":         sess.get("current_item_id"),
+        "choice":          sess.get("choice"),
+        "is_correct":      sess.get("is_correct"),
+        "belief":          sess.get("belief") or "",
+        "probe_count":     sess.get("probe_count", 0),
+        "lp_before":       sess.get("lp_before", "L1"),
+        "lp_after":        diag.get("current_lp_level") or "L1",
+        "mastery_before":  sess.get("mastery_before", 0.0),
+        "mastery_after":   sess.get("mastery_after",  0.0),
+        "intervention":    "quiz_explanation",
+        "conf":            float(diag.get("diagnostic_confidence") or 0.0),
+        "dwell_s":         round(time.time() - sess.get("item_started_at",
+                                                          time.time()), 2),
+        "teach_variant":   sess.get("teach_variant", "control"),
+    }
+    try:
+        get_db().audit("turn_completed",
+                       student_id=sess.get("student_id"),
+                       payload=payload)
+    except Exception as e:
+        print(f"[student_app] turn_completed audit fell through: {e}")
+
+
 def _advance_to_next_item(sess: Dict) -> Optional[str]:
     """Bookkeeping when the student finishes a quiz item — record history,
-    reset belief / probe state, and return the next item id (or None)."""
+    write the audit row, reset belief / probe state, and return the next
+    item id (or None)."""
+    item = QUIZ_BY_ID.get(sess["current_item_id"])
+    if item is not None:
+        _log_turn_completed(sess, item)
+
     sess["history"].append({
         "item_id":      sess["current_item_id"],
         "choice":       sess["choice"],
@@ -490,6 +648,12 @@ def _advance_to_next_item(sess: Dict) -> Optional[str]:
         sess["probe_count"]     = 0
         sess["probed_criteria"] = []
         sess["probe_answers"]   = []
+        sess["item_started_at"] = time.time()
+        sess["mastery_before"]  = None
+        sess["mastery_after"]   = None
+        sess["lp_before"]       = (sess.get("lp_diagnosis") or {}).get(
+            "current_lp_level") or "L1"
+        sess["lp_diagnosis"]    = None
         return next_item["id"]
     return None
 
@@ -506,7 +670,7 @@ def correct(req: CorrectReq):
     if item is None:
         raise HTTPException(status_code=400, detail="no active item")
 
-    sess["belief"]          = (req.belief or "").strip()
+    sess["belief"]          = _sanitise_student_input((req.belief or "").strip())
     sess["probe_count"]     = 0     # fresh ladder per item
     sess["probed_criteria"] = []
     sess["probe_answers"]   = []
@@ -551,7 +715,8 @@ def probe_answer(req: ProbeAnswerReq):
     if item is None:
         raise HTTPException(status_code=400, detail="no active item")
 
-    sess.setdefault("probe_answers", []).append((req.probe_answer or "").strip())
+    sess.setdefault("probe_answers", []).append(
+        _sanitise_student_input((req.probe_answer or "").strip()))
 
     decision = _decide_probe_or_explain(sess, item)
     correct_opt = next(o for o in item["options"] if o.get("correct"))
@@ -593,6 +758,212 @@ def health():
     return {"status": "ok", "items": len(QUIZ_ITEMS)}
 
 
+# ── Identity / consent / GDPR endpoints (wired 2026-05-30) ───────────────────
+
+class WhoAmIResp(BaseModel):
+    student_id: str
+    role: str
+    course: str
+    teach_variant: Optional[str] = None
+    consent_given: bool = False
+
+
+@app.get("/api/me", response_model=WhoAmIResp)
+def whoami(request: Request):
+    """Identity probe — returns the resolved student_id + role + course +
+    the sticky A/B variant + current consent status. The UI calls this on
+    page load to know which student key it's bound to."""
+    ident = _resolve_student_id(request)
+    sid = ident["student_id"]
+    try:
+        consent = bool(get_db().has_consent(sid))
+    except Exception:
+        consent = False
+    try:
+        variant = assign_variant(sid, "teach_prompt_v2") or "control"
+    except Exception:
+        variant = "control"
+    return WhoAmIResp(student_id=sid, role=ident["role"], course=ident["course"],
+                       teach_variant=variant, consent_given=consent)
+
+
+class ConsentReq(BaseModel):
+    given: bool
+
+
+@app.post("/api/me/consent")
+def set_consent(req: ConsentReq, request: Request):
+    """Record (or revoke) consent for storing the student's progression
+    data. Audited so the dashboard can show "consent received YYYY-MM-DD"."""
+    ident = _resolve_student_id(request)
+    sid = ident["student_id"]
+    try:
+        get_db().set_consent(sid, bool(req.given))
+        get_db().audit("consent_set", student_id=sid,
+                       payload={"given": bool(req.given)})
+        return {"ok": True, "student_id": sid, "consent_given": bool(req.given)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"consent write failed: {e}")
+
+
+@app.post("/api/me/delete")
+def gdpr_delete(request: Request):
+    """GDPR Article 17 — right to erasure. Removes mastery, audit rows,
+    A/B assignments, and student-state for the resolved student. Writes a
+    tombstone audit row that survives the deletion. Mirrors
+    scripts/gdpr_admin.py for self-serve use from the UI."""
+    ident = _resolve_student_id(request)
+    sid = ident["student_id"]
+    if sid in ("anon", ""):
+        raise HTTPException(status_code=400,
+                              detail="cannot delete the anonymous shared key")
+    try:
+        result = get_db().delete_student(sid)
+        # Also drop any in-memory sessions for this student.
+        for s_id, s in list(_sessions.items()):
+            if s.get("student_id") == sid:
+                _sessions.pop(s_id, None)
+        return {"ok": True, "student_id": sid, "deleted_rows": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"delete failed: {e}")
+
+
+# ── Fact-check pass (added 2026-05-30) ──────────────────────────────────────
+# Why: the LP-shape forces mechanism vocabulary (compile-time / runtime,
+# heap / stack, reference / value). On smaller backbones, the model
+# sometimes confuses the categories — e.g. "the loop condition is checked
+# at compile-time" (wrong — runtime per iteration). A factually wrong tutor
+# is worse than no tutor. This second LLM pass narrowly checks for those
+# specific category errors and, if found, strips the offending sentence
+# rather than letting it reach the student.
+#
+# Scoped intentionally tight: we do NOT try to fact-check Java in general
+# (the small model isn't reliable enough to grade itself on arbitrary
+# claims). We only flag the four error patterns that the prior run
+# (output/tutor_comparison_2026-05-30_152306/) actually surfaced.
+
+_FACTCHECK_PROMPT_LEGACY_UNUSED = """You are a Java expert reviewing a tutor's reply for ONE specific category of factual error.
+
+ONLY flag a sentence if it makes ONE of these specific mistakes:
+  A. Says something happens "at compile-time" when it actually happens at runtime
+     (e.g. "Java creates new String objects on the heap at compile-time" — WRONG;
+      the allocation happens at runtime).
+  B. Says a loop condition is "checked at compile-time" or "initialized at compile-time"
+     (loop conditions are evaluated at runtime, every iteration).
+  C. Says a primitive int / boolean is stored "on the heap" (primitives in local
+     variables and parameters live on the stack; only object fields live on the heap).
+  D. Says == on String objects compares values / contents (== compares references).
+
+Reply with a JSON object:
+  {{"ok": true}}                                if no error of the above kinds
+  {{"ok": false, "bad_sentences": ["<verbatim sentence to remove>", ...]}}
+
+Do NOT flag anything outside the four categories above. Do NOT flag stylistic issues.
+Do NOT explain. Only output the JSON.
+
+Tutor reply to review:
+\"\"\"
+{reply}
+\"\"\"
+"""
+
+
+import re as _fc_re
+
+# Regex patterns for the specific factually-wrong phrase-shapes the
+# prior comparison runs surfaced. Each pattern must match a LITERAL
+# wrong claim — false positives are a worse outcome than false negatives
+# (a fact-check that strips correct sentences damages the response).
+# Calibrated from output/tutor_comparison_2026-05-30_152306/ + 172527/.
+_FACTCHECK_PATTERNS = [
+    # A-fwd: "at compile-time" followed by a runtime-implying verb
+    (_fc_re.compile(
+        r"\bat compile[- ]time\b[^.!?]*\b("
+        r"allocate[ds]?|create[ds]?|check[ds]?|initiali[sz]e[ds]?|"
+        r"stor(?:e[ds]?|ing)|happen[ds]?|evaluate[ds]?|"
+        r"hands? back|knows? (?:you'?re )?dividing|performs? an integer division"
+        r")\b",
+        _fc_re.IGNORECASE),
+     "compile-time confused with runtime"),
+    # A-rev: runtime verb preceding "at compile-time"
+    # (e.g. "checking references at compile-time", "evaluating the loop condition at compile-time")
+    (_fc_re.compile(
+        r"\b(check(?:s|ing|ed)?|evaluat(?:es|ing|ed)?|compar(?:es|ing|ed)?|"
+        r"compute[ds]?|computing|resolv(?:es|ing|ed)?|"
+        r"allocate[ds]?|allocating|caus(?:es|ed|ing)|"
+        r"throw(?:s|ing|n)?|raise[ds]?|raising|"
+        r"happen[s]?|happening|occur[s]?|occurring|"
+        r"(?:integer )?division|"
+        r"executes?|executing|run[s]?|running)\b[^.!?]*"
+        r"\bat compile[- ]time\b",
+        _fc_re.IGNORECASE),
+     "runtime operation incorrectly placed at compile-time"),
+    # B specifically: loop condition "checked at compile-time"
+    (_fc_re.compile(
+        r"\bloop (?:condition|index|counter)[^.!?]*\bat compile[- ]time\b",
+        _fc_re.IGNORECASE),
+     "loop condition incorrectly said to be compile-time"),
+    # C: primitive "stored on the heap"
+    (_fc_re.compile(
+        r"\b(?:primitive|local int|local boolean|local variable)\b[^.!?]*"
+        r"\bstor(?:e[ds]?|ing)\b[^.!?]*\bon the heap\b",
+        _fc_re.IGNORECASE),
+     "primitive incorrectly said to be on the heap"),
+    # D: == on Strings "compares contents/values"
+    (_fc_re.compile(
+        r"==[^.!?]*\bString[s]?\b[^.!?]*\bcompares? (?:contents?|values?)\b",
+        _fc_re.IGNORECASE),
+     "== said to compare contents on String"),
+]
+
+
+def _factcheck_mechanism_claims(reply: str, model: str = None) -> str:
+    """Deterministic regex fact-check. Strips sentences containing literal
+    phrase-shapes known to be factually wrong. Zero false positives by
+    construction.
+
+    v1 used an 8B LLM grader and produced 2/3 false positives — stripping
+    CORRECT sentences. Regex is more precise, recall is lower but the
+    failure cases it does catch are the recurring ones.
+
+    `model` accepted but unused (kept for API stability).
+    """
+    if not reply or len(reply.split()) < 6:
+        return reply
+    try:
+        sentences = _fc_re.split(r'(?<=[.!?])\s+', reply)
+        clean = []
+        stripped = []
+        for s in sentences:
+            hit = None
+            for pat, label in _FACTCHECK_PATTERNS:
+                if pat.search(s):
+                    hit = label
+                    break
+            if hit:
+                stripped.append((hit, s.strip()))
+            else:
+                clean.append(s)
+        if not stripped:
+            return reply
+        cleaned = " ".join(clean).strip()
+        # Don't gut the response. If stripping leaves <25 tokens, the
+        # remainder is too short to teach. Keep the original (with the
+        # error in the logs) — a partial error in 60 useful tokens beats
+        # 20 useless tokens.
+        if len(cleaned.split()) < 25:
+            for label, s in stripped:
+                print(f"[factcheck] WOULD strip ({label}) but result would be "
+                      f"<25 tok; keeping original. Bad: {s[:90]}")
+            return reply
+        for label, s in stripped:
+            print(f"[factcheck] stripped ({label}): {s[:90]}{'...' if len(s)>90 else ''}")
+        return cleaned
+    except Exception as e:
+        print(f"[factcheck] pass fell through: {e}")
+        return reply
+
+
 # ── theory-grounded correction text ──────────────────────────────────────────
 
 def _build_explanation(
@@ -603,6 +974,7 @@ def _build_explanation(
     correct_opt: Dict,
     chosen_wm: Optional[Dict],
     diag_dict: Optional[Dict] = None,
+    teach_variant: str = "control",
 ) -> str:
     """Compose a level-aware, theory-grounded teaching message.
 
@@ -626,6 +998,7 @@ def _build_explanation(
         target_level=target_level,
         lp_level=lp_level,
         diag_dict=diag_dict,
+        teach_variant=teach_variant,
     )
     if llm_text:
         return llm_text
@@ -682,7 +1055,8 @@ def _template_explanation(item, student_belief, is_correct, chosen_opt,
 def _try_ollama(item, student_belief, is_correct, chosen_opt, correct_opt,
                 chosen_wm, target_level,
                 lp_level: Optional[str] = None,
-                diag_dict: Optional[Dict] = None) -> Optional[str]:
+                diag_dict: Optional[Dict] = None,
+                teach_variant: str = "control") -> Optional[str]:
     """Best-effort LLM call — now level-aware + anti-cliche guarded.
 
     The explanation SHAPE branches by the student's LP level:
@@ -699,15 +1073,17 @@ def _try_ollama(item, student_belief, is_correct, chosen_opt, correct_opt,
         models = [m.get("name") for m in tags.json().get("models", []) if m.get("name")]
         if not models:
             return None
-        # Env var override (matches the chat-flow generator). Fall back to
-        # llama3.1 → general-purpose models are less prompt-suspicious than
-        # coder-specialised ones on long prescriptive prompts.
+        # Backbone selection (2026-05-30 — reverted to llama3.1:8b after
+        # qwen2.5:14b proved ~2x slower per token on this hardware. The
+        # fact-check pass + tighter LP-shape remain — those are
+        # model-independent improvements that benefit any backbone).
+        # Env var override lets ops upgrade later (e.g. CPAL_OLLAMA_MODEL=qwen2.5:14b).
         model = (
             os.environ.get("CPAL_OLLAMA_MODEL")
             or next((m for m in models
-                     if "llama3.1" in m.lower() or "llama3.3" in m.lower()), None)
+                     if "llama3.3" in m.lower() or "llama3.1" in m.lower()), None)
             or next((m for m in models if "llama3" in m.lower()), None)
-            or next((m for m in models if "qwen" in m.lower() and "coder" in m.lower()), None)
+            or next((m for m in models if "qwen" in m.lower() and "coder" not in m.lower()), None)
             or models[0]
         )
 
@@ -740,11 +1116,23 @@ def _try_ollama(item, student_belief, is_correct, chosen_opt, correct_opt,
             "\"to recap\", \"great job\"."
         )
 
+        # A/B variant — "verbose" asks the model to restate the question
+        # in the student's words before answering (encoding-prompt
+        # experiment teach_prompt_v2, ab_testing.py).
+        variant_prefix = ""
+        if teach_variant == "verbose":
+            variant_prefix = (
+                "Before answering, restate the question in one sentence "
+                "in your own words to make sure you understood it. Then proceed.\n\n"
+            )
+
         prompt = (
-            "You are a Java tutor for a first-year student. Respond in 4-7 "
-            "short sentences. Do NOT mention mastery, scores, levels, models, "
+            "You are a Java tutor for a first-year student. Respond in 3-4 "
+            "short sentences — be disciplined and tight, every sentence must "
+            "earn its place. Do NOT mention mastery, scores, levels, models, "
             "BKT, DINA, LP, or any internal metric. Address the student "
             "directly.\n\n"
+            f"{variant_prefix}"
             f"{anti_cliche}\n\n"
             f"Topic: {item['title']} ({item['concept']})\n\n"
             f"Code:\n{item['code']}\n\n"
@@ -766,7 +1154,13 @@ def _try_ollama(item, student_belief, is_correct, chosen_opt, correct_opt,
             timeout=60,
         )
         r.raise_for_status()
-        return (r.json().get("response") or "").strip() or None
+        reply = (r.json().get("response") or "").strip() or None
+        if reply:
+            # Fact-check pass — strip sentences that confuse compile-time
+            # vs runtime, heap vs stack, or reference vs value equality.
+            # See _factcheck_mechanism_claims for the four categories.
+            reply = _factcheck_mechanism_claims(reply, model)
+        return reply
     except Exception:
         return None
 
@@ -774,42 +1168,38 @@ def _try_ollama(item, student_belief, is_correct, chosen_opt, correct_opt,
 def _shape_for_level(lp_level: Optional[str]) -> str:
     """Return a compact, level-appropriate pedagogical instruction block.
 
-    Matches the LP-3 SIX-STEP shapes the chat-flow uses but pared down for
-    the quiz's 4-7 sentence budget.
+    Tightened 2026-05-30: was 4-7 sentences (~140 tok responses), now 3-4
+    sentences (~80 tok responses). Closer to Ruffle & Riley's discipline,
+    reduces cognitive load, forces the prompt to earn each sentence.
+    Reduces the surface area where the small backbone can hallucinate
+    mechanism details.
     """
     if lp_level == "L4":
         return (
-            "L4 — generalising student. Do NOT re-teach the concept; the "
-            "student already abstracted it. Confirm the generalisation and "
-            "name the principle. Present ONE stretch / edge case where the "
-            "principle interacts with another feature (e.g. string interning, "
-            "autoboxing identity, primitive-vs-reference). End with a "
-            "design-rationale question: why did Java's designers make this "
-            "choice, or what is the trade-off?"
+            "L4 — generalising student. Do NOT re-teach. Confirm the "
+            "generalisation in one sentence; name ONE edge case that stretches "
+            "the principle (string interning, autoboxing identity, "
+            "primitive-vs-reference); end with a design-rationale question."
         )
     if lp_level == "L3":
         return (
-            "L3 — student traced the mechanism. Do NOT re-explain what they "
-            "already understand. Confirm their mechanism in ONE sentence, "
-            "then present a NOVEL application of the same mechanism (a "
-            "different concept or code pattern). End with a question asking "
-            "the student to name the SHARED mechanism between the two cases."
+            "L3 — student traced the mechanism. Confirm in one sentence; "
+            "present ONE novel application of the same mechanism; ask the "
+            "student to name the SHARED mechanism between the two cases."
         )
     if lp_level == "L2":
         return (
-            "L2 — student knows the rule, not the mechanism. Acknowledge "
-            "the rule briefly, then introduce the MECHANISM underneath — "
-            "name the operative step (compile-time vs runtime; heap vs "
-            "stack vs reference; condition checked before/after iteration; "
-            "length-1 vs length). Walk one short example. End with a "
-            "predict-this question on a small variant."
+            "L2 — student knows the rule, not the mechanism. Acknowledge the "
+            "rule in ONE phrase; name the operative mechanism step (compile-"
+            "time vs runtime; heap vs stack vs reference; condition checked "
+            "before/after iteration); end with a predict-this question on a "
+            "small variant."
         )
     # L1 or unknown
     return (
-        "L1 — pure symptom level. Name the RULE the student missed in one "
-        "plain sentence. Show a 4-6 line annotated Java example. Walk what "
-        "Java does at each line. Name the ONE key mechanism the student "
-        "should take away. End with a predict-this check question."
+        "L1 — symptom level. Name the RULE the student missed in one plain "
+        "sentence; show 2-3 lines of annotated Java; end with a predict-this "
+        "check question on a tiny variant."
     )
 
 

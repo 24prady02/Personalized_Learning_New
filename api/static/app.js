@@ -7,10 +7,28 @@ const state = {
   sessionId: null,
   currentItem: null,
   selectedChoice: null,
+  identity: null,   // {student_id, role, course, teach_variant, consent_given}
 };
 
+// Forward ?student= and ?token= query params on every API call so the
+// backend's _resolve_student_id can bind the session to the right
+// per-student key. Same-origin fetches already inherit them via
+// document.location, but the server's start endpoint reads them from
+// the REQUEST query string so we attach them explicitly.
+function withQuery(path) {
+  const sp = new URLSearchParams(window.location.search);
+  const passthrough = new URLSearchParams();
+  for (const k of ["student", "student_id", "token"]) {
+    const v = sp.get(k);
+    if (v) passthrough.set(k, v);
+  }
+  const q = passthrough.toString();
+  if (!q) return path;
+  return path + (path.includes("?") ? "&" : "?") + q;
+}
+
 async function api(path, opts = {}) {
-  const r = await fetch(path, {
+  const r = await fetch(withQuery(path), {
     headers: { "Content-Type": "application/json" },
     ...opts,
   });
@@ -204,6 +222,61 @@ async function loadNextItem(itemId) {
   }
 }
 
+// ── Identity + privacy (wired 2026-05-30 to /api/me, /api/me/consent,
+//    and /api/me/delete) ─────────────────────────────────────────────────
+async function loadIdentity() {
+  try {
+    const me = await api("/api/me");
+    state.identity = me;
+    const label = $("identity");
+    if (me.student_id && me.student_id !== "anon") {
+      label.textContent = `Signed in as ${me.student_id}` +
+        (me.role !== "student" ? ` (${me.role})` : "");
+      show("identity");
+    }
+    $("consent-toggle").checked = !!me.consent_given;
+    $("privacy-id").textContent = `Student key: ${me.student_id}` +
+      (me.teach_variant ? ` · variant: ${me.teach_variant}` : "");
+  } catch (e) {
+    console.warn("identity load failed", e);
+  }
+}
+
+function openPrivacy()  { $("privacy-modal").hidden = false; }
+function closePrivacy() {
+  $("privacy-modal").hidden = true;
+  $("privacy-status").textContent = "";
+}
+
+async function toggleConsent(e) {
+  const given = !!e.target.checked;
+  try {
+    await api("/api/me/consent", {
+      method: "POST",
+      body: JSON.stringify({ given }),
+    });
+    $("privacy-status").textContent = given
+      ? "Consent recorded."
+      : "Consent revoked.";
+  } catch (err) {
+    $("privacy-status").textContent = `Could not save: ${err.message}`;
+    e.target.checked = !given;
+  }
+}
+
+async function deleteMyData() {
+  if (!confirm("This will delete your mastery, progression history, and " +
+                "A/B assignment. The deletion is logged. Continue?")) return;
+  try {
+    const res = await api("/api/me/delete", { method: "POST" });
+    $("privacy-status").textContent =
+      `Deleted ${JSON.stringify(res.deleted_rows)} — restarting session…`;
+    setTimeout(() => location.reload(), 900);
+  } catch (err) {
+    $("privacy-status").textContent = `Delete failed: ${err.message}`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("submit-choice").addEventListener("click", submitChoice);
   $("submit-belief").addEventListener("click", submitBelief);
@@ -215,5 +288,12 @@ document.addEventListener("DOMContentLoaded", () => {
   $("probe-input").addEventListener("input", (e) => {
     $("submit-probe").disabled = e.target.value.trim().length === 0;
   });
+  // Privacy drawer
+  $("open-privacy").addEventListener("click", openPrivacy);
+  $("close-privacy").addEventListener("click", closePrivacy);
+  $("consent-toggle").addEventListener("change", toggleConsent);
+  $("delete-data").addEventListener("click", deleteMyData);
+
+  loadIdentity();
   startSession();
 });

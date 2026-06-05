@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CPAL — AI-Driven Java Code Comprehension Wireframe</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F4F0; }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+// CPAL palette — deeper indigo + Java amber accent
+const COLORS = {
+  bg: "#F5F4F0", surface: "#FFFFFF", surfaceAlt: "#EDECE6",
+  border: "#DDDBD3", borderFocus: "#3F4F8E",
+  primary: "#3F4F8E", primaryLight: "#EAEDF5", primaryDark: "#2D3B6E",
+  accent: "#C49A4A", accentLight: "#FBF5E8",
+  text: "#222222", textMid: "#555555", textLight: "#8A8A8A",
+  danger: "#C45B4A", dangerLight: "#FCEEED",
+  success: "#4A8B6E", successLight: "#EDF6F1",
+  warning: "#C49B4A", warningLight: "#FDF8EB",
+  blue: "#4A7BC4", blueLight: "#EBF1FD",
+  code: "#1E1E2E", codeText: "#D4D4D4",
+};
+
+const fonts = {
+  display: "'DM Serif Display', Georgia, serif",
+  body: "'DM Sans', 'Segoe UI', sans-serif",
+  mono: "'JetBrains Mono', 'Fira Code', monospace",
+};
+
+const WireframeTag = ({ children, color = COLORS.textLight }) => (
+  <span style={{ fontSize: 9, fontFamily: fonts.mono, color, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 600, display: "inline-block" }}>{children}</span>
+);
+
+const Placeholder = ({ label, h = 120, icon, color = COLORS.border, dashed = true }) => (
+  <div style={{ height: h, border: `1.5px ${dashed ? "dashed" : "solid"} ${color}`, borderRadius: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, background: `${color}11`, transition: "all 0.2s" }}>
+    {icon && <span style={{ fontSize: 22, opacity: 0.5 }}>{icon}</span>}
+    <span style={{ fontSize: 11, color: COLORS.textLight, fontFamily: fonts.mono, letterSpacing: 0.5 }}>{label}</span>
+  </div>
+);
+
+const Card = ({ children, style = {}, onClick, hoverable = false }) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ background: COLORS.surface, borderRadius: 12, border: `1px solid ${COLORS.border}`, padding: 20, transition: "all 0.25s ease", cursor: onClick ? "pointer" : "default", transform: hoverable && hovered ? "translateY(-2px)" : "none", boxShadow: hoverable && hovered ? "0 8px 24px rgba(0,0,0,0.08)" : "0 1px 3px rgba(0,0,0,0.04)", ...style }}>
+      {children}
+    </div>
+  );
+};
+
+const Badge = ({ children, color = COLORS.primary, bg }) => (
+  <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, fontFamily: fonts.body, color, background: bg || `${color}18`, letterSpacing: 0.3 }}>{children}</span>
+);
+
+const ProgressBar = ({ value, max = 100, color = COLORS.primary, h = 6 }) => (
+  <div style={{ height: h, borderRadius: h, background: `${color}22`, overflow: "hidden", width: "100%" }}>
+    <div style={{ height: "100%", width: `${(value / max) * 100}%`, borderRadius: h, background: color, transition: "width 0.6s ease" }} />
+  </div>
+);
+
+const CodeBlock = ({ children, h = "auto" }) => (
+  <pre style={{ background: COLORS.code, color: COLORS.codeText, fontFamily: fonts.mono, fontSize: 12, padding: 14, borderRadius: 8, overflow: "auto", height: h, lineHeight: 1.6, margin: 0 }}>
+    {children}
+  </pre>
+);
+
+// Wiring annotation — shows which backend file/function drives a UI element.
+const WiredTo = ({ mod, fn }) => (
+  <div style={{ marginTop: 6, padding: "5px 8px", background: `${COLORS.primary}0E`, borderLeft: `2px solid ${COLORS.primary}`, borderRadius: "0 4px 4px 0", fontFamily: fonts.mono, fontSize: 9.5, lineHeight: 1.4 }}>
+    <span style={{ color: COLORS.primary, fontWeight: 700 }}>▸ wired:</span>
+    <span style={{ color: COLORS.textMid }}> {mod}</span>
+    {fn && <span style={{ color: COLORS.textLight }}> · {fn}</span>}
+  </div>
+);
+
+// Confidence bar — shows diagnostic_confidence from LP Diagnostician (0.0-1.0)
+const ConfidenceBar = ({ value, label = "Diagnostic confidence" }) => {
+  const pct = Math.round(value * 100);
+  const color = value >= 0.7 ? COLORS.success : value >= 0.5 ? COLORS.warning : COLORS.danger;
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+        <span style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono }}>{label}</span>
+        <span style={{ fontSize: 10, fontWeight: 700, color: color, fontFamily: fonts.mono }}>{pct}%</span>
+      </div>
+      <ProgressBar value={pct} color={color} h={4} />
+    </div>
+  );
+};
+
+// Soft nudge banner — used when a heuristic flag (e.g. substance penalty) fires
+const SoftNudge = ({ icon = "💭", message }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", background: COLORS.warningLight, border: `1px solid ${COLORS.warning}44`, borderRadius: 8, marginBottom: 10 }}>
+    <span style={{ fontSize: 16 }}>{icon}</span>
+    <span style={{ fontSize: 12, color: COLORS.textMid, lineHeight: 1.5 }}>{message}</span>
+  </div>
+);
+
+// Probe counter chip — "Probe 2 of 8"
+const ProbeCounter = ({ current, cap }) => (
+  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 14, background: COLORS.surfaceAlt, fontSize: 11, fontFamily: fonts.mono, color: COLORS.textMid }}>
+    <span style={{ width: 6, height: 6, borderRadius: 6, background: current >= cap * 0.75 ? COLORS.danger : COLORS.success }} />
+    Probe {current}/{cap}
+  </span>
+);
+
+// Covered-topics chip row — list of sub-criteria already probed
+const CoveredTopics = ({ topics }) => (
+  topics && topics.length > 0 ? (
+    <div style={{ marginTop: 10, padding: 10, background: COLORS.surfaceAlt, borderRadius: 8 }}>
+      <WireframeTag>Topics covered this concept</WireframeTag>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+        {topics.map((t) => (
+          <Badge key={t} color={COLORS.success}>✓ {t}</Badge>
+        ))}
+      </div>
+    </div>
+  ) : null
+);
+
+// Mastery toast — small positive feedback when mastery improved this turn
+const MasteryToast = ({ delta }) => (
+  delta > 0 ? (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", background: COLORS.successLight, border: `1px solid ${COLORS.success}44`, borderRadius: 8, marginBottom: 10 }}>
+      <span style={{ fontSize: 16 }}>📈</span>
+      <span style={{ fontSize: 12, color: COLORS.success, fontWeight: 700 }}>+{(delta * 100).toFixed(1)}% mastery this turn</span>
+    </div>
+  ) : null
+);
+
+// Hover popover for showing per-cell detail (e.g. LP probs)
+const Popover = ({ trigger, content, w = 240 }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <span style={{ position: "relative", display: "inline-block" }} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      {trigger}
+      {open && (
+        <div style={{ position: "absolute", top: "100%", left: 0, marginTop: 6, padding: 12, background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", width: w, zIndex: 100, fontSize: 11, color: COLORS.textMid, lineHeight: 1.5 }}>
+          {content}
+        </div>
+      )}
+    </span>
+  );
+};
+
+// Heuristic-firing dot indicators — 5 mini dots showing which post-correction heuristics fired
+// Order: [substance_penalty, mech_vocab_bump, l2_rule_naming, parroting_downgrade, transfer_upgrade]
+const HeuristicDots = ({ flags }) => {
+  const defs = [
+    { key: "substance",   label: "Substance penalty",      color: COLORS.danger },
+    { key: "mech_vocab",  label: "Mech-vocab bump",        color: COLORS.success },
+    { key: "l2_rule",     label: "L2 rule-naming upgrade", color: COLORS.blue },
+    { key: "parroting",   label: "Parroting downgrade",    color: COLORS.warning },
+    { key: "transfer",    label: "Transfer→L4 upgrade",    color: COLORS.accent },
+  ];
+  return (
+    <div style={{ display: "flex", gap: 3 }}>
+      {defs.map((d) => (
+        <Popover key={d.key}
+          trigger={<span style={{ width: 8, height: 8, borderRadius: 8, background: flags[d.key] ? d.color : COLORS.border, display: "inline-block" }} />}
+          content={<><strong style={{ color: d.color }}>{flags[d.key] ? "✓ fired" : "—"}</strong> — {d.label}</>}
+          w={180}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Reward sparkline — small inline chart of recent reward values
+const RewardSpark = ({ values, color = COLORS.primary, h = 24 }) => {
+  if (!values || values.length === 0) return null;
+  const min = Math.min(...values, -1);
+  const max = Math.max(...values, 1);
+  const range = max - min || 1;
+  return (
+    <svg width="80" height={h} style={{ display: "block" }}>
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        points={values.map((v, i) => `${(i / (values.length - 1)) * 78 + 1},${h - ((v - min) / range) * (h - 4) - 2}`).join(" ")}
+      />
+      <line x1="0" y1={h / 2} x2="80" y2={h / 2} stroke={COLORS.border} strokeDasharray="2,2" />
+    </svg>
+  );
+};
+
+// ─── STUDENT VIEW ───
+const StudentView = () => {
+  const [step, setStep] = useState(1);
+  // Steps mapping to CPAL's LP rubric:
+  //   1 Read    (exposure, pre-L1)
+  //   2 Predict (L1 symptom level)
+  //   3 Explain (L2 rule level)
+  //   4 Mechanism (L3 mechanism level)
+  //   5 Transfer (L4 transfer level)
+  const steps = [
+    { n: 1, label: "Read",       icon: "\u{1F4D6}", desc: "Examine the Java code",      lp: "—"  },
+    { n: 2, label: "Predict",    icon: "\u{1F3AF}", desc: "What will it output?",       lp: "L1" },
+    { n: 3, label: "Explain",    icon: "✏️", desc: "Articulate your reasoning", lp: "L2" },
+    { n: 4, label: "Mechanism",  icon: "⚙️", desc: "Understand the why",        lp: "L3" },
+    { n: 5, label: "Transfer",   icon: "\u{1F504}", desc: "Apply to a variant",         lp: "L4" },
+  ];
+
+  // Mock backend response shape — when wired, this comes from POST /api/correct
+  const mockDiagnosis = {
+    current_lp_level: ["—","L1","L2","L3","L4"][step - 1],
+    diagnostic_confidence: [0.20, 0.45, 0.58, 0.78, 0.91][step - 1],
+    wrong_model_id: step >= 3 ? "SE-A" : null,
+    mastery_delta: step === 3 ? 0.08 : step === 4 ? 0.16 : 0,
+    substance_penalty: false,
+    probe_count: step >= 3 ? Math.min(step - 2, 3) : 0,
+    probe_cap: 8,
+    probed_criteria: step >= 4 ? ["reference vs value", "object identity"] : step === 3 ? ["reference vs value"] : [],
+    fact_check_passed: true,
+  };
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "280px 1fr 300px", gap: 20, height: "100%" }}>
+      {/* Left sidebar */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <Card style={{ padding: 16 }}>
+          <WireframeTag>Current Concept</WireframeTag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 4px", color: COLORS.text }}>String Equality</h3>
+          <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.5 }}>CSCI 1301 — Java fundamentals &middot; Module 4 of 12</p>
+          <div style={{ marginTop: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontSize: 11, color: COLORS.textLight }}>Progress</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: COLORS.primary }}>Step {step}/5</span>
+            </div>
+            <ProgressBar value={step} max={5} />
+          </div>
+          <div style={{ marginTop: 14, padding: 10, background: COLORS.surfaceAlt, borderRadius: 8 }}>
+            <WireframeTag>Your LP Level</WireframeTag>
+            <div style={{ display: "flex", gap: 4, marginTop: 6 }}>
+              {["L1","L2","L3","L4"].map((lv, i) => (
+                <div key={lv} style={{ flex: 1, padding: "6px 0", textAlign: "center", borderRadius: 6, background: i < step - 1 ? COLORS.primary : i === step - 2 ? COLORS.accent : COLORS.surface, color: i < step - 1 || i === step - 2 ? "#fff" : COLORS.textLight, fontSize: 11, fontFamily: fonts.mono, fontWeight: 700, border: `1px solid ${i === step - 2 ? COLORS.accent : COLORS.border}` }}>{lv}</div>
+              ))}
+            </div>
+            <ConfidenceBar value={mockDiagnosis.diagnostic_confidence} />
+            <WiredTo mod="lp_diagnostic.py" fn="current_lp_level + diagnostic_confidence" />
+          </div>
+        </Card>
+        <Card style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ padding: "14px 16px 8px" }}><WireframeTag>Reasoning Pathway</WireframeTag></div>
+          {steps.map((s) => (
+            <div key={s.n} onClick={() => setStep(s.n)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", cursor: "pointer", background: step === s.n ? COLORS.primaryLight : "transparent", borderLeft: `3px solid ${step === s.n ? COLORS.primary : step > s.n ? COLORS.success : "transparent"}`, transition: "all 0.2s" }}>
+              <div style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, background: step === s.n ? COLORS.primary : step > s.n ? COLORS.successLight : COLORS.surfaceAlt, color: step === s.n ? "#fff" : undefined }}>
+                {step > s.n ? "✓" : s.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 13, fontWeight: step === s.n ? 700 : 500, color: step === s.n ? COLORS.primaryDark : step > s.n ? COLORS.success : COLORS.textMid }}>{s.label}</span>
+                  <span style={{ fontSize: 9, fontFamily: fonts.mono, color: step === s.n ? COLORS.primary : COLORS.textLight, fontWeight: 700 }}>{s.lp}</span>
+                </div>
+                <div style={{ fontSize: 10, color: COLORS.textLight }}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+        </Card>
+      </div>
+
+      {/* Center */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <Card>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <div>
+              <WireframeTag color={COLORS.primary}>Step {step}: {steps[step - 1].label} {steps[step - 1].lp !== "—" && `· LP Target: ${steps[step - 1].lp}`}</WireframeTag>
+              <h2 style={{ fontFamily: fonts.display, fontSize: 22, margin: "6px 0 0", color: COLORS.text }}>
+                {step === 1 && "Read the Java Code"}
+                {step === 2 && "Predict the Output"}
+                {step === 3 && "Explain Your Reasoning"}
+                {step === 4 && "How Java Actually Handles This"}
+                {step === 5 && "Apply to a New Variant"}
+              </h2>
+            </div>
+            <Badge color={COLORS.accent} bg={COLORS.accentLight}>
+              {step === 1 && "\u{1F4D6} Code Reading"}
+              {step === 2 && "\u{1F3AF} Multiple Choice"}
+              {step === 3 && "✏️ Free Response"}
+              {step === 4 && "⚙️ Mechanism"}
+              {step === 5 && "\u{1F504} Transfer"}
+            </Badge>
+          </div>
+
+          {step === 1 && (<div>
+            <CodeBlock>
+{`String a = new String("hello");
+String b = new String("hello");
+if (a == b) {
+    System.out.println("same");
+} else {
+    System.out.println("different");
+}`}
+            </CodeBlock>
+            <WiredTo mod="data/quiz_bank.json" fn="items[concept].code" />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 12 }}>
+              <Placeholder label="Hover-explain each line" h={50} color={COLORS.border} dashed={false} />
+              <Placeholder label="Click `==` to see explanation" h={50} color={COLORS.border} dashed={false} />
+            </div>
+          </div>)}
+
+          {step === 2 && (<div>
+            <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.accent}33`, marginBottom: 12 }}>
+              <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+                <strong style={{ color: COLORS.accent }}>Question:</strong> This prints "different". Why?
+              </p>
+            </div>
+            {[
+              { key: "A", text: "== compares the object references; a and b are two distinct String objects even though the characters are equal. Use a.equals(b) for content equality.", wm: null },
+              { key: "B", text: "== works on Strings the way it does on int, so the result must be a bug in the JVM.", wm: "SE-A" },
+              { key: "C", text: "The characters are equal but the strings have different lengths in memory.", wm: "SE-B" },
+              { key: "D", text: "Java stores each call to new String separately and compares the variable names, not the contents.", wm: "SE-C" },
+            ].map((opt) => (
+              <div key={opt.key} style={{ display: "flex", gap: 12, padding: 12, borderRadius: 8, border: `1px solid ${COLORS.border}`, marginBottom: 8, cursor: "pointer", background: COLORS.surface }}>
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: COLORS.surfaceAlt, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: COLORS.primary, fontFamily: fonts.mono }}>{opt.key}</div>
+                <div style={{ flex: 1, fontSize: 12, color: COLORS.textMid, lineHeight: 1.5 }}>{opt.text}</div>
+                {opt.wm && <Badge color={COLORS.textLight} bg={COLORS.surfaceAlt}>WM:{opt.wm}</Badge>}
+              </div>
+            ))}
+            <div style={{ fontSize: 10, color: COLORS.textLight, marginTop: 6, fontFamily: fonts.mono }}>
+              ▸ wrong-model IDs (SE-A, SE-B, SE-C) only visible in dev mode — students see clean options
+            </div>
+            <WiredTo mod="data/quiz_bank.json + wrong_models_catalogue.json" fn="options[].wm_id ↔ catalogued WM" />
+          </div>)}
+
+          {step === 3 && (<div>
+            <SoftNudge icon="💭" message="If your previous answer was too brief (≤ 2 tokens), CPAL's substance-penalty would gently nudge you to expand. Example: 'idk' → confidence floored at 0.30, encourages elaboration." />
+            <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.accent}33`, marginBottom: 12 }}>
+              <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+                <strong style={{ color: COLORS.accent }}>Now in your own words:</strong> Why do you think the output is what it is? Don't worry about being right — explain what you think is happening.
+              </p>
+            </div>
+            <Placeholder label="Student free-text response — diagnoses LP level (L1 / L2 / L3 / L4) from articulation" h={130} icon="✏️" color={COLORS.accent} />
+            <WiredTo mod="lp_diagnostic.py" fn="LPDiagnostician.diagnose() → current_lp_level + wrong_model_id" />
+            <div style={{ marginTop: 10, padding: 12, background: COLORS.surfaceAlt, borderRadius: 8 }}>
+              <WireframeTag>Behind the scenes</WireframeTag>
+              <p style={{ fontSize: 11, color: COLORS.textMid, margin: "6px 0 0", lineHeight: 1.5 }}>
+                LPDiagnostician runs sentence-transformer head + rubric grader → classifies your reasoning level. Detects wrong-model match (SE-A, SE-B, SE-C) from your phrasing.
+              </p>
+            </div>
+          </div>)}
+
+          {step === 4 && (<div>
+            <MasteryToast delta={mockDiagnosis.mastery_delta} />
+            <Card style={{ padding: 14, border: `1px solid ${COLORS.primary}44`, background: COLORS.primaryLight, marginBottom: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 16 }}>{"\u{1F916}"}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: COLORS.primaryDark }}>CPAL tutor response (LP-shape: L2 → L3)</span>
+                  <Badge color={COLORS.success}>Fact-check ✓</Badge>
+                </div>
+                <ProbeCounter current={mockDiagnosis.probe_count} cap={mockDiagnosis.probe_cap} />
+              </div>
+              <p style={{ fontSize: 13, color: COLORS.text, margin: 0, lineHeight: 1.7 }}>
+                <em>"When comparing strings using `==` in Java, it doesn't check the content equality like you might expect from arithmetic operations. The `==` operator checks <strong style={{ color: COLORS.primary }}>object references</strong>, so when we create new String objects, even if their contents are identical, they're treated as separate entities on the <strong style={{ color: COLORS.primary }}>heap</strong>. You should use the <strong style={{ color: COLORS.primary }}>.equals()</strong> method to compare string contents. Predict this: what would happen if we changed the code to `String b = \"hello\";` instead of creating a new String object?"</em>
+              </p>
+              <WiredTo mod="api/student_app.py" fn="_try_ollama + _shape_for_level → fact-checked output" />
+            </Card>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div style={{ padding: 12, background: COLORS.surfaceAlt, borderRadius: 8 }}>
+                <WireframeTag>Mechanism vocabulary used</WireframeTag>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                  {["reference", "heap", ".equals()", "object"].map((t) => <Badge key={t} color={COLORS.primary}>{t}</Badge>)}
+                </div>
+              </div>
+              <div style={{ padding: 12, background: COLORS.surfaceAlt, borderRadius: 8 }}>
+                <WireframeTag>Wrong model addressed</WireframeTag>
+                <div style={{ marginTop: 6, fontSize: 11, color: COLORS.textMid, lineHeight: 1.5 }}>
+                  <strong style={{ color: COLORS.danger }}>SE-A:</strong> "== works on Strings like int" — refuted via reference-vs-value distinction
+                </div>
+              </div>
+            </div>
+            <CoveredTopics topics={mockDiagnosis.probed_criteria} />
+          </div>)}
+
+          {step === 5 && (<div>
+            <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.accent}33`, marginBottom: 12 }}>
+              <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+                <strong style={{ color: COLORS.accent }}>Transfer challenge:</strong> Predict the output and explain why.
+              </p>
+            </div>
+            <CodeBlock>
+{`Integer a = 127;
+Integer b = 127;
+Integer c = 200;
+Integer d = 200;
+System.out.println(a == b);  // ?
+System.out.println(c == d);  // ?`}
+            </CodeBlock>
+            <Placeholder label="Free-text response — apply the reference vs. value mechanism to autoboxing" h={100} icon="\u{1F504}" color={COLORS.accent} />
+            <div style={{ marginTop: 10, fontSize: 11, color: COLORS.textLight, fontFamily: fonts.mono, padding: 8, background: COLORS.surfaceAlt, borderRadius: 6 }}>
+              ▸ same mechanism (reference vs value) → autoboxing identity → Integer cache (-128 to 127)
+            </div>
+          </div>)}
+        </Card>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={() => setStep(Math.max(1, step - 1))} disabled={step === 1}
+            style={{ flex: 1, padding: "12px 20px", borderRadius: 10, border: `1px solid ${COLORS.border}`, background: COLORS.surface, fontFamily: fonts.body, fontSize: 13, fontWeight: 600, color: step === 1 ? COLORS.textLight : COLORS.textMid, cursor: step === 1 ? "not-allowed" : "pointer" }}>
+            &larr; Previous
+          </button>
+          <button onClick={() => setStep(Math.min(5, step + 1))} disabled={step === 5}
+            style={{ flex: 1, padding: "12px 20px", borderRadius: 10, border: "none", background: step === 5 ? COLORS.textLight : COLORS.primary, fontFamily: fonts.body, fontSize: 13, fontWeight: 600, color: "#fff", cursor: step === 5 ? "not-allowed" : "pointer" }}>
+            {step === 5 ? "Complete & Save" : "Continue →"}
+          </button>
+        </div>
+      </div>
+
+      {/* Right sidebar — AI */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <Card style={{ padding: 16, border: `1px solid ${COLORS.primary}44`, background: `${COLORS.primary}05` }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: COLORS.primary, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "#fff" }}>{"\u{2615}"}</div>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.primaryDark }}>CPAL Tutor</div>
+              <div style={{ fontSize: 10, color: COLORS.textLight }}>LP-shape · Mechanism-grounded</div>
+            </div>
+          </div>
+          <div style={{ background: COLORS.surface, borderRadius: 10, padding: 14, border: `1px solid ${COLORS.border}`, marginBottom: 10 }}>
+            <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+              {step === 1 && "Read the code carefully. Notice that both variables use `new String(\"hello\")`. Click any token to see how the JVM treats it."}
+              {step === 2 && "Pick the option that matches what you genuinely think will happen — there's no penalty for getting it wrong, the explanation will adapt to your reasoning."}
+              {step === 3 && "I'm reading your explanation. Use plain English — I'll detect the mechanism you've grasped vs. where I should fill in. Don't try to sound smart, try to be honest."}
+              {step === 4 && "Notice the words I used: reference, heap, .equals(). These are the moving parts of the actual mechanism — they'll show up again with autoboxing, arrays, and parameter passing."}
+              {step === 5 && "This is the same mechanism as Step 4 — just wearing different clothes. If you got reference-vs-value, you can predict autoboxing identity too."}
+            </p>
+          </div>
+          <WireframeTag>Adapts based on:</WireframeTag>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+            {["LP rubric level", "WM catalogue match", "Attribution state", "Plateau flag"].map((t) => (
+              <Badge key={t} color={COLORS.textMid} bg={COLORS.surfaceAlt}>{t}</Badge>
+            ))}
+          </div>
+          <WiredTo mod="api/student_app.py" fn="LP-shape prompt + _factcheck_mechanism_claims" />
+        </Card>
+
+        <Card style={{ padding: 16 }}>
+          <WireframeTag>Wrong-Model Catalogue</WireframeTag>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { id: "SE-A", label: "JVM bug belief (== should work)", hit: step >= 3 },
+              { id: "SE-B", label: "Length mismatch in memory",       hit: false },
+              { id: "SE-C", label: "Variable-name comparison",        hit: false },
+            ].map((wm) => (
+              <div key={wm.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 8, background: wm.hit ? COLORS.dangerLight : COLORS.surfaceAlt }}>
+                <span style={{ fontSize: 11, fontWeight: 700, fontFamily: fonts.mono, color: wm.hit ? COLORS.danger : COLORS.textLight }}>{wm.id}</span>
+                <span style={{ fontSize: 11, color: COLORS.textMid, flex: 1 }}>{wm.label}</span>
+                {wm.hit && <Badge color={COLORS.danger}>Matched</Badge>}
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono, textAlign: "center" }}>
+            81 wrong models · 26 concepts · ProgMiscon-grounded
+          </div>
+          <WiredTo mod="data/mental_models/wrong_models_catalogue.json" fn="concepts[].wrong_models[]" />
+        </Card>
+
+        <Card style={{ padding: 16 }}>
+          <WireframeTag>Help & Resources</WireframeTag>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { icon: "\u{1F4D6}", label: "JLS reference", desc: "§15.21 Equality Operators" },
+              { icon: "\u{1F50D}", label: "Trace this execution", desc: "Step-through visualization" },
+              { icon: "\u{1F4AC}", label: "Ask for a hint", desc: "Won't reveal the answer" },
+              { icon: "\u{1F4CC}", label: "My notes", desc: "Save observations" },
+            ].map((r) => (
+              <div key={r.label} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 8, background: COLORS.surfaceAlt, cursor: "pointer" }}>
+                <span style={{ fontSize: 16 }}>{r.icon}</span>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.text }}>{r.label}</div>
+                  <div style={{ fontSize: 10, color: COLORS.textLight }}>{r.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+// ─── TEACHER DASHBOARD ───
+const TeacherView = () => {
+  const students = [
+    { name: "Maya R.",   lp: "L3", lpProbs: {L1:.04,L2:.12,L3:.71,L4:.13}, conf: 0.81, src: "trained_wm_head", concept: "string_equality", stage: "3",  attr: "adaptive", imposter: false, plateau: false, wm: null,    flags: {substance:false, mech_vocab:true,  l2_rule:false, parroting:false, transfer:false}, intervention: "transfer_task",     masteryDelta: +0.12, reward: 0.45, rewardHist: [0.20, 0.28, 0.35, 0.42, 0.45], variant: "control",  reasoning: "Strong" },
+    { name: "James T.",  lp: "L2", lpProbs: {L1:.08,L2:.74,L3:.15,L4:.03}, conf: 0.62, src: "trained_wm_head", concept: "null_pointer",    stage: "2b", attr: "fixed",    imposter: false, plateau: true,  wm: "NP-A",  flags: {substance:true,  mech_vocab:false, l2_rule:true,  parroting:false, transfer:false}, intervention: "trace_scaffold",    masteryDelta: -0.02, reward: -0.08, rewardHist: [0.15, 0.10, 0.05, -0.03, -0.08], variant: "verbose",  reasoning: "Stuck" },
+    { name: "Priya K.",  lp: "L4", lpProbs: {L1:.02,L2:.05,L3:.18,L4:.75}, conf: 0.88, src: "rubric_grader",   concept: "integer_division",stage: "4b", attr: "adaptive", imposter: false, plateau: false, wm: null,    flags: {substance:false, mech_vocab:true,  l2_rule:false, parroting:false, transfer:true},  intervention: "transfer_task",     masteryDelta: +0.18, reward: 0.62, rewardHist: [0.32, 0.41, 0.50, 0.58, 0.62], variant: "control",  reasoning: "Strong" },
+    { name: "Carlos M.", lp: "L2", lpProbs: {L1:.18,L2:.58,L3:.20,L4:.04}, conf: 0.55, src: "hvsae",           concept: "infinite_loop",   stage: "2b", attr: "neutral",  imposter: false, plateau: false, wm: "IL-A",  flags: {substance:false, mech_vocab:false, l2_rule:true,  parroting:false, transfer:false}, intervention: "mechanism_walk",    masteryDelta: +0.05, reward: 0.18, rewardHist: [0.05, 0.10, 0.12, 0.15, 0.18], variant: "control",  reasoning: "Developing" },
+    { name: "Aisha D.",  lp: "L1", lpProbs: {L1:.78,L2:.16,L3:.04,L4:.02}, conf: 0.42, src: "overlap",         concept: "string_equality", stage: "1",  attr: "adaptive", imposter: false, plateau: false, wm: "SE-A",  flags: {substance:true,  mech_vocab:false, l2_rule:false, parroting:false, transfer:false}, intervention: "worked_example",    masteryDelta: +0.02, reward: 0.05, rewardHist: [0.00, 0.02, 0.04, 0.04, 0.05], variant: "verbose",  reasoning: "Emerging" },
+    { name: "Liam W.",   lp: "L3", lpProbs: {L1:.05,L2:.18,L3:.63,L4:.14}, conf: 0.74, src: "trained_wm_head", concept: "type_mismatch",   stage: "3",  attr: "adaptive", imposter: false, plateau: false, wm: null,    flags: {substance:false, mech_vocab:true,  l2_rule:false, parroting:false, transfer:false}, intervention: "mechanism_walk",    masteryDelta: +0.10, reward: 0.38, rewardHist: [0.18, 0.24, 0.30, 0.34, 0.38], variant: "control",  reasoning: "Strong" },
+    { name: "Sophie L.", lp: "L2", lpProbs: {L1:.12,L2:.66,L3:.18,L4:.04}, conf: 0.59, src: "trained_wm_head", concept: "variable_scope",  stage: "2b", attr: "neutral",  imposter: false, plateau: false, wm: "VS-B",  flags: {substance:false, mech_vocab:false, l2_rule:true,  parroting:false, transfer:false}, intervention: "rule_naming",       masteryDelta: +0.06, reward: 0.22, rewardHist: [0.08, 0.12, 0.16, 0.20, 0.22], variant: "control",  reasoning: "Developing" },
+    { name: "Ethan P.",  lp: "L1", lpProbs: {L1:.82,L2:.13,L3:.03,L4:.02}, conf: 0.38, src: "overlap",         concept: "null_pointer",    stage: "1",  attr: "external", imposter: true,  plateau: false, wm: "NP-C",  flags: {substance:true,  mech_vocab:false, l2_rule:false, parroting:false, transfer:false}, intervention: "attribution_reframe", masteryDelta: 0.00, reward: -0.12, rewardHist: [-0.05,-0.08,-0.10,-0.11,-0.12], variant: "control", reasoning: "Emerging" },
+  ];
+  const lpColor = (lp) => ({ L1: COLORS.danger, L2: COLORS.warning, L3: COLORS.blue, L4: COLORS.success }[lp]);
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, marginBottom: 20 }}>
+      {[
+        { label: "Active Students",     value: "26/30", sub: "4 not started",     icon: "\u{1F465}", color: COLORS.primary },
+        { label: "Avg. LP Level",       value: "L2.3",  sub: "across class",      icon: "\u{1F4C8}", color: COLORS.success },
+        { label: "Plateau Warnings",    value: "3",     sub: "stuck at L2 ≥2 turns", icon: "\u{1F6A9}", color: COLORS.danger },
+        { label: "WM Catalogue Hits",   value: "12",    sub: "this session",      icon: "\u{1F50D}", color: COLORS.accent },
+      ].map((m) => (
+        <Card key={m.label} style={{ padding: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <WireframeTag>{m.label}</WireframeTag>
+              <div style={{ fontFamily: fonts.display, fontSize: 28, color: m.color, marginTop: 4 }}>{m.value}</div>
+              <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 2 }}>{m.sub}</div>
+            </div>
+            <span style={{ fontSize: 24 }}>{m.icon}</span>
+          </div>
+        </Card>
+      ))}
+
+      {/* AI Insight — Wrong-Model Distribution */}
+      <div style={{ gridColumn: "1 / 3" }}>
+        <Card>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <div>
+              <WireframeTag color={COLORS.primary}>AI-Generated Insight · Wrong-Model Distribution</WireframeTag>
+              <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>Most Common Misconceptions Today</h3>
+            </div>
+            <Badge color={COLORS.accent}>Live</Badge>
+          </div>
+          <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 14, border: `1px solid ${COLORS.accent}33`, marginBottom: 16 }}>
+            <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+              <strong style={{ color: COLORS.accent }}>{"\u{1F916}"} AI Summary:</strong> 8 of 26 students hit <strong>SE-A</strong> ("== works on Strings like int" — reference/value confusion). Suggested intervention: <strong>5-minute reference-vs-value mini-lesson</strong> before next class — same mechanism applies to today's autoboxing exercise. Watch out for <strong>NP-A misconception</strong> creeping in tomorrow's null-pointer concept.
+            </p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { id: "SE-A", label: "JVM bug belief (string ==)",     pct: 31, color: COLORS.danger,  count: 8 },
+              { id: "NP-A", label: "Default-constructor will init",  pct: 19, color: COLORS.warning, count: 5 },
+              { id: "IL-A", label: "println advances loop variable", pct: 15, color: COLORS.accent,  count: 4 },
+              { id: "ID-B", label: "Assignment promotes both ops",   pct: 11, color: COLORS.blue,    count: 3 },
+            ].map((wm) => (
+              <div key={wm.id}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                  <span style={{ fontSize: 11, color: COLORS.textMid }}>
+                    <span style={{ fontFamily: fonts.mono, fontWeight: 700, color: wm.color }}>{wm.id}</span> · {wm.label}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: wm.color }}>{wm.count} students ({wm.pct}%)</span>
+                </div>
+                <ProgressBar value={wm.pct} color={wm.color} />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* LP-level distribution */}
+      <div style={{ gridColumn: "3 / 5" }}>
+        <Card>
+          <WireframeTag>LP Rubric Distribution — Real-Time</WireframeTag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 16px", color: COLORS.text }}>Where Is the Class on the Rubric?</h3>
+          <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 100, marginBottom: 12 }}>
+            {[
+              { lp: "L1", label: "Symptom",   n: 5 },
+              { lp: "L2", label: "Rule",      n: 9 },
+              { lp: "L3", label: "Mechanism", n: 8 },
+              { lp: "L4", label: "Transfer",  n: 4 },
+            ].map((s) => (
+              <div key={s.lp} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: lpColor(s.lp) }}>{s.n}</span>
+                <div style={{ width: "100%", height: `${(s.n / 9) * 80}px`, minHeight: 8, borderRadius: 6, background: lpColor(s.lp), transition: "height 0.4s" }} />
+                <span style={{ fontSize: 10, fontFamily: fonts.mono, color: lpColor(s.lp), fontWeight: 700 }}>{s.lp}</span>
+                <span style={{ fontSize: 9, color: COLORS.textLight, textAlign: "center" }}>{s.label}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <Badge color={COLORS.danger}>3 plateau at L2</Badge>
+            <Badge color={COLORS.success}>4 at L4 transfer</Badge>
+          </div>
+        </Card>
+      </div>
+
+      {/* Module Wiring panel — what backend powers each dashboard widget */}
+      <div style={{ gridColumn: "1 / 5" }}>
+        <Card>
+          <WireframeTag color={COLORS.primary}>Module Wiring · Teacher Dashboard</WireframeTag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 14px", color: COLORS.text }}>Which Backend Drives Each Widget</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {[
+              { ui: "Active Students metric",        mod: "src/persistence/db_store.py",         fn: "audit_log → quiz_session_start" },
+              { ui: "Avg LP Level metric",           mod: "src/orchestrator/lp_diagnostic.py",   fn: "LPDiagnostic.current_lp_level (mean)" },
+              { ui: "Plateau Warnings metric",       mod: "src/orchestrator/lp_diagnostic.py",   fn: "plateau_flag (L2 streak ≥ 2)" },
+              { ui: "WM Catalogue Hits metric",      mod: "src/persistence/db_store.py",         fn: "count(wrong_model_id) per session" },
+              { ui: "Wrong-Model Distribution",      mod: "data/mental_models/wrong_models_catalogue.json", fn: "join with audit log; group by wm_id" },
+              { ui: "LP Rubric Distribution chart",  mod: "src/orchestrator/lp_diagnostic.py",   fn: "histogram of current_lp_level" },
+              { ui: "Tracker · LP column",           mod: "src/orchestrator/lp_diagnostic.py",   fn: "LPDiagnostic.current_lp_level" },
+              { ui: "Tracker · Concept column",      mod: "src/orchestrator/concept_resolver.py", fn: "ConceptResolver.resolve()" },
+              { ui: "Tracker · Plateau column",      mod: "src/orchestrator/lp_diagnostic.py",   fn: "plateau_flag + plateau_intervention" },
+              { ui: "Tracker · WM Hit column",       mod: "src/orchestrator/lp_diagnostic.py",   fn: "LPDiagnostic.wrong_model_id" },
+              { ui: "Tracker · Intervention column", mod: "src/orchestrator/student_state_tracker.py", fn: "InterventionSelector.select()" },
+              { ui: "Tracker · Reasoning column",    mod: "src/orchestrator/student_state_tracker.py", fn: "ContentChannelAnalyser.encoding_strength" },
+            ].map((w) => (
+              <div key={w.ui} style={{ padding: 12, background: COLORS.surfaceAlt, borderRadius: 8, borderLeft: `3px solid ${COLORS.primary}` }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.text, marginBottom: 4 }}>{w.ui}</div>
+                <div style={{ fontSize: 10, color: COLORS.primary, fontFamily: fonts.mono, marginBottom: 2 }}>▸ {w.mod}</div>
+                <div style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono }}>  {w.fn}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* RL Reward decomposition panel — class-wide */}
+      <div style={{ gridColumn: "1 / 5" }}>
+        <Card>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <div>
+              <WireframeTag color={COLORS.primary}>RL Reward Decomposition · Class average this turn</WireframeTag>
+              <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>What's driving learning gain today</h3>
+            </div>
+            <Badge color={COLORS.success}>Total: +0.21</Badge>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10 }}>
+            {[
+              { k: "learning_gain",     w: 0.26, v: +0.30, color: COLORS.success, label: "Learning gain"   },
+              { k: "engagement",        w: 0.15, v: +0.18, color: COLORS.blue,    label: "Engagement"      },
+              { k: "zpd_alignment",     w: 0.15, v: +0.12, color: COLORS.accent,  label: "ZPD alignment"   },
+              { k: "emotional_state",   w: 0.12, v: +0.04, color: COLORS.warning, label: "Emotional state" },
+              { k: "attribution_shift", w: 0.07, v: +0.10, color: COLORS.primary, label: "Attribution Δ"   },
+              { k: "lp_gain",           w: 0.25, v: +0.35, color: COLORS.success, label: "LP gain"         },
+            ].map((c) => (
+              <div key={c.k} style={{ padding: 12, background: COLORS.surfaceAlt, borderRadius: 8, borderTop: `3px solid ${c.color}` }}>
+                <div style={{ fontSize: 10, fontFamily: fonts.mono, color: COLORS.textLight, marginBottom: 4 }}>w={c.w}</div>
+                <div style={{ fontSize: 18, fontFamily: fonts.display, fontWeight: 700, color: c.color, marginBottom: 2 }}>{c.v >= 0 ? '+' : ''}{c.v.toFixed(2)}</div>
+                <div style={{ fontSize: 11, color: COLORS.text, fontWeight: 600 }}>{c.label}</div>
+                <div style={{ fontSize: 9, color: COLORS.textLight, fontFamily: fonts.mono, marginTop: 4 }}>contrib: {(c.v * c.w).toFixed(3)}</div>
+              </div>
+            ))}
+          </div>
+          <WiredTo mod="src/reinforcement_learning/reward_function.py" fn="RewardCalculator.calculate_reward() → 6-component breakdown" />
+        </Card>
+      </div>
+
+      {/* Individual student tracker — full analysis surface */}
+      <div style={{ gridColumn: "1 / 5" }}>
+        <Card style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ padding: "16px 20px 12px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <WireframeTag>Individual Student Tracker · Full Analysis Surface</WireframeTag>
+                <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>LP · Conf · Source · WM · Heuristics · Stage · Attr · Intervention · Mastery Δ · Reward · Variant</h3>
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                <Badge color={COLORS.danger}>Plateau</Badge>
+                <Badge color={COLORS.warning}>WM Hit</Badge>
+                <Badge color={COLORS.success}>Advancing</Badge>
+              </div>
+            </div>
+            <div style={{ fontSize: 10, color: COLORS.textLight, marginTop: 6, fontFamily: fonts.mono }}>
+              ▸ hover LP badge → trained_lp_probs distribution &nbsp; ▸ hover heuristic dots → which fired &nbsp; ▸ hover reward → 6-component breakdown
+            </div>
+          </div>
+          <div style={{ borderTop: `1px solid ${COLORS.border}`, overflowX: "auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "120px 70px 50px 90px 100px 110px 60px 80px 130px 70px 90px 70px 60px", gap: 0, padding: "10px 16px", background: COLORS.surfaceAlt, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, textTransform: "uppercase", letterSpacing: 1 }}>
+              <span>Student</span><span>LP</span><span>Conf</span><span>Source</span><span>Concept</span><span>WM Hit</span><span>Stage</span><span>Attr</span><span>Intervention</span><span>Heur</span><span>Mastery Δ</span><span>Reward</span><span>Variant</span>
+            </div>
+            {students.map((s, i) => (
+              <div key={s.name} style={{ display: "grid", gridTemplateColumns: "120px 70px 50px 90px 100px 110px 60px 80px 130px 70px 90px 70px 60px", alignItems: "center", gap: 0, padding: "12px 16px", borderTop: i > 0 ? `1px solid ${COLORS.border}` : "none", background: s.plateau ? `${COLORS.danger}08` : s.wm ? `${COLORS.warning}06` : "transparent", fontSize: 11 }}>
+                <span style={{ fontWeight: 600, color: COLORS.text }}>{s.name}</span>
+                <Popover
+                  trigger={<span><Badge color={lpColor(s.lp)}>{s.lp}</Badge></span>}
+                  content={
+                    <div>
+                      <div style={{ fontWeight: 700, marginBottom: 6, color: COLORS.text }}>Trained LP probs</div>
+                      {Object.entries(s.lpProbs).map(([k,v]) => (
+                        <div key={k} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+                          <span style={{ fontFamily: fonts.mono, fontSize: 10, fontWeight: 700, color: lpColor(k), width: 18 }}>{k}</span>
+                          <div style={{ flex: 1 }}><ProgressBar value={v * 100} color={lpColor(k)} h={4} /></div>
+                          <span style={{ fontSize: 10, fontFamily: fonts.mono, color: COLORS.textMid, width: 36, textAlign: "right" }}>{(v*100).toFixed(0)}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  }
+                  w={220}
+                />
+                <span style={{ fontFamily: fonts.mono, color: s.conf >= 0.7 ? COLORS.success : s.conf >= 0.5 ? COLORS.warning : COLORS.danger, fontWeight: 700, fontSize: 10 }}>{(s.conf*100).toFixed(0)}%</span>
+                <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMid }}>{s.src}</span>
+                <span style={{ color: COLORS.textMid, fontFamily: fonts.mono, fontSize: 10 }}>{s.concept}</span>
+                {s.wm ? <Badge color={COLORS.warning}>{s.wm}</Badge> : <span style={{ color: COLORS.textLight }}>—</span>}
+                <span style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textMid }}>{s.stage}</span>
+                <Badge color={s.attr === "adaptive" ? COLORS.success : s.attr === "fixed" ? COLORS.danger : s.attr === "external" ? COLORS.warning : COLORS.blue}>{s.attr}{s.imposter && " ⚠"}</Badge>
+                <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMid }}>{s.intervention}</span>
+                <HeuristicDots flags={s.flags} />
+                <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 11, color: s.masteryDelta > 0 ? COLORS.success : s.masteryDelta < 0 ? COLORS.danger : COLORS.textLight }}>{s.masteryDelta >= 0 ? '+' : ''}{(s.masteryDelta * 100).toFixed(1)}%</span>
+                <Popover
+                  trigger={
+                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <span style={{ fontFamily: fonts.mono, fontSize: 10, fontWeight: 700, color: s.reward >= 0 ? COLORS.success : COLORS.danger }}>{s.reward >= 0 ? '+' : ''}{s.reward.toFixed(2)}</span>
+                      <RewardSpark values={s.rewardHist} color={s.reward >= 0 ? COLORS.success : COLORS.danger} h={16} />
+                    </div>
+                  }
+                  content={
+                    <div>
+                      <div style={{ fontWeight: 700, marginBottom: 6, color: COLORS.text }}>Reward breakdown</div>
+                      <div style={{ fontSize: 10, color: COLORS.textLight, marginBottom: 6 }}>Last 5 turns: {s.rewardHist.map(v => v.toFixed(2)).join(', ')}</div>
+                      <div style={{ fontSize: 10, color: COLORS.textMid }}>6-component reward (learning_gain · engagement · zpd_alignment · emotional_state · attribution_shift · lp_gain). Hover the RL Decomposition panel above for class-wide breakdown.</div>
+                    </div>
+                  }
+                  w={220}
+                />
+                <Badge color={s.variant === "verbose" ? COLORS.accent : COLORS.textMid}>{s.variant}</Badge>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+// ─── PARENT VIEW ───
+const ParentView = () => (
+  <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 20 }}>
+    <Card>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+        <div style={{ width: 56, height: 56, borderRadius: 14, background: COLORS.primaryLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontFamily: fonts.display, color: COLORS.primary }}>MR</div>
+        <div>
+          <h2 style={{ fontFamily: fonts.display, fontSize: 22, margin: 0, color: COLORS.text }}>Maya's Java Learning Summary</h2>
+          <p style={{ fontSize: 13, color: COLORS.textMid, margin: "4px 0 0" }}>CSCI 1301 &middot; Prof. Anderson's Class &middot; Week of June 2</p>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20 }}>
+        {[
+          { label: "Concepts mastered", value: "8/26", sub: "of CSCI 1301 catalogue", icon: "\u{1F4DA}" },
+          { label: "LP Level (avg)",   value: "L3",   sub: "mechanism-level reasoning", icon: "\u{1F9E0}" },
+          { label: "Engagement",        value: "High", sub: "avg 18 min/session", icon: "⏱" },
+        ].map((m) => (
+          <div key={m.label} style={{ background: COLORS.surfaceAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
+            <span style={{ fontSize: 20 }}>{m.icon}</span>
+            <div style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.primary, margin: "4px 0" }}>{m.value}</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.text }}>{m.label}</div>
+            <div style={{ fontSize: 10, color: COLORS.textLight }}>{m.sub}</div>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card>
+      <WireframeTag color={COLORS.primary}>LP Rubric Growth — Last 4 weeks</WireframeTag>
+      <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 14px", color: COLORS.text }}>How Maya's Reasoning Is Developing</h3>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 12, height: 120, marginBottom: 12, paddingBottom: 16, borderBottom: `1px solid ${COLORS.border}` }}>
+        {[
+          { wk: "Wk 1", avg: 1.2, color: COLORS.danger  },
+          { wk: "Wk 2", avg: 1.8, color: COLORS.warning },
+          { wk: "Wk 3", avg: 2.5, color: COLORS.blue    },
+          { wk: "Wk 4", avg: 3.0, color: COLORS.success },
+        ].map((w) => (
+          <div key={w.wk} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: w.color }}>L{w.avg}</span>
+            <div style={{ width: "100%", height: `${(w.avg / 4) * 80}px`, borderRadius: 6, background: w.color }} />
+            <span style={{ fontSize: 10, color: COLORS.textLight }}>{w.wk}</span>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>
+        Maya is consistently progressing from <strong>L1 (symptom)</strong> to <strong>L3 (mechanism)</strong> reasoning. She's now able to explain <em>why</em> Java behaves the way it does, not just what happens. Next goal: <strong>L4 (transfer)</strong> — applying the same mechanism to new contexts.
+      </p>
+      <WiredTo mod="src/persistence/db_store.py" fn="progression_for(student, skill) → weekly LP histogram" />
+    </Card>
+
+    <Card>
+      <WireframeTag color={COLORS.primary}>Concepts Maya Worked On</WireframeTag>
+      <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 14px", color: COLORS.text }}>Recent Java Investigations</h3>
+      {[
+        { title: "String Equality",  status: "Mastered L3", date: "Jun 2",  insight: "Maya correctly distinguished `==` (reference) from `.equals()` (content), and applied the mechanism to autoboxing (Integer cache identity)." },
+        { title: "Null Pointer",     status: "Mastered L3", date: "May 30", insight: "Initially held the SE-A misconception that constructor wasn't called; CPAL caught it, traced through default initialization, and Maya now articulates the mechanism cleanly." },
+        { title: "Integer Division", status: "In Progress · L2", date: "Jun 1", insight: "Currently at the rule level. CPAL is scaffolding toward L3 mechanism — runtime type promotion vs. compile-time type checking." },
+      ].map((inv, i) => (
+        <div key={inv.title} style={{ padding: 14, borderRadius: 10, border: `1px solid ${COLORS.border}`, marginBottom: i < 2 ? 10 : 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 700, color: COLORS.text }}>{inv.title}</span>
+              <span style={{ fontSize: 11, color: COLORS.textLight, marginLeft: 8 }}>{inv.date}</span>
+            </div>
+            <Badge color={inv.status.includes("Mastered") ? COLORS.success : COLORS.accent}>{inv.status}</Badge>
+          </div>
+          <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>{inv.insight}</p>
+        </div>
+      ))}
+    </Card>
+
+    <Card>
+      <WireframeTag color={COLORS.primary}>AI Transparency</WireframeTag>
+      <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 14px", color: COLORS.text }}>How CPAL Tutors Your Child</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+        {[
+          { val: "100%", label: "Fact-check pass rate", sub: "this week",                     color: COLORS.success },
+          { val: "0",    label: "Misconceptions repeated", sub: "AI named & refuted each one", color: COLORS.blue },
+          { val: "24/26", label: "Tutor turns with mechanism vocab", sub: "explanations, not rules", color: COLORS.primary },
+        ].map((t) => (
+          <div key={t.label} style={{ padding: 12, background: COLORS.surfaceAlt, borderRadius: 10, textAlign: "center", borderTop: `3px solid ${t.color}` }}>
+            <div style={{ fontFamily: fonts.display, fontSize: 22, color: t.color }}>{t.val}</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.text }}>{t.label}</div>
+            <div style={{ fontSize: 10, color: COLORS.textLight }}>{t.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ background: COLORS.primaryLight, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.primary}33`, marginBottom: 16 }}>
+        <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.7 }}>
+          CPAL's AI tutor gives <strong>mechanism-level explanations</strong> &mdash; it teaches the <em>why</em> behind Java rules, not just the rules themselves. The tutor identifies your child's specific misconception from a <strong>catalogue of 81 named wrong models</strong> (grounded in CS-education research) and addresses it directly. A <strong>fact-check gate</strong> reviews the AI's response before your child sees it, removing known-wrong statements about Java mechanisms. <strong>No personal data leaves the classroom.</strong>
+        </p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {[
+          { icon: "\u{1F4D6}", title: "Mechanism teaching",   desc: "Explains heap/stack/reference — not just rules to memorize.",  mod: "api/student_app.py · _shape_for_level" },
+          { icon: "\u{1F50D}", title: "Misconception named",  desc: "Identifies the specific belief and refutes it with JLS evidence.", mod: "lp_diagnostic.py · wrong_model_id" },
+          { icon: "✅",      title: "Fact-checked output",    desc: "Regex gate strips known-wrong claims before your child sees them.", mod: "_factcheck_mechanism_claims" },
+          { icon: "\u{1F4A1}", title: "Predict-this closings", desc: "Every response ends with a transfer question — retrieval practice.", mod: "_shape_for_level (L1-L4)" },
+        ].map((f) => (
+          <div key={f.title} style={{ display: "flex", gap: 10, padding: 12, borderRadius: 8, background: COLORS.surfaceAlt }}>
+            <span style={{ fontSize: 20 }}>{f.icon}</span>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.text }}>{f.title}</div>
+              <div style={{ fontSize: 11, color: COLORS.textMid, lineHeight: 1.4 }}>{f.desc}</div>
+              <div style={{ fontSize: 9, color: COLORS.primary, fontFamily: fonts.mono, marginTop: 4 }}>▸ {f.mod}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card style={{ background: COLORS.surfaceAlt }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <span style={{ fontSize: 24 }}>{"\u{1F4AC}"}</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>Questions about Maya's progress?</div>
+          <div style={{ fontSize: 12, color: COLORS.textMid }}>Contact Prof. Anderson or review the full CPAL interaction log</div>
+        </div>
+        <Placeholder label="Contact" h={36} color={COLORS.primary} dashed={false} />
+      </div>
+    </Card>
+  </div>
+);
+
+// ─── MAIN APP ───
+function CPALWireframe() {
+  const [view, setView] = useState("student");
+  const views = [
+    { id: "student", label: "Student Module",   icon: "\u{1F393}", desc: "Java code comprehension flow" },
+    { id: "teacher", label: "Teacher Dashboard", icon: "\u{1F4CB}", desc: "Real-time class LP & WM tracking" },
+    { id: "parent",  label: "Parent View",       icon: "\u{1F468}‍\u{1F469}‍\u{1F467}", desc: "Concept mastery & AI transparency" },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: fonts.body, color: COLORS.text }}>
+      <div style={{ background: COLORS.surface, borderBottom: `1px solid ${COLORS.border}`, padding: "16px 28px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${COLORS.primary}, ${COLORS.primaryDark})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "#fff" }}>{"\u{2615}"}</div>
+          <div>
+            <h1 style={{ fontFamily: fonts.display, fontSize: 22, margin: 0, color: COLORS.text }}>CPAL</h1>
+            <p style={{ fontSize: 10, color: COLORS.textLight, margin: 0, letterSpacing: 1.5, textTransform: "uppercase" }}>Catalogued · Personalised · Adaptive · Learning</p>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 6, background: COLORS.surfaceAlt, padding: 4, borderRadius: 10 }}>
+          {views.map((v) => (
+            <button key={v.id} onClick={() => setView(v.id)}
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 8, border: "none", background: view === v.id ? COLORS.surface : "transparent", boxShadow: view === v.id ? "0 2px 8px rgba(0,0,0,0.08)" : "none", cursor: "pointer", fontFamily: fonts.body, fontSize: 13, fontWeight: view === v.id ? 700 : 500, color: view === v.id ? COLORS.primary : COLORS.textMid, transition: "all 0.2s" }}>
+              <span style={{ fontSize: 16 }}>{v.icon}</span>{v.label}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Badge color={COLORS.textMid} bg={COLORS.surfaceAlt}>WIREFRAME</Badge>
+          <Badge color={COLORS.accent} bg={COLORS.accentLight}>CSCI 1301 · JAVA</Badge>
+        </div>
+      </div>
+      <div style={{ padding: "14px 28px", background: COLORS.primaryLight, borderBottom: `1px solid ${COLORS.primary}22`, display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 18 }}>{views.find(v => v.id === view).icon}</span>
+        <div>
+          <span style={{ fontSize: 14, fontWeight: 700, color: COLORS.primaryDark }}>{views.find(v => v.id === view).label}</span>
+          <span style={{ fontSize: 12, color: COLORS.textMid, marginLeft: 10 }}>{views.find(v => v.id === view).desc}</span>
+        </div>
+      </div>
+      <div style={{ padding: 24, maxWidth: 1280, margin: "0 auto" }}>
+        {view === "student" && <StudentView />}
+        {view === "teacher" && <TeacherView />}
+        {view === "parent" && <ParentView />}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<CPALWireframe />, document.getElementById("root"));
+</script>
+</body>
+</html>
