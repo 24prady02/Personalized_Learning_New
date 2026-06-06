@@ -36,10 +36,10 @@ const fonts = {
   body: "'DM Sans', 'Segoe UI', sans-serif",
   mono: "'JetBrains Mono', 'Fira Code', monospace",
 };
-// L0–L4 colour ramp (L0 floor added per the development plan)
-const LP_COLORS = { L0: COLORS.grey, L1: COLORS.danger, L2: COLORS.warning, L3: COLORS.blue, L4: COLORS.success };
+// L1–L4 colour ramp (L1 entry floor → L4 transfer)
+const LP_COLORS = { L1: COLORS.danger, L2: COLORS.warning, L3: COLORS.blue, L4: COLORS.success };
 const lpColor = (lp) => LP_COLORS[lp] || COLORS.grey;
-const LP_NAME = { L0:"Reference", L1:"Symptom", L2:"Rule", L3:"Mechanism", L4:"Transfer" };
+const LP_NAME = { L1:"Symptom", L2:"Rule", L3:"Mechanism", L4:"Transfer" };
 
 // ── shared atoms ──
 const Tag = ({ children, color = COLORS.textLight }) => (
@@ -87,15 +87,248 @@ const Popover = ({ trigger, content, w = 240 }) => {
     </span>
   );
 };
-// LP chips L0–L4
+// LP chips L1–L4
 const LPChips = ({ current }) => (
   <div style={{ display: "flex", gap: 4 }}>
-    {["L0","L1","L2","L3","L4"].map((lv) => {
+    {["L1","L2","L3","L4"].map((lv) => {
       const active = lv === current;
       return <div key={lv} style={{ flex: 1, padding: "6px 0", textAlign: "center", borderRadius: 6, background: active ? lpColor(lv) : COLORS.surface, color: active ? "#fff" : COLORS.textLight, fontSize: 11, fontFamily: fonts.mono, fontWeight: 700, border: `1px solid ${active ? lpColor(lv) : COLORS.border}` }}>{lv}</div>;
     })}
   </div>
 );
+
+/* ════════════════════════ STUDENT KNOWLEDGE GRAPH PANEL ════════════════════════ */
+// Fetches the live student graph from /api/student/graph and renders it as
+// engaged-concept rows + CSO neighbours + edges. Falls back to a curated demo
+// snapshot when the API is unreachable (so the wireframe still demonstrates
+// the wiring offline).
+const StudentGraphPanel = ({ curLP }) => {
+  const [graph, setGraph] = useState(null);
+  const [status, setStatus] = useState("loading");
+
+  React.useEffect(() => {
+    let alive = true;
+    const url = "/api/student/graph";
+    fetch(url, { headers: { Accept: "application/json" } })
+      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
+      .then((data) => { if (alive) { setGraph(data); setStatus("live"); } })
+      .catch(() => { if (alive) { setGraph(DEMO_GRAPH); setStatus("demo"); } });
+    return () => { alive = false; };
+  }, []);
+
+  if (!graph) return <div style={{ fontSize: 11, color: COLORS.textLight, fontFamily: fonts.mono }}>Loading student graph…</div>;
+
+  const engaged = (graph.nodes || []).filter(n => !n.is_neighbour_only);
+  const neighbours = (graph.nodes || []).filter(n => n.is_neighbour_only);
+  const dist = (graph.summary || {}).lp_distribution || { L1:0, L2:0, L3:0, L4:0 };
+  const total = Math.max(1, (dist.L1 + dist.L2 + dist.L3 + dist.L4));
+
+  return (
+    <div>
+      {/* Source indicator */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+        <Badge color={status === "live" ? COLORS.success : COLORS.warning}>
+          {status === "live" ? "✓ live from /api/student/graph" : "⚠ demo snapshot (API unreachable)"}
+        </Badge>
+        <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textLight }}>
+          {engaged.length} engaged · {neighbours.length} CSO neighbours
+        </span>
+      </div>
+
+      {/* LP distribution bar across engaged nodes */}
+      <div style={{ display: "flex", height: 14, borderRadius: 5, overflow: "hidden", border: `1px solid ${COLORS.border}`, marginBottom: 8 }}>
+        {["L1","L2","L3","L4"].map(lv => dist[lv] > 0 ? (
+          <div key={lv} title={`${lv} ${dist[lv]} concepts`}
+               style={{ flex: dist[lv], background: lpColor(lv) }} />
+        ) : null)}
+      </div>
+
+      {/* Engaged concepts — each with EVERY per-turn analysis tied to it */}
+      {engaged.length === 0 ? (
+        <div style={{ fontSize: 11, color: COLORS.textLight, padding: "6px 0" }}>
+          No concepts engaged yet — graph will grow as the student answers.
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
+          {engaged.slice(0, 5).map((n) => {
+            const heur = n.heuristics || {};
+            const heurFired = Object.entries(heur).filter(([, v]) => v).map(([k]) => k);
+            const reward = (n.reward || {}).total;
+            return (
+              <div key={n.cso_slug} style={{ padding: "7px 8px", borderRadius: 6,
+                                              background: COLORS.surfaceAlt,
+                                              borderLeft: `3px solid ${lpColor(n.lp_level)}` }}>
+                {/* Row 1: identity + LP + mastery + Δ + diagnostic confidence */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: COLORS.text, fontFamily: fonts.mono }}>{n.cso_slug}</span>
+                  <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                    <Badge color={lpColor(n.lp_level)}>{n.lp_level}</Badge>
+                    <span style={{ fontSize: 10, color: COLORS.textMid, fontFamily: fonts.mono }}>
+                      mast {Math.round((n.mastery || 0) * 100)}%
+                      {(n.mastery_delta || 0) !== 0 && (
+                        <span style={{ color: (n.mastery_delta > 0) ? COLORS.success : COLORS.danger, marginLeft: 4 }}>
+                          {n.mastery_delta > 0 ? "+" : ""}{(n.mastery_delta * 100).toFixed(0)}%
+                        </span>
+                      )}
+                    </span>
+                    <span style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono }}>
+                      conf {Math.round((n.diagnostic_confidence || 0) * 100)}%
+                    </span>
+                  </span>
+                </div>
+                {/* Row 2: wrong-model badges */}
+                {(n.wrong_models || []).length > 0 && (
+                  <div style={{ display: "flex", gap: 3, marginTop: 4, flexWrap: "wrap" }}>
+                    {n.wrong_models.map(wm => (
+                      <Badge key={wm} color={(n.wrong_models_refuted || []).includes(wm) ? COLORS.success : COLORS.danger}>
+                        {(n.wrong_models_refuted || []).includes(wm) ? "✓" : "!"} {wm}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                {/* Row 3: 3-channel pill row + intervention + reward + heuristics */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 5, alignItems: "center" }}>
+                  {n.cognitive && n.cognitive.encoding_strength && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.successLight, color: COLORS.success }}>
+                      cog · {n.cognitive.encoding_strength}
+                    </span>
+                  )}
+                  {n.progression && n.progression.stage && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.blueLight, color: COLORS.blue }}>
+                      prog · stage {n.progression.stage}
+                    </span>
+                  )}
+                  {n.psychological && n.psychological.attribution && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.accentLight, color: COLORS.accent }}>
+                      psych · {n.psychological.attribution}
+                    </span>
+                  )}
+                  {n.intervention && n.intervention.type && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.primaryLight, color: COLORS.primaryDark, fontWeight: 700 }}>
+                      ⚙ {n.intervention.type}
+                    </span>
+                  )}
+                  {typeof reward === "number" && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: reward >= 0 ? COLORS.successLight : COLORS.dangerLight,
+                                    color: reward >= 0 ? COLORS.success : COLORS.danger, fontWeight: 700 }}>
+                      RL · {reward >= 0 ? "+" : ""}{reward.toFixed(2)}
+                    </span>
+                  )}
+                  {heurFired.length > 0 && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.warningLight, color: COLORS.warning }}>
+                      heur · {heurFired.join(",")}
+                    </span>
+                  )}
+                  {n.probe_state && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: COLORS.surface, color: COLORS.textMid, border: `1px solid ${COLORS.border}` }}>
+                      probe {n.probe_state.count}/{n.probe_state.cap}
+                    </span>
+                  )}
+                  {n.fact_check && (
+                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
+                                    background: n.fact_check.passed ? COLORS.successLight : COLORS.dangerLight,
+                                    color: n.fact_check.passed ? COLORS.success : COLORS.danger }}>
+                      {n.fact_check.passed ? "✓ fact-checked" : `⚠ stripped ${n.fact_check.stripped}`}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* CSO neighbours — concepts the student hasn't touched but are connected */}
+      {neighbours.length > 0 && (
+        <div style={{ marginTop: 6, padding: "6px 8px", borderRadius: 6, background: COLORS.primaryLight + "55" }}>
+          <Tag color={COLORS.primaryDark}>CSO neighbours pulled in</Tag>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginTop: 4 }}>
+            {neighbours.slice(0, 8).map(n => (
+              <span key={n.cso_slug} style={{ fontSize: 9.5, fontFamily: fonts.mono, padding: "2px 6px", borderRadius: 3, background: COLORS.surface, color: COLORS.textMid }}>
+                {n.cso_slug}
+              </span>
+            ))}
+            {neighbours.length > 8 && <span style={{ fontSize: 9.5, color: COLORS.textLight }}>+{neighbours.length - 8} more</span>}
+          </div>
+        </div>
+      )}
+
+      {/* Edges preview */}
+      {(graph.edges || []).length > 0 && (
+        <div style={{ marginTop: 8, fontSize: 9.5, color: COLORS.textLight, fontFamily: fonts.mono, lineHeight: 1.5 }}>
+          {(graph.edges || []).slice(0, 3).map((e, i) => (
+            <div key={i}>▸ {e.src} <span style={{ color: COLORS.primary }}>--{e.rel}--&gt;</span> {e.dst}</div>
+          ))}
+          {graph.edges.length > 3 && <div style={{ marginTop: 2 }}>+{graph.edges.length - 3} more CSO edges</div>}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Demo fallback graph — every per-turn CPAL analysis populated, so the
+// wireframe demonstrates the full surface even when the API is offline.
+// (Mirrors the output of scripts/smoke_test_student_graph.py.)
+const DEMO_GRAPH = {
+  nodes: [
+    {
+      cso_slug: "user_interfaces", cpal_concept: "command_line_args",
+      lp_level: "L3", mastery: 0.78, mastery_delta: 0.23, diagnostic_confidence: 0.81,
+      wrong_models: ["CL-A"], wrong_models_refuted: ["CL-A"],
+      cognitive: { encoding_strength: "solid", dual_coding: "dual" },
+      progression: { stage: "3", zpd_position: "in_zpd", scaffold_level: "low" },
+      psychological: { attribution: "adaptive", imposter_signal: false, high_anxiety: false, self_efficacy: "growth" },
+      intervention: { type: "trace_scaffold", rationale: "plateau cleared at L3 via mechanism trace", gate_triggered: true },
+      reward: { total: 0.62, breakdown: { learning_gain: 0.50, engagement: 0.22, zpd_alignment: 1.00, emotional_state: 0.10, attribution_shift: 0.0, lp_gain: 0.50 } },
+      heuristics: { substance_penalty: false, mech_vocab_bump: true, l2_rule_naming: false, parroting_downgrade: false, transfer_upgrade: false },
+      probe_state: { count: 3, cap: 8, criteria: ["args length", "runtime exception", "args content"] },
+      fact_check: { passed: true, stripped: 0 },
+      turn_count: 3, is_neighbour_only: false,
+    },
+    {
+      cso_slug: "string_matching", cpal_concept: "string_equality",
+      lp_level: "L1", mastery: 0.25, mastery_delta: 0.05, diagnostic_confidence: 0.40,
+      wrong_models: ["SE-A"], wrong_models_refuted: [],
+      cognitive: { encoding_strength: "surface", dual_coding: "verbal_only" },
+      progression: { stage: "1", zpd_position: "overwhelmed", scaffold_level: "high" },
+      psychological: { attribution: "adaptive", imposter_signal: false, high_anxiety: false, self_efficacy: "neutral" },
+      intervention: { type: "worked_example", rationale: "L1 + WM detected on new concept", gate_triggered: false },
+      reward: { total: 0.04, breakdown: { learning_gain: 0.04, engagement: 0.10, zpd_alignment: -0.50, emotional_state: 0.0, attribution_shift: 0.0, lp_gain: 0.0 } },
+      heuristics: { substance_penalty: false, mech_vocab_bump: false, l2_rule_naming: false, parroting_downgrade: false, transfer_upgrade: false },
+      probe_state: { count: 1, cap: 8, criteria: ["== references"] },
+      fact_check: { passed: true, stripped: 0 },
+      turn_count: 1, is_neighbour_only: false,
+    },
+    // CSO neighbours pulled in via real traversal of CSO v3.5
+    { cso_slug: "human-computer_interaction", is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+    { cso_slug: "3d_user_interfaces",         is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+    { cso_slug: "ajax",                       is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+    { cso_slug: "pattern_matching",           is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+    { cso_slug: "string_matching_algorithm",  is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+    { cso_slug: "approximate_string_matching",is_neighbour_only: true, lp_level: "L1", mastery: 0 },
+  ],
+  edges: [
+    { src: "user_interfaces", dst: "human-computer_interaction", rel: "prereq" },
+    { src: "user_interfaces", dst: "3d_user_interfaces",         rel: "sub_topic" },
+    { src: "user_interfaces", dst: "ajax",                       rel: "sub_topic" },
+    { src: "string_matching", dst: "pattern_matching",           rel: "prereq" },
+    { src: "string_matching", dst: "string_matching_algorithm",  rel: "sub_topic" },
+    { src: "string_matching", dst: "approximate_string_matching",rel: "sub_topic" },
+  ],
+  summary: {
+    engaged_count: 2, neighbour_count: 6,
+    lp_distribution: { L1: 1, L2: 0, L3: 1, L4: 0 },
+    active_wms: [["SE-A", "string_matching"]],
+    avg_mastery: 0.515,
+  },
+};
 
 /* ════════════════════════ STUDENT VIEW — CONVERSATION-FIRST ════════════════════════ */
 const StudentView = () => {
@@ -108,63 +341,66 @@ const StudentView = () => {
     { n: 4, label: "Mechanism", icon: "⚙️", desc: "Trace the execution",    lp: "L3" },
     { n: 5, label: "Transfer",  icon: "🔄", desc: "Apply to a variant",     lp: "L4" },
   ];
-  const curLP = ["L0","L1","L2","L3","L4"][step - 1];
+  const LP_ORDER = ["L1","L2","L3","L4"];
+  // Read & Predict sit at the L1 entry floor; Explain→L2, Mechanism→L3, Transfer→L4.
+  const curLP = ["L1","L1","L2","L3","L4"][step - 1];
+  const curIdx = LP_ORDER.indexOf(curLP);
   const diag = {
     lp: curLP,
-    conf: [0.20, 0.46, 0.58, 0.80, 0.91][step - 1],
-    wm: step >= 3 ? "AI-A" : null,
+    conf: [0.28, 0.46, 0.58, 0.80, 0.91][step - 1],
+    wm: step >= 2 && step <= 3 ? "CL-A" : null,
     delta: step === 4 ? 0.16 : step === 5 ? 0.11 : 0,
     probe: step >= 3 ? Math.min(step - 2, 3) : 0,
     plateau: false,
   };
 
   // The conversation thread, grown by step. tutor = CPAL, you = student.
+  // Chapter 1.1 · UseArgument.java — command-line arguments
   const thread = [
-    { who: "tutor", t: "Here's a short Java fragment. Read it first — don't run anything yet. What is each line doing?", show: 1 },
-    { who: "you",   t: "It makes an int array of size 5, then puts a number in position 5.", show: 1 },
-    { who: "tutor", t: "Good read. Now predict: when this runs, what happens at the line scores[5] = 100;?", show: 2 },
-    { who: "you",   t: "It stores 100 in the 5th slot — the last element of the array.", show: 2, lp: "L1" },
-    { who: "tutor", t: "Say a bit more — in your own words, why do you think index 5 is the last element?", show: 3 },
-    { who: "you",   t: "Because there are 5 elements, so I should use index 5 for the last one.", show: 3, lp: "L2", wm: "AI-A" },
-    { who: "tutor", t: "You've named a rule, but let's surface the mechanism. Let's trace the slots together — I'll walk it, you tell me what's in each box.", show: 4, scaffold: true },
-    { who: "you",   t: "Oh — new int[5] allocates slots 0,1,2,3,4. There's no slot 5, so scores[5] asks for a box that was never allocated → it throws ArrayIndexOutOfBoundsException at runtime.", show: 4, lp: "L3" },
-    { who: "tutor", t: "Exactly. Now transfer it: in a for-loop over this array, what's the largest index you can safely write, and why?", show: 5 },
-    { who: "you",   t: "i must stop at length−1, so i < a.length. Same zero-based, bounds-checked model — it's why `i <= a.length` is the classic off-by-one. Applies to every Java array.", show: 5, lp: "L4" },
+    { who: "tutor", t: "Here's the UseArgument program from Chapter 1.1. Read it — don't run it yet. What is line by line happening?", show: 1 },
+    { who: "you",   t: "It prints 'Hi,', then args[0], then '. How are you?'. So args[0] must hold the user's name.", show: 1 },
+    { who: "tutor", t: "Good read. Now predict: I run `java UseArgument` with NO arguments. What happens?", show: 2 },
+    { who: "you",   t: "It'll just print 'Hi, . How are you?' — args[0] is empty when nothing is passed.", show: 2, lp: "L1", wm: "CL-A" },
+    { who: "tutor", t: "Try it. What error did you actually see, and in your own words why?", show: 3 },
+    { who: "you",   t: "I got ArrayIndexOutOfBoundsException at args[0]. So I guess you have to pass at least one argument when calling the program.", show: 3, lp: "L2", wm: "CL-A" },
+    { who: "tutor", t: "You've named the rule. Let's trace the mechanism — I'll show you what `args` actually contains for two different runs, you tell me what's in each box.", show: 4, scaffold: true },
+    { who: "you",   t: "Oh — `args` IS an array. With no args passed, args.length is 0, no slots exist, so args[0] is out of bounds at runtime. With args passed, the JVM puts each one into args[0], args[1], ... starting at index 0.", show: 4, lp: "L3" },
+    { who: "tutor", t: "Exactly. Now transfer: if I run `java UseArgument Alice Bob`, what is args[0] — and how is that different from C's argv[0]?", show: 5 },
+    { who: "you",   t: "args[0] is 'Alice' — the first USER argument. Java strips the program name out before populating args, unlike C where argv[0] is the program path. Same bounds rule applies: only args.length slots exist.", show: 5, lp: "L4" },
   ];
   const visible = thread.filter((m) => m.show <= step);
 
-  // Per-turn PROGRESSION + KNOWLEDGE-GRAPH FORMATION. Evidence wording is taken
-  // from the uploaded LP-evidence table (Arrays cluster). dist = the cumulative
-  // concept-node posterior over L0–L4 AFTER this turn is scored.
+  // Per-level SCENARIO → progression + knowledge-graph formation.
+  // Chapter 1.1 · UseArgument.java · L1→L4 evidence trail.
   const ledger = [
-    { lp:"L0", evid:"Exposure — reads the code; no execution model yet.",
-      resp:"It makes an int array of size 5, then puts a number in position 5.",
-      algo:"concept_resolver.resolve() → array_index",
-      kg:"create node array_index · init posterior", dist:{L0:.6,L1:.4,L2:0,L3:0,L4:0} },
-    { lp:"L1", evid:"Identifies array declaration, creation, indexing, and length.",
-      resp:"It stores 100 in the 5th slot — the last element.",
-      algo:"classify_lp_level() → L1 (symptom)",
-      kg:"posterior[L1] += conf · renormalise", dist:{L0:.1,L1:.7,L2:.2,L3:0,L4:0} },
-    { lp:"L2", evid:"Accesses / updates elements; names a rule, no mechanism.",
-      resp:"Because there are 5 elements, so I use index 5 for the last one.",
-      algo:"match_wrong_model() → AI-A  +  classify_lp_level() → L2 (rule)",
-      kg:"posterior[L2] += · wrong_model=AI-A · lp_streak++", dist:{L0:0,L1:.2,L2:.6,L3:.2,L4:0} },
-    { lp:"L3", evid:"Traces array updates / allocation and bounds.",
-      resp:"new int[5] allocates slots 0–4; index 5 was never allocated → AIOOBE at runtime.",
-      algo:"plateau gate → trace_scaffold · classify_post_reply() → L3, Δlp +1",
-      kg:"posterior[L3] += · delta_lp logged to lp_history", dist:{L0:0,L1:0,L2:.2,L3:.65,L4:.15} },
-    { lp:"L4", evid:"Diagnoses bounds errors; generalises the model.",
-      resp:"i must stop at length−1 (i < a.length). Same model for every Java array.",
-      algo:"classify_lp_level() → L4 (transfer cue)",
-      kg:"posterior[L4] += · reporting_level resolves to L4", dist:{L0:0,L1:0,L2:0,L3:.2,L4:.8} },
+    { lp:"L1", scen:"Predict — what does `java UseArgument` (no args) do?",
+      resp:"It'll print 'Hi, . How are you?' — args[0] is empty when nothing is passed.",
+      evid:"Identifies the print sequence — describes a symptom, names no rule about args.",
+      wm:"CL-A", algo:"classify_lp_level() → L1 (symptom)  ·  match_wrong_model() → CL-A",
+      kg:"create/seed node · posterior[L1] += conf · wm=CL-A", dist:{L1:.72,L2:.23,L3:.05,L4:0} },
+    { lp:"L2", scen:"Explain — what rule did the error reveal?",
+      resp:"I got ArrayIndexOutOfBoundsException — so you have to pass at least one argument.",
+      evid:"States a (correct but shallow) rule, names no mechanism for why args is sized this way.",
+      wm:"CL-A", algo:"match_wrong_model() → CL-A still active  ·  classify_lp_level() → L2 (rule)",
+      kg:"posterior[L2] += · wrong_model=CL-A · lp_streak++", dist:{L1:.2,L2:.6,L3:.2,L4:0} },
+    { lp:"L3", scen:"Mechanism — plateau at L2 fires trace_scaffold; trace `args` for two runs.",
+      resp:"`args` is an array. No args → length 0 → args[0] is out of bounds at runtime. With args, JVM populates index 0 onward.",
+      evid:"Traces array allocation and bounds — articulates the runtime mechanism.",
+      wm:"— (CL-A refuted)", algo:"plateau gate → trace_scaffold  ·  classify_post_reply() → L3, Δlp +1",
+      kg:"posterior[L3] += · delta_lp logged to lp_history", dist:{L1:0,L2:.2,L3:.65,L4:.15} },
+    { lp:"L4", scen:"Transfer — `java UseArgument Alice Bob`: what is args[0], and how does it differ from C's argv[0]?",
+      resp:"args[0] is 'Alice' — the first USER argument. Java strips the program name out; C keeps it as argv[0]. Same bounds rule still applies.",
+      evid:"Diagnoses the args layout; generalises across languages and to multi-arg calls.",
+      wm:"—", algo:"classify_lp_level() → L4 (mechanism + cross-language transfer)",
+      kg:"posterior[L4] += · reporting_level resolves to L4", dist:{L1:0,L2:0,L3:.2,L4:.8} },
   ];
-  const cur = ledger[step - 1];
-  // Arrays concept cluster — L1–L4 evidence rows (uploaded LP-evidence table)
+  const cur = ledger[curIdx];
+  // Chapter 1.1 concept cluster — L1–L4 evidence rows (Hello World + Command-line args)
   const cluster = [
-    { lp:"L1", txt:"Identifies array declaration, creation, indexing, and length." },
-    { lp:"L2", txt:"Accesses and updates simple array elements." },
-    { lp:"L3", txt:"Traces array updates inside loops and nested loops." },
-    { lp:"L4", txt:"Diagnoses bounds errors, reference comparison, array-algorithm behavior." },
+    { lp:"L1", txt:"Identifies the basic Java program structure (class, main, println, ;)." },
+    { lp:"L2", txt:"States the rule for compile vs runtime errors and command-line invocation." },
+    { lp:"L3", txt:"Traces how args is populated by the JVM at runtime — bounds, zero-indexed." },
+    { lp:"L4", txt:"Generalises across multi-arg calls and contrasts with C's argv layout." },
   ];
   const ALGO = { L1:"classify_lp_level → L1", L2:"match_wrong_model + classify_lp_level → L2",
                  L3:"classify_post_reply → L3 (Δlp +1)", L4:"classify_lp_level → L4" };
@@ -197,15 +433,15 @@ const StudentView = () => {
       {/* LEFT — concept + pathway */}
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         <Card style={{ padding: 16 }}>
-          <Tag>Current Concept · Chapter 1 §1.4</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 4px", color: COLORS.text }}>Array Indexing</h3>
-          <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.5 }}>CSCI 1301 · Java fundamentals · Sedgewick &amp; Wayne §1.4</p>
+          <Tag>Current Concept · Chapter 1 §1.1</Tag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 4px", color: COLORS.text }}>Command-line arguments</h3>
+          <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.5 }}>Princeton intro: Sedgewick &amp; Wayne §1.1 · UseArgument.java</p>
           <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
             <Tag>Progress</Tag><span style={{ fontSize: 11, fontWeight: 700, color: COLORS.primary }}>Step {step}/5</span>
           </div>
           <Bar value={step} max={5} />
           <div style={{ marginTop: 14, padding: 10, background: COLORS.surfaceAlt, borderRadius: 8 }}>
-            <Tag>Your LP level (L0 floor → L4 transfer)</Tag>
+            <Tag>Your LP level (L1 entry → L4 transfer)</Tag>
             <div style={{ marginTop: 6 }}><LPChips current={curLP} /></div>
             <Confidence value={diag.conf} />
             <Wired mod="lp_diagnostic.py" fn="classify_lp_level → current_lp_level + confidence" />
@@ -238,10 +474,18 @@ const StudentView = () => {
             </div>
             <Badge color={COLORS.accent} bg={COLORS.accentLight}>Step {step}: {steps[step-1].label}</Badge>
           </div>
-          <Code>{`int[] scores = new int[5];
-scores[5] = 100;   // student: "the 5th / last element"`}</Code>
-          <Wired mod="data/quiz_bank.json" fn="items[array_index].code" />
-          <div style={{ marginTop: 14, maxHeight: 360, overflowY: "auto", paddingRight: 4 }}>
+          <Code>{`public class UseArgument {
+   public static void main(String[] args) {
+      System.out.print("Hi, ");
+      System.out.print(args[0]);   // student tries: java UseArgument  (no args)
+      System.out.println(". How are you?");
+   }
+}`}</Code>
+          <Wired mod="data/quiz_bank.json" fn="items[command_line_args].code  (Princeton §1.1)" />
+          <div style={{ marginTop: 10, padding: "7px 11px", borderRadius: 8, background: COLORS.primaryLight, border: `1px solid ${COLORS.primary}22`, fontSize: 11, color: COLORS.primaryDark, lineHeight: 1.5 }}>
+            ↻ After <strong>every</strong> student message, <span style={{ fontFamily: fonts.mono }}>diagnose()</span> re-runs: the wrong model is caught at the <strong>first</strong> reply (L1) and re-checked each turn — matched at L1–L2, refuted once the mechanism is reached (L3).
+          </div>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column" }}>
             {visible.map((m, i) => <Bubble key={i} m={m} />)}
           </div>
           {step < 5 ? (
@@ -251,7 +495,7 @@ scores[5] = 100;   // student: "the 5th / last element"`}</Code>
             </div>
           ) : (
             <div style={{ marginTop: 6, padding: "11px 14px", borderRadius: 10, background: COLORS.successLight, border: `1px solid ${COLORS.success}44`, color: COLORS.success, fontWeight: 700, fontSize: 13, textAlign: "center" }}>
-              ✓ Reached L4 transfer on Array Indexing — concept distribution written to the Student KG
+              ✓ Reached L4 transfer on Command-line arguments — concept distribution written to the Student KG
             </div>
           )}
           <Wired mod="lp_diagnostic.py + api/student_app.py" fn="diagnose() → LP-shaped Socratic prompt (never gives the answer)" />
@@ -265,7 +509,7 @@ scores[5] = 100;   // student: "the 5th / last element"`}</Code>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontSize: 12, color: COLORS.textMid }}>Concept</span>
-              <Badge color={COLORS.primary}>array_index</Badge>
+              <Badge color={COLORS.primary}>command_line_args</Badge>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontSize: 12, color: COLORS.textMid }}>LP level</span>
@@ -280,16 +524,24 @@ scores[5] = 100;   // student: "the 5th / last element"`}</Code>
               <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{diag.probe}/8</span>
             </div>
           </div>
-          {diag.wm && <div style={{ marginTop: 10, padding: 10, background: COLORS.dangerLight, borderRadius: 8, fontSize: 11, color: COLORS.textMid, lineHeight: 1.5 }}>
-            <strong style={{ color: COLORS.danger }}>AI-A:</strong> "first element is index 1" — refuted by tracing slots 0–4.
-          </div>}
-          <Wired mod="mental_models.py" fn="match_wrong_model() → AI-A from conversation_signals" />
+          <div style={{ marginTop: 10, padding: 10, background: diag.wm ? COLORS.dangerLight : COLORS.surfaceAlt, borderRadius: 8, fontSize: 10.5, color: COLORS.textMid, lineHeight: 1.5 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+              <Tag color={diag.wm ? COLORS.danger : COLORS.textLight}>Wrong mental model · model example</Tag>
+              <Badge color={diag.wm ? COLORS.danger : COLORS.textLight}>{diag.wm ? "matched" : "not active"}</Badge>
+            </div>
+            <div><strong style={{ color: COLORS.danger }}>CL-A · args has defaults / args[0] is the program</strong></div>
+            <div style={{ marginTop: 2 }}><strong>belief:</strong> args[0] is always populated — either with an empty string or with the program name when no arguments are passed.</div>
+            <div><strong>origin:</strong> carryover from C/Python where argv[0] holds the script/program path.</div>
+            <div><strong>signal:</strong> &ldquo;args[0] is empty when nothing passed&rdquo;, &ldquo;args[0] is the program name&rdquo;</div>
+            <div><strong>refutation:</strong> JVM populates args with ONLY user-supplied tokens after the class name. No args → args.length == 0 → args[0] is out of bounds.</div>
+          </div>
+          <Wired mod="mental_models.py · wrong_models_catalogue_v2.json" fn="match_wrong_model() → CL-A {wrong_belief, origin, signals, refutation}" />
         </Card>
 
         <Card style={{ padding: 16 }}>
           <Tag>Mechanism vocabulary detected</Tag>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 8 }}>
-            {(step >= 4 ? ["allocate","slot","index","runtime","bounds"] : step === 3 ? ["index","element"] : []).map((t) => <Badge key={t} color={step >= 4 ? COLORS.primary : COLORS.textLight}>{t}</Badge>)}
+            {(step >= 4 ? ["array","length","args","runtime","bounds","argv vs args"] : step === 3 ? ["array","args[]","runtime"] : []).map((t) => <Badge key={t} color={step >= 4 ? COLORS.primary : COLORS.textLight}>{t}</Badge>)}
             {step < 3 && <span style={{ fontSize: 11, color: COLORS.textLight }}>none yet — pre-mechanism</span>}
           </div>
           {diag.delta > 0 && <div style={{ marginTop: 10, padding: "8px 12px", background: COLORS.successLight, border: `1px solid ${COLORS.success}44`, borderRadius: 8, fontSize: 12, color: COLORS.success, fontWeight: 700 }}>📈 +{(diag.delta*100).toFixed(0)}% mastery this turn (delta_lp &gt; 0)</div>}
@@ -309,19 +561,22 @@ scores[5] = 100;   // student: "the 5th / last element"`}</Code>
     <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 16 }}>
       <Card>
         <Tag color={COLORS.primary}>How the progression advances &amp; the knowledge graph forms — turn by turn</Tag>
-        <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 10px", color: COLORS.text }}>Array Indexing · L0 → L4</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 10px", color: COLORS.text }}>Command-line arguments · scenarios L1 → L4 (Princeton §1.1)</h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
           {ledger.map((r, i) => {
-            const done = i < step, active = i === step - 1;
+            const active = r.lp === curLP, done = i < curIdx;
             return (
-              <div key={r.lp} style={{ display: "grid", gridTemplateColumns: "44px 1fr", gap: 10, padding: "8px 10px", borderRadius: 8, background: active ? COLORS.primaryLight : done ? COLORS.surfaceAlt : "transparent", opacity: i < step ? 1 : 0.4, border: `1px solid ${active ? COLORS.primary + "55" : "transparent"}` }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div key={r.lp} style={{ display: "grid", gridTemplateColumns: "44px 1fr", gap: 10, padding: "9px 10px", borderRadius: 8, background: active ? COLORS.primaryLight : done ? COLORS.surfaceAlt : "transparent", opacity: i <= curIdx ? 1 : 0.4, border: `1px solid ${active ? COLORS.primary + "55" : "transparent"}` }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                   <Badge color={lpColor(r.lp)}>{r.lp}</Badge>
+                  <span style={{ fontSize: 8, fontFamily: fonts.mono, color: COLORS.textLight }}>{LP_NAME[r.lp]}</span>
                 </div>
                 <div>
+                  <div style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono, marginBottom: 2 }}>SCENARIO · {r.scen}</div>
                   <div style={{ fontSize: 12, color: COLORS.text, fontStyle: "italic" }}>&ldquo;{r.resp}&rdquo;</div>
                   <div style={{ fontSize: 10, color: COLORS.textMid, marginTop: 3 }}>{r.evid}</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
+                    <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: r.wm.startsWith("CL") || r.wm.startsWith("AI") ? COLORS.danger : COLORS.textLight }}>▸ wrong model: {r.wm}</span>
                     <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: COLORS.primary }}>▸ algo: {r.algo}</span>
                     <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: COLORS.success }}>▸ KG: {r.kg}</span>
                   </div>
@@ -330,24 +585,18 @@ scores[5] = 100;   // student: "the 5th / last element"`}</Code>
             );
           })}
         </div>
-        <Wired mod="lp_diagnostic.py + student_state_tracker.py" fn="classify → diagnose → update_mastery → KG write per turn" />
+        <Wired mod="lp_diagnostic.py + student_state_tracker.py" fn="classify → diagnose → update_mastery → KG write per level" />
       </Card>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Card style={{ padding: 16 }}>
-          <Tag color={COLORS.primary}>Knowledge graph forming — concept node posterior</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 15, margin: "6px 0 8px", color: COLORS.text }}>array_index · after step {step}</h3>
-          <div style={{ display: "flex", height: 16, borderRadius: 6, overflow: "hidden", border: `1px solid ${COLORS.border}` }}>
-            {["L0","L1","L2","L3","L4"].map((lv) => cur.dist[lv] > 0 ? <div key={lv} title={lv+" "+Math.round(cur.dist[lv]*100)+"%"} style={{ width: `${cur.dist[lv]*100}%`, background: lpColor(lv), transition: "width 0.4s" }} /> : null)}
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
-            {["L0","L1","L2","L3","L4"].map((lv) => <span key={lv} style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textMid }}><span style={{ width: 8, height: 8, borderRadius: 2, background: lpColor(lv) }} />{lv} {Math.round((cur.dist[lv]||0)*100)}%</span>)}
-          </div>
-          <div style={{ marginTop: 8, fontSize: 10.5, color: COLORS.textMid, lineHeight: 1.5 }}>Reporting level shown only when one bucket dominates; otherwise a straddle (Jin 2019). Mass is added each turn by <span style={{ fontFamily: fonts.mono }}>update_mastery()</span>.</div>
-          <Wired mod="student_state_tracker.py" fn="posterior over {L0..L4} + reporting rule" />
+          <Tag color={COLORS.primary}>Live student knowledge graph · CSO v3.5 grounded</Tag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 15, margin: "6px 0 8px", color: COLORS.text }}>The graph that revolves around the student</h3>
+          <StudentGraphPanel curLP={curLP} />
+          <Wired mod="student_knowledge_graph.py + cso_traversal.py" fn="GET /api/student/graph — nodes (LP+DINA+WM) + CSO neighbours" />
         </Card>
         <Card style={{ padding: 16 }}>
-          <Tag>Arrays concept cluster · LP evidence (uploaded table)</Tag>
+          <Tag>Chapter 1.1 concept cluster · LP evidence trail</Tag>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
             {cluster.map((r) => (
               <div key={r.lp} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "5px 8px", borderRadius: 6, background: r.lp === curLP ? COLORS.primaryLight : COLORS.surfaceAlt }}>
@@ -396,30 +645,26 @@ const TeacherView = () => {
 
   // ── Graph C: student KG (per-concept LP distribution) ──
   const maya = [
-    { c: "program_structure", dist: {L0:0,L1:0,L2:.1,L3:.3,L4:.6}, rep: "L4" },
-    { c: "integer_division",  dist: {L0:0,L1:0,L2:.2,L3:.7,L4:.1}, rep: "L3" },
-    { c: "string_equality",   dist: {L0:0,L1:.05,L2:.15,L3:.65,L4:.15}, rep: "L3" },
-    { c: "loops",             dist: {L0:.05,L1:.5,L2:.4,L3:.05,L4:0}, rep: "L1→L2" },
-    { c: "array_index",       dist: {L0:0,L1:.1,L2:.55,L3:.3,L4:.05}, rep: "L2→L3", plateau: true },
+    { c: "program_structure", dist: {L1:0,L2:.1,L3:.3,L4:.6}, rep: "L4" },
+    { c: "integer_division",  dist: {L1:0,L2:.2,L3:.7,L4:.1}, rep: "L3" },
+    { c: "string_equality",   dist: {L1:.05,L2:.15,L3:.65,L4:.15}, rep: "L3" },
+    { c: "loops",             dist: {L1:.5,L2:.4,L3:.05,L4:0}, rep: "L1→L2" },
+    { c: "array_index",       dist: {L1:.1,L2:.55,L3:.3,L4:.05}, rep: "L2→L3", plateau: true },
   ];
 
-  // ── Graph B: misconception graph (concept → wrong-model → intervention) ──
+  // ── Graph B: THIS student's misconceptions (from her conversation) ──
   const B = {
     concepts: [
-      { id: "array_index",      x: 20,  y: 30,  hits: 8 },
-      { id: "string_equality",  x: 20,  y: 110, hits: 6 },
-      { id: "integer_division", x: 20,  y: 190, hits: 3 },
+      { id: "array_index",     x: 20,  y: 50,  hits: 3 },
+      { id: "string_equality", x: 20,  y: 150, hits: 1 },
     ],
     wms: [
-      { id: "AI-A", label: "index from 1",        x: 300, y: 20,  from: "array_index",      to: "trace_scaffold",  n: 8, lp: "L2" },
-      { id: "AI-B", label: "length = last index", x: 300, y: 80,  from: "array_index",      to: "bounds_task",     n: 5, lp: "L2" },
-      { id: "SE-A", label: "== like int",         x: 300, y: 140, from: "string_equality",  to: "trace_scaffold",  n: 6, lp: "L1" },
-      { id: "ID-B", label: "/ promotes operands", x: 300, y: 200, from: "integer_division", to: "expr_eval_task",  n: 3, lp: "L2" },
+      { id: "AI-A", label: "index from 1", x: 300, y: 40,  from: "array_index",     to: "trace_scaffold",  n: 3, lp: "L2" },
+      { id: "SE-A", label: "== like int",  x: 300, y: 140, from: "string_equality", to: "worked_example",  n: 1, lp: "L1" },
     ],
     intvs: [
-      { id: "trace_scaffold",  label: "Trace scaffold",       x: 580, y: 40  },
-      { id: "bounds_task",     label: "Bounds / last-index",  x: 580, y: 110 },
-      { id: "expr_eval_task",  label: "Expression eval",      x: 580, y: 180 },
+      { id: "trace_scaffold",  label: "Trace scaffold",  x: 580, y: 50  },
+      { id: "worked_example",  label: "Worked example",  x: 580, y: 150 },
     ],
   };
   const cNode = (c) => ({ x: c.x, y: c.y, w: 130, h: 40 });
@@ -429,10 +674,10 @@ const TeacherView = () => {
   const findI = (id) => B.intvs.find(i => i.id === id);
 
   const metrics = [
-    { label: "Active students", value: "26/30", sub: "4 not started", icon: "👥", color: COLORS.primary },
-    { label: "Avg LP level",    value: "L2.1",  sub: "Chapter 1",     icon: "📈", color: COLORS.success },
-    { label: "At L0 floor",     value: "2",     sub: "no exec model",  icon: "🪧", color: COLORS.grey },
-    { label: "Plateau warnings",value: "3",     sub: "L2 ≥ 2 turns",   icon: "🚩", color: COLORS.danger },
+    { label: "Student",          value: "Maya R.",     sub: "CSCI 1301",     icon: "🧑‍🎓", color: COLORS.primary },
+    { label: "Current concept",  value: "array_index", sub: "§1.4",          icon: "📍", color: COLORS.success },
+    { label: "LP level",         value: "L2→L3",       sub: "straddle",      icon: "📈", color: COLORS.warning },
+    { label: "Active wrong model",value: "AI-A",        sub: "index from 1",  icon: "🔍", color: COLORS.danger },
   ];
 
   return (
@@ -457,8 +702,8 @@ const TeacherView = () => {
       <Card>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <div>
-            <Tag color={COLORS.primary}>Graph A · Prerequisite DAG (diagnostic, not a teaching order)</Tag>
-            <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>Chapter 1 Concept Dependencies (§1.1–§1.6)</h3>
+            <Tag color={COLORS.primary}>Graph A · Prerequisite knowledge graph (built from the CSE-KG)</Tag>
+            <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>Maya's prerequisite path · Chapter 1 (§1.1–§1.6)</h3>
           </div>
           <div style={{ display: "flex", gap: 6 }}>
             <Badge color={COLORS.success}>≥75% mastered</Badge>
@@ -466,7 +711,7 @@ const TeacherView = () => {
             <Badge color={COLORS.danger}>&lt;50%</Badge>
           </div>
         </div>
-        <p style={{ fontSize: 12, color: COLORS.textMid, margin: "0 0 8px", lineHeight: 1.5 }}>Nodes tinted by class-average mastery. Used to decide whether an error on Arrays is really an upstream gap in Loops or Types.</p>
+        <p style={{ fontSize: 12, color: COLORS.textMid, margin: "0 0 8px", lineHeight: 1.5 }}>Nodes and edges come from the CSE-KG <span style={{ fontFamily: fonts.mono }}>requiresKnowledge</span> relations (an arrow points from a concept to what it depends on). Tint = <strong>this student's</strong> mastery — so Maya's weak Arrays node is read against its upstream Loops/Types prerequisites.</p>
         <svg viewBox="0 0 880 270" style={{ width: "100%", height: "auto" }}>
           <defs>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -476,14 +721,14 @@ const TeacherView = () => {
           {Aedges.map(([a,b],i) => <path key={i} d={edgePath(A[a],A[b])} fill="none" stroke={COLORS.primary} strokeWidth="1.6" opacity="0.55" markerEnd="url(#arrA)" />)}
           {Object.values(A).map((n,i) => <GNode key={i} {...n} fill={masteryFill(n.mastery)} stroke={masteryStroke(n.mastery)} />)}
         </svg>
-        <Wired mod="pedagogical_kg_schema.py" fn="isPrerequisiteOf edges · node mastery = mean(student KG distribution)" />
+        <Wired mod="cse_kg_client.py · local_cse_kg_client.py" fn="get_prerequisites() / build_concept_subgraph() · requiresKnowledge edges · node tint = this student's posterior" />
       </Card>
 
       {/* GRAPH B + Graph C side by side */}
       <div style={{ display: "grid", gridTemplateColumns: "1.25fr 1fr", gap: 16 }}>
         {/* GRAPH B — misconception graph */}
         <Card>
-          <Tag color={COLORS.primary}>Graph B · Misconception graph</Tag>
+          <Tag color={COLORS.primary}>Graph B · Maya's misconceptions (from her conversation)</Tag>
           <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 8px", color: COLORS.text }}>Concept → Wrong model → Intervention</h3>
           <svg viewBox="0 0 740 250" style={{ width: "100%", height: "auto" }}>
             <defs>
@@ -499,11 +744,11 @@ const TeacherView = () => {
             <text x="85" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>CONCEPT</text>
             <text x="375" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>WRONG MODEL</text>
             <text x="655" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>INTERVENTION</text>
-            {B.concepts.map((c,i) => <GNode key={"c"+i} {...cNode(c)} label={c.id} sub={c.hits + " students"} fill={COLORS.primaryLight} stroke={COLORS.primary} />)}
-            {B.wms.map((w,i) => <GNode key={"w"+i} {...wNode(w)} label={w.id + " · " + w.label} sub={"caps " + w.lp + " · n=" + w.n} fill={COLORS.dangerLight} stroke={COLORS.danger} />)}
+            {B.concepts.map((c,i) => <GNode key={"c"+i} {...cNode(c)} label={c.id} sub={c.hits + " turns"} fill={COLORS.primaryLight} stroke={COLORS.primary} />)}
+            {B.wms.map((w,i) => <GNode key={"w"+i} {...wNode(w)} label={w.id + " · " + w.label} sub={"caps " + w.lp + " · ×" + w.n} fill={COLORS.dangerLight} stroke={COLORS.danger} />)}
             {B.intvs.map((it,i) => <GNode key={"i"+i} {...iNode(it)} label={it.label} fill={COLORS.successLight} stroke={COLORS.success} />)}
           </svg>
-          <Wired mod="wrong_models_catalogue_v2.json" fn="hasMisconception / addressesMisconception · edge width = #students" />
+          <Wired mod="mental_models.py · match_wrong_model()" fn="from THIS student's chat · edge width = times signalled in her conversation" />
         </Card>
 
         {/* GRAPH C — student knowledge graph */}
@@ -512,7 +757,7 @@ const TeacherView = () => {
           <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 8px", color: COLORS.text }}>Maya R. — per-concept LP distribution</h3>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <div style={{ width: 40, height: 40, borderRadius: 11, background: COLORS.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fonts.display, fontSize: 16 }}>MR</div>
-            <div style={{ fontSize: 11, color: COLORS.textMid, lineHeight: 1.4 }}>Each concept stores a <strong>distribution over L0–L4</strong>, not one hard level. Reporting level shown only when a level dominates; otherwise a straddle (Jin 2019).</div>
+            <div style={{ fontSize: 11, color: COLORS.textMid, lineHeight: 1.4 }}>Each concept stores a <strong>distribution over L1–L4</strong>, not one hard level. Reporting level shown only when a level dominates; otherwise a straddle (Jin 2019).</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             {maya.map((m) => (
@@ -524,106 +769,103 @@ const TeacherView = () => {
                     <Badge color={m.rep.includes("→") ? COLORS.warning : lpColor(m.rep)}>{m.rep}</Badge>
                   </span>
                 </div>
-                {/* stacked L0–L4 distribution bar */}
+                {/* stacked L1–L4 distribution bar */}
                 <div style={{ display: "flex", height: 10, borderRadius: 5, overflow: "hidden", border: `1px solid ${COLORS.border}` }}>
-                  {["L0","L1","L2","L3","L4"].map((lv) => m.dist[lv] > 0 ? <div key={lv} title={lv+" "+Math.round(m.dist[lv]*100)+"%"} style={{ width: `${m.dist[lv]*100}%`, background: lpColor(lv) }} /> : null)}
+                  {["L1","L2","L3","L4"].map((lv) => m.dist[lv] > 0 ? <div key={lv} title={lv+" "+Math.round(m.dist[lv]*100)+"%"} style={{ width: `${m.dist[lv]*100}%`, background: lpColor(lv) }} /> : null)}
                 </div>
               </div>
             ))}
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-            {["L0","L1","L2","L3","L4"].map((lv) => <span key={lv} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textMid }}><span style={{ width: 9, height: 9, borderRadius: 2, background: lpColor(lv) }} />{lv} {LP_NAME[lv]}</span>)}
+            {["L1","L2","L3","L4"].map((lv) => <span key={lv} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textMid }}><span style={{ width: 9, height: 9, borderRadius: 2, background: lpColor(lv) }} />{lv} {LP_NAME[lv]}</span>)}
           </div>
-          <Wired mod="student_state_tracker.py" fn="(student, concept) → posterior over {L0..L4} + reporting rule" />
+          <Wired mod="student_state_tracker.py" fn="(student, concept) → posterior over {L1..L4} + reporting rule" />
         </Card>
       </div>
 
-      {/* live rollups: LP distribution (L0–L4) + most-common misconceptions */}
+      {/* live rollups: LP distribution (L1–L4) + most-common misconceptions */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <Card>
-          <Tag>LP Rubric Distribution — class, this concept</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 14px", color: COLORS.text }}>Where Is the Class on the Rubric?</h3>
+          <Tag>LP across Maya's concepts</Tag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 14px", color: COLORS.text }}>Where Is Maya on the Rubric?</h3>
           <div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: 110 }}>
-            {[{lp:"L0",n:2},{lp:"L1",n:5},{lp:"L2",n:9},{lp:"L3",n:7},{lp:"L4",n:3}].map((s) => (
+            {[{lp:"L1",n:1},{lp:"L2",n:1},{lp:"L3",n:2},{lp:"L4",n:1}].map((s) => (
               <div key={s.lp} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: lpColor(s.lp) }}>{s.n}</span>
-                <div style={{ width: "100%", height: `${(s.n/9)*78}px`, minHeight: 6, borderRadius: 6, background: lpColor(s.lp) }} />
+                <div style={{ width: "100%", height: `${(s.n/2)*78}px`, minHeight: 6, borderRadius: 6, background: lpColor(s.lp) }} />
                 <span style={{ fontSize: 10, fontFamily: fonts.mono, color: lpColor(s.lp), fontWeight: 700 }}>{s.lp}</span>
                 <span style={{ fontSize: 8.5, color: COLORS.textLight }}>{LP_NAME[s.lp]}</span>
               </div>
             ))}
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-            <Badge color={COLORS.grey}>2 at L0 floor</Badge>
-            <Badge color={COLORS.danger}>3 plateau at L2</Badge>
-            <Badge color={COLORS.success}>3 at L4 transfer</Badge>
+            <Badge color={COLORS.danger}>array_index plateau at L2</Badge>
+            <Badge color={COLORS.success}>program_structure at L4</Badge>
           </div>
-          <Wired mod="lp_diagnostic.py" fn="histogram over reporting_level incl L0" />
+          <Wired mod="db_store.py · progression_for(student, concept)" fn="reporting_level per concept for this student" />
         </Card>
 
         <Card>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
             <div>
-              <Tag color={COLORS.accent}>AI-generated insight</Tag>
-              <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Most Common Misconceptions Today</h3>
+              <Tag color={COLORS.accent}>AI-generated insight · this student</Tag>
+              <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Maya's Active Wrong Models</h3>
             </div>
             <Badge color={COLORS.accent}>Live</Badge>
           </div>
           <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 12, border: `1px solid ${COLORS.accent}33`, marginBottom: 12 }}>
             <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.55 }}>
-              <strong style={{ color: COLORS.accent }}>🤖</strong> 8 of 26 students hit <strong>AI-A</strong> ("first element is index 1"). Suggested: a 5-minute zero-based-indexing trace before next class — same model underlies the off-by-one loop bound coming in §1.4.
+              <strong style={{ color: COLORS.accent }}>🤖</strong> Maya is holding <strong>CL-A</strong> ("args[0] is the program name") on command_line_args (§1.1) — signalled across 2 turns, currently capped at L2. Suggested: run the args.length trace; the same misconception will surface in §1.4 array indexing as AI-A ("index from 1"). Pre-empt both with one zero-based mini-lesson.
             </p>
           </div>
           {[
-            { id: "AI-A", label: "array index from 1", n: 8, pct: 31, color: COLORS.danger },
-            { id: "AI-B", label: "length = last index", n: 5, pct: 19, color: COLORS.warning },
-            { id: "SE-A", label: "== works like int",  n: 6, pct: 23, color: COLORS.accent },
-            { id: "ID-B", label: "/ promotes operands", n: 3, pct: 12, color: COLORS.blue },
+            { id: "CL-A", label: "args[0] is the program name",  n: 2, pct: 67, color: COLORS.danger },
+            { id: "AI-A", label: "array index from 1 (§1.4)",    n: 1, pct: 33, color: COLORS.accent },
           ].map((wm) => (
             <div key={wm.id} style={{ marginBottom: 8 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
                 <span style={{ fontSize: 11, color: COLORS.textMid }}><span style={{ fontFamily: fonts.mono, fontWeight: 700, color: wm.color }}>{wm.id}</span> · {wm.label}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: wm.color }}>{wm.n} ({wm.pct}%)</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: wm.color }}>×{wm.n} turns</span>
               </div>
               <Bar value={wm.pct} color={wm.color} />
             </div>
           ))}
-          <Wired mod="wrong_models_catalogue_v2.json + interaction_log.jsonl" fn="group by wrong_model_id" />
+          <Wired mod="match_wrong_model() + interaction_log.jsonl" fn="this student · group by wrong_model_id" />
         </Card>
       </div>
 
-      {/* individual tracker (compact, L0–L4 distribution popover) */}
+      {/* individual tracker (compact, L1–L4 distribution popover) */}
       <Card style={{ padding: 0, overflow: "hidden" }}>
         <div style={{ padding: "16px 20px 12px" }}>
-          <Tag>Individual Student Tracker</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Per-Student LP, Concept, Wrong Model, Plateau</h3>
-          <div style={{ fontSize: 10, color: COLORS.textLight, marginTop: 6, fontFamily: fonts.mono }}>▸ hover the LP badge → the L0–L4 distribution behind the reported level</div>
+          <Tag>Maya's concept tracker</Tag>
+          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Per-Concept LP, Section, Wrong Model, Plateau</h3>
+          <div style={{ fontSize: 10, color: COLORS.textLight, marginTop: 6, fontFamily: fonts.mono }}>▸ hover the LP badge → the L1–L4 distribution behind the reported level</div>
         </div>
         <div style={{ borderTop: `1px solid ${COLORS.border}` }}>
-          <div style={{ display: "grid", gridTemplateColumns: "150px 110px 150px 120px 90px 1fr", padding: "10px 20px", background: COLORS.surfaceAlt, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, textTransform: "uppercase", letterSpacing: 1 }}>
-            <span>Student</span><span>LP (reported)</span><span>Concept</span><span>Wrong model</span><span>Conf</span><span>Intervention</span>
+          <div style={{ display: "grid", gridTemplateColumns: "150px 110px 90px 120px 90px 1fr", padding: "10px 20px", background: COLORS.surfaceAlt, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, textTransform: "uppercase", letterSpacing: 1 }}>
+            <span>Concept</span><span>LP (reported)</span><span>Section</span><span>Wrong model</span><span>Conf</span><span>Intervention</span>
           </div>
           {[
-            { name: "Maya R.",  lp: "L3", rep:"L3", dist:{L0:0,L1:.05,L2:.15,L3:.65,L4:.15}, concept: "array_index", wm: null, conf: .81, intv: "transfer_task", plateau:false },
-            { name: "James T.", lp: "L2", rep:"L2", dist:{L0:0,L1:.1,L2:.74,L3:.13,L4:.03}, concept: "array_index", wm: "AI-A", conf: .62, intv: "trace_scaffold", plateau:true },
-            { name: "Aisha D.", lp: "L1", rep:"L1", dist:{L0:.1,L1:.74,L2:.12,L3:.04,L4:0}, concept: "string_equality", wm: "SE-A", conf: .44, intv: "worked_example", plateau:false },
-            { name: "Ethan P.", lp: "L0", rep:"L0", dist:{L0:.7,L1:.22,L2:.06,L3:.02,L4:0}, concept: "loops", wm: null, conf: .35, intv: "reduce_challenge", plateau:false },
-            { name: "Priya K.", lp: "L4", rep:"L4", dist:{L0:0,L1:0,L2:.05,L3:.2,L4:.75}, concept: "integer_division", wm: null, conf: .88, intv: "transfer_task", plateau:false },
+            { concept: "program_structure", sub:"§1.1", rep:"L4", dist:{L1:0,L2:.1,L3:.3,L4:.6}, wm: null, conf: .92, intv: "transfer_task", plateau:false },
+            { concept: "integer_division",  sub:"§1.2", rep:"L3", dist:{L1:0,L2:.2,L3:.7,L4:.1}, wm: null, conf: .84, intv: "transfer_task", plateau:false },
+            { concept: "string_equality",   sub:"§1.2", rep:"L3", dist:{L1:.05,L2:.15,L3:.65,L4:.15}, wm: null, conf: .78, intv: "transfer_task", plateau:false },
+            { concept: "loops",             sub:"§1.3", rep:"L1→L2", dist:{L1:.5,L2:.4,L3:.05,L4:0}, wm: null, conf: .47, intv: "trace_scaffold", plateau:false },
+            { concept: "array_index",       sub:"§1.4", rep:"L2→L3", dist:{L1:.1,L2:.55,L3:.3,L4:.05}, wm: "AI-A", conf: .62, intv: "trace_scaffold", plateau:true },
           ].map((s, i) => (
-            <div key={s.name} style={{ display: "grid", gridTemplateColumns: "150px 110px 150px 120px 90px 1fr", alignItems: "center", padding: "12px 20px", borderTop: i ? `1px solid ${COLORS.border}` : "none", background: s.plateau ? `${COLORS.danger}08` : s.wm ? `${COLORS.warning}06` : "transparent", fontSize: 12 }}>
-              <span style={{ fontWeight: 600 }}>{s.name}</span>
+            <div key={s.concept} style={{ display: "grid", gridTemplateColumns: "150px 110px 90px 120px 90px 1fr", alignItems: "center", padding: "12px 20px", borderTop: i ? `1px solid ${COLORS.border}` : "none", background: s.plateau ? `${COLORS.danger}08` : s.wm ? `${COLORS.warning}06` : "transparent", fontSize: 12 }}>
+              <span style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 600 }}>{s.concept}</span>
               <Popover w={210}
-                trigger={<span style={{ display:"inline-flex", gap:6, alignItems:"center" }}><Badge color={lpColor(s.rep)}>{s.rep}</Badge>{s.plateau && <Badge color={COLORS.danger}>🚩</Badge>}</span>}
-                content={<div><div style={{ fontWeight: 700, marginBottom: 6, color: COLORS.text }}>LP distribution</div>{["L0","L1","L2","L3","L4"].map((lv) => (<div key={lv} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}><span style={{ fontFamily: fonts.mono, fontSize: 10, fontWeight: 700, color: lpColor(lv), width: 18 }}>{lv}</span><div style={{ flex: 1 }}><Bar value={(s.dist[lv]||0)*100} color={lpColor(lv)} h={4} /></div><span style={{ fontSize: 10, fontFamily: fonts.mono, color: COLORS.textMid, width: 32, textAlign: "right" }}>{Math.round((s.dist[lv]||0)*100)}%</span></div>))}</div>}
+                trigger={<span style={{ display:"inline-flex", gap:6, alignItems:"center" }}><Badge color={s.rep.includes("→") ? COLORS.warning : lpColor(s.rep)}>{s.rep}</Badge>{s.plateau && <Badge color={COLORS.danger}>🚩</Badge>}</span>}
+                content={<div><div style={{ fontWeight: 700, marginBottom: 6, color: COLORS.text }}>LP distribution</div>{["L1","L2","L3","L4"].map((lv) => (<div key={lv} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}><span style={{ fontFamily: fonts.mono, fontSize: 10, fontWeight: 700, color: lpColor(lv), width: 18 }}>{lv}</span><div style={{ flex: 1 }}><Bar value={(s.dist[lv]||0)*100} color={lpColor(lv)} h={4} /></div><span style={{ fontSize: 10, fontFamily: fonts.mono, color: COLORS.textMid, width: 32, textAlign: "right" }}>{Math.round((s.dist[lv]||0)*100)}%</span></div>))}</div>}
               />
-              <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{s.concept}</span>
+              <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{s.sub}</span>
               {s.wm ? <Badge color={COLORS.warning}>{s.wm}</Badge> : <span style={{ color: COLORS.textLight }}>—</span>}
               <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 11, color: s.conf >= .7 ? COLORS.success : s.conf >= .5 ? COLORS.warning : COLORS.danger }}>{Math.round(s.conf*100)}%</span>
               <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{s.intv}</span>
             </div>
           ))}
         </div>
-        <div style={{ padding: "10px 20px" }}><Wired mod="student_state_tracker.py + lp_diagnostic.py" fn="reporting_level · wrong_model_id · plateau_flag · intervention" /></div>
+        <div style={{ padding: "10px 20px" }}><Wired mod="student_state_tracker.py · db_store.progression_for()" fn="this student · reporting_level · wrong_model_id · plateau_flag · intervention" /></div>
       </Card>
     </div>
   );
@@ -658,7 +900,7 @@ const ParentView = () => (
     <Card>
       <Tag color={COLORS.primary}>How Maya's reasoning is developing</Tag>
       <p style={{ fontSize: 13, color: COLORS.textMid, margin: "10px 0 0", lineHeight: 1.7 }}>
-        Maya is moving from <strong>symptom-level</strong> answers ("it crashes") to <strong>mechanism-level</strong> reasoning — she can now explain <em>why</em> Java throws an error when you read past the end of an array, not just that it does. On Array Indexing she's at the rule level and the tutor is walking her through the actual memory slots to reach the mechanism. No personal data leaves the classroom.
+        Maya is moving from <strong>symptom-level</strong> answers ("it crashes") to <strong>mechanism-level</strong> reasoning — she can now explain <em>why</em> Java throws an error when you ask for an args[] slot that doesn't exist, not just that it does. On Command-line arguments (§1.1) she's at the rule level and the tutor is walking her through what the JVM actually puts into args[] to reach the mechanism. No personal data leaves the classroom.
       </p>
       <Wired mod="db_store.py" fn="progression_for(student) → weekly LP" />
     </Card>
@@ -670,7 +912,7 @@ function App() {
   const [view, setView] = useState("student");
   const views = [
     { id: "student", label: "Student · Conversation", icon: "🎓", desc: "The tutoring conversation that produces LP evidence" },
-    { id: "teacher", label: "Teacher · Knowledge Graphs", icon: "📋", desc: "Prerequisite DAG · Misconception graph · Student KG" },
+    { id: "teacher", label: "Teacher · This Student", icon: "📋", desc: "Maya R. · prerequisite KG (CSE-KG) · her misconceptions · her LP distribution" },
     { id: "parent",  label: "Parent", icon: "👨‍👩‍👧", desc: "Plain-language progress" },
   ];
   const v = views.find((x) => x.id === view);

@@ -134,6 +134,15 @@ class DBStore:
                     consent_given  INTEGER NOT NULL,
                     consent_iso    TEXT NOT NULL
                 );
+
+                -- CSO-grounded student knowledge graph (added by
+                -- StudentGraphService). One row per student; payload is the
+                -- to_dict() of StudentKnowledgeGraph: nodes + edges + summary.
+                CREATE TABLE IF NOT EXISTS student_graph (
+                    student_id   TEXT PRIMARY KEY,
+                    json_payload TEXT NOT NULL,
+                    updated_iso  TEXT NOT NULL
+                );
             """)
 
     # ── Mastery ────────────────────────────────────────────────────────
@@ -195,6 +204,36 @@ class DBStore:
                 "json_payload=excluded.json_payload, "
                 "updated_iso=excluded.updated_iso",
                 (student_id, payload, _utcnow_iso()),
+            )
+
+    # ── Student Knowledge Graph (CSO-grounded) ─────────────────────────
+    def get_student_graph(self, student_id: str) -> Optional[Dict[str, Any]]:
+        """Return the to_dict() payload of the student's CSO-grounded
+        knowledge graph (StudentKnowledgeGraph), or None if not yet stored."""
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT json_payload FROM student_graph WHERE student_id=?",
+                (student_id,),
+            ).fetchone()
+        if not row:
+            return None
+        try:
+            return json.loads(row[0])
+        except Exception:
+            return None
+
+    def upsert_student_graph(self, student_id: str,
+                              payload: Dict[str, Any]) -> None:
+        """Snapshot the student's knowledge graph after each diagnose() turn."""
+        blob = json.dumps(payload, default=str)
+        with self._lock, self._conn:
+            self._conn.execute(
+                "INSERT INTO student_graph (student_id, json_payload, updated_iso) "
+                "VALUES (?, ?, ?) "
+                "ON CONFLICT(student_id) DO UPDATE SET "
+                "json_payload=excluded.json_payload, "
+                "updated_iso=excluded.updated_iso",
+                (student_id, blob, _utcnow_iso()),
             )
 
     def list_students(self) -> List[str]:

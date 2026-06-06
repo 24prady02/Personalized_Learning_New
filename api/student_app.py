@@ -390,6 +390,22 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
                     question_text=accumulated,
                 )
                 diag_dict = diag_obj.to_dict()
+                # Update the CSO-grounded student knowledge graph — central
+                # data structure that ties LP level + WM + DINA mastery to
+                # the CSO ontology. Soft-fail so the quiz still works if the
+                # graph layer is absent.
+                try:
+                    from src.knowledge_graph.student_graph_service import StudentGraphService
+                    StudentGraphService.shared().record_turn(
+                        student_id=sess.get("student_id", "anon"),
+                        diag=diag_dict,
+                        mastery=sess.get("mastery_after"),
+                        misconception_text=accumulated,
+                        expand_cso=True,
+                        persist=True,
+                    )
+                except Exception as e:
+                    print(f"[QuizApp] StudentGraphService.record_turn failed: {e}")
             except Exception as e:
                 print(f"[QuizApp] LPDiagnostician.diagnose failed: {e}")
                 diag_dict = {}
@@ -756,6 +772,31 @@ def get_item(item_id: str):
 @app.get("/api/health")
 def health():
     return {"status": "ok", "items": len(QUIZ_ITEMS)}
+
+
+# ── Student Knowledge Graph endpoints (added with the CSO-grounded
+# student-graph layer — wireframe + teacher view fetch from here). ──────
+@app.get("/api/student/graph")
+def get_student_graph(request: Request):
+    """Return the CSO-grounded student knowledge graph for the requesting
+    student. Resolved by ?token= or ?student=, falling back to 'anon'.
+
+    Payload shape:
+      { student_id, created_at, updated_at,
+        nodes:    [{cpal_concept, cso_slug, lp_level, mastery,
+                    wrong_models, wrong_models_refuted, turn_count,
+                    is_neighbour_only, ...}],
+        edges:    [{src, dst, rel}],
+        summary:  {engaged_count, neighbour_count, avg_mastery,
+                   lp_distribution, active_wms} }
+    """
+    ident = _resolve_student_id(request)
+    try:
+        from src.knowledge_graph.student_graph_service import StudentGraphService
+        return StudentGraphService.shared().render_payload(ident["student_id"])
+    except Exception as e:
+        raise HTTPException(status_code=500,
+                              detail=f"student graph unavailable: {e}")
 
 
 # ── Identity / consent / GDPR endpoints (wired 2026-05-30) ───────────────────
