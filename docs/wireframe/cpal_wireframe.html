@@ -665,10 +665,20 @@ const HelloWorldLiveView = ({ mode, step, setStep, scenario, setScenario }) => {
           </div>
           <div style={{ marginTop: 5, fontSize: 8.5, fontFamily: fonts.mono, color: COLORS.textLight }}>note · program_structure is the DAG root → no prerequisite to remediate</div>
         </Dash>
-        <Dash title="⑥ Model tutor response" sub="The reply the tutor actually sends — assessment item type drives it; Socratic, shaped by the level; never reveals the answer." tone={COLORS.accent} reads="the reported level + the chosen teaching move + the item type" produces="the actual Socratic reply the student receives" feeds="→ the Student tab; becomes the context for the next turn" mod="enhanced_personalized_generator.py" fn="generate → LP-shaped Socratic reply">
+        <Dash title="⑥ Model tutor response" sub="Not built from one input — the reply is assembled jointly from ALL FIVE analyses (level + mastery + misconception + knowledge graph + intervention) into one prompt; the LLM then writes it." tone={COLORS.accent} reads="all five components together — LP level, mastery, misconception, knowledge-graph context, and the chosen intervention" produces="the actual Socratic reply the student receives" feeds="→ the Student tab; becomes the context for the next turn" mod="enhanced_personalized_generator.py · _build_enhanced_prompt" fn="LP-1 level + rubric · LP-2 wrong-model · KG context · mastery line · recommended_intervention → reply">
           <div style={{ fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, marginBottom: 5 }}>assessment item · {t.item}</div>
           <div style={{ padding: "9px 12px", borderRadius: 10, background: COLORS.accentLight, border: `1px solid ${COLORS.accent}33`, fontSize: 12, color: COLORS.text, lineHeight: 1.55 }}>{t.model}</div>
-          <div style={{ marginTop: 6, fontSize: 10, color: COLORS.textLight }}>Shaped by reported {rep.label} + action <span style={{ fontFamily: fonts.mono }}>{t.policy.action}</span>. Never reveals the answer.</div>
+          <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 8, background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}` }}>
+            <div style={{ fontSize: 8, fontFamily: fonts.mono, color: COLORS.textLight, letterSpacing: 1, marginBottom: 4 }}>HOW THIS REPLY WAS ASSEMBLED · all 5 → prompt → LLM</div>
+            <div style={{ fontSize: 10, color: COLORS.textMid, lineHeight: 1.6 }}>
+              <div><strong style={{ color: lpColor(modalLP) }}>LP level</strong> — aims from {rep.label} one rung up and sets the teaching structure (the six-step rubric).</div>
+              <div><strong style={{ color: COLORS.primary }}>mastery</strong> — {Math.round(masteryNow * 100)}% → {masteryNow < 0.5 ? "heavier scaffolding" : "lighter support"}.</div>
+              <div><strong style={{ color: wmActive ? COLORS.danger : COLORS.success }}>misconception</strong> — {wmActive ? "the reply must refute PS-A (compile = run), using the catalogue refutation" : "none active, so nothing to refute"}.</div>
+              <div><strong style={{ color: COLORS.primary }}>knowledge graph</strong> — grounds the reply in program_structure's real prerequisites/neighbours.</div>
+              <div><strong style={{ color: COLORS.warning }}>intervention</strong> — delivers it as <span style={{ fontFamily: fonts.mono }}>{t.policy.action}</span> ({t.item}).</div>
+            </div>
+            <div style={{ marginTop: 6, fontSize: 9, color: COLORS.textLight, fontStyle: "italic", lineHeight: 1.4 }}>The five build the prompt; the LLM writes the wording; a guardrail strips any fabricated &ldquo;you said…&rdquo; quote. The reply never reveals the answer.</div>
+          </div>
         </Dash>
       </div>
       </React.Fragment>)}
