@@ -2348,6 +2348,76 @@ def _stream_teach(state, diag, history):
     except Exception as _e:
         print(f"[CPAL/Audit] turn_completed write failed: {_e}")
 
+    # ── Couple this turn onto the CSO 3.5 student knowledge graph ─────────
+    # End-to-end binding (added 2026-06-07): when the student answers, the
+    # touched CSO node is updated with EVERY per-turn analysis tied to it —
+    # LP level, DINA mastery, the matched wrong-model + misconception, the
+    # 3-channel psychological state, AND the intervention actually selected
+    # this turn (LP-gated + RL-refined `chosen`). expand_cso=True traces the
+    # 1-hop CSO neighbourhood so the graph shows the surrounding ontology
+    # (CSO.3.5.nt), not just the single node. This is the live feed the
+    # /api/student/graph endpoint + teacher/parent/wireframe views read.
+    # Soft-fail — the student is still taught if the graph layer is down.
+    try:
+        from src.knowledge_graph.student_graph_service import StudentGraphService
+        _sid_graph = state.get("student_id") or "chat_user"
+        _pg = (three_channel_block or {}).get("psychological_graph") or {}
+        # Map the chat-app signals into the {cognitive, progression,
+        # psychological} shape update_from_diagnosis merges onto the node.
+        _enc = ("solid" if dina_now >= 0.70
+                else "developing" if dina_now >= 0.40 else "surface")
+        _stage = {"L1": "1", "L2": "2", "L3": "3", "L4": "4"}.get(
+            diag.get("current_lp_level"), "1")
+        _three_channel_for_graph = {
+            "cognitive":   {"encoding_strength": _enc,
+                            "dina_mastery": round(dina_now, 3),
+                            "bkt_mastery":  round(bkt_now, 3)},
+            "progression": {"stage": _stage,
+                            "scaffold_level": ("high" if dina_now < 0.40
+                                               else "low" if dina_now >= 0.70
+                                               else "medium"),
+                            "plateau": bool(diag.get("plateau_flag"))},
+            "psychological": {"attribution":     _pg.get("attribution"),
+                              "self_efficacy":   _pg.get("self_efficacy"),
+                              "imposter_signal": _pg.get("imposter_flag"),
+                              "high_anxiety":    _pg.get("high_anxiety")},
+        }
+        # The intervention ACTUALLY used this turn (LP-validity gate first,
+        # then refined by the trained RL teaching agent). gate_overrode_rl
+        # records when the LP gate rejected the RL pick.
+        _intervention_for_graph = {
+            "type":             chosen,
+            "rl_action":        rl_action,
+            "rl_q":             round(float(rl_q), 3),
+            "gate_overrode_rl": bool(chosen != rl_action),
+            "rationale":        (f"LP-{diag.get('current_lp_level')} gate + RL "
+                                 f"(q={rl_q:+.2f}) -> {chosen}"),
+        }
+        # Reward is the latest learning signal closed by _rl_finalise_previous
+        # (this turn's own reward isn't known until next turn closes it).
+        _reward_for_graph = ({"total": round(float(state["last_rl_reward"]), 3)}
+                             if "last_rl_reward" in state else None)
+        StudentGraphService.shared().record_turn(
+            student_id=_sid_graph,
+            diag={**(diag or {}), "concept": q["concept"]},
+            mastery=dina_now,
+            misconception_text=reasoning,
+            three_channel=_three_channel_for_graph,
+            intervention=_intervention_for_graph,
+            reward=_reward_for_graph,
+            probe_state={"count":    state.get("probe_count", 0),
+                         "cap":      CHAT_MAX_PROBES,
+                         "criteria": state.get("probed_criteria") or []},
+            expand_cso=True,
+            persist=True,
+        )
+        print(f"[CPAL/Graph] coupled CSO node '{q['concept']}' — "
+              f"lp={diag.get('current_lp_level')} dina={dina_now:.2f} "
+              f"wm={diag.get('wrong_model_id') or '-'} intervention={chosen}",
+              flush=True)
+    except Exception as _e:
+        print(f"[CPAL/Graph] record_turn coupling failed: {_e}")
+
     # Feed this turn's outcome into the dynamic KG updater so prerequisite
     # strengths, misconception frequencies, and intervention effectiveness
     # accumulate across sessions.

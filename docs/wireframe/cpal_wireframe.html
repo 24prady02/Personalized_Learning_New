@@ -36,10 +36,27 @@ const fonts = {
   body: "'DM Sans', 'Segoe UI', sans-serif",
   mono: "'JetBrains Mono', 'Fira Code', monospace",
 };
-// L1–L4 colour ramp (L1 entry floor → L4 transfer)
-const LP_COLORS = { L1: COLORS.danger, L2: COLORS.warning, L3: COLORS.blue, L4: COLORS.success };
+// SOLO-for-code LP scale — Level 0 (prestructural floor) → Level 4 (transfer).
+// Level 1 = unistructural (a single surface aspect, i.e. a symptom).
+const LP_COLORS = { L0: COLORS.textLight, L1: COLORS.danger, L2: COLORS.warning, L3: COLORS.blue, L4: COLORS.success };
 const lpColor = (lp) => LP_COLORS[lp] || COLORS.grey;
-const LP_NAME = { L1:"Symptom", L2:"Rule", L3:"Mechanism", L4:"Transfer" };
+const LP_NAME = { L0:"Prestructural", L1:"Symptom", L2:"Rule", L3:"Mechanism", L4:"Transfer" };
+const LP_FULL = ["L0", "L1", "L2", "L3", "L4"];
+// Documented reporting rule (§4.6): report Lk only when its posterior mass
+// exceeds REPORT_TAU and adjacent mass is below ADJ_TAU; otherwise the student
+// is straddling two levels → report "between Lk–Lk+1". Mastery is the WHOLE
+// distribution; the reporting level is a derived convenience for dashboards.
+const REPORT_TAU = 0.55, ADJ_TAU = 0.30;
+const reportLevel = (dist) => {
+  const ranked = LP_FULL.map((k, i) => ({ k, m: dist[k] || 0, i })).sort((a, b) => b.m - a.m);
+  const top = ranked[0];
+  const adjMass = Math.max(top.i > 0 ? (dist[LP_FULL[top.i - 1]] || 0) : 0,
+                          top.i < 4 ? (dist[LP_FULL[top.i + 1]] || 0) : 0);
+  if (top.m >= REPORT_TAU && adjMass < ADJ_TAU) return { label: top.k, firm: true };
+  const idx = [ranked[0].i, ranked[1].i].sort((a, b) => a - b);
+  if (idx[1] - idx[0] === 1) return { label: `between ${LP_FULL[idx[0]]}–${LP_FULL[idx[1]]}`, firm: false };
+  return { label: top.k, firm: false };
+};
 
 // ── shared atoms ──
 const Tag = ({ children, color = COLORS.textLight }) => (
@@ -97,329 +114,299 @@ const LPChips = ({ current }) => (
   </div>
 );
 
-/* ════════════════════════ STUDENT KNOWLEDGE GRAPH PANEL ════════════════════════ */
-// Fetches the live student graph from /api/student/graph and renders it as
-// engaged-concept rows + CSO neighbours + edges. Falls back to a curated demo
-// snapshot when the API is unreachable (so the wireframe still demonstrates
-// the wiring offline).
-const StudentGraphPanel = ({ curLP }) => {
-  const [graph, setGraph] = useState(null);
-  const [status, setStatus] = useState("loading");
+/* ════════════════════════ HELLO WORLD · LIVE SIMULTANEOUS ANALYSIS ════════════════════════ */
+/* Chapter 1.1 · HelloWorld.java (Princeton introcs 11hello). Every student
+   message recomputes ALL dashboards at once — LP level, DINA mastery,
+   misconception / wrong-model catalogue, CSO 3.5 tracing, intervention
+   selection, and the model tutor response. Static, step-driven content —
+   NOT wired to the backend. */
+const HELLO_CODE = `public class HelloWorld {
+   public static void main(String[] args) {
+      System.out.println("Hello, World");
+   }
+}`;
 
-  React.useEffect(() => {
-    let alive = true;
-    const url = "/api/student/graph";
-    fetch(url, { headers: { Accept: "application/json" } })
-      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
-      .then((data) => { if (alive) { setGraph(data); setStatus("live"); } })
-      .catch(() => { if (alive) { setGraph(DEMO_GRAPH); setStatus("demo"); } });
-    return () => { alive = false; };
-  }, []);
-
-  if (!graph) return <div style={{ fontSize: 11, color: COLORS.textLight, fontFamily: fonts.mono }}>Loading student graph…</div>;
-
-  const engaged = (graph.nodes || []).filter(n => !n.is_neighbour_only);
-  const neighbours = (graph.nodes || []).filter(n => n.is_neighbour_only);
-  const dist = (graph.summary || {}).lp_distribution || { L1:0, L2:0, L3:0, L4:0 };
-  const total = Math.max(1, (dist.L1 + dist.L2 + dist.L3 + dist.L4));
-
+/* Layer-2 ontology + Chapter-1 prerequisite DAG (§4.3–4.7). The centre node
+   program_structure (§1.1) is the ROOT of the prereq DAG. Typed nodes
+   (JavaConcept, LPLevel, Misconception, AssessmentItem, Resource, Evidence)
+   attach via typed edges (prerequisiteOf, alignedToLPLevel, indicatesMis-
+   conception, assessedBy, remediatedBy, demonstrates) as the turn unfolds. */
+const KG_NODES = [
+  { id: "types",   label: "types_expressions §1.2", type: "JavaConcept",    rel: "prerequisiteOf",        dir: "out", appear: 1, x: 565, y: 30 },
+  { id: "lp",      label: "LPLevel  L0–L4",          type: "LPLevel",        rel: "alignedToLPLevel",      dir: "out", appear: 1, x: 565, y: 112 },
+  { id: "item",    label: "trace-table item",        type: "AssessmentItem", rel: "assessedBy",            dir: "out", appear: 4, x: 565, y: 194 },
+  { id: "miscon",  label: "PS-A misconception",      type: "Misconception",  rel: "indicatesMisconception", dir: "out", appear: 2, x: 45,  y: 30 },
+  { id: "res",     label: "§1.1 worksheet",          type: "Resource",       rel: "remediatedBy",          dir: "out", appear: 2, x: 45,  y: 112 },
+  { id: "evid",    label: "student response",        type: "Evidence",       rel: "demonstrates",          dir: "in",  appear: 1, x: 45,  y: 194 },
+];
+// ── STUDENT SCENARIOS ────────────────────────────────────────────────────
+// Each scenario is a different KIND of student. Every turn carries the full
+// per-turn analysis (distribution, confidences, misconception, scoring,
+// tutoring action) plus a graph narration (kg) and how-to-use-it note (use).
+const SCENARIOS = [
+  { id: "steady", label: "Steady learner", who: "Maya",
+    desc: "Holds one misconception, works through it, and climbs L1 → L4 over five turns.",
+    turns: [
+      { you: "It's a class called HelloWorld, and the line inside prints “Hello, World”.",
+        dist: { L0: .15, L1: .62, L2: .18, L3: .05, L4: 0 }, mastery_prev: 0, self_conf: .50, scorer_conf: .50, wm: null, item: "syntax-identification",
+        scoring: { det: "partial — named the print, not compile/run", analytic: "PS-A flag: not yet", holistic: "L1 (unistructural)", arm: "fine-tuned", route: "→ human review (scorer 0.50)" },
+        policy: { action: "same-level practice", trigger: "mastery developing at L1, no misconception yet", task: "another syntax-identification item" },
+        model: "Good — you can see the class and the print statement. Before we go deeper: name the THREE things you do to a .java file to make those words appear. (Hint: one you haven't typed yet.)",
+        kg: "program_structure (§1.1) is the concept the student is on — right now low, around Level 1, just naming what the program does. It's the root of Chapter 1; its prerequisite link points to types_expressions (§1.2), not started.",
+        use: "The student has only read the program, so the move is more same-level practice — another read-and-identify item. Let the basics settle before bringing in compiling; don't jump to how it runs yet." },
+      { you: "You just run it with `java HelloWorld` and it prints. I think that one command compiles and runs it in one go.",
+        dist: { L0: .08, L1: .55, L2: .30, L3: .07, L4: 0 }, mastery_prev: .18, self_conf: .82, scorer_conf: .63, wm: "PS-A", item: "predict-output",
+        scoring: { det: "✗ predicted one command", analytic: "PS-A flag: TRUE", holistic: "L1 (unistructural)", arm: "fine-tuned", route: "auto (0.63)" },
+        policy: { action: "misconception repair", trigger: "PS-A active (compile = run)", task: "repair task — compile a fresh file, inspect HelloWorld.class" },
+        model: "Careful — `java HelloWorld` is only HALF the story. Try it on a brand-new file without compiling and watch the terminal. What file does `javac HelloWorld.java` create, and why would `java` need it?",
+        kg: "Still around Level 1, but a red misconception node (PS-A — compile = run) is now wired in, plus a §1.1 worksheet linked as the way to fix it.",
+        use: "A real misconception is active. Repair it directly — have them compile a fresh file and look at the HelloWorld.class that appears. Let them SEE the two steps rather than telling them." },
+      { you: "Oh — `javac HelloWorld.java` compiles it into HelloWorld.class first, then `java HelloWorld` runs that class. So it's two steps, not one.",
+        dist: { L0: 0, L1: .18, L2: .58, L3: .24, L4: 0 }, mastery_prev: .30, self_conf: .62, scorer_conf: .57, wm: "PS-A", item: "explanation",
+        scoring: { det: "✓ two-step rule stated", analytic: "PS-A flag: weakening", holistic: "L2 (rule)", arm: "fine-tuned", route: "→ human review (0.57, straddling L2–L3)" },
+        policy: { action: "misconception repair", trigger: "PS-A present but weakening", task: "targeted explanation — what each phase PRODUCES" },
+        model: "Exactly — two phases. Now WHICH phase catches each: (a) you misspell `Sytem.out.println`, (b) you ask for args[0] when none was passed? One is compile-time, one run-time — which, and how can you tell?",
+        kg: "program_structure climbs to ~Level 2 — the student can state the two-step rule; the misconception link is fading but the worksheet stays attached in case they slip back.",
+        use: "Rule stated but the misconception is faintly there. Keep repairing, lightly: ask which phase catches which error. A single targeted question beats re-explaining." },
+      { you: "javac turns the source into bytecode (HelloWorld.class). `java` starts the JVM, finds `public static void main`, runs the statement, and System.out.println writes “Hello, World” plus a newline to standard output.",
+        dist: { L0: 0, L1: 0, L2: .18, L3: .62, L4: .20 }, mastery_prev: .48, self_conf: .78, scorer_conf: .80, wm: "— (PS-A refuted)", item: "trace-table",
+        scoring: { det: "✓ trace correct (src→bytecode→JVM→stdout)", analytic: "PS-A flag: cleared", holistic: "L3 (mechanism)", arm: "fine-tuned", route: "auto (0.80)" },
+        policy: { action: "same-level practice", trigger: "mastery developing at L3 — consolidate mechanism", task: "trace-table item (the primary localiser)" },
+        model: "That's the whole pipeline, correctly ordered — you named the JVM entry point and the newline. That's L3 mechanism. Last move: what makes `main` the entry point and not some other method?",
+        kg: "Now Level 3 — mechanism. A trace-table item is wired in to assess it and the misconception link has cleared.",
+        use: "They can trace the mechanism — same-level practice (a trace-table task) to lock it in. Confirm the mechanism is solid before pushing toward transfer." },
+      { you: "If I rename the class to `Hi` but keep the file HelloWorld.java it won't compile — a public class name must match its filename (compile-time error). `print` omits the newline, `println` adds it. The signature must stay `public static void main(String[] args)` or the JVM throws NoSuchMethodError at run-time.",
+        dist: { L0: 0, L1: 0, L2: 0, L3: .18, L4: .82 }, mastery_prev: .70, self_conf: .90, scorer_conf: .91, wm: "—", item: "debugging / code-comparison",
+        scoring: { det: "✓ all checks pass", analytic: "no flags", holistic: "L4 (transfer)", arm: "fine-tuned", route: "auto (0.91)" },
+        policy: { action: "transfer / debugging", trigger: "mastery strong at L4", task: "transfer variant — rename class, print vs println, NoSuchMethodError" },
+        model: "L4 — you generalised across naming, the two print methods, AND which phase each failure surfaces in. You've got HelloWorld cold. Next concept: where does `args[0]` come from? (UseArgument, §1.1 part 2.)",
+        kg: "Level 4 — transfer, fully understood. Because it's mastered, its prerequisite edge now unlocks types_expressions (§1.2) as the next concept.",
+        use: "Mastery is strong — a transfer or debugging task. Once the student can apply the rules in a new situation, move on to the next concept." },
+    ] },
+  { id: "confident", label: "Confident but wrong", who: "Dev",
+    desc: "Sure of himself but holds the misconception — high self-confidence, low scorer confidence, plateaus before it clears.",
+    turns: [
+      { you: "Easy — you just type `java HelloWorld` and it runs. Compiling is automatic, I'm sure.",
+        dist: { L0: .05, L1: .70, L2: .20, L3: .05, L4: 0 }, mastery_prev: 0, self_conf: .92, scorer_conf: .50, wm: "PS-A", item: "predict-output",
+        scoring: { det: "✗ skips the compile step", analytic: "PS-A flag: TRUE", holistic: "L1 (unistructural)", arm: "fine-tuned", route: "→ human review (self 0.92 vs scorer 0.50)" },
+        policy: { action: "misconception repair", trigger: "PS-A active + overconfidence mismatch", task: "repair — run java on an uncompiled file, read the error" },
+        model: "You sound sure — so let's test it. Delete HelloWorld.class, run `java HelloWorld`, and tell me exactly what the terminal says.",
+        kg: "program_structure sits at Level 1 with a misconception node (PS-A) wired in from the first turn. Watch the gap: the student's own confidence is high while the system's is low.",
+        use: "Confident AND wrong is the most important case to catch. Don't argue — have them run the failing command so the terminal contradicts them. The error does the teaching." },
+      { you: "Huh, it said 'Could not find or load main class'. But that's a one-off — java still compiles normally.",
+        dist: { L0: .03, L1: .72, L2: .22, L3: .03, L4: 0 }, mastery_prev: .15, self_conf: .85, scorer_conf: .55, wm: "PS-A", item: "predict-output",
+        scoring: { det: "✗ dismisses the evidence", analytic: "PS-A flag: TRUE (resisting)", holistic: "L1", arm: "fine-tuned", route: "→ human review (resisting correction)" },
+        policy: { action: "misconception repair", trigger: "PS-A active, evidence explained away", task: "run javac, then list the new .class file" },
+        model: "Good, you saw the error. Now run `javac HelloWorld.java`, then `ls`. What new file appears — and why does `java` work only after that?",
+        kg: "Still Level 1, misconception still red — the student saw the error but hasn't updated. This is a plateau forming on the graph.",
+        use: "They got contradicting evidence and explained it away. Make the fix physical: compile, then list the folder so the new .class file is undeniable." },
+      { you: "Okay… javac made HelloWorld.class. So maybe there are two steps after all, but they kind of feel like one.",
+        dist: { L0: 0, L1: .40, L2: .50, L3: .10, L4: 0 }, mastery_prev: .25, self_conf: .60, scorer_conf: .60, wm: "PS-A", item: "explanation",
+        scoring: { det: "✓ now sees two files", analytic: "PS-A flag: weakening", holistic: "between L1–L2", arm: "fine-tuned", route: "→ human review (straddling)" },
+        policy: { action: "misconception repair", trigger: "misconception weakening but not cleared", task: "explanation — name what each step PRODUCES" },
+        model: "They don't feel like one once you name the products: javac makes bytecode, java runs it. Tell me what each command takes in and what it hands back.",
+        kg: "program_structure is straddling L1–L2 now — the reported level is honestly 'between two levels'. The misconception link is fading.",
+        use: "The plateau is breaking. Pin it down by naming the product of each step (bytecode vs output) — concrete artifacts beat abstract phases for this student." },
+      { you: "Right — javac takes the .java and makes .class bytecode; java takes the .class and runs it to print the text. Two separate steps.",
+        dist: { L0: 0, L1: .10, L2: .60, L3: .30, L4: 0 }, mastery_prev: .42, self_conf: .70, scorer_conf: .72, wm: "— (PS-A refuted)", item: "explanation",
+        scoring: { det: "✓ two steps, correct products", analytic: "PS-A flag: cleared", holistic: "L2 (rule)", arm: "fine-tuned", route: "auto (0.72)" },
+        policy: { action: "same-level practice", trigger: "misconception cleared, mastery developing at L2", task: "same-level practice before the mechanism" },
+        model: "That's it — and notice your confidence and the result now line up. Next: which of these is caught when — compile-time or run-time?",
+        kg: "Misconception finally cleared; program_structure reaches Level 2. Note how many turns it took versus the steady learner — the plateau is visible in the history.",
+        use: "Now confidence and correctness match — give same-level practice to consolidate. For yourself, note how long the repair took: that's the cost of overconfidence." },
+    ] },
+  { id: "struggling", label: "Struggling (Level 0)", who: "Sam",
+    desc: "Starts at the prestructural floor — not wrong, just lost. No misconception; needs tiny, patient steps.",
+    turns: [
+      { you: "Honestly I'm not sure what this is doing. There's a lot of words.",
+        dist: { L0: .60, L1: .32, L2: .08, L3: 0, L4: 0 }, mastery_prev: 0, self_conf: .25, scorer_conf: .55, wm: null, item: "syntax-identification",
+        scoring: { det: "no claim made", analytic: "no flags", holistic: "L0 (prestructural)", arm: "fine-tuned", route: "→ human review (very low evidence)" },
+        policy: { action: "same-level practice", trigger: "prestructural floor (L0) — no usable understanding yet", task: "simplest read item: point to the line that shows text" },
+        model: "No problem — let's start tiny. There's exactly one line that puts words on the screen. Which line do you think it is?",
+        kg: "The Level 0 floor in action: program_structure sits at L0, prestructural — no usable hold on it yet. No misconception, just an absence of understanding.",
+        use: "At the floor, not wrong — just lost. Don't diagnose a misconception that isn't there. Shrink the task to one concrete thing (find the print line) and build from a success." },
+      { you: "Um, the System.out.println line? It has the words in quotes.",
+        dist: { L0: .20, L1: .62, L2: .18, L3: 0, L4: 0 }, mastery_prev: .05, self_conf: .40, scorer_conf: .60, wm: null, item: "syntax-identification",
+        scoring: { det: "✓ found the print line", analytic: "no flags", holistic: "L1 (unistructural)", arm: "fine-tuned", route: "auto (0.60)" },
+        policy: { action: "same-level practice", trigger: "reached L1, mastery still low and fragile", task: "another one-aspect item to build confidence" },
+        model: "Exactly right — that's the line. So if you run the program, what words show up on the screen?",
+        kg: "The node lifts off the floor to Level 1 — one aspect grasped (the print line). Mastery is still low; this is fragile.",
+        use: "They had a win — build on it immediately with another single-aspect question. Keep the steps tiny; don't introduce compile-vs-run yet, that's two levels above them." },
+      { you: "It shows 'Hello, World'. But I don't get the public class stuff at the top.",
+        dist: { L0: .10, L1: .70, L2: .20, L3: 0, L4: 0 }, mastery_prev: .20, self_conf: .45, scorer_conf: .62, wm: null, item: "explanation",
+        scoring: { det: "✓ predicts the output", analytic: "no flags", holistic: "L1", arm: "fine-tuned", route: "auto (0.62)" },
+        policy: { action: "same-level practice", trigger: "solid at L1; the 'frame' is the next step within the concept", task: "name the role of class/main in one sentence, no jargon" },
+        model: "You've got the output — that's the important half. The top lines are just the 'frame' every Java program needs. In your words, what is main for?",
+        kg: "program_structure holds steady at Level 1. There's no earlier prerequisite node to send them back to — this concept is the root — so the move stays same-level practice, not remediation.",
+        use: "Because program_structure is the root, there's nowhere earlier to send them — so the answer is patient same-level practice, not 'go fix a prerequisite'. Keep language jargon-free." },
+    ] },
+  { id: "advanced", label: "Advanced / fast", who: "Priya",
+    desc: "Arrives near the mechanism on turn one, no misconception — the system skips the build-up and goes straight to transfer.",
+    turns: [
+      { you: "It's a class with a main method; `javac` compiles it to bytecode and `java` runs that on the JVM, which prints “Hello, World” with a newline.",
+        dist: { L0: 0, L1: 0, L2: .10, L3: .50, L4: .40 }, mastery_prev: .40, self_conf: .85, scorer_conf: .86, wm: null, item: "explanation",
+        scoring: { det: "✓ full pipeline, unprompted", analytic: "no flags", holistic: "L3 (mechanism)", arm: "fine-tuned", route: "auto (0.86)" },
+        policy: { action: "transfer / debugging", trigger: "mastery already strong (L3), no misconception", task: "skip ahead — a transfer/debugging variant" },
+        model: "You've already got the mechanism, so let's stretch it: if I rename the class to Hi but keep the file HelloWorld.java, what happens, and at which phase?",
+        kg: "Unusual shape: the concept node arrives already near Level 3 on turn one, no misconception. The system skips the early scaffolding and goes straight to the assessment item.",
+        use: "This student doesn't need the build-up — don't make them trace what they know. Jump to a transfer/debugging task and use it to find the edge of their understanding." },
+      { you: "Compile-time error — the public class name must match the filename. And `print` vs `println` differ only by the trailing newline.",
+        dist: { L0: 0, L1: 0, L2: 0, L3: .25, L4: .75 }, mastery_prev: .65, self_conf: .90, scorer_conf: .90, wm: null, item: "debugging / code-comparison",
+        scoring: { det: "✓ correct + names the phase", analytic: "no flags", holistic: "L4 (transfer)", arm: "fine-tuned", route: "auto (0.90)" },
+        policy: { action: "transfer / debugging", trigger: "mastery strong at L4", task: "one more transfer — break the main signature" },
+        model: "Right on both. Last one: change main's signature to `void main()` with no args. Compiles? Runs? What does the JVM say?",
+        kg: "program_structure is at Level 4 already on turn two. The prerequisite edge to types_expressions (§1.2) is effectively unlocked — ready to move on.",
+        use: "They're at transfer fast. Confirm with one more debugging twist (the main signature), then don't hold them back — advance to the next concept." },
+      { you: "It compiles but the JVM throws NoSuchMethodError at run-time, because it looks for the exact `public static void main(String[])` signature.",
+        dist: { L0: 0, L1: 0, L2: 0, L3: .10, L4: .90 }, mastery_prev: .80, self_conf: .95, scorer_conf: .95, wm: null, item: "debugging",
+        scoring: { det: "✓ compile vs run distinction perfect", analytic: "no flags", holistic: "L4 (transfer)", arm: "fine-tuned", route: "auto (0.95)" },
+        policy: { action: "transfer / debugging", trigger: "mastery saturated at L4", task: "advance to the next concept (command-line arguments)" },
+        model: "Perfect — you separated compile-time from run-time cleanly. You've mastered Hello World; next is where args[0] comes from (UseArgument, §1.1 part 2).",
+        kg: "Saturated at Level 4, no misconception ever. The graph's job here is mostly to confirm readiness and hand off to the next concept via the prerequisite edge.",
+        use: "Nothing left to teach here — the right move is to advance. Use this to free your time for the students who are stuck, like the confident-but-wrong case." },
+    ] },
+];
+const KG_NODE_STYLE = {
+  JavaConcept:    { fill: COLORS.primaryLight, stroke: COLORS.primary },
+  LPLevel:        { fill: COLORS.surfaceAlt,   stroke: COLORS.textMid },
+  AssessmentItem: { fill: COLORS.blueLight,    stroke: COLORS.blue },
+  Misconception:  { fill: COLORS.dangerLight,  stroke: COLORS.danger },
+  Resource:       { fill: COLORS.successLight, stroke: COLORS.success },
+  Evidence:       { fill: COLORS.surfaceAlt,   stroke: COLORS.border },
+};
+const HelloKG = ({ modalLP, mastery, wmActive, showMiscon, showItem }) => {
+  const CX = 288, CY = 82, CW = 220, CH = 106;
+  const cx = CX + CW / 2, cy = CY + CH / 2;
+  const cFill = lpColor(modalLP);
+  const vis = KG_NODES.filter((n) => {
+    if (n.id === "miscon" || n.id === "res") return showMiscon;
+    if (n.id === "item") return showItem;
+    return true; // concept, LPLevel and evidence nodes are always present
+  });
   return (
-    <div>
-      {/* Source indicator */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-        <Badge color={status === "live" ? COLORS.success : COLORS.warning}>
-          {status === "live" ? "✓ live from /api/student/graph" : "⚠ demo snapshot (API unreachable)"}
-        </Badge>
-        <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textLight }}>
-          {engaged.length} engaged · {neighbours.length} CSO neighbours
-        </span>
-      </div>
-
-      {/* LP distribution bar across engaged nodes */}
-      <div style={{ display: "flex", height: 14, borderRadius: 5, overflow: "hidden", border: `1px solid ${COLORS.border}`, marginBottom: 8 }}>
-        {["L1","L2","L3","L4"].map(lv => dist[lv] > 0 ? (
-          <div key={lv} title={`${lv} ${dist[lv]} concepts`}
-               style={{ flex: dist[lv], background: lpColor(lv) }} />
-        ) : null)}
-      </div>
-
-      {/* Engaged concepts — each with EVERY per-turn analysis tied to it */}
-      {engaged.length === 0 ? (
-        <div style={{ fontSize: 11, color: COLORS.textLight, padding: "6px 0" }}>
-          No concepts engaged yet — graph will grow as the student answers.
-        </div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
-          {engaged.slice(0, 5).map((n) => {
-            const heur = n.heuristics || {};
-            const heurFired = Object.entries(heur).filter(([, v]) => v).map(([k]) => k);
-            const reward = (n.reward || {}).total;
-            return (
-              <div key={n.cso_slug} style={{ padding: "7px 8px", borderRadius: 6,
-                                              background: COLORS.surfaceAlt,
-                                              borderLeft: `3px solid ${lpColor(n.lp_level)}` }}>
-                {/* Row 1: identity + LP + mastery + Δ + diagnostic confidence */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: COLORS.text, fontFamily: fonts.mono }}>{n.cso_slug}</span>
-                  <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                    <Badge color={lpColor(n.lp_level)}>{n.lp_level}</Badge>
-                    <span style={{ fontSize: 10, color: COLORS.textMid, fontFamily: fonts.mono }}>
-                      mast {Math.round((n.mastery || 0) * 100)}%
-                      {(n.mastery_delta || 0) !== 0 && (
-                        <span style={{ color: (n.mastery_delta > 0) ? COLORS.success : COLORS.danger, marginLeft: 4 }}>
-                          {n.mastery_delta > 0 ? "+" : ""}{(n.mastery_delta * 100).toFixed(0)}%
-                        </span>
-                      )}
-                    </span>
-                    <span style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono }}>
-                      conf {Math.round((n.diagnostic_confidence || 0) * 100)}%
-                    </span>
-                  </span>
-                </div>
-                {/* Row 2: wrong-model badges */}
-                {(n.wrong_models || []).length > 0 && (
-                  <div style={{ display: "flex", gap: 3, marginTop: 4, flexWrap: "wrap" }}>
-                    {n.wrong_models.map(wm => (
-                      <Badge key={wm} color={(n.wrong_models_refuted || []).includes(wm) ? COLORS.success : COLORS.danger}>
-                        {(n.wrong_models_refuted || []).includes(wm) ? "✓" : "!"} {wm}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-                {/* Row 3: 3-channel pill row + intervention + reward + heuristics */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 5, alignItems: "center" }}>
-                  {n.cognitive && n.cognitive.encoding_strength && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.successLight, color: COLORS.success }}>
-                      cog · {n.cognitive.encoding_strength}
-                    </span>
-                  )}
-                  {n.progression && n.progression.stage && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.blueLight, color: COLORS.blue }}>
-                      prog · stage {n.progression.stage}
-                    </span>
-                  )}
-                  {n.psychological && n.psychological.attribution && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.accentLight, color: COLORS.accent }}>
-                      psych · {n.psychological.attribution}
-                    </span>
-                  )}
-                  {n.intervention && n.intervention.type && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.primaryLight, color: COLORS.primaryDark, fontWeight: 700 }}>
-                      ⚙ {n.intervention.type}
-                    </span>
-                  )}
-                  {typeof reward === "number" && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: reward >= 0 ? COLORS.successLight : COLORS.dangerLight,
-                                    color: reward >= 0 ? COLORS.success : COLORS.danger, fontWeight: 700 }}>
-                      RL · {reward >= 0 ? "+" : ""}{reward.toFixed(2)}
-                    </span>
-                  )}
-                  {heurFired.length > 0 && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.warningLight, color: COLORS.warning }}>
-                      heur · {heurFired.join(",")}
-                    </span>
-                  )}
-                  {n.probe_state && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: COLORS.surface, color: COLORS.textMid, border: `1px solid ${COLORS.border}` }}>
-                      probe {n.probe_state.count}/{n.probe_state.cap}
-                    </span>
-                  )}
-                  {n.fact_check && (
-                    <span style={{ fontSize: 9, fontFamily: fonts.mono, padding: "1px 5px", borderRadius: 3,
-                                    background: n.fact_check.passed ? COLORS.successLight : COLORS.dangerLight,
-                                    color: n.fact_check.passed ? COLORS.success : COLORS.danger }}>
-                      {n.fact_check.passed ? "✓ fact-checked" : `⚠ stripped ${n.fact_check.stripped}`}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* CSO neighbours — concepts the student hasn't touched but are connected */}
-      {neighbours.length > 0 && (
-        <div style={{ marginTop: 6, padding: "6px 8px", borderRadius: 6, background: COLORS.primaryLight + "55" }}>
-          <Tag color={COLORS.primaryDark}>CSO neighbours pulled in</Tag>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginTop: 4 }}>
-            {neighbours.slice(0, 8).map(n => (
-              <span key={n.cso_slug} style={{ fontSize: 9.5, fontFamily: fonts.mono, padding: "2px 6px", borderRadius: 3, background: COLORS.surface, color: COLORS.textMid }}>
-                {n.cso_slug}
-              </span>
-            ))}
-            {neighbours.length > 8 && <span style={{ fontSize: 9.5, color: COLORS.textLight }}>+{neighbours.length - 8} more</span>}
-          </div>
-        </div>
-      )}
-
-      {/* Edges preview */}
-      {(graph.edges || []).length > 0 && (
-        <div style={{ marginTop: 8, fontSize: 9.5, color: COLORS.textLight, fontFamily: fonts.mono, lineHeight: 1.5 }}>
-          {(graph.edges || []).slice(0, 3).map((e, i) => (
-            <div key={i}>▸ {e.src} <span style={{ color: COLORS.primary }}>--{e.rel}--&gt;</span> {e.dst}</div>
-          ))}
-          {graph.edges.length > 3 && <div style={{ marginTop: 2 }}>+{graph.edges.length - 3} more CSO edges</div>}
-        </div>
-      )}
-    </div>
+    <svg viewBox="0 0 760 280" style={{ width: "100%", height: "auto", display: "block" }}>
+      {/* typed edges */}
+      {vis.map((n) => {
+        const nx = n.x + 60, ny = n.y + 16;
+        const refuted = n.id === "miscon" && !wmActive;
+        const col = refuted ? COLORS.textLight : (KG_NODE_STYLE[n.type] || {}).stroke || COLORS.border;
+        const a = n.dir === "in" ? { x: nx, y: ny } : { x: cx, y: cy };
+        const b = n.dir === "in" ? { x: cx, y: cy } : { x: nx, y: ny };
+        return (
+          <g key={"e" + n.id}>
+            <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={col} strokeWidth="1.5" strokeDasharray={refuted ? "3 3" : "0"} opacity="0.6" />
+            <text x={(cx + nx) / 2} y={(cy + ny) / 2 - 3} textAnchor="middle" fontSize="7.5" fontFamily={fonts.mono} fill={COLORS.textLight}>{n.rel}</text>
+          </g>
+        );
+      })}
+      {/* typed nodes */}
+      {vis.map((n) => {
+        const refuted = n.id === "miscon" && !wmActive;
+        const st = KG_NODE_STYLE[n.type] || { fill: COLORS.surface, stroke: COLORS.border };
+        return (
+          <g key={n.id} opacity={refuted ? 0.5 : 1}>
+            <rect x={n.x} y={n.y} width="120" height="34" rx="7" fill={st.fill} stroke={st.stroke} strokeWidth="1.3" />
+            <text x={n.x + 60} y={n.y + 14} textAnchor="middle" fontSize="9" fontWeight="700" fontFamily={fonts.mono} fill={st.stroke}>{n.label}</text>
+            <text x={n.x + 60} y={n.y + 26} textAnchor="middle" fontSize="7.5" fontFamily={fonts.mono} fill={COLORS.textLight}>{n.type}{refuted ? " · refuted" : ""}</text>
+          </g>
+        );
+      })}
+      {/* centre node — the concept, showing LP level · mastery · misconception ON the node */}
+      <rect x={CX} y={CY} width={CW} height={CH} rx="12" fill={cFill + "18"} stroke={cFill} strokeWidth="2.5" />
+      <text x={cx} y={CY + 18} textAnchor="middle" fontSize="13" fontWeight="700" fontFamily={fonts.body} fill={COLORS.text}>program_structure</text>
+      <text x={cx} y={CY + 31} textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill={COLORS.textLight}>JavaConcept · §1.1 · DAG root</text>
+      {/* LP-level chip */}
+      <rect x={CX + 12} y={CY + 40} width="94" height="22" rx="5" fill={cFill + "22"} stroke={cFill} strokeWidth="1" />
+      <text x={CX + 59} y={CY + 54} textAnchor="middle" fontSize="8" fontWeight="700" fontFamily={fonts.mono} fill={cFill}>LP {modalLP} · {LP_NAME[modalLP]}</text>
+      {/* mastery chip */}
+      <rect x={CX + 12} y={CY + 68} width="94" height="22" rx="5" fill={COLORS.primaryLight} stroke={COLORS.primary} strokeWidth="1" />
+      <text x={CX + 59} y={CY + 82} textAnchor="middle" fontSize="8" fontWeight="700" fontFamily={fonts.mono} fill={COLORS.primaryDark}>mastery {Math.round(mastery * 100)}%</text>
+      {/* misconception chip */}
+      <rect x={CX + 114} y={CY + 40} width="94" height="50" rx="5" fill={wmActive ? COLORS.dangerLight : COLORS.successLight} stroke={wmActive ? COLORS.danger : COLORS.success} strokeWidth="1" />
+      <text x={CX + 161} y={CY + 58} textAnchor="middle" fontSize="7.5" fontWeight="700" fontFamily={fonts.mono} fill={wmActive ? COLORS.danger : COLORS.success}>misconception</text>
+      <text x={CX + 161} y={CY + 74} textAnchor="middle" fontSize="9.5" fontWeight="700" fontFamily={fonts.mono} fill={wmActive ? COLORS.danger : COLORS.success}>{wmActive ? "⚠ PS-A" : "✓ none"}</text>
+    </svg>
   );
 };
 
-// Demo fallback graph — every per-turn CPAL analysis populated, so the
-// wireframe demonstrates the full surface even when the API is offline.
-// (Mirrors the output of scripts/smoke_test_student_graph.py.)
-const DEMO_GRAPH = {
-  nodes: [
-    {
-      cso_slug: "user_interfaces", cpal_concept: "command_line_args",
-      lp_level: "L3", mastery: 0.78, mastery_delta: 0.23, diagnostic_confidence: 0.81,
-      wrong_models: ["CL-A"], wrong_models_refuted: ["CL-A"],
-      cognitive: { encoding_strength: "solid", dual_coding: "dual" },
-      progression: { stage: "3", zpd_position: "in_zpd", scaffold_level: "low" },
-      psychological: { attribution: "adaptive", imposter_signal: false, high_anxiety: false, self_efficacy: "growth" },
-      intervention: { type: "trace_scaffold", rationale: "plateau cleared at L3 via mechanism trace", gate_triggered: true },
-      reward: { total: 0.62, breakdown: { learning_gain: 0.50, engagement: 0.22, zpd_alignment: 1.00, emotional_state: 0.10, attribution_shift: 0.0, lp_gain: 0.50 } },
-      heuristics: { substance_penalty: false, mech_vocab_bump: true, l2_rule_naming: false, parroting_downgrade: false, transfer_upgrade: false },
-      probe_state: { count: 3, cap: 8, criteria: ["args length", "runtime exception", "args content"] },
-      fact_check: { passed: true, stripped: 0 },
-      turn_count: 3, is_neighbour_only: false,
-    },
-    {
-      cso_slug: "string_matching", cpal_concept: "string_equality",
-      lp_level: "L1", mastery: 0.25, mastery_delta: 0.05, diagnostic_confidence: 0.40,
-      wrong_models: ["SE-A"], wrong_models_refuted: [],
-      cognitive: { encoding_strength: "surface", dual_coding: "verbal_only" },
-      progression: { stage: "1", zpd_position: "overwhelmed", scaffold_level: "high" },
-      psychological: { attribution: "adaptive", imposter_signal: false, high_anxiety: false, self_efficacy: "neutral" },
-      intervention: { type: "worked_example", rationale: "L1 + WM detected on new concept", gate_triggered: false },
-      reward: { total: 0.04, breakdown: { learning_gain: 0.04, engagement: 0.10, zpd_alignment: -0.50, emotional_state: 0.0, attribution_shift: 0.0, lp_gain: 0.0 } },
-      heuristics: { substance_penalty: false, mech_vocab_bump: false, l2_rule_naming: false, parroting_downgrade: false, transfer_upgrade: false },
-      probe_state: { count: 1, cap: 8, criteria: ["== references"] },
-      fact_check: { passed: true, stripped: 0 },
-      turn_count: 1, is_neighbour_only: false,
-    },
-    // CSO neighbours pulled in via real traversal of CSO v3.5
-    { cso_slug: "human-computer_interaction", is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-    { cso_slug: "3d_user_interfaces",         is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-    { cso_slug: "ajax",                       is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-    { cso_slug: "pattern_matching",           is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-    { cso_slug: "string_matching_algorithm",  is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-    { cso_slug: "approximate_string_matching",is_neighbour_only: true, lp_level: "L1", mastery: 0 },
-  ],
-  edges: [
-    { src: "user_interfaces", dst: "human-computer_interaction", rel: "prereq" },
-    { src: "user_interfaces", dst: "3d_user_interfaces",         rel: "sub_topic" },
-    { src: "user_interfaces", dst: "ajax",                       rel: "sub_topic" },
-    { src: "string_matching", dst: "pattern_matching",           rel: "prereq" },
-    { src: "string_matching", dst: "string_matching_algorithm",  rel: "sub_topic" },
-    { src: "string_matching", dst: "approximate_string_matching",rel: "sub_topic" },
-  ],
-  summary: {
-    engaged_count: 2, neighbour_count: 6,
-    lp_distribution: { L1: 1, L2: 0, L3: 1, L4: 0 },
-    active_wms: [["SE-A", "string_matching"]],
-    avg_mastery: 0.515,
-  },
-};
+const HelloWorldLiveView = ({ mode, step, setStep, scenario, setScenario }) => {
+  const LP_ORDER = LP_FULL;
 
-/* ════════════════════════ STUDENT VIEW — CONVERSATION-FIRST ════════════════════════ */
-const StudentView = () => {
-  const [step, setStep] = useState(1);
+  // The selected scenario drives everything. step is clamped to the scenario's
+  // length so switching to a shorter scenario never indexes past its turns.
+  const sc = SCENARIOS[scenario] || SCENARIOS[0];
+  const TURNS = sc.turns;
+  const nTurns = TURNS.length;
+  const safeStep = Math.min(Math.max(step, 1), nTurns);
+  const t = TURNS[safeStep - 1];
+  // Mastery as a distribution → expected level value gives a single % for trend.
+  const expectedMastery = (d) => (0 * (d.L0 || 0) + 1 * (d.L1 || 0) + 2 * (d.L2 || 0) + 3 * (d.L3 || 0) + 4 * (d.L4 || 0)) / 4;
+  const masteryNow = expectedMastery(t.dist);
+  const masteryDelta = masteryNow - t.mastery_prev;
+  const rep = reportLevel(t.dist);                       // {label, firm} — the documented reporting rule
+  const modalLP = LP_FULL.map((k) => ({ k, m: t.dist[k] || 0 })).sort((a, b) => b.m - a.m)[0].k;
+  const curLP = modalLP;                                  // modal level — used only for colour/badges
+  const wmActive = t.wm && t.wm.indexOf("PS-A") === 0;
+  // Knowledge-graph node visibility, derived from the scenario's state (not a
+  // fixed step) — so e.g. the advanced student never grows a misconception node.
+  const lvlIdx = LP_FULL.indexOf(modalLP);
+  const seenWM = TURNS.slice(0, safeStep).some((tt) => tt.wm && (tt.wm.indexOf("PS-A") === 0 || tt.wm.indexOf("refuted") >= 0));
+  const showItem = lvlIdx >= LP_FULL.indexOf("L3");       // trace-table item attaches once at the mechanism
 
-  const steps = [
-    { n: 1, label: "Read",      icon: "📖", desc: "Examine the Java code", lp: "—"  },
-    { n: 2, label: "Predict",   icon: "🎯", desc: "What will it do?",       lp: "L1" },
-    { n: 3, label: "Explain",   icon: "✏️", desc: "Say why, in your words", lp: "L2" },
-    { n: 4, label: "Mechanism", icon: "⚙️", desc: "Trace the execution",    lp: "L3" },
-    { n: 5, label: "Transfer",  icon: "🔄", desc: "Apply to a variant",     lp: "L4" },
+  // Per-concept mastery within Hello World (§1.1), in plain language. Each
+  // sub-skill needs a level; it's Solid once the student reaches it, derived
+  // from the CURRENT level so it works for every scenario (no fixed schedule).
+  const CONCEPTS = [
+    { name: "Reads the program's structure", desc: "the class, the main method, the print line", needs: "L1" },
+    { name: "Knows the 3 steps: edit → compile → run", desc: "you must compile a file before you can run it", needs: "L2" },
+    { name: "Compile vs run are two separate phases", desc: "javac makes HelloWorld.class; java runs it (the misconception lives here)", needs: "L2", clearWM: true },
+    { name: "Can trace how the program runs", desc: "source → bytecode → JVM → text on the screen", needs: "L3" },
+    { name: "Knows why main is the entry point", desc: "the JVM looks for public static void main", needs: "L3" },
+    { name: "Generalises the rules", desc: "print vs println, class name must match the file, compile- vs run-time errors", needs: "L4" },
   ];
-  const LP_ORDER = ["L1","L2","L3","L4"];
-  // Read & Predict sit at the L1 entry floor; Explain→L2, Mechanism→L3, Transfer→L4.
-  const curLP = ["L1","L1","L2","L3","L4"][step - 1];
-  const curIdx = LP_ORDER.indexOf(curLP);
-  const diag = {
-    lp: curLP,
-    conf: [0.28, 0.46, 0.58, 0.80, 0.91][step - 1],
-    wm: step >= 2 && step <= 3 ? "CL-A" : null,
-    delta: step === 4 ? 0.16 : step === 5 ? 0.11 : 0,
-    probe: step >= 3 ? Math.min(step - 2, 3) : 0,
-    plateau: false,
+  const conceptState = (c) => {
+    const need = LP_FULL.indexOf(c.needs);
+    if (c.clearWM && wmActive) return { label: "Not yet", color: COLORS.danger, bg: COLORS.dangerLight };
+    if (lvlIdx >= need) return { label: "Solid", color: COLORS.success, bg: COLORS.successLight };
+    if (lvlIdx === need - 1) return { label: "Developing", color: COLORS.warning, bg: COLORS.warningLight };
+    return { label: "Not yet", color: COLORS.textLight, bg: COLORS.surfaceAlt };
   };
+  const solidCount = CONCEPTS.filter((c) => conceptState(c).label === "Solid").length;
 
-  // The conversation thread, grown by step. tutor = CPAL, you = student.
-  // Chapter 1.1 · UseArgument.java — command-line arguments
-  const thread = [
-    { who: "tutor", t: "Here's the UseArgument program from Chapter 1.1. Read it — don't run it yet. What is line by line happening?", show: 1 },
-    { who: "you",   t: "It prints 'Hi,', then args[0], then '. How are you?'. So args[0] must hold the user's name.", show: 1 },
-    { who: "tutor", t: "Good read. Now predict: I run `java UseArgument` with NO arguments. What happens?", show: 2 },
-    { who: "you",   t: "It'll just print 'Hi, . How are you?' — args[0] is empty when nothing is passed.", show: 2, lp: "L1", wm: "CL-A" },
-    { who: "tutor", t: "Try it. What error did you actually see, and in your own words why?", show: 3 },
-    { who: "you",   t: "I got ArrayIndexOutOfBoundsException at args[0]. So I guess you have to pass at least one argument when calling the program.", show: 3, lp: "L2", wm: "CL-A" },
-    { who: "tutor", t: "You've named the rule. Let's trace the mechanism — I'll show you what `args` actually contains for two different runs, you tell me what's in each box.", show: 4, scaffold: true },
-    { who: "you",   t: "Oh — `args` IS an array. With no args passed, args.length is 0, no slots exist, so args[0] is out of bounds at runtime. With args passed, the JVM puts each one into args[0], args[1], ... starting at index 0.", show: 4, lp: "L3" },
-    { who: "tutor", t: "Exactly. Now transfer: if I run `java UseArgument Alice Bob`, what is args[0] — and how is that different from C's argv[0]?", show: 5 },
-    { who: "you",   t: "args[0] is 'Alice' — the first USER argument. Java strips the program name out before populating args, unlike C where argv[0] is the program path. Same bounds rule applies: only args.length slots exist.", show: 5, lp: "L4" },
-  ];
-  const visible = thread.filter((m) => m.show <= step);
-
-  // Per-level SCENARIO → progression + knowledge-graph formation.
-  // Chapter 1.1 · UseArgument.java · L1→L4 evidence trail.
-  const ledger = [
-    { lp:"L1", scen:"Predict — what does `java UseArgument` (no args) do?",
-      resp:"It'll print 'Hi, . How are you?' — args[0] is empty when nothing is passed.",
-      evid:"Identifies the print sequence — describes a symptom, names no rule about args.",
-      wm:"CL-A", algo:"classify_lp_level() → L1 (symptom)  ·  match_wrong_model() → CL-A",
-      kg:"create/seed node · posterior[L1] += conf · wm=CL-A", dist:{L1:.72,L2:.23,L3:.05,L4:0} },
-    { lp:"L2", scen:"Explain — what rule did the error reveal?",
-      resp:"I got ArrayIndexOutOfBoundsException — so you have to pass at least one argument.",
-      evid:"States a (correct but shallow) rule, names no mechanism for why args is sized this way.",
-      wm:"CL-A", algo:"match_wrong_model() → CL-A still active  ·  classify_lp_level() → L2 (rule)",
-      kg:"posterior[L2] += · wrong_model=CL-A · lp_streak++", dist:{L1:.2,L2:.6,L3:.2,L4:0} },
-    { lp:"L3", scen:"Mechanism — plateau at L2 fires trace_scaffold; trace `args` for two runs.",
-      resp:"`args` is an array. No args → length 0 → args[0] is out of bounds at runtime. With args, JVM populates index 0 onward.",
-      evid:"Traces array allocation and bounds — articulates the runtime mechanism.",
-      wm:"— (CL-A refuted)", algo:"plateau gate → trace_scaffold  ·  classify_post_reply() → L3, Δlp +1",
-      kg:"posterior[L3] += · delta_lp logged to lp_history", dist:{L1:0,L2:.2,L3:.65,L4:.15} },
-    { lp:"L4", scen:"Transfer — `java UseArgument Alice Bob`: what is args[0], and how does it differ from C's argv[0]?",
-      resp:"args[0] is 'Alice' — the first USER argument. Java strips the program name out; C keeps it as argv[0]. Same bounds rule still applies.",
-      evid:"Diagnoses the args layout; generalises across languages and to multi-arg calls.",
-      wm:"—", algo:"classify_lp_level() → L4 (mechanism + cross-language transfer)",
-      kg:"posterior[L4] += · reporting_level resolves to L4", dist:{L1:0,L2:0,L3:.2,L4:.8} },
-  ];
-  const cur = ledger[curIdx];
-  // Chapter 1.1 concept cluster — L1–L4 evidence rows (Hello World + Command-line args)
-  const cluster = [
-    { lp:"L1", txt:"Identifies the basic Java program structure (class, main, println, ;)." },
-    { lp:"L2", txt:"States the rule for compile vs runtime errors and command-line invocation." },
-    { lp:"L3", txt:"Traces how args is populated by the JVM at runtime — bounds, zero-indexed." },
-    { lp:"L4", txt:"Generalises across multi-arg calls and contrasts with C's argv layout." },
-  ];
-  const ALGO = { L1:"classify_lp_level → L1", L2:"match_wrong_model + classify_lp_level → L2",
-                 L3:"classify_post_reply → L3 (Δlp +1)", L4:"classify_lp_level → L4" };
-
-  const Bubble = ({ m }) => {
-    const tutor = m.who === "tutor";
+  // Dashboard wrapper — each carries the "⟳ updated this turn" pulse so the
+  // simultaneity is visible: one message → every panel recomputes at once.
+  // Blueprint strip — every card explains itself: what it READS, what it
+  // PRODUCES, and what it FEEDS downstream, so the whole tab reads as a wiring
+  // diagram of the system, not just numbers.
+  const Blueprint = ({ reads, produces, feeds }) => (
+    <div style={{ marginTop: 9, padding: "8px 10px", borderRadius: 7, background: COLORS.surfaceAlt, border: `1px dashed ${COLORS.border}` }}>
+      <div style={{ fontSize: 8, fontFamily: fonts.mono, color: COLORS.textLight, letterSpacing: 1.2, marginBottom: 3 }}>WHAT THIS CARD DOES</div>
+      <div style={{ fontSize: 10, color: COLORS.textMid, lineHeight: 1.6 }}>It reads {reads}. From that it produces {produces}, which then flows to {(feeds || "").replace(/^→\s*/, "")}.</div>
+    </div>
+  );
+  const Dash = ({ title, sub, tone = COLORS.primary, reads, produces, feeds, mod, fn, children }) => (
+    <Card style={{ padding: 13 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Tag color={tone}>{title}</Tag>
+        <Badge color={COLORS.success} bg={COLORS.successLight}>⟳ updated</Badge>
+      </div>
+      {sub && <div style={{ fontSize: 10.5, color: COLORS.textLight, marginTop: 4, lineHeight: 1.4 }}>{sub}</div>}
+      <div style={{ marginTop: 8 }}>{children}</div>
+      {(reads || produces || feeds) && <Blueprint reads={reads} produces={produces} feeds={feeds} />}
+      {mod && <Wired mod={mod} fn={fn} />}
+    </Card>
+  );
+  const Bub = ({ who, txt, lp, wm }) => {
+    const tutor = who === "tutor";
     return (
-      <div style={{ display: "flex", justifyContent: tutor ? "flex-start" : "flex-end", marginBottom: 12 }}>
-        <div style={{ maxWidth: "82%", display: "flex", gap: 10, flexDirection: tutor ? "row" : "row-reverse" }}>
-          <div style={{ width: 30, height: 30, flexShrink: 0, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, background: tutor ? COLORS.primaryLight : COLORS.accentLight }}>{tutor ? "🤖" : "🧑‍🎓"}</div>
+      <div style={{ display: "flex", justifyContent: tutor ? "flex-start" : "flex-end", marginBottom: 9 }}>
+        <div style={{ maxWidth: "85%", display: "flex", gap: 8, flexDirection: tutor ? "row" : "row-reverse" }}>
+          <div style={{ width: 26, height: 26, flexShrink: 0, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, background: tutor ? COLORS.primaryLight : COLORS.accentLight }}>{tutor ? "🤖" : "🧑‍🎓"}</div>
           <div>
-            <div style={{ padding: "10px 14px", borderRadius: 12, background: tutor ? COLORS.primaryLight : COLORS.surface, border: `1px solid ${tutor ? COLORS.primary + "33" : COLORS.border}`, fontSize: 13, color: COLORS.text, lineHeight: 1.55 }}>
-              {m.scaffold && <Badge color={COLORS.accent} bg={COLORS.accentLight}>⚙️ trace scaffold</Badge>}
-              <div style={{ marginTop: m.scaffold ? 6 : 0 }}>{m.t}</div>
-            </div>
-            {m.lp && <div style={{ marginTop: 4, display: "flex", gap: 6, flexWrap: "wrap", justifyContent: tutor ? "flex-start" : "flex-end" }}>
-              <Badge color={lpColor(m.lp)}>scored {m.lp} · {LP_NAME[m.lp]}</Badge>
-              {m.wm && <Badge color={COLORS.danger}>wrong-model {m.wm}</Badge>}
-              <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.primary }}>▸ {ALGO[m.lp]}</span>
+            <div style={{ padding: "8px 12px", borderRadius: 11, background: tutor ? COLORS.primaryLight : COLORS.surface, border: `1px solid ${tutor ? COLORS.primary + "33" : COLORS.border}`, fontSize: 12.5, color: COLORS.text, lineHeight: 1.5 }}>{txt}</div>
+            {lp && <div style={{ marginTop: 3, display: "flex", gap: 5, justifyContent: "flex-end" }}>
+              <Badge color={lpColor(lp)}>scored {lp}</Badge>
+              {wm && wm.indexOf("PS-A") === 0 && <Badge color={COLORS.danger}>wrong-model {wm}</Badge>}
             </div>}
           </div>
         </div>
@@ -428,492 +415,289 @@ const StudentView = () => {
   };
 
   return (
-   <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-    <div style={{ display: "grid", gridTemplateColumns: "260px 1fr 290px", gap: 18 }}>
-      {/* LEFT — concept + pathway */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Card style={{ padding: 16 }}>
-          <Tag>Current Concept · Chapter 1 §1.1</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "8px 0 4px", color: COLORS.text }}>Command-line arguments</h3>
-          <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.5 }}>Princeton intro: Sedgewick &amp; Wayne §1.1 · UseArgument.java</p>
-          <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <Tag>Progress</Tag><span style={{ fontSize: 11, fontWeight: 700, color: COLORS.primary }}>Step {step}/5</span>
-          </div>
-          <Bar value={step} max={5} />
-          <div style={{ marginTop: 14, padding: 10, background: COLORS.surfaceAlt, borderRadius: 8 }}>
-            <Tag>Your LP level (L1 entry → L4 transfer)</Tag>
-            <div style={{ marginTop: 6 }}><LPChips current={curLP} /></div>
-            <Confidence value={diag.conf} />
-            <Wired mod="lp_diagnostic.py" fn="classify_lp_level → current_lp_level + confidence" />
-          </div>
-        </Card>
-        <Card style={{ padding: 0, overflow: "hidden" }}>
-          <div style={{ padding: "14px 16px 8px" }}><Tag>Reasoning Pathway</Tag></div>
-          {steps.map((s) => (
-            <div key={s.n} onClick={() => setStep(s.n)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 16px", cursor: "pointer", background: step === s.n ? COLORS.primaryLight : "transparent", borderLeft: `3px solid ${step === s.n ? COLORS.primary : step > s.n ? COLORS.success : "transparent"}` }}>
-              <div style={{ width: 30, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, background: step === s.n ? COLORS.primary : step > s.n ? COLORS.successLight : COLORS.surfaceAlt, color: step === s.n ? "#fff" : undefined }}>{step > s.n ? "✓" : s.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 13, fontWeight: step === s.n ? 700 : 500, color: step === s.n ? COLORS.primaryDark : step > s.n ? COLORS.success : COLORS.textMid }}>{s.label}</span>
-                  <span style={{ fontSize: 9, fontFamily: fonts.mono, color: step === s.n ? COLORS.primary : COLORS.textLight, fontWeight: 700 }}>{s.lp}</span>
-                </div>
-                <div style={{ fontSize: 10, color: COLORS.textLight }}>{s.desc}</div>
-              </div>
+   <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+    {/* SELF-EXPLANATORY HEADER — what this is + how to read it */}
+    <Card style={{ padding: "14px 18px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }}>
+        <div style={{ maxWidth: 640 }}>
+          <h2 style={{ fontFamily: fonts.display, fontSize: 18, margin: "0 0 4px", color: COLORS.text }}>CPAL · a Java tutor that reads <em>how</em> a student thinks</h2>
+          <p style={{ fontSize: 12.5, color: COLORS.textMid, margin: 0, lineHeight: 1.55 }}>
+            One program (<span style={{ fontFamily: fonts.mono }}>HelloWorld.java</span>), two views. The <strong>Student</strong> tab is the plain Socratic chat the learner sees. This <strong>Teacher</strong> tab is the live reasoning analysis behind every message — it diagnoses the student's <em>level of understanding</em>, not just right vs wrong, and adapts the next reply.
+          </p>
+        </div>
+        <div style={{ background: COLORS.surfaceAlt, borderRadius: 10, padding: "9px 12px" }}>
+          <div style={{ fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, marginBottom: 5, letterSpacing: 1 }}>SOLO-FOR-CODE SCALE · LP (Level 0–4)</div>
+          {[["L0", "Prestructural", "no usable understanding (floor)"], ["L1", "Unistructural", "names one aspect — a symptom"], ["L2", "Rule", "states the rule"], ["L3", "Mechanism", "explains why"], ["L4", "Transfer", "applies it elsewhere"]].map(([lv, nm, desc]) => (
+            <div key={lv} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+              <Badge color={lpColor(lv)}>{lv}</Badge>
+              <span style={{ fontSize: 11, fontWeight: 700, color: COLORS.text }}>{nm}</span>
+              <span style={{ fontSize: 10, color: COLORS.textLight }}>— {desc}</span>
             </div>
           ))}
-        </Card>
+        </div>
       </div>
-
-      {/* CENTER — the conversation */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Card>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <div>
-              <Tag color={COLORS.primary}>Conversation · this is where the evidence is produced</Tag>
-              <h2 style={{ fontFamily: fonts.display, fontSize: 20, margin: "4px 0 0", color: COLORS.text }}>Tutoring Conversation</h2>
-            </div>
-            <Badge color={COLORS.accent} bg={COLORS.accentLight}>Step {step}: {steps[step-1].label}</Badge>
-          </div>
-          <Code>{`public class UseArgument {
-   public static void main(String[] args) {
-      System.out.print("Hi, ");
-      System.out.print(args[0]);   // student tries: java UseArgument  (no args)
-      System.out.println(". How are you?");
-   }
-}`}</Code>
-          <Wired mod="data/quiz_bank.json" fn="items[command_line_args].code  (Princeton §1.1)" />
-          <div style={{ marginTop: 10, padding: "7px 11px", borderRadius: 8, background: COLORS.primaryLight, border: `1px solid ${COLORS.primary}22`, fontSize: 11, color: COLORS.primaryDark, lineHeight: 1.5 }}>
-            ↻ After <strong>every</strong> student message, <span style={{ fontFamily: fonts.mono }}>diagnose()</span> re-runs: the wrong model is caught at the <strong>first</strong> reply (L1) and re-checked each turn — matched at L1–L2, refuted once the mechanism is reached (L3).
-          </div>
-          <div style={{ marginTop: 14, display: "flex", flexDirection: "column" }}>
-            {visible.map((m, i) => <Bubble key={i} m={m} />)}
-          </div>
-          {step < 5 ? (
-            <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
-              <div style={{ flex: 1, padding: "11px 14px", borderRadius: 10, border: `1.5px dashed ${COLORS.border}`, color: COLORS.textLight, fontSize: 12 }}>Type your response…</div>
-              <button onClick={() => setStep(step + 1)} style={{ padding: "0 18px", borderRadius: 10, border: "none", background: COLORS.primary, color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>Send ▸</button>
-            </div>
-          ) : (
-            <div style={{ marginTop: 6, padding: "11px 14px", borderRadius: 10, background: COLORS.successLight, border: `1px solid ${COLORS.success}44`, color: COLORS.success, fontWeight: 700, fontSize: 13, textAlign: "center" }}>
-              ✓ Reached L4 transfer on Command-line arguments — concept distribution written to the Student KG
-            </div>
-          )}
-          <Wired mod="lp_diagnostic.py + api/student_app.py" fn="diagnose() → LP-shaped Socratic prompt (never gives the answer)" />
-        </Card>
+      {/* SCENARIO PICKER — switch between different kinds of student */}
+      <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textLight, letterSpacing: 1, marginRight: 2 }}>STUDENT SCENARIO:</span>
+        {SCENARIOS.map((s, i) => (
+          <button key={s.id} onClick={() => { setScenario(i); setStep(1); }} style={{ padding: "5px 11px", borderRadius: 7, border: scenario === i ? `1.5px solid ${COLORS.primary}` : `1px solid ${COLORS.border}`, background: scenario === i ? COLORS.primaryLight : COLORS.surface, color: scenario === i ? COLORS.primaryDark : COLORS.textMid, fontSize: 11, fontWeight: scenario === i ? 700 : 500, cursor: "pointer" }}>{s.label}</button>
+        ))}
       </div>
+      <div style={{ marginTop: 5, fontSize: 11.5, color: COLORS.textMid, fontStyle: "italic" }}><strong style={{ fontStyle: "normal", color: COLORS.text }}>{sc.who}</strong> — {sc.desc}</div>
+      {mode === "teacher" && (
+        <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+          <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textLight, marginRight: 4, letterSpacing: 1 }}>EACH MESSAGE RUNS:</span>
+          {["① LP distribution", "② track mastery", "③ catch misconception", "④ map on graph", "⑤ pick action", "⑥ reply"].map((s, i, a) => (
+            <React.Fragment key={s}>
+              <span style={{ fontSize: 10.5, fontFamily: fonts.mono, color: COLORS.primaryDark, background: COLORS.primaryLight, padding: "3px 7px", borderRadius: 5 }}>{s}</span>
+              {i < a.length - 1 && <span style={{ color: COLORS.textLight, fontSize: 12 }}>→</span>}
+            </React.Fragment>
+          ))}
+          <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textLight, marginLeft: 6 }}>· each card explains, in plain language, what it does</span>
+        </div>
+      )}
+      {mode === "student" && (
+        <div style={{ marginTop: 10, fontSize: 11.5, color: COLORS.textMid, fontStyle: "italic" }}>
+          👩‍🎓 This is everything the learner sees — a guided conversation. None of the analysis is shown to them; it all lives on the <strong>Teacher · Live analysis</strong> tab.
+        </div>
+      )}
+    </Card>
 
-      {/* RIGHT — live diagnosis */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Card style={{ padding: 16 }}>
-          <Tag color={COLORS.primary}>Live diagnosis (dev panel — hidden from student)</Tag>
-          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12, color: COLORS.textMid }}>Concept</span>
-              <Badge color={COLORS.primary}>command_line_args</Badge>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12, color: COLORS.textMid }}>LP level</span>
-              <Badge color={lpColor(curLP)}>{curLP} · {LP_NAME[curLP]}</Badge>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12, color: COLORS.textMid }}>Wrong model</span>
-              {diag.wm ? <Badge color={COLORS.danger}>{diag.wm}</Badge> : <span style={{ color: COLORS.textLight, fontSize: 12 }}>—</span>}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12, color: COLORS.textMid }}>Probe</span>
-              <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{diag.probe}/8</span>
-            </div>
+    {/* LIVE banner — makes the simultaneity explicit */}
+    <Card style={{ padding: "12px 16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 18 }}>⟳</span>
+          <div>
+            <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.primaryDark }}>{mode === "teacher" ? "Live · simultaneous analysis" : "Hello World · live tutoring"} · {sc.who}</span>
+            <span style={{ fontSize: 12, color: COLORS.textMid, marginLeft: 8 }}>{mode === "teacher" ? "every dashboard recomputes on each student message" : "answer step by step — the teacher view analyses each message"} — step {safeStep}/{nTurns}</span>
+            {mode === "teacher" && <div style={{ fontSize: 11, color: COLORS.textMid, marginTop: 3, fontStyle: "italic" }}>analysing student msg → &ldquo;{t.you.length > 80 ? t.you.slice(0, 80) + "…" : t.you}&rdquo; · reported {rep.label}</div>}
           </div>
-          <div style={{ marginTop: 10, padding: 10, background: diag.wm ? COLORS.dangerLight : COLORS.surfaceAlt, borderRadius: 8, fontSize: 10.5, color: COLORS.textMid, lineHeight: 1.5 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-              <Tag color={diag.wm ? COLORS.danger : COLORS.textLight}>Wrong mental model · model example</Tag>
-              <Badge color={diag.wm ? COLORS.danger : COLORS.textLight}>{diag.wm ? "matched" : "not active"}</Badge>
-            </div>
-            <div><strong style={{ color: COLORS.danger }}>CL-A · args has defaults / args[0] is the program</strong></div>
-            <div style={{ marginTop: 2 }}><strong>belief:</strong> args[0] is always populated — either with an empty string or with the program name when no arguments are passed.</div>
-            <div><strong>origin:</strong> carryover from C/Python where argv[0] holds the script/program path.</div>
-            <div><strong>signal:</strong> &ldquo;args[0] is empty when nothing passed&rdquo;, &ldquo;args[0] is the program name&rdquo;</div>
-            <div><strong>refutation:</strong> JVM populates args with ONLY user-supplied tokens after the class name. No args → args.length == 0 → args[0] is out of bounds.</div>
-          </div>
-          <Wired mod="mental_models.py · wrong_models_catalogue_v2.json" fn="match_wrong_model() → CL-A {wrong_belief, origin, signals, refutation}" />
-        </Card>
-
-        <Card style={{ padding: 16 }}>
-          <Tag>Mechanism vocabulary detected</Tag>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 8 }}>
-            {(step >= 4 ? ["array","length","args","runtime","bounds","argv vs args"] : step === 3 ? ["array","args[]","runtime"] : []).map((t) => <Badge key={t} color={step >= 4 ? COLORS.primary : COLORS.textLight}>{t}</Badge>)}
-            {step < 3 && <span style={{ fontSize: 11, color: COLORS.textLight }}>none yet — pre-mechanism</span>}
-          </div>
-          {diag.delta > 0 && <div style={{ marginTop: 10, padding: "8px 12px", background: COLORS.successLight, border: `1px solid ${COLORS.success}44`, borderRadius: 8, fontSize: 12, color: COLORS.success, fontWeight: 700 }}>📈 +{(diag.delta*100).toFixed(0)}% mastery this turn (delta_lp &gt; 0)</div>}
-          <Wired mod="lp_diagnostic.py" fn="classify_post_reply → delta_lp" />
-        </Card>
-
-        <Card style={{ padding: 16 }}>
-          <Tag>Adapts based on</Tag>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 8 }}>
-            {["LP level","wrong-model match","plateau flag","probe cap"].map((t) => <Badge key={t} color={COLORS.textMid} bg={COLORS.surfaceAlt}>{t}</Badge>)}
-          </div>
-        </Card>
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button onClick={() => setStep(Math.max(1, safeStep - 1))} style={{ padding: "7px 12px", borderRadius: 8, border: `1px solid ${COLORS.border}`, background: COLORS.surface, color: COLORS.textMid, fontSize: 12, cursor: "pointer" }}>◂ Prev</button>
+          <button onClick={() => setStep(safeStep < nTurns ? safeStep + 1 : 1)} style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: COLORS.primary, color: "#fff", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>{safeStep < nTurns ? "Next message ▸" : "↻ Restart"}</button>
+        </div>
       </div>
-    </div>
+    </Card>
 
-    {/* PROGRESSION + KNOWLEDGE-GRAPH FORMATION (turn-by-turn) */}
-    <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 16 }}>
-      <Card>
-        <Tag color={COLORS.primary}>How the progression advances &amp; the knowledge graph forms — turn by turn</Tag>
-        <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 10px", color: COLORS.text }}>Command-line arguments · scenarios L1 → L4 (Princeton §1.1)</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-          {ledger.map((r, i) => {
-            const active = r.lp === curLP, done = i < curIdx;
-            return (
-              <div key={r.lp} style={{ display: "grid", gridTemplateColumns: "44px 1fr", gap: 10, padding: "9px 10px", borderRadius: 8, background: active ? COLORS.primaryLight : done ? COLORS.surfaceAlt : "transparent", opacity: i <= curIdx ? 1 : 0.4, border: `1px solid ${active ? COLORS.primary + "55" : "transparent"}` }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                  <Badge color={lpColor(r.lp)}>{r.lp}</Badge>
-                  <span style={{ fontSize: 8, fontFamily: fonts.mono, color: COLORS.textLight }}>{LP_NAME[r.lp]}</span>
-                </div>
-                <div>
-                  <div style={{ fontSize: 10, color: COLORS.textLight, fontFamily: fonts.mono, marginBottom: 2 }}>SCENARIO · {r.scen}</div>
-                  <div style={{ fontSize: 12, color: COLORS.text, fontStyle: "italic" }}>&ldquo;{r.resp}&rdquo;</div>
-                  <div style={{ fontSize: 10, color: COLORS.textMid, marginTop: 3 }}>{r.evid}</div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
-                    <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: r.wm.startsWith("CL") || r.wm.startsWith("AI") ? COLORS.danger : COLORS.textLight }}>▸ wrong model: {r.wm}</span>
-                    <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: COLORS.primary }}>▸ algo: {r.algo}</span>
-                    <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: COLORS.success }}>▸ KG: {r.kg}</span>
-                  </div>
+    {/* TEACHER — chat explained: why each answer was read the way it was */}
+    {mode === "teacher" && (
+    <Card style={{ padding: 16 }}>
+      <Tag color={COLORS.primary}>Chat, explained · why each answer was read the way it was</Tag>
+      <div style={{ fontSize: 10.5, color: COLORS.textLight, marginTop: 4, lineHeight: 1.4 }}>Every student message so far, each with the reasoning that produced its level and misconception flag. The most recent is highlighted.</div>
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+        {TURNS.slice(0, safeStep).map((tt, i) => {
+          const rl = reportLevel(tt.dist);
+          const mlp = LP_FULL.map((k) => ({ k, m: tt.dist[k] || 0 })).sort((a, b) => b.m - a.m)[0].k;
+          const wmOn = tt.wm && tt.wm.indexOf("PS-A") === 0;
+          const cleared = tt.wm && (tt.wm.indexOf("refuted") >= 0 || tt.scoring.analytic.indexOf("cleared") >= 0);
+          const cur = i === safeStep - 1;
+          return (
+            <div key={i} style={{ padding: "9px 11px", borderRadius: 8, background: cur ? COLORS.primaryLight : COLORS.surfaceAlt, border: cur ? `1px solid ${COLORS.primary}33` : "1px solid transparent" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }}>
+                <div style={{ fontSize: 12, color: COLORS.text, fontStyle: "italic", flex: 1, lineHeight: 1.45 }}>🧑‍🎓 &ldquo;{tt.you}&rdquo;</div>
+                <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+                  <Badge color={rl.firm ? lpColor(mlp) : COLORS.warning}>{rl.label}</Badge>
+                  {wmOn ? <Badge color={COLORS.danger} bg={COLORS.dangerLight}>PS-A</Badge> : cleared ? <Badge color={COLORS.success} bg={COLORS.successLight}>cleared</Badge> : null}
                 </div>
               </div>
-            );
-          })}
-        </div>
-        <Wired mod="lp_diagnostic.py + student_state_tracker.py" fn="classify → diagnose → update_mastery → KG write per level" />
-      </Card>
+              <div style={{ marginTop: 5, fontSize: 11, color: COLORS.textMid, lineHeight: 1.5 }}><strong>Why this reading:</strong> {tt.scoring.det}; {tt.scoring.analytic.toLowerCase()}. Taken together that is <strong>{tt.scoring.holistic}</strong> reasoning, which is why it lands where it does on the scale.</div>
+            </div>
+          );
+        })}
+      </div>
+      <Wired mod="lp_diagnostic.py + scoring_pipeline.py" fn="per-answer rationale = deterministic + analytic + holistic, per message" />
+    </Card>
+    )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Card style={{ padding: 16 }}>
-          <Tag color={COLORS.primary}>Live student knowledge graph · CSO v3.5 grounded</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 15, margin: "6px 0 8px", color: COLORS.text }}>The graph that revolves around the student</h3>
-          <StudentGraphPanel curLP={curLP} />
-          <Wired mod="student_knowledge_graph.py + cso_traversal.py" fn="GET /api/student/graph — nodes (LP+DINA+WM) + CSO neighbours" />
-        </Card>
-        <Card style={{ padding: 16 }}>
-          <Tag>Chapter 1.1 concept cluster · LP evidence trail</Tag>
-          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
-            {cluster.map((r) => (
-              <div key={r.lp} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "5px 8px", borderRadius: 6, background: r.lp === curLP ? COLORS.primaryLight : COLORS.surfaceAlt }}>
-                <Badge color={lpColor(r.lp)}>{r.lp}</Badge>
-                <span style={{ fontSize: 10.5, color: COLORS.textMid, lineHeight: 1.4 }}>{r.txt}</span>
+    {/* TEACHER — per-concept mastery, plain language a teacher can read at a glance */}
+    {mode === "teacher" && (
+    <Card style={{ padding: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <Tag color={COLORS.primary}>Per-concept mastery · what this student can &amp; can't do yet</Tag>
+        <Badge color={COLORS.success} bg={COLORS.successLight}>{solidCount}/{CONCEPTS.length} solid</Badge>
+      </div>
+      <div style={{ fontSize: 10.5, color: COLORS.textLight, marginTop: 4, lineHeight: 1.4 }}>The sub-skills inside Hello World (§1.1), in plain language — read it like a checklist of where this student is right now. Each turns <span style={{ color: COLORS.success, fontWeight: 700 }}>Solid</span> as they demonstrate it.</div>
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5 }}>
+        {CONCEPTS.map((c) => {
+          const s = conceptState(c);
+          return (
+            <div key={c.name} style={{ display: "grid", gridTemplateColumns: "1fr 96px", gap: 10, alignItems: "center", padding: "8px 11px", borderRadius: 8, background: s.bg, border: `1px solid ${s.color}33` }}>
+              <div>
+                <div style={{ fontSize: 12.5, fontWeight: 700, color: COLORS.text }}>{c.name}</div>
+                <div style={{ fontSize: 10.5, color: COLORS.textMid, marginTop: 1 }}>{c.desc}</div>
+              </div>
+              <div style={{ textAlign: "right" }}><Badge color={s.color} bg={s.bg}>{s.label}</Badge></div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: 9, padding: "8px 12px", borderRadius: 8, background: COLORS.primaryLight, border: `1px solid ${COLORS.primary}22`, fontSize: 11.5, color: COLORS.primaryDark, lineHeight: 1.5 }}>
+        <strong>📋 teacher takeaway:</strong> {solidCount <= 1 ? "Still at first read — knows what the program prints, but not yet how it actually runs." : solidCount <= 3 ? "Past the common ‘compile = run’ mix-up and can state the rule; ready to trace the mechanism." : solidCount <= 5 ? "Owns the mechanism — can explain WHY it runs, not just that it does." : "Mastered Hello World end to end: structure, mechanism, and the rules generalised. Ready for the next concept."}
+      </div>
+      <Blueprint reads="the mastery estimate ② for each sub-skill of Hello World" produces="a plain Solid / Developing / Not-yet checklist + a one-line takeaway" feeds="→ you, the teacher — this is the at-a-glance summary of where the student is" />
+      <Wired mod="student_model_service.py · progression_for(student)" fn="per-concept LP distribution → plain-language mastery" />
+    </Card>
+    )}
+
+    {/* TEACHER — the knowledge graph, full width, evolving per turn */}
+    {mode === "teacher" && (
+    <Card style={{ padding: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Tag color={COLORS.primary}>④ Knowledge graph · ontology + Chapter-1 prerequisite DAG</Tag>
+        <Badge color={COLORS.success} bg={COLORS.successLight}>⟳ grows with the conversation</Badge>
+      </div>
+      <div style={{ fontSize: 10.5, color: COLORS.textLight, marginTop: 4, lineHeight: 1.4 }}>The Layer-2 typed ontology (§4.3–4.7). <span style={{ fontFamily: fonts.mono }}>program_structure §1.1</span> is the ROOT of the Chapter-1 prerequisite DAG; typed nodes attach via typed edges as the turn unfolds. The concept node in the middle shows its <strong>LP level, mastery, and any misconception right on it</strong>, so you can read the student's state straight off the graph.</div>
+      <div style={{ marginTop: 10, background: COLORS.surfaceAlt, borderRadius: 10, padding: "10px 8px" }}>
+        <HelloKG modalLP={modalLP} mastery={masteryNow} wmActive={wmActive} showMiscon={seenWM} showItem={showItem} />
+      </div>
+      <div style={{ marginTop: 8, fontSize: 11, color: COLORS.text, lineHeight: 1.9 }}>
+        <div style={{ fontWeight: 700, marginBottom: 2 }}>Each concept — its LP level · mastery · misconception:</div>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 5 }}>
+          <span style={{ fontFamily: fonts.mono }}>program_structure §1.1</span>
+          <Badge color={lpColor(modalLP)}>{modalLP} · {LP_NAME[modalLP]}</Badge>
+          <Badge color={COLORS.primary} bg={COLORS.primaryLight}>mastery {Math.round(masteryNow * 100)}%</Badge>
+          <Badge color={wmActive ? COLORS.danger : COLORS.success} bg={wmActive ? COLORS.dangerLight : COLORS.successLight}>{wmActive ? "misconception PS-A" : "no misconception"}</Badge>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 5, marginTop: 3 }}>
+          <span style={{ fontFamily: fonts.mono }}>types_expressions §1.2</span>
+          <Badge color={COLORS.textLight} bg={COLORS.surfaceAlt}>{step >= 5 ? "unlocked — ready next" : "not started — no LP yet"}</Badge>
+        </div>
+      </div>
+      <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight }}>
+        <span>node types:</span><span style={{ color: COLORS.primary }}>JavaConcept</span><span style={{ color: COLORS.textMid }}>LPLevel</span><span style={{ color: COLORS.danger }}>Misconception</span><span style={{ color: COLORS.blue }}>AssessmentItem</span><span style={{ color: COLORS.success }}>Resource</span><span style={{ color: COLORS.textMid }}>Evidence</span>
+      </div>
+      <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: COLORS.surfaceAlt, border: `1px dashed ${COLORS.border}`, fontSize: 11, color: COLORS.textMid, lineHeight: 1.5 }}>
+        <strong>This answer demonstrates</strong> (the <span style={{ fontFamily: fonts.mono, color: COLORS.text }}>demonstrates</span> edge feeding the concept): {t.scoring.det} — so the concept node updates to <Badge color={lpColor(modalLP)}>{modalLP} · {LP_NAME[modalLP]}</Badge>{wmActive ? <> and keeps its <Badge color={COLORS.danger} bg={COLORS.dangerLight}>PS-A</Badge> link</> : <> with no active misconception</>}.
+      </div>
+      <div style={{ marginTop: 8, padding: "9px 12px", borderRadius: 8, background: COLORS.primaryLight, border: `1px solid ${COLORS.primary}22`, fontSize: 12, color: COLORS.primaryDark, lineHeight: 1.55 }}>
+        <strong>🤖 graph narration · turn {safeStep}:</strong> {t.kg}
+      </div>
+      <Blueprint reads="the concept + its level ①, the misconception ③, the assessment items, and the resources" produces="one typed graph where every analysis couples onto the concept node" feeds="→ prerequisite-gap diagnosis and the per-concept checklist above" />
+      <Wired mod="ontology.jsonld + prerequisite_dag + student_knowledge_graph.py" fn="typed nodes/edges · prerequisiteOf · indicatesMisconception · assessedBy · alignedToLPLevel · remediatedBy · demonstrates" />
+    </Card>
+    )}
+
+    <div style={{ display: "grid", gridTemplateColumns: mode === "teacher" ? "1fr 1fr" : "1fr", gap: 14, alignItems: "start" }}>
+      {/* STUDENT VIEW — only the live conversation */}
+      {mode === "student" && (
+      <Card>
+        <Tag color={COLORS.primary}>Live tutoring · HelloWorld.java (Princeton §1.1)</Tag>
+        <div style={{ marginTop: 8 }}><Code>{HELLO_CODE}</Code></div>
+        <Wired mod="introcs.cs.princeton.edu/java/11hello · HelloWorld.java" fn="the first program — edit · compile · run" />
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column" }}>
+          {TURNS.slice(0, safeStep).map((tt, i) => (
+            <React.Fragment key={i}>
+              <Bub who="you" txt={tt.you} />
+              <Bub who="tutor" txt={tt.model} />
+            </React.Fragment>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+          <div style={{ flex: 1, padding: "10px 13px", borderRadius: 10, border: `1.5px dashed ${COLORS.border}`, color: COLORS.textLight, fontSize: 12 }}>Type your response… (each send re-runs every analysis dashboard on the Teacher tab)</div>
+          <button onClick={() => setStep(safeStep < nTurns ? safeStep + 1 : 1)} style={{ padding: "0 16px", borderRadius: 10, border: "none", background: COLORS.primary, color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>{safeStep < nTurns ? "Send ▸" : "↻"}</button>
+        </div>
+      </Card>
+      )}
+
+      {/* TEACHER VIEW — all six analysis dashboards (hidden from student) */}
+      {mode === "teacher" && (<React.Fragment>
+      {/* LEFT — LP distribution · scoring+routing · mastery */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Dash title="① LP distribution + reporting rule" sub="Mastery is the whole distribution over Level 0–4 (§4.6), not one level. A reporting level is derived only by the documented rule — else the student is 'between Lk–Lk+1'." reads="the student's latest message" produces="a probability spread across Level 0–4, and one reported level (or ‘between two levels’ when they straddle)" feeds="→ mastery ②, the knowledge graph ④, and the teaching decision ⑤" mod="lp_diagnostic.py · classification_rule" fn="distribution(L0–L4) → reportLevel(τ_report=0.55, τ_adj=0.30)">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Badge color={rep.firm ? lpColor(modalLP) : COLORS.warning}>reported: {rep.label}</Badge>
+            <span style={{ fontFamily: fonts.mono, fontSize: 9.5, color: COLORS.textLight }}>{rep.firm ? "firm (mass>0.55, adj<0.30)" : "straddling — adjacent levels"}</span>
+          </div>
+          <div style={{ marginTop: 8 }}>
+            {LP_ORDER.map((lv) => (
+              <div key={lv} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+                <span style={{ fontFamily: fonts.mono, fontSize: 9.5, fontWeight: 700, color: lpColor(lv), width: 16 }}>{lv}</span>
+                <div style={{ flex: 1 }}><Bar value={(t.dist[lv] || 0) * 100} color={lpColor(lv)} h={5} /></div>
+                <span style={{ fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textMid, width: 28, textAlign: "right" }}>{Math.round((t.dist[lv] || 0) * 100)}%</span>
               </div>
             ))}
           </div>
-        </Card>
+        </Dash>
+        <Dash title="② Mastery · knowledge tracing" sub="The per-concept LP distribution updated over the response sequence. Expected-level value gives a single trend %; the model is compared across approaches." reads="this turn's level spread + everything the student has done before" produces="an updated mastery estimate for the concept (a single trend %)" feeds="→ the teaching decision ⑤ (practise vs move on) and the per-concept checklist above" mod="knowledge_tracing.py" fn="weighted-evidence · IRT/PCM · KT · graph-based propagation">
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            <span style={{ fontFamily: fonts.display, fontSize: 24, color: COLORS.primary }}>{Math.round(masteryNow * 100)}%</span>
+            <span style={{ fontSize: 9.5, color: COLORS.textLight }}>expected-level value</span>
+            {masteryDelta > 0.001 && <Badge color={COLORS.success} bg={COLORS.successLight}>+{Math.round(masteryDelta * 100)}% this turn</Badge>}
+          </div>
+          <div style={{ marginTop: 6 }}><Bar value={masteryNow * 100} h={8} /></div>
+          <div style={{ marginTop: 6, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight }}>graph-based updater can trigger an earlier-prerequisite diagnosis on a repeated later error</div>
+        </Dash>
       </div>
+
+      {/* RIGHT — misconception (multi-keyed) · tutoring policy (4 actions) · model response */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Dash title="③ Misconception · multi-keyed catalogue" sub="Each catalogue entry is keyed to concept(s), LP level(s), a response pattern, the diagnostic trace step that exposes it, and a remediation resource (§3.8)." tone={wmActive ? COLORS.danger : COLORS.textLight} reads="the reasoning pattern in the student's answer" produces="a named wrong belief (here PS-A) with where it shows up + how to fix it — or nothing" feeds="→ the teaching decision ⑤ (repair it) and the graph ④ (an indicatesMisconception link)" mod="misconception_catalogue.json" fn="match → {concepts, lp_levels, response_pattern, trace_step, remediation}">
+          {t.wm ? (
+            <div style={{ fontSize: 10.5, color: COLORS.textMid, lineHeight: 1.5 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                <Badge color={wmActive ? COLORS.danger : COLORS.success}>PS-A · compile = run</Badge>
+                <Badge color={wmActive ? COLORS.danger : COLORS.success} bg={wmActive ? COLORS.dangerLight : COLORS.successLight}>{wmActive ? "flagged" : "cleared"}</Badge>
+              </div>
+              <div><strong>concepts:</strong> program_structure (§1.1)</div>
+              <div><strong>LP levels:</strong> L1–L2 (surface/rule)</div>
+              <div><strong>response pattern:</strong> &ldquo;one command compiles and runs&rdquo;</div>
+              <div><strong>diagnostic trace step:</strong> the <em>compile</em> step — no <span style={{ fontFamily: fonts.mono }}>.class</span> exists before <span style={{ fontFamily: fonts.mono }}>javac</span></div>
+              <div><strong>remediation:</strong> §1.1 worksheet — compile-then-run walkthrough</div>
+            </div>
+          ) : <div style={{ fontSize: 11, color: COLORS.textLight }}>No active misconception flag — response consistent with the mechanism.</div>}
+        </Dash>
+        <Dash title="⑤ Tutoring policy · four actions" sub="The policy selects ONE of four actions from the diagnosed evidence (§5.8): prerequisite remediation, misconception repair, same-level practice, or transfer/debugging." tone={COLORS.warning} reads="is there a prerequisite gap? an active misconception? how strong is mastery?" produces="exactly one of four teaching moves, plus the next task" feeds="→ the reply the tutor writes ⑥" mod="tutoring_policy.py" fn="select_action(prereq_gap, misconception, mastery) → action + task">
+          <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {[["prerequisite remediation", "prereq gap"], ["misconception repair", "misconception active"], ["same-level practice", "mastery developing"], ["transfer / debugging", "mastery strong"]].map(([a, trig]) => {
+              const on = t.policy.action === a;
+              return (
+                <div key={a} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 8px", borderRadius: 6, background: on ? COLORS.warningLight : COLORS.surfaceAlt, border: on ? `1px solid ${COLORS.warning}55` : "1px solid transparent" }}>
+                  <span style={{ fontSize: 10.5, fontWeight: on ? 700 : 500, color: on ? COLORS.warning : COLORS.textMid }}>{on ? "▸ " : ""}{a}</span>
+                  <span style={{ fontSize: 8.5, fontFamily: fonts.mono, color: COLORS.textLight }}>{trig}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 7, padding: "6px 9px", borderRadius: 7, background: COLORS.primaryLight, border: `1px solid ${COLORS.primary}22`, fontSize: 10.5, color: COLORS.primaryDark, lineHeight: 1.45 }}>
+            <strong>trigger:</strong> {t.policy.trigger}<br /><strong>task:</strong> {t.policy.task}
+          </div>
+          <div style={{ marginTop: 5, fontSize: 8.5, fontFamily: fonts.mono, color: COLORS.textLight }}>note · program_structure is the DAG root → no prerequisite to remediate</div>
+        </Dash>
+        <Dash title="⑥ Model tutor response" sub="The reply the tutor actually sends — assessment item type drives it; Socratic, shaped by the level; never reveals the answer." tone={COLORS.accent} reads="the reported level + the chosen teaching move + the item type" produces="the actual Socratic reply the student receives" feeds="→ the Student tab; becomes the context for the next turn" mod="enhanced_personalized_generator.py" fn="generate → LP-shaped Socratic reply">
+          <div style={{ fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, marginBottom: 5 }}>assessment item · {t.item}</div>
+          <div style={{ padding: "9px 12px", borderRadius: 10, background: COLORS.accentLight, border: `1px solid ${COLORS.accent}33`, fontSize: 12, color: COLORS.text, lineHeight: 1.55 }}>{t.model}</div>
+          <div style={{ marginTop: 6, fontSize: 10, color: COLORS.textLight }}>Shaped by reported {rep.label} + action <span style={{ fontFamily: fonts.mono }}>{t.policy.action}</span>. Never reveals the answer.</div>
+        </Dash>
+      </div>
+      </React.Fragment>)}
     </div>
+
+    {/* CLOSING — the needed intervention this turn and how to use it */}
+    {mode === "teacher" && (
+    <Card style={{ padding: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <Tag color={COLORS.warning}>The needed intervention — and how to use it</Tag>
+        <Badge color={COLORS.warning} bg={COLORS.warningLight}>{t.policy.action}</Badge>
+      </div>
+      <p style={{ fontSize: 12.5, color: COLORS.textMid, margin: "9px 0 0", lineHeight: 1.6 }}>{t.use}</p>
+      <p style={{ fontSize: 11, color: COLORS.textLight, margin: "8px 0 0", lineHeight: 1.55 }}>Read across the five turns, the system walks through every kind of move — practise, repair the misconception, practise again to consolidate, then transfer — and it chooses each one from the evidence on this page, never on a fixed schedule. That is the whole point: the intervention follows the diagnosis, so a teacher can trust that the next task is the one this particular student actually needs.</p>
+      <Wired mod="tutoring_policy.py → enhanced_personalized_generator.py" fn="diagnosed evidence → action → how to apply it" />
+    </Card>
+    )}
    </div>
   );
 };
 
-/* ════════════════════════ GRAPH PRIMITIVES (SVG) ════════════════════════ */
-const GNode = ({ x, y, w, h, label, sub, fill = COLORS.surface, stroke = COLORS.primary, text = COLORS.text }) => (
-  <g>
-    <rect x={x} y={y} width={w} height={h} rx={9} fill={fill} stroke={stroke} strokeWidth="1.5" />
-    <text x={x + w/2} y={y + (sub ? h/2 - 4 : h/2 + 4)} textAnchor="middle" fontFamily={fonts.body} fontSize="12.5" fontWeight="700" fill={text}>{label}</text>
-    {sub && <text x={x + w/2} y={y + h/2 + 12} textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>{sub}</text>}
-  </g>
-);
-const edgePath = (a, b) => {
-  // from right-center of a to left-center of b, smooth cubic
-  const x1 = a.x + a.w, y1 = a.y + a.h/2, x2 = b.x, y2 = b.y + b.h/2;
-  const mx = (x1 + x2) / 2;
-  return `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
-};
-
-/* ════════════════════════ TEACHER VIEW — THE THREE GRAPHS ════════════════════════ */
-const TeacherView = () => {
-  // ── Graph A: prerequisite DAG (§1.1–1.6) ──
-  const A = {
-    ps:   { x: 20,  y: 120, w: 120, h: 46, label: "Program structure", sub: "§1.1", mastery: 0.86 },
-    ty:   { x: 200, y: 120, w: 120, h: 46, label: "Types & expr",      sub: "§1.2", mastery: 0.71 },
-    cond: { x: 380, y: 36,  w: 120, h: 46, label: "Conditionals",      sub: "§1.3", mastery: 0.64 },
-    loop: { x: 380, y: 120, w: 120, h: 46, label: "Loops",             sub: "§1.3", mastery: 0.52 },
-    io:   { x: 380, y: 204, w: 120, h: 46, label: "Input / Output",    sub: "§1.5", mastery: 0.48 },
-    arr:  { x: 560, y: 120, w: 120, h: 46, label: "Arrays",            sub: "§1.4", mastery: 0.41 },
-    cs:   { x: 740, y: 162, w: 120, h: 46, label: "Case study",        sub: "§1.6 PageRank", mastery: 0.22 },
-  };
-  const Aedges = [["ps","ty"],["ty","cond"],["ty","loop"],["ty","io"],["loop","arr"],["arr","cs"],["io","cs"]];
-  const masteryFill = (m) => m >= 0.75 ? COLORS.successLight : m >= 0.5 ? COLORS.warningLight : COLORS.dangerLight;
-  const masteryStroke = (m) => m >= 0.75 ? COLORS.success : m >= 0.5 ? COLORS.warning : COLORS.danger;
-
-  // ── Graph C: student KG (per-concept LP distribution) ──
-  const maya = [
-    { c: "program_structure", dist: {L1:0,L2:.1,L3:.3,L4:.6}, rep: "L4" },
-    { c: "integer_division",  dist: {L1:0,L2:.2,L3:.7,L4:.1}, rep: "L3" },
-    { c: "string_equality",   dist: {L1:.05,L2:.15,L3:.65,L4:.15}, rep: "L3" },
-    { c: "loops",             dist: {L1:.5,L2:.4,L3:.05,L4:0}, rep: "L1→L2" },
-    { c: "array_index",       dist: {L1:.1,L2:.55,L3:.3,L4:.05}, rep: "L2→L3", plateau: true },
-  ];
-
-  // ── Graph B: THIS student's misconceptions (from her conversation) ──
-  const B = {
-    concepts: [
-      { id: "array_index",     x: 20,  y: 50,  hits: 3 },
-      { id: "string_equality", x: 20,  y: 150, hits: 1 },
-    ],
-    wms: [
-      { id: "AI-A", label: "index from 1", x: 300, y: 40,  from: "array_index",     to: "trace_scaffold",  n: 3, lp: "L2" },
-      { id: "SE-A", label: "== like int",  x: 300, y: 140, from: "string_equality", to: "worked_example",  n: 1, lp: "L1" },
-    ],
-    intvs: [
-      { id: "trace_scaffold",  label: "Trace scaffold",  x: 580, y: 50  },
-      { id: "worked_example",  label: "Worked example",  x: 580, y: 150 },
-    ],
-  };
-  const cNode = (c) => ({ x: c.x, y: c.y, w: 130, h: 40 });
-  const wNode = (w) => ({ x: w.x, y: w.y, w: 150, h: 40 });
-  const iNode = (i) => ({ x: i.x, y: i.y, w: 150, h: 40 });
-  const findC = (id) => B.concepts.find(c => c.id === id);
-  const findI = (id) => B.intvs.find(i => i.id === id);
-
-  const metrics = [
-    { label: "Student",          value: "Maya R.",     sub: "CSCI 1301",     icon: "🧑‍🎓", color: COLORS.primary },
-    { label: "Current concept",  value: "array_index", sub: "§1.4",          icon: "📍", color: COLORS.success },
-    { label: "LP level",         value: "L2→L3",       sub: "straddle",      icon: "📈", color: COLORS.warning },
-    { label: "Active wrong model",value: "AI-A",        sub: "index from 1",  icon: "🔍", color: COLORS.danger },
-  ];
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      {/* metric strip */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16 }}>
-        {metrics.map((m) => (
-          <Card key={m.label} style={{ padding: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <div>
-                <Tag>{m.label}</Tag>
-                <div style={{ fontFamily: fonts.display, fontSize: 26, color: m.color, marginTop: 4 }}>{m.value}</div>
-                <div style={{ fontSize: 11, color: COLORS.textLight }}>{m.sub}</div>
-              </div>
-              <span style={{ fontSize: 22 }}>{m.icon}</span>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* GRAPH A — prerequisite DAG */}
-      <Card>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <div>
-            <Tag color={COLORS.primary}>Graph A · Prerequisite knowledge graph (built from the CSE-KG)</Tag>
-            <h3 style={{ fontFamily: fonts.display, fontSize: 18, margin: "6px 0 0", color: COLORS.text }}>Maya's prerequisite path · Chapter 1 (§1.1–§1.6)</h3>
-          </div>
-          <div style={{ display: "flex", gap: 6 }}>
-            <Badge color={COLORS.success}>≥75% mastered</Badge>
-            <Badge color={COLORS.warning}>50–75%</Badge>
-            <Badge color={COLORS.danger}>&lt;50%</Badge>
-          </div>
-        </div>
-        <p style={{ fontSize: 12, color: COLORS.textMid, margin: "0 0 8px", lineHeight: 1.5 }}>Nodes and edges come from the CSE-KG <span style={{ fontFamily: fonts.mono }}>requiresKnowledge</span> relations (an arrow points from a concept to what it depends on). Tint = <strong>this student's</strong> mastery — so Maya's weak Arrays node is read against its upstream Loops/Types prerequisites.</p>
-        <svg viewBox="0 0 880 270" style={{ width: "100%", height: "auto" }}>
-          <defs>
-            <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill={COLORS.primary} />
-            </marker>
-          </defs>
-          {Aedges.map(([a,b],i) => <path key={i} d={edgePath(A[a],A[b])} fill="none" stroke={COLORS.primary} strokeWidth="1.6" opacity="0.55" markerEnd="url(#arrA)" />)}
-          {Object.values(A).map((n,i) => <GNode key={i} {...n} fill={masteryFill(n.mastery)} stroke={masteryStroke(n.mastery)} />)}
-        </svg>
-        <Wired mod="cse_kg_client.py · local_cse_kg_client.py" fn="get_prerequisites() / build_concept_subgraph() · requiresKnowledge edges · node tint = this student's posterior" />
-      </Card>
-
-      {/* GRAPH B + Graph C side by side */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.25fr 1fr", gap: 16 }}>
-        {/* GRAPH B — misconception graph */}
-        <Card>
-          <Tag color={COLORS.primary}>Graph B · Maya's misconceptions (from her conversation)</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 8px", color: COLORS.text }}>Concept → Wrong model → Intervention</h3>
-          <svg viewBox="0 0 740 250" style={{ width: "100%", height: "auto" }}>
-            <defs>
-              <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill={COLORS.danger} />
-              </marker>
-            </defs>
-            {/* concept → wm edges (thickness ~ #students) */}
-            {B.wms.map((w,i) => { const c = findC(w.from); return <path key={"cw"+i} d={edgePath(cNode(c), wNode(w))} fill="none" stroke={COLORS.danger} strokeWidth={1 + w.n/3} opacity="0.5" markerEnd="url(#arrB)" />; })}
-            {/* wm → intervention edges */}
-            {B.wms.map((w,i) => { const it = findI(w.to); return <path key={"wi"+i} d={edgePath(wNode(w), iNode(it))} fill="none" stroke={COLORS.success} strokeWidth="1.4" opacity="0.55" markerEnd="url(#arrB)" />; })}
-            {/* column headers */}
-            <text x="85" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>CONCEPT</text>
-            <text x="375" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>WRONG MODEL</text>
-            <text x="655" y="14" textAnchor="middle" fontFamily={fonts.mono} fontSize="9" fill={COLORS.textLight}>INTERVENTION</text>
-            {B.concepts.map((c,i) => <GNode key={"c"+i} {...cNode(c)} label={c.id} sub={c.hits + " turns"} fill={COLORS.primaryLight} stroke={COLORS.primary} />)}
-            {B.wms.map((w,i) => <GNode key={"w"+i} {...wNode(w)} label={w.id + " · " + w.label} sub={"caps " + w.lp + " · ×" + w.n} fill={COLORS.dangerLight} stroke={COLORS.danger} />)}
-            {B.intvs.map((it,i) => <GNode key={"i"+i} {...iNode(it)} label={it.label} fill={COLORS.successLight} stroke={COLORS.success} />)}
-          </svg>
-          <Wired mod="mental_models.py · match_wrong_model()" fn="from THIS student's chat · edge width = times signalled in her conversation" />
-        </Card>
-
-        {/* GRAPH C — student knowledge graph */}
-        <Card>
-          <Tag color={COLORS.primary}>Graph C · Student knowledge graph</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 8px", color: COLORS.text }}>Maya R. — per-concept LP distribution</h3>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 11, background: COLORS.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fonts.display, fontSize: 16 }}>MR</div>
-            <div style={{ fontSize: 11, color: COLORS.textMid, lineHeight: 1.4 }}>Each concept stores a <strong>distribution over L1–L4</strong>, not one hard level. Reporting level shown only when a level dominates; otherwise a straddle (Jin 2019).</div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-            {maya.map((m) => (
-              <div key={m.c} style={{ padding: "8px 10px", borderRadius: 8, background: m.plateau ? COLORS.dangerLight : COLORS.surfaceAlt }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-                  <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{m.c}</span>
-                  <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                    {m.plateau && <Badge color={COLORS.danger}>plateau</Badge>}
-                    <Badge color={m.rep.includes("→") ? COLORS.warning : lpColor(m.rep)}>{m.rep}</Badge>
-                  </span>
-                </div>
-                {/* stacked L1–L4 distribution bar */}
-                <div style={{ display: "flex", height: 10, borderRadius: 5, overflow: "hidden", border: `1px solid ${COLORS.border}` }}>
-                  {["L1","L2","L3","L4"].map((lv) => m.dist[lv] > 0 ? <div key={lv} title={lv+" "+Math.round(m.dist[lv]*100)+"%"} style={{ width: `${m.dist[lv]*100}%`, background: lpColor(lv) }} /> : null)}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-            {["L1","L2","L3","L4"].map((lv) => <span key={lv} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 9.5, fontFamily: fonts.mono, color: COLORS.textMid }}><span style={{ width: 9, height: 9, borderRadius: 2, background: lpColor(lv) }} />{lv} {LP_NAME[lv]}</span>)}
-          </div>
-          <Wired mod="student_state_tracker.py" fn="(student, concept) → posterior over {L1..L4} + reporting rule" />
-        </Card>
-      </div>
-
-      {/* live rollups: LP distribution (L1–L4) + most-common misconceptions */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <Card>
-          <Tag>LP across Maya's concepts</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 14px", color: COLORS.text }}>Where Is Maya on the Rubric?</h3>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: 110 }}>
-            {[{lp:"L1",n:1},{lp:"L2",n:1},{lp:"L3",n:2},{lp:"L4",n:1}].map((s) => (
-              <div key={s.lp} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: lpColor(s.lp) }}>{s.n}</span>
-                <div style={{ width: "100%", height: `${(s.n/2)*78}px`, minHeight: 6, borderRadius: 6, background: lpColor(s.lp) }} />
-                <span style={{ fontSize: 10, fontFamily: fonts.mono, color: lpColor(s.lp), fontWeight: 700 }}>{s.lp}</span>
-                <span style={{ fontSize: 8.5, color: COLORS.textLight }}>{LP_NAME[s.lp]}</span>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-            <Badge color={COLORS.danger}>array_index plateau at L2</Badge>
-            <Badge color={COLORS.success}>program_structure at L4</Badge>
-          </div>
-          <Wired mod="db_store.py · progression_for(student, concept)" fn="reporting_level per concept for this student" />
-        </Card>
-
-        <Card>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <div>
-              <Tag color={COLORS.accent}>AI-generated insight · this student</Tag>
-              <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Maya's Active Wrong Models</h3>
-            </div>
-            <Badge color={COLORS.accent}>Live</Badge>
-          </div>
-          <div style={{ background: COLORS.accentLight, borderRadius: 10, padding: 12, border: `1px solid ${COLORS.accent}33`, marginBottom: 12 }}>
-            <p style={{ fontSize: 12, color: COLORS.textMid, margin: 0, lineHeight: 1.55 }}>
-              <strong style={{ color: COLORS.accent }}>🤖</strong> Maya is holding <strong>CL-A</strong> ("args[0] is the program name") on command_line_args (§1.1) — signalled across 2 turns, currently capped at L2. Suggested: run the args.length trace; the same misconception will surface in §1.4 array indexing as AI-A ("index from 1"). Pre-empt both with one zero-based mini-lesson.
-            </p>
-          </div>
-          {[
-            { id: "CL-A", label: "args[0] is the program name",  n: 2, pct: 67, color: COLORS.danger },
-            { id: "AI-A", label: "array index from 1 (§1.4)",    n: 1, pct: 33, color: COLORS.accent },
-          ].map((wm) => (
-            <div key={wm.id} style={{ marginBottom: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                <span style={{ fontSize: 11, color: COLORS.textMid }}><span style={{ fontFamily: fonts.mono, fontWeight: 700, color: wm.color }}>{wm.id}</span> · {wm.label}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: wm.color }}>×{wm.n} turns</span>
-              </div>
-              <Bar value={wm.pct} color={wm.color} />
-            </div>
-          ))}
-          <Wired mod="match_wrong_model() + interaction_log.jsonl" fn="this student · group by wrong_model_id" />
-        </Card>
-      </div>
-
-      {/* individual tracker (compact, L1–L4 distribution popover) */}
-      <Card style={{ padding: 0, overflow: "hidden" }}>
-        <div style={{ padding: "16px 20px 12px" }}>
-          <Tag>Maya's concept tracker</Tag>
-          <h3 style={{ fontFamily: fonts.display, fontSize: 17, margin: "6px 0 0", color: COLORS.text }}>Per-Concept LP, Section, Wrong Model, Plateau</h3>
-          <div style={{ fontSize: 10, color: COLORS.textLight, marginTop: 6, fontFamily: fonts.mono }}>▸ hover the LP badge → the L1–L4 distribution behind the reported level</div>
-        </div>
-        <div style={{ borderTop: `1px solid ${COLORS.border}` }}>
-          <div style={{ display: "grid", gridTemplateColumns: "150px 110px 90px 120px 90px 1fr", padding: "10px 20px", background: COLORS.surfaceAlt, fontSize: 9, fontFamily: fonts.mono, color: COLORS.textLight, textTransform: "uppercase", letterSpacing: 1 }}>
-            <span>Concept</span><span>LP (reported)</span><span>Section</span><span>Wrong model</span><span>Conf</span><span>Intervention</span>
-          </div>
-          {[
-            { concept: "program_structure", sub:"§1.1", rep:"L4", dist:{L1:0,L2:.1,L3:.3,L4:.6}, wm: null, conf: .92, intv: "transfer_task", plateau:false },
-            { concept: "integer_division",  sub:"§1.2", rep:"L3", dist:{L1:0,L2:.2,L3:.7,L4:.1}, wm: null, conf: .84, intv: "transfer_task", plateau:false },
-            { concept: "string_equality",   sub:"§1.2", rep:"L3", dist:{L1:.05,L2:.15,L3:.65,L4:.15}, wm: null, conf: .78, intv: "transfer_task", plateau:false },
-            { concept: "loops",             sub:"§1.3", rep:"L1→L2", dist:{L1:.5,L2:.4,L3:.05,L4:0}, wm: null, conf: .47, intv: "trace_scaffold", plateau:false },
-            { concept: "array_index",       sub:"§1.4", rep:"L2→L3", dist:{L1:.1,L2:.55,L3:.3,L4:.05}, wm: "AI-A", conf: .62, intv: "trace_scaffold", plateau:true },
-          ].map((s, i) => (
-            <div key={s.concept} style={{ display: "grid", gridTemplateColumns: "150px 110px 90px 120px 90px 1fr", alignItems: "center", padding: "12px 20px", borderTop: i ? `1px solid ${COLORS.border}` : "none", background: s.plateau ? `${COLORS.danger}08` : s.wm ? `${COLORS.warning}06` : "transparent", fontSize: 12 }}>
-              <span style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 600 }}>{s.concept}</span>
-              <Popover w={210}
-                trigger={<span style={{ display:"inline-flex", gap:6, alignItems:"center" }}><Badge color={s.rep.includes("→") ? COLORS.warning : lpColor(s.rep)}>{s.rep}</Badge>{s.plateau && <Badge color={COLORS.danger}>🚩</Badge>}</span>}
-                content={<div><div style={{ fontWeight: 700, marginBottom: 6, color: COLORS.text }}>LP distribution</div>{["L1","L2","L3","L4"].map((lv) => (<div key={lv} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}><span style={{ fontFamily: fonts.mono, fontSize: 10, fontWeight: 700, color: lpColor(lv), width: 18 }}>{lv}</span><div style={{ flex: 1 }}><Bar value={(s.dist[lv]||0)*100} color={lpColor(lv)} h={4} /></div><span style={{ fontSize: 10, fontFamily: fonts.mono, color: COLORS.textMid, width: 32, textAlign: "right" }}>{Math.round((s.dist[lv]||0)*100)}%</span></div>))}</div>}
-              />
-              <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{s.sub}</span>
-              {s.wm ? <Badge color={COLORS.warning}>{s.wm}</Badge> : <span style={{ color: COLORS.textLight }}>—</span>}
-              <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 11, color: s.conf >= .7 ? COLORS.success : s.conf >= .5 ? COLORS.warning : COLORS.danger }}>{Math.round(s.conf*100)}%</span>
-              <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMid }}>{s.intv}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ padding: "10px 20px" }}><Wired mod="student_state_tracker.py · db_store.progression_for()" fn="this student · reporting_level · wrong_model_id · plateau_flag · intervention" /></div>
-      </Card>
-    </div>
-  );
-};
-
-/* ════════════════════════ PARENT VIEW (plain-language) ════════════════════════ */
-const ParentView = () => (
-  <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 18 }}>
-    <Card>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
-        <div style={{ width: 52, height: 52, borderRadius: 13, background: COLORS.primaryLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, fontFamily: fonts.display, color: COLORS.primary }}>MR</div>
-        <div>
-          <h2 style={{ fontFamily: fonts.display, fontSize: 21, margin: 0, color: COLORS.text }}>Maya's Java Learning Summary</h2>
-          <p style={{ fontSize: 13, color: COLORS.textMid, margin: "4px 0 0" }}>CSCI 1301 · Chapter 1 · Week of June 2</p>
-        </div>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-        {[
-          { label: "Chapter 1 concepts", value: "5/9", sub: "of §1.1–1.6", icon: "📚" },
-          { label: "Reasoning level", value: "L3", sub: "explains the why", icon: "🧠" },
-          { label: "Engagement", value: "High", sub: "~18 min/session", icon: "⏱" },
-        ].map((m) => (
-          <div key={m.label} style={{ background: COLORS.surfaceAlt, borderRadius: 10, padding: 14, textAlign: "center" }}>
-            <span style={{ fontSize: 20 }}>{m.icon}</span>
-            <div style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.primary, margin: "4px 0" }}>{m.value}</div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.text }}>{m.label}</div>
-            <div style={{ fontSize: 10, color: COLORS.textLight }}>{m.sub}</div>
-          </div>
-        ))}
-      </div>
-    </Card>
-    <Card>
-      <Tag color={COLORS.primary}>How Maya's reasoning is developing</Tag>
-      <p style={{ fontSize: 13, color: COLORS.textMid, margin: "10px 0 0", lineHeight: 1.7 }}>
-        Maya is moving from <strong>symptom-level</strong> answers ("it crashes") to <strong>mechanism-level</strong> reasoning — she can now explain <em>why</em> Java throws an error when you ask for an args[] slot that doesn't exist, not just that it does. On Command-line arguments (§1.1) she's at the rule level and the tutor is walking her through what the JVM actually puts into args[] to reach the mechanism. No personal data leaves the classroom.
-      </p>
-      <Wired mod="db_store.py" fn="progression_for(student) → weekly LP" />
-    </Card>
-  </div>
-);
-
 /* ════════════════════════ APP SHELL ════════════════════════ */
 function App() {
   const [view, setView] = useState("student");
+  const [step, setStep] = useState(1);
+  const [scenario, setScenario] = useState(0);
   const views = [
-    { id: "student", label: "Student · Conversation", icon: "🎓", desc: "The tutoring conversation that produces LP evidence" },
-    { id: "teacher", label: "Teacher · This Student", icon: "📋", desc: "Maya R. · prerequisite KG (CSE-KG) · her misconceptions · her LP distribution" },
-    { id: "parent",  label: "Parent", icon: "👨‍👩‍👧", desc: "Plain-language progress" },
+    { id: "student", label: "Student · Hello World", icon: "🎓", desc: "§1.1 HelloWorld.java — the live tutoring conversation (no analysis shown to the student)" },
+    { id: "teacher", label: "Teacher · Live analysis", icon: "📊", desc: "All six analyses, recomputed simultaneously on each student message" },
   ];
   const v = views.find((x) => x.id === view);
   return (
@@ -943,9 +727,8 @@ function App() {
         <div><span style={{ fontSize: 14, fontWeight: 700, color: COLORS.primaryDark }}>{v.label}</span><span style={{ fontSize: 12, color: COLORS.textMid, marginLeft: 10 }}>{v.desc}</span></div>
       </div>
       <div style={{ padding: 24, maxWidth: 1320, margin: "0 auto" }}>
-        {view === "student" && <StudentView />}
-        {view === "teacher" && <TeacherView />}
-        {view === "parent" && <ParentView />}
+        {view === "student" && <HelloWorldLiveView mode="student" step={step} setStep={setStep} scenario={scenario} setScenario={setScenario} />}
+        {view === "teacher" && <HelloWorldLiveView mode="teacher" step={step} setStep={setStep} scenario={scenario} setScenario={setScenario} />}
       </div>
     </div>
   );
