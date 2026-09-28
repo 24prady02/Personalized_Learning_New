@@ -9,6 +9,193 @@ behind a mistake, and picks a teaching move that fits that level.
 Everything hangs off one graph: the **Chapter-1 concept + LP graph**
 (`data/chapter1_concept_graph_percpt_lp.json`).
 
+The design target is described in **[The ideal methodology](#the-ideal-methodology-design-target)**
+below, with a framework diagram, a process diagram and a worked example.
+**[Ideal vs current](#ideal-vs-current)** shows how far the code is from it.
+
+---
+
+## The ideal methodology (design target)
+
+What the tutor should do on every student message. Sources:
+`docs/wireframe/LP_LEARNING_PROGRESSION.md`,
+`docs/cpal_trainable_dynamic_design.md` and the Chapter-1 graph itself.
+
+### The loop
+
+| Step | What happens |
+|---|---|
+| 0. Assessment item | Each answer is an item of a type: syntax identification → predict output → explanation → trace table → debugging. The student climbs this ladder as their level rises. |
+| 1. LP level | A **probability for each level L0–L4**, judged against the concept's own description of each level. |
+| 2. Mastery | Knowledge tracing over the LP distributions gives a trend per concept. A repeated later error points back to a prerequisite gap. |
+| 3. Misconception | Matched against a catalogue keyed by concept, LP level, giveaway pattern, exposing trace step and remediation. Shown as **matched**, then **cleared** once the student reaches the mechanism. |
+| 4. Knowledge graph | The concept node carries LP level, mastery and misconception. Typed nodes (LPLevel, Misconception, AssessmentItem, Resource, Evidence) and edges (`prerequisiteOf`, `alignedToLPLevel`, `indicatesMisconception`, `assessedBy`, `remediatedBy`, `demonstrates`) attach to it, turn by turn. |
+| 5. Teaching action | **Exactly one of four**, each with a trigger (table below). |
+| 6. Reply | Socratic, shaped by action + level + item type. It asks the next good question and never gives the answer. |
+
+### The level scale (from the Chapter-1 graph)
+
+| Level | Name | Notional machine |
+|---|---|---|
+| L0 | Reference / Prestructural | none; reads code as prose |
+| L1 | Surface Recognition | recognises constructs; no working machine |
+| L2 | Local Execution Tracing | hand-executes a fragment; partial machine |
+| L3 | Relational State Reasoning | coordinates state into purpose; full machine |
+| L4 | Integrated Transfer & Debugging | transfers and debugs the machine |
+
+Levels and ordering follow Jin et al.'s construct map; each concept's level
+descriptions are derived with the Block Model.
+
+**Reporting rule:** report Lk only if its share is above **0.55** and the
+neighbouring level's share is below **0.30**. Otherwise report
+"between Lk and Lk+1".
+
+### The four teaching actions
+
+| Trigger | Action |
+|---|---|
+| A prerequisite of this concept is weak | Prerequisite remediation |
+| A misconception is active | Misconception repair |
+| Mastery is still developing | Same-level practice |
+| Mastery is strong | Transfer / debugging |
+
+### Framework and data flow
+
+Solid arrows run on every turn; dotted arrows are the offline learning loop.
+
+```mermaid
+flowchart TB
+    IB[("Item bank<br/>typed items")]
+    subgraph G ["Chapter-1 concept + LP graph"]
+        GC[("Concepts")]
+        GL[("L0–L4 descriptors<br/>per concept")]
+        GM[("Misconceptions<br/>keyed, growing")]
+        GP[("Prerequisite edges")]
+    end
+    A["Student answer<br/>choice + reasoning"]
+    CR["Concept resolver"]
+    LP["LP diagnoser<br/>retrieval + LLM grader · trained heads<br/>→ confidence arbiter"]
+    MM["Misconception matcher"]
+    MT["Mastery tracer"]
+    GU["Knowledge-graph updater"]
+    PO["Teaching policy<br/>one of four actions"]
+    RG["Reply generator (LLM)"]
+    SG[("Student graph store")]
+    T(["Teacher view"])
+    S(["Student"])
+    LOG[("Interaction log")]
+    RT["Retrain heads"]
+    CG["Catalogue growth<br/>human review"]
+
+    IB -- "typed item" --> A
+    A -- "answer + item type" --> CR
+    GC -- "concept ids" --> CR
+    CR -- "concept id" --> LP
+    GL -- "descriptors" --> LP
+    LP -- "L0–L4 distribution + confidence" --> MM
+    GM -- "known beliefs" --> MM
+    MM -- "level + belief" --> MT
+    GP -- "prereq links" --> MT
+    MT -- "mastery + gaps" --> GU
+    GU -- "node update" --> SG
+    GU -- "node + prereq status" --> PO
+    PO -- "action + why" --> T
+    PO -- "action · level · item type" --> RG
+    RG -- "next question" --> S
+    S -- "next turn" --> A
+    RG -- "turn record" --> LOG
+    LOG -. labelled turns .-> RT
+    RT -. updated weights .-> LP
+    LOG -. unmatched answers .-> CG
+    CG -. approved beliefs .-> GM
+```
+
+### Process flow for one turn
+
+```mermaid
+flowchart TD
+    A(["Student answers an item"]) --> B["Resolve concept(s), pick focus"]
+    B --> C["Diagnose L0–L4 distribution"]
+    C --> D{"Evidence clear?<br/>firm level, tiers agree"}
+    D -- no --> P["Ask a probe question"]
+    P -- "student answers the probe" --> C
+    D -- yes --> E["Update mastery + misconception"]
+    E --> F["Record on knowledge graph"]
+    F -.-> X{"Same level<br/>3+ turns?"}
+    X -. yes .-> XT["Flag teacher review"]
+    F --> Q1{"Prerequisite weak?"}
+    Q1 -- yes --> A1["Prerequisite remediation"]
+    Q1 -- no --> Q2{"Misconception active?"}
+    Q2 -- yes --> A2["Misconception repair"]
+    Q2 -- no --> Q3{"Mastery strong?"}
+    Q3 -- yes --> A3["Transfer / debugging"]
+    Q3 -- no --> A4["Same-level practice"]
+    A1 --> R["Write the Socratic reply"]
+    A2 --> R
+    A3 --> R
+    A4 --> R
+    R --> L["Log turn (Δ LP measured next turn)"]
+    L --> Z{"At L4, firm,<br/>for this concept?"}
+    Z -- yes --> N["Move to next concept<br/>along prerequisite edges"]
+    Z -- no --> A
+    N --> A
+```
+
+The probe loop has a cap: after it, the tutor teaches anyway.
+
+### Worked example: one student learning `println`
+
+Code: `System.out.print("A"); System.out.println("B"); System.out.print("C");`
+Concept, misconception and level meanings come from the Chapter-1 graph;
+the percentages are illustrative.
+
+| Turn | Item type | Student says | LP distribution → reported | Misconception | Action | Tutor asks |
+|---|---|---|---|---|---|---|
+| 1 | predict output | "It prints ABC on one line." | L1 .62, L2 .22 → **L1 firm** | PrintEqualsPrintln **matched** | Misconception repair | "Where does the cursor sit after `println("B")` finishes?" |
+| 2 | explanation | "println adds a newline, print doesn't." | L2 .52, L3 .33 → **between L2–L3** | still active | Same-level practice | "Trace it: after each call, which line is the cursor on?" |
+| 3 | trace table | "After print A the cursor stays; println B ends the line, so C starts line 2." | L3 .71 → **L3 firm** | **cleared** | Transfer / debugging | "Someone wants a blank line between outputs. Which call adds it?" |
+| 4 | debugging | "`println()` with no argument just outputs the newline." | L4 .64 → **L4 firm** | none | Next concept (`compile`) | "Which of these lines would the compiler reject, and why?" |
+
+Mastery trends 31% → 59% → 74% → 89% (illustrative). Had `statement` or
+`string_literal` (println's prerequisites) been weak at turn 1, the action
+would have been prerequisite remediation instead.
+
+**Student types, same loop:** a steady learner climbs L1 → L4 as above; a
+confident-but-wrong student plateaus at L2 and is flagged for review; a
+struggling student sits at L0 with same-level practice; an advanced student
+skips to transfer and never grows a misconception node.
+
+### How it keeps learning
+
+- **Dynamic tier:** retrieval + an LLM grading against the level descriptions; improves as soon as knowledge is added, with no retraining.
+- **Trainable tier:** the classifier heads, retrained from real sessions instead of synthetic paraphrases.
+- **Confidence arbiter:** fuses the two; agreement → teach, disagreement → probe first.
+- **Data flywheel:** every turn logged with the Δ LP that followed, used as the label for retraining.
+- **Living catalogue:** unmatched answers clustered into candidate misconceptions that a person approves.
+- **Golden evaluation set:** a fixed set of labelled turns run on every change.
+
+---
+
+## Ideal vs current
+
+| Step | Ideal | Current code | Gap |
+|---|---|---|---|
+| Input | Typed assessment items climbing a ladder | Multiple-choice pick + reasoning; no item types | Medium |
+| LP output | Distribution over L0–L4 + reporting rule | One label, L1–L4 (no L0) | Large |
+| LP levels | Notional-machine levels, judged per concept | SOLO-style keywords; per-concept descriptions reach the prompt only | Large |
+| Mastery | Tracing over LP, points back to prerequisites | DINA on right/wrong only, 20 legacy concepts; BKT value unused (bug) | Large |
+| Misconceptions | One keyed, living catalogue | Two separate sets (20×3 catalogue and the graph's 90) | Medium |
+| Knowledge graph | Typed nodes and edges, evidence per turn | Concept nodes + prerequisite / leads-to / parallel neighbours | Medium |
+| Policy | Four actions driven by prerequisites, misconceptions, mastery | LP level alone picks the move; RL can't change it; plateau never fires in the chat app | Large |
+| Reply | Socratic, never gives the answer, item-type aware | Six-step shapes per level include worked examples | Small–medium |
+| Learning loop | Flywheel + retraining + golden set | Audit log only; RL learning isn't saved | Large |
+
+The wireframe app in the separate `Personalized_Learning_Cleaned` project
+already implements the L0–L4 distribution with a reported level and the
+four-action policy (14/15 LP levels and 15/15 actions correct on its built-in
+items), for 3 of the 7 chapters. Porting it here is the shortest route to the
+ideal.
+
 ---
 
 ## Current status
@@ -33,7 +220,7 @@ project, then run `python scripts/setup_java_knowledge.py` and start Ollama.
 
 ---
 
-## The complete process — what happens on one student turn
+## The current process: what the code does on one student turn
 
 The student sees a Java snippet with a multiple-choice question, picks an
 answer, and writes **why**. That answer runs through these steps, in order:
