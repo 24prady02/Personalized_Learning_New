@@ -91,41 +91,6 @@ class MetricsCalculator:
         }
     
     @staticmethod
-    def emotion_metrics(predictions: torch.Tensor,
-                       targets: torch.Tensor) -> Dict[str, float]:
-        """
-        Metrics for emotional state classification
-        
-        Args:
-            predictions: [batch, num_emotions] - logits or probabilities
-            targets: [batch] - class indices
-            
-        Returns:
-            Dictionary with metrics
-        """
-        # Get predicted classes
-        pred_classes = torch.argmax(predictions, dim=-1)
-        
-        # Convert to numpy
-        preds_np = pred_classes.cpu().numpy()
-        targets_np = targets.cpu().numpy()
-        
-        # Accuracy
-        accuracy = accuracy_score(targets_np, preds_np)
-        
-        # Precision, Recall, F1
-        precision, recall, f1, _ = precision_recall_fscore_support(
-            targets_np, preds_np, average='macro', zero_division=0
-        )
-        
-        return {
-            'accuracy': float(accuracy),
-            'precision': float(precision),
-            'recall': float(recall),
-            'f1': float(f1)
-        }
-    
-    @staticmethod
     def intervention_metrics(recommended: List[str],
                            successful: List[str]) -> Dict[str, float]:
         """

@@ -174,11 +174,9 @@ def main():
         "personality_profile": {"communication_style": "direct",
                                 "learning_preference": "visual"},
         "bkt_mastery": {CONCEPT: 0.30},
-        "emotional_state": "confused",
         "interaction_count": 1,
     }
-    analysis = {"emotion": {"primary": "confused", "confidence": 0.7},
-                "knowledge_gaps": [CONCEPT], "pedagogical_kg": {}}
+    analysis = {"knowledge_gaps": [CONCEPT]}
 
     gen = EnhancedPersonalizedGenerator()
     print(f"  [model: {gen._ollama_model}]  [intervention: {chosen}]")

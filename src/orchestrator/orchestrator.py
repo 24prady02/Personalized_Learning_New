@@ -38,7 +38,7 @@ class InterventionOrchestrator:
     - HVSAE for encoding student state
     - Student State Tracker for cognitive diagnosis and mastery tracking
     - Behavioral models for strategy analysis
-    - CSE-KG for domain knowledge
+    - Chapter-1 concept + LP graph for domain knowledge
     - Intervention recommender for selection
     - Content generator for personalized delivery
     """
@@ -65,7 +65,6 @@ class InterventionOrchestrator:
                 - hvsae: HVSAE model
                 - behavioral_rnn: Behavioral RNN
                 - behavioral_hmm: Behavioral HMM
-                - cse_kg_client: CSE-KG client
                 - intervention_recommender: Intervention recommender
                 - content_generator: Content generator
             use_rl: Whether to use RL agent for continuous improvement
@@ -189,9 +188,9 @@ class InterventionOrchestrator:
         Steps:
         1. Multi-modal encoding (HVSAE)
         2. Cognitive diagnosis (Student State Tracker)
-        3. Psychological assessment (Personality Profiler)
+        3. Personality assessment (Nestor / Personality Profiler)
         4. Behavioral analysis (RNN/HMM)
-        5. Knowledge gap identification (CSE-KG + Student Graph)
+        5. Knowledge gap identification (Chapter-1 graph + Student Graph)
         6. Intervention selection
         7. Personalized content generation
         8. Delivery
@@ -221,21 +220,19 @@ class InterventionOrchestrator:
         encoding_results = self._encode_session(session_data)
         latent = encoding_results['latent']
         
-        # === STEP 1b: THREE-CHANNEL PROMPT ANALYSIS (Psychological Integration) ===
-        # All 12 theories run simultaneously on the prompt BEFORE intervention selection.
-        # This populates: Cognitive Graph, Progression Graph, Psychological Graph
-        # and surfaces the recommended intervention with gate conditions checked.
+        # === STEP 1b: TWO-CHANNEL PROMPT ANALYSIS ===
+        # The structure and content channels run on the prompt BEFORE
+        # intervention selection. This populates the Cognitive Graph and the
+        # Progression Graph and surfaces a recommended intervention.
         three_channel_result = {}
         if self.state_tracker:
             try:
                 three_channel_result = self.state_tracker.analyse_prompt(student_id, session_data)
-                print(f"[3-Channel] stage={three_channel_result['progression_graph']['stage']}, "
+                print(f"[2-Channel] stage={three_channel_result['progression_graph']['stage']}, "
                       f"enc={three_channel_result['content_channel']['encoding_strength']}, "
-                      f"attr={three_channel_result['psychological_graph']['attribution']}, "
-                      f"imp={three_channel_result['psychological_graph']['imposter_flag']}, "
                       f"→ {three_channel_result['recommended_intervention']['type']}")
             except Exception as e:
-                print(f"[WARN] Three-channel analysis failed: {e}")
+                print(f"[WARN] Two-channel analysis failed: {e}")
 
         # === STEP 1c: CPAL STAGE 1 — LP DIAGNOSTIC LAYER (MULTI-CONCEPT) ===
         # See mental_models_cpal_methodology.docx Part 3 Stage 1 and
@@ -315,8 +312,8 @@ class InterventionOrchestrator:
         # === STEP 2: COGNITIVE DIAGNOSIS ===
         cognitive_assessment = self._diagnose_cognition(student_id, session_data)
         
-        # === STEP 3: PSYCHOLOGICAL ASSESSMENT ===
-        psychological_assessment = self._assess_psychology(student_id, session_data)
+        # === STEP 3: PERSONALITY ASSESSMENT (Nestor) ===
+        personality_assessment = self._assess_personality(student_id, session_data)
         
         # === STEP 4: BEHAVIORAL ANALYSIS ===
         behavioral_analysis = self._analyze_behavior(session_data)
@@ -330,20 +327,11 @@ class InterventionOrchestrator:
         )
         
         # === STEP 6: INTERVENTION SELECTION ===
-        # PSYCHOLOGICAL GATE: Fixed Attribution or Imposter Flag must be cleared
-        # before any instructional advance (T11 Attribution + T12 Imposter).
-        psychologically_gated = (
-            three_channel_result.get("recommended_intervention", {}).get("gate_triggered", False)
-        )
-        if psychologically_gated and three_channel_result.get("recommended_intervention"):
-            intervention = three_channel_result["recommended_intervention"]
-            print(f"[Gate] Psychological gate -> {intervention['type']} (blocks_advance={intervention.get('blocks_advance')})")
         # LP PLATEAU OVERRIDE — CPAL Stage 2.
         # Methodology Part 3 Stage 2: "If plateau_flag is True, the
         # function returns trace_scaffold immediately with no further
-        # processing." Psychological gate still wins (it's a safety
-        # gate), but plateau beats everything else pedagogical.
-        elif lp_diagnostic is not None and lp_diagnostic.get("plateau_flag"):
+        # processing." Plateau beats everything else pedagogical.
+        if lp_diagnostic is not None and lp_diagnostic.get("plateau_flag"):
             intervention_type = lp_diagnostic["plateau_intervention"]
             intervention = {
                 "type":           intervention_type,
@@ -369,7 +357,7 @@ class InterventionOrchestrator:
         # it well — so this turn's "intervention" is an elicitation question,
         # and the student's reply is graded against the target rubric
         # criterion next turn (diagnose -> probe -> re-diagnose, instead of a
-        # one-shot guess). The psychological gate and plateau still win above.
+        # one-shot guess). The plateau override still wins above.
         elif (lp_diagnostic is not None
               and self._should_probe(lp_diagnostic, pending_probe_concept,
                                      student_id=student_id)):
@@ -397,37 +385,30 @@ class InterventionOrchestrator:
                 student_id=student_id,
                 session_data=session_data,
                 cognitive_assessment=cognitive_assessment,
-                psychological_assessment=psychological_assessment,
+                personality_assessment=personality_assessment,
                 behavioral_analysis=behavioral_analysis,
                 knowledge_gaps=knowledge_gaps
             )
-        elif not psychologically_gated:
-            # Pull real signals from the three-channel analyser into the
-            # context so the InterventionRecommender's hard gate
-            # (attr=='fixed' or imposter) can actually fire on the right cases
-            # and mastery/encoding can drive the scoring.
+        else:
+            # Pull the content channel's encoding strength and the mastery
+            # profile into the context so they can drive the scoring.
             tc = three_channel_result or {}
-            pg = tc.get('psychological_graph', {}) or {}
             cg = tc.get('content_channel', {}) or {}
             mastery_profile = cognitive_assessment.get('mastery_profile', {}) or {}
             avg_mastery = (sum(mastery_profile.values())/len(mastery_profile)
                            if mastery_profile else 0.30)
             intervention = self._select_intervention(
                 student_profile={
-                    'personality': psychological_assessment.get('personality', {}),
-                    'learning_style': psychological_assessment.get('learning_style', {}),
+                    'personality': personality_assessment.get('personality', {}),
+                    'learning_style': personality_assessment.get('learning_style', {}),
                     'mastery_profile': mastery_profile,
                 },
                 context={
-                    'emotional_state': behavioral_analysis.get('emotion', 'neutral'),
                     'knowledge_gaps': knowledge_gaps,
                     'time_stuck': session_data.get('time_stuck', 0),
                     'recent_interventions': self._get_recent_interventions(student_id),
-                    # Full student state so the recommender's gate + bucket lookup work
+                    # Student state for the recommender's bucket lookup
                     'encoding_strength': cg.get('encoding_strength', 'surface'),
-                    'attribution':       pg.get('attribution', 'neutral'),
-                    'imposter_flag':     pg.get('imposter_flag', False),
-                    'high_anxiety':      pg.get('high_anxiety', False),
                     'avg_mastery':       avg_mastery,
                     # CPAL Stage 2 — LP diagnostic flows into the selector
                     # so the LP-validity gate can filter the ranked output.
@@ -440,11 +421,11 @@ class InterventionOrchestrator:
             )
 
         # === STEP 7: PERSONALIZED CONTENT GENERATION ===
-        # Fix 1: three_channel_result now passed into content generation
+        # Fix 1: two-channel result passed into content generation
         content = self._generate_content(
             latent=latent,
             intervention=intervention,
-            student_profile=psychological_assessment,
+            student_profile=personality_assessment,
             knowledge_gaps=knowledge_gaps,
             student_id=student_id,
             session_data=session_data,
@@ -471,13 +452,13 @@ class InterventionOrchestrator:
         )
 
         # === RETURN RESULT ===
-        # Fix 8: three_channel analysis now in return payload
+        # Fix 8: two-channel analysis in return payload
         return {
             'intervention': intervention,
             'content': content,
             'analysis': {
                 'cognitive':        cognitive_assessment,
-                'psychological':    psychological_assessment,
+                'personality':      personality_assessment,
                 'behavioral':       behavioral_analysis,
                 'knowledge_gaps':   knowledge_gaps,
                 'three_channel':    three_channel_result,
@@ -494,9 +475,7 @@ class InterventionOrchestrator:
                            lp_diagnostic_multi: Dict = None,
                            student_id: str = None):
         """
-        DYNAMIC LEARNING: Learn misconceptions and cognitive chains from session
-
-        Updates graphs with new patterns discovered from student behavior.
+        DYNAMIC LEARNING: learn from the session's LP outcome.
 
         CPAL Stage 4 + Stage 5:
           - If session_data contains a 'student_reply' (the student's
@@ -508,73 +487,6 @@ class InterventionOrchestrator:
             input sequence to LPProgressionRNN on future sessions.
         """
         try:
-            # Get adaptive explainer (has access to pedagogical_kg and coke_graph)
-            adaptive_explainer = self.models.get('adaptive_explainer')
-
-            if adaptive_explainer:
-                # Learn from session (existing pedagogical-KG learning)
-                if adaptive_explainer.pedagogical_kg and hasattr(adaptive_explainer.pedagogical_kg, 'pedagogical_builder'):
-                    pedagogical_builder = adaptive_explainer.pedagogical_kg.pedagogical_builder
-                    code = session_data.get('code')
-                    error_message = session_data.get('error_message')
-
-                    # Extract concept from knowledge gaps or error
-                    concept = None
-                    if knowledge_gaps:
-                        concept = knowledge_gaps[0].get('concept')
-                    elif error_message:
-                        # Extract from error
-                        if "RecursionError" in error_message:
-                            concept = "recursion"
-                        elif "IndexError" in error_message:
-                            concept = "arrays"
-                        elif "UnboundLocalError" in error_message:
-                            concept = "variable_scope"
-                        elif "TypeError" in error_message:
-                            concept = "type_system"
-                        elif "AttributeError" in error_message:
-                            concept = "object_oriented"
-
-                    # 1. Learn misconceptions
-                    if concept or error_message or code:
-                        learned_mc = pedagogical_builder.learn_from_session(
-                            code=code,
-                            error_message=error_message,
-                            concept=concept
-                        )
-                        if learned_mc:
-                            print(f"[Orchestrator] [OK] Learned misconception: {learned_mc.id}")
-
-                    # 2. Learn cognitive load
-                    if concept:
-                        learned_load = pedagogical_builder.learn_cognitive_load_from_session(
-                            concept=concept,
-                            session_data=session_data
-                        )
-                        if learned_load:
-                            print(f"[Orchestrator] [OK] Learned cognitive load for: {concept}")
-
-                    # 3. Learn learning progression from mastery sequence
-                    if cognitive_assessment and cognitive_assessment.get('mastery_profile'):
-                        mastery_profile = cognitive_assessment['mastery_profile']
-                        # Extract concept sequence from knowledge gaps or session
-                        concepts_learned = list(mastery_profile.keys())
-                        if len(concepts_learned) >= 2:
-                            pedagogical_builder.learn_progression_from_session(
-                                concept_sequence=concepts_learned,
-                                student_mastery=mastery_profile
-                            )
-
-                    # 4. Learn intervention effectiveness (will be updated with feedback)
-                    # Track intervention usage for later effectiveness learning
-                    if intervention and intervention.get('type'):
-                        intervention_id = f"int_{intervention.get('type')}_{concept or 'general'}"
-                        # Effectiveness will be updated when we get feedback
-                        print(f"[Orchestrator] [Tracking] intervention: {intervention_id}")
-
-            # COKE graph learning happens automatically in infer_theory_of_mind()
-            # (already called during content generation via adaptive_explainer)
-
             # ─────────────────────────────────────────────────────────
             # CPAL Stage 4 + Stage 5 — LP gain measurement & persistence
             # ─────────────────────────────────────────────────────────
@@ -789,11 +701,9 @@ class InterventionOrchestrator:
             )
             # Pull channel signals for the state vector
             content_ch = {}
-            pg = {}
             progression = {}
             try:
                 state = self.state_tracker.get_student_state(student_id)
-                pg          = state.get("psychological_graph", {})
                 progression = state.get("progression_graph", {})
                 nodes       = state.get("cognitive_graph", {}).get("concept_nodes", {})
                 concept_node = nodes.get(concept, {})
@@ -819,7 +729,6 @@ class InterventionOrchestrator:
                 },
                 intervention_type = (intervention or {}).get("type"),
                 delta_lp_last     = delta_lp,
-                emotion           = (behavioral or {}).get("emotion", "neutral"),
                 encoding_strength = content_ch.get("encoding_strength", "surface"),
                 stage             = progression.get("stage", 1),
                 scaffold_level    = progression.get("scaffold_level", 3),
@@ -1024,9 +933,10 @@ class InterventionOrchestrator:
             'trajectory':       trajectory,
         }
     
-    def _assess_psychology(self, student_id: str, session_data: Dict) -> Dict:
+    def _assess_personality(self, student_id: str, session_data: Dict) -> Dict:
         """
-        Psychological assessment using Nestor Bayesian Network (preferred) or Personality Profiler
+        Personality + learning-style assessment using Nestor Bayesian Network
+        (preferred) or Personality Profiler.
         """
         # Try Nestor profiler first (better accuracy with Bayesian Network)
         nestor_profiler = self.models.get('nestor_profiler')
@@ -1074,55 +984,30 @@ class InterventionOrchestrator:
         }
     
     def _analyze_behavior(self, session_data: Dict) -> Dict:
-        """Behavioral analysis.
-        Fix 6: when RNN/HMM are unavailable (untrained) fall back to the
-        LanguageChannelAnalyser which gives real emotion signals from text
-        rather than the previous two-check stub (? and 'still')."""
+        """Behavioral analysis of the debugging action sequence.
+
+        Reports strategy effectiveness / productivity (RNN) and the HMM
+        debugging state. Emotion is not inferred. With no action sequence,
+        or no trained RNN/HMM, returns {'strategy': 'unknown'}."""
         rnn = self.models.get('behavioral_rnn')
         hmm = self.models.get('behavioral_hmm')
 
         # If we have no action sequence (e.g. a pure question with no
-        # debugging activity yet), the RNN can't run — fall through to the
-        # language-channel fallback below.
+        # debugging activity yet), the RNN/HMM can't run.
         if not session_data.get('action_sequence'):
             rnn = None
             hmm = None
 
         if rnn is None and hmm is None:
-            # Use language channel for real emotion inference
-            if self.state_tracker:
-                question = session_data.get('question', '') or session_data.get('conversation', [{}])[-1].get('content', '')
-                lang = self.state_tracker.language_channel.analyse(question)
-                # Map language channel signals to emotion label
-                if lang['high_anxiety']:
-                    emotion = 'anxious'
-                elif lang['attribution'] == 'fixed' or lang['self_efficacy'] == 'low':
-                    emotion = 'frustrated'
-                elif lang['self_efficacy'] == 'growth':
-                    emotion = 'engaged'
-                elif lang['srl_phase'] == 'monitoring':
-                    emotion = 'confused'
-                else:
-                    emotion = 'neutral'
-                return {
-                    'emotion':        emotion,
-                    'strategy':       lang['srl_phase'],
-                    'attribution':    lang['attribution'],
-                    'self_efficacy':  lang['self_efficacy'],
-                    'imposter_flag':  lang['imposter_signal'],
-                    'high_anxiety':   lang['high_anxiety'],
-                    'source':         'language_channel',
-                }
-            return {'emotion': 'neutral', 'strategy': 'unknown'}
-        
+            return {'strategy': 'unknown'}
+
         # Prepare behavioral features
         action_sequence = session_data.get('action_sequence', [])
-        
+
         analysis = {}
-        
+
         # RNN analysis — needs at least one action; pack_padded_sequence
-        # rejects empty tensors. Fall back to the language channel for
-        # pure-question sessions (no debugging actions yet).
+        # rejects empty tensors.
         if rnn is not None and len(action_sequence) > 0:
             # Convert to tensors (must be Long/Int for embedding)
             action_ids = torch.tensor([[
@@ -1135,188 +1020,71 @@ class InterventionOrchestrator:
             )
             outcomes = torch.zeros_like(action_ids, dtype=torch.float)
             lengths = torch.tensor([len(action_sequence)], dtype=torch.long)
-            
+
             rnn_analysis = rnn.analyze_strategy(action_ids, time_deltas, outcomes, lengths)
             # Handle both list and scalar returns
             def get_first(item):
                 return item[0] if isinstance(item, list) and len(item) > 0 else item
-            
+
             analysis.update({
-                'emotion': get_first(rnn_analysis.get('emotion', ['neutral'])),
-                'emotion_confidence': get_first(rnn_analysis.get('emotion_confidence', [0.5])),
+                'strategy': get_first(rnn_analysis.get('strategy', ['unknown'])),
                 'effectiveness': get_first(rnn_analysis.get('effectiveness', [0.5])),
                 'productivity': get_first(rnn_analysis.get('productivity', ['medium'])),
                 'strategy_effectiveness': get_first(rnn_analysis.get('effectiveness', [0.5]))
             })
-        
-        # HMM analysis
+
+        # HMM analysis (debugging-state trajectory)
         if hmm is not None and hmm.is_fitted:
             hmm_analysis = hmm.analyze_session(action_sequence)
             analysis['hmm_state'] = hmm_analysis['final_state']
             analysis['hmm_confidence'] = hmm_analysis['final_confidence']
 
-            # Trained emotion classifier (MLP on HMM features). Only fires
-            # when a checkpoint exists — otherwise we fall through to whatever
-            # emotion label the RNN / language channel already produced.
-            emo = self._get_emotion_classifier()
-            if emo is not None:
-                try:
-                    feats = hmm._extract_features(action_sequence)
-                    last = feats[-1]
-                    import torch as _t
-                    with _t.no_grad():
-                        logits = emo['model'](_t.from_numpy(last).float().unsqueeze(0))
-                        probs = _t.softmax(logits, dim=1).squeeze(0).tolist()
-                        idx = int(max(range(len(probs)), key=lambda i: probs[i]))
-                    analysis['emotion_cls_label'] = emo['classes'][idx]
-                    analysis['emotion_cls_confidence'] = probs[idx]
-                    # Override only when classifier is confident — keep RNN
-                    # label otherwise to avoid regressions.
-                    if probs[idx] >= 0.6:
-                        analysis['emotion'] = emo['classes'][idx]
-                except Exception as _e:
-                    print(f"[Emotion] classifier call failed: {_e}")
-
         return analysis
 
-    def _get_emotion_classifier(self):
-        """Lazy-load the trained 7→64→5 MLP emotion classifier once."""
-        if hasattr(self, '_emotion_clf_cache'):
-            return self._emotion_clf_cache
-        try:
-            import torch as _t
-            from pathlib import Path as _P
-            ckpt = _P(self.config.get('emotion', {}).get(
-                'checkpoint', 'checkpoints/emotion_classifier.pt'))
-            if not ckpt.exists():
-                self._emotion_clf_cache = None
-                return None
-            data = _t.load(ckpt, weights_only=False, map_location='cpu')
-            hidden = data.get('hidden', 64)
-            in_dim = data.get('in_dim', 7)
-            classes = data.get('classes',
-                ['neutral', 'confused', 'frustrated', 'engaged', 'understanding'])
-            import torch.nn as _nn
-            model = _nn.Sequential(
-                _nn.Linear(in_dim, hidden), _nn.ReLU(), _nn.Dropout(0.2),
-                _nn.Linear(hidden, hidden), _nn.ReLU(), _nn.Dropout(0.2),
-                _nn.Linear(hidden, len(classes)),
-            )
-            # Handle state dict key prefix from training-time Sequential wrapper
-            sd = data['state_dict']
-            remap = {k.replace('net.', ''): v for k, v in sd.items()}
-            model.load_state_dict(remap)
-            model.eval()
-            self._emotion_clf_cache = {'model': model, 'classes': classes}
-            print(f"[Emotion] classifier loaded from {ckpt}")
-            return self._emotion_clf_cache
-        except Exception as _e:
-            print(f"[Emotion] load failed: {_e}")
-            self._emotion_clf_cache = None
-            return None
-    
     def _identify_gaps(self, student_id: str,
                       cognitive_assessment: Dict,
                       session_data: Dict,
                       behavioral_analysis: Optional[Dict] = None) -> List[Dict]:
-        """Identify knowledge gaps grounded in the full ontology stack.
+        """Identify knowledge gaps grounded in the Chapter-1 concept + LP graph.
 
         Uses:
-          - CSE-KG concept retrieval + prerequisite lookup
-          - Pedagogical KG for misconceptions + cognitive load
-          - UnifiedExplanationGenerator for Theory-of-Mind + misconception binding
-          - Behavioral RNN output (emotion/strategy) for gap severity weighting
+          - the student's tracked mastery profile for candidate concepts
+          - the Chapter-1 graph for prerequisites + catalogued misconceptions
         """
-        cse_kg = self.models.get('cse_kg_client')
-        if cse_kg is None:
-            return []
+        try:
+            from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+            ch1 = get_chapter1_graph()
+        except Exception as e:
+            print(f"[Orchestrator] Chapter-1 graph unavailable: {e}")
+            ch1 = None
 
-        concept_retriever = self.models.get('concept_retriever')
-        pedagogical_kg = self.models.get('pedagogical_kg')
-        unified_gen = self.models.get('unified_explanation_generator')
+        # Candidate concepts: low-mastery concepts already tracked for this student
+        concepts = list((cognitive_assessment.get('mastery_profile') or {}).keys())
 
-        code = session_data.get('code', '')
-        error_message = session_data.get('error_message', '')
-
-        # Candidate concepts: union of
-        #   (a) concepts extracted from code + error via the CSE-KG retriever
-        #   (b) low-mastery concepts already tracked for this student
-        # This keeps gap identification working even before the local CSE-KG
-        # graph has been built (build_local_cse_kg.py).
-        if concept_retriever:
-            concepts = list(concept_retriever.retrieve_from_code(code, error_message) or [])
-        else:
-            concepts = []
-        mastery_keys = list((cognitive_assessment.get('mastery_profile') or {}).keys())
-        for c in mastery_keys:
-            if c not in concepts:
-                concepts.append(c)
-
-        # Unified Theory-of-Mind + misconception analysis (one-shot for this session)
-        unified_analysis = None
-        if unified_gen is not None and (code or error_message):
-            try:
-                unified_analysis = unified_gen.generate_unified_explanation(
-                    code=code,
-                    error_message=error_message,
-                    student_data={'student_id': student_id,
-                                  'mastery_profile': cognitive_assessment.get('mastery_profile', {})},
-                )
-            except Exception as e:
-                print(f"[Orchestrator] Unified explanation failed: {e}")
-
-        # Severity boost from trained behavioral RNN
+        # Severity boost from the behavioral RNN's debugging-strategy output
         severity_boost = 0.0
         if behavioral_analysis:
-            if behavioral_analysis.get('emotion') in ('frustrated', 'anxious', 'confused'):
-                severity_boost += 0.15
             if behavioral_analysis.get('strategy') == 'trial_error':
                 severity_boost += 0.10
             eff = behavioral_analysis.get('effectiveness')
             if isinstance(eff, (int, float)) and eff < 0.4:
                 severity_boost += 0.10
 
-        # Build a Java-specific prerequisite index from learning_progressions.json.
-        # This replaces the general CSE-KG prereq lookup: our progressions already
-        # encode the CS1-Java syllabus (week 1 → 5) with explicit per-concept prereqs,
-        # so we don't need a separate CSE-KG local graph for a Java-focused system.
-        prereq_index = {}
-        if pedagogical_kg is not None:
-            try:
-                for lp in pedagogical_kg.pedagogical_builder.learning_progressions.values():
-                    for c, pl in (lp.prerequisites or {}).items():
-                        prereq_index.setdefault(c, set()).update(pl)
-            except Exception:
-                pass
-
         mastery = cognitive_assessment.get('mastery_profile', {}) or {}
         gaps = []
         for concept in concepts:
             m = mastery.get(concept)
-            # Prerequisites: prefer the Java learning-progression index; fall
-            # back to CSE-KG only if the concept isn't in our CS1 syllabus.
-            prereqs = sorted(prereq_index.get(concept, set()))
-            if not prereqs:
-                try:
-                    prereqs = cse_kg.get_prerequisites(concept) or []
-                except Exception:
-                    prereqs = []
-
-            # Misconceptions + cognitive load from pedagogical KG
-            misconceptions, cog_load = [], None
-            if pedagogical_kg is not None:
-                try:
-                    info = pedagogical_kg.get_concept_full_info(concept) or {}
-                    misconceptions = info.get('misconceptions', []) or []
-                    cog_load = info.get('cognitive_load')
-                except Exception:
-                    pass
+            # Prerequisites + misconceptions from the Chapter-1 graph (empty for
+            # concepts outside Chapter 1)
+            prereqs, misconceptions = [], []
+            if ch1 is not None and ch1.exists(concept):
+                prereqs = ch1.get_prerequisites(concept)
+                misconceptions = [mc.get('wrong_belief') or mc['id']
+                                  for mc in ch1.misconceptions_for(concept)]
 
             # Classify gap
             if m is not None and m < self.intervention_threshold:
                 gap_type, severity = 'low_mastery', (1.0 - m) + severity_boost
-            elif misconceptions:
-                gap_type, severity = 'misconception', 0.6 + severity_boost
             elif m is None and concept:
                 gap_type, severity = 'unknown_mastery', 0.5 + severity_boost
             else:
@@ -1329,16 +1097,11 @@ class InterventionOrchestrator:
                 'severity': min(1.0, severity),
                 'prerequisites': prereqs,
                 'misconceptions': misconceptions,
-                'cognitive_load': cog_load,
             })
 
-        # Attach unified explanation (Theory of Mind + misconception) to the top gap
-        if gaps and unified_analysis:
-            gaps.sort(key=lambda g: g.get('severity', 0.0), reverse=True)
-            gaps[0]['unified_explanation'] = unified_analysis
-
+        gaps.sort(key=lambda g: g.get('severity', 0.0), reverse=True)
         return gaps
-    
+
     def _select_intervention(self, student_profile: Dict, context: Dict) -> Dict:
         """Select optimal intervention.
 
@@ -1357,7 +1120,7 @@ class InterventionOrchestrator:
         time we get here, plateau_flag can never be True.
 
         Fix 5b: when RL recommender is unavailable (no trained policy),
-        use a principled rule-based scorer grounded in mastery, emotion,
+        use a principled rule-based scorer grounded in mastery, time stuck
         and learning style — not random Q-values. Every rule has a cited
         rationale."""
 
@@ -1433,7 +1196,6 @@ class InterventionOrchestrator:
 
         # ── 3. Original principled heuristic fallback ──
         # Principled fallback — no random values
-        emotion     = context.get('emotional_state', 'neutral')
         gaps        = context.get('knowledge_gaps', [])
         time_stuck  = context.get('time_stuck', 0)
         personality = student_profile.get('personality', {})
@@ -1441,7 +1203,6 @@ class InterventionOrchestrator:
         mastery     = student_profile.get('mastery_profile', {})
 
         avg_mastery = (sum(mastery.values()) / len(mastery)) if mastery else 0.5
-        is_frustrated = emotion in ('frustrated', 'anxious')
         is_stuck      = time_stuck > 120  # 2+ minutes
         is_visual     = ls.get('visual_verbal', 'visual') == 'visual'
         is_systematic = personality.get('cognitive_style', '') == 'systematic'
@@ -1468,18 +1229,6 @@ class InterventionOrchestrator:
                 'rationale': (default.get('rationale', '')
                               + f' (LP-gate: substituted for L={lp_level})'),
             }
-
-        # Gate: emotional support before instruction
-        if is_frustrated and avg_mastery < 0.40:
-            return _lp_guard('reduce_challenge', 'worked_example',
-                {'type': 'reduce_challenge',    'priority': 0.95,
-                 'rationale': 'Frustrated + low mastery: reduce complexity first',
-                 'confidence': 0.90})
-        if is_frustrated:
-            return _lp_guard('worked_example', 'socratic_prompt',
-                {'type': 'worked_example',      'priority': 0.88,
-                 'rationale': 'Frustrated: concrete worked example before advancing',
-                 'confidence': 0.85})
 
         # High mastery — advance
         if avg_mastery >= 0.80 and not is_stuck:
@@ -1521,7 +1270,7 @@ class InterventionOrchestrator:
     def _select_intervention_hierarchical(self, student_id: str,
                                          session_data: Dict,
                                          cognitive_assessment: Dict,
-                                         psychological_assessment: Dict,
+                                         personality_assessment: Dict,
                                          behavioral_analysis: Dict,
                                          knowledge_gaps: List[Dict]) -> Dict:
         """
@@ -1537,7 +1286,9 @@ class InterventionOrchestrator:
         # Prepare comprehensive student state
         student_state = {
             'student_id': student_id,
-            'student_type': self._infer_student_type(psychological_assessment, behavioral_analysis),
+            'student_type': self._infer_student_type(
+                personality_assessment, behavioral_analysis,
+                self._get_average_mastery(cognitive_assessment)),
             'overall_progress': self._calculate_overall_progress(student_id),
             'completed_concepts': self._get_completed_concepts(student_id),
             'learning_goals': self._get_learning_goals(student_id),
@@ -1545,8 +1296,6 @@ class InterventionOrchestrator:
             # Current session
             'current_concept': self._extract_concept(session_data),
             'mastery': self._get_average_mastery(cognitive_assessment),
-            'emotion': behavioral_analysis.get('emotion', 'neutral'),
-            'frustration_level': behavioral_analysis.get('frustration', 0.5),
             'engagement_score': behavioral_analysis.get('engagement', 0.5),
             'time_stuck': session_data.get('time_stuck', 0),
             
@@ -1554,10 +1303,10 @@ class InterventionOrchestrator:
             'knowledge_gaps': knowledge_gaps,
             
             # Personality
-            'conscientiousness': psychological_assessment.get('personality', {}).get('conscientiousness', 0.5),
-            'neuroticism': psychological_assessment.get('personality', {}).get('neuroticism', 0.5),
-            'openness': psychological_assessment.get('personality', {}).get('openness', 0.5),
-            'learning_style': psychological_assessment.get('learning_style', {}).get('visual_verbal', 'visual'),
+            'conscientiousness': personality_assessment.get('personality', {}).get('conscientiousness', 0.5),
+            'neuroticism': personality_assessment.get('personality', {}).get('neuroticism', 0.5),
+            'openness': personality_assessment.get('personality', {}).get('openness', 0.5),
+            'learning_style': personality_assessment.get('learning_style', {}).get('visual_verbal', 'visual'),
             
             # Behavioral
             'behavioral_pattern': self._classify_behavior_pattern(behavioral_analysis),
@@ -1595,12 +1344,11 @@ class InterventionOrchestrator:
             print(f"⚠ Hierarchical RL failed: {e}, falling back to standard selection")
             return self._select_intervention(
                 student_profile={
-                    'personality': psychological_assessment.get('personality', {}),
-                    'learning_style': psychological_assessment.get('learning_style', {}),
+                    'personality': personality_assessment.get('personality', {}),
+                    'learning_style': personality_assessment.get('learning_style', {}),
                     'mastery_profile': cognitive_assessment.get('mastery_profile', {})
                 },
                 context={
-                    'emotional_state': behavioral_analysis.get('emotion', 'neutral'),
                     'knowledge_gaps': knowledge_gaps,
                     'time_stuck': session_data.get('time_stuck', 0),
                     'recent_interventions': self._get_recent_interventions(student_id)
@@ -1618,11 +1366,6 @@ class InterventionOrchestrator:
                 1.0 - g.get('mastery', 0.5) for g in gaps
             ) / len(gaps)
             priority += self.priority_factors['knowledge_gap'] * gap_urgency
-        
-        # Emotional state
-        emotion = context.get('emotional_state', 'neutral')
-        if emotion in ['frustrated', 'confused']:
-            priority += self.priority_factors['emotional_state'] * 0.8
         
         # Time stuck
         time_stuck = context.get('time_stuck', 0)
@@ -1642,32 +1385,21 @@ class InterventionOrchestrator:
                          three_channel_result: Dict = None,
                          lp_diagnostic: Dict = None,
                          lp_diagnostic_multi: Dict = None) -> Dict:
-        # Fix 1+2: three_channel_result carries psychological graph, progression graph,
-        # content channel, and recommended intervention into the prompt builder.
+        # Fix 1+2: three_channel_result (two-channel analysis) carries the
+        # progression graph, content channel, and recommended intervention
+        # into the prompt builder.
         # CPAL Stage 3: lp_diagnostic carries the wrong-model + LP level +
         # plateau context into the prompt so _build_enhanced_prompt can
         # inject the LP-1 / LP-2 / LP-3 sections.
         """
-        Generate personalized content using Adaptive Explanation Generator
-        Integrated with HVSAE, Claude, and RL
+        Generate personalized content with the EnhancedPersonalizedGenerator
+        (Ollama). The LP diagnostic drives the prompt; the generator adds the
+        Chapter-1 concept-graph context for the diagnosed concept itself.
         """
-        # Initialize Adaptive Explanation Generator if not already done
-        if 'adaptive_explainer' not in self.models:
-            try:
-                from src.knowledge_graph import AdaptiveExplanationGenerator
-                self.models['adaptive_explainer'] = AdaptiveExplanationGenerator(self.config)
-                print("[OK] Adaptive Explanation Generator initialized")
-            except Exception as e:
-                print(f"[WARN] Adaptive Explanation Generator failed: {e}")
-                self.models['adaptive_explainer'] = None
-        
-        adaptive_explainer = self.models.get('adaptive_explainer')
-        
-        # Prepare student data for adaptive explainer
-        if session_data and adaptive_explainer:
+        if session_data:
             # Extract concept from code/error
             concept = self._extract_concept(session_data)
-            
+
             # Prepare comprehensive student data
             student_data = {
                 "code": session_data.get("code", ""),
@@ -1677,22 +1409,15 @@ class InterventionOrchestrator:
                 "concept": concept,
                 "action_sequence": session_data.get("action_sequence", []),
                 "time_stuck": session_data.get("time_stuck", 0),
-                "theory_of_mind": {
-                    "cognitive_state": behavioral_analysis.get("emotion", "engaged") if behavioral_analysis else "engaged"
-                }
             }
-            
-            # Get adaptive explanation
+
+            mastery_profile = (cognitive_assessment or {}).get('mastery_profile') or {}
+            avg_mastery = (sum(mastery_profile.values()) / len(mastery_profile)
+                           if mastery_profile else 0.5)
+            generation = {'explanation': '', 'average_mastery': avg_mastery}
+
             try:
-                # Ensure student_id is available
-                effective_student_id = student_id if student_id else (session_data.get('student_id', 'student') if session_data else 'student')
-                adaptive_result = adaptive_explainer.generate_adaptive_explanation(
-                    concept=concept,
-                    student_id=effective_student_id,
-                    student_data=student_data
-                )
-                
-                # Use Enhanced Personalized Generator with Groq API
+                # Use Enhanced Personalized Generator (Ollama)
                 if 'enhanced_generator' not in self.models:
                     try:
                         from src.orchestrator.enhanced_personalized_generator import EnhancedPersonalizedGenerator
@@ -1705,10 +1430,10 @@ class InterventionOrchestrator:
                         print(f"[OK] Enhanced Personalized Generator initialized with Ollama ({ollama_model})")
                     except Exception as e:
                         print(f"[WARN] Enhanced generator setup failed: {e}")
-                
+
                 if self.models.get('enhanced_generator'):
                     try:
-                        # Fix 1+2: three_channel data now in student_state so
+                        # Fix 1+2: two-channel data in student_state so
                         # enhanced_personalized_generator can inject it into the prompt.
                         tc = three_channel_result or {}
                         student_state = {
@@ -1716,14 +1441,12 @@ class InterventionOrchestrator:
                             'interaction_count': len(session_data.get('conversation', [])) + 1,
                             'personality': student_profile.get('personality', {}),
                             'knowledge_state': {
-                                'overall_mastery': adaptive_result.get('prior_knowledge', {}).get('average_mastery', 0.5),
-                                'mastery_history': [adaptive_result.get('prior_knowledge', {}).get('average_mastery', 0.5)]
+                                'overall_mastery': avg_mastery,
+                                'mastery_history': [avg_mastery]
                             },
-                            # Psychological / progression data from three-channel analysis
-                            'psychological_graph': tc.get('psychological_graph', {}),
+                            # Progression / content data from the two-channel analysis
                             'progression_graph':   tc.get('progression_graph', {}),
                             'content_channel':     tc.get('content_channel', {}),
-                            'language_channel':    tc.get('language_channel', {}),
                             # Use the ACTUALLY-selected intervention (plateau
                             # override, diagnostic probe, RL pick, ...) — not
                             # the raw three-channel suggestion — so the
@@ -1736,183 +1459,18 @@ class InterventionOrchestrator:
                             'lp_diagnostic': lp_diagnostic,
                             'lp_diagnostic_multi': lp_diagnostic_multi,
                         }
-                        
-                        # Get COKE cognitive state (QUERY ACTUALLY)
-                        coke_cognitive_state = None
-                        coke_info = {}
-                        if adaptive_explainer and adaptive_explainer.coke_graph:
-                            try:
-                                # Predict cognitive state from conversation
-                                coke_cognitive_state = adaptive_explainer.coke_graph.predict_cognitive_state(student_data)
-                                cognitive_state_str = coke_cognitive_state.value if hasattr(coke_cognitive_state, 'value') else str(coke_cognitive_state)
-                                
-                                # Get behavioral response prediction
-                                behavioral_response = 'ask_question'
-                                try:
-                                    if hasattr(adaptive_explainer.coke_graph, 'predict_behavioral_response'):
-                                        behavioral_response = adaptive_explainer.coke_graph.predict_behavioral_response(coke_cognitive_state, student_data)
-                                        if hasattr(behavioral_response, 'value'):
-                                            behavioral_response = behavioral_response.value
-                                except:
-                                    pass
-                                
-                                # Get cognitive chain and behavioral response
-                                cognitive_chain_desc = ''
-                                try:
-                                    # Get cognitive chains for this state
-                                    if hasattr(adaptive_explainer.coke_graph, 'get_cognitive_chains_for_state'):
-                                        chains = adaptive_explainer.coke_graph.get_cognitive_chains_for_state(coke_cognitive_state)
-                                        if chains:
-                                            chain = chains[0]  # Get first matching chain
-                                            if hasattr(chain, 'behavioral_response'):
-                                                behavioral_response = chain.behavioral_response.value if hasattr(chain.behavioral_response, 'value') else str(chain.behavioral_response)
-                                            cognitive_chain_desc = f"Student is in {cognitive_state_str} state, likely to {behavioral_response}"
-                                        else:
-                                            # Use predict_behavioral_response as fallback
-                                            if hasattr(adaptive_explainer.coke_graph, 'predict_behavioral_response'):
-                                                context = student_data.get('error_message', '') or student_data.get('question', '')
-                                                predicted_response = adaptive_explainer.coke_graph.predict_behavioral_response(coke_cognitive_state, context)
-                                                behavioral_response = predicted_response.value if hasattr(predicted_response, 'value') else str(predicted_response)
-                                                cognitive_chain_desc = f"Student is in {cognitive_state_str} state, likely to {behavioral_response}"
-                                            else:
-                                                cognitive_chain_desc = f"Student cognitive state: {cognitive_state_str}"
-                                    else:
-                                        cognitive_chain_desc = f"Student cognitive state: {cognitive_state_str}"
-                                except Exception as e:
-                                    cognitive_chain_desc = f"Student cognitive state: {cognitive_state_str}"
-                                
-                                coke_info = {
-                                    'cognitive_state': cognitive_state_str,
-                                    'mental_activity': cognitive_state_str,
-                                    'behavioral_response': behavioral_response,
-                                    'confidence': 0.8,
-                                    'cognitive_chain': {'description': cognitive_chain_desc} if cognitive_chain_desc else {},
-                                    'source': 'COKE Cognitive Knowledge Graph'
-                                }
-                                print(f"[OK] COKE queried: cognitive state = {cognitive_state_str}, behavioral response = {behavioral_response}")
-                            except Exception as e:
-                                print(f"[WARN] COKE analysis failed: {e}")
-                                import traceback
-                                traceback.print_exc()
-                        
-                        # Get CSE-KG information (QUERY ACTUALLY)
-                        cse_kg_info = {}
-                        if adaptive_explainer and adaptive_explainer.cse_kg:
-                            try:
-                                # Use _get_prerequisites from adaptive explainer which queries CSE-KG
-                                prerequisites_list = adaptive_explainer._get_prerequisites(concept)
-                                prerequisites = [p.get('concept', '') if isinstance(p, dict) else str(p) for p in prerequisites_list]
-                                
-                                # Get related concepts
-                                related_concepts = []
-                                try:
-                                    if hasattr(adaptive_explainer.cse_kg, 'get_related_concepts'):
-                                        related = adaptive_explainer.cse_kg.get_related_concepts(concept, max_distance=1)
-                                        related_concepts = [r[0] if isinstance(r, tuple) else str(r) for r in related[:5]]
-                                except:
-                                    pass
-                                
-                                # Get concept definition/label
-                                definition = f"Concept: {concept}"
-                                try:
-                                    if hasattr(adaptive_explainer.cse_kg, 'search_by_keywords'):
-                                        search_results = adaptive_explainer.cse_kg.search_by_keywords([concept], limit=1)
-                                        if search_results:
-                                            definition = search_results[0].get('label', definition)
-                                except:
-                                    pass
-                                
-                                cse_kg_info = {
-                                    'concept': concept,
-                                    'prerequisites': prerequisites,
-                                    'related_concepts': related_concepts,
-                                    'definition': definition,
-                                    'source': 'CSE-KG 2.0'
-                                }
-                                print(f"[OK] CSE-KG queried: {len(prerequisites)} prerequisites, {len(related_concepts)} related concepts")
-                            except Exception as e:
-                                print(f"[WARN] CSE-KG query failed: {e}")
-                                import traceback
-                                traceback.print_exc()
-                        
-                        # Get Pedagogical KG information (QUERY ACTUALLY)
-                        pedagogical_kg_info = {}
-                        if adaptive_explainer and adaptive_explainer.pedagogical_kg:
-                            try:
-                                # Query Pedagogical KG for full concept info
-                                concept_full_info = adaptive_explainer.pedagogical_kg.get_concept_full_info(concept)
-                                
-                                # Get misconceptions (use pedagogical_builder method)
-                                misconceptions = adaptive_explainer.pedagogical_kg.pedagogical_builder.get_misconceptions_for_concept(concept)
-                                misconception_descriptions = []
-                                if misconceptions:
-                                    for m in misconceptions[:3]:
-                                        if isinstance(m, dict):
-                                            misconception_descriptions.append(m.get('description', m.get('name', str(m))))
-                                        else:
-                                            misconception_descriptions.append(str(m))
-                                
-                                # Get cognitive load
-                                cognitive_load = adaptive_explainer.pedagogical_kg.get_cognitive_load_info(concept)
-                                cognitive_load_level = 'moderate'
-                                if cognitive_load:
-                                    if isinstance(cognitive_load, dict):
-                                        cognitive_load_level = cognitive_load.get('level', cognitive_load.get('total_load', 'moderate'))
-                                    else:
-                                        cognitive_load_level = str(cognitive_load)
-                                
-                                # Get learning progression
-                                progression_desc = ''
-                                if concept_full_info:
-                                    if isinstance(concept_full_info, dict):
-                                        progression = concept_full_info.get('learning_progression', {})
-                                        if isinstance(progression, dict):
-                                            progression_desc = progression.get('description', progression.get('steps', ''))
-                                        else:
-                                            progression_desc = str(progression)
-                                
-                                # Get interventions
-                                interventions = []
-                                if concept_full_info and isinstance(concept_full_info, dict):
-                                    interventions_list = concept_full_info.get('interventions', [])
-                                    for i in interventions_list[:3]:
-                                        if isinstance(i, dict):
-                                            interventions.append(i.get('type', i.get('name', str(i))))
-                                        else:
-                                            interventions.append(str(i))
-                                
-                                pedagogical_kg_info = {
-                                    'progression': progression_desc,
-                                    'misconceptions': misconception_descriptions,
-                                    'cognitive_load': cognitive_load_level,
-                                    'interventions': interventions,
-                                    'source': 'Pedagogical Knowledge Graph'
-                                }
-                                print(f"[OK] Pedagogical KG queried: {len(misconception_descriptions)} misconceptions, cognitive load: {cognitive_load_level}")
-                            except Exception as e:
-                                print(f"[WARN] Pedagogical KG query failed: {e}")
-                                import traceback
-                                traceback.print_exc()
-                        
-                        # Prepare analysis for enhanced generator with ALL knowledge graphs
+
+                        top_gap = knowledge_gaps[0] if knowledge_gaps else {}
                         analysis = {
-                            'emotion': behavioral_analysis.get('emotion', 'engaged') if behavioral_analysis else 'engaged',
-                            'frustration_level': 0.7 if adaptive_result.get('learning_style_adaptation', {}).get('visual_verbal') == 'frustrated' else 0.3,
                             'engagement_score': 0.6,
                             'mastery_change': 0.0,
-                            # Knowledge Graphs (CRITICAL)
-                            'cse_kg': cse_kg_info,
-                            'pedagogical_kg': pedagogical_kg_info,
-                            'coke': coke_info,
-                            # Fallback
+                            # Fallback domain context when there is no LP diagnosis
                             'kg_knowledge': {
                                 'name': concept,
-                                'common_misconceptions': [g.get('concept', '') for g in adaptive_result.get('knowledge_gaps', [])],
-                                'better_mental_model': adaptive_result.get('explanation', '')
+                                'common_misconceptions': top_gap.get('misconceptions', []),
                             }
                         }
-                        
-                        # Generate comprehensive response with all 10 features + Knowledge Graphs
+
                         enhanced_response = self.models['enhanced_generator'].generate_personalized_response(
                             student_id=student_id,
                             student_message=student_data.get('question', 'Help with code'),
@@ -1924,86 +1482,74 @@ class InterventionOrchestrator:
                                     'type': 'logic_error',
                                     'line': 'N/A',
                                     'issue': student_data.get('error_message', ''),
-                                    'fix': adaptive_result.get('explanation', '')
+                                    'fix': ''
                                 }] if student_data.get('error_message') else []
-                            },
-                            adaptive_analysis=adaptive_result  # Pass full adaptive analysis for KG access
+                            }
                         )
-                        adaptive_result['explanation'] = enhanced_response
+                        generation['explanation'] = enhanced_response
                         print("[OK] Response generated with Enhanced Personalized Generator (Ollama)")
                     except Exception as e:
                         print(f"[WARN] Enhanced generator failed: {e}")
                         import traceback
                         traceback.print_exc()
-                        # Fallback to direct Groq enhancement
+                        # Fallback to a direct Ollama call
                         try:
-                            enhanced_response = self._enhance_with_ollama(
-                                adaptive_result.get('explanation', ''),
+                            generation['explanation'] = self._enhance_with_ollama(
+                                generation['explanation'],
                                 student_data,
-                                adaptive_result,
+                                avg_mastery,
                                 student_profile
                             )
-                            adaptive_result['explanation'] = enhanced_response
                         except Exception as e2:
-                            print(f"[WARN] Claude enhancement also failed: {e2}")
-                
+                            print(f"[WARN] Ollama fallback also failed: {e2}")
+
                 # Calculate quantitative metrics
                 metrics = self._calculate_complete_metrics(
-                    session_data, adaptive_result, cognitive_assessment,
+                    session_data, generation, cognitive_assessment,
                     behavioral_analysis, student_profile, knowledge_gaps
                 )
-                
+
                 # ===== DYNAMIC STATE UPDATE =====
-                # Extract concepts from code/conversation
-                concepts_identified = self._extract_concepts_dynamically(session_data, adaptive_result)
-                
-                # Infer cognitive state from conversation (COKE)
-                cognitive_state = self._infer_cognitive_state_from_conversation(session_data, behavioral_analysis)
-                
+                concepts_identified = self._extract_concepts_dynamically(session_data)
+
                 # Calculate code correctness
                 code_correctness = metrics['quantitative']['codebert_analysis']['correctness_score']
                 response_quality = metrics['quantitative']['bert_explanation_quality']['quality_score']
-                
+
                 # Update student state tracker
                 if self.state_tracker:
                     self.state_tracker.update_from_session(
                         student_id=student_id,
                         session_data=session_data,
-                        cognitive_state=cognitive_state,
                         concepts_identified=concepts_identified,
                         code_correctness=code_correctness,
                         response_quality=response_quality
                     )
-                    
+
                     # Mastery is already updated by Student State Tracker above
-                
+
                 return {
                     'intervention': intervention,
                     'content': {
-                        'explanation': adaptive_result.get('explanation', ''),
+                        'explanation': generation['explanation'],
                         'type': intervention['type']
                     },
                     'analysis': {
                         'cognitive': cognitive_assessment,
-                        'psychological': student_profile,
+                        'personality': student_profile,
                         'behavioral': behavioral_analysis,
                         'knowledge_gaps': knowledge_gaps
                     },
-                    'adaptive_analysis': adaptive_result,
                     'metrics': metrics,
                     'encoding': encoding_results if 'encoding_results' in locals() else {},
-                    'knowledge_graphs_used': adaptive_result.get('knowledge_graphs_used', {}),
-                    'strategy': adaptive_result.get('strategy', 'scaffold_gradually'),
-                    'complexity': adaptive_result.get('complexity', 3),
-                    'cognitive_state_inferred': cognitive_state,
                     'concepts_identified': concepts_identified,
                     'state_updated': True
                 }
             except Exception as e:
-                print(f"[WARN] Adaptive explanation failed: {e}")
+                print(f"[WARN] Content generation failed: {e}")
                 import traceback
                 traceback.print_exc()
-        
+
         # Fallback to original content generator
         content_gen = self.models.get('content_generator')
         if content_gen:
@@ -2018,7 +1564,7 @@ class InterventionOrchestrator:
                 'content': content,
                 'analysis': {
                     'cognitive': cognitive_assessment if cognitive_assessment else {},
-                    'psychological': student_profile,
+                    'personality': student_profile,
                     'behavioral': behavioral_analysis if behavioral_analysis else {}
                 },
                 'encoding': encoding_results if 'encoding_results' in locals() else {}
@@ -2033,7 +1579,7 @@ class InterventionOrchestrator:
             },
             'analysis': {
                 'cognitive': {},
-                'psychological': {},
+                'personality': {},
                 'behavioral': {}
             },
             'encoding': {}
@@ -2063,94 +1609,12 @@ class InterventionOrchestrator:
         resolver = getattr(self, "concept_resolver", None) or ConceptResolver()
         return resolver.top_concept(session_data)
 
-    def _extract_concepts_dynamically(self, session_data: Dict, adaptive_result: Dict) -> List[str]:
-        """
-        Dynamically extract concepts from code, error, and conversation
-        Uses CSE-KG to identify actual concepts
-        """
-        concepts = []
-        
-        # Get from adaptive result if available
-        if 'concepts_identified' in adaptive_result:
-            concepts.extend(adaptive_result['concepts_identified'])
-        
-        # Extract from CSE-KG if available
-        cse_kg = self.models.get('cse_kg_client')
-        if cse_kg:
-            try:
-                # Extract from code
-                code = session_data.get("code", "")
-                error = session_data.get("error_message", "")
-                question = session_data.get("question", "")
-                
-                # Use concept retriever if available
-                concept_retriever = self.models.get('concept_retriever')
-                if concept_retriever:
-                    extracted = concept_retriever.retrieve_from_code(code, error)
-                    concepts.extend(extracted)
-                else:
-                    # Fallback: simple keyword extraction
-                    text = f"{code} {error} {question}".lower()
-                    concept_keywords = {
-                        'recursion': ['recursion', 'recursive', 'base case'],
-                        'loops': ['loop', 'for', 'while', 'iterate'],
-                        'functions': ['function', 'def', 'call'],
-                        'variables': ['variable', 'assign', '='],
-                        'conditional_statements': ['if', 'else', 'elif', 'conditional'],
-                        'data_structures': ['list', 'dict', 'array', 'tuple'],
-                        'algorithms': ['algorithm', 'sort', 'search'],
-                        'object_oriented': ['class', 'object', 'method', 'attribute'],
-                        'error_handling': ['try', 'except', 'error', 'exception']
-                    }
-                    
-                    for concept, keywords in concept_keywords.items():
-                        if any(kw in text for kw in keywords):
-                            concepts.append(concept)
-            except Exception as e:
-                print(f"[WARN] Concept extraction failed: {e}")
-        
-        # Remove duplicates and return
-        return list(set(concepts)) if concepts else [self._extract_concept(session_data)]
-    
-    def _infer_cognitive_state_from_conversation(self, session_data: Dict, behavioral_analysis: Dict) -> str:
-        """
-        Infer cognitive state from conversation using COKE
-        """
-        # Try COKE graph if available
-        adaptive_explainer = self.models.get('adaptive_explainer')
-        if adaptive_explainer and adaptive_explainer.coke_graph:
-            try:
-                cognitive_state = adaptive_explainer.coke_graph.predict_cognitive_state(session_data)
-                return cognitive_state.value if hasattr(cognitive_state, 'value') else str(cognitive_state)
-            except Exception as e:
-                print(f"[WARN] COKE inference failed: {e}")
-        
-        # Fallback to behavioral analysis
-        if behavioral_analysis:
-            emotion = behavioral_analysis.get('emotion', 'neutral')
-            if emotion in ['frustrated', 'confused', 'engaged', 'understanding']:
-                return emotion
-        
-        # Fallback: analyze conversation text
-        conversation = session_data.get('conversation', [])
-        question = session_data.get('question', '')
-        error = session_data.get('error_message', '')
-        
-        text = f"{question} {' '.join(str(c) for c in conversation)} {error}".lower()
-        
-        if any(word in text for word in ['confused', "don't understand", "don't get", 'help']):
-            return 'confused'
-        elif any(word in text for word in ['frustrated', 'stuck', 'hard', 'difficult']):
-            return 'frustrated'
-        elif any(word in text for word in ['understand', 'got it', 'see', 'clear']):
-            return 'understanding'
-        elif error:
-            return 'confused'
-        else:
-            return 'engaged'
-    
+    def _extract_concepts_dynamically(self, session_data: Dict) -> List[str]:
+        """Concepts touched this session (catalogue concept ids via ConceptResolver)."""
+        return [self._extract_concept(session_data)]
+
     def _enhance_with_ollama(self, base_explanation: str, student_data: Dict,
-                            adaptive_result: Dict, student_profile: Dict) -> str:
+                            mastery: float, student_profile: Dict) -> str:
         """Enhance explanation using local Ollama model."""
         import requests, os
         ollama_url   = self.config.get('ollama', {}).get('url',   'http://localhost:11434')
@@ -2164,7 +1628,7 @@ STUDENT CONTEXT:
 
 STUDENT PROFILE:
 - Learning Style: {student_profile.get('learning_style', {}).get('visual_verbal', 'visual')}
-- Mastery: {adaptive_result.get('prior_knowledge', {}).get('average_mastery', 0.5):.0%}
+- Mastery: {mastery:.0%}
 
 BASE EXPLANATION:
 {base_explanation}
@@ -2188,7 +1652,7 @@ Enhanced explanation:"""
             print(f"[WARN] Ollama enhancement error: {e}")
             return base_explanation
 
-    def _calculate_complete_metrics(self, session_data: Dict, adaptive_result: Dict,
+    def _calculate_complete_metrics(self, session_data: Dict, generation: Dict,
                                    cognitive_assessment: Dict, behavioral_analysis: Dict,
                                    student_profile: Dict, knowledge_gaps: List[Dict]) -> Dict:
         """
@@ -2200,8 +1664,7 @@ Enhanced explanation:"""
         import time
         
         # DINA Mastery - DYNAMIC CALCULATION
-        prior_knowledge = adaptive_result.get('prior_knowledge', {})
-        previous_overall_mastery = prior_knowledge.get('average_mastery', 0.5)
+        previous_overall_mastery = generation.get('average_mastery', 0.5)
         
         # Get previous mastery from state tracker
         student_id = session_data.get('student_id', 'unknown')
@@ -2228,14 +1691,12 @@ Enhanced explanation:"""
         current_overall_mastery = max(0.0, min(1.0, previous_overall_mastery + mastery_delta))
         
         # Update concept-specific mastery
-        concept_mastery = prior_knowledge.get('mastery_scores', {}).copy()
-        if not concept_mastery:
-            # Initialize from knowledge gaps
-            knowledge_gaps = adaptive_result.get('knowledge_gaps', [])
-            for gap in knowledge_gaps:
-                concept = gap.get('concept', '')
-                if concept:
-                    concept_mastery[concept] = gap.get('mastery', 0.5)
+        concept_mastery = {}
+        # Initialize from knowledge gaps
+        for gap in knowledge_gaps or []:
+            concept = gap.get('concept', '')
+            if concept:
+                concept_mastery[concept] = gap.get('mastery') if gap.get('mastery') is not None else 0.5
         
         # Update concept mastery based on performance
         for concept in concept_mastery:
@@ -2270,7 +1731,7 @@ Enhanced explanation:"""
             }
         
         # [OK] REAL BERT Explanation Quality (using actual model)
-        explanation = adaptive_result.get('explanation', '')
+        explanation = generation.get('explanation', '')
         if self.metrics_calculator:
             bert_quality = self.metrics_calculator.calculate_bert_quality(explanation)
             print(f"[Metrics] [OK] BERT quality: score={bert_quality.get('quality_score', 0):.2f}")
@@ -2309,14 +1770,7 @@ Enhanced explanation:"""
         nestor_profile = {
             "personality": student_profile.get('personality', {}),
             "learning_style": student_profile.get('learning_style', {}),
-            "learning_strategy": adaptive_result.get('learning_style_adaptation', {}).get('order', 'systematic')
-        }
-        
-        # COKE Analysis
-        coke_analysis = {
-            "cognitive_state": behavioral_analysis.get('emotion', 'engaged') if behavioral_analysis else 'engaged',
-            "confidence": 0.8,
-            "behavioral_response": "continue"
+            "learning_strategy": student_profile.get('learning_style', {}).get('order', 'systematic')
         }
         
         return {
@@ -2325,15 +1779,9 @@ Enhanced explanation:"""
                 "codebert_analysis": codebert_analysis,
                 "bert_explanation_quality": bert_quality,
                 "time_tracking": time_tracking,
-                "knowledge_graphs_used": adaptive_result.get('knowledge_graphs_used', {}),
-                "nestor_profile": nestor_profile,
-                "coke_analysis": coke_analysis
+                "nestor_profile": nestor_profile
             },
             "qualitative": {
-                "explanation_style": adaptive_result.get('strategy', 'scaffold_gradually'),
-                "complexity_level": adaptive_result.get('complexity', 3),
-                "personalization_factors": adaptive_result.get('personalization_factors', {}),
-                "cognitive_state": coke_analysis['cognitive_state'],
                 "learning_style": nestor_profile['learning_style']
             }
         }
@@ -2497,12 +1945,6 @@ Enhanced explanation:"""
         help_actions = ['ask_question', 'search_documentation', 'help', 'question']
         help_count = sum(1 for action in action_sequence if any(h in str(action).lower() for h in help_actions))
         behavioral_data['social_interaction'] = min(1.0, help_count / max(total_actions, 1))
-        
-        # Emotional variability: Variance in time between actions
-        if len(time_deltas) > 1:
-            behavioral_data['emotional_variability'] = min(1.0, np.std(time_deltas) / 30.0)  # Normalize
-        else:
-            behavioral_data['emotional_variability'] = 0.5
         
         # Add historical data if available
         if student_id in self.session_history:
@@ -2735,24 +2177,23 @@ Enhanced explanation:"""
     
     # === Helper Methods for Hierarchical RL ===
     
-    def _infer_student_type(self, psychological: Dict, behavioral: Dict) -> str:
-        """Infer student type from assessments"""
-        emotion = behavioral.get('emotion', 'neutral')
-        mastery_avg = 0.5  # Would calculate from cognitive assessment
-        conscientiousness = psychological.get('personality', {}).get('conscientiousness', 0.5)
-        
-        if emotion == 'confused' and mastery_avg < 0.3:
-            if conscientiousness > 0.7:
+    def _infer_student_type(self, personality: Dict, behavioral: Dict,
+                            mastery_avg: float = 0.5) -> str:
+        """Infer student type from mastery, conscientiousness and debugging
+        effectiveness (no emotion input)."""
+        conscientiousness = personality.get('personality', {}).get('conscientiousness', 0.5)
+        effectiveness = behavioral.get('effectiveness', 0.5)
+        if not isinstance(effectiveness, (int, float)):
+            effectiveness = 0.5
+
+        if mastery_avg < 0.3:
+            if conscientiousness > 0.7 or effectiveness > 0.6:
                 return "systematic_beginner"
-            else:
-                return "chaotic_beginner"
-        elif emotion == 'frustrated':
-            return "frustrated_struggling"
-        elif emotion == 'engaged' and mastery_avg > 0.6:
+            return "chaotic_beginner"
+        if mastery_avg > 0.6:
             return "engaged_intermediate"
-        else:
-            return "systematic_beginner"  # Default
-    
+        return "systematic_beginner"  # Default
+
     def _calculate_overall_progress(self, student_id: str) -> float:
         """Calculate student's overall progress"""
         if student_id not in self.session_history:
@@ -2789,14 +2230,15 @@ Enhanced explanation:"""
             return "random_exploration"
     
     def _estimate_dropout_risk(self, behavioral_analysis: Dict) -> float:
-        """Estimate dropout risk"""
-        emotion = behavioral_analysis.get('emotion', 'neutral')
-        if emotion == 'frustrated':
-            return 0.75
-        elif emotion == 'confused':
-            return 0.35
-        else:
-            return 0.15
+        """Estimate dropout risk from debugging-strategy effectiveness."""
+        effectiveness = behavioral_analysis.get('effectiveness', 0.5)
+        if not isinstance(effectiveness, (int, float)):
+            effectiveness = 0.5
+        if effectiveness < 0.4:
+            return 0.5
+        elif effectiveness < 0.7:
+            return 0.3
+        return 0.15
     
     def _get_session_history(self, student_id: str) -> List:
         """Get student's session history"""

@@ -1,8 +1,8 @@
 """
 Enhanced Personalized Content Generator
-Implements 10 key personalization features for student responses:
+Implements personalization features for student responses (Feature 2,
+emotional tone adaptation, was removed: emotion is no longer an input):
 1. Conversation Memory & Context
-2. Emotional Intelligence & Tone Adaptation
 3. Learning Style Deep Personalization
 4. Personality-Based Communication
 5. Progress-Aware Responses
@@ -84,8 +84,7 @@ class EnhancedPersonalizedGenerator:
         student_state: Dict,
         analysis: Dict,
         code: Optional[str] = None,
-        code_analysis: Optional[Dict] = None,
-        adaptive_analysis: Optional[Dict] = None
+        code_analysis: Optional[Dict] = None
     ) -> str:
         """
         Generate fully personalized response using all 10 features
@@ -94,7 +93,7 @@ class EnhancedPersonalizedGenerator:
             student_id: Unique student identifier
             student_message: Current student question/message
             student_state: Complete student state (BKT, personality, history)
-            analysis: System analysis (emotion, knowledge gaps, etc.)
+            analysis: System analysis (knowledge gaps, learning path, etc.)
             code: Optional student code
             code_analysis: Optional code analysis results
             
@@ -105,11 +104,6 @@ class EnhancedPersonalizedGenerator:
         # Feature 1: Conversation Memory & Context
         conversation_context = self._build_conversation_context(
             student_id, student_state, analysis
-        )
-        
-        # Feature 2: Emotional Intelligence & Tone Adaptation
-        emotional_context = self._adapt_emotional_tone(
-            analysis, student_state
         )
         
         # Feature 3: Learning Style Deep Personalization
@@ -152,14 +146,13 @@ class EnhancedPersonalizedGenerator:
             student_state, analysis
         )
         
-        # Build comprehensive prompt (include adaptive_analysis for knowledge graphs)
+        # Build comprehensive prompt
         prompt = self._build_enhanced_prompt(
             student_message=student_message,
             code=code,
             student_state=student_state,
             analysis=analysis,
             conversation_context=conversation_context,
-            emotional_context=emotional_context,
             learning_style_adaptation=learning_style_adaptation,
             personality_adaptation=personality_adaptation,
             progress_context=progress_context,
@@ -167,8 +160,7 @@ class EnhancedPersonalizedGenerator:
             format_preferences=format_preferences,
             error_feedback=error_feedback,
             metacognitive_guidance=metacognitive_guidance,
-            difficulty_adaptation=difficulty_adaptation,
-            adaptive_analysis=adaptive_analysis
+            difficulty_adaptation=difficulty_adaptation
         )
         
         # Ollama local inference — streaming so first tokens appear in ~8-10s
@@ -239,7 +231,6 @@ class EnhancedPersonalizedGenerator:
             'interaction_number': interaction_count,
             'previous_topics': [],
             'what_worked_before': [],
-            'confusion_patterns': [],
             'learning_trajectory': []
         }
         
@@ -259,17 +250,6 @@ class EnhancedPersonalizedGenerator:
                         h.get('intervention_type', 'unknown')
                     )
             
-            # Track confusion patterns
-            confusion_count = sum(
-                1 for h in history 
-                if h.get('emotion') in ['confused', 'frustrated']
-            )
-            if confusion_count > 2:
-                context['confusion_patterns'] = [
-                    "Student has asked about this concept multiple times",
-                    "May need alternative explanation approach"
-                ]
-        
         # Learning trajectory
         if interaction_count >= 3:
             mastery_history = student_state.get('knowledge_state', {}).get(
@@ -280,60 +260,6 @@ class EnhancedPersonalizedGenerator:
                 context['learning_trajectory'] = f"Mastery is {trend}"
         
         return context
-    
-    # ========== FEATURE 2: Emotional Intelligence & Tone Adaptation ==========
-    
-    def _adapt_emotional_tone(self, analysis: Dict, student_state: Dict) -> Dict:
-        """Adapt tone based on emotional state"""
-        
-        emotion = analysis.get('emotion', 'neutral')
-        frustration = analysis.get('frustration_level', 0.5)
-        engagement = analysis.get('engagement_score', 0.5)
-        mastery = student_state.get('knowledge_state', {}).get('overall_mastery', 0.5)
-        
-        tone_guidance = {
-            'tone': 'neutral',
-            'encouragement_level': 'moderate',
-            'step_size': 'normal',
-            'reassurance_needed': False,
-            'celebration_needed': False
-        }
-        
-        # High frustration → Softer, more supportive
-        if frustration > 0.7:
-            tone_guidance.update({
-                'tone': 'gentle_supportive',
-                'encouragement_level': 'high',
-                'step_size': 'small',
-                'reassurance_needed': True,
-                'message': "Student is frustrated. Use gentle, encouraging tone. Break into smaller steps. Normalize the struggle."
-            })
-        
-        # Low engagement → More engaging, enthusiastic
-        elif engagement < 0.4:
-            tone_guidance.update({
-                'tone': 'enthusiastic_engaging',
-                'encouragement_level': 'high',
-                'message': "Student engagement is low. Be more enthusiastic. Use interesting examples. Make it exciting!"
-            })
-        
-        # High mastery + improving → Celebrate!
-        elif mastery > 0.7 and analysis.get('mastery_change', 0) > 0.1:
-            tone_guidance.update({
-                'tone': 'celebratory',
-                'celebration_needed': True,
-                'message': "Student is doing great! Celebrate their progress. Acknowledge improvement."
-            })
-        
-        # Confused but trying → Supportive with clarity
-        elif emotion == 'confused' and engagement > 0.5:
-            tone_guidance.update({
-                'tone': 'supportive_clarifying',
-                'step_size': 'small',
-                'message': "Student is confused but engaged. Be supportive. Provide clear, step-by-step explanation."
-            })
-        
-        return tone_guidance
     
     # ========== FEATURE 3: Learning Style Deep Personalization ==========
     
@@ -657,13 +583,6 @@ class EnhancedPersonalizedGenerator:
             'hint_level': 'moderate'  # subtle, moderate, explicit
         }
         
-        # Determine hint level based on frustration
-        frustration = analysis.get('frustration_level', 0.5)
-        if frustration > 0.7:
-            error_feedback['hint_level'] = 'explicit'  # More direct help
-        elif frustration < 0.3:
-            error_feedback['hint_level'] = 'subtle'  # Let them discover
-        
         return error_feedback
     
     # ========== FEATURE 9: Metacognitive & Learning Strategy Support ==========
@@ -675,7 +594,6 @@ class EnhancedPersonalizedGenerator:
         
         interaction_count = student_state.get('interaction_count', 0)
         mastery = student_state.get('knowledge_state', {}).get('overall_mastery', 0.5)
-        emotion = analysis.get('emotion', 'neutral')
         
         guidance = {
             'has_guidance': False,
@@ -713,19 +631,6 @@ class EnhancedPersonalizedGenerator:
                 ]
             })
         
-        # Pattern: Frustrated
-        if emotion == 'frustrated':
-            guidance.update({
-                'has_guidance': True,
-                'strategy_type': 'self_regulation',
-                'message': "When stuck, try:",
-                'tips': [
-                    "Take a short break, then return with fresh eyes",
-                    "Explain the problem to someone (or yourself) out loud",
-                    "Start with a simpler version of the problem"
-                ]
-            })
-        
         return guidance
     
     # ========== FEATURE 10: Adaptive Difficulty & Pacing ==========
@@ -736,9 +641,7 @@ class EnhancedPersonalizedGenerator:
         """Adapt difficulty and pacing to student level"""
         
         mastery = student_state.get('knowledge_state', {}).get('overall_mastery', 0.5)
-        emotion = analysis.get('emotion', 'neutral')
         engagement = analysis.get('engagement_score', 0.5)
-        frustration = analysis.get('frustration_level', 0.5)
         
         adaptation = {
             'difficulty_level': 'appropriate',
@@ -777,13 +680,9 @@ class EnhancedPersonalizedGenerator:
                 'instructions': "Extend to advanced concepts. Minimal scaffolding. Challenge them."
             })
         
-        # Adjust pacing based on emotion and engagement
-        if frustration > 0.7:
-            adaptation['pacing'] = 'slower'
-        elif engagement < 0.4:
+        # Adjust pacing based on engagement (answer length, not emotion)
+        if engagement < 0.4:
             adaptation['pacing'] = 'faster'  # Speed up to maintain interest
-        elif emotion == 'engaged' and mastery > 0.6:
-            adaptation['pacing'] = 'faster'
         
         return adaptation
     
@@ -796,7 +695,6 @@ class EnhancedPersonalizedGenerator:
         student_state: Dict,
         analysis: Dict,
         conversation_context: Dict,
-        emotional_context: Dict,
         learning_style_adaptation: Dict,
         personality_adaptation: Dict,
         progress_context: Dict,
@@ -804,8 +702,7 @@ class EnhancedPersonalizedGenerator:
         format_preferences: Dict,
         error_feedback: Dict,
         metacognitive_guidance: Dict,
-        difficulty_adaptation: Dict,
-        adaptive_analysis: Optional[Dict] = None
+        difficulty_adaptation: Dict
     ) -> str:
         """Build comprehensive personalized prompt"""
 
@@ -846,8 +743,8 @@ class EnhancedPersonalizedGenerator:
         # ===== CPAL Stage 3 header + LP sections =====
         # If lp_diagnostic was produced upstream, rewrite the header and
         # inject three LP-specific sections (LP-1, LP-2, LP-3). The
-        # existing sections (EMOTIONAL CONTEXT, PERSONALITY, PROGRESS,
-        # KNOWLEDGE GRAPHS, etc.) still run below this block so we
+        # existing sections (PERSONALITY, PROGRESS, CHAPTER-1 GRAPH,
+        # etc.) still run below this block so we
         # preserve all current behaviour for students without a
         # diagnosis. See mental_models_cpal_methodology.docx Part 3
         # Stage 3.
@@ -905,9 +802,9 @@ class EnhancedPersonalizedGenerator:
 
             # ===== LP-0.6: BEHAVIORAL CONTEXT (HMM) =====
             # Added 2026-05-25. Surface the BehavioralHMM's read of the
-            # student's cognitive state from their action sequence
-            # (engaged / confused / frustrated / exploring / systematic)
-            # so the LLM can pace and tone the response accordingly.
+            # student's debugging state from their action sequence
+            # (exploring / stuck / making_progress / understanding /
+            # mastered) so the LLM can pace the response accordingly.
             behav = (student_state.get("behavioral_state")
                      if isinstance(student_state, dict) else None) or {}
             if behav.get("final_state"):
@@ -923,9 +820,9 @@ class EnhancedPersonalizedGenerator:
                         f"Recent state trace: {' -> '.join(seq[-5:])}"
                     )
                 prompt_parts.append(
-                    "If the student is frustrated or stuck, de-escalate and "
-                    "scaffold; if engaged or systematic, you can ask a "
-                    "deeper question."
+                    "If the student is stuck, scaffold in smaller steps; "
+                    "if they are making progress or understanding, you can "
+                    "ask a deeper question."
                 )
         else:
             # Existing header preserved verbatim
@@ -1656,9 +1553,8 @@ class EnhancedPersonalizedGenerator:
         # concept they asked about, we hard-redirect the lesson to the next
         # concept they CAN learn. This runs before everything else so the LLM
         # sees the override first; small models (e.g. llama3.2 3B) obey it more
-        # reliably than a deeply-nested MUST clause inside the pedagogical-KG
-        # section.
-        lp_path = (analysis.get('pedagogical_kg') or {}).get('learning_path')
+        # reliably than a deeply-nested MUST clause further down the prompt.
+        lp_path = analysis.get('learning_path')
         lp_redirect = None
         if lp_path and not lp_path.get('on_track', True):
             target = lp_path.get('target_concept')
@@ -1726,17 +1622,6 @@ class EnhancedPersonalizedGenerator:
                 prompt_parts.append(
                     f"What worked before: {', '.join(set(conversation_context['what_worked_before']))}"
                 )
-            if conversation_context['confusion_patterns']:
-                prompt_parts.append(
-                    f"Note: {conversation_context['confusion_patterns'][0]}"
-                )
-        
-        # Feature 2: Emotional Intelligence
-        prompt_parts.append("\n=== EMOTIONAL CONTEXT ===")
-        prompt_parts.append(f"Tone: {emotional_context['tone']}")
-        prompt_parts.append(f"Encouragement level: {emotional_context['encouragement_level']}")
-        if 'message' in emotional_context:
-            prompt_parts.append(f"Guidance: {emotional_context['message']}")
         
         # Feature 3: Learning Style
         prompt_parts.append("\n=== LEARNING STYLE ADAPTATION ===")
@@ -1800,22 +1685,13 @@ class EnhancedPersonalizedGenerator:
         if 'instructions' in difficulty_adaptation:
             prompt_parts.append(f"Guidance: {difficulty_adaptation['instructions']}")
         
-        # ===== FIX 1+2: PSYCHOLOGICAL STATE from three-channel analysis ==========
-        pg  = student_state.get('psychological_graph', {})
+        # ===== LEARNER STATE from the progression + content channels ==========
         prg = student_state.get('progression_graph', {})
         cc  = student_state.get('content_channel', {})
-        lg  = student_state.get('language_channel', {})
         ri  = student_state.get('recommended_intervention', {})
 
-        if pg or prg or cc:
-            prompt_parts.append("\n=== PSYCHOLOGICAL STATE (from three-channel analysis) ===")
-            if pg:
-                prompt_parts.append(f"Attribution style: {pg.get('attribution', 'neutral')}")
-                prompt_parts.append(f"Self-efficacy: {pg.get('self_efficacy', 'neutral')}")
-                prompt_parts.append(f"SRL phase: {pg.get('srl_phase', 'unknown')}")
-                prompt_parts.append(f"Imposter flag: {pg.get('imposter_flag', False)}")
-                prompt_parts.append(f"High anxiety: {pg.get('high_anxiety', False)}")
-                prompt_parts.append(f"Flow state: {pg.get('flow_state', False)}")
+        if prg or cc:
+            prompt_parts.append("\n=== LEARNER STATE (progression + content channels) ===")
             if prg:
                 prompt_parts.append(f"Developmental stage: {prg.get('stage', 1)} / 5 (ZPD: {prg.get('zpd_status', 'unknown')})")
                 prompt_parts.append(f"Scaffold level needed: {prg.get('scaffold_level', 3)} / 5")
@@ -1835,23 +1711,10 @@ class EnhancedPersonalizedGenerator:
                 "NOT give a worked example, do NOT give the answer. One "
                 "sentence of warm framing, then the question — nothing else."
             ),
-            'attribution_reframe': (
-                "CRITICAL — this student believes they are fundamentally bad at programming. "
-                "Do NOT advance the concept yet. First: acknowledge that this specific error trips up "
-                "almost every Java learner. Reframe the difficulty as a normal learning step, not a "
-                "sign of inability. Use phrases like 'this confuses nearly everyone at first' and "
-                "'the fact that you spotted it means you are making progress'. Only after reframing "
-                "should you gently begin explaining the concept."
-            ),
             'reduce_challenge':    (
-                "Student is overwhelmed. Drastically simplify. Use the smallest possible code example "
-                "(3-5 lines max). Do not introduce new terms. Focus on one single idea only. "
-                "Be warm and reassuring throughout."
-            ),
-            'mastery_surface':     (
-                "Student has solid understanding but low confidence. Your primary job is to surface "
-                "evidence of their competence before teaching anything new. Start by pointing out what "
-                "they already got right in their code or reasoning. Then build from there."
+                "Student is at the entry stage and needs a smaller step. Drastically simplify. Use the "
+                "smallest possible code example (3-5 lines max). Do not introduce new terms. Focus on "
+                "one single idea only."
             ),
             'worked_example':      (
                 "Student needs a complete worked example. Provide a short Java snippet (5-10 lines) "
@@ -1889,77 +1752,49 @@ class EnhancedPersonalizedGenerator:
                 if ri.get('rationale'):
                     prompt_parts.append(f"Why this was selected: {ri['rationale']}")
 
-        # ===== KNOWLEDGE GRAPHS CONTEXT (CRITICAL - MUST USE THESE) =====
-        prompt_parts.append("\n=== KNOWLEDGE GRAPHS (MUST REFERENCE IN RESPONSE) ===")
-        
-        # CSE-KG 2.0 (Computer Science Knowledge Graph)
-        cse_kg_info = analysis.get('cse_kg', {})
-        if cse_kg_info:
-            prompt_parts.append("\n[CSE-KG 2.0 - Computer Science Domain Knowledge]")
-            prompt_parts.append(f"  - Concept: {cse_kg_info.get('concept', 'N/A')}")
-            prompt_parts.append(f"  - Prerequisites: {', '.join(cse_kg_info.get('prerequisites', []))}")
-            prompt_parts.append(f"  - Related Concepts: {', '.join(cse_kg_info.get('related_concepts', []))}")
-            prompt_parts.append(f"  - Definition: {cse_kg_info.get('definition', 'N/A')}")
-            prompt_parts.append("  - MUST: Use CSE-KG information to explain concepts accurately and reference prerequisites")
-        
-        # Pedagogical KG (Learning Progressions, Misconceptions)
-        pedagogical_kg_info = analysis.get('pedagogical_kg', {})
-        if pedagogical_kg_info:
-            prompt_parts.append("\n[Pedagogical Knowledge Graph - Learning Science]")
-            prompt_parts.append(f"  - Learning Progression: {pedagogical_kg_info.get('progression', 'N/A')}")
-            misconceptions = pedagogical_kg_info.get('misconceptions', [])
-            if misconceptions:
-                prompt_parts.append(f"  - Common Misconceptions: {', '.join(misconceptions[:3])}")
-            prompt_parts.append(f"  - Cognitive Load Level: {pedagogical_kg_info.get('cognitive_load', 'N/A')}")
-            prompt_parts.append(f"  - Recommended Interventions: {', '.join(pedagogical_kg_info.get('interventions', []))}")
-            prompt_parts.append("  - MUST: Address misconceptions explicitly and follow learning progression")
+        # ===== CHAPTER-1 CONCEPT GRAPH CONTEXT =====
+        # Where the diagnosed concept sits in the Chapter-1 concept + LP graph
+        # (data/chapter1_concept_graph_percpt_lp.json): prerequisites, what it
+        # leads to, catalogued misconceptions, and what the student's current
+        # LP level looks like for this specific concept.
+        ch1_block = self._chapter1_graph_block(lp_diag)
+        if ch1_block:
+            prompt_parts.append("\n=== CHAPTER-1 CONCEPT GRAPH ===")
+            prompt_parts.append(ch1_block)
 
-            # Structured learning-progression path from data/pedagogical_kg/learning_progressions.json
-            # Inserted by orchestrator / end-to-end pipeline via LPIndex.get_path().
-            lp_path = pedagogical_kg_info.get('learning_path')
-            if lp_path:
-                prompt_parts.append("\n[LP Progression (from learning_progressions.json)]")
-                try:
-                    from src.knowledge_graph.lp_index import LPIndex
-                    # Use a module-level singleton to avoid reloading JSON each call
-                    if not hasattr(EnhancedPersonalizedGenerator, "_lp_index_singleton"):
-                        EnhancedPersonalizedGenerator._lp_index_singleton = LPIndex()
-                    prompt_parts.append(
-                        EnhancedPersonalizedGenerator._lp_index_singleton
-                        .render_prompt_block(lp_path)
-                    )
-                except Exception as _e:
-                    # fall back to a minimal render if LPIndex can't be imported
-                    prompt_parts.append(
-                        f"Progression: {lp_path.get('progression_id', 'unknown')}\n"
-                        f"Target: {lp_path.get('target_concept')}  "
-                        f"next step: {lp_path.get('next_concept')}\n"
-                        f"On track: {lp_path.get('on_track')}"
-                    )
-        
-        # COKE (Cognitive Knowledge Graph - Theory of Mind)
-        coke_info = analysis.get('coke', {})
-        if coke_info:
-            prompt_parts.append("\n[COKE - Cognitive Knowledge Graph for Theory of Mind]")
-            prompt_parts.append(f"  - Cognitive State: {coke_info.get('cognitive_state', 'N/A')}")
-            prompt_parts.append(f"  - Mental Activity: {coke_info.get('mental_activity', 'N/A')}")
-            prompt_parts.append(f"  - Behavioral Response: {coke_info.get('behavioral_response', 'N/A')}")
-            prompt_parts.append(f"  - Confidence: {coke_info.get('confidence', 0.5):.2f}")
-            cognitive_chain = coke_info.get('cognitive_chain', {})
-            if cognitive_chain:
-                prompt_parts.append(f"  - Cognitive Chain: {cognitive_chain.get('description', 'N/A')}")
-            prompt_parts.append("  - MUST: Use COKE cognitive state to understand student's mental state and adapt explanation accordingly")
-        
+        # Structured learning-progression path (LPIndex.get_path()), when the
+        # caller supplies one.
+        lp_path_ctx = analysis.get('learning_path')
+        if lp_path_ctx:
+            prompt_parts.append("\n[LP Progression]")
+            try:
+                from src.knowledge_graph.lp_index import LPIndex
+                # Use a module-level singleton to avoid reloading JSON each call
+                if not hasattr(EnhancedPersonalizedGenerator, "_lp_index_singleton"):
+                    EnhancedPersonalizedGenerator._lp_index_singleton = LPIndex()
+                prompt_parts.append(
+                    EnhancedPersonalizedGenerator._lp_index_singleton
+                    .render_prompt_block(lp_path_ctx)
+                )
+            except Exception:
+                # fall back to a minimal render if LPIndex can't be imported
+                prompt_parts.append(
+                    f"Progression: {lp_path_ctx.get('progression_id', 'unknown')}\n"
+                    f"Target: {lp_path_ctx.get('target_concept')}  "
+                    f"next step: {lp_path_ctx.get('next_concept')}\n"
+                    f"On track: {lp_path_ctx.get('on_track')}"
+                )
+
         # Fix 9: Fallback uses Java KG defaults from setup_java_knowledge.py
         kg = analysis.get('kg_knowledge', {})
-        if kg and not (cse_kg_info or pedagogical_kg_info or coke_info):
+        if kg and not ch1_block:
             prompt_parts.append("\n=== JAVA DOMAIN KNOWLEDGE ===")
             prompt_parts.append(f"Concept: {kg.get('name', 'N/A')}")
             prompt_parts.append(f"Java-specific misconceptions: {kg.get('common_misconceptions', 'N/A')}")
             prompt_parts.append(f"Better mental model for Java: {kg.get('better_mental_model', 'N/A')}")
             prompt_parts.append(f"Week in CSCI 1301: {kg.get('week', 'N/A')}")
             prompt_parts.append(f"Error type: {kg.get('error_type', 'N/A')}")
-        
+
         # Emphasize knowledge graph usage
         # NOTE: the old "CRITICAL INSTRUCTION: KNOWLEDGE GRAPH INTEGRATION"
         # block was a third recap of KG content already provided above. On
@@ -1993,7 +1828,7 @@ class EnhancedPersonalizedGenerator:
 
         # ===== YOUR RESPONSE MUST (compact, 5 items) =====
         # Trimmed from 12 to 5. The dropped items were either restatements
-        # of sections above (KG integration, psychological state, difficulty)
+        # of sections above (KG integration, learner state, difficulty)
         # or pure exhortations ("be encouraging"). What remains are the
         # decisions the model can actually act on this turn.
         prompt_parts.append("\n=== YOUR RESPONSE MUST ===")
@@ -2023,23 +1858,47 @@ class EnhancedPersonalizedGenerator:
         # itself still carries its own count + required-output language.)
 
 
-        # Add adaptive analysis knowledge graph info if available
-        if adaptive_analysis:
-            # Extract additional KG info from adaptive analysis
-            if adaptive_analysis.get('prerequisites'):
-                if not analysis.get('cse_kg', {}).get('prerequisites'):
-                    if 'cse_kg' not in analysis:
-                        analysis['cse_kg'] = {}
-                    analysis['cse_kg']['prerequisites'] = [p.get('concept', '') if isinstance(p, dict) else str(p) for p in adaptive_analysis['prerequisites']]
-            
-            if adaptive_analysis.get('knowledge_gaps'):
-                if not analysis.get('pedagogical_kg', {}).get('misconceptions'):
-                    if 'pedagogical_kg' not in analysis:
-                        analysis['pedagogical_kg'] = {}
-                    analysis['pedagogical_kg']['misconceptions'] = [g.get('concept', '') for g in adaptive_analysis['knowledge_gaps']]
-        
         return "\n".join(prompt_parts)
     
+    @staticmethod
+    def _chapter1_graph_block(lp_diag: Optional[Dict]) -> str:
+        """Render the diagnosed concept's neighbourhood in the Chapter-1
+        concept + LP graph. Empty string when there is no diagnosis or the
+        concept is outside Chapter 1."""
+        if not lp_diag or not lp_diag.get('concept'):
+            return ""
+        try:
+            from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+            g = get_chapter1_graph()
+        except Exception:
+            return ""
+        concept = lp_diag['concept']
+        info = g.concept_info(concept)
+        if not info:
+            return ""
+        level = lp_diag.get('current_lp_level') or 'L1'
+        target = lp_diag.get('target_lp_level')
+        lines = [f"Concept: {info['id']} -- {info.get('description', '')}"]
+        prereqs = g.get_prerequisites(concept)
+        if prereqs:
+            lines.append(f"Prerequisites: {', '.join(prereqs)}")
+        leads = g.get_leads_to(concept)
+        if leads:
+            lines.append(f"Leads to: {', '.join(leads)}")
+        miscs = g.misconceptions_for(concept)
+        if miscs:
+            lines.append("Catalogued misconceptions for this concept:")
+            for m in miscs[:4]:
+                lines.append(f"  - {m['id']}: {m.get('wrong_belief', '')}")
+        desc = g.lp_descriptor(concept, level)
+        if desc:
+            lines.append(f"What {level} looks like here: {desc}")
+        if target and target != level:
+            tdesc = g.lp_descriptor(concept, target)
+            if tdesc:
+                lines.append(f"What {target} looks like here: {tdesc}")
+        return "\n".join(lines)
+
     def _update_conversation_history(
         self, student_id: str, message: str, response: str
     ):

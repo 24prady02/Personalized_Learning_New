@@ -242,11 +242,9 @@ def generate_response(scenario, diag, gen):
         "personality_profile": {"communication_style": "direct",
                                 "learning_preference": "visual"},
         "bkt_mastery": {scenario["concept"]: 0.30},
-        "emotional_state": "confused",
         "interaction_count": 1,
     }
-    analysis = {"emotion": {"primary": "confused", "confidence": 0.7},
-                "knowledge_gaps": [scenario["concept"]], "pedagogical_kg": {}}
+    analysis = {"knowledge_gaps": [scenario["concept"]]}
     msg = (
         f"I was given this quiz question:\n\n{scenario['question']}\n\n"
         f"Code:\n```java\n{scenario['code']}\n```\n\n"

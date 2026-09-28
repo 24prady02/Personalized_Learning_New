@@ -1,59 +1,25 @@
 """
-CSE-KG 2.0 Integration Module
-Computer Science Knowledge Graph for domain knowledge
+Knowledge-graph module.
+
+Holds the pieces CPAL uses at run time:
+  - chapter1_graph:          the Chapter-1 concept + LP graph
+                             (data/chapter1_concept_graph_percpt_lp.json)
+  - student_knowledge_graph: per-student graph keyed by Chapter-1 concept
+  - student_graph_service:   loads/saves student graphs via SQLite
+  - mental_models:           wrong-model (misconception) catalogue
+  - lp_index:                optional learning-progression path lookup
+
+The CSE-KG, Pedagogical KG and COKE modules were retired to
+_archive/knowledge_graph_models/.
 """
 
-from .cse_kg_client import CSEKGClient
-from .graph_fusion import GraphFusion
-from .query_engine import QueryEngine, ConceptRetriever
-from .pedagogical_kg_builder import PedagogicalKGBuilder
-from .pedagogical_kg_schema import (
-    PedagogicalKGSchema,
-    Misconception,
-    LearningProgression,
-    CognitiveLoad,
-    Intervention,
-    ConceptPedagogicalData
-)
-from .pedagogical_kg_integration import PedagogicalKGIntegration
-from .coke_cognitive_graph import COKECognitiveGraph, CognitiveState, BehavioralResponse
-
-try:
-    from .gikt_knowledge_tracing import GIKTModel, GIKTKnowledgeTracer
-except ImportError:
-    GIKTModel, GIKTKnowledgeTracer = None, None  # torch_geometric not installed
-
-try:
-    from .coke_gikt_integration import COKEGIKTIntegration
-except ImportError:
-    COKEGIKTIntegration = None  # torch_geometric not installed
-
-from .error_explanation_mapper import ErrorExplanationMapper, ErrorType, RootCauseType
-from .unified_explanation_generator import UnifiedExplanationGenerator
-from .adaptive_explanation_generator import AdaptiveExplanationGenerator
+from .chapter1_graph import Chapter1Graph, get_chapter1_graph
+from .student_knowledge_graph import StudentKnowledgeGraph
+from .student_graph_service import StudentGraphService
 
 __all__ = [
-    "CSEKGClient",
-    "GraphFusion",
-    "QueryEngine",
-    "ConceptRetriever",
-    "PedagogicalKGBuilder",
-    "PedagogicalKGSchema",
-    "Misconception",
-    "LearningProgression",
-    "CognitiveLoad",
-    "Intervention",
-    "ConceptPedagogicalData",
-    "PedagogicalKGIntegration",
-    "COKECognitiveGraph",
-    "CognitiveState",
-    "BehavioralResponse",
-    "GIKTModel",
-    "GIKTKnowledgeTracer",
-    "COKEGIKTIntegration",
-    "ErrorExplanationMapper",
-    "ErrorType",
-    "RootCauseType",
-    "UnifiedExplanationGenerator",
-    "AdaptiveExplanationGenerator",
+    "Chapter1Graph",
+    "get_chapter1_graph",
+    "StudentKnowledgeGraph",
+    "StudentGraphService",
 ]

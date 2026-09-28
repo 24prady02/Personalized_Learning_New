@@ -94,17 +94,14 @@ def part_B_full_reply_live() -> None:
                         "extraversion": 0.5, "agreeableness": 0.5,
                         "neuroticism": 0.4},
         "knowledge_state": {"overall_mastery": 0.30, "mastery_history": [0.30]},
-        "psychological_graph": {},
         "progression_graph":   {"stage": 1, "scaffold_level": 4},
         "content_channel":     {"encoding_strength": "surface"},
-        "language_channel":    {},
         "recommended_intervention": {"type": "worked_example",
                                      "rationale": "L1 -> L2 build mechanism"},
         "lp_diagnostic":       multi["focus"],
         "lp_diagnostic_multi": multi,
     }
-    analysis = {"emotion": "confused", "frustration_level": 0.4,
-                "engagement_score": 0.6}
+    analysis = {"engagement_score": 0.6}
 
     print("  ── generated tutor reply ──")
     t0 = time.time()

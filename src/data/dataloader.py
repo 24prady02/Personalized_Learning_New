@@ -13,7 +13,6 @@ Batch keys produced (all tensors on CPU, moved to device by Trainer._to_device):
   timestamps        FloatTensor (B, max_seq_len, 1)
   sequence_lengths  LongTensor  (B,)
   is_correct        FloatTensor (B,)
-  emotion_label     LongTensor  (B,)   — -1 for unlabelled samples
   concept_label     LongTensor  (B,)   — -1 for unlabelled samples
   student_ids       list[str]
   problem_ids       list[str]
@@ -120,9 +119,6 @@ class PLSDataset(Dataset):
         # ── Labels ────────────────────────────────────────────────────────────
         is_correct    = float(row.get('is_correct', 0))
 
-        emotion_raw   = row.get('emotion_label', -1)
-        emotion_label = int(emotion_raw) if emotion_raw is not None else -1
-
         concept_str   = str(row.get('concept', ''))
         concept_label = CONCEPT_LABELS.get(concept_str, -1)
 
@@ -142,7 +138,6 @@ class PLSDataset(Dataset):
             'timestamps':       ts_tensor,
             'sequence_lengths': torch.tensor(max(seq_len, 1), dtype=torch.long),
             'is_correct':       torch.tensor(is_correct,    dtype=torch.float),
-            'emotion_label':    torch.tensor(emotion_label, dtype=torch.long),
             'concept_label':    torch.tensor(concept_label, dtype=torch.long),
             'student_id':       str(row.get('student_id', 'unknown')),
             'problem_id':       str(row.get('problem_id', 'unknown')),
@@ -156,7 +151,7 @@ def _collate_fn(batch: List[Dict]) -> Dict:
     """
     tensor_keys = [
         'code_tokens', 'text_tokens', 'action_sequence',
-        'timestamps', 'is_correct', 'emotion_label', 'concept_label',
+        'timestamps', 'is_correct', 'concept_label',
     ]
     result = {}
     for key in tensor_keys:

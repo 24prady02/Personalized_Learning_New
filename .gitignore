@@ -44,6 +44,7 @@ ENV/
 !/data/raw/.gitkeep
 !/data/processed/
 !/data/processed/.gitkeep
+!/data/chapter1_concept_graph_percpt_lp.json
 
 # Models — only the repo-root models/ and checkpoints/ folders are excluded
 # (where pretrained weights live). The src/models/ Python package is tracked.

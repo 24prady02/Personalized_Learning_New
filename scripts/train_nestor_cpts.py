@@ -106,8 +106,7 @@ def main():
     prof = NestorBayesianProfiler({"nestor": {"data_dir": str(CKPT.parent)}})
     print(f"[Nestor] reload check: is_trained={prof.is_trained}")
     sample = {"exploration_rate": 0.8, "persistence": 0.3,
-              "organization": 0.4, "social_interaction": 0.2,
-              "emotional_variability": 0.7}
+              "organization": 0.4, "social_interaction": 0.2}
     out = prof.complete_inference(sample)
     print(f"[Nestor] sample inference:")
     print(f"   personality={ {k: round(v,2) for k,v in out['personality'].items()} }")

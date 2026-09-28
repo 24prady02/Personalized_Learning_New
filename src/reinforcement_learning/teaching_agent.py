@@ -18,7 +18,8 @@ class TeachingRLAgent:
     
     Key Idea: Treat teaching as a sequential decision problem
     
-    State: Student's knowledge state + emotional state + session context
+    State: Student's knowledge state + personality + session context
+           (emotion is not an input; its state slot is kept as zeros)
     Action: Which intervention/teaching strategy to use
     Reward: Student's learning gain + engagement + long-term retention
     
@@ -39,7 +40,7 @@ class TeachingRLAgent:
             1: "guided_practice", 
             2: "interactive_exercise",
             3: "conceptual_deepdive",
-            4: "motivational_support",
+            4: "motivational_support",   # kept for checkpoint shape; not emotion-driven
             5: "worked_example",
             6: "peer_comparison",
             7: "spaced_review",
@@ -109,7 +110,8 @@ class TeachingRLAgent:
         State includes:
         - Student's latent representation (from HVSAE)
         - Knowledge gaps (from Student State Tracker)
-        - Emotional state (from RNN)
+        - Reserved slot (32 zeros — formerly emotion; kept so the 512-dim
+          layout and existing checkpoints still load)
         - Personality (from Personality Profiler)
         - Session context (time stuck, attempts, etc.)
         """
@@ -121,12 +123,13 @@ class TeachingRLAgent:
         gaps = analysis['cognitive']['knowledge_gaps']
         gap_encoding = self._encode_gaps(gaps)  # [64-dim]
         
-        # Encode emotional state
-        emotion = analysis['behavioral']['emotional_state']
-        emotion_encoding = self._encode_emotion(emotion)  # [32-dim]
+        # Reserved slot (formerly emotion) — always zeros
+        reserved_encoding = torch.zeros(32)  # [32-dim]
         
-        # Encode personality
-        personality = analysis['psychological']['personality']
+        # Encode personality (Nestor Big Five)
+        personality = (analysis.get('personality')
+                       or (analysis.get('psychological') or {}).get('personality')
+                       or {})
         personality_encoding = self._encode_personality(personality)  # [64-dim]
         
         # Encode session context
@@ -142,7 +145,7 @@ class TeachingRLAgent:
         state = torch.cat([
             latent.flatten(),
             gap_encoding,
-            emotion_encoding,
+            reserved_encoding,
             personality_encoding,
             context_encoding
         ], dim=0)  # [512-dim]
@@ -340,14 +343,6 @@ class TeachingRLAgent:
             gap_vector[i] = gap.get('mastery', 0.5)
         return gap_vector
     
-    def _encode_emotion(self, emotion: str) -> torch.Tensor:
-        """Encode emotional state"""
-        emotions = ['frustrated', 'engaged', 'confused', 'systematic', 'exploratory']
-        emotion_id = emotions.index(emotion) if emotion in emotions else 0
-        encoding = torch.zeros(32)
-        encoding[emotion_id] = 1.0
-        return encoding
-    
     def _encode_personality(self, personality: Dict) -> torch.Tensor:
         """Encode personality traits"""
         traits = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism']
@@ -370,7 +365,7 @@ class TeachingRLAgent:
             'encoding': {'latent': torch.randn(256)},  # Placeholder
             'cognitive': student_response.get('cognitive', {}),
             'behavioral': student_response.get('behavioral', {}),
-            'psychological': student_response.get('psychological', {})
+            'personality': student_response.get('personality', {})
         }
     
     def save_checkpoint(self, path: str):

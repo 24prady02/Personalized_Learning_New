@@ -20,7 +20,7 @@ class HierarchicalMultiTaskRL:
     
     LEVEL 1 (Meta): Learn to teach ANY student
     LEVEL 2 (Curriculum): Which concept to teach Sarah next
-    LEVEL 3 (Session): Balance learning/engagement/emotion for Sarah
+    LEVEL 3 (Session): Balance learning/engagement/efficiency/retention for Sarah
     LEVEL 4 (Intervention): Which specific action to take
     """
     
@@ -268,7 +268,7 @@ class CurriculumController(nn.Module):
         Select which concept Sarah should learn next
         
         Considers:
-        - Prerequisites (from CSE-KG)
+        - Prerequisites (from the Chapter-1 graph)
         - Sarah's current mastery
         - Sarah's learning goals
         - Concept difficulty
@@ -297,7 +297,7 @@ class CurriculumController(nn.Module):
             'concept': best_concept[0],
             'score': best_concept[1],
             'reason': f"Highest readiness score based on Sarah's state",
-            'prereqs_met': True,  # Would check CSE-KG
+            'prereqs_met': True,  # Would check the Chapter-1 graph
             'estimated_sessions': 4
         }
 
@@ -311,9 +311,13 @@ class SessionMultiTaskController(nn.Module):
     Multi-Task optimization:
     - Task A: Maximize Sarah's mastery gain (recursion)
     - Task B: Maximize Sarah's engagement
-    - Task C: Optimize Sarah's emotional state
     - Task D: Maximize time efficiency
     - Task E: Maximize long-term retention
+
+    (Task C, the former emotional objective, is retired: emotion is not an
+    input. Its head and its slot in weight_adapter stay only so the layer
+    shapes — and any saved weights — are unchanged; its weight is forced to
+    0 and the remaining four weights are renormalised.)
     
     Outputs: Best intervention considering ALL objectives
     """
@@ -345,11 +349,12 @@ class SessionMultiTaskController(nn.Module):
             nn.Linear(64, num_interventions)  # Q-values for engagement
         )
         
-        # Task C: Emotional optimization
+        # Task C: retired (formerly emotional optimization). Kept for
+        # shape compatibility only; never contributes to q_combined.
         self.emotional_task = nn.Sequential(
             nn.Linear(128, 64),
             nn.ReLU(),
-            nn.Linear(64, num_interventions)  # Q-values for emotion
+            nn.Linear(64, num_interventions)
         )
         
         # Task D: Efficiency optimization
@@ -371,7 +376,7 @@ class SessionMultiTaskController(nn.Module):
         self.weight_adapter = nn.Sequential(
             nn.Linear(128, 32),
             nn.ReLU(),
-            nn.Linear(32, 5),  # Weights for 5 objectives
+            nn.Linear(32, 5),  # 5 slots; slot 2 (retired emotional) is zeroed
             nn.Softmax(dim=-1)
         )
     
@@ -394,7 +399,6 @@ class SessionMultiTaskController(nn.Module):
         
         q_learning = self.learning_task(features)      # [10] interventions
         q_engagement = self.engagement_task(features)  # [10] interventions
-        q_emotional = self.emotional_task(features)    # [10] interventions
         q_efficiency = self.efficiency_task(features)  # [10] interventions
         q_retention = self.retention_task(features)    # [10] interventions
         
@@ -402,17 +406,15 @@ class SessionMultiTaskController(nn.Module):
         # Weights change based on Sarah's state!
         
         weights = self.weight_adapter(features)  # [5]
-        
-        # If Sarah frustrated: weights[2] (emotional) increases
-        # If Sarah engaged: weights[0] (learning) increases
-        # If Sarah bored: weights[1] (engagement) increases
+        # Drop the retired emotional slot and renormalise the other four.
+        weights = weights * torch.tensor([1.0, 1.0, 0.0, 1.0, 1.0])
+        weights = weights / weights.sum().clamp_min(1e-9)
         
         # ===== COMBINE Q-VALUES =====
         
         q_combined = (
             q_learning * weights[0] +      # Learning weight
             q_engagement * weights[1] +    # Engagement weight
-            q_emotional * weights[2] +     # Emotional weight
             q_efficiency * weights[3] +    # Efficiency weight
             q_retention * weights[4]       # Retention weight
         )
@@ -432,14 +434,12 @@ class SessionMultiTaskController(nn.Module):
             'objective_weights': {
                 'learning': weights[0].item(),
                 'engagement': weights[1].item(),
-                'emotional': weights[2].item(),
                 'efficiency': weights[3].item(),
                 'retention': weights[4].item()
             },
             'expected_outcomes': {
                 'learning': q_learning[intervention_id].item(),
                 'engagement': q_engagement[intervention_id].item(),
-                'emotional': q_emotional[intervention_id].item(),
                 'efficiency': q_efficiency[intervention_id].item(),
                 'retention': q_retention[intervention_id].item()
             },
@@ -447,7 +447,7 @@ class SessionMultiTaskController(nn.Module):
         }
     
     def _get_primary_objective(self, weights: torch.Tensor) -> str:
-        objectives = ['learning', 'engagement', 'emotional', 'efficiency', 'retention']
+        objectives = ['learning', 'engagement', 'retired', 'efficiency', 'retention']
         primary_idx = weights.argmax().item()
         return objectives[primary_idx]
 
@@ -507,7 +507,6 @@ def complete_example_sarah():
         # Current session
         "current_concept": "recursion",
         "mastery": 0.18,
-        "emotion": "confused",
         "time_stuck": 120,
         
         # History
@@ -535,11 +534,10 @@ def complete_example_sarah():
     LEVEL 1 (Meta): Use 'gradual_scaffolding' strategy for systematic beginners
     LEVEL 2 (Curriculum): Teach 'recursion' next (prerequisites met, high priority)
     LEVEL 3 (Session): Use 'guided_practice' balancing:
-        - Learning (40%): Expected Q=0.88
-        - Engagement (25%): Expected Q=0.68  
-        - Emotional (20%): Expected Q=0.65
-        - Efficiency (10%): Expected Q=0.85
-        - Retention (5%): Expected Q=0.82
+        - Learning (50%): Expected Q=0.88
+        - Engagement (31%): Expected Q=0.68
+        - Efficiency (13%): Expected Q=0.85
+        - Retention (6%): Expected Q=0.82
     LEVEL 4 (Intervention): Deliver structured step-by-step guidance
     
     EXPECTED OUTCOME: Sarah learns effectively while staying engaged!

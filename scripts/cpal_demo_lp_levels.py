@@ -47,19 +47,15 @@ def build_prompt_for_level(gen, diag, forced_level, intervention):
         "personality_profile": {"communication_style": "direct",
                                  "learning_preference": "visual"},
         "bkt_mastery": {CONCEPT_ID: 0.30},
-        "emotional_state": "neutral",
         "interaction_count": 1,
     }
     analysis = {
-        "emotion": {"primary": "neutral", "confidence": 0.6},
         "knowledge_gaps": [CONCEPT_ID],
-        "pedagogical_kg": {},
     }
 
     # Run the same helper funcs generate_personalized_response runs so
     # _build_enhanced_prompt has every kwarg it expects.
     conv = gen._build_conversation_context(STUDENT_ID, student_state, analysis)
-    emo  = gen._adapt_emotional_tone(analysis, student_state)
     ls   = gen._adapt_to_learning_style(student_state, analysis)
     per  = gen._adapt_to_personality(student_state)
     prog = gen._build_progress_context(student_state, analysis)
@@ -72,12 +68,11 @@ def build_prompt_for_level(gen, diag, forced_level, intervention):
     prompt = gen._build_enhanced_prompt(
         student_message=STUDENT_INPUT, code=None,
         student_state=student_state, analysis=analysis,
-        conversation_context=conv, emotional_context=emo,
+        conversation_context=conv,
         learning_style_adaptation=ls, personality_adaptation=per,
         progress_context=prog, interest_context=ic,
         format_preferences=fmt, error_feedback=err,
         metacognitive_guidance=meta, difficulty_adaptation=diff,
-        adaptive_analysis=None,
     )
     return prompt, student_state, analysis
 
@@ -87,7 +82,7 @@ def extract_lp_sections(prompt: str) -> str:
     start = prompt.find("=== LP-1: DIAGNOSTIC CONTEXT")
     if start < 0: return "(no LP sections present)"
     end = prompt.find("=== CONVERSATION", start)
-    if end < 0: end = prompt.find("=== EMOTIONAL", start)
+    if end < 0: end = prompt.find("=== LEARNING STYLE", start)
     if end < 0: end = start + 3500
     return prompt[start:end].rstrip()
 
@@ -101,7 +96,7 @@ def call_ollama(gen, student_state, analysis, tag):
     r = gen.generate_personalized_response(
         student_id=STUDENT_ID, student_message=STUDENT_INPUT,
         student_state=student_state, analysis=analysis,
-        code=None, code_analysis=None, adaptive_analysis=None,
+        code=None, code_analysis=None,
     )
     gen._stream_callback = None
     return r

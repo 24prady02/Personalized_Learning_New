@@ -3,13 +3,12 @@ Multi-turn scenario runner — drives student personas through 3-10 turn
 dialogues against Ollama, maintaining conversation history across turns.
 
 Companion to:
-  - run_all_scenarios.py            (single-call internal harness, 289 sc)
-  - run_all_scenarios_ollama.py     (single-call Ollama runner, 299 sc)
+  - run_all_scenarios.py            (single-call internal harness)
+  - run_all_scenarios_ollama.py     (single-call Ollama runner, 275 sc)
 
 Covers priorities the single-call runners can't:
   - Multi-turn probe → answer → re-probe loops
   - Clarification turns ("I still don't get it")
-  - Emotional arcs that shift mid-conversation
   - Returning-user continuity ("yesterday you helped me with X")
   - Persona consistency across turns
 
@@ -52,8 +51,12 @@ TUTOR_SYSTEM = (
 # runner sends each turn with the full preceding conversation, so the
 # model has memory across turns.
 #
-# kind = "clarification" | "probe_loop" | "emotional_arc" |
-#        "returning_user" | "comparison" | "deep_dive"
+# kind = "clarification" | "probe_loop" | "returning_user" |
+#        "comparison" | "deep_dive"
+#
+# The emotional-arc dialogues (mt.7 frustrated→engaged, mt.8 anxious→calm,
+# mt.11 imposter arc) were removed with the emotion / psychological
+# channel; mt.9 and mt.10 are kept as plain conceptual dialogues.
 # ═════════════════════════════════════════════════════════════════════════
 DIALOGUES: List[Dict] = [
     # ── Clarification dialogues ───────────────────────────────────────────
@@ -120,31 +123,10 @@ DIALOGUES: List[Dict] = [
         ],
     },
 
-    # ── Emotional arc dialogues ───────────────────────────────────────────
+    # ── Conceptual correction dialogues ───────────────────────────────────
     {
-        "id": "mt.7.frustrated_to_engaged", "kind": "emotional_arc",
-        "name": "Starts frustrated, builds to engaged",
-        "turns": [
-            "I've been stuck on this for 2 hours and I hate Java",
-            "ok fine, my code throws NPE on line 8",
-            "oh that's actually kind of interesting",
-            "can you show me a few more examples like that?",
-            "this is making sense now, what should I try next?",
-        ],
-    },
-    {
-        "id": "mt.8.anxious_to_calm", "kind": "emotional_arc",
-        "name": "Starts anxious about exam, calms down with help",
-        "turns": [
-            "my exam is in 3 hours and I don't understand strings AT ALL",
-            "ok so == is for primitives and .equals is for objects?",
-            "and strings are objects so I use .equals?",
-            "phew, ok I think I can do this",
-        ],
-    },
-    {
-        "id": "mt.9.confident_to_humble", "kind": "emotional_arc",
-        "name": "Overconfident student gets gently corrected",
+        "id": "mt.9.confident_to_humble", "kind": "clarification",
+        "name": "Student blames the language, then finds own bug",
         "turns": [
             "easy, my loop is broken because Java sucks at while loops",
             "what do you mean? I'm just doing while(i<10)",
@@ -153,24 +135,14 @@ DIALOGUES: List[Dict] = [
         ],
     },
     {
-        "id": "mt.10.breakthrough", "kind": "emotional_arc",
-        "name": "Confusion → struggle → sudden 'aha' moment",
+        "id": "mt.10.breakthrough", "kind": "deep_dive",
+        "name": "References explained until the mechanism clicks",
         "turns": [
             "I genuinely don't understand pointers/references",
             "no I still don't get it",
             "wait wait — so a String variable holds an *address* not the actual text?",
             "OHHH that's why == compares the addresses not the text!!",
             "this just unlocked everything for me",
-        ],
-    },
-    {
-        "id": "mt.11.imposter_arc", "kind": "emotional_arc",
-        "name": "Imposter syndrome arc with reframing",
-        "turns": [
-            "I'm probably too dumb for this, everyone else gets it but me",
-            "ok let me try... I think static means it belongs to the class?",
-            "wait did I actually get that right?",
-            "I guess I'm not that dumb after all",
         ],
     },
 
@@ -362,7 +334,7 @@ def main():
     ap.add_argument("--model", default=None)
     ap.add_argument("--kind", default=None,
                     help="Filter by dialogue kind (clarification, probe_loop, "
-                    "emotional_arc, returning_user, comparison, deep_dive)")
+                    "returning_user, comparison, deep_dive)")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--out", default=None)
     args = ap.parse_args()

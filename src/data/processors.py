@@ -17,8 +17,6 @@ Common output columns (all processors):
   time_deltas   list  — seconds between actions (empty list if not available)
   is_correct    int   — 1 = correct / successful, 0 = incorrect
   concept       str   — skill/concept name (empty string if unknown)
-  emotion_label int   — 0=frustrated 1=confused 2=engaged 3=neutral 4=confident
-                        (-1 if not available — excluded from loss)
 
 Additional columns per processor:
   CodeNet:    language, submission_type (correct/buggy)
@@ -46,29 +44,6 @@ def _safe_read_csv(path: Path, **kwargs) -> pd.DataFrame:
         except UnicodeDecodeError:
             continue
     raise ValueError(f"Cannot decode {path}")
-
-
-def _infer_emotion_from_actions(actions: List[str]) -> int:
-    """
-    Rule-based emotion label from action sequences.
-    Mirrors BehavioralHMM._rule_based() logic.
-    Returns int label.
-    """
-    if not actions:
-        return 3  # neutral
-    n = max(len(actions), 1)
-    error_rate  = sum('error' in str(a).lower() for a in actions) / n
-    submit_rate = sum('submit' in str(a).lower() for a in actions) / n
-    run_rate    = sum('run' in str(a).lower() for a in actions) / n
-    if submit_rate > 0.15:
-        return 4  # confident
-    if error_rate > 0.5:
-        return 0  # frustrated
-    if run_rate > 0.3 and error_rate > 0.2:
-        return 1  # confused
-    if run_rate > 0.2:
-        return 2  # engaged
-    return 3       # neutral
 
 
 # Map Java error strings to concept names
@@ -188,7 +163,6 @@ class CodeNetProcessor:
             'time_deltas':   [],
             'is_correct':    is_correct,
             'concept':       _concept_from_error(error),
-            'emotion_label': -1,
             'language':      language,
             'submission_type': 'correct' if is_correct else 'buggy',
         }
@@ -316,7 +290,6 @@ class ProgSnap2Processor:
                 'time_deltas':   time_deltas,
                 'is_correct':    is_correct,
                 'concept':       '',
-                'emotion_label': _infer_emotion_from_actions(actions),
                 'session_id':    f'{sid}_{pid}',
                 'final_code':    final_code,
                 'event_count':   len(group),
@@ -480,7 +453,6 @@ class MOOCCubeXProcessor:
                 'time_deltas':      [],
                 'is_correct':       1,
                 'concept':          concept_seq[-1] if concept_seq else '',
-                'emotion_label':    -1,
                 'course_id':        student.get('course_id', ''),
                 'concept_sequence': concept_seq,
             })

@@ -90,11 +90,11 @@ class TeachingEngine:
         
         print("\n  📖 Stage 1: INTRODUCTION")
         
-        # Retrieve knowledge from CSE-KG
-        cse_kg = self.models['cse_kg_client']
-        concept_info = cse_kg.get_concept_info(concept)
-        examples = cse_kg.get_examples(concept, difficulty='beginner')
-        
+        # Retrieve the concept's description from the Chapter-1 graph
+        from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+        concept_info = get_chapter1_graph().concept_info(concept) or {}
+        description = concept_info.get('description', concept)
+
         # Build explanation using Socratic method
         teaching_content = {
             "stage": "introduction",
@@ -103,28 +103,21 @@ class TeachingEngine:
             # Part 1: Hook with real-world analogy
             "hook": self._generate_analogy(concept),
             
-            # Part 2: Formal definition (from CSE-KG)
+            # Part 2: Formal definition (from the Chapter-1 graph)
             "definition": {
-                "text": concept_info['descriptions'][0],
-                "source": "CS Knowledge Graph",
-                "simple_version": self._simplify_for_beginner(concept_info['descriptions'][0])
+                "text": description,
+                "source": "Chapter-1 concept graph",
+                "simple_version": _simplify_for_beginner(description)
             },
-            
-            # Part 3: Show concrete example
-            "example": {
-                "code": examples[0]['code'],
-                "explanation": self._annotate_example(examples[0], concept),
-                "interactive": True  # Student can modify and test
-            },
-            
-            # Part 4: Guided discovery questions
+
+            # Part 3: Guided discovery questions
             "discovery_questions": [
                 f"What do you think happens if we remove the {concept}?",
                 f"Can you identify the {concept} in this example?",
                 "Try running the code without it - what happens?"
             ],
             
-            # Part 5: Very simple practice (heavily guided)
+            # Part 4: Very simple practice (heavily guided)
             "practice": {
                 "problem": self._generate_starter_problem(concept, difficulty=1),
                 "scaffolding_level": 5,  # Maximum support
@@ -133,7 +126,7 @@ class TeachingEngine:
                 "check_understanding": self._generate_check_questions(concept, level=1)
             },
             
-            # Part 6: What's next
+            # Part 5: What's next
             "next_steps": {
                 "if_understand": "Move to guided practice",
                 "if_confused": "Review with different analogy",
@@ -717,15 +710,15 @@ class AdaptiveCurriculum:
         """
         Generate optimal learning path from current state to target
         
-        Uses CSE-KG to find prerequisites and logical progression
+        Uses the Chapter-1 graph to find prerequisites and logical progression
         """
-        
+        from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+
         path = []
-        
-        # Get prerequisites from CSE-KG
-        cse_kg = self.config['cse_kg_client']
-        prerequisites = cse_kg.get_prerequisites(target_concept)
-        
+
+        # Get prerequisites from the Chapter-1 graph
+        prerequisites = get_chapter1_graph().get_prerequisites(target_concept)
+
         # Order by dependency
         for prereq in prerequisites:
             if current_mastery.get(prereq, 0) < 0.7:

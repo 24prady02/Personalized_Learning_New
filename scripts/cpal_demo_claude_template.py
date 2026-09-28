@@ -9,7 +9,7 @@ Removed vs the chat-app's enriched prompt:
   - MATCHED WRONG BELIEF block (no WM-ID, no belief text, no origin)
   - OPERATIVE MECHANISM hint (no "ADDRESS COMPARISON" naming from the
     chat-app's hand-curated _OPERATIVE_STEP table)
-  - KG-grounded context (no pedagogical-KG misconceptions, no CSE-KG)
+  - KG-grounded context (no Chapter-1 graph prerequisites or misconceptions)
   - expert benchmark key-ideas line
 
 Kept (all template-only — not architecture):

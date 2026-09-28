@@ -88,20 +88,16 @@ def run_case(label: str, msg: str, intervention_default: str) -> None:
                         "extraversion":.5,"agreeableness":.5,"neuroticism":.4},
         "knowledge_state": {"overall_mastery": 0.30 if focus_level=="L1" else 0.75,
                             "mastery_history":[0.30 if focus_level=="L1" else 0.75]},
-        "psychological_graph": {},
         "progression_graph":   {"stage": 1 if focus_level=="L1" else 4,
                                 "scaffold_level": 4 if focus_level=="L1" else 1},
         "content_channel":     {"encoding_strength":
                                 "surface" if focus_level=="L1" else "deep"},
-        "language_channel":    {},
         "recommended_intervention": {"type": intervention_type,
                                      "rationale": f"level-appropriate for {focus_level}"},
         "lp_diagnostic":       multi["focus"],
         "lp_diagnostic_multi": multi,
     }
-    analysis = {"emotion": "confused" if focus_level=="L1" else "engaged",
-                "frustration_level": 0.4 if focus_level=="L1" else 0.1,
-                "engagement_score":  0.6 if focus_level=="L1" else 0.9}
+    analysis = {"engagement_score":  0.6 if focus_level=="L1" else 0.9}
 
     print(f"\n  ── generated tutor reply ──")
     t0 = time.time()

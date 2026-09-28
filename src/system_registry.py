@@ -9,10 +9,13 @@ re-implementing the init dance.
 
 Excluded by design (Nestor): NestorBayesianNetwork, NestorBayesianProfiler,
 PersonalityProfiler, InterventionRecommender. The orchestrator's
-psychological-assessment paths gracefully no-op when these are absent
-(see orchestrator.py:_assess_psychological_state — returns
+personality-assessment path gracefully no-ops when these are absent
+(see orchestrator.py:_assess_personality — returns
 {personality: {}, learning_style: {}, source: 'none'} when both are
 missing) so the rest of the pipeline runs untouched.
+
+No emotion classifier and no psychological channel are registered:
+emotion and psychological state are not used as inputs.
 
 Usage:
     from src.system_registry import get_registry
@@ -56,18 +59,8 @@ class SystemRegistry:
     dina: Any = None
     bkt: Any = None  # BayesianKnowledgeTracer
 
-    # Knowledge graphs
-    cse_kg_client: Any = None
-    concept_retriever: Any = None
-    query_engine: Any = None
-    pedagogical_kg: Any = None
-    coke_graph: Any = None
-    graph_fusion: Any = None
-
-    # Explanation generators (KG-grounded)
-    unified_explanation_generator: Any = None
-    adaptive_explainer: Any = None
-    error_explanation_mapper: Any = None
+    # Knowledge graph (Chapter-1 concept + LP graph)
+    chapter1_graph: Any = None
 
     # Content generation
     content_generator: Any = None       # HVSAE-backed decoder
@@ -164,63 +157,12 @@ def _build_registry() -> SystemRegistry:
     reg.dina = _try(reg, "dina", lambda: DINAModel(cfg))
     reg.bkt = _try(reg, "bkt", lambda: BayesianKnowledgeTracer())
 
-    # ── Knowledge graphs ─────────────────────────────────────────────────
-    from src.knowledge_graph.cse_kg_client import CSEKGClient
-    from src.knowledge_graph.query_engine import QueryEngine, ConceptRetriever
-    from src.knowledge_graph.pedagogical_kg_integration import (
-        PedagogicalKGIntegration,
-    )
-    from src.knowledge_graph.coke_cognitive_graph import COKECognitiveGraph
-    from src.knowledge_graph.graph_fusion import GraphFusion
-    from src.knowledge_graph.adaptive_explanation_generator import (
-        AdaptiveExplanationGenerator,
-    )
-    from src.knowledge_graph.unified_explanation_generator import (
-        UnifiedExplanationGenerator,
-    )
-    from src.knowledge_graph.error_explanation_mapper import (
-        ErrorExplanationMapper,
-    )
+    # ── Knowledge graph ──────────────────────────────────────────────────
+    # The Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json).
+    # CSE-KG, Pedagogical KG and COKE were retired to _archive/.
+    from src.knowledge_graph.chapter1_graph import get_chapter1_graph
 
-    reg.cse_kg_client = _try(reg, "cse_kg_client",
-                              lambda: CSEKGClient(cfg))
-    if reg.cse_kg_client is not None:
-        reg.query_engine = _try(reg, "query_engine",
-                                 lambda: QueryEngine(reg.cse_kg_client))
-        reg.concept_retriever = _try(reg, "concept_retriever",
-                                      lambda: ConceptRetriever(reg.cse_kg_client))
-
-    reg.pedagogical_kg = _try(reg, "pedagogical_kg",
-                               lambda: PedagogicalKGIntegration(cfg))
-    coke_cfg = cfg.get("coke", {"enabled": True,
-                                 "data_dir": "data/pedagogical_kg"})
-    # COKECognitiveGraph reads pedagogical_kg.data_dir for coke_chains.json
-    # but has hardcoded defaults if the file is missing — safe to init either way.
-    reg.coke_graph = _try(reg, "coke_graph",
-                           lambda: COKECognitiveGraph(coke_cfg))
-    reg.graph_fusion = _try(reg, "graph_fusion",
-                             lambda: GraphFusion(cfg))
-
-    if reg.pedagogical_kg is not None:
-        reg.unified_explanation_generator = _try(
-            reg, "unified_explanation_generator",
-            lambda: UnifiedExplanationGenerator(
-                cfg,
-                pedagogical_builder=reg.pedagogical_kg.pedagogical_builder,
-                coke_graph=reg.coke_graph,
-            ),
-        )
-    reg.adaptive_explainer = _try(reg, "adaptive_explainer",
-                                   lambda: AdaptiveExplanationGenerator(cfg))
-    reg.error_explanation_mapper = _try(
-        reg, "error_explanation_mapper",
-        lambda: ErrorExplanationMapper(
-            cfg,
-            pedagogical_builder=getattr(reg.pedagogical_kg,
-                                         "pedagogical_builder", None),
-            coke_graph=reg.coke_graph,
-        ),
-    )
+    reg.chapter1_graph = _try(reg, "chapter1_graph", lambda: get_chapter1_graph())
 
     # ── Content generation ───────────────────────────────────────────────
     from src.orchestrator.content_generator import PersonalizedContentGenerator
@@ -259,15 +201,7 @@ def _build_registry() -> SystemRegistry:
         "behavioral_hmm":                 reg.behavioral_hmm,
         "dina":                           reg.dina,
         "bkt":                            reg.bkt,
-        "cse_kg_client":                  reg.cse_kg_client,
-        "concept_retriever":              reg.concept_retriever,
-        "query_engine":                   reg.query_engine,
-        "pedagogical_kg":                 reg.pedagogical_kg,
-        "coke_graph":                     reg.coke_graph,
-        "graph_fusion":                   reg.graph_fusion,
-        "unified_explanation_generator":  reg.unified_explanation_generator,
-        "adaptive_explainer":             reg.adaptive_explainer,
-        "error_explanation_mapper":       reg.error_explanation_mapper,
+        "chapter1_graph":                 reg.chapter1_graph,
         "content_generator":              reg.content_generator,
         "enhanced_generator":             reg.enhanced_generator,
         "catalogue":                      reg.catalogue,

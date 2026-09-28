@@ -180,7 +180,6 @@ def main():
         },
         intervention_type=chosen_intervention,
         delta_lp_last=delta_lp,
-        emotion="confident",
         encoding_strength="surface",
         stage=2,
         scaffold_level=3,
@@ -189,17 +188,12 @@ def main():
     print(f"  state_vector (12-d) : [{', '.join(f'{x:.2f}' for x in vec)}]")
 
     reward_calc = RewardCalculator(config={})
-    session_data_for_reward = {
-        "emotion": "confused",
-    }
+    session_data_for_reward = {}
     student_response_payload = {
         "mastery_before": 0.30,
         "mastery_after": 0.45,
         "engagement_score": 0.75,
-        "emotion_after": "engaged",
         "zpd_status": "at_boundary",
-        "attribution_before": "neutral",
-        "attribution_after": "neutral",
         "intervention_type": chosen_intervention,
         "delta_lp": delta_lp,
         "lp_level_before": pre,

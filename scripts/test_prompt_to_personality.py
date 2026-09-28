@@ -18,8 +18,8 @@ PROMPTS = [
                  "factorial by hand and it's beautiful but I want to understand *why* "
                  "it works, not just that it does."),
 
-    # high-neuroticism / anxious / imposter
-    ("anxious", "Honestly I think I'm just bad at programming. Everyone in my class "
+    # high-neuroticism (Big Five trait read by Nestor)
+    ("high_neuroticism", "Honestly I think I'm just bad at programming. Everyone in my class "
                 "gets this stuff and I feel stupid for not being able to figure out "
                 "why my loop never ends. I've been staring at this for two hours and "
                 "nothing I try works. I don't think I'm cut out for CS."),

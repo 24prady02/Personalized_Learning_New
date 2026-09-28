@@ -1,7 +1,7 @@
 """End-to-end CPAL integration test.
 
 Simulates what InterventionOrchestrator.process_session does for the LP
-portion, without requiring torch / SPARQLWrapper / the full model stack.
+portion, without requiring torch / the full model stack.
 Exercises:
 
   - Stage 1: LP Diagnostic (wrong-model identification + LP classification
@@ -120,7 +120,7 @@ green(f"Wrong-model match: {r.wrong_model_id} score={r.match_score:.2f}")
 print("\n=== Stage 2: LP-validity gate + LPProgressionRanker ===")
 ranked = [("transfer_task", 0.9), ("worked_example", 0.8),
           ("socratic_prompt", 0.7), ("trace_scaffold", 0.65),
-          ("attribution_reframe", 0.4)]
+          ("model_explanation", 0.4)]
 
 for lvl, expected_top in [("L1", "worked_example"),
                           ("L2", "worked_example"),
@@ -192,7 +192,6 @@ vec = lprnn.build_state_vector(
     lp_state          = lp_state,
     intervention_type = "trace_scaffold",
     delta_lp_last     = 1,
-    emotion           = "engaged",
     encoding_strength = "partial",
     stage             = 3,
     scaffold_level    = 3,
@@ -265,14 +264,11 @@ if REWARD_OK:
 
     # Scenario: student broke an L2 plateau with trace_scaffold
     r = rc.calculate_reward(
-        session_data={"emotion": "confused"},
+        session_data={},
         action_taken=0,
         student_response={
             "mastery_before": 0.5, "mastery_after": 0.62,
             "engagement_score": 0.75,
-            "emotion_after": "engaged",
-            "attribution_before": "neutral", "attribution_after": "neutral",
-            "imposter_flag_before": False, "imposter_flag_after": False,
             "zpd_status": "at_boundary",
             "intervention_type": "trace_scaffold",
             "delta_lp": 1,
@@ -285,13 +281,11 @@ if REWARD_OK:
 
     # Scenario: student regressed L3 → L1
     r = rc.calculate_reward(
-        session_data={"emotion": "frustrated"},
+        session_data={},
         action_taken=0,
         student_response={
             "mastery_before": 0.65, "mastery_after": 0.50,
-            "engagement_score": 0.3, "emotion_after": "frustrated",
-            "attribution_before": "neutral", "attribution_after": "neutral",
-            "imposter_flag_before": False, "imposter_flag_after": False,
+            "engagement_score": 0.3,
             "zpd_status": "overwhelmed", "intervention_type": "transfer_task",
             "delta_lp": -2, "lp_level_before": "L3", "lp_level_after": "L1",
             "plateau_flag_before": False,

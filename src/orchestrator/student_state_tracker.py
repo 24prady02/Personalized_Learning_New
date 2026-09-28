@@ -1,15 +1,15 @@
 """
-Student State Tracker — Psychological Integration Update
-=========================================================
-Tracks the full THREE-GRAPH learner state in parallel:
+Student State Tracker — two-channel learner state
+=================================================
+Tracks two graphs in parallel from every prompt:
 
-  Cognitive Graph   → encoding_strength per concept node (9 nodes, 3 tiers)
+  Cognitive Graph   → encoding_strength per concept node (Content Channel)
   Progression Graph → developmental stage (7 stages) + ZPD boundary
-  Psychological Graph → 9 motivation/belief nodes + SRL phase + imposter flag
+                      (Structure Channel)
 
-All 12 psychological theories write to one of these three graphs.
-The Language Channel classifies attribution, self-efficacy, and SRL
-phase markers from every prompt before any graph update occurs.
+Emotion and the psychological channel (attribution, self-efficacy, SRL
+phase, imposter, anxiety, flow) are intentionally NOT tracked: they are not
+used as inputs anywhere in CPAL.
 """
 
 from typing import Dict, List, Optional, Tuple
@@ -17,19 +17,6 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
-
-# ─── Psychological Graph Node Definitions ────────────────────────────────────
-PSYCH_NODES = {
-    "high_anxiety":               {"valence": "NEGATIVE",  "theories": ["T10_Flow", "T08_SCT"]},
-    "low_self_efficacy":          {"valence": "NEGATIVE",  "theories": ["T08_SCT", "T09_SRL"]},
-    "fixed_attribution":          {"valence": "NEGATIVE",  "theories": ["T11_Attribution"]},
-    "forethought_planning":       {"valence": "NEUTRAL+",  "theories": ["T09_SRL"]},
-    "performance_monitoring":     {"valence": "NEUTRAL+",  "theories": ["T09_SRL"]},
-    "self_reflection_evaluation": {"valence": "NEUTRAL+",  "theories": ["T09_SRL", "T12_Imposter"]},
-    "flow_state":                 {"valence": "POSITIVE",  "theories": ["T10_Flow"]},
-    "growth_self_efficacy":       {"valence": "POSITIVE",  "theories": ["T08_SCT"]},
-    "adaptive_attribution":       {"valence": "POSITIVE",  "theories": ["T11_Attribution"]},
-}
 
 PROGRESSION_STAGES = {
     1: "Observation", "2a": "Guided_Modification", "2b": "Scaffolded_Practice",
@@ -90,197 +77,6 @@ CONCEPT_KEYWORDS = {
     "overloading":           ["overload", "method", "same name", "parameter", "signature"],
     "generics_primitives":   ["ArrayList", "int", "Integer", "wrapper", "generic", "primitive", "<int>"],
 }
-
-
-class LanguageChannelAnalyser:
-    """
-    Language Channel of the Prompt Analysis Engine.
-    Detects: attribution type, self-efficacy, SRL phase, imposter signals, anxiety.
-    All 12 theories (T08-T12) write to the Psychological Graph through this channel.
-    """
-
-    _PATTERNS = {
-        "fixed_attr": [
-            r"\bi('m| am) (just |always |never )?(bad|terrible|hopeless|awful) at",
-            r"\b(always|never) (get|understand|figure|know)",
-            r"\bi('m| am) not (good enough|cut out for|meant for)",
-            r"\b(can't|cannot) (do|learn|understand) (this|it|coding|programming)",
-            r"\bstupid( mistake| me)",
-            r"\b(it's|it is) (just |always )?(too hard|impossible)",
-            # Added 2026-05-21: self-deprecating slurs ("I'm dumb/stupid")
-            # were missed because the original "bad|terrible|hopeless|awful"
-            # set didn't include them, and "stupid" only matched as
-            # "stupid mistake/me". Harness L15.4 ("I'm just bad at this")
-            # already worked; L15.1 ("I'm probably too dumb for this")
-            # didn't.
-            r"\bi('m| am) (just |probably |maybe |kinda |kind of )?(too )?(dumb|stupid|slow|thick|dense)\b",
-            r"\b(too |probably |maybe )(dumb|stupid|slow|thick|dense)( for| at)\b",
-            r"\bi('m| am) not smart enough\b",
-        ],
-        "adaptive_attr": [
-            r"\b(let me|i('ll| will)) try (a |another |different )?approach",
-            r"\b(next time|from now on) i('ll| will)",
-            r"\bi (need to|should) (study|practice|review|learn) (more|better|this)",
-            r"\b(my approach|my strategy) (was|is) wrong",
-            # Added 2026-05-21: "I keep making the same mistake — I need to
-            # read errors more carefully" — healthy internal attribution
-            # (the L15.3 scenario).
-            r"\bi keep making (the same |this )?mistake\b",
-            r"\bi (need|have) to (read|check|watch|look at) .{0,30} (more|better|carefully)",
-        ],
-        "external_attr": [
-            # New 2026-05-21: external attribution (blaming the tool, the
-            # language, the system rather than oneself). Harness L15.2
-            # ("Java is just badly designed, this is stupid") came back as
-            # attribution=neutral because the original code only knew
-            # fixed/adaptive (both internal).
-            r"\b(java|python|c\+\+|this language|the language|this tool|this thing|the compiler)\b.*\b(sucks|is (just |so |really )?(stupid|bad|terrible|broken|garbage))",
-            r"\b(badly|poorly) designed\b",
-            r"\b(this|the) (language|tool|library|framework) is (just |so |really )?(bad|stupid|terrible|broken|awful)",
-            r"\bwhy (does|do) (java|python|c\+\+|this language)\b",
-        ],
-        "low_efficacy": [
-            r"\bi (don't|do not) (think|believe) (i|i'll|i can)",
-            r"\bi('m| am) (totally|completely) (lost|confused|stuck)",
-            r"\bno (idea|clue) (what|how|why) (to|i should)",
-            r"\bwhy (can't|don't) i (get|understand) (this|it)",
-        ],
-        "growth_efficacy": [
-            r"\bi (think|believe) i (see|understand|get|have) (it|this|now)",
-            r"\b(that makes|makes a lot of) sense( now)?",
-            r"\bnow i (understand|get|see|know)",
-            r"\bi (can|could) (do|try|figure) (this|it) out",
-            # Added 2026-05-21: breakthrough-moment phrasings ("OH I get
-            # it now!!", "i get it now") didn't match the strict
-            # "I think/believe I" frame.
-            r"\b(oh+|ahh?|wait,?|ok,?|okay,?)? ?i (get|see|understand|know) (it|this|now|why)\b",
-            r"\bi get it now\b",
-            r"\b(it makes sense|got it|i see it)\b",
-        ],
-        "forethought": [
-            r"\b(before|first)(,| i| let me) (plan|think|figure|understand)",
-            r"\bmy (plan|approach|strategy) (is|will be)",
-            r"\bi('m| am) going to (first|start by|begin with)",
-        ],
-        "monitoring": [
-            r"\bi('m| am) trying|i tried|i ran|i tested",
-            r"\b(it's|it is) (still |)not working|keeps? (giving|throwing|failing)",
-            r"\bwhen i (run|execute|call) (it|this|the code)",
-        ],
-        "reflection": [
-            r"\bi (got|get) (it|the right answer) but (i'm not sure|i don't understand) why",
-            r"\b(i think|maybe) i (just got|was) lucky",
-            r"\bit (works|worked) but i('m| am) not (sure|confident)",
-            r"\b(looking back|in hindsight|after thinking)",
-        ],
-        "imposter": [
-            r"\b(i got|i was) (just )?lucky",
-            r"\b(they('ll| will)|someone will) (find out|know|realize) (i'm|that i'm)",
-            r"\bi don't (deserve|belong|know why i)",
-            r"\bit (was|is) an (accident|fluke|coincidence)",
-            # Added 2026-05-21: "too dumb/stupid for this" reads to humans
-            # as classic imposter phrasing. Harness L15.1 / L15.4 both
-            # missed.
-            r"\b(too |probably (too )?)(dumb|stupid|slow|thick)( for| to (do|learn) this)?\b",
-            r"\bi('m| am) not smart enough\b",
-        ],
-        "high_anxiety": [
-            r"\bi('m| am) (panicking|freaking out|stressed|overwhelmed|scared)",
-            r"\b(deadline|exam|test) (is|in) (tomorrow|today|soon)",
-            r"\b(please|urgent|asap) help",
-            r"\bwhat do i do",
-            # Added 2026-05-21: long-grind frustration. Harness L6.1
-            # ("I've been at this for 3 hours, I hate this stupid
-            # language") didn't match the original panic/exam patterns.
-            r"\bi('ve| have) been (at this|stuck|working on this|trying) for (\d+|a few|several|many|hours|days|forever)",
-            r"\b(been at this|stuck on this) for (\d+|a few|several|many)\b",
-            r"\bi hate (this|java|python|c\+\+|the (language|compiler|tool))",
-            r"\bnothing (is|seems|appears to be)? ?working\b",
-        ],
-    }
-
-    def __init__(self):
-        flags = re.IGNORECASE
-        self._compiled = {
-            k: [re.compile(p, flags) for p in pats]
-            for k, pats in self._PATTERNS.items()
-        }
-
-    def _score(self, text: str, key: str) -> int:
-        return sum(1 for p in self._compiled[key] if p.search(text))
-
-    def analyse(self, text: str) -> Dict:
-        if not text:
-            return self._neutral()
-        t = text.lower()
-
-        fixed_s    = self._score(t, "fixed_attr")
-        adaptive_s = self._score(t, "adaptive_attr")
-        external_s = self._score(t, "external_attr")   # added 2026-05-21
-        low_s      = self._score(t, "low_efficacy")
-        growth_s   = self._score(t, "growth_efficacy")
-        f_s        = self._score(t, "forethought")
-        m_s        = self._score(t, "monitoring")
-        r_s        = self._score(t, "reflection")
-        imp_s      = self._score(t, "imposter")
-        anx_s      = self._score(t, "high_anxiety")
-
-        # Attribution: pick the strongest of fixed (internal-fixed),
-        # adaptive (internal-adaptive), or external (blaming the tool).
-        # Tie-break: prefer the more actionable signal — fixed and
-        # external both block progress and need different interventions;
-        # adaptive is the healthy state.
-        attr_scores = {
-            "fixed": fixed_s, "adaptive": adaptive_s, "external": external_s,
-        }
-        max_attr_score = max(attr_scores.values())
-        if max_attr_score == 0:
-            attribution = "neutral"
-        else:
-            # Deterministic order when scores tie: fixed > external > adaptive
-            # (fixed_attr is the highest-priority gate for InterventionSelector).
-            for k in ("fixed", "external", "adaptive"):
-                if attr_scores[k] == max_attr_score:
-                    attribution = k
-                    break
-        self_efficacy = "low"   if low_s > 0   and low_s   >= growth_s   else ("growth"   if growth_s > 0   else "neutral")
-        max_srl = max(f_s, m_s, r_s)
-        srl_phase = "unknown" if max_srl == 0 else (
-            "forethought" if f_s == max_srl else ("monitoring" if m_s == max_srl else "reflection")
-        )
-        imposter_signal = imp_s > 0 or (srl_phase == "reflection" and self_efficacy != "growth")
-        high_anxiety    = anx_s > 0
-
-        nodes = []
-        if attribution   == "fixed":       nodes.append("fixed_attribution")
-        elif attribution == "external":    nodes.append("external_attribution")  # 2026-05-21
-        elif attribution == "adaptive":    nodes.append("adaptive_attribution")
-        if self_efficacy == "low":         nodes.append("low_self_efficacy")
-        elif self_efficacy == "growth":    nodes.append("growth_self_efficacy")
-        if high_anxiety:                   nodes.append("high_anxiety")
-        if srl_phase == "forethought":     nodes.append("forethought_planning")
-        elif srl_phase == "monitoring":    nodes.append("performance_monitoring")
-        elif srl_phase == "reflection":    nodes.append("self_reflection_evaluation")
-        if (not high_anxiety and self_efficacy == "growth"
-                and attribution in ("adaptive", "neutral")):
-            nodes.append("flow_state")
-
-        return {
-            "attribution": attribution, "self_efficacy": self_efficacy,
-            "srl_phase": srl_phase, "imposter_signal": imposter_signal,
-            "high_anxiety": high_anxiety, "psych_nodes_activated": nodes,
-            "fixed_score": fixed_s, "adaptive_score": adaptive_s,
-            "low_efficacy_score": low_s, "growth_efficacy_score": growth_s,
-        }
-
-    def _neutral(self) -> Dict:
-        return {
-            "attribution": "neutral", "self_efficacy": "neutral",
-            "srl_phase": "unknown",   "imposter_signal": False,
-            "high_anxiety": False,    "psych_nodes_activated": [],
-            "fixed_score": 0, "adaptive_score": 0,
-            "low_efficacy_score": 0, "growth_efficacy_score": 0,
-        }
 
 
 class StructureChannelAnalyser:
@@ -393,87 +189,55 @@ class ContentChannelAnalyser:
 
 class InterventionSelector:
     """
-    Applies the 8-intervention decision logic from the reference document.
-    Fixed Attribution and Imposter Flag are NON-NEGOTIABLE gates that must
-    be cleared BEFORE any instructional advance.
+    Picks an intervention from the Content (encoding strength) and Structure
+    (progression stage) channels. First matching rule wins. gate_triggered
+    and blocks_advance are kept in the output for compatibility and are
+    always False (the psychological gates were removed).
     """
 
-    def select(self, cognitive: Dict, progression: Dict, psychological: Dict, bkt_mastery: float) -> Dict:
+    def select(self, cognitive: Dict, progression: Dict, bkt_mastery: float) -> Dict:
         enc   = cognitive.get("encoding_strength", "surface")
         stage = progression.get("stage", 1)
-        attr  = psychological.get("attribution", "neutral")
-        eff   = psychological.get("self_efficacy", "neutral")
-        imp   = psychological.get("imposter_signal", False)
-        anx   = psychological.get("high_anxiety", False)
 
-        # GATE 1 — Non-negotiable: Attribution or Imposter
-        # Both "fixed" (internal blame) and "external" (blaming the tool)
-        # block instructional progress and need reframing first. Added
-        # "external" gate 2026-05-21 once the language analyser learned
-        # to detect "Java is just badly designed" etc.
-        if attr in ("fixed", "external") or imp:
-            return {"type": "attribution_reframe", "priority": 1.0, "gate_triggered": True,
-                    "rationale": f"Attribution={attr} OR Imposter ({imp}) — must clear before advance.",
-                    "blocks_advance": True}
+        def _pick(itype: str, priority: float, rationale: str) -> Dict:
+            return {"type": itype, "priority": priority, "gate_triggered": False,
+                    "rationale": rationale, "blocks_advance": False}
 
-        # GATE 2 — Crisis de-escalation
-        if stage == 1 and (anx or eff == "low"):
-            return {"type": "reduce_challenge", "priority": 0.95, "gate_triggered": True,
-                    "rationale": "Stage 1 + Anxiety/Low Efficacy — overwhelmed student.", "blocks_advance": False}
+        # Transfer task
+        if enc == "deep" and stage in ("4a", "4b", 5):
+            return _pick("transfer_task", 0.80,
+                         "Deep encoding + Stage 4+: novel real-world application.")
 
-        # Mastery surface (high mastery + imposter-like low efficacy)
-        if enc in ("solid", "deep") and eff == "low":
-            return {"type": "mastery_surface", "priority": 0.90, "gate_triggered": False,
-                    "rationale": "High encoding + Low Efficacy: surface prior successes.", "blocks_advance": False}
-
-        # All positive → validate and advance (checked BEFORE generic growth shortcut)
-        if (enc in ("solid", "deep")
-                and stage in ("4a", "4b", 5)
-                and eff == "growth"
-                and attr == "adaptive"):
-            return {"type": "validate_and_advance", "priority": 0.87, "gate_triggered": False,
-                    "rationale": "All three graphs positive — confirm mastery and advance.",
-                    "blocks_advance": False}
-
-        # Growth efficacy + Stage 4+ → increase challenge even without deep encoding
-        # (student solved it independently — T08 SCT signals readiness)
-        if eff == "growth" and stage in ("4a", "4b", 5):
-            return {"type": "increase_challenge", "priority": 0.72, "gate_triggered": False,
-                    "rationale": "Growth Efficacy + Stage 4+: student solved independently, advance challenge.",
-                    "blocks_advance": False}
+        # Solid encoding at an independent stage → confirm and advance
+        if enc == "solid" and stage in ("4a", "4b", 5):
+            return _pick("validate_and_advance", 0.87,
+                         "Solid encoding + Stage 4+: confirm mastery and advance.")
 
         # Worked example
         if enc == "surface" and stage in (1, "2a", "2b"):
-            return {"type": "worked_example", "priority": 0.75, "gate_triggered": False,
-                    "rationale": "Surface encoding + early stage: dual-coded walkthrough.", "blocks_advance": False}
+            return _pick("worked_example", 0.75,
+                         "Surface encoding + early stage: dual-coded walkthrough.")
 
         # Socratic prompt
         if enc == "partial" and stage in ("2b", 3):
-            return {"type": "socratic_prompt", "priority": 0.70, "gate_triggered": False,
-                    "rationale": "Partial encoding + scaffold-stage: targeted questioning.", "blocks_advance": False}
-
-        # Transfer task
-        if enc == "deep" and stage in ("4a","4b",5):
-            return {"type": "transfer_task", "priority": 0.80, "gate_triggered": False,
-                    "rationale": "Deep encoding + Stage 4+: novel real-world application.", "blocks_advance": False}
+            return _pick("socratic_prompt", 0.70,
+                         "Partial encoding + scaffold-stage: targeted questioning.")
 
         # Increase challenge
-        if enc in ("solid","deep") and stage == 3 and eff in ("growth","neutral"):
-            return {"type": "increase_challenge", "priority": 0.70, "gate_triggered": False,
-                    "rationale": "Solid + Stage 3 + positive efficacy: advance challenge.", "blocks_advance": False}
+        if enc in ("solid", "deep") and stage == 3:
+            return _pick("increase_challenge", 0.70,
+                         "Solid/deep encoding + Stage 3: advance challenge.")
 
         # Default
-        return {"type": "worked_example", "priority": 0.50, "gate_triggered": False,
-                "rationale": "Default: scaffolded worked example.", "blocks_advance": False}
+        return _pick("worked_example", 0.50, "Default: scaffolded worked example.")
 
 
 class StudentStateTracker:
     """
-    Full three-graph student state machine.
+    Two-graph student state machine.
 
-    Cognitive Graph    → encoding_strength per concept node (9 nodes, 3 tiers)
+    Cognitive Graph    → encoding_strength per concept node
     Progression Graph  → developmental stage (7 stages) + ZPD + scaffold_level
-    Psychological Graph → 9 motivation/belief nodes + SRL + imposter_flag
 
     Primary entry point: analyse_prompt() — call this FIRST on every message
     before selecting an intervention.
@@ -487,7 +251,6 @@ class StudentStateTracker:
         )
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
 
-        self.language_channel      = LanguageChannelAnalyser()
         self.structure_channel     = StructureChannelAnalyser()
         self.content_channel       = ContentChannelAnalyser()
         self.intervention_selector = InterventionSelector()
@@ -499,6 +262,12 @@ class StudentStateTracker:
             try:
                 with open(self.state_file, "r") as f:
                     self.student_states = json.load(f)
+                # States saved before the psychological channel and emotion
+                # were removed still carry those blocks — drop them.
+                for st in self.student_states.values():
+                    if isinstance(st, dict):
+                        st.pop("psychological_graph", None)
+                        st.pop("cognitive_state", None)
             except Exception as e:
                 print(f"[WARN] Failed to load student states: {e}")
 
@@ -578,14 +347,8 @@ class StudentStateTracker:
                 "stage": 1, "zpd_status": "overwhelmed",
                 "scaffold_level": 5, "has_attempt": False, "stage_history": [],
             },
-            "psychological_graph": {
-                "active_nodes": [], "attribution": "neutral", "self_efficacy": "neutral",
-                "srl_phase": "unknown", "imposter_flag": False, "high_anxiety": False,
-                "flow_state": False, "psych_history": [],
-            },
             "recommended_intervention": {},
             # legacy compatibility
-            "cognitive_state": {"current_state": "engaged", "confidence": 0.5, "state_history": []},
             "knowledge_state": {"concept_mastery": {}, "mastery_history": [], "last_updated": None},
             "conversation_history": [],
             "session_count": 0,
@@ -596,9 +359,9 @@ class StudentStateTracker:
 
     def analyse_prompt(self, student_id: str, session_data: Dict) -> Dict:
         """
-        Run all three channels simultaneously on a student prompt.
+        Run the structure and content channels on a student prompt.
         Call this BEFORE selecting an intervention.
-        Returns full three-graph analysis + recommended_intervention.
+        Returns the two-graph analysis + recommended_intervention.
         """
         state     = self.get_student_state(student_id)
         question  = session_data.get("question", "")
@@ -608,38 +371,8 @@ class StudentStateTracker:
         has_error = bool(error and error.strip())
         full_text = f"{question} {error}".strip()
 
-        lang   = self.language_channel.analyse(full_text)
         struct = self.structure_channel.analyse(full_text, has_code=has_code, has_error=has_error)
         cont   = self.content_channel.analyse(full_text, has_code=has_code)
-
-        # ── Psychological Graph update ────────────────────────────────────
-        pg = state["psychological_graph"]
-        pg["attribution"]   = lang["attribution"]
-        pg["self_efficacy"] = lang["self_efficacy"]
-        pg["srl_phase"]     = lang["srl_phase"]
-        pg["high_anxiety"]  = lang["high_anxiety"]
-        pg["flow_state"]    = "flow_state" in lang["psych_nodes_activated"]
-
-        if lang["imposter_signal"]:
-            pg["imposter_flag"] = True
-        avg_m = self._avg_mastery(state)
-        if (pg["imposter_flag"]
-                and lang["self_efficacy"] == "growth"
-                and lang["attribution"] == "adaptive"
-                and avg_m > 0.70):
-            pg["imposter_flag"] = False
-            print(f"[PsychGraph] Imposter flag cleared for {student_id}")
-
-        pg["active_nodes"] = lang["psych_nodes_activated"]
-        pg["psych_history"].append({
-            "timestamp": datetime.now().isoformat(),
-            "nodes": lang["psych_nodes_activated"],
-            "attribution": lang["attribution"],
-            "srl_phase": lang["srl_phase"],
-            "imposter": pg["imposter_flag"],
-        })
-        if len(pg["psych_history"]) > 100:
-            pg["psych_history"] = pg["psych_history"][-100:]
 
         # ── Progression Graph update ──────────────────────────────────────
         prg = state["progression_graph"]
@@ -656,6 +389,7 @@ class StudentStateTracker:
             prg["stage_history"] = prg["stage_history"][-100:]
 
         # ── Cognitive Graph update ────────────────────────────────────────
+        avg_m = self._avg_mastery(state)
         concept = session_data.get("concept") or self._infer_concept(session_data)
         cg = state["cognitive_graph"]
         if concept and concept in cg["concept_nodes"]:
@@ -672,21 +406,19 @@ class StudentStateTracker:
 
         # ── Select Intervention ───────────────────────────────────────────
         intervention = self.intervention_selector.select(
-            cognitive=cont, progression=struct, psychological=lang, bkt_mastery=avg_m
+            cognitive=cont, progression=struct, bkt_mastery=avg_m
         )
         state["recommended_intervention"] = intervention
         state["last_updated"] = datetime.now().isoformat()
         self._save_states()
 
         print(f"[StateTracker] {student_id}: stage={prg['stage']}, "
-              f"enc={cont['encoding_strength']}, attr={lang['attribution']}, "
-              f"imp={pg['imposter_flag']}, -> {intervention['type']}")
+              f"enc={cont['encoding_strength']}, -> {intervention['type']}")
 
         return {
-            "language_channel": lang, "structure_channel": struct, "content_channel": cont,
+            "structure_channel": struct, "content_channel": cont,
             "cognitive_graph": state["cognitive_graph"],
             "progression_graph": state["progression_graph"],
-            "psychological_graph": state["psychological_graph"],
             "recommended_intervention": intervention,
             "concept": concept, "avg_mastery": avg_m,
         }
@@ -694,7 +426,7 @@ class StudentStateTracker:
     # ── BKT Mastery Update ───────────────────────────────────────────────────
 
     def update_from_session(self, student_id: str, session_data: Dict,
-                            cognitive_state: str, concepts_identified: List[str],
+                            concepts_identified: List[str],
                             code_correctness: float, response_quality: float):
         state = self.get_student_state(student_id)
         BKT_P_T, BKT_P_S, BKT_P_G = 0.20, 0.10, 0.25
@@ -729,19 +461,11 @@ class StudentStateTracker:
             ks["mastery_history"] = ks["mastery_history"][-100:]
         ks["last_updated"] = datetime.now().isoformat()
 
-        state["cognitive_state"]["current_state"] = cognitive_state
-        state["cognitive_state"]["state_history"].append({
-            "state": cognitive_state, "timestamp": datetime.now().isoformat()
-        })
-        if len(state["cognitive_state"]["state_history"]) > 50:
-            state["cognitive_state"]["state_history"] = state["cognitive_state"]["state_history"][-50:]
-
         state["conversation_history"].append({
             "timestamp": datetime.now().isoformat(),
             "question": session_data.get("question", ""),
             "code": session_data.get("code", "")[:200],
             "error": session_data.get("error_message", ""),
-            "cognitive_state": cognitive_state,
             "concepts": concepts_identified,
             "correctness": code_correctness,
         })
@@ -755,14 +479,8 @@ class StudentStateTracker:
 
     # ── Public Getters ───────────────────────────────────────────────────────
 
-    def get_cognitive_state(self, student_id: str) -> Dict:
-        return self.get_student_state(student_id)["cognitive_state"]
-
     def get_knowledge_state(self, student_id: str) -> Dict:
         return self.get_student_state(student_id)["knowledge_state"]
-
-    def get_psychological_graph(self, student_id: str) -> Dict:
-        return self.get_student_state(student_id)["psychological_graph"]
 
     def get_progression_graph(self, student_id: str) -> Dict:
         return self.get_student_state(student_id)["progression_graph"]
@@ -774,8 +492,8 @@ class StudentStateTracker:
         return self.get_student_state(student_id).get("recommended_intervention", {})
 
     def is_intervention_gated(self, student_id: str) -> bool:
-        pg = self.get_psychological_graph(student_id)
-        return pg["attribution"] == "fixed" or pg["imposter_flag"]
+        """No gates remain (the psychological gates were removed)."""
+        return False
 
     def get_conversation_history(self, student_id: str, limit: int = 10) -> List[Dict]:
         return self.get_student_state(student_id)["conversation_history"][-limit:]

@@ -1,14 +1,14 @@
 """
 Self-contained learning-progression index.
 
-Loads data/pedagogical_kg/learning_progressions.json at init time and exposes
+Loads data/java_curriculum/learning_progressions.json at init time and exposes
 a single query: get_path(target_concept, current_mastery) -> ordered path to
 the target, annotated with prerequisites, mastery, thresholds, and a
 next_concept pointer.
 
-This is a lighter-weight alternative to pedagogical_kg_integration.py for
-callers that only need the LP lookup and don't want to drag in the full
-pedagogical-KG builder + its dependencies.
+Standalone: it depends only on that JSON file, which
+scripts/setup_java_knowledge.py writes. When the file is missing, callers get
+no path and skip the LP-path prompt block.
 """
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -16,7 +16,7 @@ import json
 
 
 class LPIndex:
-    def __init__(self, json_path: str = "data/pedagogical_kg/learning_progressions.json"):
+    def __init__(self, json_path: str = "data/java_curriculum/learning_progressions.json"):
         self.json_path = Path(json_path)
         self.progressions: List[Dict] = []
         self._by_concept: Dict[str, List[Dict]] = {}

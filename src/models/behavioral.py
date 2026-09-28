@@ -8,10 +8,11 @@ BehavioralRNN
 Bidirectional LSTM trained on ProgSnap2 action sequences.
 Input  : sequence of action IDs + time deltas
 Outputs:
-  - emotion       : frustrated / confused / engaged / neutral / confident
   - strategy      : systematic / exploratory / help_seeking / trial_error
   - effectiveness : float 0-1 (how productive is this session)
   - productivity  : high / medium / low
+(Emotion is not an output: the network keeps an emotion_head layer only so
+saved checkpoints still load, but its logits are never read.)
 
 ProgSnap2 action IDs (20 event types):
   0=pad  1=run  2=compile_error  3=run_error  4=edit
@@ -56,7 +57,9 @@ ACTION_MAP = {
 }
 NUM_ACTIONS = 20
 
-EMOTIONS   = ["frustrated", "confused", "engaged", "neutral", "confident"]
+# Size of the retired emotion_head layer (kept only for checkpoint
+# compatibility — its output is never read).
+_RETIRED_EMOTION_CLASSES = 5
 STRATEGIES = ["systematic", "exploratory", "help_seeking", "trial_error"]
 PRODUCTIVITIES = ["high", "medium", "low"]
 
@@ -66,7 +69,7 @@ PRODUCTIVITIES = ["high", "medium", "low"]
 class BehavioralRNN(nn.Module):
     """
     Bidirectional LSTM that reads debugging action sequences and infers
-    emotional + strategic state.
+    strategic state.
 
     Input tensors (all (B, T)):
       action_ids    : long, values 0-19
@@ -75,8 +78,6 @@ class BehavioralRNN(nn.Module):
       lengths       : long, actual sequence lengths per batch item
 
     Outputs (dict):
-      emotion            : List[str]
-      emotion_confidence : List[float]
       strategy           : List[str]
       effectiveness      : List[float]
       productivity       : List[str]
@@ -116,13 +117,10 @@ class BehavioralRNN(nn.Module):
         )
 
         # Task heads
-        self.emotion_head      = nn.Linear(256, len(EMOTIONS))
+        self.emotion_head      = nn.Linear(256, _RETIRED_EMOTION_CLASSES)  # retired; checkpoint shape only
         self.strategy_head     = nn.Linear(256, len(STRATEGIES))
         self.effectiveness_head = nn.Sequential(nn.Linear(256, 64), nn.ReLU(), nn.Linear(64, 1), nn.Sigmoid())
         self.productivity_head = nn.Linear(256, len(PRODUCTIVITIES))
-
-        # Frustration threshold (67.5 s from ProgSnap2 analysis)
-        self.frustration_threshold_s = config.get('behavioral', {}).get('frustration_threshold', 67.5)
 
     def forward(self, action_ids: torch.Tensor,
                 time_deltas: torch.Tensor,
@@ -164,13 +162,11 @@ class BehavioralRNN(nn.Module):
         features = self.trunk(h_cat)                             # (B, 256)
 
         # Task heads
-        emotion_logits = self.emotion_head(features)
         strategy_logits = self.strategy_head(features)
         effectiveness   = self.effectiveness_head(features).squeeze(-1)
         productivity_logits = self.productivity_head(features)
 
         return {
-            'emotion_logits':      emotion_logits,
             'strategy_logits':     strategy_logits,
             'effectiveness':       effectiveness,
             'productivity_logits': productivity_logits,
@@ -201,15 +197,11 @@ class BehavioralRNN(nn.Module):
 
         out = self.forward(action_ids, time_deltas, outcomes, lengths)
 
-        emotions       = [EMOTIONS[i]      for i in out['emotion_logits'].argmax(-1).tolist()]
         strategies     = [STRATEGIES[i]    for i in out['strategy_logits'].argmax(-1).tolist()]
         productivities = [PRODUCTIVITIES[i] for i in out['productivity_logits'].argmax(-1).tolist()]
-        emotion_conf   = F.softmax(out['emotion_logits'], dim=-1).max(-1).values.tolist()
         effectiveness  = out['effectiveness'].tolist()
 
         return {
-            'emotion':            emotions,
-            'emotion_confidence': emotion_conf,
             'strategy':           strategies,
             'effectiveness':      effectiveness,
             'productivity':       productivities,
@@ -225,7 +217,7 @@ class BehavioralRNN(nn.Module):
         Accepts either 'action_ids' or 'action_sequence' key (dataloader uses the latter).
         batch keys: action_ids|action_sequence, time_deltas|timestamps,
                     outcomes|is_correct, lengths|sequence_lengths,
-                    emotion_labels, strategy_labels, effectiveness_labels
+                    strategy_labels, effectiveness_labels
         """
         # Key aliasing — dataloader uses different names than learning scripts
         action_ids = batch.get('action_ids', batch.get('action_sequence'))
@@ -244,13 +236,6 @@ class BehavioralRNN(nn.Module):
 
         out = self.forward(action_ids, time_deltas_raw.float(), outcomes.float(), lengths)
         loss = torch.tensor(0.0)
-        # emotion supervision — filter out unlabelled samples (-1)
-        emotion_key = next((k for k in ['emotion_labels', 'emotion_label'] if k in batch), None)
-        if emotion_key:
-            el = batch[emotion_key]
-            mask = el >= 0
-            if mask.any():
-                loss = loss + F.cross_entropy(out['emotion_logits'][mask], el[mask])
         if 'strategy_labels' in batch:
             loss = loss + F.cross_entropy(out['strategy_logits'], batch['strategy_labels'])
         if 'effectiveness_labels' in batch:

@@ -1,10 +1,10 @@
 """
-Ollama runner for all 194 CPAL scenarios.
+Ollama runner for all 275 CPAL scenarios.
 
 Companion to scripts/run_all_scenarios.py — that harness validates the
 *internal* CPAL state (concept resolver, LP diagnostic, DINA mastery,
 intervention selection, DB, etc.) without ever calling an LLM. This
-runner takes the same 194 scenarios and ALSO produces a real Ollama
+runner takes the same scenarios and ALSO produces a real Ollama
 tutor reply for each, so you can see what the frontend would say.
 
 Output:
@@ -41,7 +41,9 @@ HTTP_TIMEOUT_S = 240   # per-scenario hard cap; the 8B model is slow on CPU
 
 
 # ═════════════════════════════════════════════════════════════════════════
-# SCENARIOS — flat list of all 194 from scripts/run_all_scenarios.py.
+# SCENARIOS — flat list mirroring scripts/run_all_scenarios.py. Emotion and
+# psychological-channel scenarios (6.x, 11.3, 11.6, 12.7, 15.1-15.4, 18.1-18.5,
+# 18.10) were removed along with those inputs.
 # kind = "student" (real student message to be answered) or "infra"
 # (backend test — we still ask the LLM but framed differently).
 # ═════════════════════════════════════════════════════════════════════════
@@ -104,7 +106,7 @@ SCENARIOS += [
         "(every session_data field is explicitly null)",
         expected="graceful when fields are None", kind="infra"),
     S("0.20","0", "disengagement / quit", "stop, I quit, this is useless",
-        expected="motivational_support"),
+        expected="intervention surfaces"),
 ]
 
 # ── Layer 1 — Concept detection (each maps to a catalogue concept) ───────
@@ -248,21 +250,6 @@ SCENARIOS += [
         expected="strong off-facet reply still credited"),
 ]
 
-# ── Layer 6 — Emotion / behavioral surface signals ───────────────────────
-_L6 = [
-    ("6.1","frustrated","I've been at this for 3 hours, I hate this stupid language"),
-    ("6.2","confused",  "wait, I don't understand what static even means"),
-    ("6.3","anxious",   "my exam is tomorrow and nothing is working"),
-    ("6.4","engaged",   "ok I think I get it — but what happens if the array is empty?"),
-    ("6.5","neutral",   "I have a bug on line 12"),
-    ("6.6","frustrated","whatever, I give up"),
-    ("6.7","engaged",   "easy, this is just a basic null check"),
-    ("6.8","engaged",   "OH I get it now!! it's because of the heap right?!"),
-]
-for sid, exp, q in _L6:
-    SCENARIOS.append(S(sid, "6", f"label={exp}", q,
-                       expected=f"psych signals consistent with {exp}"))
-
 # ── Layer 7 — Behavioral actions (resolver smoke) ────────────────────────
 _L7 = [
     ("7.1","trial-and-error",   ["compile","run"]*6),
@@ -325,10 +312,8 @@ for sid, name, code, err in _L9:
 # ── Layer 11 — Intervention selection ────────────────────────────────────
 _L11 = [
     ("11.1","L1 should not get challenge_problem","it just doesn't work"),
-    ("11.3","frustrated low mastery","I hate this language, I quit"),
     ("11.4","high mastery engaged","I think I'm pretty solid on this — what else can I try?"),
     ("11.5","wrong-model identified","I thought == compares the text of the string"),
-    ("11.6","imposter syndrome","I'm just too dumb for this"),
     ("11.7","new concept first encounter","what is a constructor?"),
 ]
 for sid, name, q in _L11:
@@ -354,9 +339,6 @@ SCENARIOS += [
     S("12.6","12","ZPD reward",
         "(reward calc, in-ZPD vs overwhelmed)",
         expected="in-ZPD > overwhelmed", kind="infra"),
-    S("12.7","12","attribution reward",
-        "(reward calc, fixed→adaptive + imposter cleared vs flat)",
-        expected="shift > flat", kind="infra"),
     S("12.8","12","RL module importable",
         "(import src.reinforcement_learning.teaching_agent)",
         expected="no import crash", kind="infra"),
@@ -387,42 +369,20 @@ SCENARIOS += [
         expected="sanitized", kind="infra"),
 ]
 
-# ── Layer 15 — Three-channel analysis ────────────────────────────────────
+# ── Layer 15 — Content-channel analysis ────────────────────────────────────
 _L15 = [
-    ("15.1","imposter language", "I'm probably too dumb for this", "imposter_flag=True"),
-    ("15.2","external attribution",
-        "Java is just badly designed, this is stupid", "attribution=external"),
-    ("15.3","internal healthy",
-        "I keep making the same mistake — I need to read errors more carefully",
-        "internal, not imposter"),
-    ("15.4","internal unhealthy","I'm just bad at this", "internal + imposter"),
     ("15.5","high encoding",
         "== compares the references stored in variables, so two new String objects "
         "holding 'hello' get different heap addresses and == returns false; "
         ".equals walks the char[].", "encoding=high"),
     ("15.6","low encoding", "NullPointerException at Main.java:12", "encoding=low"),
-    ("15.8","factual question","what's the syntax for a for-loop?", "neutral psych"),
+    ("15.8","factual question","what's the syntax for a for-loop?", "encoding=surface"),
 ]
 for sid, name, q, exp in _L15:
     SCENARIOS.append(S(sid, "15", name, q, expected=exp))
 
 # ── Layer 18 — Post-fix gap coverage ─────────────────────────────────────
 SCENARIOS += [
-    S("18.1","18","external attribution → reframe gate",
-        "this language is just badly designed, why does Java even exist",
-        expected="attribution=external + attribution_reframe"),
-    S("18.2","18","imposter + external combo",
-        "I'm probably too dumb for this and the compiler is garbage anyway",
-        expected="both flagged, reframe fires"),
-    S("18.3","18","self-correction reads as adaptive",
-        "I thought == compared content but actually it compares references — "
-        "I need to read the docs more carefully", expected="attribution=adaptive"),
-    S("18.4","18","breakthrough → growth_efficacy",
-        "OH I get it now!! it's because of the heap right?",
-        expected="self_efficacy=growth"),
-    S("18.5","18","prolonged grind → high_anxiety",
-        "I've been at this for 4 hours and nothing is working",
-        expected="high_anxiety=True"),
     S("18.6","18","WM threshold boundary",
         "References vs values — that's the whole story for ==",
         expected="wm=None OR score>=0.55"),
@@ -434,9 +394,6 @@ SCENARIOS += [
         "why does this work",
         code="// I thought strings are like numbers\nString a = \"hi\";",
         expected="string_equality or unknown"),
-    S("18.10","18","anxiety + L1 → de-escalation",
-        "I'm freaking out, my exam is tomorrow and I have no clue what to do",
-        expected="reduce_challenge or attribution_reframe"),
     S("18.11","18","stack trace alone", "",
         err="java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 5\n"
             "        at Main.process(Main.java:24)\n"
@@ -537,7 +494,7 @@ SCENARIOS += [
         expected="first None, rest numeric", kind="infra"),
 ]
 
-# ── Layer 21 — Behavioral + KG signals per turn (all infra) ──────────────
+# ── Layer 21 — Behavioral signals per turn (all infra) ──────────────
 SCENARIOS += [
     S("21.1","21","reasoning length+complexity per turn",
         "(3 turns with lengths 3/47/220)",
@@ -545,17 +502,8 @@ SCENARIOS += [
     S("21.2","21","correct_streak grows + resets",
         "(T/T/T/F/T/T → [1,2,3,0,1,2])",
         expected="streak pattern [1,2,3,0,1,2]", kind="infra"),
-    S("21.3","21","KG concept + counts per turn",
-        "(1 turn with KG block fields)",
-        expected="all KG fields preserved", kind="infra"),
-    S("21.4","21","COKE cognitive_state per turn",
-        "(3 turns: confused/engaged/frustrated)",
-        expected="states preserved in order", kind="infra"),
-    S("21.5","21","KG block sizes per turn",
-        "(rich-context turn + sparse turn)",
-        expected="1200 / 40 sizes preserved", kind="infra"),
     S("21.6","21","old + new fields coexist in one turn",
-        "(one turn with all 14 expected fields)",
+        "(one turn with all 12 expected fields)",
         expected="all fields present", kind="infra"),
 ]
 
@@ -692,7 +640,7 @@ for sid, q in _L26:
 # ── Layer 27 — Linguistic edge cases (added 2026-05-23) ─────────────────
 _L27 = [
     ("27.1",  "text-speak",            "y is dis not workin lol my loop runs 4ever"),
-    ("27.2",  "all caps frustration",  "WHY DOES THIS KEEP THROWING NULLPOINTEREXCEPTION I HATE THIS"),
+    ("27.2",  "all caps input",  "WHY DOES THIS KEEP THROWING NULLPOINTEREXCEPTION I HATE THIS"),
     ("27.3",  "streaming consciousness","so like i was trying to compare strings and i thought == "
                                        "would work but then it didn't and i was like wait why and "
                                        "then i looked it up and apparently you need .equals but i "
@@ -714,8 +662,10 @@ for sid, kind, msg in _L27:
     SCENARIOS.append(S(sid, "27", kind, msg, expected="parse and respond despite messy phrasing"))
 
 # Sanity check.
-assert len(SCENARIOS) == 194 + 50 + 10 + 10 + 10 + 15 + 10, \
-    f"expected 299 scenarios, got {len(SCENARIOS)}"
+# 299 originally, minus 21.3–21.5 (KG-only, retired) and 21 emotion /
+# psychological-channel scenarios.
+assert len(SCENARIOS) == 299 - 3 - 21, \
+    f"expected 275 scenarios, got {len(SCENARIOS)}"
 
 
 # ═════════════════════════════════════════════════════════════════════════

@@ -73,10 +73,7 @@ def evaluate_system_basic(orchestrator, test_data):
         "components_used": {
             "hvsae": 0,
             "behavioral": 0,
-            "coke": 0,
-            "nestor": 0,
-            "cse_kg": 0,
-            "pedagogical_kg": 0
+            "nestor": 0
         }
     }
     
@@ -99,14 +96,8 @@ def evaluate_system_basic(orchestrator, test_data):
                 results["components_used"]["hvsae"] += 1
             if system_analysis.get('behavioral_analysis'):
                 results["components_used"]["behavioral"] += 1
-            if system_analysis.get('coke_analysis'):
-                results["components_used"]["coke"] += 1
             if system_analysis.get('nestor_inference'):
                 results["components_used"]["nestor"] += 1
-            if system_analysis.get('cse_kg_queries'):
-                results["components_used"]["cse_kg"] += 1
-            if system_analysis.get('pedagogical_kg'):
-                results["components_used"]["pedagogical_kg"] += 1
             
             print(f"  [OK] Processed in {processing_time:.2f}s")
             print(f"  Intervention: {result.get('intervention_type', 'N/A')}")

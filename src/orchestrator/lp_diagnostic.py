@@ -1465,14 +1465,15 @@ class LPDiagnostician:
                 "ok", "k", "hmm", "huh", "uh",
             }
             _qt_norm = (question_text or "").lower().strip()
-            # Generic-frustration phrases also count — "it doesn't
+            # Generic complaint phrases also count — "it doesn't
             # work" / "it's broken" / "I can't get it" carry no
-            # concept-specific signal, so reading them as regression
+            # concept-specific substance (this is a text-substance check,
+            # not an emotion read), so reading them as regression
             # (especially after stored L2+) matches both common sense
             # and the harness's L4.5 expectation. Adding 2026-05-22
             # to balance with L4.6 (which uses concept-specific text
             # and SHOULDN'T trigger regression).
-            _GENERIC_FRUSTRATION = (
+            _GENERIC_COMPLAINT = (
                 "doesn't work", "don't work", "won't work",
                 "doesn't run", "is broken", "broken",
                 "i can't get", "i don't get",
@@ -1483,7 +1484,7 @@ class LPDiagnostician:
                 and gap >= 1
                 and (len(_qt_norm.split()) <= 2
                      or _qt_norm in _SHORT_FILLERS
-                     or any(p in _qt_norm for p in _GENERIC_FRUSTRATION))
+                     or any(p in _qt_norm for p in _GENERIC_COMPLAINT))
             )
             regression_confident = (
                 (gap >= 2 and pre_blend_agreement >= 0.66
@@ -1682,8 +1683,7 @@ class LPDiagnostician:
 # filter the RNN/recommender output before picking the top intervention.
 #
 #   L1 students need structure: worked example, reduce challenge, model
-#     explanation, Socratic prompt, misconception correction, attribution
-#     reframe (psychological safety).
+#     explanation, Socratic prompt, misconception correction.
 #   L2 students need the mechanism surfaced: trace scaffold (the
 #     plateau-break default), Socratic prompt, misconception correction,
 #     worked example, model explanation.
@@ -1695,7 +1695,6 @@ LP_VALID_INTERVENTIONS: Dict[str, List[str]] = {
     LP_L1: [
         "worked_example", "reduce_challenge", "socratic_prompt",
         "misconception_correct", "model_explanation",
-        "attribution_reframe",
     ],
     LP_L2: [
         "trace_scaffold", "socratic_prompt", "misconception_correct",

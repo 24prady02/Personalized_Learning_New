@@ -136,9 +136,8 @@ class NestorBayesianProfiler:
           social_interaction
 
         Note: 'emotional_variability' was removed as a Nestor input. Emotion
-        reading is handled by the dedicated emotion_classifier.pt component
-        (see scripts/demo_full_stack.py component #4); Nestor focuses on
-        BFI personality, learning styles, and strategies only.
+        is not used anywhere in the system; Nestor focuses on BFI
+        personality, learning styles, and strategies only.
         """
         expl  = behavioral_data.get('exploration_rate',    0.5)
         pers  = behavioral_data.get('persistence',         0.5)
@@ -492,8 +491,8 @@ class PersonalityProfiler:
         behavioral_data: exploration_rate, persistence, organization,
                          social_interaction
 
-        Note: emotional_variability removed; emotion reading is handled by
-        the dedicated emotion_classifier component, not Nestor.
+        Note: emotional_variability removed; emotion is not used anywhere
+        in the system.
         """
         expl = behavioral_data.get('exploration_rate',    0.5)
         pers = behavioral_data.get('persistence',         0.5)
@@ -518,24 +517,20 @@ class InterventionRecommender:
     """
     Recommends teaching interventions based on learned effectiveness data.
 
-    Effectiveness scores are loaded from:
-      data/pedagogical_kg/interventions.json  (set up by setup_java_knowledge.py)
-    and updated online from ASSISTments learning script.
+    Learned effectiveness scores are kept in:
+      data/nestor/intervention_effectiveness.json
+    (written by update(); read back on start-up). Without that file the
+    built-in _PROFILE_SCORES are used.
 
     recommend() returns top-k (intervention_type, score, rationale) tuples.
     """
 
-    # Maps our 8 intervention types to scores by student state profile
+    # Maps our 6 intervention types to scores by student state profile
     _PROFILE_SCORES = {
         'worked_example':       {'surface': 0.88, 'partial': 0.72, 'solid': 0.50, 'deep': 0.30},
         'socratic_prompt':      {'surface': 0.50, 'partial': 0.78, 'solid': 0.72, 'deep': 0.55},
         'transfer_task':        {'surface': 0.20, 'partial': 0.45, 'solid': 0.72, 'deep': 0.90},
-        # Base scores kept low on purpose — attribution_reframe is a GATE, not a
-        # default fallback. It gets boosted to 0.98 only when attr=='fixed' or
-        # imposter is set (see the hard-gate block below).
-        'attribution_reframe':  {'surface': 0.10, 'partial': 0.10, 'solid': 0.10, 'deep': 0.10},
         'reduce_challenge':     {'surface': 0.90, 'partial': 0.60, 'solid': 0.25, 'deep': 0.10},
-        'mastery_surface':      {'surface': 0.40, 'partial': 0.65, 'solid': 0.88, 'deep': 0.70},
         'validate_and_advance': {'surface': 0.30, 'partial': 0.55, 'solid': 0.85, 'deep': 0.92},
         'increase_challenge':   {'surface': 0.25, 'partial': 0.50, 'solid': 0.75, 'deep': 0.88},
     }
@@ -544,17 +539,15 @@ class InterventionRecommender:
         'worked_example':       'Surface/partial encoding: dual-coded walkthrough most effective',
         'socratic_prompt':      'Partial encoding at scaffold stage: guided discovery',
         'transfer_task':        'Deep encoding: novel real-world application to consolidate',
-        'attribution_reframe':  'Fixed attribution gate: must reframe before instruction',
         'reduce_challenge':     'Overwhelmed student: reduce cognitive load first',
-        'mastery_surface':      'High encoding + low efficacy: surface prior successes',
-        'validate_and_advance': 'All graphs positive: confirm mastery and advance concept',
-        'increase_challenge':   'Solid encoding + growth efficacy: advance difficulty',
+        'validate_and_advance': 'Solid/deep encoding: confirm mastery and advance concept',
+        'increase_challenge':   'Solid encoding: advance difficulty',
     }
 
     def __init__(self, config: Dict):
         self.config      = config
-        self.data_dir    = Path(config.get('pedagogical_kg', {}).get('data_dir',
-                                           'data/pedagogical_kg'))
+        self.data_dir    = Path(config.get('nestor', {}).get('data_dir',
+                                           'data/nestor'))
         self._learned_scores: Dict[str, float] = {}
         self._load_learned()
 
@@ -566,18 +559,12 @@ class InterventionRecommender:
         sorted by score descending, length top_k.
 
         student_profile keys: personality, learning_style, mastery_profile
-        context keys: knowledge_gaps, time_stuck, encoding_strength,
-                      attribution, imposter_flag, avg_mastery
+        context keys: knowledge_gaps, time_stuck, encoding_strength, avg_mastery
 
-        Note: 'emotional_state' was removed from Nestor's intervention
-        recommender. Emotion-aware intervention boosts are now handled
-        upstream by the orchestrator, which consumes the dedicated
-        emotion_classifier output and combines it with Nestor's
-        personality-based recommendations.
+        Emotion and psychological signals (attribution, imposter, anxiety)
+        are not inputs; the recommendation uses encoding and mastery only.
         """
         encoding  = context.get('encoding_strength', 'surface')
-        attr      = context.get('attribution', 'neutral')
-        imposter  = context.get('imposter_flag', False)
         mastery   = context.get('avg_mastery', 0.5)
 
         # Map to encoding bucket for lookup
@@ -589,10 +576,6 @@ class InterventionRecommender:
         scores = {}
         for itype, enc_scores in self._PROFILE_SCORES.items():
             base = enc_scores.get(enc_bucket, 0.5)
-
-            # Hard gate: attribution/imposter
-            if (attr == 'fixed' or imposter) and itype == 'attribution_reframe':
-                base = 0.98
 
             # Blend with learned effectiveness if available
             if itype in self._learned_scores:
@@ -633,20 +616,15 @@ class InterventionRecommender:
         self._save_learned()
 
     def _load_learned(self):
-        """Load effectiveness from pedagogical KG interventions.json."""
-        path = self.data_dir / 'interventions.json'
+        """Load learned effectiveness saved by _save_learned()."""
+        path = self.data_dir / 'intervention_effectiveness.json'
         if path.exists():
             try:
                 with open(path) as f:
                     data = json.load(f)
-                for idata in data.values():
-                    itype = idata.get('type', '')
-                    if itype:
-                        self._learned_scores[itype] = float(
-                            idata.get('effectiveness_score', 0.70)
-                        )
+                self._learned_scores = {k: float(v) for k, v in data.items()}
             except Exception as e:
-                print(f"[Recommender] Could not load interventions.json: {e}")
+                print(f"[Recommender] Could not load intervention_effectiveness.json: {e}")
 
     def _save_learned(self):
         path = self.data_dir / 'intervention_effectiveness.json'

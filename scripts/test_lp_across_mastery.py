@@ -80,13 +80,6 @@ def run_profile(name, mastery, nestor, gen):
         'knowledge_state': {'overall_mastery': sum(mastery.values())/max(len(mastery),1),
                             'mastery_history': [sum(mastery.values())/max(len(mastery),1)]},
         'interests': [],
-        'psychological_graph': {
-            'attribution': 'internal_stable', 'self_efficacy': 'moderate',
-            'srl_phase': 'performance',
-            'imposter_flag': False,
-            'high_anxiety': p['neuroticism'] > 0.55,
-            'flow_state': False,
-        },
         'progression_graph': {'stage': 2, 'zpd_status': 'within',
                               'scaffold_level': 4, 'has_attempt': True},
         'content_channel': {'encoding_strength': 'surface',
@@ -96,27 +89,9 @@ def run_profile(name, mastery, nestor, gen):
             'rationale': 'Inferred from prompt.'},
     }
     analysis = {
-        'emotion': 'confused', 'frustration_level': 0.4,
         'engagement_score': 0.6,
         'bkt_update': {'p_learned_before': 0.50, 'p_learned_after': 0.55},
-        'cse_kg': {'concept': 'recursion',
-                   'prerequisites': ['functions', 'base case', 'stack frames'],
-                   'related_concepts': ['iteration', 'divide and conquer'],
-                   'definition': 'A function that calls itself with a smaller '
-                                 'input until a base case is reached.'},
-        'pedagogical_kg': {
-            'progression': 'function call -> base case -> recursive step',
-            'misconceptions': ['forgetting base case causes infinite recursion',
-                               'base case for factorial is n==0, not n==1'],
-            'cognitive_load': 'high',
-            'interventions': ['worked example'],
-            'learning_path': lp,
-        },
-        'coke': {'cognitive_state': 'confused',
-                 'mental_activity': 'reasoning about recursion',
-                 'behavioral_response': 'continues engagement',
-                 'confidence': 0.55,
-                 'cognitive_chain': {'description': 'mild confusion, engaged'}},
+        'learning_path': lp,
     }
 
     t0 = time.time()

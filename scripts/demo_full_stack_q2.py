@@ -3,7 +3,7 @@ Full-stack demo #2 — different question, different student, different signals.
 
 New scenario:
   Question  : Java string comparison bug (== vs .equals())
-  Personality tone: methodical, curious — not anxious
+  Personality tone: methodical, curious
   Action seq: shorter, fewer errors — student iterates quickly
   Mastery   : advanced beginner — has null_pointer mastered, target is
               string_equality which is the actual Week-2 concept here
@@ -18,9 +18,7 @@ import torch
 
 # Reuse every helper from the canonical demo
 sys.path.insert(0, str(Path(__file__).parent))
-from demo_full_stack import (
-    load_emotion_mlp, rnn_analyze, run_hvsae, EMOTION_CLASSES,
-)
+from demo_full_stack import rnn_analyze, run_hvsae
 from src.models.nestor.nestor_bayesian_profiler import NestorBayesianProfiler
 from src.models.behavioral import BehavioralHMM
 from src.student_modeling.bayesian_knowledge_tracing import BayesianKnowledgeTracer
@@ -97,29 +95,18 @@ def run():
     h = hmm.analyze_session(ACTION_SEQUENCE)
     print(f"\n[3] HMM state : {h['final_state']}  (conf {h['final_confidence']:.2f})")
 
-    # 4. Emotion MLP
-    emo_model, emo_classes = load_emotion_mlp()
-    feats = hmm._extract_features(ACTION_SEQUENCE)
-    last = torch.from_numpy(feats[-1]).float().unsqueeze(0)
-    with torch.no_grad():
-        probs = torch.softmax(emo_model(last), dim=1).squeeze(0).tolist()
-    emo_label = emo_classes[int(np.argmax(probs))]
-    print(f"\n[4] EMOTION MLP : {emo_label}  ({max(probs)*100:.0f}%)")
-    print(f"    dist: " + "  ".join(
-        f"{c}:{probs[i]*100:.0f}%" for i, c in enumerate(emo_classes)))
-
-    # 5a. HVSAE
+    # 4. HVSAE
     ckpt = torch.load("checkpoints/best.pt", weights_only=False, map_location='cpu')
     hv = run_hvsae(STUDENT_CODE, STUDENT_MESSAGE, ACTION_SEQUENCE, ckpt)
-    print(f"\n[5a] HVSAE : latent {tuple(hv['latent'].shape)}  "
+    print(f"\n[4] HVSAE : latent {tuple(hv['latent'].shape)}  "
           f"gate code={hv['attention'][0]:.2f} text={hv['attention'][1]:.2f} action={hv['attention'][2]:.2f}")
     top = torch.topk(torch.sigmoid(hv['misconception_logits']), k=3)
     print(f"    top-3 misconception heads: "
           + "  ".join(f"#{int(i)}:{v.item():.2f}" for i, v in zip(top.indices, top.values)))
 
-    # 5b. RNN
+    # 5. RNN
     r = rnn_analyze(ACTION_SEQUENCE, TIME_DELTAS, ckpt)
-    print(f"\n[5b] RNN   : emotion={r['emotion']}  eff={r['effectiveness']:.2f}  prod={r['productivity']}")
+    print(f"\n[5] RNN   : eff={r['effectiveness']:.2f}  prod={r['productivity']}")
 
     # 6. BKT
     bkt = BayesianKnowledgeTracer()
@@ -142,9 +129,7 @@ def run():
     rl_analysis = {
         'encoding': {'latent': hv['latent']},
         'cognitive': {'knowledge_gaps': [{'mastery': post[TARGET_CONCEPT]}]},
-        'behavioral': {'emotional_state':
-            emo_label if emo_label in ['frustrated','engaged','confused'] else 'confused'},
-        'psychological': {'personality': p},
+        'personality': p,
         'history': {'interventions': []},
     }
     rl_session = {'time_stuck': sum(TIME_DELTAS), 'action_sequence': ACTION_SEQUENCE}
@@ -163,13 +148,13 @@ def run():
         'visual_explanation': 'worked_example',
         'worked_example':     'worked_example',
         'conceptual_deepdive':'validate_and_advance',
-        'motivational_support':'attribution_reframe',
+        'motivational_support':'reduce_challenge',
         'interactive_exercise':'transfer_task',
         'guided_practice':    'worked_example',
         'challenge_problem':  'increase_challenge',
         'spaced_review':      'validate_and_advance',
         'error_analysis':     'worked_example',
-        'peer_comparison':    'mastery_surface',
+        'peer_comparison':    'validate_and_advance',
     }
     gen_interv = rl_to_gen.get(rl_action, 'worked_example')
 
@@ -181,12 +166,6 @@ def run():
             'mastery_history': [PRIOR_MASTERY[TARGET_CONCEPT], post[TARGET_CONCEPT]],
         },
         'interests': [],
-        'psychological_graph': {
-            'attribution': 'internal_unstable', 'self_efficacy': 'growth',
-            'srl_phase': 'forethought', 'imposter_flag': False,
-            'high_anxiety': p['neuroticism'] > 0.55,
-            'flow_state': h['final_state'] in ['making_progress','understanding'],
-        },
         'progression_graph': {'stage': 3, 'zpd_status': 'within',
                               'scaffold_level': 3, 'has_attempt': True},
         'content_channel': {'encoding_strength': 'partial',
@@ -194,47 +173,14 @@ def run():
         'recommended_intervention': {
             'type': gen_interv,
             'rationale': f"RL '{rl_action}' -> generator '{gen_interv}', "
-                         f"HMM={h['final_state']}, emotion MLP={emo_label}",
+                         f"HMM={h['final_state']}",
         },
     }
     analysis = {
-        'emotion': emo_label, 'frustration_level': float(p['neuroticism']),
         'engagement_score': 0.7,
         'bkt_update': {'p_learned_before': PRIOR_MASTERY[TARGET_CONCEPT],
                        'p_learned_after':  post[TARGET_CONCEPT]},
-        'cse_kg': {
-            'concept': 'string_equality',
-            'prerequisites': ['references', 'object vs primitive', 'intern pool'],
-            'related_concepts': ['.equals()', 'String.intern()', 'hashCode/equals contract'],
-            'definition': 'In Java, == compares reference identity for '
-                          'objects; .equals() compares logical content. '
-                          'String literals may share references via the '
-                          'intern pool, which makes == appear to work by '
-                          'accident, but Scanner.nextLine() returns a fresh '
-                          'String object so == fails.',
-        },
-        'pedagogical_kg': {
-            'progression': 'value vs reference -> == for refs -> .equals() for content',
-            'misconceptions': [
-                '== compares string content (it does not)',
-                'since literals compare with ==, all strings do',
-                'trim() fixes comparison (it does not — still returns a new object)',
-            ],
-            'cognitive_load': 'medium',
-            'interventions': ['worked example', 'heap trace'],
-            'learning_path': lp,
-        },
-        'coke': {
-            'cognitive_state': emo_label,
-            'mental_activity': 'debugging equality check',
-            'behavioral_response': 'persistent, non-anxious',
-            'confidence': float(max(probs)),
-            'cognitive_chain': {
-                'description': f"HMM={h['final_state']}, Emotion MLP={emo_label}, "
-                               f"HVSAE gate=action-weighted, RL picks {rl_action}. "
-                               f"Student tried trim/print — is genuinely exploring."
-            },
-        },
+        'learning_path': lp,
     }
 
     # 9. Generation
@@ -265,9 +211,8 @@ def run():
           f"{n_out['learning_styles']['active_reflective']} style, "
           f"interv={n_out['intervention_preference']}")
     print(f"  HMM              : {h['final_state']}")
-    print(f"  EMOTION MLP      : {emo_label}")
     print(f"  HVSAE            : action-weighted fusion (gate={hv['attention'][2]:.2f})")
-    print(f"  RNN              : emotion={r['emotion']} eff={r['effectiveness']:.2f}")
+    print(f"  RNN              : eff={r['effectiveness']:.2f}")
     print(f"  BKT              : {TARGET_CONCEPT} {PRIOR_MASTERY[TARGET_CONCEPT]:.2f} -> {post[TARGET_CONCEPT]:.2f}")
     print(f"  LP               : on_track={lp['on_track']} (target reached)")
     print(f"  RL               : {rl_action}")

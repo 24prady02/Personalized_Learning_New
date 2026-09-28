@@ -1,8 +1,10 @@
 """
 setup_java_knowledge.py
 =======================
-Fix 9+10: Populates the Pedagogical KG with Java CSCI 1301 specific data
-for all 20 concepts. Run this ONCE before starting the system.
+Fix 9+10: Writes the Java CSCI 1301 curriculum tables for all 20 concepts
+(misconceptions, learning progressions, cognitive loads, interventions,
+LP rubric) to data/java_curriculum/. LPIndex reads learning_progressions.json
+from there. Run this ONCE before starting the system.
 
 Replaces the four Python-oriented default misconceptions/progressions with
 real Java curriculum content grounded in your 20-concept bank.
@@ -14,7 +16,7 @@ Usage:
 import json
 from pathlib import Path
 
-DATA_DIR = Path("data/pedagogical_kg")
+DATA_DIR = Path("data/java_curriculum")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -524,7 +526,7 @@ def save_json(path: Path, data):
 
 def main():
     print("=" * 60)
-    print("Setting up Java CSCI 1301 Pedagogical Knowledge Graph")
+    print("Setting up Java CSCI 1301 curriculum data")
     print("=" * 60)
 
     # Save misconceptions
@@ -562,7 +564,7 @@ def main():
         }
     save_json(DATA_DIR / "lp_rubric.json", lp_rubric)
 
-    print("\n[DONE] Java Pedagogical KG ready.")
+    print("\n[DONE] Java curriculum data ready.")
     print(f"  Misconceptions:      {len(JAVA_MISCONCEPTIONS)}")
     print(f"  Progressions:        {len(JAVA_PROGRESSIONS)}")
     print(f"  Cognitive loads:     {len(JAVA_COGNITIVE_LOADS)}")

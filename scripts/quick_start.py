@@ -30,11 +30,10 @@ def main():
     """)
     
     steps = [
-        ("python scripts/download_models.py", "Step 1/5: Downloading Pre-trained Models"),
-        ("python scripts/download_datasets.py", "Step 2/5: Downloading Datasets"),
-        ("python scripts/init_knowledge_graph.py", "Step 3/5: Initializing CSE-KG Connection"),
-        ("python scripts/verify_datasets.py", "Step 4/5: Verifying Datasets"),
-        ("python scripts/process_datasets.py", "Step 5/5: Processing Datasets")
+        ("python scripts/download_models.py", "Step 1/4: Downloading Pre-trained Models"),
+        ("python scripts/download_datasets.py", "Step 2/4: Downloading Datasets"),
+        ("python scripts/verify_datasets.py", "Step 3/4: Verifying Datasets"),
+        ("python scripts/process_datasets.py", "Step 4/4: Processing Datasets")
     ]
     
     success = []

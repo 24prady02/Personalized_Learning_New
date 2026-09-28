@@ -7,6 +7,10 @@ Layers:
   Part 2: Decision Table — InterventionSelector rule coverage + gate order.
   Part 3: State Transition — LP/plateau transitions.
 
+Emotion and the psychological channel (attribution, self-efficacy,
+imposter, anxiety) are no longer inputs: B.8, DT.1-DT.6, DT.8 and the
+gate-order rows DT.G1-DT.G3 tested only those gates and were removed.
+
 Outputs:
   output/full_test_suite_<ts>/results.json
   output/full_test_suite_<ts>/REPORT.md
@@ -273,9 +277,9 @@ def b5():
     rc = RewardCalculator(CFG)
     def reward_at(mastery):
         return rc.calculate_reward(
-            {"emotion": "neutral"}, 0,
+            {}, 0,
             {"mastery_before": mastery, "mastery_after": mastery,
-             "engagement_score": 0.5, "emotion_after": "neutral",
+             "engagement_score": 0.5,
              "delta_lp": 0, "lp_level_before": "L2", "lp_level_after": "L2",
              "zpd_status": "at_boundary"})
     r_39 = reward_at(0.39)
@@ -301,9 +305,9 @@ def b6():
     rc = RewardCalculator(CFG)
     def reward_at(mastery, eng):
         return rc.calculate_reward(
-            {"emotion": "neutral"}, 0,
+            {}, 0,
             {"mastery_before": mastery, "mastery_after": mastery,
-             "engagement_score": eng, "emotion_after": "neutral",
+             "engagement_score": eng,
              "delta_lp": 0, "lp_level_before": "L2", "lp_level_after": "L2",
              "zpd_status": "at_boundary"})
     # In-flow + high eng vs in-flow + low eng (bonus only fires when eng > 0.65)
@@ -334,9 +338,9 @@ def b7():
     rc = RewardCalculator(CFG)
     def lp_reward_for(dlp):
         return rc.calculate_reward(
-            {"emotion": "neutral"}, 0,
+            {}, 0,
             {"mastery_before": 0.5, "mastery_after": 0.5,
-             "engagement_score": 0.5, "emotion_after": "neutral",
+             "engagement_score": 0.5,
              "delta_lp": dlp, "lp_level_before": "L3",
              "lp_level_after":  "L1" if dlp <= -2 else "L2",
              "zpd_status": "at_boundary"})
@@ -355,22 +359,6 @@ def b7():
             "reward_dlp_minus2": round(r_minus2, 4),
             "reward_dlp_minus3": round(r_minus3, 4),
             "floor_active_at_minus2_and_minus3": ok}
-
-
-# ── B.8 — external attribution alone (no imposter) → reframe ───────────
-def b8():
-    out = SEL.select(
-        cognitive={"encoding_strength": "partial"},
-        progression={"stage": 2},
-        psychological={"attribution": "external", "self_efficacy": "neutral",
-                       "imposter_signal": False, "high_anxiety": False},
-        bkt_mastery=0.4,
-    )
-    ok = out.get("type") == "attribution_reframe" and out.get("gate_triggered") is True
-    return {"_outcome": "PASS" if ok else "FAIL",
-            "intervention": out.get("type"),
-            "gate_triggered": out.get("gate_triggered"),
-            "rationale": out.get("rationale")}
 
 
 # ── B.9 — forecast at exactly n=3 rows ─────────────────────────────────
@@ -495,9 +483,9 @@ def b14():
     def total_for(dlp):
         # Isolate lp_gain by zeroing other components
         return rc.calculate_reward(
-            {"emotion": "neutral"}, 0,
+            {}, 0,
             {"mastery_before": 0.5, "mastery_after": 0.5,
-             "engagement_score": 0.5, "emotion_after": "neutral",
+             "engagement_score": 0.5,
              "delta_lp": dlp, "lp_level_before": "L1",
              "lp_level_after": ["L1","L2","L3","L4"][min(dlp,3)] if dlp>=0 else "L1",
              "zpd_status": "at_boundary"})
@@ -520,7 +508,6 @@ BVA = [
     ("BVA","B.5",  "ZPD window edges 0.40 / 0.75",             "in-zpd reward > out-of-zpd", b5),
     ("BVA","B.6",  "flow band edges 0.42 / 0.72",              "in-flow + high-eng > others", b6),
     ("BVA","B.7",  "regression penalty floor at delta_lp=-2",  "reward(-2)≈reward(-3)",    b7),
-    ("BVA","B.8",  "external attribution alone → reframe",    "attribution_reframe",       b8),
     ("BVA","B.9",  "forecast at exactly n=3 rows",             "non-None at n=3, None at n=2", b9),
     ("BVA","B.10", "DINA cold-start prior 0.10 floor",         "formula matches; floor dead code", b10),
     ("BVA","B.11", "encoding deep_s=2 + cross_s=0 → solid",    "AND-clause documented",     b11),
@@ -533,29 +520,21 @@ BVA = [
 # ════════════════════════════════════════════════════════════════════════
 #               PART 2 — Decision Table: InterventionSelector
 # ════════════════════════════════════════════════════════════════════════
-# Branches in order from student_state_tracker.py:401-467:
-#   1. GATE 1: attr in {fixed,external} OR imposter        → attribution_reframe
-#   2. GATE 2: stage=1 AND (anxiety OR eff=low)            → reduce_challenge
-#   3. enc ∈ {solid,deep} AND eff=low                       → mastery_surface
-#   4. enc ∈ {solid,deep} AND stage ∈ {4a,4b,5} AND eff=growth AND attr=adaptive → validate_and_advance
-#   5. eff=growth AND stage ∈ {4a,4b,5}                     → increase_challenge
-#   6. enc=surface AND stage ∈ {1,2a,2b}                    → worked_example
-#   7. enc=partial AND stage ∈ {2b,3}                       → socratic_prompt
-#   8. enc=deep AND stage ∈ {4a,4b,5}                       → transfer_task
-#   9. enc ∈ {solid,deep} AND stage=3 AND eff ∈ {growth,neutral} → increase_challenge
-#   10. default                                              → worked_example
-
-def _psych(**kw):
-    base = {"attribution":"adaptive", "self_efficacy":"neutral",
-             "imposter_signal":False, "high_anxiety":False}
-    base.update(kw); return base
+# Branches in order from student_state_tracker.py InterventionSelector.select
+# (first match wins; psychological gates removed):
+#   1. enc=deep AND stage ∈ {4a,4b,5}                       → transfer_task
+#   2. enc=solid AND stage ∈ {4a,4b,5}                      → validate_and_advance
+#   3. enc=surface AND stage ∈ {1,2a,2b}                    → worked_example
+#   4. enc=partial AND stage ∈ {2b,3}                       → socratic_prompt
+#   5. enc ∈ {solid,deep} AND stage=3                       → increase_challenge
+#   6. default                                              → worked_example
 
 def _cog(enc): return {"encoding_strength": enc}
 def _prog(stage): return {"stage": stage}
 
 
-def _dt_test(cog, prog, psych, expected):
-    out = SEL.select(cog, prog, psych, bkt_mastery=0.5)
+def _dt_test(cog, prog, expected):
+    out = SEL.select(cog, prog, bkt_mastery=0.5)
     actual = out.get("type")
     return {"_outcome": "PASS" if actual == expected else "FAIL",
             "intervention": actual, "expected": expected,
@@ -565,62 +544,21 @@ def _dt_test(cog, prog, psych, expected):
 
 DT_ROWS = [
     # ── Branch coverage (each rule exercised at least once)
-    ("DT","DT.1",  "attr=fixed alone → reframe",          "attribution_reframe",
-        lambda: _dt_test(_cog("partial"), _prog(2),
-                          _psych(attribution="fixed"), "attribution_reframe")),
-    ("DT","DT.2",  "imposter alone → reframe",            "attribution_reframe",
-        lambda: _dt_test(_cog("partial"), _prog(2),
-                          _psych(imposter_signal=True), "attribution_reframe")),
-    ("DT","DT.3",  "attr=external alone → reframe",       "attribution_reframe",
-        lambda: _dt_test(_cog("partial"), _prog(2),
-                          _psych(attribution="external"), "attribution_reframe")),
-    ("DT","DT.4",  "stage=1 + anxiety → reduce_challenge","reduce_challenge",
-        lambda: _dt_test(_cog("surface"), _prog(1),
-                          _psych(high_anxiety=True), "reduce_challenge")),
-    ("DT","DT.5",  "stage=1 + eff=low → reduce_challenge","reduce_challenge",
-        lambda: _dt_test(_cog("surface"), _prog(1),
-                          _psych(self_efficacy="low"), "reduce_challenge")),
-    ("DT","DT.6",  "solid + eff=low → mastery_surface",   "mastery_surface",
-        lambda: _dt_test(_cog("solid"), _prog(3),
-                          _psych(self_efficacy="low"), "mastery_surface")),
-    ("DT","DT.7",  "solid + stage4a + growth + adaptive → validate_and_advance",
+    ("DT","DT.7",  "solid + stage4a → validate_and_advance",
         "validate_and_advance",
-        lambda: _dt_test(_cog("solid"), _prog("4a"),
-                          _psych(self_efficacy="growth", attribution="adaptive"),
-                          "validate_and_advance")),
-    ("DT","DT.8",  "growth + stage4a (partial enc) → increase_challenge",
-        "increase_challenge",
-        lambda: _dt_test(_cog("partial"), _prog("4a"),
-                          _psych(self_efficacy="growth"), "increase_challenge")),
+        lambda: _dt_test(_cog("solid"), _prog("4a"), "validate_and_advance")),
     ("DT","DT.9",  "surface + stage1 → worked_example",   "worked_example",
-        lambda: _dt_test(_cog("surface"), _prog(1), _psych(), "worked_example")),
+        lambda: _dt_test(_cog("surface"), _prog(1), "worked_example")),
     ("DT","DT.10", "partial + stage2b → socratic_prompt", "socratic_prompt",
-        lambda: _dt_test(_cog("partial"), _prog("2b"), _psych(), "socratic_prompt")),
+        lambda: _dt_test(_cog("partial"), _prog("2b"), "socratic_prompt")),
     ("DT","DT.11", "deep + stage4b → transfer_task",      "transfer_task",
-        lambda: _dt_test(_cog("deep"), _prog("4b"),
-                          _psych(self_efficacy="neutral"), "transfer_task")),
-    ("DT","DT.12", "solid + stage3 + growth → increase_challenge",
+        lambda: _dt_test(_cog("deep"), _prog("4b"), "transfer_task")),
+    ("DT","DT.12", "solid + stage3 → increase_challenge",
         "increase_challenge",
-        lambda: _dt_test(_cog("solid"), _prog(3),
-                          _psych(self_efficacy="growth"), "increase_challenge")),
-    ("DT","DT.13", "default fall-through (surface+stage3+neutral) → worked_example",
+        lambda: _dt_test(_cog("solid"), _prog(3), "increase_challenge")),
+    ("DT","DT.13", "default fall-through (surface+stage3) → worked_example",
         "worked_example",
-        lambda: _dt_test(_cog("surface"), _prog(3), _psych(), "worked_example")),
-    # ── Gate-order tests (multiple rules could fire; verify highest-priority wins)
-    ("DT","DT.G1", "fixed attr + stage1 + anxiety → reframe (GATE 1 beats GATE 2)",
-        "attribution_reframe",
-        lambda: _dt_test(_cog("surface"), _prog(1),
-                          _psych(attribution="fixed", high_anxiety=True),
-                          "attribution_reframe")),
-    ("DT","DT.G2", "stage1 + eff=low + solid → reduce_challenge (GATE 2 beats mastery_surface)",
-        "reduce_challenge",
-        lambda: _dt_test(_cog("solid"), _prog(1),
-                          _psych(self_efficacy="low"), "reduce_challenge")),
-    ("DT","DT.G3", "solid + stage4a + growth + FIXED attr → reframe (GATE 1 beats validate)",
-        "attribution_reframe",
-        lambda: _dt_test(_cog("solid"), _prog("4a"),
-                          _psych(self_efficacy="growth", attribution="fixed"),
-                          "attribution_reframe")),
+        lambda: _dt_test(_cog("surface"), _prog(3), "worked_example")),
 ]
 
 

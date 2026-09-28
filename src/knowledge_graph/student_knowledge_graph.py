@@ -1,96 +1,60 @@
 """
-student_knowledge_graph.py — per-student knowledge graph grounded in CSO v3.5.
+student_knowledge_graph.py — per-student knowledge graph grounded in the
+Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json).
 
-This is the central data structure CPAL now revolves around. Each student's
-graph is a subgraph of CSO v3.5 limited to the concepts that student has
-touched. Each node carries everything CPAL has inferred about that student's
-relationship to that concept:
+This is the central data structure CPAL revolves around. Each student's graph
+is the part of the Chapter-1 graph that student has touched. Each node carries
+everything CPAL has inferred about that student's relationship to that concept:
 
-    LP level             (L1 / L2 / L3 / L4)            ← LPDiagnostician
-    diagnostic_confidence (0.0 - 1.0)                    ← LPDiagnostician
-    DINA mastery         (0.0 - 1.0)                     ← DINAModel
-    wrong_models         (list of matched WM IDs)        ← match_wrong_model
+    LP level             (L0 / L1 / L2 / L3 / L4)       <- LPDiagnostician
+    diagnostic_confidence (0.0 - 1.0)                    <- LPDiagnostician
+    DINA mastery         (0.0 - 1.0)                     <- DINAModel
+    wrong_models         (list of matched WM IDs)        <- match_wrong_model
     misconceptions       (free-text notes per turn)
     last_seen            (timestamp)
     turn_count           (int)
 
-Edges are inherited from CSO:
-    prereq    (CSO superTopicOf / contributedBy)
-    related   (CSO relatedEquivalent)
-    sub_topic (CSO inverse superTopicOf)
+Edges are inherited from the Chapter-1 graph:
+    prereq    (the concept needs this one first)
+    leads_to  (this concept is a prerequisite of that one)
+    parallel  (sibling construct, e.g. print / println)
 
-The graph grows incrementally — every time the student submits text, the
-pipeline calls `update_from_diagnosis(diag, dina_mastery)` to add or update
-the touched concept's node, and `expand_neighbours()` to bring in 1-hop CSO
-neighbours so the teacher / parent view can see what's connected to what
-the student is currently learning.
+The graph grows incrementally: after every student turn the pipeline calls
+`update_from_diagnosis(diag, mastery)` to add or update the touched concept's
+node, and `expand_neighbours()` to bring in its 1-hop Chapter-1 neighbours so
+the teacher view can see what surrounds the concept being learned.
+
+Concepts outside Chapter 1 (e.g. null_pointer) are kept as standalone nodes
+under their own id, with no neighbours.
 
 Persisted to SQLite via db_store.upsert_student_graph().
 """
 from __future__ import annotations
 
-import json
 import time
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field, asdict, fields
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from .cso_traversal import get_cso, CSOTraversal
+from .chapter1_graph import Chapter1Graph, get_chapter1_graph
 
-
-# Map CPAL's internal Java concept IDs to CSO slugs so the student graph is
-# anchored in the ontology. (CPAL concepts are coarse; CSO equivalents may
-# be either broader or narrower — pick whichever maps cleanly.)
-# CPAL concept -> CSO slug. All targets verified to exist in CSO v3.5
-# (the slugs that didn't exist were replaced by their nearest broader topic
-# that does).
-CPAL_TO_CSO = {
-    "type_mismatch":          "computer_programming_languages",
-    "infinite_loop":          "computer_programming",
-    "null_pointer":           "computer_programming",
-    "string_equality":        "string_matching",
-    "variable_scope":         "computer_programming_languages",
-    "assignment_vs_compare":  "computer_programming_languages",
-    "integer_division":       "computer_arithmetic",
-    "scanner_buffer":         "user_interfaces",
-    "array_index":            "computer_programming",
-    "missing_return":         "computer_programming_languages",
-    "array_not_allocated":    "memory_management",
-    "boolean_operators":      "computer_programming_languages",
-    "sentinel_loop":          "computer_programming",
-    "unreachable_code":       "computer_programming",
-    "string_immutability":    "object_oriented_programming",
-    "no_default_constructor": "object_oriented_programming",
-    "static_vs_instance":     "object_oriented_programming",
-    "foreach_no_modify":      "computer_programming",
-    "overloading":            "object_oriented_programming",
-    "generics_primitives":    "computer_programming_languages",
-    # Chapter 1.1 (Princeton §1.1 Hello World) specific
-    "hello_world":            "computer_programming",
-    "command_line_args":      "user_interfaces",
-    "main_method":            "object_oriented_programming",
-    "println":                "user_interfaces",
-    "compile_vs_runtime":     "compilers",
-    "syntax_errors":          "compilers",
-}
-
-# Fallback used when neither CPAL_TO_CSO nor the raw concept name resolves
-# to a CSO node — anchors orphan concepts at the broad CS-programming level
-# so the student graph still grows instead of stalling.
-_FALLBACK_CSO_SLUG = "computer_programming"
+LP_LEVELS = ("L0", "L1", "L2", "L3", "L4")
 
 
 @dataclass
 class GraphNode:
-    """One concept the student has touched, grounded in CSO. Carries every
-    per-turn CPAL analysis (LP, mastery, WM, 3-channel state, intervention,
+    """One concept the student has touched, grounded in the Chapter-1 graph. Carries every
+    per-turn CPAL analysis (LP, mastery, WM, channel state, intervention,
     RL reward, probe, fact-check) so the student knowledge graph is the
     single source of truth the wireframe / teacher / parent views read from.
     """
     # Identity
     cpal_concept: str                     # CPAL-internal Java concept id
-    cso_slug: str                         # canonical CSO topic slug
+    concept_id: str                       # Chapter-1 concept id (or the raw id if outside Chapter 1)
+    label: str = ""                       # short display label from the Chapter-1 graph
+    chapter: str = ""                     # Chapter-1 chapter id ("" if outside Chapter 1)
+    in_chapter1: bool = False
     # LPDiagnostician outputs
-    lp_level: str = "L1"                  # current LP level (L1-L4)
+    lp_level: str = "L1"                  # current LP level (L0-L4)
     diagnostic_confidence: float = 0.0    # last diagnostic_confidence
     # DINA mastery
     mastery: float = 0.30                 # DINA probability of mastery
@@ -99,10 +63,10 @@ class GraphNode:
     wrong_models: List[str] = field(default_factory=list)
     wrong_models_refuted: List[str] = field(default_factory=list)
     misconception_notes: List[str] = field(default_factory=list)
-    # Three-channel state (StudentStateTracker)
+    # Channel state (StudentStateTracker). The psychological/emotion
+    # channel was removed; old payloads carrying it are ignored on load.
     cognitive: Dict[str, Any] = field(default_factory=dict)       # encoding_strength, dual_coding, ...
     progression: Dict[str, Any] = field(default_factory=dict)     # stage, zpd_position, scaffold_level
-    psychological: Dict[str, Any] = field(default_factory=dict)   # attribution, imposter, anxiety, efficacy
     # Intervention chosen by InterventionSelector
     intervention: Dict[str, Any] = field(default_factory=dict)    # {type, rationale, gate_triggered}
     # RL reward breakdown (RewardCalculator)
@@ -123,7 +87,7 @@ class GraphNode:
     last_seen: float = field(default_factory=time.time)
     turn_count: int = 0
     lp_history: List[str] = field(default_factory=list)
-    is_neighbour_only: bool = False       # True if pulled in via CSO traversal but never directly engaged
+    is_neighbour_only: bool = False       # True if pulled in as a graph neighbour but never directly engaged
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -131,10 +95,10 @@ class GraphNode:
 
 @dataclass
 class GraphEdge:
-    """Typed edge between two concepts (always CSO-derived)."""
-    src: str            # CSO slug
-    dst: str            # CSO slug
-    rel: str            # 'prereq' | 'related' | 'sub_topic' | 'contributes_to'
+    """Typed edge between two concepts (always Chapter-1-graph-derived)."""
+    src: str            # concept id
+    dst: str            # concept id
+    rel: str            # 'prereq' | 'leads_to' | 'parallel'
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -156,38 +120,39 @@ class StudentKnowledgeGraph:
     """
 
     def __init__(self, student_id: str,
-                 cso: Optional[CSOTraversal] = None):
+                 graph: Optional[Chapter1Graph] = None):
         self.student_id = student_id
-        self.cso = cso or get_cso()
-        self.nodes: Dict[str, GraphNode] = {}     # keyed by CSO slug
+        self.graph = graph or get_chapter1_graph()
+        self.nodes: Dict[str, GraphNode] = {}     # keyed by concept_id
         self.edges: Set[Tuple[str, str, str]] = set()
         self.created_at = time.time()
         self.updated_at = self.created_at
 
     # ── Node management ────────────────────────────────────────────────────
 
-    def _resolve_slug(self, cpal_concept: str) -> str:
-        """Map CPAL concept -> CSO slug, with three fallbacks:
-            1. explicit CPAL_TO_CSO mapping
-            2. the raw concept name (if it happens to exist in CSO)
-            3. a broad CS-programming anchor so the graph still grows
-        Then run CSO's canonical() to follow any aliases.
-        """
-        slug = CPAL_TO_CSO.get(cpal_concept, cpal_concept)
-        if not self.cso.exists(slug):
-            slug = _FALLBACK_CSO_SLUG
-        return self.cso.canonical(slug)
+    def _resolve(self, cpal_concept: str) -> str:
+        """Map a CPAL concept id to its Chapter-1 concept id (or keep it as-is
+        when the concept is outside Chapter 1)."""
+        return self.graph.canonical(cpal_concept)
+
+    def _new_node(self, concept_id: str, cpal_concept: str,
+                  is_neighbour: bool) -> GraphNode:
+        info = self.graph.concept_info(concept_id) or {}
+        return GraphNode(
+            cpal_concept=cpal_concept,
+            concept_id=concept_id,
+            label=info.get("label", concept_id),
+            chapter=info.get("chapter", ""),
+            in_chapter1=bool(info),
+            is_neighbour_only=is_neighbour,
+        )
 
     def get_or_create_node(self, cpal_concept: str,
                            is_neighbour: bool = False) -> GraphNode:
-        slug = self._resolve_slug(cpal_concept)
-        if slug not in self.nodes:
-            self.nodes[slug] = GraphNode(
-                cpal_concept=cpal_concept,
-                cso_slug=slug,
-                is_neighbour_only=is_neighbour,
-            )
-        return self.nodes[slug]
+        cid = self._resolve(cpal_concept)
+        if cid not in self.nodes:
+            self.nodes[cid] = self._new_node(cid, cpal_concept, is_neighbour)
+        return self.nodes[cid]
 
     def update_from_diagnosis(self, diag: Any,
                               mastery: Optional[float] = None,
@@ -247,7 +212,6 @@ class StudentKnowledgeGraph:
         if three_channel:
             node.cognitive.update(three_channel.get("cognitive") or {})
             node.progression.update(three_channel.get("progression") or {})
-            node.psychological.update(three_channel.get("psychological") or {})
         if intervention:
             node.intervention = dict(intervention)
         if reward:
@@ -263,43 +227,23 @@ class StudentKnowledgeGraph:
         return node
 
     def expand_neighbours(self, cpal_concept: str, depth: int = 1) -> int:
-        """Pull in CSO neighbours of the touched concept so the graph shows
-        related areas the student hasn't yet engaged with. Added as
-        is_neighbour_only=True nodes. Returns count of new nodes added.
+        """Pull in the concept's Chapter-1 neighbours (prerequisites, the
+        concepts it leads to, parallel constructs) as is_neighbour_only=True
+        nodes. Returns the count of new nodes added.
         """
-        center = self._resolve_slug(cpal_concept)
-        if not self.cso.exists(center):
+        center = self._resolve(cpal_concept)
+        if not self.graph.exists(center):
             return 0
         added = 0
-        neighbours = self.cso.get_neighbours(center)
-
-        def _add_edge(src: str, dst: str, rel: str) -> None:
-            self.edges.add((src, dst, rel))
-
-        # parents -> prereq edges
-        for p in neighbours["parents"][:5]:
-            if p not in self.nodes:
-                self.nodes[p] = GraphNode(cpal_concept=p, cso_slug=p, is_neighbour_only=True)
-                added += 1
-            _add_edge(center, p, "prereq")
-        # children -> sub_topic edges
-        for c in neighbours["children"][:5]:
-            if c not in self.nodes:
-                self.nodes[c] = GraphNode(cpal_concept=c, cso_slug=c, is_neighbour_only=True)
-                added += 1
-            _add_edge(center, c, "sub_topic")
-        # related -> related edges
-        for r in neighbours["related"][:5]:
-            if r not in self.nodes:
-                self.nodes[r] = GraphNode(cpal_concept=r, cso_slug=r, is_neighbour_only=True)
-                added += 1
-            _add_edge(center, r, "related")
-        # contributes_to -> prereq (the targets of contribution help with this)
-        for t in neighbours["contributes_to"][:5]:
-            if t not in self.nodes:
-                self.nodes[t] = GraphNode(cpal_concept=t, cso_slug=t, is_neighbour_only=True)
-                added += 1
-            _add_edge(center, t, "contributes_to")
+        neighbours = self.graph.get_neighbours(center)
+        for rel, key in (("prereq", "prerequisites"),
+                         ("leads_to", "leads_to"),
+                         ("parallel", "parallel")):
+            for n in neighbours[key][:5]:
+                if n not in self.nodes:
+                    self.nodes[n] = self._new_node(n, n, is_neighbour=True)
+                    added += 1
+                self.edges.add((center, n, rel))
         self.updated_at = time.time()
         return added
 
@@ -318,7 +262,7 @@ class StudentKnowledgeGraph:
         for n in self.engaged_nodes():
             for wm in n.wrong_models:
                 if wm not in n.wrong_models_refuted:
-                    out.append((wm, n.cso_slug))
+                    out.append((wm, n.concept_id))
         return out
 
     def average_mastery(self) -> float:
@@ -328,7 +272,7 @@ class StudentKnowledgeGraph:
         return sum(n.mastery for n in engaged) / len(engaged)
 
     def lp_distribution(self) -> Dict[str, int]:
-        out = {"L1": 0, "L2": 0, "L3": 0, "L4": 0}
+        out = {lv: 0 for lv in LP_LEVELS}
         for n in self.engaged_nodes():
             if n.lp_level in out:
                 out[n.lp_level] += 1
@@ -353,13 +297,17 @@ class StudentKnowledgeGraph:
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any],
-                  cso: Optional[CSOTraversal] = None) -> "StudentKnowledgeGraph":
-        sg = cls(student_id=d.get("student_id", "unknown"), cso=cso)
+                  graph: Optional[Chapter1Graph] = None) -> "StudentKnowledgeGraph":
+        sg = cls(student_id=d.get("student_id", "unknown"), graph=graph)
+        known = {f.name for f in fields(GraphNode)}
         sg.created_at = d.get("created_at", time.time())
         sg.updated_at = d.get("updated_at", sg.created_at)
         for nd in d.get("nodes", []):
-            node = GraphNode(**nd)
-            sg.nodes[node.cso_slug] = node
+            nd = dict(nd)
+            if "concept_id" not in nd:    # graphs saved before the CSO removal
+                nd["concept_id"] = sg._resolve(nd.get("cpal_concept") or nd.get("cso_slug", "unknown"))
+            node = GraphNode(**{k: v for k, v in nd.items() if k in known})
+            sg.nodes[node.concept_id] = node
         for ed in d.get("edges", []):
             sg.edges.add((ed["src"], ed["dst"], ed["rel"]))
         return sg

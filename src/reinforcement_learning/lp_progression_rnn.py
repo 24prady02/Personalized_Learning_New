@@ -31,7 +31,8 @@ State vector layout (dimension = 12):
     5  plateau_flag           (0/1)
     6  delta_lp_last          (-3..+3 / 3)
     7  last_intervention_idx  (/ num_interventions)
-    8  emotion_valence        (-1..+1)
+    8  reserved               (always 0.0; formerly emotion valence —
+                               kept so the 12-d layout / trained weights still fit)
     9  encoding_strength      (0=surface, 0.5=partial, 1=solid/deep)
     10 stage                  (1..5 / 5)
     11 scaffold_level         (1..5 / 5)
@@ -70,14 +71,17 @@ INTERVENTION_VOCAB: List[str] = [
     "socratic_prompt",
     "misconception_correct",
     "model_explanation",
-    "attribution_reframe",
-    "mastery_surface",
+    "attribution_reframe",     # kept for output-layer shape; no longer selected
+    "mastery_surface",         # kept for output-layer shape; no longer selected
     "trace_scaffold",
     "transfer_prompt",
     "transfer_task",
     "increase_challenge",
     "validate_and_advance",
 ]
+# Psychological-channel interventions: still in the vocabulary (output-layer
+# shape) but never returned by the ranker.
+RETIRED_INTERVENTIONS = frozenset({"attribution_reframe", "mastery_surface"})
 INTERVENTION_TO_IDX: Dict[str, int] = {t: i for i, t in enumerate(INTERVENTION_VOCAB)}
 NUM_INTERVENTIONS = len(INTERVENTION_VOCAB)
 
@@ -89,16 +93,11 @@ STATE_DIM = 12
 # ──────────────────────────────────────────────────────────────────────
 _LP_IDX = {"L1": 0, "L2": 1, "L3": 2, "L4": 3}
 _ENC_SCORE = {"surface": 0.0, "partial": 0.5, "solid": 0.85, "deep": 1.0}
-_EMOTION_VALENCE = {
-    "frustrated": -0.8, "anxious": -0.7, "confused": -0.3,
-    "neutral": 0.0, "engaged": 0.5, "confident": 0.9,
-}
 
 
 def build_state_vector(lp_state: Optional[Dict],
                        intervention_type: Optional[str] = None,
                        delta_lp_last: int = 0,
-                       emotion: str = "neutral",
                        encoding_strength: str = "surface",
                        stage: int = 1,
                        scaffold_level: int = 3,
@@ -133,7 +132,7 @@ def build_state_vector(lp_state: Optional[Dict],
         plateau,
         max(-1.0, min(1.0, delta_lp_last / 3.0)),
         (int_idx + 1) / NUM_INTERVENTIONS if int_idx >= 0 else 0.0,
-        _EMOTION_VALENCE.get(emotion, 0.0),
+        0.0,                                  # reserved (formerly emotion)
         _ENC_SCORE.get(encoding_strength, 0.0),
         max(0.0, min(1.0, float(_stage_as_int(stage)) / 5.0)),
         max(0.0, min(1.0, float(scaffold_level) / 5.0)),
@@ -235,7 +234,8 @@ if _TORCH_OK:
                 logits = self(x)[0]  # (NUM_INTERVENTIONS,)
                 scores = logits.cpu().tolist()
             ranked = sorted(
-                zip(INTERVENTION_VOCAB, scores),
+                ((t, sc) for t, sc in zip(INTERVENTION_VOCAB, scores)
+                 if t not in RETIRED_INTERVENTIONS),
                 key=lambda p: p[1],
                 reverse=True,
             )
@@ -262,7 +262,6 @@ _LP_LEVEL_PREFERENCES: Dict[str, List[Tuple[str, float]]] = {
         ("reduce_challenge",        0.72),
         ("socratic_prompt",         0.60),
         ("misconception_correct",   0.55),
-        ("attribution_reframe",     0.40),
     ],
     "L2": [
         ("trace_scaffold",          0.90),   # plateau-break default
@@ -355,7 +354,7 @@ if __name__ == "__main__":
     v1 = build_state_vector(
         lp_state={"lp_level": "L1", "lp_streak": 0,
                   "logical_step": False, "logical_step_detail": False},
-        intervention_type=None, delta_lp_last=0, emotion="confused",
+        intervention_type=None, delta_lp_last=0,
         encoding_strength="surface", stage=1, scaffold_level=4,
         mastery=0.25,
     )
@@ -363,7 +362,7 @@ if __name__ == "__main__":
         lp_state={"lp_level": "L2", "lp_streak": 1,
                   "logical_step": True, "logical_step_detail": False},
         intervention_type="worked_example", delta_lp_last=1,
-        emotion="neutral", encoding_strength="partial",
+        encoding_strength="partial",
         stage=2, scaffold_level=3, mastery=0.48,
     )
     v3 = build_state_vector(
@@ -371,7 +370,7 @@ if __name__ == "__main__":
                   "logical_step": True, "logical_step_detail": False,
                   "plateau_flag": True},
         intervention_type="worked_example", delta_lp_last=0,
-        emotion="confused", encoding_strength="partial",
+        encoding_strength="partial",
         stage=2, scaffold_level=3, mastery=0.52,
     )
     print(f"v1 (L1): {[f'{x:.2f}' for x in v1]}")

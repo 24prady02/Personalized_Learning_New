@@ -154,23 +154,10 @@ class BayesianKnowledgeTracer:
         # Extract skill from focus or concept
         skill = interaction_data.get('focus', 'general')
         
-        # Infer correctness from emotion and mastery
-        emotion = interaction_data.get('emotion', 'neutral')
+        # Infer correctness from mastery (emotion is not an input)
         mastery = interaction_data.get('mastery', 0.5)
-        
-        # If confused + low mastery = incorrect understanding
-        # If confident + high mastery = correct understanding
-        
-        if emotion in ['confused', 'frustrated']:
-            is_correct = False
-            evidence_strength = 0.7  # Strong evidence of not knowing
-        elif emotion in ['confident', 'engaged']:
-            is_correct = True
-            evidence_strength = 0.7  # Strong evidence of knowing
-        else:
-            # Use mastery as proxy
-            is_correct = mastery > 0.5
-            evidence_strength = 0.5  # Moderate evidence
+        is_correct = mastery > 0.5
+        evidence_strength = 0.5  # Moderate evidence
         
         # Check if question shows understanding progression
         message = interaction_data.get('message', '').lower()
@@ -343,7 +330,6 @@ class StudentStateManager:
             'interaction': profile['interaction_count'],
             'skill': skill,
             'bkt_update': bkt_update,
-            'emotion': interaction.get('emotion'),
             'intervention': interaction.get('intervention')
         })
         

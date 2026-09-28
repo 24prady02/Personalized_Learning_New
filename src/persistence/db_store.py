@@ -33,7 +33,7 @@ Tables
 
   student_state (student_id, json_payload, updated_iso)
       PRIMARY KEY (student_id)
-      The 3-graph state blob (cognitive/progression/psychological)
+      The student-state blob (cognitive/progression graphs)
       stored as JSON for now — the schema is too fluid to normalise.
 
   variant_assignment (student_id, experiment, variant, assigned_iso)

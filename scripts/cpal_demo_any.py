@@ -94,8 +94,7 @@ def main():
         hvsae_latent=latent, hvsae_misconception_probs=mp,
     ).to_dict()
 
-    # Emotional/behavioral context not wired here — keep diagnosis pure
-    # (fusion rule fires only on wrong-model confidence)
+    # Fusion rule fires only on wrong-model confidence.
     # If wrong model detected with decent confidence, cap LP at L2
     if diag.get("wrong_model_id") and diag.get("match_score", 0) >= 0.5:
         from src.orchestrator.lp_diagnostic import LP_ORDER, LP_INDEX
@@ -144,11 +143,9 @@ def main():
         "personality_profile": {"communication_style": "direct",
                                 "learning_preference": "visual"},
         "bkt_mastery": {concept: 0.30},
-        "emotional_state": "confused",
         "interaction_count": 1,
     }
-    analysis = {"emotion": {"primary": "confused", "confidence": 0.7},
-                "knowledge_gaps": [concept], "pedagogical_kg": {}}
+    analysis = {"knowledge_gaps": [concept]}
     gen = EnhancedPersonalizedGenerator()
     print(f"  [model: {gen._ollama_model}]  [intervention: {chosen}]")
     print(f"  [LP: {diag['current_lp_level']} → {diag['target_lp_level']}]  "

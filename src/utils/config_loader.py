@@ -41,7 +41,7 @@ def validate_config(config: Dict) -> None:
     Raises:
         ValueError: If configuration is invalid
     """
-    required_keys = ['system', 'hvsae', 'training', 'cse_kg']
+    required_keys = ['system', 'hvsae', 'training']
     
     for key in required_keys:
         if key not in config:

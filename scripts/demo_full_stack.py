@@ -5,15 +5,17 @@ Components exercised (checkpoints used):
   1. Text -> Big Five           (checkpoints/text_personality.pt)
   2. Nestor CPTs v2              (data/nestor/nestor_cpts.json)
   3. BehavioralHMM (Baum-Welch)  (checkpoints/behavioral_hmm.json)
-  4. Emotion classifier MLP      (checkpoints/emotion_classifier.pt)
+  4. HVSAE tri-stream encoder    (checkpoints/best.pt)
   5. BehavioralRNN (pretrained)  (checkpoints/best.pt — loaded via server.py)
   6. BKT mastery update          (probabilistic, no checkpoint)
-  7. LPIndex + enforcement       (data/pedagogical_kg/learning_progressions.json)
+  7. LPIndex + enforcement       (data/java_curriculum/learning_progressions.json)
   7b. LPDiagnostician + wrong-models catalogue (data/mental_models/
         wrong_models_catalogue.json + checkpoints/cpal_lp_head_st.pt +
         checkpoints/cpal_wm_subhead.pt) — matches student's text + HVSAE
         latent against the documented Java CS1 misconceptions, classifies
         LP level (L1-L4), and runs the plateau gate.
+  7d. Student knowledge graph    (StudentGraphService, grounded in
+        data/chapter1_concept_graph_percpt_lp.json)
   8. RL teaching agent DQN       (checkpoints/rl_teaching_agent.pt)
   9. EnhancedPersonalizedGenerator -> Ollama qwen2.5-coder:7b  (streaming)
 
@@ -21,6 +23,10 @@ The input is one session:
     student_message + code + action_sequence (simulated realistic debug trail)
 Each component's contribution is printed before the LLM call so the
 provenance of every signal in the final response is visible.
+
+Emotion and the psychological channel (attribution, self-efficacy,
+imposter, anxiety, flow) are not inputs: the emotion classifier was
+retired to _archive/emotion_and_psych/.
 
 All artifacts (transcript, assembled Ollama prompt, response, structured
 diagnosis) are saved to output/full_stack_run_<timestamp>/.
@@ -34,7 +40,6 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
 import numpy as np
 import torch
 import torch.nn as nn
-import networkx as nx
 
 from src.models.nestor.nestor_bayesian_profiler import NestorBayesianProfiler
 from src.models.behavioral import BehavioralHMM, BehavioralRNN
@@ -44,12 +49,7 @@ from src.student_modeling.bayesian_knowledge_tracing import BayesianKnowledgeTra
 from src.reinforcement_learning.teaching_agent import TeachingRLAgent
 from src.knowledge_graph.lp_index import LPIndex
 from src.knowledge_graph.mental_models import get_catalogue
-from src.knowledge_graph.local_cse_kg_client import LocalCSEKGClient
-from src.knowledge_graph.error_explanation_mapper import ErrorExplanationMapper
-from src.knowledge_graph.coke_cognitive_graph import (
-    COKECognitiveGraph, CognitiveState
-)
-from src.knowledge_graph.gikt_knowledge_tracing import GIKTKnowledgeTracer
+from src.knowledge_graph.student_graph_service import StudentGraphService
 from src.orchestrator.lp_diagnostic import LPDiagnostician
 from src.orchestrator.catalogue_rag import CatalogueRAG
 from src.orchestrator.enhanced_personalized_generator import EnhancedPersonalizedGenerator
@@ -93,25 +93,8 @@ PRIOR_MASTERY = {
     "null_pointer":  0.30,
 }
 
-EMOTION_CLASSES = ['neutral', 'confused', 'frustrated', 'engaged', 'understanding']
-
-
-def load_emotion_mlp():
-    data = torch.load("checkpoints/emotion_classifier.pt",
-                      weights_only=False, map_location='cpu')
-    model = nn.Sequential(
-        nn.Linear(7, 64), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(64, 64), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(64, 5),
-    )
-    sd = {k.replace("net.", ""): v for k, v in data["state_dict"].items()}
-    model.load_state_dict(sd)
-    model.eval()
-    return model, data.get("classes", EMOTION_CLASSES)
-
-
 def rnn_analyze(action_sequence, time_deltas, ckpt):
-    """Run the pretrained BehavioralRNN — returns emotion label + effectiveness."""
+    """Run the pretrained BehavioralRNN — returns effectiveness + productivity."""
     try:
         rnn = BehavioralRNN({
             'behavioral': {'num_actions': 20, 'action_embedding_dim': 32,
@@ -130,8 +113,6 @@ def rnn_analyze(action_sequence, time_deltas, ckpt):
         a = rnn.analyze_strategy(action_ids, t_d, out, lengths)
         def _first(x): return x[0] if isinstance(x, list) else x
         return {
-            "emotion": _first(a.get("emotion", ["neutral"])),
-            "emotion_confidence": _first(a.get("emotion_confidence", [0.5])),
             "effectiveness": _first(a.get("effectiveness", [0.5])),
             "productivity":  _first(a.get("productivity", ["medium"])),
             "loaded": True,
@@ -234,25 +215,10 @@ def run():
     print(f"    final state    : {hmm_out['final_state']}")
     print(f"    confidence     : {hmm_out['final_confidence']:.3f}")
 
-    # ── 4. Emotion classifier MLP on HMM feature window ──────────────────────
-    emo_model, emo_classes = load_emotion_mlp()
-    feats = hmm._extract_features(ACTION_SEQUENCE)
-    last_feat = torch.from_numpy(feats[-1]).float().unsqueeze(0)
-    with torch.no_grad():
-        probs = torch.softmax(emo_model(last_feat), dim=1).squeeze(0).tolist()
-    emo_idx = int(np.argmax(probs))
-    emo_label = emo_classes[emo_idx]
-    print(f"\n[4] EMOTION MLP")
-    print(f"    src   : checkpoints/emotion_classifier.pt "
-          f"(7-feature MLP on HMM windows, 5 classes)")
-    print(f"    predicted emotion : {emo_label}  ({probs[emo_idx]*100:.0f}% confidence)")
-    print(f"    distribution      : "
-          + "  ".join(f"{c}:{probs[i]*100:.0f}%" for i, c in enumerate(emo_classes)))
-
-    # ── 5a. HVSAE tri-stream encoder ─────────────────────────────────────────
+    # ── 4. HVSAE tri-stream encoder ─────────────────────────────────────────
     ckpt_bestpt = torch.load("checkpoints/best.pt", weights_only=False, map_location='cpu')
     hv = run_hvsae(STUDENT_CODE, STUDENT_MESSAGE, ACTION_SEQUENCE, ckpt_bestpt)
-    print(f"\n[5a] HVSAE TRI-STREAM ENCODER")
+    print(f"\n[4] HVSAE TRI-STREAM ENCODER")
     print(f"    src   : checkpoints/best.pt > hvsae_state "
           f"(8-head attention, 256-dim vMF latent, 20 misconception heads)")
     if hv["loaded"]:
@@ -268,19 +234,17 @@ def run():
     else:
         print(f"    load failed: {hv['error'][:100]}")
 
-    # ── 5b. BehavioralRNN ─────────────────────────────────────────────────────
+    # ── 5. BehavioralRNN ─────────────────────────────────────────────────────
     rnn_out = rnn_analyze(ACTION_SEQUENCE, TIME_DELTAS, ckpt_bestpt)
-    print(f"\n[5b] BEHAVIORAL RNN")
+    print(f"\n[5] BEHAVIORAL RNN")
     print(f"    src   : checkpoints/best.pt > behavioral_rnn_state "
           f"(2-layer LSTM, 64 hidden, 20 action types)")
     if rnn_out.get("loaded"):
-        print(f"    emotion        : {rnn_out['emotion']} "
-              f"({rnn_out['emotion_confidence']:.2f})")
         print(f"    effectiveness  : {rnn_out['effectiveness']:.2f}")
         print(f"    productivity   : {rnn_out['productivity']}")
     else:
         print(f"    not loaded ({rnn_out.get('error','')[:80]}) — "
-              f"HMM+Emotion MLP already cover this signal path")
+              f"HMM already covers this signal path")
 
     # ── 6. BKT mastery update ────────────────────────────────────────────────
     bkt = BayesianKnowledgeTracer()
@@ -310,7 +274,7 @@ def run():
     lp_idx = LPIndex()
     lp_path = lp_idx.get_path(TARGET_CONCEPT, new_mastery_dict)
     print(f"\n[7] LEARNING PROGRESSION")
-    print(f"    src   : data/pedagogical_kg/learning_progressions.json "
+    print(f"    src   : data/java_curriculum/learning_progressions.json "
           f"(9 progressions, 25 concepts)")
     print(f"    progression   : {lp_path['progression_id']}")
     print(f"    target        : {lp_path['target_concept']}")
@@ -321,7 +285,7 @@ def run():
     # ── 7b. LP-Diagnostic + wrong-model identification ───────────────────────
     # Matches the student's text against the documented wrong models for the
     # target concept (catalogue) AND runs the trained LP+WM heads on top of
-    # the HVSAE latent we already computed in step 5a. Produces an LPDiagnostic
+    # the HVSAE latent we already computed in step 4. Produces an LPDiagnostic
     # with current/target LP level, plateau flag, and matched wrong-model id.
     catalogue = get_catalogue()  # data/mental_models/wrong_models_catalogue.json
     lp_diag_obj = LPDiagnostician(catalogue=catalogue)
@@ -387,7 +351,7 @@ def run():
           + ", ".join(f"{k}={v:.2f}" for k, v in dina_bot3))
 
     # ── 7b'. CATALOGUE RAG (embedding retrieval + hybrid scoring) ────────────
-    kg_artifacts = {}  # populated by both [7b'] and [7c]
+    kg_artifacts = {}  # populated by [7b'] and [7d]
 
     # Layer over the trained WM head (val_acc ~0.04). Embeds the student's
     # text with MiniLM-L6-v2 (already loaded for the LP head), retrieves
@@ -459,273 +423,29 @@ def run():
         "top_lp_rubric":    rag_top_lp,
     }
 
-    # ── 7c. Knowledge Graph + CoKE + GiKT ────────────────────────────────────
-    # Fires the actual KG modules (not just LP index): pedagogical KG JSON
-    # tables, local CSE-KG client, error->explanation mapper, CoKE cognitive
-    # graph, and GiKT graph-based knowledge tracer.
-    # (kg_artifacts already initialized in [7b'] above)
-
-    # 7c-1. Pedagogical KG JSON tables (all 8 files)
-    pkg_dir = ROOT / "data" / "pedagogical_kg"
-    pkg_tables = {}
-    for tbl in ("misconceptions", "error_patterns", "root_causes",
-                "cognitive_loads", "interventions", "explanation_strategies",
-                "lp_rubric", "learning_progressions"):
-        try:
-            pkg_tables[tbl] = json.loads(
-                (pkg_dir / f"{tbl}.json").read_text(encoding="utf-8"))
-        except Exception:
-            pkg_tables[tbl] = None
-    print(f"\n[7c] KNOWLEDGE GRAPH + COKE + GIKT")
-    print(f"    pedagogical KG load (data/pedagogical_kg/):")
-    for tbl, data in pkg_tables.items():
-        n = (len(data) if isinstance(data, (list, dict)) else 0)
-        print(f"      {tbl:<26} {n:>3} entries")
-
-    # 7c-2. Concept-specific lookup in pedagogical KG
-    def _matches(record, concept):
-        return concept in str(record).lower() or concept.replace("_", "") in str(record).lower()
-    np_misconceptions = [m for m in (pkg_tables['misconceptions'] or [])
-                         if _matches(m, TARGET_CONCEPT)]
-    np_cog_load = [c for c in (pkg_tables['cognitive_loads'] or [])
-                   if _matches(c, TARGET_CONCEPT)]
-    np_interv = [i for i in (pkg_tables['interventions'] or [])
-                 if _matches(i, TARGET_CONCEPT)]
-    print(f"    concept '{TARGET_CONCEPT}' lookup:")
-    print(f"      misconceptions  : {len(np_misconceptions)} match(es)")
-    if np_misconceptions:
-        m0 = np_misconceptions[0]
-        print(f"        -> '{m0.get('id', m0.get('name', '?'))}' "
-              f"({m0.get('description', '')[:80]}...)" )
-    print(f"      cognitive_loads : {len(np_cog_load)} match(es)")
-    if np_cog_load:
-        c0 = np_cog_load[0]
-        print(f"        -> intrinsic={c0.get('intrinsic_load', '?')} "
-              f"extraneous={c0.get('extraneous_load', '?')}")
-    print(f"      interventions   : {len(np_interv)} match(es)")
-    if np_interv:
-        i0 = np_interv[0]
-        print(f"        -> '{i0.get('id', i0.get('name', '?'))}' "
-              f"({i0.get('description', '')[:80]}...)")
-    kg_artifacts["pedagogical_kg_table_sizes"] = {
-        k: (len(v) if isinstance(v, (list, dict)) else 0)
-        for k, v in pkg_tables.items()
-    }
-    kg_artifacts["pedagogical_kg_concept_match"] = {
-        "concept": TARGET_CONCEPT,
-        "misconceptions": np_misconceptions,
-        "cognitive_loads": np_cog_load,
-        "interventions": np_interv,
-    }
-
-    # 7c-3. ErrorExplanationMapper — match the error to a pattern
-    eem = ErrorExplanationMapper({"pedagogical_kg": {"data_dir": str(pkg_dir)}})
-    eem_pattern = eem.detect_error(code=STUDENT_CODE,
-                                   error_message="NullPointerException")
-    print(f"    ErrorExplanationMapper.detect_error:")
-    if eem_pattern:
-        print(f"      -> '{eem_pattern.id}' "
-              f"({eem_pattern.error_type.value}, concept={eem_pattern.concept})")
-        rcs = eem.identify_root_causes(eem_pattern)
-        print(f"      -> {len(rcs)} root cause(s): "
-              + ", ".join(rc.id for rc in rcs[:3]))
-        kg_artifacts["error_pattern"] = {
-            "id": eem_pattern.id,
-            "type": eem_pattern.error_type.value,
-            "concept": eem_pattern.concept,
-            "root_causes": [rc.id for rc in rcs],
-        }
-    else:
-        print(f"      -> no pattern in current KG matches "
-              f"'NullPointerException' (KG covers {len(pkg_tables['error_patterns'])} "
-              f"patterns, all Python-flavored — Java NPE not in current data)")
-        kg_artifacts["error_pattern"] = None
-
-    # 7c-4. LocalCSEKGClient — seed CS knowledge graph
-    cse = LocalCSEKGClient({
-        "cse_kg": {"namespace": "http://example.org/cskg#",
-                   "local_dir": "data/cse_kg_local"}
-    })
-    cse_prereqs = cse.get_prerequisites(TARGET_CONCEPT) or []
-    cse_related = [c for c, _, _ in (cse.get_related_concepts(TARGET_CONCEPT) or [])][:6]
-    cse_miscons = cse.get_common_misconceptions(TARGET_CONCEPT) or []
-    cse_extracted = cse.extract_concepts(f"{STUDENT_MESSAGE}\n{STUDENT_CODE}")
-    cse_subgraph = cse.build_subgraph([TARGET_CONCEPT] + cse_related[:3])
-    cse_concept_info = cse.get_concept_info(TARGET_CONCEPT) or {}
-    print(f"    LocalCSEKGClient:")
-    print(f"      src   : data/cse_kg_local/{{graph.pkl, concepts.json, "
-          f"keyword_index.json}}  (seed built from JAVA_SKILLS + "
-          f"wrong_models + LP)")
-    print(f"      graph         : nodes={len(cse.graph.nodes())} "
-          f"edges={len(cse.graph.edges())}")
-    print(f"      concept '{TARGET_CONCEPT}' lookup:")
-    print(f"        prerequisites : {cse_prereqs[:5]}")
-    print(f"        related       : {cse_related[:5]}")
-    print(f"        miscons (kg)  : {len(cse_miscons)} entries")
-    print(f"        extracted     : {cse_extracted[:5]}")
-    print(f"        subgraph      : nodes={len(cse_subgraph.get('nodes', []))} "
-          f"edges={len(cse_subgraph.get('edges', []))}")
-    kg_artifacts["cse_kg"] = {
-        "graph_nodes": len(cse.graph.nodes()) if cse.graph else 0,
-        "graph_edges": len(cse.graph.edges()) if cse.graph else 0,
-        "prerequisites": cse_prereqs,
-        "related_concepts": cse_related,
-        "misconceptions": cse_miscons,
-        "concept_info": cse_concept_info,
-        "extracted_concepts": cse_extracted,
-        "subgraph_nodes": len(cse_subgraph.get("nodes", [])),
-        "subgraph_edges": len(cse_subgraph.get("edges", [])),
-    }
-
-    # 7c-5. CoKE Cognitive Graph
-    coke = COKECognitiveGraph({"coke": {"data_dir": "data/coke"}})
-    coke_input = {
-        "errors_made": ACTION_SEQUENCE.count("Run.Error") +
-                       ACTION_SEQUENCE.count("Compile.Error"),
-        "time_spent": sum(TIME_DELTAS),
-        "attempts":   ACTION_SEQUENCE.count("Run.Program"),
-    }
-    coke_state = coke.predict_cognitive_state(coke_input)
-    coke_chains = coke.get_cognitive_chains_for_state(coke_state)
-    coke_tom = coke.infer_theory_of_mind(coke_input)
-    print(f"    COKECognitiveGraph:")
-    print(f"      cognitive state : {coke_state.value if hasattr(coke_state, 'value') else coke_state}")
-    print(f"      chains for state: {len(coke_chains)}")
-    print(f"      theory of mind  : {coke_tom.get('cognitive_state', '?')} -> "
-          f"{coke_tom.get('behavioral_response', '?')}  "
-          f"(conf={coke_tom.get('confidence', 0):.2f})")
-    kg_artifacts["coke"] = {
-        "cognitive_state": coke_state.value if hasattr(coke_state, 'value') else str(coke_state),
-        "num_chains": len(coke_chains),
-        "theory_of_mind": coke_tom,
-    }
-
-    # 7c-6. GiKT Knowledge Tracer — graph-based KT on top of HVSAE skills
-    gikt = GIKTKnowledgeTracer(
-        {"gikt": {"num_skills": 20, "num_questions": 100, "embed_dim": 64}})
-    target_skill_id = 2  # null_pointer is skill index 2 in JAVA_SKILLS
-    gikt.add_question_skill_mapping(question_id=1, skill_ids=[target_skill_id])
-    gikt.record_exercise(student_id=1, question_id=1,
-                         skill_ids=[target_skill_id], correct=False)
-    gikt_pred = gikt.predict_performance(student_id=1, question_id=1)
-    gikt_state = gikt.get_student_knowledge_state(1)
-    print(f"    GIKTKnowledgeTracer:")
-    print(f"      target skill_id  : {target_skill_id} (null_pointer)")
-    print(f"      predicted P(correct on next attempt) : {gikt_pred:.3f}")
-    print(f"      total exercises  : {gikt_state.get('total_exercises', '?')}")
-    print(f"      overall mastery  : {gikt_state.get('overall_mastery', 0):.3f}")
-    kg_artifacts["gikt"] = {
-        "target_skill_id": target_skill_id,
-        "predicted_p_correct": float(gikt_pred),
-        "knowledge_state": gikt_state,
-    }
-
     # ── 7d. STUDENT KNOWLEDGE GRAPH ──────────────────────────────────────────
-    # Methodology (per user spec):
-    #   1. Use the graph to find the wrong catalogues the student might hold
-    #      for the target concept (enumerate all has_wrong_model neighbors).
-    #   2. Retrieve the correct concepts from the graph (target + prereqs +
-    #      cso_aligned + wikidata_aligned + their 1-hop neighbors).
-    #   3. Build a per-student knowledge subgraph with mastery annotations
-    #      from BKT/DINA, marking which wrong-model the student actually holds
-    #      (from the LP-Diagnostic in step 7b).
-    import pickle as _pkl
-    g_full = _pkl.load(open(ROOT / "data" / "cse_kg_local" / "graph.pkl", "rb"))
+    # Record this turn in the per-student graph (grounded in the Chapter-1
+    # concept + LP graph). persist=False keeps the demo out of SQLite.
+    sg = StudentGraphService.shared().record_turn(
+        student_id="demo_student",
+        diag=lp_diag_dict,
+        mastery=dina_update.get("mastery_after"),
+        mastery_before=dina_before[TARGET_CONCEPT],
+        misconception_text=STUDENT_MESSAGE,
+        persist=False,
+    )
+    skg = sg.to_dict()
     matched_wm_id = lp_diag_dict.get("wrong_model_id")
-    skg = nx.DiGraph()  # student knowledge graph
-
-    # Step 1: wrong catalogues (sibling wrong models for this concept)
-    wrong_catalogues = []
-    if TARGET_CONCEPT in g_full:
-        skg.add_node(TARGET_CONCEPT, kind="concept",
-                     mastery_bkt=new_mastery_dict.get(TARGET_CONCEPT, 0),
-                     mastery_dina=dina_update.get("mastery_after", 0))
-        for nbr in g_full.successors(TARGET_CONCEPT):
-            ed = g_full.edges[TARGET_CONCEPT, nbr]
-            if g_full.nodes[nbr].get("kind") == "wrong_model":
-                attrs = dict(g_full.nodes[nbr])
-                holds = (nbr == matched_wm_id)
-                wrong_catalogues.append({
-                    "id": nbr,
-                    "wrong_belief": attrs.get("wrong_belief", ""),
-                    "origin":       attrs.get("origin", ""),
-                    "student_holds": holds,
-                    "trained_head_score": (
-                        lp_diag_dict.get("match_score") if holds else None),
-                })
-                skg.add_node(nbr, **attrs, student_holds=holds)
-                skg.add_edge(TARGET_CONCEPT, nbr, kind="has_wrong_model")
-            elif g_full.nodes[nbr].get("kind") == "misconception":
-                skg.add_node(nbr, **g_full.nodes[nbr])
-                skg.add_edge(TARGET_CONCEPT, nbr, kind="has_misconception")
-
-    # Step 2: correct concepts (prereqs + aligned external + their neighbors)
-    correct_concepts = [TARGET_CONCEPT]
-    # 2a. Prereqs (predecessors via prerequisite_of)
-    if TARGET_CONCEPT in g_full:
-        for pred in g_full.predecessors(TARGET_CONCEPT):
-            if g_full.edges[pred, TARGET_CONCEPT].get("kind") == "prerequisite_of":
-                attrs = dict(g_full.nodes[pred])
-                attrs["mastery_bkt"] = new_mastery_dict.get(pred, 0)
-                attrs["mastery_dina"] = dina_full.get(pred, 0)
-                skg.add_node(pred, **attrs)
-                skg.add_edge(pred, TARGET_CONCEPT, kind="prerequisite_of")
-                correct_concepts.append(pred)
-    # 2b. External alignment anchors + 1-hop neighbors
-    aligned_anchors = []
-    if TARGET_CONCEPT in g_full:
-        for nbr in g_full.successors(TARGET_CONCEPT):
-            ed_kind = g_full.edges[TARGET_CONCEPT, nbr].get("kind")
-            if ed_kind in ("cso_aligned", "wikidata_aligned"):
-                aligned_anchors.append(nbr)
-                skg.add_node(nbr, **g_full.nodes[nbr])
-                skg.add_edge(TARGET_CONCEPT, nbr, kind=ed_kind)
-                # Pull up to 4 neighbors of the anchor (broader/subclass etc)
-                useful = ("broader_than", "subclass_of", "instance_of",
-                          "contributes_to", "part_of", "same_as")
-                cnt = 0
-                for nbr2 in g_full.successors(nbr):
-                    if cnt >= 4: break
-                    edge2 = g_full.edges[nbr, nbr2].get("kind", "")
-                    if edge2 in useful:
-                        skg.add_node(nbr2, **g_full.nodes[nbr2])
-                        skg.add_edge(nbr, nbr2, kind=edge2)
-                        correct_concepts.append(nbr2)
-                        cnt += 1
-
-    # Step 3: persist the student KG
-    skg_nodes = [{"id": n, **{k: v for k, v in d.items() if v is not None}}
-                 for n, d in skg.nodes(data=True)]
-    skg_edges = [{"source": s, "target": t, **d}
-                 for s, t, d in skg.edges(data=True)]
-
-    print(f"\n[7d] STUDENT KNOWLEDGE GRAPH (per-session subgraph)")
-    print(f"    src   : data/cse_kg_local/graph.pkl  (filtered for student)")
-    print(f"    method: 1) graph -> wrong catalogues  2) graph -> correct "
-          f"concepts  3) build per-student subgraph")
+    print(f"\n[7d] STUDENT KNOWLEDGE GRAPH")
+    print(f"    src   : data/chapter1_concept_graph_percpt_lp.json")
     print(f"    student      : demo_student")
     print(f"    target       : {TARGET_CONCEPT}  "
           f"(mastery_bkt={new_mastery_dict.get(TARGET_CONCEPT, 0):.2f}, "
           f"mastery_dina={dina_update.get('mastery_after', 0):.2f})")
-    print(f"    wrong-cat    : {len(wrong_catalogues)} catalogue entries; "
-          f"student holds: {matched_wm_id}")
-    for wc in wrong_catalogues:
-        marker = " <- HELD" if wc["student_holds"] else ""
-        print(f"      {wc['id']:<6} {wc['wrong_belief'][:80]}...{marker}")
-    print(f"    correct-cps  : {len(correct_concepts)} concepts to teach "
-          f"(target + {len(correct_concepts)-1} supporting)")
-    print(f"    aligned to   : {aligned_anchors}")
-    print(f"    student KG   : {len(skg_nodes)} nodes, {len(skg_edges)} edges")
-
-    kg_artifacts["student_knowledge_graph"] = {
-        "student_id": "demo_student",
-        "target_concept": TARGET_CONCEPT,
-        "wrong_catalogues": wrong_catalogues,
-        "correct_concepts": correct_concepts,
-        "aligned_anchors":  aligned_anchors,
-        "subgraph_nodes":   skg_nodes,
-        "subgraph_edges":   skg_edges,
-    }
+    print(f"    student holds: {matched_wm_id}")
+    print(f"    student KG   : {len(skg['nodes'])} nodes, {len(skg['edges'])} edges; "
+          f"LP distribution {skg['summary']['lp_distribution']}")
+    kg_artifacts["student_knowledge_graph"] = skg
 
     # ── 8. RL agent picks the intervention ───────────────────────────────────
     rl = TeachingRLAgent({"rl": {"checkpoint": "checkpoints/rl_teaching_agent.pt"}},
@@ -735,10 +455,7 @@ def run():
         'cognitive': {'knowledge_gaps': [
             {'mastery': new_mastery_dict[TARGET_CONCEPT]}
         ]},
-        'behavioral': {'emotional_state': emo_label
-                       if emo_label in ['frustrated','engaged','confused']
-                       else 'confused'},
-        'psychological': {'personality': p},
+        'personality': p,
         'history': {'interventions': []},
     }
     session_for_rl = {
@@ -763,13 +480,13 @@ def run():
         'visual_explanation': 'worked_example',
         'worked_example':     'worked_example',
         'conceptual_deepdive':'validate_and_advance',
-        'motivational_support':'attribution_reframe',
+        'motivational_support':'reduce_challenge',
         'interactive_exercise':'transfer_task',
         'guided_practice':    'worked_example',
         'challenge_problem':  'increase_challenge',
         'spaced_review':      'validate_and_advance',
         'error_analysis':     'worked_example',
-        'peer_comparison':    'mastery_surface',
+        'peer_comparison':    'validate_and_advance',
     }
     generator_interv = rl_to_generator_interv.get(rl_action_name, 'worked_example')
 
@@ -782,14 +499,6 @@ def run():
                                 new_mastery_dict[TARGET_CONCEPT]],
         },
         'interests': [],
-        'psychological_graph': {
-            'attribution':   'internal_unstable',
-            'self_efficacy': 'moderate',
-            'srl_phase':     'monitoring',
-            'imposter_flag': False,
-            'high_anxiety':  p['neuroticism'] > 0.55,
-            'flow_state':    hmm_out['final_state'] in ['making_progress','understanding'],
-        },
         'progression_graph': {'stage': 3, 'zpd_status': 'within',
                               'scaffold_level': 3, 'has_attempt': True},
         'content_channel':   {'encoding_strength': 'partial',
@@ -798,8 +507,7 @@ def run():
         'recommended_intervention': {
             'type':      generator_interv,
             'rationale': f"RL agent selected '{rl_action_name}' (mapped to "
-                         f"'{generator_interv}') for HMM={hmm_out['final_state']}, "
-                         f"emotion={emo_label}",
+                         f"'{generator_interv}') for HMM={hmm_out['final_state']}",
         },
         # IMPORTANT: the EnhancedPersonalizedGenerator looks for
         # student_state['lp_diagnostic'] (NOT analysis['cpal_lp_diagnostic'])
@@ -808,69 +516,13 @@ def run():
         'lp_diagnostic': lp_diag_dict,
     }
     analysis = {
-        'emotion':           emo_label,
-        'frustration_level': float(p['neuroticism']),
-        'engagement_score':  float(0.5 + 0.2 *
-                                    (1 if emo_label == 'engaged' else 0)),
+        'engagement_score':  0.5,
         'bkt_update': {
             'p_learned_before': PRIOR_MASTERY[TARGET_CONCEPT],
             'p_learned_after':  new_mastery_dict[TARGET_CONCEPT],
         },
-        'cse_kg': {
-            # Source: data/cse_kg_local/ (seed graph) — queried via LocalCSEKGClient
-            'concept': TARGET_CONCEPT,
-            'prerequisites':    cse_prereqs or
-                                ['references', 'object instantiation',
-                                 'heap vs stack'],
-            'related_concepts': cse_related or
-                                ['NullPointerException', 'Optional',
-                                 'default field values'],
-            'misconceptions_from_kg': [
-                m.get('description', m.get('label', ''))
-                for m in (cse_miscons or [])
-            ],
-            'definition':       cse_concept_info.get('description') or
-                                'Accessing a member via a reference whose value '
-                                'is null — the JVM throws NullPointerException '
-                                'because there is no object on the heap to '
-                                'dereference.',
-            'subgraph_size': {
-                'nodes': len(cse_subgraph.get('nodes', [])),
-                'edges': len(cse_subgraph.get('edges', [])),
-            },
-        },
-        'pedagogical_kg': {
-            'progression': 'declare ref -> new to allocate -> dereference safely',
-            'misconceptions': [
-                'declaring a reference also creates the object',
-                'Java auto-initializes fields to usable defaults',
-                'null means "no value" rather than "no allocation"',
-            ],
-            'cognitive_load': 'medium',
-            'interventions': ['worked example', 'heap diagram'],
-            'learning_path':  lp_path,        # <-- LP path from step 7
-        },
-        'coke': {
-            'cognitive_state': emo_label,     # <-- from emotion MLP (step 4)
-            'mental_activity': 'debugging reference failure',
-            'behavioral_response': 'persistent — multiple attempts',
-            'confidence':          probs[emo_idx],
-            'cognitive_chain': {
-                'description': f"HMM says '{hmm_out['final_state']}'; "
-                               f"emotion MLP says '{emo_label}'. Student has run "
-                               f"into repeated Run.Errors. RL picked "
-                               f"'{rl_action_name}' to break the loop.",
-            },
-        },
+        'learning_path': lp_path,             # <-- LP path from step 7
         'cpal_lp_diagnostic': lp_diag_dict,   # <-- from step 7b
-        'knowledge_graph': {                  # <-- from step 7c
-            'pedagogical_kg_concept_match':
-                kg_artifacts['pedagogical_kg_concept_match'],
-            'cse_kg':         kg_artifacts['cse_kg'],
-            'error_pattern':  kg_artifacts['error_pattern'],
-            'coke':           kg_artifacts['coke'],
-            'gikt':           kg_artifacts['gikt'],
-        },
     }
 
     # ── 9. Ollama generation ─────────────────────────────────────────────────
@@ -917,13 +569,12 @@ def run():
     print("=" * 80)
     print(f"  TEXT-PERSONALITY   -> neuroticism={p['neuroticism']:.2f} shaped opening tone")
     print(f"  NESTOR CPTs        -> style/strategy drove format choices")
-    print(f"  HMM                -> state '{hmm_out['final_state']}' set psychological_graph")
-    print(f"  EMOTION MLP        -> '{emo_label}' used as coke.cognitive_state")
+    print(f"  HMM                -> behavioural state '{hmm_out['final_state']}'")
     if hv.get("loaded"):
         print(f"  HVSAE              -> 256-dim latent fed to RL agent, "
               f"gating code/text/action={tuple(round(w,2) for w in hv['attention'])}")
     if rnn_out.get("loaded"):
-        print(f"  BEHAVIORAL RNN     -> '{rnn_out['emotion']}' cross-check")
+        print(f"  BEHAVIORAL RNN     -> effectiveness={rnn_out['effectiveness']:.2f}")
     print(f"  BKT                -> {TARGET_CONCEPT} mastery "
           f"{PRIOR_MASTERY[TARGET_CONCEPT]:.2f} -> {new_mastery_dict[TARGET_CONCEPT]:.2f}")
     print(f"  DINA               -> {TARGET_CONCEPT} P(mastered)="
@@ -937,29 +588,11 @@ def run():
           f"LP={lp_diag_dict.get('current_lp_level')}->"
           f"{lp_diag_dict.get('target_lp_level')}, "
           f"plateau={lp_diag_dict.get('plateau_flag')}")
-    print(f"  PEDAGOGICAL KG     -> "
-          f"misconceptions={len(np_misconceptions)} "
-          f"cog_loads={len(np_cog_load)} "
-          f"interventions={len(np_interv)}  for '{TARGET_CONCEPT}'")
-    print(f"  CSE-KG (seed)      -> "
-          f"nodes={kg_artifacts['cse_kg']['graph_nodes']}, "
-          f"prereqs={len(kg_artifacts['cse_kg']['prerequisites'])}, "
-          f"related={len(kg_artifacts['cse_kg']['related_concepts'])}, "
-          f"miscons={len(kg_artifacts['cse_kg']['misconceptions'])}")
-    print(f"  ERROR-MAPPER       -> "
-          f"{(eem_pattern.id if eem_pattern else 'no match in current KG')}")
-    print(f"  COKE GRAPH         -> "
-          f"state={kg_artifacts['coke']['cognitive_state']}, "
-          f"chains={kg_artifacts['coke']['num_chains']}")
-    print(f"  GIKT KT            -> "
-          f"P(correct)={kg_artifacts['gikt']['predicted_p_correct']:.3f}, "
-          f"overall_mastery={kg_artifacts['gikt']['knowledge_state']['overall_mastery']:.3f}")
     skg_info = kg_artifacts.get('student_knowledge_graph', {})
     print(f"  STUDENT KG         -> "
-          f"{len(skg_info.get('subgraph_nodes', []))} nodes, "
-          f"{len(skg_info.get('subgraph_edges', []))} edges; "
-          f"wrong-cat held: {matched_wm_id}; "
-          f"correct concepts: {len(skg_info.get('correct_concepts', []))}")
+          f"{len(skg_info.get('nodes', []))} nodes, "
+          f"{len(skg_info.get('edges', []))} edges; "
+          f"wrong-model held: {matched_wm_id}")
 
     return {
         "started_at_session": STUDENT_MESSAGE,
@@ -975,8 +608,6 @@ def run():
             "elements": nestor_out['recommended_elements'],
         },
         "behavioral_hmm": hmm_out,
-        "emotion_mlp": {"label": emo_label, "distribution":
-                        {emo_classes[i]: probs[i] for i in range(len(emo_classes))}},
         "hvsae": {
             "loaded": hv.get("loaded"),
             "attention": hv.get("attention"),
@@ -1044,9 +675,7 @@ def main():
     (out_dir / "prompt.txt").write_text(artifacts.get("ollama_prompt", ""), encoding="utf-8")
     (out_dir / "response.md").write_text(artifacts.get("ollama_response", ""), encoding="utf-8")
 
-    # Save student knowledge graph as a first-class artifact (per the
-    # methodology spec: graph-driven wrong-catalogue + correct-concept
-    # retrieval -> per-student subgraph)
+    # Save the student knowledge graph as a first-class artifact
     skg_dict = artifacts.get("knowledge_graph", {}).get(
         "student_knowledge_graph") or \
         artifacts.get("knowledge_graph_full", {}).get(

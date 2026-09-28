@@ -28,11 +28,7 @@ from src.models.nestor import NestorBayesianNetwork, InterventionRecommender, Pe
 from src.models.behavioral import BehavioralRNN, BehavioralHMM
 # LLM backend: Ollama (local) — no API key required
 # Make sure Ollama is running: ollama serve
-from src.knowledge_graph import (
-    CSEKGClient, QueryEngine, ConceptRetriever,
-    PedagogicalKGIntegration, COKECognitiveGraph, GraphFusion,
-    AdaptiveExplanationGenerator, UnifiedExplanationGenerator,
-)
+from src.knowledge_graph.chapter1_graph import get_chapter1_graph
 from src.reinforcement_learning.hierarchical_multi_task_rl import HierarchicalMultiTaskRL
 
 
@@ -80,7 +76,7 @@ class FeedbackData(BaseModel):
 
 app = FastAPI(
     title="Personalized Learning API",
-    description="Real-time debugging assistance with CSE-KG integration",
+    description="Real-time debugging assistance grounded in the Chapter-1 concept + LP graph",
     version="1.0.0"
 )
 
@@ -143,54 +139,8 @@ async def startup_event():
     except Exception as e:
         print(f"⚠ Checkpoint load error: {e}")
 
-    # CSE-KG Client (domain ontology)
-    state.models['cse_kg_client'] = CSEKGClient(state.config)
-    state.models['concept_retriever'] = ConceptRetriever(state.models['cse_kg_client'])
-    state.models['query_engine'] = QueryEngine(state.models['cse_kg_client'])
-
-    # Pedagogical KG (misconceptions, cognitive load, progressions, interventions)
-    try:
-        state.models['pedagogical_kg'] = PedagogicalKGIntegration(state.config)
-        print("✓ PedagogicalKGIntegration initialized")
-    except Exception as e:
-        print(f"⚠ PedagogicalKGIntegration failed: {e}")
-        state.models['pedagogical_kg'] = None
-
-    # CoKE cognitive graph (Theory of Mind)
-    try:
-        coke_cfg = state.config.get('coke', {'enabled': True})
-        state.models['coke_graph'] = COKECognitiveGraph(coke_cfg)
-        print("✓ COKECognitiveGraph initialized")
-    except Exception as e:
-        print(f"⚠ COKECognitiveGraph failed: {e}")
-        state.models['coke_graph'] = None
-
-    # Graph fusion (merges CSE-KG + pedagogical + cognitive subgraphs)
-    try:
-        state.models['graph_fusion'] = GraphFusion(state.config)
-        print("✓ GraphFusion initialized")
-    except Exception as e:
-        print(f"⚠ GraphFusion failed: {e}")
-        state.models['graph_fusion'] = None
-
-    # Unified explanation generator (binds pedagogical + CoKE)
-    if state.models.get('pedagogical_kg') is not None:
-        try:
-            state.models['unified_explanation_generator'] = UnifiedExplanationGenerator(
-                state.config,
-                pedagogical_builder=state.models['pedagogical_kg'].pedagogical_builder,
-                coke_graph=state.models.get('coke_graph'),
-            )
-            print("✓ UnifiedExplanationGenerator initialized")
-        except Exception as e:
-            print(f"⚠ UnifiedExplanationGenerator failed: {e}")
-
-    # Adaptive explainer — the orchestrator's _learn_from_session reads this
-    try:
-        state.models['adaptive_explainer'] = AdaptiveExplanationGenerator(state.config)
-        print("✓ AdaptiveExplanationGenerator initialized")
-    except Exception as e:
-        print(f"⚠ AdaptiveExplanationGenerator failed: {e}")
+    # Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json)
+    state.models['chapter1_graph'] = get_chapter1_graph()
 
     # Intervention Recommender
     state.models['intervention_recommender'] = InterventionRecommender(state.config)
@@ -229,7 +179,7 @@ async def root():
     """Health check"""
     return {
         "status": "running",
-        "system": "Personalized Learning with CSE-KG 2.0",
+        "system": "Personalized Learning with the Chapter-1 concept + LP graph",
         "initialized": state.initialized
     }
 
@@ -242,7 +192,7 @@ async def process_session(session: SessionData, background_tasks: BackgroundTask
     This is the main endpoint that:
     1. Encodes the session using HVSAE
     2. Performs multi-dimensional diagnosis
-    3. Identifies knowledge gaps using CSE-KG
+    3. Identifies knowledge gaps
     4. Selects optimal intervention
     5. Generates personalized content
     """
@@ -364,63 +314,61 @@ async def update_student_profile(profile: StudentProfile):
 @app.get("/api/concept/{concept_name}")
 async def get_concept_info(concept_name: str):
     """
-    Get information about a concept from CSE-KG
+    Get information about a concept from the Chapter-1 concept + LP graph.
+    Accepts a graph id (program_structure.println), a unique short label
+    (println) or a CPAL concept id (string_equality).
     """
-    if not state.initialized:
-        raise HTTPException(status_code=503, detail="System not initialized")
-    
-    try:
-        cse_kg = state.models['cse_kg_client']
-        
-        # Get concept info
-        concept_info = cse_kg.get_concept_info(concept_name)
-        
-        if not concept_info:
-            raise HTTPException(status_code=404, detail="Concept not found")
-        
-        # Get prerequisites
-        prerequisites = cse_kg.get_prerequisites(concept_name)
-        
-        # Get related concepts
-        related = cse_kg.get_related_concepts(concept_name, max_distance=1)
-        
-        return {
-            'concept': concept_name,
-            'info': concept_info,
-            'prerequisites': prerequisites,
-            'related': [{'concept': r[0], 'relation': r[1]} for r in related[:10]]
-        }
-    
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching concept: {str(e)}")
+    graph = get_chapter1_graph()
+    concept_id = graph.canonical(concept_name)
+    info = graph.concept_info(concept_id)
+    if not info:
+        raise HTTPException(status_code=404, detail="Concept not found in the Chapter-1 graph")
+
+    return {
+        'concept': concept_id,
+        'info': info,
+        'prerequisites': graph.get_prerequisites(concept_id),
+        'leads_to': graph.get_leads_to(concept_id),
+        'parallel': graph.get_parallel(concept_id),
+        'misconceptions': [
+            {'id': m['id'], 'wrong_belief': m.get('wrong_belief', '')}
+            for m in graph.misconceptions_for(concept_id)
+        ],
+        'lp_levels': {
+            lv: graph.lp_descriptor(concept_id, lv)
+            for lv in ('L0', 'L1', 'L2', 'L3', 'L4')
+        },
+    }
 
 
 @app.post("/api/query/concepts")
 async def query_concepts(query: Dict):
     """
-    Query CSE-KG for concepts
-    
-    Body: {"text": "student struggling with recursion and base cases"}
+    Search the Chapter-1 graph for concepts whose id, label or description
+    mentions any word of the query.
+
+    Body: {"text": "student struggling with array bounds and indexing"}
     """
-    if not state.initialized:
-        raise HTTPException(status_code=503, detail="System not initialized")
-    
-    try:
-        text = query.get('text', '')
-        
-        # Extract concepts
-        retriever = state.models['concept_retriever']
-        concepts = retriever.retrieve_from_query(text, top_k=10)
-        
-        return {
-            'query': text,
-            'concepts': concepts
-        }
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error querying concepts: {str(e)}")
+    text = query.get('text', '')
+    words = [w for w in text.lower().replace('_', ' ').split() if len(w) > 2]
+    graph = get_chapter1_graph()
+
+    scored = []
+    for cid, c in graph.concepts.items():
+        haystack = f"{cid} {c.get('label', '')} {c.get('description', '')}".lower().replace('_', ' ')
+        hits = sum(1 for w in words if w in haystack)
+        if hits:
+            scored.append((hits, cid, c))
+    scored.sort(key=lambda t: (-t[0], t[1]))
+
+    return {
+        'query': text,
+        'concepts': [
+            {'concept': cid, 'label': c.get('label', cid),
+             'chapter': c.get('chapter'), 'matches': hits}
+            for hits, cid, c in scored[:10]
+        ],
+    }
 
 
 @app.get("/api/stats")
@@ -486,10 +434,9 @@ async def multitask_rl_optimize(student_state: Dict):
     """
     Multi-Task RL optimization for current student state
     
-    Balances 5 objectives:
+    Balances 4 objectives (emotion is not an input):
     - Learning maximization
     - Engagement optimization
-    - Emotional state management
     - Time efficiency
     - Long-term retention
     """
@@ -508,7 +455,6 @@ async def multitask_rl_optimize(student_state: Dict):
         
         sarah_current_state = {
             'mastery': student_state.get('mastery', 0.5),
-            'emotion': student_state.get('emotion', 'neutral'),
             'embedding': torch.randn(512)  # Would be real embedding
         }
         
@@ -521,11 +467,7 @@ async def multitask_rl_optimize(student_state: Dict):
         
         # Add rationale
         primary_obj = session_plan['primary_objective']
-        rationale = _generate_weight_rationale(
-            primary_obj,
-            student_state.get('emotion', 'neutral'),
-            student_state.get('frustration_level', 0.5)
-        )
+        rationale = _generate_weight_rationale(primary_obj)
         
         return {
             'intervention': session_plan['intervention'],
@@ -563,21 +505,14 @@ async def get_rl_learning_stats():
                 'current_success_rate': 0.88,
                 'learned_policies': [
                     {
-                        'student_type': 'confused_beginner',
+                        'student_type': 'low_mastery_beginner',
                         'best_intervention': 'guided_practice',
                         'q_value': 0.88,
                         'success_rate': 0.92,
                         'num_trials': 34
                     },
                     {
-                        'student_type': 'frustrated_struggling',
-                        'best_intervention': 'motivational_support',
-                        'q_value': 0.82,
-                        'success_rate': 0.85,
-                        'num_trials': 28
-                    },
-                    {
-                        'student_type': 'engaged_intermediate',
+                        'student_type': 'high_mastery_intermediate',
                         'best_intervention': 'independent_challenge',
                         'q_value': 0.85,
                         'success_rate': 0.89,
@@ -585,9 +520,8 @@ async def get_rl_learning_stats():
                     }
                 ],
                 'key_insights': [
-                    'Guided practice works best for confused beginners (92% success)',
-                    'Motivational support critical for frustrated students (reduces dropout by 65%)',
-                    'Challenge problems accelerate learning for engaged students',
+                    'Guided practice works best for low-mastery beginners (92% success)',
+                    'Challenge problems accelerate learning for high-mastery students',
                     'Visual explanations more effective for spatial concepts (recursion, trees)',
                     'Spaced review improves retention by 43%'
                 ]
@@ -622,14 +556,13 @@ async def compare_interventions(student_state: Dict):
     
     try:
         mastery = student_state.get('mastery', 0.5)
-        emotion = student_state.get('emotion', 'neutral')
         
         # Get Q-values for each intervention
         # (In real system, would use RL agent)
         interventions = {
             'guided_practice': {
-                'q_value': 0.88 if emotion == 'confused' and mastery < 0.3 else 0.65,
-                'best_for': 'confused beginners with low mastery',
+                'q_value': 0.88 if mastery < 0.3 else 0.65,
+                'best_for': 'beginners with low mastery',
                 'success_rate': 0.92
             },
             'visual_explanation': {
@@ -637,24 +570,19 @@ async def compare_interventions(student_state: Dict):
                 'best_for': 'visual learners and spatial concepts',
                 'success_rate': 0.78
             },
-            'motivational_support': {
-                'q_value': 0.82 if emotion == 'frustrated' else 0.45,
-                'best_for': 'frustrated students with high dropout risk',
-                'success_rate': 0.85
-            },
             'conceptual_deepdive': {
                 'q_value': 0.71 if mastery > 0.4 else 0.48,
                 'best_for': 'misconceptions and medium mastery',
                 'success_rate': 0.76
             },
             'independent_challenge': {
-                'q_value': 0.85 if emotion == 'engaged' and mastery > 0.6 else 0.52,
-                'best_for': 'engaged students with high mastery',
+                'q_value': 0.85 if mastery > 0.6 else 0.52,
+                'best_for': 'students with high mastery',
                 'success_rate': 0.89
             },
             'worked_example': {
                 'q_value': 0.68 if mastery < 0.4 else 0.58,
-                'best_for': 'confused beginners, visual learners',
+                'best_for': 'low-mastery beginners, visual learners',
                 'success_rate': 0.73
             },
             'spaced_review': {
@@ -693,19 +621,15 @@ async def compare_interventions(student_state: Dict):
         raise HTTPException(status_code=500, detail=f"Error comparing interventions: {str(e)}")
 
 
-def _generate_weight_rationale(primary_objective: str, emotion: str, 
-                               frustration: float) -> str:
+def _generate_weight_rationale(primary_objective: str) -> str:
     """Generate rationale for objective weighting"""
     rationales = {
-        'learning': f"Focus on learning because student is {emotion} (not critically frustrated). "
-                   f"Frustration level ({frustration:.0%}) allows for productive learning.",
-        
-        'engagement': f"Prioritizing engagement because student shows signs of disengagement. "
-                     f"Need to recapture attention before teaching can be effective.",
-        
-        'emotional': f"Emotional state is primary concern. Student is {emotion} with "
-                    f"frustration at {frustration:.0%}. Must address emotional barriers first.",
-        
+        'learning': "Focus on learning: the student's mastery and LP level show room "
+                    "for productive progress on this concept.",
+
+        'engagement': "Prioritizing engagement because student shows signs of disengagement. "
+                      "Need to recapture attention before teaching can be effective.",
+
         'efficiency': "Optimizing for time efficiency as student has limited attention span "
                      "or session time. Need to maximize learning per minute.",
         

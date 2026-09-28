@@ -6,7 +6,11 @@ app and stalls partway). Instead instantiates ONLY the lightweight
 components each scenario needs:
   - ConceptResolver
   - DINAModel
-  - StudentStateTracker (three regex-based channels)
+  - StudentStateTracker (structure + content channels)
+
+Emotion and the psychological channel (attribution, self-efficacy,
+imposter, anxiety, flow, SRL) are no longer inputs; scenarios that only
+tested them were removed.
   - LPDiagnostician (with hvsae=None, rubric/RAG disabled)
 
 Skips anything that genuinely requires the full pipeline (HVSAE encoding,
@@ -135,7 +139,7 @@ def _resolve(sd):
     if not RESOLVER: return [("unknown", 0.0)]
     return RESOLVER.resolve(sd)
 
-def _three_channel(sd):
+def _state_channels(sd):
     if not TRACKER: return {}
     try:
         return TRACKER.analyse_prompt(sd["student_id"], sd) or {}
@@ -159,7 +163,7 @@ def _diagnose(text, concept="string_equality", stored_lp="L1", streak=0):
 section("Layer 0 — Silence / non-response")
 
 def s0_1():
-    sd = _sd(); r = _resolve(sd); tc = _three_channel(sd)
+    sd = _sd(); r = _resolve(sd); tc = _state_channels(sd)
     ok = r and r[0][0] == "unknown"
     return {"_outcome":"PASS" if ok else "DEGRADED",
             "_drawback": None if ok else f"empty input resolved as {r[0][0]}",
@@ -179,7 +183,7 @@ for sid, q in [("0.3a","?"),("0.3b","😭"),("0.3c","."),("0.3d","k")]:
     def _mk(q=q):
         def fn():
             sd = _sd(question=q)
-            r = _resolve(sd); tc = _three_channel(sd)
+            r = _resolve(sd); tc = _state_channels(sd)
             enc = (tc.get("content_channel") or {}).get("encoding_strength")
             ok = r[0][0] == "unknown"
             return {"_outcome":"PASS" if ok else "DEGRADED",
@@ -221,14 +225,14 @@ run_scenario("0","0.8","empty error, real code",s0_8,"concept from code")
 
 def s0_9():
     code = "\n".join(f"int x{i}=0;" for i in range(220))
-    tc = _three_channel(_sd(code=code))
+    tc = _state_channels(_sd(code=code))
     enc = (tc.get("content_channel") or {}).get("encoding_strength")
     return {"_outcome":"OK", "_drawback":None, "encoding_strength":enc}
 run_scenario("0","0.9","code dump no question",s0_9,"ask clarifying question")
 
 def s0_10():
     sd = _sd(question="why does == not work on Strings?")
-    r = _resolve(sd); tc = _three_channel(sd)
+    r = _resolve(sd); tc = _state_channels(sd)
     return {"_outcome":"PASS","_drawback":None,
             "top": r[0][0],
             "stage":(tc.get("progression_graph") or {}).get("stage")}
@@ -275,19 +279,16 @@ def s0_15():
 run_scenario("0","0.15","screenshot empty-text fallthrough",s0_15,"elicitation")
 
 def s0_20():
-    tc = _three_channel(_sd(question="stop, I quit, this is useless"))
-    pg = tc.get("psychological_graph") or {}
+    tc = _state_channels(_sd(question="stop, I quit, this is useless"))
     rec = (tc.get("recommended_intervention") or {}).get("type")
     return {"_outcome":"OK","_drawback":None,
-            "intervention": rec, "self_efficacy": pg.get("self_efficacy"),
-            "attribution": pg.get("attribution"),
-            "high_anxiety": pg.get("high_anxiety")}
-run_scenario("0","0.20","disengagement / quit",s0_20,"motivational_support")
+            "intervention": rec}
+run_scenario("0","0.20","disengagement / quit",s0_20,"intervention surfaces")
 
 # 0.4 — idle session timer. Closed 2026-05-23 by simulating a stale state
 # in StudentStateTracker: call analyse_prompt with the same student_id
 # twice with an "idle gap" of empty input in between, and confirm the
-# tracker doesn't double-flag anxiety or crash on the resumed turn.
+# tracker keeps state consistent and doesn't crash on the resumed turn.
 def s0_4():
     if not TRACKER:
         return {"_outcome":"NOT_RUNNABLE","_drawback":"StudentStateTracker missing"}
@@ -860,40 +861,6 @@ run_scenario("5","5.7","credit different-sub-criterion answer",s5_7,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Layer 6 — Emotion / behavioral state surface signals
-# ═══════════════════════════════════════════════════════════════════════════
-section("Layer 6 — Emotion / behavioral surface signals")
-
-L6_CASES = [
-    ("6.1","frustrated","I've been at this for 3 hours, I hate this stupid language"),
-    ("6.2","confused","wait, I don't understand what static even means"),
-    ("6.3","anxious","my exam is tomorrow and nothing is working"),
-    ("6.4","engaged","ok I think I get it — but what happens if the array is empty?"),
-    ("6.5","neutral","I have a bug on line 12"),
-    ("6.6","frustrated","whatever, I give up"),
-    ("6.7","engaged","easy, this is just a basic null check"),
-    ("6.8","engaged","OH I get it now!! it's because of the heap right?!"),
-]
-for sid, exp, txt in L6_CASES:
-    def _mk(sid=sid, exp=exp, txt=txt):
-        def fn():
-            tc = _three_channel(_sd(question=txt))
-            pg = tc.get("psychological_graph") or {}
-            lc = tc.get("language_channel") or {}
-            return {"_outcome":"OK","_drawback":None,
-                    "expected_label":exp,
-                    "attribution":pg.get("attribution"),
-                    "self_efficacy":pg.get("self_efficacy"),
-                    "high_anxiety":pg.get("high_anxiety"),
-                    "imposter_flag":pg.get("imposter_flag"),
-                    "srl_phase":pg.get("srl_phase"),
-                    "lang_imposter":lc.get("imposter_signal")}
-        return fn
-    run_scenario("6", sid, f"label={exp}", _mk(),
-                 f"psych signals consistent with {exp}")
-
-
-# ═══════════════════════════════════════════════════════════════════════════
 # Layer 7 — Behavioral actions (signals into resolver)
 # ═══════════════════════════════════════════════════════════════════════════
 section("Layer 7 — Behavioral actions (resolver smoke)")
@@ -914,7 +881,7 @@ for sid, name, actions in L7_CASES:
                      time_stuck=320.0 if "stuck" in name else 0.0)
             try:
                 r = _resolve(sd)
-                tc = _three_channel(sd)
+                tc = _state_channels(sd)
                 return {"_outcome":"PASS","_drawback":None,
                         "top":r[0][0],
                         "stage":(tc.get("progression_graph") or {}).get("stage")}
@@ -1116,29 +1083,23 @@ for sid, name, code, err in L9_CASES:
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Layer 11 — Intervention selection (from three-channel)
+# Layer 11 — Intervention selection (from structure + content channels)
 # ═══════════════════════════════════════════════════════════════════════════
 section("Layer 11 — Intervention selection")
 
 L11_CASES = [
     ("11.1","L1 should not get challenge_problem",   "it just doesn't work"),
-    ("11.3","frustrated low mastery",                "I hate this language, I quit"),
     ("11.4","high mastery engaged",                  "I think I'm pretty solid on this — what else can I try?"),
     ("11.5","wrong-model identified",                "I thought == compares the text of the string"),
-    ("11.6","imposter syndrome",                     "I'm just too dumb for this"),
     ("11.7","new concept first encounter",           "what is a constructor?"),
 ]
 for sid, name, q in L11_CASES:
     def _mk(sid=sid, name=name, q=q):
         def fn():
-            tc = _three_channel(_sd(question=q))
+            tc = _state_channels(_sd(question=q))
             rec = (tc.get("recommended_intervention") or {}).get("type")
-            pg = tc.get("psychological_graph") or {}
             return {"_outcome":"OK","_drawback":None,
-                    "intervention":rec,
-                    "imposter_flag":pg.get("imposter_flag"),
-                    "self_efficacy":pg.get("self_efficacy"),
-                    "attribution":pg.get("attribution")}
+                    "intervention":rec}
         return fn
     run_scenario("11", sid, name, _mk(), "intervention surfaces")
 
@@ -1156,7 +1117,7 @@ def s12_8():
         return {"_outcome":"ERROR","_drawback":f"import: {e}"}
 run_scenario("12","12.8","RL module importable",s12_8,"no import crash")
 
-# 12.1–12.7 closed 2026-05-23 by running the RewardCalculator over
+# 12.1–12.6 closed 2026-05-23 by running the RewardCalculator over
 # synthetic session→response pairs in-process. Bypasses the full chat-app
 # loop but exercises every signal path the agent reads.
 def _reward_calc():
@@ -1179,10 +1140,9 @@ def s12_1():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     r = _silent_reward(calc,
-        {"emotion":"neutral"}, 5,
+        {}, 5,
         {"mastery_before":0.25,"mastery_after":0.55,
-         "engagement_score":0.6,"emotion_after":"engaged",
-         "zpd_status":"at_boundary","delta_lp":0,
+         "engagement_score":0.6,"zpd_status":"at_boundary","delta_lp":0,
          "lp_level_before":"L1","lp_level_after":"L1"})
     ok = r > 0
     return {"_outcome":"PASS" if ok else "FAIL",
@@ -1195,18 +1155,16 @@ def s12_2():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     r_drop = _silent_reward(calc,
-        {"emotion":"engaged"}, 5,
+        {}, 5,
         {"mastery_before":0.60,"mastery_after":0.35,
-         "engagement_score":0.5,"emotion_after":"frustrated",
-         "zpd_status":"overwhelmed","delta_lp":-1,
+         "engagement_score":0.5,"zpd_status":"overwhelmed","delta_lp":-1,
          "lp_level_before":"L2","lp_level_after":"L1",
          "gave_up":True})
     # Compare to a flat baseline (no change)
     r_flat = _silent_reward(calc,
-        {"emotion":"neutral"}, 5,
+        {}, 5,
         {"mastery_before":0.50,"mastery_after":0.50,
-         "engagement_score":0.5,"emotion_after":"neutral",
-         "zpd_status":"at_boundary","delta_lp":0,
+         "engagement_score":0.5,"zpd_status":"at_boundary","delta_lp":0,
          "lp_level_before":"L2","lp_level_after":"L2"})
     ok = r_drop < r_flat
     return {"_outcome":"PASS" if ok else "FAIL",
@@ -1222,12 +1180,11 @@ def s12_3():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     base_resp = {"mastery_before":0.50,"mastery_after":0.50,
-                 "engagement_score":0.5,"emotion_after":"neutral",
-                 "zpd_status":"at_boundary"}
-    r0 = _silent_reward(calc, {"emotion":"neutral"}, 5,
+                 "engagement_score":0.5,"zpd_status":"at_boundary"}
+    r0 = _silent_reward(calc, {}, 5,
                         {**base_resp,"delta_lp":0,
                          "lp_level_before":"L1","lp_level_after":"L1"})
-    r1 = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r1 = _silent_reward(calc, {}, 5,
                         {**base_resp,"delta_lp":1,
                          "lp_level_before":"L1","lp_level_after":"L2"})
     ok = r1 > r0
@@ -1244,12 +1201,11 @@ def s12_4():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     base = {"mastery_before":0.50,"mastery_after":0.55,
-            "engagement_score":0.6,"emotion_after":"engaged",
-            "zpd_status":"at_boundary","delta_lp":1,
+            "engagement_score":0.6,"zpd_status":"at_boundary","delta_lp":1,
             "lp_level_before":"L2","lp_level_after":"L3"}
-    r_no_plateau = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_no_plateau = _silent_reward(calc, {}, 5,
                                   {**base,"plateau_flag_before":False})
-    r_plateau    = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_plateau    = _silent_reward(calc, {}, 5,
                                   {**base,"plateau_flag_before":True})
     ok = r_plateau > r_no_plateau
     return {"_outcome":"PASS" if ok else "FAIL",
@@ -1265,11 +1221,11 @@ def s12_5():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     base = {"mastery_before":0.50,"mastery_after":0.55,
-            "emotion_after":"neutral","zpd_status":"at_boundary",
+            "zpd_status":"at_boundary",
             "delta_lp":0,"lp_level_before":"L2","lp_level_after":"L2"}
-    r_lo = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_lo = _silent_reward(calc, {}, 5,
                           {**base,"engagement_score":0.2})
-    r_hi = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_hi = _silent_reward(calc, {}, 5,
                           {**base,"engagement_score":0.9})
     ok = r_hi > r_lo
     return {"_outcome":"PASS" if ok else "FAIL",
@@ -1285,12 +1241,11 @@ def s12_6():
     calc, err = _reward_calc()
     if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
     base = {"mastery_after":0.55,"engagement_score":0.6,
-            "emotion_after":"engaged",
             "delta_lp":0,"lp_level_before":"L2","lp_level_after":"L2"}
-    r_in = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_in = _silent_reward(calc, {}, 5,
                           {**base,"mastery_before":0.55,
                            "zpd_status":"at_boundary"})
-    r_over = _silent_reward(calc, {"emotion":"neutral"}, 5,
+    r_over = _silent_reward(calc, {}, 5,
                             {**base,"mastery_before":0.10,
                              "zpd_status":"overwhelmed"})
     ok = r_in > r_over
@@ -1300,37 +1255,6 @@ def s12_6():
             "reward_in_zpd":round(r_in,3),
             "reward_overwhelmed":round(r_over,3)}
 run_scenario("12","12.6","ZPD reward",s12_6,"in-ZPD > overwhelmed")
-
-# 12.7 — attribution reward. fixed→adaptive shift + imposter cleared via
-# attribution_reframe should produce a higher reward than the same
-# session with neutral→neutral attribution and no intervention.
-def s12_7():
-    calc, err = _reward_calc()
-    if err: return {"_outcome":"ERROR","_drawback":f"calc init: {err}"}
-    base = {"mastery_before":0.50,"mastery_after":0.55,
-            "engagement_score":0.6,"emotion_after":"engaged",
-            "zpd_status":"at_boundary","delta_lp":0,
-            "lp_level_before":"L2","lp_level_after":"L2"}
-    r_shift = _silent_reward(calc, {"emotion":"neutral"}, 5,
-                             {**base,
-                              "attribution_before":"fixed",
-                              "attribution_after":"adaptive",
-                              "imposter_flag_before":True,
-                              "imposter_flag_after":False,
-                              "intervention_type":"attribution_reframe"})
-    r_flat = _silent_reward(calc, {"emotion":"neutral"}, 5,
-                            {**base,
-                             "attribution_before":"neutral",
-                             "attribution_after":"neutral"})
-    ok = r_shift > r_flat
-    return {"_outcome":"PASS" if ok else "FAIL",
-            "_drawback":None if ok else
-              f"attribution shift didn't help: shift={r_shift} flat={r_flat}",
-            "reward_shift":round(r_shift,3),
-            "reward_flat":round(r_flat,3)}
-run_scenario("12","12.7","attribution reward",s12_7,
-             "fixed→adaptive + imposter cleared > flat")
-
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Layer 14 — Adversarial / robustness
@@ -1392,33 +1316,23 @@ run_scenario("14","14.11","NaN time_stuck",s14_11,"sanitized")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Layer 15 — Three-channel
+# Layer 15 — Content channel (encoding strength)
 # ═══════════════════════════════════════════════════════════════════════════
-section("Layer 15 — Three-channel analysis")
+section("Layer 15 — Content-channel analysis")
 
 L15_CASES = [
-    ("15.1","imposter language",    "I'm probably too dumb for this", "imposter_flag=True"),
-    ("15.2","external attribution", "Java is just badly designed, this is stupid", "attribution=external"),
-    ("15.3","internal healthy",     "I keep making the same mistake — I need to read errors more carefully", "internal, not imposter"),
-    ("15.4","internal unhealthy",   "I'm just bad at this", "internal + imposter"),
     ("15.5","high encoding",        "== compares the references stored in variables, so two new String objects holding 'hello' get different heap addresses and == returns false; .equals walks the char[].", "encoding=high"),
     ("15.6","low encoding",         "NullPointerException at Main.java:12", "encoding=low"),
-    ("15.8","factual question",     "what's the syntax for a for-loop?", "neutral psych"),
+    ("15.8","factual question",     "what's the syntax for a for-loop?", "encoding=surface"),
 ]
 for sid, name, q, exp in L15_CASES:
     def _mk(sid=sid, name=name, q=q, exp=exp):
         def fn():
-            tc = _three_channel(_sd(question=q))
-            pg = tc.get("psychological_graph") or {}
+            tc = _state_channels(_sd(question=q))
             cc = tc.get("content_channel") or {}
-            lc = tc.get("language_channel") or {}
             return {"_outcome":"OK","_drawback":None,
                     "expected":exp,
-                    "imposter_flag":pg.get("imposter_flag"),
-                    "attribution":pg.get("attribution"),
-                    "self_efficacy":pg.get("self_efficacy"),
-                    "encoding_strength":cc.get("encoding_strength"),
-                    "lang_imposter":lc.get("imposter_signal")}
+                    "encoding_strength":cc.get("encoding_strength")}
         return fn
     run_scenario("15", sid, name, _mk(), exp)
 
@@ -1428,61 +1342,6 @@ for sid, name, q, exp in L15_CASES:
 # Targets gaps the harness exposed after fixes landed.
 # ═══════════════════════════════════════════════════════════════════════════
 section("Layer 18 — Added scenarios (post-fix gap coverage)")
-
-# 18.1 — external attribution should now route to attribution_reframe
-def s18_1():
-    tc = _three_channel(_sd(student_id="s18_1", question="this language is just badly designed, why does Java even exist"))
-    attr = (tc.get("psychological_graph") or {}).get("attribution")
-    rec = (tc.get("recommended_intervention") or {}).get("type")
-    ok = attr == "external" and rec == "attribution_reframe"
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else f"attribution={attr}, intervention={rec}",
-            "attribution":attr,"intervention":rec}
-run_scenario("18","18.1","external attribution → reframe gate",s18_1,
-             "attribution=external + intervention=attribution_reframe")
-
-# 18.2 — imposter + external simultaneously
-def s18_2():
-    tc = _three_channel(_sd(student_id="s18_2", question="I'm probably too dumb for this and the compiler is garbage anyway"))
-    pg = tc.get("psychological_graph") or {}
-    rec = (tc.get("recommended_intervention") or {}).get("type")
-    ok = pg.get("imposter_flag") and pg.get("attribution") in ("external","fixed") and rec == "attribution_reframe"
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else f"imposter={pg.get('imposter_flag')} attr={pg.get('attribution')} rec={rec}",
-            "imposter":pg.get("imposter_flag"),"attribution":pg.get("attribution"),"intervention":rec}
-run_scenario("18","18.2","imposter + external combo",s18_2,
-             "both flagged, reframe gate fires")
-
-# 18.3 — self-correction "I thought X but actually Y" should read as adaptive
-def s18_3():
-    tc = _three_channel(_sd(student_id="s18_3", question="I thought == compared content but actually it compares references — I need to read the docs more carefully"))
-    pg = tc.get("psychological_graph") or {}
-    ok = pg.get("attribution") == "adaptive"
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else f"self-correction → attribution={pg.get('attribution')}",
-            "attribution":pg.get("attribution"),"self_efficacy":pg.get("self_efficacy")}
-run_scenario("18","18.3","self-correction reads as adaptive",s18_3,"attribution=adaptive")
-
-# 18.4 — breakthrough "OH I get it now" → growth efficacy
-def s18_4():
-    tc = _three_channel(_sd(student_id="s18_4", question="OH I get it now!! it's because of the heap right?"))
-    pg = tc.get("psychological_graph") or {}
-    eff = pg.get("self_efficacy")
-    ok = eff == "growth"
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else f"breakthrough got efficacy={eff}",
-            "self_efficacy":eff,"attribution":pg.get("attribution")}
-run_scenario("18","18.4","breakthrough → growth_efficacy",s18_4,"self_efficacy=growth")
-
-# 18.5 — long-grind anxiety "been at this for 4 hours"
-def s18_5():
-    tc = _three_channel(_sd(student_id="s18_5", question="I've been at this for 4 hours and nothing is working"))
-    pg = tc.get("psychological_graph") or {}
-    ok = pg.get("high_anxiety") is True
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else "prolonged-grind didn't flag anxiety",
-            "high_anxiety":pg.get("high_anxiety")}
-run_scenario("18","18.5","prolonged grind → high_anxiety",s18_5,"high_anxiety=True")
 
 # 18.6 — WM threshold boundary: confidence ~0.50 should now be suppressed
 def s18_6():
@@ -1535,20 +1394,6 @@ def s18_9():
 run_scenario("18","18.9","code comment doesn't leak to wrong concept",s18_9,
              "string_equality or unknown")
 
-# 18.10 — anxiety + L1 reply → reduce_challenge gate (not attribution_reframe)
-def s18_10():
-    tc = _three_channel(_sd(student_id="s18_10", question="I'm freaking out, my exam is tomorrow and I have no clue what to do"))
-    pg = tc.get("psychological_graph") or {}
-    rec = (tc.get("recommended_intervention") or {}).get("type")
-    # Either reduce_challenge (anxiety gate) or attribution_reframe (if
-    # imposter side-effect from "no clue" reflection pattern fired) is OK
-    ok = rec in ("reduce_challenge","attribution_reframe")
-    return {"_outcome":"PASS" if ok else "DEGRADED",
-            "_drawback":None if ok else f"anxious-L1 got rec={rec}",
-            "anxiety":pg.get("high_anxiety"),"intervention":rec}
-run_scenario("18","18.10","anxiety + L1 → de-escalation",s18_10,
-             "reduce_challenge or attribution_reframe")
-
 # 18.11 — pasted stack trace only (no English) should still detect concept
 def s18_11():
     trace = """java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 5
@@ -1574,7 +1419,7 @@ def s18_12():
         "character. This is also why Integer == Integer fails for values outside "
         "the autobox cache range — same root cause, different surface symptom."
     )
-    tc = _three_channel(_sd(student_id="s18_12", question=essay))
+    tc = _state_channels(_sd(student_id="s18_12", question=essay))
     cc = tc.get("content_channel") or {}
     enc = cc.get("encoding_strength")
     ok = enc in ("solid","deep")
@@ -1873,7 +1718,7 @@ def s19_12():
         from src.persistence.db_store import DBStore
         db = DBStore(tmp)
         for t in ["worked_example","worked_example","worked_example",
-                  "socratic_prompt","attribution_reframe"]:
+                  "socratic_prompt","trace_scaffold"]:
             db.audit("intervention_picked", student_id="x", payload={"type":t})
         counts = db.intervention_counts()
         ok = counts.get("worked_example") == 3 and counts.get("socratic_prompt") == 1
@@ -2165,7 +2010,7 @@ def s20_10():
     try:
         db = _fresh_db("20_10")
         for it in ["worked_example","worked_example","socratic_prompt",
-                   "attribution_reframe","worked_example"]:
+                   "trace_scaffold","worked_example"]:
             db.audit("turn_completed", student_id="iv", payload={
                 "skill":"null_pointer","intervention":it,
                 "lp_before":"L1","lp_after":"L2","mastery_after":0.5})
@@ -2224,11 +2069,11 @@ run_scenario("20","20.12","dwell_s preserved per turn",s20_12,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Layer 21 — Behavioral + KG signals per turn (added 2026-05-22).
+# Layer 21 — Behavioral signals per turn (added 2026-05-22).
 # Closes the Layer 7 (no per-turn behavior strategy) and Layer 13 (no
-# per-turn KG context tracking) gaps identified in the prior review.
+# per-turn context tracking) gaps identified in the prior review.
 # ═══════════════════════════════════════════════════════════════════════════
-section("Layer 21 — Behavioral + KG signals per turn")
+section("Layer 21 — Behavioral signals per turn")
 
 def _seed_full_turn(db, sid, skill, payload):
     """Mirror the turn_completed shape the chat app now writes."""
@@ -2279,74 +2124,6 @@ def s21_2():
 run_scenario("21","21.2","correct_streak grows + resets",s21_2,
              "[1,2,3,0,1,2]")
 
-# 21.3 — KG concept queried + counts per turn
-def s21_3():
-    try:
-        db = _fresh_db("21_3")
-        _seed_full_turn(db, "u", "null_pointer", {
-            "lp_before":"L1","lp_after":"L2","mastery_after":0.4,
-            "kg_concept_queried":"null_pointer",
-            "cse_prerequisites_count":3, "cse_related_count":5,
-            "ped_misconceptions_count":2, "ped_interventions_count":4,
-            "three_channel_fired":True,
-        })
-        row = db.progression_for("u","null_pointer")[0]
-        ok = (row.get("kg_concept_queried") == "null_pointer"
-              and row.get("cse_prerequisites_count") == 3
-              and row.get("ped_misconceptions_count") == 2
-              and row.get("three_channel_fired") is True)
-        return {"_outcome":"PASS" if ok else "FAIL",
-                "_drawback":None if ok else "KG fields missing",
-                "row_keys":sorted(row.keys())}
-    except Exception as e:
-        return {"_outcome":"ERROR","_drawback":str(e)}
-run_scenario("21","21.3","KG concept + counts per turn",s21_3,
-             "all KG fields preserved")
-
-# 21.4 — COKE cognitive_state captured
-def s21_4():
-    try:
-        db = _fresh_db("21_4")
-        for cs, cf in [("confused", 0.72), ("engaged", 0.85), ("frustrated", 0.61)]:
-            _seed_full_turn(db, "u", "null_pointer", {
-                "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
-                "coke_cognitive_state":cs, "coke_confidence":cf,
-            })
-        rows = db.progression_for("u","null_pointer")
-        states = [r.get("coke_cognitive_state") for r in rows]
-        ok = states == ["confused","engaged","frustrated"]
-        return {"_outcome":"PASS" if ok else "FAIL",
-                "_drawback":None if ok else f"states={states}",
-                "states":states}
-    except Exception as e:
-        return {"_outcome":"ERROR","_drawback":str(e)}
-run_scenario("21","21.4","COKE cognitive_state per turn",s21_4,
-             "states preserved in order")
-
-# 21.5 — KG block sizes (proxy for context volume)
-def s21_5():
-    try:
-        db = _fresh_db("21_5")
-        # Simulate one rich-context turn and one sparse turn
-        _seed_full_turn(db, "u", "null_pointer", {
-            "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
-            "cse_kg_block_chars":1200, "ped_kg_block_chars":850,
-        })
-        _seed_full_turn(db, "u", "null_pointer", {
-            "lp_before":"L1","lp_after":"L1","mastery_after":0.30,
-            "cse_kg_block_chars":40, "ped_kg_block_chars":20,
-        })
-        rows = db.progression_for("u","null_pointer")
-        ok = (rows[0]["cse_kg_block_chars"] == 1200
-              and rows[1]["cse_kg_block_chars"] == 40)
-        return {"_outcome":"PASS" if ok else "FAIL",
-                "_drawback":None if ok else "sizes not captured",
-                "sizes":[r.get("cse_kg_block_chars") for r in rows]}
-    except Exception as e:
-        return {"_outcome":"ERROR","_drawback":str(e)}
-run_scenario("21","21.5","KG block sizes per turn",s21_5,
-             "1200 / 40 sizes preserved")
-
 # 21.6 — All new fields coexist with old fields in one turn audit
 def s21_6():
     try:
@@ -2356,23 +2133,17 @@ def s21_6():
             "session_id":"s1","lp_before":"L1","lp_after":"L2",
             "mastery_after":0.50,"intervention":"worked_example",
             "rl_q":0.42,"dwell_s":18.3,
-            "attribution":"adaptive","imposter":False,
             # NEW Layer 21 fields
             "reasoning_length_words":42,"reasoning_complexity":3.8,
             "correct_streak":2,
             "kg_concept_queried":"null_pointer",
-            "cse_prerequisites_count":3,"cse_related_count":5,
-            "ped_misconceptions_count":2,"ped_interventions_count":4,
-            "coke_cognitive_state":"engaged","coke_confidence":0.78,
             "three_channel_fired":True,
-            "cse_kg_block_chars":900,"ped_kg_block_chars":650,
         })
         row = db.progression_for("u","null_pointer")[0]
         required = {"session_id","lp_after","mastery_after","intervention",
-                    "rl_q","dwell_s","attribution","reasoning_length_words",
+                    "rl_q","dwell_s","reasoning_length_words",
                     "reasoning_complexity","correct_streak",
-                    "kg_concept_queried","cse_prerequisites_count",
-                    "coke_cognitive_state","three_channel_fired"}
+                    "kg_concept_queried","three_channel_fired"}
         missing = required - set(row.keys())
         ok = not missing
         return {"_outcome":"PASS" if ok else "FAIL",
@@ -2381,7 +2152,7 @@ def s21_6():
     except Exception as e:
         return {"_outcome":"ERROR","_drawback":str(e)}
 run_scenario("21","21.6","old + new fields coexist in one turn",s21_6,
-             "all 14 expected fields present")
+             "all 11 expected fields present")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -2562,7 +2333,7 @@ for sid, msg in L24_CASES:
             try:
                 r = _resolve(_sd(question=m))
                 top = r[0][0] if r else "unknown"
-                tc = _three_channel(_sd(question=m))
+                tc = _state_channels(_sd(question=m))
                 return {"_outcome":"OK","_drawback":None,
                         "top":top,
                         "intervention":(tc.get("recommended_intervention") or {}).get("type")}
@@ -2676,7 +2447,7 @@ section("Layer 27 — Linguistic edge cases")
 
 L27_CASES = [
     ("27.1",  "text-speak", "y is dis not workin lol my loop runs 4ever"),
-    ("27.2",  "all caps frustration", "WHY DOES THIS KEEP THROWING NULLPOINTEREXCEPTION I HATE THIS"),
+    ("27.2",  "all caps input", "WHY DOES THIS KEEP THROWING NULLPOINTEREXCEPTION I HATE THIS"),
     ("27.3",  "streaming consciousness",
         "so like i was trying to compare strings and i thought == would work "
         "but then it didn't and i was like wait why and then i looked it up "
@@ -2703,7 +2474,7 @@ for sid, kind, msg in L27_CASES:
         def fn():
             try:
                 r = _resolve(_sd(question=m))
-                tc = _three_channel(_sd(question=m))
+                tc = _state_channels(_sd(question=m))
                 top = r[0][0] if r else "unknown"
                 return {"_outcome":"OK","_drawback":None,
                         "kind":kind, "top":top,

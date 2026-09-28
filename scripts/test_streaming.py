@@ -41,11 +41,6 @@ def main():
         'interaction_count': 1, 'personality': p,
         'knowledge_state': {'overall_mastery': 0.35, 'mastery_history': [0.35]},
         'interests': [],
-        'psychological_graph': {
-            'attribution': 'internal_stable', 'self_efficacy': 'low',
-            'srl_phase': 'performance',
-            'imposter_flag': True, 'high_anxiety': True, 'flow_state': False,
-        },
         'progression_graph': {'stage': 2, 'zpd_status': 'within',
                               'scaffold_level': 4, 'has_attempt': True},
         'content_channel': {'encoding_strength': 'surface',
@@ -55,23 +50,9 @@ def main():
             'rationale': 'Inferred from prompt.'},
     }
     analysis = {
-        'emotion': 'frustrated', 'frustration_level': float(p['neuroticism']),
         'engagement_score': 0.5,
         'bkt_update': {'p_learned_before': 0.30, 'p_learned_after': 0.35},
-        'cse_kg': {'concept': 'recursion',
-                   'prerequisites': ['functions', 'base case', 'stack frames'],
-                   'related_concepts': ['iteration', 'divide and conquer'],
-                   'definition': 'A function that calls itself with smaller input.'},
-        'pedagogical_kg': {
-            'progression': 'function call -> base case -> recursive step',
-            'misconceptions': ['forgetting base case', 'n==0 not n==1'],
-            'cognitive_load': 'high',
-            'interventions': ['worked example'],
-            'learning_path': lp,
-        },
-        'coke': {'cognitive_state': 'frustrated', 'mental_activity': 'recursion',
-                 'behavioral_response': 'may abandon', 'confidence': 0.4,
-                 'cognitive_chain': {'description': 'wrong output -> disengages'}},
+        'learning_path': lp,
     }
 
     gen = EnhancedPersonalizedGenerator()

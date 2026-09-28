@@ -113,10 +113,11 @@ Evidence) attach via typed edges (`prerequisiteOf`, `alignedToLPLevel`,
 `indicatesMisconception`, `assessedBy`, `remediatedBy`, `demonstrates`).
 
 **The algorithm (two parts).**
-1. **CSO traversal (`cso_traversal.py`, `get_neighbours`).** An in-memory index
-   over `CSO.3.5.nt` exposes the relations (superTopicOf, relatedEquivalent,
-   contributesTo…). The concept name is resolved to a CSO slug (`canonical()`
-   follows aliases), and 1-hop neighbours are pulled.
+1. **Chapter-1 graph lookup (`chapter1_graph.py`, `get_neighbours`).** The
+   Chapter-1 concept + LP graph (`data/chapter1_concept_graph_percpt_lp.json`)
+   is indexed once. The concept name is resolved to its Chapter-1 id
+   (`canonical()`), and its 1-hop neighbours are pulled: prerequisites, the
+   concepts it leads to, and parallel constructs.
 2. **Graph update (`student_knowledge_graph.py` → `StudentGraphService.record_turn`).**
    For the touched node it writes the LP level, mastery (with a delta), the
    wrong-models (applying the L3+ refutation rule), the misconception note, and
@@ -144,7 +145,7 @@ transfer/debugging.
    `[transfer_task, worked_example, socratic_prompt, trace_scaffold]` is filtered
    by **`filter_interventions_by_lp(current_lp_level)`** — an LP-validity gate, so
    an L4 move can't be handed to an L1 student.
-2. The student's reasoning latent + mastery + emotion + LP form a **state
+2. The student's reasoning latent + mastery + LP form a **state
    vector** fed to the trained **`TeachingRLAgent`** (a DQN). `select_action()`
    returns the argmax-Q intervention.
 3. If the RL pick passes the LP gate, it **overrides** the default. The previous
@@ -219,5 +220,5 @@ follow the Phase-1 **spec** rather than the current code (e.g. the code uses
 L1–L4, not the L0 floor; mastery is a single value + DINA, not yet a full
 distribution). The component **algorithms above are real** and live in the
 codebase; the wireframe shows the intended end-to-end picture, with one genuine
-live hook (`record_turn`) feeding the CSO graph from the running app. See
+live hook (`record_turn`) feeding the student graph from the running app. See
 `PROJECT_REPORT.md` §9 for the per-component code locations.

@@ -35,8 +35,7 @@ def initialize_nestor_profiler(config_path: str = 'config.yaml'):
         'exploration_rate': 0.7,
         'persistence': 0.6,
         'organization': 0.8,
-        'social_interaction': 0.5,
-        'emotional_variability': 0.4
+        'social_interaction': 0.5
     }
     
     result = profiler.complete_inference(test_behavioral_data)

@@ -1,8 +1,8 @@
 """Standalone smoke test for the on-disk LP pipeline.
 
 Loads mental_models.py and lp_diagnostic.py directly, bypassing the
-src.knowledge_graph package __init__ which pulls in SPARQLWrapper and
-other heavy deps that aren't installed in this sandbox.
+src.knowledge_graph package __init__ and the heavy deps the rest of the
+stack needs.
 """
 import sys
 import importlib.util

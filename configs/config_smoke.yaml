@@ -40,8 +40,6 @@ orchestrator:
     emotional: 0.3
     mastery: 0.4
     time: 0.3
-pedagogical_kg:
-  data_dir: data/pedagogical_kg
 rl:
   batch_size: 32
   epsilon: 0.15

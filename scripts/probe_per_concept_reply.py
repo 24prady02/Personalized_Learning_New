@@ -65,7 +65,6 @@ def main() -> None:
         student_message=msg, code=None, student_state=student_state, analysis={},
         conversation_context={"interaction_number":1, "previous_topics":[],
             "what_worked_before":[], "confusion_patterns":[], "learning_trajectory":[]},
-        emotional_context={"tone":"neutral","encouragement_level":"moderate"},
         learning_style_adaptation={"style":"visual"},
         personality_adaptation={"communication_style":"balanced"},
         progress_context={"current_mastery":0.3,"skill_change":0.0,

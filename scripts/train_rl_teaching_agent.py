@@ -5,11 +5,11 @@ Simulator
 ---------
 - State vector (512-dim) = concat of:
     * BKT-style mastery per 8 concepts (sampled trajectory)
-    * emotion logits (5-dim from pretrained emotion classifier)
+    * reserved (5 zeros; formerly emotion — emotion is no longer an input)
     * recent action stats (7-dim from BehavioralHMM features)
     * learned HVSAE-like latent noise padded to 512
 - Action space (10): matches TeachingRLAgent.actions
-- Reward: Δmastery + engagement bonus − intervention cost
+- Reward: Δmastery − intervention cost (+1 on reaching mastery)
 - Transition: per-action empirical Δmastery drawn from ProgSnap2 Score deltas
     conditioned on current HMM state. Matched on student trajectories so the
     dynamics are at least loosely anchored in real student behaviour.
@@ -92,16 +92,15 @@ class StudentSimulator:
 
     def reset(self):
         self.mastery = np.random.uniform(0.1, 0.4, size=N_CONCEPTS).astype(np.float32)
-        self.emotion = np.zeros(5, dtype=np.float32)
-        self.emotion[0] = 1.0  # start neutral
+        self.reserved = np.zeros(5, dtype=np.float32)  # formerly emotion
         self.action_stats = np.zeros(7, dtype=np.float32)
         self.steps = 0
         self.target_concept = np.random.randint(N_CONCEPTS)
         return self._state()
 
     def _state(self):
-        # Assemble 512-dim state: mastery (8) + emotion (5) + action_stats (7) + latent noise pad (492)
-        head = np.concatenate([self.mastery, self.emotion, self.action_stats])
+        # Assemble 512-dim state: mastery (8) + reserved (5) + action_stats (7) + latent noise pad (492)
+        head = np.concatenate([self.mastery, self.reserved, self.action_stats])
         pad = np.random.normal(0, 0.05, STATE_DIM - len(head)).astype(np.float32)
         return np.concatenate([head, pad]).astype(np.float32)
 
@@ -116,33 +115,25 @@ class StudentSimulator:
             1: 1.1 if 0.3 < m < 0.7 else 0.8,   # guided_practice
             2: 1.0,                        # interactive_exercise
             3: 1.3 if m > 0.5 else 0.6,   # conceptual_deepdive
-            4: 0.8 + 0.4 * self.emotion[2],  # motivational_support when frustrated
+            4: 0.8,                        # motivational_support
             5: 1.4 if m < 0.3 else 0.5,   # worked_example
             6: 0.7,                        # peer_comparison
             7: 1.0 if m > 0.5 else 0.6,   # spaced_review
             8: 1.4 if m > 0.7 else 0.3,   # challenge_problem
-            9: 1.2 if self.emotion[1] > 0.4 or self.emotion[2] > 0.4 else 0.6,  # error_analysis
+            9: 1.2 if m < 0.5 else 0.6,   # error_analysis
         }[action]
         delta_m = np.random.normal(mu * action_shape, sigma * 0.5)
         # Clamp and apply
         self.mastery[self.target_concept] = float(np.clip(
             self.mastery[self.target_concept] + 0.05 * action_shape + delta_m, 0, 1))
-        # Emotion transition: good progress -> understanding/engaged,
-        # plateau -> confused, repeated bad -> frustrated
-        if delta_m > 0.02:
-            self.emotion = np.array([0.1, 0.05, 0.05, 0.3, 0.5], dtype=np.float32)
-        elif delta_m < -0.01:
-            self.emotion = np.array([0.1, 0.3, 0.4, 0.1, 0.1], dtype=np.float32)
-        else:
-            self.emotion = 0.8 * self.emotion + 0.2 * np.array([0.5, 0.2, 0.1, 0.1, 0.1], dtype=np.float32)
         # Action stats drift
         self.action_stats = np.clip(
             0.8 * self.action_stats +
             0.2 * np.random.uniform(0, 1, 7).astype(np.float32), 0, 1)
         self.steps += 1
         done = self.mastery[self.target_concept] > 0.9 or self.steps >= 30
-        # Reward: mastery gain + engagement (emotion[3]+emotion[4]) - small action cost
-        reward = float(delta_m * 10 + (self.emotion[3] + self.emotion[4]) * 0.1 - 0.01)
+        # Reward: mastery gain - small action cost
+        reward = float(delta_m * 10 - 0.01)
         if self.mastery[self.target_concept] > 0.9:
             reward += 1.0
         return self._state(), reward, done

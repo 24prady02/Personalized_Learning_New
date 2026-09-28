@@ -1,5 +1,10 @@
 """
-Runner for the 16 Appendix-A boundary scenarios added 2026-05-27.
+Runner for the Appendix-A boundary scenarios added 2026-05-27.
+
+Emotion and the psychological channel are no longer inputs: A.11.1
+(mastery_surface via low self-efficacy), A.11.2 (growth efficacy) and
+A.12.1 (emotional_state reward) were removed; A.11.5 / A.11.6 cover the
+remaining encoding x stage branches of InterventionSelector.
 
 Each scenario maps to a numeric threshold in the actual code and exercises
 the just-below / at / just-above value. Output is written to
@@ -29,7 +34,6 @@ print("[boundary] loading catalogue + LP diagnostician...", flush=True)
 from src.knowledge_graph.mental_models import get_catalogue
 from src.orchestrator.lp_diagnostic import LPDiagnostician
 from src.orchestrator.student_state_tracker import InterventionSelector
-from src.reinforcement_learning.reward_function import RewardCalculator
 from src.models.dina import DINAModel
 from src.persistence.auth import issue_token, validate_token
 
@@ -312,28 +316,11 @@ def t_A_8_1():
 # ── A.11.x — uncovered intervention branches ──────────────────────────────
 SEL = InterventionSelector()
 
-def t_A_11_1():
+def t_A_11_5():
     out = SEL.select(
         cognitive={"encoding_strength": "solid"},
         progression={"stage": 3},
-        psychological={"attribution": "adaptive", "self_efficacy": "low",
-                       "imposter_signal": False, "high_anxiety": False},
         bkt_mastery=0.6,
-    )
-    ok = out.get("type") == "mastery_surface"
-    return {"_outcome": "PASS" if ok else "FAIL",
-            "intervention": out.get("type"),
-            "expected": "mastery_surface",
-            "rationale": out.get("rationale")}
-
-
-def t_A_11_2():
-    out = SEL.select(
-        cognitive={"encoding_strength": "partial"},
-        progression={"stage": "4a"},
-        psychological={"attribution": "adaptive", "self_efficacy": "growth",
-                       "imposter_signal": False, "high_anxiety": False},
-        bkt_mastery=0.5,
     )
     ok = out.get("type") == "increase_challenge"
     return {"_outcome": "PASS" if ok else "FAIL",
@@ -342,12 +329,23 @@ def t_A_11_2():
             "rationale": out.get("rationale")}
 
 
+def t_A_11_6():
+    out = SEL.select(
+        cognitive={"encoding_strength": "solid"},
+        progression={"stage": "4a"},
+        bkt_mastery=0.5,
+    )
+    ok = out.get("type") == "validate_and_advance"
+    return {"_outcome": "PASS" if ok else "FAIL",
+            "intervention": out.get("type"),
+            "expected": "validate_and_advance",
+            "rationale": out.get("rationale")}
+
+
 def t_A_11_3():
     out = SEL.select(
         cognitive={"encoding_strength": "partial"},
         progression={"stage": "2b"},
-        psychological={"attribution": "adaptive", "self_efficacy": "neutral",
-                       "imposter_signal": False, "high_anxiety": False},
         bkt_mastery=0.4,
     )
     ok = out.get("type") == "socratic_prompt"
@@ -361,8 +359,6 @@ def t_A_11_4():
     out = SEL.select(
         cognitive={"encoding_strength": "deep"},
         progression={"stage": "4b"},
-        psychological={"attribution": "adaptive", "self_efficacy": "neutral",
-                       "imposter_signal": False, "high_anxiety": False},
         bkt_mastery=0.7,
     )
     ok = out.get("type") == "transfer_task"
@@ -370,39 +366,6 @@ def t_A_11_4():
             "intervention": out.get("type"),
             "expected": "transfer_task",
             "rationale": out.get("rationale")}
-
-
-# ── A.12.1 — emotional_state reward component ─────────────────────────────
-def t_A_12_1():
-    rc = RewardCalculator(CFG)
-    # Identical setup, only emotion_after varies.
-    base_session = {"emotion": "frustrated"}
-    base_resp = {
-        "mastery_before": 0.4, "mastery_after": 0.4,
-        "engagement_score": 0.5, "time_spent": 60,
-        "emotion_after": "engaged",
-        "gave_up": False, "has_misconception": False,
-        "attribution_before": "adaptive", "attribution_after": "adaptive",
-        "imposter_flag_before": False, "imposter_flag_after": False,
-        "zpd_status": "at_boundary", "intervention_type": "worked_example",
-        "delta_lp": 0, "lp_level_before": "L1", "lp_level_after": "L1",
-        "plateau_flag_before": False,
-    }
-    r_engaged = rc.calculate_reward(base_session, action_taken=0,
-                                    student_response=base_resp)
-    base_resp_y = dict(base_resp); base_resp_y["emotion_after"] = "frustrated"
-    r_frustrated = rc.calculate_reward(base_session, action_taken=0,
-                                       student_response=base_resp_y)
-    delta = r_engaged - r_frustrated
-    # Expected: e_change for X = 0.5-(-1) = 1.5 clipped to +1; for Y = 0.
-    # Weight 0.12 → delta ≈ 0.12. Sign must be positive.
-    ok = delta > 0.05
-    return {"_outcome": "PASS" if ok else "FAIL",
-            "reward_engaged": round(r_engaged, 4),
-            "reward_frustrated": round(r_frustrated, 4),
-            "delta": round(delta, 4),
-            "expected_delta_approx": 0.12,
-            "weight_emotional_state": rc.weights["emotional_state"]}
 
 
 # ── A.19.1 — mastery decay 14-day boundary ────────────────────────────────
@@ -482,11 +445,10 @@ SCENARIOS = [
     ("A.5.1",  "probe floor 0.54 < 0.55 → probe fires",         "< floor",     t_A_5_1),
     ("A.5.2",  "probe floor 0.56 > 0.55 → teach",                ">= floor",   t_A_5_2),
     ("A.8.1",  "DINA lower clamp at 0.01",                       "p=0.01",     t_A_8_1),
-    ("A.11.1", "mastery_surface (solid+low_eff)",                "mastery_surface",  t_A_11_1),
-    ("A.11.2", "increase_challenge (growth+stage4a)",            "increase_challenge", t_A_11_2),
     ("A.11.3", "socratic_prompt (partial+stage2b)",              "socratic_prompt",    t_A_11_3),
     ("A.11.4", "transfer_task (deep+stage4b)",                   "transfer_task",      t_A_11_4),
-    ("A.12.1", "emotional_state component delta",                "delta ~= +0.12",     t_A_12_1),
+    ("A.11.5", "increase_challenge (solid+stage3)",              "increase_challenge", t_A_11_5),
+    ("A.11.6", "validate_and_advance (solid+stage4a)",           "validate_and_advance", t_A_11_6),
     ("A.19.1", "mastery decay at 13/14/15-day boundary",         "matches formula",    t_A_19_1),
     ("A.19.2", "auth token expiry edge",                          "valid / None",      t_A_19_2),
 ]

@@ -32,7 +32,7 @@ from src.orchestrator.enhanced_personalized_generator import EnhancedPersonalize
 
 # Intervention chosen by the focus concept's LP level — same mapping the
 # orchestrator's Stage-2 LP-validity table would pick when nothing else
-# overrides it (no psychological gate, no plateau, no probe).
+# overrides it (no plateau, no probe).
 INTV_BY_LEVEL = {
     "L1": "worked_example",    "L2": "trace_scaffold",
     "L3": "transfer_prompt",   "L4": "transfer_task",
@@ -78,20 +78,16 @@ def process_turn(d, r, g, msg, student_id="interactive"):
         "knowledge_state": {"overall_mastery":
                             {"L1":0.30,"L2":0.55,"L3":0.75,"L4":0.85}[focus_lvl],
                             "mastery_history":[0.5]},
-        "psychological_graph": {},
         "progression_graph":   {"stage": {"L1":1,"L2":2,"L3":4,"L4":5}[focus_lvl],
                                 "scaffold_level": {"L1":4,"L2":3,"L3":2,"L4":1}[focus_lvl]},
         "content_channel":     {"encoding_strength":
                                 {"L1":"surface","L2":"partial","L3":"solid","L4":"deep"}[focus_lvl]},
-        "language_channel":    {},
         "recommended_intervention": {"type": intervention_type,
                                      "rationale": f"LP-{focus_lvl} appropriate"},
         "lp_diagnostic":       multi["focus"],
         "lp_diagnostic_multi": multi,
     }
-    analysis = {"emotion": "confused" if focus_lvl=="L1" else "engaged",
-                "frustration_level": 0.4 if focus_lvl=="L1" else 0.1,
-                "engagement_score":  0.6 if focus_lvl=="L1" else 0.9}
+    analysis = {"engagement_score":  0.6 if focus_lvl=="L1" else 0.9}
 
     print(f"\n  ── generated tutor reply ──")
     t0 = time.time()

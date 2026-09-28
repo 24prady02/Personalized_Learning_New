@@ -401,7 +401,7 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
                         diag=diag_dict,
                         mastery=sess.get("mastery_after"),
                         misconception_text=accumulated,
-                        expand_cso=True,
+                        expand_neighbours=True,
                         persist=True,
                     )
                 except Exception as e:

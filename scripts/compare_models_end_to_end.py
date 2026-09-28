@@ -50,13 +50,6 @@ def build_state_and_analysis():
         'personality':       p,
         'knowledge_state':   {'overall_mastery': 0.35, 'mastery_history': [0.35]},
         'interests':         [],
-        'psychological_graph': {
-            'attribution': 'internal_stable', 'self_efficacy': 'low',
-            'srl_phase': 'performance',
-            'imposter_flag': 'bad at' in STUDENT_PROMPT.lower(),
-            'high_anxiety':  p['neuroticism'] > 0.55,
-            'flow_state':    False,
-        },
         'progression_graph': {'stage': 2, 'zpd_status': 'within',
                               'scaffold_level': 4, 'has_attempt': True},
         'content_channel':   {'encoding_strength': 'surface',
@@ -66,33 +59,10 @@ def build_state_and_analysis():
             'rationale': 'Inferred from prompt via Nestor text-personality pipeline.',
         },
     }
-    emotion = 'frustrated' if p['neuroticism'] > 0.55 else 'confused'
     analysis = {
-        'emotion': emotion, 'frustration_level': float(p['neuroticism']),
         'engagement_score': 0.5,
         'bkt_update': {'p_learned_before': 0.30, 'p_learned_after': 0.35},
-        'cse_kg': {'concept': 'recursion',
-                   'prerequisites': ['functions', 'base case', 'stack frames'],
-                   'related_concepts': ['iteration', 'divide and conquer'],
-                   'definition': 'A function that calls itself with a smaller '
-                                 'input until a base case is reached.'},
-        'pedagogical_kg': {
-            'progression': 'function call -> self-reference -> base case -> recursive step',
-            'misconceptions': [
-                'forgetting base case causes infinite recursion',
-                'base case for factorial is n==0, not n==1',
-            ],
-            'cognitive_load': 'high',
-            'interventions': ['worked example', 'visual trace of call stack'],
-            'learning_path': lp,
-        },
-        'coke': {'cognitive_state': emotion,
-                 'mental_activity': 'reasoning about self-reference',
-                 'behavioral_response': 'may abandon task if not scaffolded',
-                 'confidence': 0.40,
-                 'cognitive_chain': {
-                     'description': 'wrong output -> attributes to ability -> disengages'
-                 }},
+        'learning_path': lp,
     }
     return state, analysis
 

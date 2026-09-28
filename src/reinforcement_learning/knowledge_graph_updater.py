@@ -303,36 +303,6 @@ class DynamicKGUpdater:
         
         return dot_product / (norm1 * norm2)
     
-    def update_cse_kg_integration(self, concept: str):
-        """
-        Update how we query CSE-KG based on learned patterns
-        
-        For example:
-        - If students consistently struggle with X after learning Y,
-          add edge Y→X in our student graphs
-        - If certain CSE-KG examples are more helpful,
-          prioritize those in retrieval
-        """
-        
-        # Get CSE-KG client
-        cse_kg = self.models.get('cse_kg_client')
-        
-        if not cse_kg:
-            return
-        
-        # Check if our learned difficulty differs from CSE-KG
-        learned_diff = self.learned_difficulties.get(concept, 0.5)
-        
-        # Query CSE-KG for concept metadata
-        concept_info = cse_kg.get_concept_info(concept)
-        
-        # If significant difference, could flag for human review
-        # or adjust retrieval priorities
-        
-        print(f"\n🔄 KG Integration Update for '{concept}':")
-        print(f"   Learned difficulty: {learned_diff:.2f}")
-        print(f"   Adjusting retrieval priorities...")
-    
     def generate_dynamic_kg_report(self) -> Dict:
         """
         Generate report on what the system has learned

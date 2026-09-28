@@ -1,6 +1,6 @@
 """
 Fresh demo — different question (NullPointerException, not factorial), different
-personality signal (exploratory, not anxious), and a mastery profile where the
+personality signal (exploratory), and a mastery profile where the
 student IS ready for the target concept so the pipeline teaches it directly.
 """
 import sys, os, time, json
@@ -74,14 +74,6 @@ def main():
         'knowledge_state': {'overall_mastery': 0.65,
                             'mastery_history': [0.60, 0.65]},
         'interests': [],
-        'psychological_graph': {
-            'attribution': 'internal_stable',
-            'self_efficacy': 'growth',
-            'srl_phase': 'forethought',
-            'imposter_flag': False,
-            'high_anxiety':  p['neuroticism'] > 0.55,
-            'flow_state':    p['openness'] > 0.60,
-        },
         'progression_graph': {'stage': 3, 'zpd_status': 'within',
                               'scaffold_level': 3, 'has_attempt': True},
         'content_channel': {'encoding_strength': 'partial',
@@ -91,40 +83,9 @@ def main():
             'rationale': 'Inferred from exploratory prompt.'},
     }
     analysis = {
-        'emotion': 'curious', 'frustration_level': 0.25,
         'engagement_score': 0.80,
         'bkt_update': {'p_learned_before': 0.28, 'p_learned_after': 0.30},
-        'cse_kg': {
-            'concept': 'null_pointer',
-            'prerequisites': ['references', 'object instantiation (new)',
-                              'heap vs stack'],
-            'related_concepts': ['NullPointerException', 'default values',
-                                 'Optional<T>'],
-            'definition': 'Accessing a member via a reference whose value is '
-                          'null — the JVM throws NullPointerException because '
-                          'there is no object on the heap to dereference.',
-        },
-        'pedagogical_kg': {
-            'progression': 'object reference -> new operator -> null default -> '
-                           'dereference check',
-            'misconceptions': [
-                'declaring a reference also creates the object',
-                'Java auto-initializes object fields to a usable default',
-                'null means "no value" rather than "no object allocated"',
-            ],
-            'cognitive_load': 'medium',
-            'interventions': ['worked example', 'visual heap diagram'],
-            'learning_path': lp,
-        },
-        'coke': {
-            'cognitive_state': 'curious',
-            'mental_activity': 'reasoning about memory model',
-            'behavioral_response': 'continues exploration',
-            'confidence': 0.65,
-            'cognitive_chain': {
-                'description': 'asks for why, not just fix -> high elaboration',
-            },
-        },
+        'learning_path': lp,
     }
 
     gen = EnhancedPersonalizedGenerator()

@@ -15,7 +15,6 @@ class PersonalizedContentGenerator:
     - Intervention type
     - Learning style preferences
     - Knowledge gaps
-    - Emotional state
     """
     
     def __init__(self, config: Dict, hvsae_model):

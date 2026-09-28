@@ -86,11 +86,11 @@ python scripts/setup_java_knowledge.py
 
 You should see:
 ```
-[OK] Saved data/pedagogical_kg/misconceptions.json (20 items)
-[OK] Saved data/pedagogical_kg/learning_progressions.json (5 items)
-[OK] Saved data/pedagogical_kg/cognitive_loads.json (20 items)
-[OK] Saved data/pedagogical_kg/interventions.json (8 items)
-[OK] Saved data/pedagogical_kg/lp_rubric.json (20 items)
+[OK] Saved data/java_curriculum/misconceptions.json (20 items)
+[OK] Saved data/java_curriculum/learning_progressions.json (5 items)
+[OK] Saved data/java_curriculum/cognitive_loads.json (20 items)
+[OK] Saved data/java_curriculum/interventions.json (8 items)
+[OK] Saved data/java_curriculum/lp_rubric.json (20 items)
 [DONE] Java Pedagogical KG ready.
 ```
 

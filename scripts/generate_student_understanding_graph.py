@@ -20,10 +20,10 @@ def generate_understanding_graph(conversation_file: str, output_dir: str = "outp
     student_id = conversation.get('student_id', 'unknown')
     turns = conversation.get('turns', [])
     
-    # Extract data (without DINA mastery)
+    # Extract data
     turn_numbers = []
     correctness_scores = []
-    cognitive_states = []
+    mastery_scores = []
     errors_encountered = []
     time_durations = []
     time_stuck = []
@@ -40,10 +40,15 @@ def generate_understanding_graph(conversation_file: str, output_dir: str = "outp
         correctness = codebert.get('correctness_score', 0.5) if codebert else 0.5
         correctness_scores.append(correctness)
         
-        # Cognitive state
-        coke = quantitative.get('coke_analysis', {})
-        cognitive_state = coke.get('cognitive_state', 'unknown') if coke else 'unknown'
-        cognitive_states.append(cognitive_state)
+        # DINA mastery (a dict of per-skill probabilities or a single value)
+        dm = quantitative.get('dina_mastery')
+        if isinstance(dm, dict) and dm:
+            vals = [v for v in dm.values() if isinstance(v, (int, float))]
+            mastery_scores.append(sum(vals) / len(vals) if vals else 0.0)
+        elif isinstance(dm, (int, float)):
+            mastery_scores.append(float(dm))
+        else:
+            mastery_scores.append(0.0)
         
         # Errors
         student_input = turn.get('student_input', {})
@@ -100,20 +105,15 @@ def generate_understanding_graph(conversation_file: str, output_dir: str = "outp
     ax3.grid(True, alpha=0.3, zorder=0)
     ax3.legend()
     
-    # Plot 4: Cognitive State Transitions
+    # Plot 4: DINA Mastery Progression
     ax4 = axes[1, 1]
-    # Map cognitive states to numbers for plotting
-    state_map = {'perceiving': 1, 'understanding': 2, 'engaged': 3, 'confused': 4, 'frustrated': 5, 'unknown': 0}
-    state_numbers = [state_map.get(s, 0) for s in cognitive_states]
-    ax4.plot(turn_numbers, state_numbers, marker='o', linewidth=2, markersize=10, color='#9B59B6', zorder=2)
+    ax4.plot(turn_numbers, mastery_scores, marker='o', linewidth=2, markersize=10, color='#9B59B6', zorder=2)
     ax4.set_xlabel('Turn Number', fontsize=12)
-    ax4.set_ylabel('Cognitive State', fontsize=12)
-    ax4.set_title('Cognitive State Transitions', fontsize=14, fontweight='bold')
-    ax4.set_yticks([0, 1, 2, 3, 4, 5])
-    ax4.set_yticklabels(['Unknown', 'Perceiving', 'Understanding', 'Engaged', 'Confused', 'Frustrated'], fontsize=9)
-    ax4.set_ylim(-0.5, 5.5)
+    ax4.set_ylabel('Mastery (DINA)', fontsize=12)
+    ax4.set_title('Mastery Progression', fontsize=14, fontweight='bold')
+    ax4.set_ylim(0, 1)
     ax4.grid(True, alpha=0.3, zorder=0)
-    
+
     plt.tight_layout()
     
     # Save figure

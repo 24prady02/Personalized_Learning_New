@@ -1,16 +1,16 @@
 """
-Reward Function — Psychological + CPAL LP Integration Update
-===================================================
-Reward now encodes:
+Reward Function — CPAL LP Integration
+=====================================
+Reward encodes:
   T05 ZPD        → penalises tasks outside 0.40-0.75 mastery window
-  T10 Flow       → maximises challenge-skill balance (flow channel bonus)
-  T11 Attribution → bonus for interventions that shift attribution adaptive
-  T12 Imposter   → bonus for mastery_surface resolving imposter flag
-  T08 SCT        → engagement component reflects self-efficacy trajectory
+  T10 Flow       → challenge-skill balance bonus (mastery band + engagement)
   CPAL LP Gain   → bonus for LP-level advancement (L1->L2->L3->L4);
                     penalty for L-level regression. Primary training
                     signal for the LPProgressionRNN — see
                     mental_models_cpal_methodology.docx Part 3 Stage 4.
+
+Emotion and the psychological channel (attribution, imposter, self-efficacy)
+are not reward inputs.
 """
 
 import numpy as np
@@ -31,23 +31,19 @@ class RewardCalculator:
     Calculates reward for teaching actions.
 
     Components (weights sum to 1.00):
-    1. learning_gain       (0.26) — BKT mastery delta
-    2. engagement          (0.15) — engagement/flow quality
-    3. zpd_alignment       (0.15) — was the task in the ZPD window?
-    4. emotional_state     (0.12) — emotion trajectory improvement
-    5. attribution_shift   (0.07) — fixed→adaptive attribution shift
-    6. lp_gain             (0.25) — LP level advancement (CPAL Stage 4)
+    1. learning_gain       (0.32) — BKT mastery delta
+    2. engagement          (0.18) — engagement/flow quality
+    3. zpd_alignment       (0.18) — was the task in the ZPD window?
+    4. lp_gain             (0.32) — LP level advancement (CPAL Stage 4)
     """
 
     def __init__(self, config: Dict):
         self.config = config
         self.weights = {
-            "learning_gain":     0.26,
-            "engagement":        0.15,
-            "zpd_alignment":     0.15,
-            "emotional_state":   0.12,
-            "attribution_shift": 0.07,
-            "lp_gain":           0.25,   # NEW — CPAL Stage 4 primary signal
+            "learning_gain":     0.32,
+            "engagement":        0.18,
+            "zpd_alignment":     0.18,
+            "lp_gain":           0.32,   # CPAL Stage 4 primary signal
         }
 
     def calculate_reward(self, session_data: Dict, action_taken: int,
@@ -59,13 +55,9 @@ class RewardCalculator:
           mastery_before, mastery_after       — BKT values
           engagement_score                    — float 0-1
           time_spent                          — seconds
-          emotion_before, emotion_after       — string
           gave_up, has_misconception          — bool
           mastery_achieved, solved_independently, asked_deep_question — bool
-          attribution_before, attribution_after — 'fixed'|'adaptive'|'neutral' [NEW]
-          imposter_flag_before, imposter_flag_after — bool [NEW]
-          zpd_status                          — 'overwhelmed'|'at_boundary'|'internalized' [NEW]
-          intervention_type                   — string [NEW]
+          zpd_status                          — 'overwhelmed'|'at_boundary'|'internalized'
           delta_lp                            — int {-3..+3}  [CPAL Stage 4]
           lp_level_before, lp_level_after     — 'L1'|'L2'|'L3'|'L4'  [CPAL]
           plateau_flag_before                 — bool  [CPAL]
@@ -106,43 +98,7 @@ class RewardCalculator:
 
         rewards["zpd_alignment"] = float(np.clip(zpd_score, -1, 1))
 
-        # ── 4. Emotional State ────────────────────────────────────────────
-        emotion_values = {
-            "frustrated": -1.0, "confused": -0.5, "neutral": 0.0,
-            "engaged": 0.5, "confident": 1.0
-        }
-        e_before = session_data.get("emotion", "neutral")
-        e_after  = student_response.get("emotion_after", "neutral")
-        e_change = emotion_values.get(e_after, 0) - emotion_values.get(e_before, 0)
-        rewards["emotional_state"] = float(np.clip(e_change, -1, 1))
-
-        # ── 5. Attribution Shift (T11 + T12) ─────────────────────────────
-        attr_before   = student_response.get("attribution_before", "neutral")
-        attr_after    = student_response.get("attribution_after", "neutral")
-        imp_before    = student_response.get("imposter_flag_before", False)
-        imp_after     = student_response.get("imposter_flag_after", False)
-        intervention  = student_response.get("intervention_type", "")
-
-        attr_reward = 0.0
-        # Fixed → Adaptive shift: big bonus
-        if attr_before == "fixed" and attr_after == "adaptive":
-            attr_reward += 1.0
-        # Imposter flag cleared: significant bonus
-        if imp_before and not imp_after:
-            attr_reward += 0.8
-        # Attribution reframe used correctly (when fixed attr was present)
-        if intervention == "attribution_reframe" and attr_before == "fixed":
-            attr_reward += 0.5
-        # Penalty: attribution_reframe used when not needed (wastes time)
-        if intervention == "attribution_reframe" and attr_before != "fixed" and not imp_before:
-            attr_reward -= 0.5
-        # Mastery surface used correctly when imposter present
-        if intervention == "mastery_surface" and imp_before:
-            attr_reward += 0.4
-
-        rewards["attribution_shift"] = float(np.clip(attr_reward, -1, 1))
-
-        # ── 6. LP Gain (CPAL Stage 4 — primary training signal) ──────────
+        # ── 4. LP Gain (CPAL Stage 4 — primary training signal) ──────────
         # delta_lp is the level-index change computed by
         # LPDiagnostic.classify_post_reply:
         #    post_lvl_idx - pre_lvl_idx   where L1=1, L2=2, L3=3, L4=4.
@@ -150,16 +106,10 @@ class RewardCalculator:
         # is a strong +0.5 signal and a two-level jump saturates at +1.
         # Regression (negative delta) penalises proportionally.
         #
-        # Bonus: LP-valid intervention actually used. The intervention
-        # _selector already filters through the LP gate in Stage 2, so
-        # if we see a non-LP-valid intervention type here, something
-        # upstream overrode the gate (psychological safety, for
-        # example) — that's not a reward failure, just no bonus.
         delta_lp           = student_response.get("delta_lp", 0)
         lp_level_before    = student_response.get("lp_level_before", "L1")
         lp_level_after     = student_response.get("lp_level_after", lp_level_before)
         plateau_before     = student_response.get("plateau_flag_before", False)
-        intervention_type  = intervention   # already pulled above
 
         # Core signal: normalised delta_lp.
         lp_reward = float(np.clip(delta_lp / 2.0, -1.0, 1.0))
@@ -190,8 +140,6 @@ class RewardCalculator:
             rewards["learning_gain"] = min(rewards["learning_gain"] - 0.5, -0.3)
         if student_response.get("has_misconception", False):
             rewards["learning_gain"] -= 0.3
-        if e_after == "frustrated" and e_before != "frustrated":
-            rewards["emotional_state"] -= 0.3
 
         # ── Bonuses ───────────────────────────────────────────────────────
         if student_response.get("mastery_achieved", False):

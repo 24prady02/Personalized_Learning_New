@@ -177,9 +177,8 @@ QUIZ_CHOICES = [(f"{q['id']} — {q['concept']} — {q['question'][:48]}", q["id
 
 # =========================================================================
 # Load models once — via the system registry so DINA, BKT, behavioral,
-# CSE-KG, pedagogical KG, CoKE, graph fusion, RL teaching agent,
-# hierarchical RL, dynamic KG updater, error mapper, and the orchestrator
-# all fire alongside the LP diagnostician. Nestor is intentionally
+# RL teaching agent, hierarchical RL, dynamic KG updater, and the
+# orchestrator all fire alongside the LP diagnostician. Nestor is intentionally
 # excluded (per scope).
 # =========================================================================
 print("Loading full CPAL stack via system_registry...")
@@ -206,9 +205,8 @@ print("Ready.")
 # These helpers thread the chat app through every non-Nestor CPAL component
 # so each turn:
 #   - DINA and BKT update real per-student mastery and write to disk
-#   - Pedagogical KG and CSE-KG retrieval supplies KG-grounded context
-#     that gets injected into the LLM prompt
-#   - ErrorExplanationMapper resolves code/error symptoms to root causes
+#   - The Chapter-1 concept + LP graph supplies KG-grounded context
+#     (prerequisites, catalogued misconceptions) injected into the prompt
 #   - TeachingRLAgent picks an intervention type from the learned policy
 #   - DynamicKGUpdater learns prerequisite + misconception patterns from
 #     observed (concept, correct/incorrect) interactions
@@ -245,77 +243,19 @@ def _update_mastery(student_id: str, concept: str, is_correct: bool) -> dict:
 def _kg_context_block(concept: str, code: str = "",
                       error_message: str = "") -> str:
     """Build a KG-grounded context block to inject into the tutor prompt.
-    Pulls from pedagogical KG (misconceptions/cognitive load), CSE-KG
-    (related concepts/prerequisites), and ErrorExplanationMapper (root
-    causes for code/error symptoms). Returns '' if nothing useful is
-    available so the prompt stays clean."""
+    Pulls the concept's prerequisites and catalogued misconceptions from
+    the Chapter-1 concept + LP graph. Returns '' if the concept is outside
+    Chapter 1 so the prompt stays clean. (`code` / `error_message` are
+    accepted for call-site compatibility.)"""
+    blk = _build_chapter1_block(concept)
+    if not blk:
+        return ""
     parts = []
-    try:
-        if REG.pedagogical_kg is not None:
-            info = REG.pedagogical_kg.get_concept_full_info(concept) or {}
-            ped = info.get("pedagogical_data") or {}
-            misc = ped.get("common_misconceptions") or []
-            if misc:
-                names = [
-                    (m.get("description") or m.get("id") or "").strip()[:80]
-                    for m in misc[:3]
-                ]
-                names = [n for n in names if n]
-                if names:
-                    parts.append(
-                        "Pedagogical-KG misconceptions: "
-                        + " | ".join(names))
-            load = ped.get("cognitive_load") or {}
-            if load:
-                total = load.get("total")
-                factors = load.get("factors") or []
-                if total is not None or factors:
-                    parts.append(
-                        f"Pedagogical-KG cognitive load: total={total}"
-                        + (f"  factors={', '.join(factors[:4])}"
-                           if factors else ""))
-            dom = info.get("domain_knowledge") or {}
-            rel = dom.get("related_concepts") or []
-            if rel:
-                # The KG stores URIs like http://cse-kg.org/ontology/NP-A
-                # — strip the prefix so the prompt stays readable.
-                short = []
-                for r in rel[:4]:
-                    uri = r.get("concept", "") if isinstance(r, dict) else str(r)
-                    short.append(uri.rsplit("/", 1)[-1])
-                parts.append("CSE-KG related concepts: " + ", ".join(short))
-    except Exception as e:
-        print(f"[CPAL/KG] pedagogical_kg lookup failed: {e}")
-    try:
-        if REG.concept_retriever is not None and (code or error_message):
-            related = REG.concept_retriever.retrieve_from_code(
-                code or "", error_message or "", top_k=5) or []
-            if related:
-                parts.append(
-                    "CSE-KG retrieved from code: " + ", ".join(related[:5]))
-    except Exception as e:
-        print(f"[CPAL/KG] CSE-KG retrieval failed: {e}")
-    try:
-        if (REG.error_explanation_mapper is not None
-                and (code or error_message)):
-            expl = REG.error_explanation_mapper.generate_explanation(
-                code=code or None,
-                error_message=error_message or None,
-                student_data={"concept": concept},
-            ) or {}
-            # Schema: when an error pattern is matched, expl has fields
-            # like 'root_cause', 'explanation', 'strategy'. When no pattern
-            # matches, expl is {"error_detected": False, ...} — skip then.
-            if expl.get("error_detected", True):
-                root = (expl.get("root_cause")
-                        or expl.get("explanation")
-                        or expl.get("strategy"))
-                if root:
-                    root_str = str(root).strip().split("\n")[0][:280]
-                    if root_str:
-                        parts.append(f"Error-mapper root cause: {root_str}")
-    except Exception as e:
-        print(f"[CPAL/KG] error_explanation_mapper failed: {e}")
+    if blk["prerequisites"]:
+        parts.append("Chapter-1 prerequisites: " + ", ".join(blk["prerequisites"]))
+    if blk["misconceptions"]:
+        parts.append("Chapter-1 catalogued misconceptions: "
+                     + " | ".join(blk["misconceptions"][:3]))
     if not parts:
         return ""
     return "KG-GROUNDED CONTEXT (use to anchor your explanation; do not " \
@@ -324,7 +264,6 @@ def _kg_context_block(concept: str, code: str = "",
 
 def _rl_recommended_intervention(student_id: str, concept: str,
                                  mastery: float = 0.3,
-                                 emotion: str = "neutral",
                                  lp_level: str = "L1",
                                  hvsae_latent=None) -> tuple:
     """Ask the trained RL teaching agent which intervention type to use
@@ -353,8 +292,6 @@ def _rl_recommended_intervention(student_id: str, concept: str,
             "encoding":   {"latent": hvsae_latent.detach().view(-1).float()},
             "cognitive":  {"knowledge_gaps": [{"concept": concept,
                                                  "mastery": float(mastery)}]},
-            "behavioral": {"emotional_state": emotion},
-            "psychological": {"personality": {}},
             "history":    {"interventions": []},
         }
         try:
@@ -372,7 +309,7 @@ def _rl_recommended_intervention(student_id: str, concept: str,
 
 
 def _rl_finalise_previous(state: dict, current_dina: float,
-                          current_emotion: str, current_lp: str,
+                          current_lp: str,
                           current_state_vec=None,
                           engagement_signal: float = 0.5) -> None:
     """Close out the previous turn's RL step: compute reward from the
@@ -384,9 +321,9 @@ def _rl_finalise_previous(state: dict, current_dina: float,
     Reward heuristic (no graded answer mid-chat, so we approximate):
       learning_gain  = clamp((dina_now - dina_before) * 4, -1, 1)
       engagement     = 2 * (engagement_signal - 0.5)
-      emotion_delta  = +0.5 if confused->engaged, -0.5 if engaged->confused
       lp_gain        = +1.0 if LP level advanced, -0.5 if regressed
-    Combined: weighted average (weights mirror reward_function.py roughly).
+    Combined: r = 0.375*learning_gain + 0.25*engagement + 0.375*lp_gain.
+    Emotion is not an input (removed 2026-09-28).
     """
     try:
         pending = state.get("pending_rl") or {}
@@ -398,7 +335,6 @@ def _rl_finalise_previous(state: dict, current_dina: float,
         s_before     = pending.get("state_vec")
         action_id    = int(pending.get("action_id", 5))
         dina_before  = float(pending.get("dina", 0.3))
-        emotion_before = pending.get("emotion", "neutral")
         lp_before    = pending.get("lp_level", "L1")
 
         if s_before is None:
@@ -413,22 +349,15 @@ def _rl_finalise_previous(state: dict, current_dina: float,
 
         engagement    = max(-1.0, min(1.0, 2.0 * (engagement_signal - 0.5)))
 
-        emo_score = {"frustrated": -1.0, "confused": -0.5, "neutral": 0.0,
-                     "engaged": 0.5, "confident": 1.0}
-        emotion_delta = (emo_score.get(current_emotion, 0.0)
-                          - emo_score.get(emotion_before, 0.0))
-
         lp_order = {"L1": 1, "L2": 2, "L3": 3, "L4": 4}
         lp_delta = lp_order.get(current_lp, 1) - lp_order.get(lp_before, 1)
         if lp_delta > 0:    lp_gain =  1.0
         elif lp_delta < 0:  lp_gain = -0.5
         else:               lp_gain =  0.0
 
-        # Weights roughly match reward_function.py's split.
-        reward = (0.30 * learning_gain
-                  + 0.20 * engagement
-                  + 0.20 * emotion_delta
-                  + 0.30 * lp_gain)
+        reward = (0.375 * learning_gain
+                  + 0.25 * engagement
+                  + 0.375 * lp_gain)
 
         # Store + learn.
         agent.store_experience(s_before, action_id, float(reward),
@@ -480,110 +409,42 @@ def _dynamic_kg_learn(student_id: str, concept: str, is_correct: bool,
 
 # ──────────────────────────────────────────────────────────────────────────
 # CPAL teach-turn context builders — populate the `analysis` dict so the
-# generator's KNOWLEDGE GRAPHS (MUST REFERENCE IN RESPONSE) section, LP-Multi
-# mini-replies block, and 3-channel psychological state section all fire
-# with real data instead of empty dicts.
+# generator's LP-Multi mini-replies block and the cognitive/progression
+# state section fire with real data instead of empty dicts.
 # ──────────────────────────────────────────────────────────────────────────
 
-def _build_cse_kg_block(concept: str) -> dict:
-    """Pull concept info + prerequisites + related concepts from CSE-KG.
-    Shape matches what enhanced_personalized_generator expects in
-    analysis['cse_kg']: {concept, prerequisites, related_concepts, definition}.
-    """
+def _build_chapter1_block(concept: str) -> dict:
+    """Look the concept up in the Chapter-1 concept + LP graph
+    (data/chapter1_concept_graph_percpt_lp.json). Returns
+    {concept, description, prerequisites, leads_to, parallel,
+    misconceptions} or {} when the concept is outside Chapter 1.
+    The generator renders its own Chapter-1 prompt section from the LP
+    diagnosis; this dict feeds the KG context line and the audit log."""
     out = {}
     try:
-        if REG.cse_kg_client is None:
+        from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+        g = get_chapter1_graph()
+        info = g.concept_info(concept)
+        if not info:
             return out
-        info = REG.cse_kg_client.get_concept_info(concept) or {}
-        out["concept"]    = concept
-        out["definition"] = (info.get("description")
-                              or info.get("label")
-                              or "")
-        try:
-            prereqs = REG.cse_kg_client.get_prerequisites(concept) or []
-            # Strip URI prefix for readability
-            out["prerequisites"] = [
-                (p.rsplit("/", 1)[-1] if isinstance(p, str) else str(p))
-                for p in prereqs[:5]
-            ]
-        except Exception:
-            out["prerequisites"] = []
-        related = info.get("related_concepts") or []
-        out["related_concepts"] = [
-            (r.get("concept", "").rsplit("/", 1)[-1]
-             if isinstance(r, dict) else str(r))
-            for r in related[:5]
-        ]
-    except Exception as e:
-        print(f"[CPAL/CSE-KG] build failed: {e}")
-    return out
-
-
-def _build_pedagogical_kg_block(concept: str) -> dict:
-    """Shape pedagogical KG output into the structure the generator's
-    Pedagogical-KG section reads: {progression, misconceptions,
-    cognitive_load, interventions, learning_path}.
-    """
-    out = {}
-    try:
-        if REG.pedagogical_kg is None:
-            return out
-        info = REG.pedagogical_kg.get_concept_full_info(concept) or {}
-        ped  = info.get("pedagogical_data") or {}
-        out["progression"] = ped.get("progression") or ped.get(
-            "difficulty_level", "")
-        miscs = ped.get("common_misconceptions") or []
+        out["concept"]        = info["id"]
+        out["description"]    = info.get("description", "")
+        out["prerequisites"]  = g.get_prerequisites(concept)
+        out["leads_to"]       = g.get_leads_to(concept)
+        out["parallel"]       = g.get_parallel(concept)
         out["misconceptions"] = [
-            (m.get("description") or m.get("id") or "")[:120]
-            for m in miscs[:3]
-            if (m.get("description") or m.get("id"))
+            f"{m['id']}: {m.get('wrong_belief', '')}"[:120]
+            for m in g.misconceptions_for(concept)
         ]
-        load = ped.get("cognitive_load") or {}
-        if load:
-            out["cognitive_load"] = (
-                f"total={load.get('total', '?')} "
-                f"intrinsic={load.get('intrinsic', '?')} "
-                f"germane={load.get('germane', '?')}")
-        else:
-            out["cognitive_load"] = ""
-        interventions = ped.get("recommended_interventions") or []
-        if isinstance(interventions, list):
-            out["interventions"] = [str(i)[:60] for i in interventions[:4]]
-        else:
-            out["interventions"] = []
     except Exception as e:
-        print(f"[CPAL/Ped-KG] build failed: {e}")
+        print(f"[CPAL/Chapter1] build failed: {e}")
     return out
 
 
-def _build_coke_block(session_data: dict) -> dict:
-    """Run COKECognitiveGraph theory-of-mind inference on this turn's
-    text + code; shape into analysis['coke']."""
-    out = {}
-    try:
-        if REG.coke_graph is None:
-            return out
-        tom = REG.coke_graph.infer_theory_of_mind(session_data) or {}
-        out["cognitive_state"]     = tom.get("predicted_cognitive_state",
-                                              tom.get("cognitive_state", ""))
-        out["mental_activity"]     = tom.get("mental_activity", "")
-        out["behavioral_response"] = tom.get("predicted_behavioral_response",
-                                              tom.get("behavioral_response", ""))
-        out["confidence"]          = float(tom.get("confidence", 0.5))
-        chain = tom.get("cognitive_chain") or {}
-        if chain:
-            out["cognitive_chain"] = {
-                "description": chain.get("description", "")
-            }
-    except Exception as e:
-        print(f"[CPAL/COKE] build failed: {e}")
-    return out
-
-
-def _run_three_channel(student_id: str, session_data: dict) -> dict:
-    """Run the language/structure/content three-channel analysis via the
-    orchestrator's state_tracker. Populates analysis['psychological_state']
-    so the generator's PSYCHOLOGICAL STATE section fires."""
+def _run_state_channels(student_id: str, session_data: dict) -> dict:
+    """Run the structure/content channel analysis via the orchestrator's
+    state_tracker (progression graph + cognitive graph). The psychological
+    channel was removed 2026-09-28."""
     try:
         tracker = getattr(REG.orchestrator, "state_tracker", None)
         if tracker is None:
@@ -591,7 +452,7 @@ def _run_three_channel(student_id: str, session_data: dict) -> dict:
         result = tracker.analyse_prompt(student_id, session_data) or {}
         return result
     except Exception as e:
-        print(f"[CPAL/3-Channel] analyse_prompt failed: {e}")
+        print(f"[CPAL/StateChannels] analyse_prompt failed: {e}")
         return {}
 
 
@@ -1185,37 +1046,13 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         except Exception:
             pass
 
-    # Psychological-state footer (2026-05-21). Shows the three-channel
-    # analyser's outputs so the user can see when imposter/external/
-    # anxiety patterns fire and which intervention was selected. Only
-    # rendered when there's a non-trivial signal to surface — keeps the
-    # panel quiet for neutral students.
-    psych_lines = ""
-    tc = state.get("last_three_channel") or {}
-    pg = tc.get("psychological_graph") or {}
+    # Intervention footer. Shows which intervention was selected this
+    # turn. (The psychological-state signals that used to render here were
+    # removed with the psychological channel, 2026-09-28.)
+    footer_lines = ""
     rec_intervention = state.get("last_chosen_intervention")
-    attr = pg.get("attribution")
-    imposter = pg.get("imposter_flag")
-    anxiety = pg.get("high_anxiety")
-    eff = pg.get("self_efficacy")
-    has_psych_signal = (attr and attr != "neutral") or imposter or anxiety or (eff and eff != "neutral")
-    if has_psych_signal or rec_intervention:
-        psych_lines += "- **Psych state:**"
-        bits = []
-        if attr and attr != "neutral":
-            tag = {"fixed": "fixed (internal blame — GATE)",
-                   "external": "external (blaming the tool — GATE)",
-                   "adaptive": "adaptive (healthy internal)"}.get(attr, attr)
-            bits.append(f"attribution=`{tag}`")
-        if imposter:
-            bits.append("imposter=`true` — GATE")
-        if anxiety:
-            bits.append("high_anxiety=`true`")
-        if eff and eff != "neutral":
-            bits.append(f"self_efficacy=`{eff}`")
-        psych_lines += " " + ", ".join(bits) + "\n"
     if rec_intervention:
-        psych_lines += f"- **Intervention picked:** `{rec_intervention}`\n"
+        footer_lines += f"- **Intervention picked:** `{rec_intervention}`\n"
     # A/B variant footer (added 2026-05-21). Surface the experiment
     # variants assigned to this student so a researcher / teacher
     # reviewing a transcript can attribute behavioral differences to
@@ -1223,7 +1060,7 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
     v_teach = state.get("variant_teach_prompt")
     v_probe = state.get("variant_probe_cap")
     if v_teach or v_probe:
-        psych_lines += (
+        footer_lines += (
             f"- **A/B variants:** teach_prompt=`{v_teach or '-'}`, "
             f"probe_cap=`{v_probe or '-'}`\n"
         )
@@ -1251,7 +1088,7 @@ def _tutor_details_md(state: dict, diag: dict) -> str:
         + progression_block
         + lp_lines
         + substance_note
-        + psych_lines
+        + footer_lines
         + rl_lines
     )
 
@@ -1998,7 +1835,6 @@ def _stream_teach(state, diag, history):
         "dina_mastery", 0.30))
     bkt_now  = float((state.get("mastery_now") or {}).get(
         "bkt_mastery", dina_now))
-    emotion_now = "confused" if not correct else "engaged"
     # Re-encode the student's accumulated belief with HVSAE so the RL agent
     # gets a real latent (matches what get_state_representation expects).
     try:
@@ -2020,8 +1856,6 @@ def _stream_teach(state, diag, history):
                 "encoding":   {"latent": latent_for_rl.detach().view(-1).float()},
                 "cognitive":  {"knowledge_gaps":
                                 [{"concept": q["concept"], "mastery": dina_now}]},
-                "behavioral": {"emotional_state": emotion_now},
-                "psychological": {"personality": {}},
                 "history":    {"interventions": []},
             }
             _curr_state_vec = REG.teaching_rl_agent.get_state_representation(
@@ -2032,14 +1866,13 @@ def _stream_teach(state, diag, history):
     # 0.3 if "i dont know"-style. Length is a coarse proxy.
     _eng = 0.7 if len((reasoning or "").split()) >= 8 else 0.3
     _rl_finalise_previous(state, current_dina=dina_now,
-                          current_emotion=emotion_now,
                           current_lp=diag["current_lp_level"],
                           current_state_vec=_curr_state_vec,
                           engagement_signal=_eng)
 
     rl_action, rl_action_id, rl_q, rl_state_vec = _rl_recommended_intervention(
         "chat_user", q["concept"],
-        mastery=dina_now, emotion=emotion_now,
+        mastery=dina_now,
         lp_level=diag["current_lp_level"],
         hvsae_latent=latent_for_rl,
     )
@@ -2050,7 +1883,7 @@ def _stream_teach(state, diag, history):
     # action's outcome).
     state["pending_rl"] = {
         "state_vec": rl_state_vec, "action_id": rl_action_id,
-        "dina": dina_now, "emotion": emotion_now,
+        "dina": dina_now,
         "lp_level": diag["current_lp_level"],
     }
     state["last_rl_action"] = rl_action
@@ -2060,8 +1893,7 @@ def _stream_teach(state, diag, history):
           flush=True)
 
     # ── Build the session_data dict the registry components expect ──────
-    # Used by analyse_prompt (3-channel), infer_theory_of_mind (COKE),
-    # and diagnose_multi (LP-Multi). Same shape the orchestrator uses.
+    # Used by analyse_prompt (state channels) and diagnose_multi (LP-Multi). Same shape the orchestrator uses.
     session_data_for_ctx = {
         "student_id": "chat_user",
         "question":   reasoning,
@@ -2072,19 +1904,13 @@ def _stream_teach(state, diag, history):
         "time_stuck": 0.0,
     }
 
-    # ── Populate the analysis dict so the generator's KNOWLEDGE GRAPHS
-    #    (MUST REFERENCE) section + 3-channel block fire with real data.
-    cse_kg_block        = _build_cse_kg_block(q["concept"])
-    pedagogical_kg_block = _build_pedagogical_kg_block(q["concept"])
-    coke_block          = _build_coke_block(session_data_for_ctx)
-    three_channel_block = _run_three_channel(
+    # ── Populate the analysis dict with the structure/content channel
+    #    analysis; chapter1_block feeds the audit log.
+    chapter1_block      = _build_chapter1_block(q["concept"])
+    state_channels_block = _run_state_channels(
         state.get("student_id") or "chat_user", session_data_for_ctx)  # 2026-05-21
-    # Stash three-channel + intervention on state so the tutor-details
-    # panel can render the psych signals (attribution, imposter,
-    # anxiety) and the chosen intervention type. Added 2026-05-21 after
-    # extending LanguageChannelAnalyser with external_attr + dumb/stupid
-    # patterns so users can see when those signals actually fire.
-    state["last_three_channel"] = three_channel_block or {}
+    # Stash the chosen intervention so the tutor-details panel can show it.
+    state["last_state_channels"] = state_channels_block or {}
     state["last_chosen_intervention"] = chosen
 
     # ── Run multi-concept diagnosis so the LP-Multi mini-replies block
@@ -2101,10 +1927,8 @@ def _stream_teach(state, diag, history):
         hvsae_misconception_probs=_mp_for_multi,
     )
 
-    print(f"[CPAL/Teach] cse_kg={'OK' if cse_kg_block else 'empty'}  "
-          f"ped_kg={'OK' if pedagogical_kg_block else 'empty'}  "
-          f"coke={'OK' if coke_block else 'empty'}  "
-          f"3ch={'OK' if three_channel_block else 'empty'}  "
+    print(f"[CPAL/Teach] chapter1={'OK' if chapter1_block else 'outside Ch1'}  "
+          f"channels={'OK' if state_channels_block else 'empty'}  "
           f"lp_multi={len((lp_diagnostic_multi or {}).get('diagnostics', {}))} concepts",
           flush=True)
 
@@ -2126,17 +1950,11 @@ def _stream_teach(state, diag, history):
         "hierarchical_rl":         aux_signals.get("hierarchical_rl"),
         "bkt_mastery":  {q["concept"]: bkt_now},
         "dina_mastery": {q["concept"]: dina_now},
-        "emotional_state": emotion_now,
         "interaction_count": len(history) + 1,
     }
     analysis = {
-        "emotion": {"primary": "confused" if not correct else "engaged",
-                    "confidence": 0.7},
         "knowledge_gaps":  [q["concept"]],
-        "cse_kg":          cse_kg_block,
-        "pedagogical_kg":  pedagogical_kg_block,
-        "coke":            coke_block,
-        "psychological_state": three_channel_block,
+        "state_channels":  state_channels_block,
         "encoding":        {"latent": _latent_for_multi}
                             if _latent_for_multi is not None else {},
     }
@@ -2297,14 +2115,6 @@ def _stream_teach(state, diag, history):
             "probe_count":     state.get("probe_count"),
             "plateau_flag":    diag.get("plateau_flag"),
         }
-        # Add psych signals if three-channel ran
-        _tc = state.get("last_three_channel") or {}
-        _pg = _tc.get("psychological_graph") or {}
-        if _pg:
-            _payload["attribution"]   = _pg.get("attribution")
-            _payload["self_efficacy"] = _pg.get("self_efficacy")
-            _payload["imposter"]      = _pg.get("imposter_flag")
-            _payload["anxiety"]       = _pg.get("high_anxiety")
         # Behavioral signals (added 2026-05-22). Closes Layer 7 gap.
         # In the chat-app context "behavior" = reasoning length +
         # complexity + correctness pattern (we don't get raw
@@ -2322,21 +2132,14 @@ def _stream_teach(state, diag, history):
         _payload["reasoning_length_words"] = _wc
         _payload["reasoning_complexity"]   = _complexity
         _payload["correct_streak"]         = _new_streak
-        # KG signals (added 2026-05-22). Closes Layer 13 gap. Captures
-        # which concept the KG was queried for, how many prereqs/related/
-        # misconceptions/interventions came back, and the COKE TOM
-        # prediction. Lets us answer "did the KG actually surface
-        # useful context this turn, or was it empty?"
-        _payload["kg_concept_queried"]      = q["concept"]
-        _payload["cse_prerequisites_count"] = len((cse_kg_block or {}).get("prerequisites", []))
-        _payload["cse_related_count"]       = len((cse_kg_block or {}).get("related_concepts", []))
-        _payload["ped_misconceptions_count"]= len((pedagogical_kg_block or {}).get("misconceptions", []))
-        _payload["ped_interventions_count"] = len((pedagogical_kg_block or {}).get("interventions", []))
-        _payload["coke_cognitive_state"]    = (coke_block or {}).get("cognitive_state")
-        _payload["coke_confidence"]         = (coke_block or {}).get("confidence")
-        _payload["three_channel_fired"]     = bool(three_channel_block)
-        _payload["cse_kg_block_chars"]      = len(json.dumps(cse_kg_block or {}))
-        _payload["ped_kg_block_chars"]      = len(json.dumps(pedagogical_kg_block or {}))
+        # KG signals. Captures which concept the Chapter-1 graph was
+        # queried for and how many prereqs/misconceptions came back, so we
+        # can answer "did the graph surface useful context this turn?"
+        _payload["kg_concept_queried"]        = q["concept"]
+        _payload["ch1_concept"]               = (chapter1_block or {}).get("concept")
+        _payload["ch1_prerequisites_count"]   = len((chapter1_block or {}).get("prerequisites", []))
+        _payload["ch1_misconceptions_count"]  = len((chapter1_block or {}).get("misconceptions", []))
+        _payload["state_channels_fired"]      = bool(state_channels_block)
         get_db().audit("turn_completed", student_id=_sid_audit,
                         payload=_payload)
         get_db().audit("intervention_picked", student_id=_sid_audit,
@@ -2348,27 +2151,26 @@ def _stream_teach(state, diag, history):
     except Exception as _e:
         print(f"[CPAL/Audit] turn_completed write failed: {_e}")
 
-    # ── Couple this turn onto the CSO 3.5 student knowledge graph ─────────
+    # ── Couple this turn onto the Chapter-1 student knowledge graph ───────
     # End-to-end binding (added 2026-06-07): when the student answers, the
-    # touched CSO node is updated with EVERY per-turn analysis tied to it —
+    # touched concept node is updated with EVERY per-turn analysis tied to it —
     # LP level, DINA mastery, the matched wrong-model + misconception, the
-    # 3-channel psychological state, AND the intervention actually selected
-    # this turn (LP-gated + RL-refined `chosen`). expand_cso=True traces the
-    # 1-hop CSO neighbourhood so the graph shows the surrounding ontology
-    # (CSO.3.5.nt), not just the single node. This is the live feed the
+    # cognitive/progression state, AND the intervention actually selected
+    # this turn (LP-gated + RL-refined `chosen`). expand_neighbours=True
+    # pulls in the concept's 1-hop Chapter-1 neighbours (prerequisites,
+    # leads-to, parallel constructs), not just the single node. This is the live feed the
     # /api/student/graph endpoint + teacher/parent/wireframe views read.
     # Soft-fail — the student is still taught if the graph layer is down.
     try:
         from src.knowledge_graph.student_graph_service import StudentGraphService
         _sid_graph = state.get("student_id") or "chat_user"
-        _pg = (three_channel_block or {}).get("psychological_graph") or {}
-        # Map the chat-app signals into the {cognitive, progression,
-        # psychological} shape update_from_diagnosis merges onto the node.
+        # Map the chat-app signals into the {cognitive, progression} shape
+        # update_from_diagnosis merges onto the node.
         _enc = ("solid" if dina_now >= 0.70
                 else "developing" if dina_now >= 0.40 else "surface")
         _stage = {"L1": "1", "L2": "2", "L3": "3", "L4": "4"}.get(
             diag.get("current_lp_level"), "1")
-        _three_channel_for_graph = {
+        _state_channels_for_graph = {
             "cognitive":   {"encoding_strength": _enc,
                             "dina_mastery": round(dina_now, 3),
                             "bkt_mastery":  round(bkt_now, 3)},
@@ -2377,10 +2179,6 @@ def _stream_teach(state, diag, history):
                                                else "low" if dina_now >= 0.70
                                                else "medium"),
                             "plateau": bool(diag.get("plateau_flag"))},
-            "psychological": {"attribution":     _pg.get("attribution"),
-                              "self_efficacy":   _pg.get("self_efficacy"),
-                              "imposter_signal": _pg.get("imposter_flag"),
-                              "high_anxiety":    _pg.get("high_anxiety")},
         }
         # The intervention ACTUALLY used this turn (LP-validity gate first,
         # then refined by the trained RL teaching agent). gate_overrode_rl
@@ -2402,16 +2200,16 @@ def _stream_teach(state, diag, history):
             diag={**(diag or {}), "concept": q["concept"]},
             mastery=dina_now,
             misconception_text=reasoning,
-            three_channel=_three_channel_for_graph,
+            three_channel=_state_channels_for_graph,
             intervention=_intervention_for_graph,
             reward=_reward_for_graph,
             probe_state={"count":    state.get("probe_count", 0),
                          "cap":      CHAT_MAX_PROBES,
                          "criteria": state.get("probed_criteria") or []},
-            expand_cso=True,
+            expand_neighbours=True,
             persist=True,
         )
-        print(f"[CPAL/Graph] coupled CSO node '{q['concept']}' — "
+        print(f"[CPAL/Graph] coupled concept node '{q['concept']}' — "
               f"lp={diag.get('current_lp_level')} dina={dina_now:.2f} "
               f"wm={diag.get('wrong_model_id') or '-'} intervention={chosen}",
               flush=True)
@@ -2505,8 +2303,8 @@ def _stream_followup(state, history, question):
         level, target level, matched wrong-model, target sub-criteria —
         no re-diagnosis runs on a follow-up because the rubric is for
         graded answers, not free-form questions),
-      * pedagogical KG misconceptions + CSE-KG related concepts via
-        the registry's _kg_context_block helper.
+      * Chapter-1 graph prerequisites + catalogued misconceptions via
+        the _kg_context_block helper.
 
     Output goes through a direct Ollama stream (not the EnhancedPersonal-
     izedGenerator's heavy LP-3 template — that fires once per teach turn,
@@ -2549,10 +2347,6 @@ def _stream_followup(state, history, question):
         latent_for_rl = latent_for_rl.squeeze(0)
     except Exception:
         latent_for_rl = None
-    # Emotion proxy: low mastery + a "why doesn't this work" style
-    # question implies frustration; high mastery + a probing question
-    # implies engagement.
-    emotion = "confused" if dina_now < 0.4 else "engaged"
 
     # CLOSE the previous RL step (the teach turn's action). engagement_signal
     # is high here because the student took the trouble to ask a follow-up
@@ -2566,8 +2360,6 @@ def _stream_followup(state, history, question):
                 "encoding":   {"latent": latent_for_rl.detach().view(-1).float()},
                 "cognitive":  {"knowledge_gaps":
                                 [{"concept": concept, "mastery": dina_now}]},
-                "behavioral": {"emotional_state": emotion},
-                "psychological": {"personality": {}},
                 "history":    {"interventions": []},
             }
             _curr_state_vec_fu = REG.teaching_rl_agent.get_state_representation(
@@ -2575,13 +2367,13 @@ def _stream_followup(state, history, question):
     except Exception:
         _curr_state_vec_fu = None
     _rl_finalise_previous(state, current_dina=dina_now,
-                          current_emotion=emotion, current_lp=cur_lvl,
+                          current_lp=cur_lvl,
                           current_state_vec=_curr_state_vec_fu,
                           engagement_signal=0.85)
 
     rl_action, rl_action_id, rl_q, rl_state_vec = _rl_recommended_intervention(
         "chat_user", concept,
-        mastery=dina_now, emotion=emotion, lp_level=cur_lvl,
+        mastery=dina_now, lp_level=cur_lvl,
         hvsae_latent=latent_for_rl,
     )
     action_shape = _RL_ACTION_SHAPING.get(
@@ -2590,15 +2382,15 @@ def _stream_followup(state, history, question):
     # Stash for the NEXT turn's _rl_finalise_previous.
     state["pending_rl"] = {
         "state_vec": rl_state_vec, "action_id": rl_action_id,
-        "dina": dina_now, "emotion": emotion, "lp_level": cur_lvl,
+        "dina": dina_now, "lp_level": cur_lvl,
     }
     state["last_rl_action"] = rl_action
     state["last_rl_q"]      = rl_q
     print(f"[CPAL/Followup] concept={concept} lp={cur_lvl}->{tgt_lvl} "
-          f"dina={dina_now:.2f} bkt={bkt_now:.2f} emotion={emotion} "
+          f"dina={dina_now:.2f} bkt={bkt_now:.2f} "
           f"rl_action={rl_action} q={rl_q:+.3f}", flush=True)
 
-    # KG-grounded context (pedagogical KG + CSE-KG + error mapper).
+    # KG-grounded context (Chapter-1 concept + LP graph).
     kg_context = _kg_context_block(
         concept=concept, code=code, error_message="")
 

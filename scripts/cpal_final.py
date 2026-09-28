@@ -2,11 +2,10 @@
 Final CPAL demo — every component working in one pass.
 
 Components:
-  TRAINED CHECKPOINTS (6):
+  TRAINED CHECKPOINTS (5):
     - HVSAE                       (checkpoints/best.pt)
     - BehavioralRNN               (checkpoints/best.pt)
     - BehavioralHMM               (checkpoints/behavioral_hmm.json)
-    - EmotionClassifier           (checkpoints/emotion_classifier.pt)
     - NESTOR personality          (checkpoints/text_personality.pt)
     - TeachingPolicyNetwork       (checkpoints/rl_teaching_agent.pt)
   TRAINED HEADS (2):
@@ -18,12 +17,15 @@ Components:
     - Conceptual prerequisites (from catalogue's week ordering)
 
 Flow:
-  1. Load all 8 trained artifacts
+  1. Load all 7 trained artifacts
   2. Build StudentStateTracker → query per-concept mastery + prerequisites
-  3. Run HVSAE + BehavioralRNN + HMM + Emotion + NESTOR + Policy on input
+  3. Run HVSAE + BehavioralRNN + HMM + NESTOR + Policy on input
   4. Run trained LP + WM heads on student text
   5. Fuse everything for a final LP + WM diagnosis
   6. Generate grounded response through the real generator
+
+Emotion and the psychological channel are not inputs (the emotion
+classifier was retired to _archive/emotion_and_psych/).
 """
 import os, sys, json
 from pathlib import Path
@@ -82,16 +84,6 @@ def load_all():
     print("  ✓ BehavioralRNN                   664K params")
     hmm = BehavioralHMM(cfg)
     print("  ✓ BehavioralHMM                   5x5 + 5x7")
-    ec = torch.load(ROOT / "checkpoints" / "emotion_classifier.pt",
-                    map_location="cpu", weights_only=False)
-    emo = nn.Sequential(
-        nn.Linear(ec["in_dim"], ec["hidden"]), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(ec["hidden"], ec["hidden"]), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(ec["hidden"], len(ec["classes"])),
-    )
-    emo.load_state_dict({k.replace("net.", ""): v for k, v in ec["state_dict"].items()})
-    emo.eval()
-    print("  ✓ EmotionClassifier               5K params")
     tp = torch.load(ROOT / "checkpoints" / "text_personality.pt",
                     map_location="cpu", weights_only=False)
     from sentence_transformers import SentenceTransformer
@@ -118,7 +110,7 @@ def load_all():
     print("  --")
     print("  ✓ LP head (sentence-transformers) via LPDiagnostician")
     print("  ✓ WM sub-head (HVSAE latent)      via LPDiagnostician")
-    return {"hvsae": h, "brn": brn, "hmm": hmm, "emo": emo,
+    return {"hvsae": h, "brn": brn, "hmm": hmm,
             "st": st, "nestor_head": nestor_head,
             "nestor_traits": tp["traits_bigfive_names"],
             "policy_net": policy_net, "policy_meta": mt,
@@ -187,25 +179,17 @@ def run_dynamic_components(m, text):
             outcomes=torch.tensor([[0]*8], dtype=torch.long),
             lengths=torch.tensor([8], dtype=torch.long),
         )
-    print(f"  BehavioralRNN emotion_logits argmax: "
-          f"{int(brn_out['emotion_logits'].argmax(dim=-1).item())}")
+    print(f"  BehavioralRNN effectiveness: "
+          f"{float(brn_out['effectiveness'].view(-1)[0]):.2f}")
 
-    # HMM + EmotionClassifier
+    # HMM
     seq = [{"event_type": t, "time_delta": d}
            for t, d in zip(
                ["run","compile_error","edit","run","runtime_error","read","search","ask"],
                [1.5, 0.5, 3.0, 1.2, 0.4, 2.0, 4.0, 5.0])]
     hmm_ana = m["hmm"].analyze_session(seq)
-    feats = m["hmm"]._extract_features(seq)[-1]
-    with torch.no_grad():
-        lg = m["emo"](torch.from_numpy(feats).float().unsqueeze(0))
-        ep = torch.softmax(lg, dim=-1).squeeze(0)
-    emo_classes = ["neutral","confused","frustrated","engaged","understanding"]
-    emo_label = emo_classes[int(ep.argmax())]
     print(f"  HMM final state: {hmm_ana.get('final_state')}  "
           f"({hmm_ana.get('final_confidence',0):.2f})")
-    print(f"  Emotion: {emo_label}  (probs: " +
-          ", ".join(f"{c}={p:.2f}" for c, p in zip(emo_classes, ep.tolist())) + ")")
 
     # NESTOR personality
     emb = m["st"].encode([text], convert_to_tensor=True)
@@ -231,14 +215,18 @@ def run_dynamic_components(m, text):
                "socratic_prompt","trace_scaffold","transfer_prompt",
                "mastery_surface","attribution_reframe",
                "prerequisite_review","metacognitive_prompt"][:len(scores)]
-    top_pol = sorted(zip(actions, scores.tolist()),
+    # mastery_surface / attribution_reframe were psychological-channel
+    # interventions (retired); drop them from the ranking — the trained
+    # net keeps its 10 outputs so the checkpoint still loads.
+    retired = {"mastery_surface", "attribution_reframe"}
+    top_pol = sorted(((a, sc) for a, sc in zip(actions, scores.tolist())
+                      if a not in retired),
                      key=lambda x: x[1], reverse=True)[:3]
     print(f"  Teaching policy top-3: " +
           ", ".join(f"{a}={s:.1f}" for a, s in top_pol))
 
     return {"latent": latent, "misconception_probs": mp,
             "brn_out": brn_out, "hmm": hmm_ana,
-            "emotion_label": emo_label, "emotion_probs": ep,
             "personality": personality, "policy_top3": top_pol}
 
 
@@ -291,7 +279,7 @@ def render_map(cmap):
 
 
 def fuse(diag, cognitive_map, components):
-    """Final fusion — graph mastery + emotion + wrong-model → corrected LP."""
+    """Final fusion — graph mastery + wrong-model → corrected LP."""
     reasons = []
     lvl_idx = LP_INDEX.get(diag["current_lp_level"], 0)
 
@@ -319,14 +307,6 @@ def fuse(diag, cognitive_map, components):
         reasons.append(
             f"wrong-model {diag['wrong_model_id']} with confidence "
             f"{diag['match_score']:.2f} → cap LP at L2 (misconception present)"
-        )
-        lvl_idx = LP_INDEX["L2"]
-
-    # Emotion: confused/frustrated cap LP
-    if components.get("emotion_label") in ("confused", "frustrated") \
-            and lvl_idx >= LP_INDEX["L3"]:
-        reasons.append(
-            f"emotion={components['emotion_label']} → cap LP at L2"
         )
         lvl_idx = LP_INDEX["L2"]
 
@@ -412,21 +392,16 @@ def main():
             "big5": components.get("personality", {}),
         },
         "bkt_mastery": {concept: cognitive_map["target_mastery"]},
-        "emotional_state": components.get("emotion_label", "neutral"),
         "interaction_count": 1,
     }
-    analysis = {"emotion": {"primary": components.get("emotion_label", "neutral"),
-                             "confidence": 0.7},
-                "knowledge_gaps": [concept],
-                "pedagogical_kg": {},
+    analysis = {"knowledge_gaps": [concept],
                 "graph_lookup": cognitive_map}
     gen = EnhancedPersonalizedGenerator()
     print(f"  [model: {gen._ollama_model}]  [intervention: {chosen}]")
     print(f"  [LP: {diag['current_lp_level']} → {diag['target_lp_level']}]  "
           f"[wrong-model: {diag['wrong_model_id']} via {diag['source']}]")
     print(f"  [concept mastery: {cognitive_map['target_mastery']:.2f}  "
-          f"prereq mastery: {cognitive_map['avg_prereq_mastery']:.2f}  "
-          f"emotion: {components['emotion_label']}]\n")
+          f"prereq mastery: {cognitive_map['avg_prereq_mastery']:.2f}]\n")
 
     def on_chunk(p): sys.stdout.write(p); sys.stdout.flush()
     gen._stream_callback = on_chunk

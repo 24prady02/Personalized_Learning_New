@@ -55,48 +55,23 @@ OPERATIVE_STEP_FOR_SE = (
 
 
 def _build_kg_context(reg, concept: str, code: str, error_message: str = "") -> str:
-    """Same logic as cpal_chat_app._kg_context_block — duplicated here so
-    the script is self-contained."""
+    """Chapter-1 concept graph context for the quiz concept: prerequisites
+    and catalogued misconceptions. `reg`, `code` and `error_message` are kept
+    for call-site compatibility."""
     parts = []
     try:
-        info = reg.pedagogical_kg.get_concept_full_info(concept) or {}
-        ped = info.get("pedagogical_data") or {}
-        misc = ped.get("common_misconceptions") or []
-        if misc:
-            names = [(m.get("description") or m.get("id") or "").strip()[:80]
-                     for m in misc[:3]]
-            names = [n for n in names if n]
-            if names:
-                parts.append("Pedagogical-KG misconceptions: "
-                             + " | ".join(names))
-        load = ped.get("cognitive_load") or {}
-        if load:
-            total = load.get("total")
-            factors = load.get("factors") or []
-            if total is not None or factors:
-                parts.append(
-                    f"Pedagogical-KG cognitive load: total={total}"
-                    + (f"  factors={', '.join(factors[:4])}"
-                       if factors else ""))
-        dom = info.get("domain_knowledge") or {}
-        rel = dom.get("related_concepts") or []
-        if rel:
-            short = []
-            for r in rel[:4]:
-                uri = r.get("concept", "") if isinstance(r, dict) else str(r)
-                short.append(uri.rsplit("/", 1)[-1])
-            parts.append("CSE-KG related concepts: " + ", ".join(short))
+        from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+        g = get_chapter1_graph()
+        if g.exists(concept):
+            prereqs = g.get_prerequisites(concept)
+            if prereqs:
+                parts.append("Chapter-1 prerequisites: " + ", ".join(prereqs))
+            miscs = g.misconceptions_for(concept)
+            if miscs:
+                parts.append("Chapter-1 misconceptions: " + " | ".join(
+                    (m.get("wrong_belief") or m["id"])[:80] for m in miscs[:3]))
     except Exception as e:
-        print(f"[ped_kg] {e}", file=sys.stderr)
-    try:
-        if code or error_message:
-            related = reg.concept_retriever.retrieve_from_code(
-                code or "", error_message or "", top_k=5) or []
-            if related:
-                parts.append("CSE-KG retrieved from code: "
-                             + ", ".join(related[:5]))
-    except Exception as e:
-        print(f"[csekg] {e}", file=sys.stderr)
+        print(f"[chapter1_graph] {e}", file=sys.stderr)
     if not parts:
         return ""
     return ("KG-GROUNDED CONTEXT (use to anchor your explanation; do "

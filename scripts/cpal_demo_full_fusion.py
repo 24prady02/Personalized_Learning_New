@@ -6,11 +6,10 @@ Stage 1 to identify LP level + wrong mental model. This is the correction
 path for the last demo's misfire (L4 inflated by sophisticated vocabulary,
 AI-A picked over AI-B by a 0.000 cosine margin).
 
-Trained weights loaded (all 6):
+Trained weights loaded (all 5):
   HVSAE                    best.pt                   3.46M params
   BehavioralRNN            best.pt                     664K params
   BehavioralHMM            behavioral_hmm.json        5×5 + 5×7
-  EmotionClassifier        emotion_classifier.pt       5K params
   NESTOR personality       text_personality.pt      22.8M params
   TeachingPolicyNetwork    rl_teaching_agent.pt      165K params
 
@@ -19,11 +18,13 @@ Fusion logic (where each trained model contributes):
   WRONG MODEL  : HVSAE.TextEncoder cosine on signals, tie-broken by
                  HVSAE concept head agreement
   LP LEVEL     : lexical classifier  +  HVSAE rubric cosine
-                 demoted by EmotionClassifier confusion signal
                  capped by BehavioralHMM "stuck/confused" hidden state
                  modulated by NESTOR neuroticism trait
   INTERVENTION : TeachingPolicyNetwork action scores,
-                 filtered by LP-validity gate and emotion gate
+                 filtered by LP-validity gate
+
+Emotion and the psychological channel are not inputs (the emotion
+classifier was retired to _archive/emotion_and_psych/).
 """
 import os, sys, json
 import torch
@@ -72,33 +73,19 @@ def load_everything():
     hvsae = HVSAE(cfg)
     hvsae.load_state_dict(ckpt["hvsae_state"])
     hvsae.eval()
-    print(f"  [1/6] HVSAE                    loaded  (3,459,351 params, epoch {ckpt['epoch']})")
+    print(f"  [1/5] HVSAE                    loaded  (3,459,351 params, epoch {ckpt['epoch']})")
     weights["hvsae"] = hvsae
     weights["config"] = cfg
 
     brn = BehavioralRNN(cfg)
     brn.load_state_dict(ckpt["behavioral_rnn_state"])
     brn.eval()
-    print(f"  [2/6] BehavioralRNN            loaded  (664,125 params)")
+    print(f"  [2/5] BehavioralRNN            loaded  (664,125 params)")
     weights["brn"] = brn
 
     hmm = BehavioralHMM(cfg)  # _try_load() auto-loads from config path
-    print(f"  [3/6] BehavioralHMM            loaded  (5 hidden states × 7 features)")
+    print(f"  [3/5] BehavioralHMM            loaded  (5 hidden states × 7 features)")
     weights["hmm"] = hmm
-
-    # Emotion classifier — 7→64→64→5 MLP
-    ec = torch.load(os.path.join(ROOT, "checkpoints", "emotion_classifier.pt"),
-                    map_location="cpu", weights_only=False)
-    emo_model = nn.Sequential(
-        nn.Linear(ec["in_dim"], ec["hidden"]), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(ec["hidden"], ec["hidden"]), nn.ReLU(), nn.Dropout(0.2),
-        nn.Linear(ec["hidden"], len(ec["classes"])),
-    )
-    remap = {k.replace("net.", ""): v for k, v in ec["state_dict"].items()}
-    emo_model.load_state_dict(remap)
-    emo_model.eval()
-    print(f"  [4/6] EmotionClassifier        loaded  (4,997 params, classes={ec['classes']})")
-    weights["emo"] = {"model": emo_model, "classes": ec["classes"]}
 
     # NESTOR personality (sentence-transformers + MLP head)
     tp = torch.load(os.path.join(ROOT, "checkpoints", "text_personality.pt"),
@@ -113,10 +100,10 @@ def load_everything():
         )
         head.load_state_dict(tp["head_state_dict"])
         head.eval()
-        print(f"  [5/6] NESTOR personality       loaded  (22.8M params, traits={tp['traits_bigfive_names']})")
+        print(f"  [4/5] NESTOR personality       loaded  (22.8M params, traits={tp['traits_bigfive_names']})")
         weights["nestor"] = {"st": st, "head": head, "traits": tp["traits_bigfive_names"]}
     except Exception as e:
-        print(f"  [5/6] NESTOR personality       skipped ({type(e).__name__}: {str(e)[:70]})")
+        print(f"  [4/5] NESTOR personality       skipped ({type(e).__name__}: {str(e)[:70]})")
         weights["nestor"] = None
 
     # Teaching policy
@@ -131,7 +118,7 @@ def load_everything():
     pn_sd = {k.replace("network.", ""): v for k, v in pol["policy_net"].items()}
     policy_net.load_state_dict(pn_sd)
     policy_net.eval()
-    print(f"  [6/6] TeachingPolicyNetwork    loaded  (165,514 params, "
+    print(f"  [5/5] TeachingPolicyNetwork    loaded  (165,514 params, "
           f"{meta['state_dim']}→{meta['num_actions']} actions, {meta['episodes']} eps trained)")
     weights["policy"] = {"net": policy_net, "meta": meta}
 
@@ -196,7 +183,7 @@ def run_all_models(w, text: str, concept: str):
             print(f"    {k:14s}: shape={tuple(v.shape)}  "
                   f"mean={v.float().mean().item():+.3f}")
 
-    # ── HMM + EmotionClassifier ──────────────────────────────────────
+    # ── BehavioralHMM ────────────────────────────────────────────────
     try:
         action_seq_list = [
             {"event_type": t, "time_delta": d}
@@ -205,27 +192,16 @@ def run_all_models(w, text: str, concept: str):
                             time_deltas[0].tolist())
         ]
         hmm_analysis = w["hmm"].analyze_session(action_seq_list)
-        feats = w["hmm"]._extract_features(action_seq_list)
-        last_feat = feats[-1]
-        with torch.no_grad():
-            logits = w["emo"]["model"](torch.from_numpy(last_feat).float().unsqueeze(0))
-            probs = torch.softmax(logits, dim=1).squeeze(0)
-        emo_idx = int(probs.argmax().item())
-        outputs["emotion"] = {
-            "label": w["emo"]["classes"][emo_idx],
-            "probs": probs.tolist(),
+        outputs["hmm"] = {
             "hmm_state": hmm_analysis.get("final_state"),
             "hmm_confidence": hmm_analysis.get("final_confidence"),
         }
-        print(f"\n  BehavioralHMM + EmotionClassifier")
+        print(f"\n  BehavioralHMM")
         print(f"    HMM final state  : {hmm_analysis.get('final_state')}  "
               f"(confidence {hmm_analysis.get('final_confidence', 0):.2f})")
-        print(f"    emotion label    : {w['emo']['classes'][emo_idx]}")
-        for cls, p in zip(w["emo"]["classes"], probs.tolist()):
-            print(f"      {cls:14s}: {p:.3f}")
     except Exception as e:
-        print(f"\n  BehavioralHMM + EmotionClassifier: failed ({e})")
-        outputs["emotion"] = None
+        print(f"\n  BehavioralHMM: failed ({e})")
+        outputs["hmm"] = None
 
     # ── NESTOR personality ───────────────────────────────────────────
     if w["nestor"] is not None:
@@ -264,7 +240,12 @@ def run_all_models(w, text: str, concept: str):
             "mastery_surface", "attribution_reframe", "prerequisite_review",
             "metacognitive_prompt",
         ][: meta["num_actions"]]
-        ranked = sorted(zip(action_names, action_scores.tolist()),
+        # mastery_surface / attribution_reframe were psychological-channel
+        # interventions (retired); the trained net still has those outputs,
+        # so they are dropped from the ranking instead of re-indexed.
+        retired = {"mastery_surface", "attribution_reframe"}
+        ranked = sorted(((n, sc) for n, sc in zip(action_names, action_scores.tolist())
+                         if n not in retired),
                         key=lambda x: x[1], reverse=True)
         outputs["policy_top3"] = ranked[:3]
         print(f"\n  TeachingPolicyNetwork (trained 1500 episodes)")
@@ -315,25 +296,15 @@ def fuse_diagnosis(w, outputs, text: str, concept: str, student_id: str):
     fused_lp_idx = LP_INDEX.get(fused_lp, 0)
 
     reasons = []
-    # Vote 1: EmotionClassifier confusion/frustration → cap LP
-    if outputs.get("emotion"):
-        emo = outputs["emotion"]["label"]
-        if emo in ("confused", "frustrated"):
-            cap = LP_INDEX["L2"]
-            if fused_lp_idx > cap:
-                reasons.append(f"emotion={emo} caps LP at L2 "
-                               f"(was {LP_ORDER[fused_lp_idx]})")
-                fused_lp_idx = cap
-
-    # Vote 2: HMM final state in "confused" cluster — reinforce demote
-    if outputs.get("emotion") and outputs["emotion"].get("hmm_state") is not None:
-        hs = outputs["emotion"]["hmm_state"]
+    # Vote 1: HMM final state in "struggling" cluster — demote
+    if outputs.get("hmm") and outputs["hmm"].get("hmm_state") is not None:
+        hs = outputs["hmm"]["hmm_state"]
         if isinstance(hs, int) and hs in (1, 2):  # struggling clusters
             if fused_lp_idx > LP_INDEX["L2"]:
                 reasons.append(f"HMM state={hs} (struggling) → demote LP")
                 fused_lp_idx = min(fused_lp_idx, LP_INDEX["L2"])
 
-    # Vote 3: NESTOR neuroticism — anxious students over-vocabulary
+    # Vote 2: NESTOR neuroticism trait — vocabulary-inflated answers
     if outputs.get("personality"):
         neu = outputs["personality"].get("neuroticism", 0.0)
         if neu > 0.4 and fused_lp_idx >= LP_INDEX["L3"]:
@@ -341,7 +312,7 @@ def fuse_diagnosis(w, outputs, text: str, concept: str, student_id: str):
                            f"→ demote one level (vocabulary-inflated)")
             fused_lp_idx = max(fused_lp_idx - 1, LP_INDEX["L1"])
 
-    # Vote 4: wrong_model identified with high cosine → student has a
+    # Vote 3: wrong_model identified with high cosine → student has a
     # MISCONCEPTION, not mastery — cannot be L4
     if diag.get("wrong_model_id") and diag.get("match_score", 0) >= 0.6:
         if fused_lp_idx >= LP_INDEX["L3"]:
@@ -387,11 +358,9 @@ def grounded_response(diag, text, concept, student_id):
         "personality_profile": {"communication_style": "direct",
                                  "learning_preference": "visual"},
         "bkt_mastery": {concept: 0.30},
-        "emotional_state": "confused",
         "interaction_count": 1,
     }
-    analysis = {"emotion": {"primary": "confused", "confidence": 0.7},
-                "knowledge_gaps": [concept], "pedagogical_kg": {}}
+    analysis = {"knowledge_gaps": [concept]}
     gen = EnhancedPersonalizedGenerator()
     print(f"  [model: {gen._ollama_model}]  [intervention: {chosen}]")
     print(f"  [LP: {diag['current_lp_level']} → {diag['target_lp_level']}]  "

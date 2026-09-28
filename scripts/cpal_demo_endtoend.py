@@ -155,14 +155,13 @@ def main():
         },
         intervention_type=chosen,
         delta_lp_last=0,
-        emotion="engaged",
         encoding_strength="surface",
         stage=1,
         scaffold_level=3,
         mastery=0.30,
     )
     labels = ["mastery", "lp_level_norm", "step", "detail", "streak_norm",
-              "plateau", "delta_lp", "intervention_idx", "emotion_val",
+              "plateau", "delta_lp", "intervention_idx", "reserved",
               "encoding_val", "stage_norm", "scaffold_norm"]
     for name, v in zip(labels, state_vec):
         print(f"    {name:20s}: {v:+.2f}")
@@ -180,13 +179,10 @@ def main():
             "learning_preference":  "visual",
         },
         "bkt_mastery":     {CONCEPT_ID: 0.30},
-        "emotional_state": "engaged",
         "interaction_count": 2,
     }
     analysis = {
-        "emotion":          {"primary": "engaged", "confidence": 0.7},
         "knowledge_gaps":   [CONCEPT_ID],
-        "pedagogical_kg":   {},
     }
 
     gen = EnhancedPersonalizedGenerator()
@@ -197,7 +193,6 @@ def main():
         student_message=STUDENT_REASONING, code=None,
         student_state=student_state, analysis=analysis,
         conversation_context=conv,
-        emotional_context=gen._adapt_emotional_tone(analysis, student_state),
         learning_style_adaptation=gen._adapt_to_learning_style(student_state, analysis),
         personality_adaptation=gen._adapt_to_personality(student_state),
         progress_context=gen._build_progress_context(student_state, analysis),
@@ -206,11 +201,10 @@ def main():
         error_feedback=gen._build_error_feedback(None, None, analysis),
         metacognitive_guidance=gen._generate_metacognitive_guidance(student_state, analysis),
         difficulty_adaptation=gen._adapt_difficulty_and_pacing(student_state, analysis),
-        adaptive_analysis=None,
     )
     # Pull the LP block for display (the rest is the 10 generic sections)
     start = prompt.find("=== LP-1: DIAGNOSTIC CONTEXT")
-    end_markers = ["=== CONVERSATION", "=== EMOTIONAL", "=== PROGRESSION"]
+    end_markers = ["=== CONVERSATION", "=== LEARNING STYLE", "=== PROGRESS"]
     end = min(
         [prompt.find(m, start) for m in end_markers if prompt.find(m, start) > 0]
         or [start + 2600]
