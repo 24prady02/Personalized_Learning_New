@@ -1,10 +1,10 @@
 """
 src/models — Neural and probabilistic model implementations.
 
-Exposes all five core models for import by server.py and train.py.
+Exposes the core models. DINA (mastery tracking) was archived to
+_archive/mastery_and_teaching_choice/ on 2026-10-01.
 """
 from .hvsae    import HVSAE
-from .dina     import DINAModel
 from .behavioral import BehavioralRNN, BehavioralHMM
 from .nestor   import (
     NestorBayesianNetwork,
@@ -15,7 +15,6 @@ from .nestor   import (
 
 __all__ = [
     "HVSAE",
-    "DINAModel",
     "BehavioralRNN",
     "BehavioralHMM",
     "NestorBayesianNetwork",

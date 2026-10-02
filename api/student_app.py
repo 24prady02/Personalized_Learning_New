@@ -4,8 +4,9 @@ Lightweight student-facing FastAPI app for the 3-step learning flow:
   2) Free-text "what do you believe is happening"
   3) Theory-grounded correction (wrong-model + LP rubric)
 
-Mastery state (DINA) is updated server-side per session but never returned
-to the student. Run with:
+Each belief is LP-classified and written to the student's concept map.
+Mastery tracking (DINA) was archived to _archive/mastery_and_teaching_choice/
+on 2026-10-01. Run with:
     uvicorn api.student_app:app --host 0.0.0.0 --port 8001
 """
 from __future__ import annotations
@@ -18,6 +19,7 @@ for _stream in (_sys.stdout, _sys.stderr):
         pass
 
 import json
+import os
 import random
 import re
 import time
@@ -34,12 +36,16 @@ from pydantic import BaseModel
 ROOT = Path(__file__).resolve().parent.parent
 _sys.path.insert(0, str(ROOT))
 
-from src.models.dina import DINAModel  # noqa: E402
 # Production-hardening additions wired in 2026-05-30 — see
 # scripts/cpal_chat_app.py for the chat-flow equivalents.
 from src.persistence.auth import validate_token            # noqa: E402
 from src.persistence.db_store import get_db                # noqa: E402
 from src.persistence.ab_testing import assign_variant      # noqa: E402
+
+# Reply generation is switched off: a belief is LP-classified and written to
+# the student's concept map; no probe question or teaching explanation is
+# generated. Set CPAL_GENERATE_REPLIES=1 to turn them back on.
+GENERATE_REPLIES = os.environ.get("CPAL_GENERATE_REPLIES", "0") == "1"
 
 
 # ── Injection guard (mirror of cpal_chat_app._INJECTION_PATTERNS) ────────────
@@ -134,9 +140,7 @@ def _lp_rubric(concept: str) -> Dict:
     return (CONCEPTS.get(concept, {}) or {}).get("lp_rubric", {}) or {}
 
 
-# ── DINA + session state (server-side only) ──────────────────────────────────
-
-_dina = DINAModel({"dina": {"data_dir": str(ROOT / "data" / "dina")}})
+# ── session state (server-side only) ─────────────────────────────────────────
 
 # session_id -> {student_id, current_item_id, choice, is_correct, belief}
 _sessions: Dict[str, Dict] = {}
@@ -374,56 +378,36 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
     Stores the diagnosis on the session so _build_explanation can shape the
     Step-3 prompt by the graded LP level.
     """
-    rubric = _lp_rubric(item["concept"])
     accumulated = _accumulated_belief(sess)
 
-    # Run the full pipeline; fall back to RubricGrader-only if it fails;
-    # finally fall back to skipping probes entirely.
+    # LP classification on the Chapter-1 percpt graph (src/lp_percpt): the
+    # newest message is classified and added to the student's concept map;
+    # earlier messages are already on the map as evidence.
     diag_dict: Dict = {}
-    if accumulated and rubric:
-        d = _get_diagnostician()
-        if d is not None:
-            try:
-                diag_obj = d.diagnose(
-                    student_id=sess.get("student_id", "anon"),
-                    concept=item["concept"],
-                    question_text=accumulated,
-                )
-                diag_dict = diag_obj.to_dict()
-                # Update the CSO-grounded student knowledge graph — central
-                # data structure that ties LP level + WM + DINA mastery to
-                # the CSO ontology. Soft-fail so the quiz still works if the
-                # graph layer is absent.
-                try:
-                    from src.knowledge_graph.student_graph_service import StudentGraphService
-                    StudentGraphService.shared().record_turn(
-                        student_id=sess.get("student_id", "anon"),
-                        diag=diag_dict,
-                        mastery=sess.get("mastery_after"),
-                        misconception_text=accumulated,
-                        expand_neighbours=True,
-                        persist=True,
-                    )
-                except Exception as e:
-                    print(f"[QuizApp] StudentGraphService.record_turn failed: {e}")
-            except Exception as e:
-                print(f"[QuizApp] LPDiagnostician.diagnose failed: {e}")
-                diag_dict = {}
-        if not diag_dict:
-            # Bare grader fallback.
-            g = _get_grader()
-            if g is not None:
-                try:
-                    grade = g.grade(accumulated, item["concept"], rubric)
-                    diag_dict = {
-                        "current_lp_level":      grade.get("level"),
-                        "target_lp_level":       _next_level(grade.get("level")),
-                        "diagnostic_confidence": grade.get("confidence", 0.0),
-                        "rubric_grade":          grade,
-                        "lp_sub_criteria":       {},
-                    }
-                except Exception as e:
-                    print(f"[QuizApp] grader fallback failed: {e}")
+    latest = ((sess.get("probe_answers") or []) or [sess.get("belief") or ""])[-1]
+    if latest:
+        try:
+            from src.lp_percpt.engine import get_engine
+            from src.knowledge_graph.chapter1_graph import get_chapter1_graph
+            shown = (f"{item.get('question', '')}\n{item.get('code', '')}\n"
+                     + "\n".join(f"{o['key']}. {o.get('text', '')}" for o in item.get("options", [])))
+            result = get_engine().process(student_id=sess.get("student_id", "anon"),
+                                          text=latest, shown_text=shown)
+            sess["lp_result"] = result
+            want = get_chapter1_graph().canonical(item["concept"])
+            focus = next((c for c in result["concepts"] if c["concept"] == want),
+                         result["concepts"][0] if result["concepts"] else None)
+            if focus:
+                level = focus["level"] or focus["prompt_level"]
+                diag_dict = {
+                    "concept":               focus["concept"],
+                    "current_lp_level":      level,
+                    "target_lp_level":       _next_level(level),
+                    "diagnostic_confidence": {"high": 0.9, "medium": 0.6, "low": 0.3}[focus["confidence"]],
+                    "lp_sub_criteria":       {},
+                }
+        except Exception as e:
+            print(f"[QuizApp] LP classification failed: {e}")
 
     # Stash the diagnosis on the session so the explanation step can read it.
     sess["lp_diagnosis"] = diag_dict
@@ -431,6 +415,7 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
     diag_conf = float(diag_dict.get("diagnostic_confidence", 1.0))
     probe_count = int(sess.get("probe_count", 0))
     should_probe = (
+        GENERATE_REPLIES and
         diag_dict and
         diag_dict.get("current_lp_level") and
         diag_conf < QUIZ_PROBE_CONFIDENCE_FLOOR and
@@ -491,16 +476,19 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
         wm_id = chosen_opt.get("wm_id")
         chosen_wm = _wm_lookup(item["concept"], wm_id) if wm_id else None
 
-    explanation = _build_explanation(
-        item=item,
-        student_belief=accumulated,
-        is_correct=sess["is_correct"],
-        chosen_opt=chosen_opt,
-        correct_opt=correct_opt,
-        chosen_wm=chosen_wm,
-        diag_dict=diag_dict,
-        teach_variant=sess.get("teach_variant", "control"),
-    )
+    if not GENERATE_REPLIES:
+        explanation = _lp_result_text(sess.get("lp_result"))
+    else:
+        explanation = _build_explanation(
+            item=item,
+            student_belief=accumulated,
+            is_correct=sess["is_correct"],
+            chosen_opt=chosen_opt,
+            correct_opt=correct_opt,
+            chosen_wm=chosen_wm,
+            diag_dict=diag_dict,
+            teach_variant=sess.get("teach_variant", "control"),
+        )
     return {
         "type":            "explanation",
         "explanation":     explanation,
@@ -509,13 +497,25 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
     }
 
 
+def _lp_result_text(result: Optional[Dict]) -> str:
+    """Shown instead of a teaching explanation: the LP classification only."""
+    concepts = (result or {}).get("concepts") or []
+    if not concepts:
+        return "Your reasoning could not be classified yet."
+    parts = []
+    for c in concepts:
+        level = c["level"] or c["prompt_level"]
+        parts.append(f"{c['label'].replace('_', ' ')}: {level} {c.get('level_name') or ''}"
+                     f"{' (provisional)' if c['provisional'] else ''}, confidence {c['confidence']}")
+    return "LP level — " + "; ".join(parts) + ". Recorded on your concept map."
+
+
 def _next_level(lvl: Optional[str]) -> str:
     """Step LP level up by one (capped at L4)."""
-    order = ["L1", "L2", "L3", "L4"]
+    order = ["L0", "L1", "L2", "L3", "L4"]
     if lvl not in order:
-        return "L2"
-    idx = order.index(lvl)
-    return order[min(idx + 1, 3)]
+        return "L1"
+    return order[min(order.index(lvl) + 1, len(order) - 1)]
 
 
 def _pick_next_item(used: List[str]) -> Optional[Dict]:
@@ -564,7 +564,7 @@ def start(request: Request):
 
 @app.post("/api/answer", response_model=AnswerResp)
 def answer(req: AnswerReq):
-    """Record the student's MCQ choice and silently update DINA mastery."""
+    """Record the student's MCQ choice and belief."""
     sess = _sessions.get(req.session_id)
     if sess is None:
         raise HTTPException(status_code=404, detail="session not found")
@@ -583,23 +583,6 @@ def answer(req: AnswerReq):
     # injection markers are wrapped so the prompt builder treats them as
     # student-quoted text rather than instructions.
     sess["belief"] = _sanitise_student_input((req.belief or "").strip())
-
-    # Capture mastery BEFORE the update so the audit row carries both
-    # mastery_before and mastery_after for progression queries.
-    try:
-        m_before = float(_dina.get_mastery(
-            sess["student_id"], item["concept"]).get(item["concept"], 0.0))
-    except Exception:
-        m_before = 0.0
-
-    # Update DINA silently — the student never sees mastery.
-    update_result = _dina.update(
-        student_id=sess["student_id"],
-        skill=item["concept"],
-        is_correct=is_correct,
-    )
-    sess["mastery_before"] = m_before
-    sess["mastery_after"]  = float(update_result.get("mastery_after", m_before))
 
     return AnswerResp(accepted=True, needs_belief=True)
 
@@ -624,9 +607,6 @@ def _log_turn_completed(sess: Dict, item: Dict) -> None:
         "probe_count":     sess.get("probe_count", 0),
         "lp_before":       sess.get("lp_before", "L1"),
         "lp_after":        diag.get("current_lp_level") or "L1",
-        "mastery_before":  sess.get("mastery_before", 0.0),
-        "mastery_after":   sess.get("mastery_after",  0.0),
-        "intervention":    "quiz_explanation",
         "conf":            float(diag.get("diagnostic_confidence") or 0.0),
         "dwell_s":         round(time.time() - sess.get("item_started_at",
                                                           time.time()), 2),
@@ -665,8 +645,6 @@ def _advance_to_next_item(sess: Dict) -> Optional[str]:
         sess["probed_criteria"] = []
         sess["probe_answers"]   = []
         sess["item_started_at"] = time.time()
-        sess["mastery_before"]  = None
-        sess["mastery_after"]   = None
         sess["lp_before"]       = (sess.get("lp_diagnosis") or {}).get(
             "current_lp_level") or "L1"
         sess["lp_diagnosis"]    = None
@@ -792,8 +770,9 @@ def get_student_graph(request: Request):
     """
     ident = _resolve_student_id(request)
     try:
-        from src.knowledge_graph.student_graph_service import StudentGraphService
-        return StudentGraphService.shared().render_payload(ident["student_id"])
+        from src.lp_percpt.engine import get_engine
+        g = get_engine().graph(ident["student_id"])
+        return {**g.to_dict(), "summary": g.summary()}
     except Exception as e:
         raise HTTPException(status_code=500,
                               detail=f"student graph unavailable: {e}")
@@ -860,6 +839,8 @@ def gdpr_delete(request: Request):
                               detail="cannot delete the anonymous shared key")
     try:
         result = get_db().delete_student(sid)
+        from src.lp_percpt.engine import get_engine
+        get_engine().forget(sid)
         # Also drop any in-memory sessions for this student.
         for s_id, s in list(_sessions.items()):
             if s.get("student_id") == sid:

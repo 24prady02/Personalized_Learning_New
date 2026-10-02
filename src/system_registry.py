@@ -8,21 +8,21 @@ import one object and get the same fully-wired stack instead of
 re-implementing the init dance.
 
 Excluded by design (Nestor): NestorBayesianNetwork, NestorBayesianProfiler,
-PersonalityProfiler, InterventionRecommender. The orchestrator's
-personality-assessment path gracefully no-ops when these are absent
-(see orchestrator.py:_assess_personality — returns
-{personality: {}, learning_style: {}, source: 'none'} when both are
-missing) so the rest of the pipeline runs untouched.
+PersonalityProfiler, InterventionRecommender.
 
 No emotion classifier and no psychological channel are registered:
 emotion and psychological state are not used as inputs.
 
+Mastery tracking (DINA, BKT), the teaching-action choice (TeachingRLAgent,
+LPProgressionRanker, InterventionOrchestrator), hierarchical RL and the
+dynamic KG updater were archived to _archive/mastery_and_teaching_choice/
+on 2026-10-01. The stack now serves LP-level classification and the
+student concept map.
+
 Usage:
     from src.system_registry import get_registry
     reg = get_registry()             # idempotent, cached after first call
-    intervention = reg.orchestrator.process_session(session_data)
-    reg.dina.update(student_id, skill, is_correct)
-    mastery = reg.dina.get_mastery(student_id, skill)
+    diag = reg.lp_diagnostician.diagnose(student_id, concept, text)
 """
 from __future__ import annotations
 
@@ -55,10 +55,6 @@ class SystemRegistry:
     behavioral_rnn: Any = None
     behavioral_hmm: Any = None
 
-    # Cognitive student modeling
-    dina: Any = None
-    bkt: Any = None  # BayesianKnowledgeTracer
-
     # Knowledge graph (Chapter-1 concept + LP graph)
     chapter1_graph: Any = None
 
@@ -66,17 +62,10 @@ class SystemRegistry:
     content_generator: Any = None       # HVSAE-backed decoder
     enhanced_generator: Any = None      # Ollama-backed enhanced gen
 
-    # Reinforcement learning
-    teaching_rl_agent: Any = None
-    hierarchical_rl: Any = None
-    dynamic_kg_updater: Any = None
-    # LP-progression historical-sequence ranker — added 2026-05-25
-    lp_progression_ranker: Any = None
 
-    # Catalogue + diagnostician + orchestrator
+    # Catalogue + diagnostician
     catalogue: Any = None
     lp_diagnostician: Any = None
-    orchestrator: Any = None
 
     # Per-component init status — diagnostic only
     status: Dict[str, str] = field(default_factory=dict)
@@ -112,8 +101,7 @@ def _build_registry() -> SystemRegistry:
     reg = SystemRegistry()
     reg.config = _load_config()
     cfg = reg.config
-    print("[Registry] Building full CPAL stack "
-          "(LPProgressionRanker re-enabled 2026-05-25; Nestor excluded)...")
+    print("[Registry] Building CPAL stack (LP classification + concept map)...")
 
     # ── HVSAE + behavioral ────────────────────────────────────────────────
     from src.models.hvsae import HVSAE
@@ -144,18 +132,6 @@ def _build_registry() -> SystemRegistry:
             print(f"[Registry] best.pt load failed: {e}")
     else:
         reg.status["best.pt"] = "missing"
-
-    # ── Cognitive student models ──────────────────────────────────────────
-    from src.models.dina import DINAModel
-    from src.student_modeling.bayesian_knowledge_tracing import (
-        BayesianKnowledgeTracer,
-    )
-    # DINA writes/reads data/dina/dina_params.json — create the dir so
-    # first-touch updates don't silently lose state.
-    (ROOT / cfg.get("dina", {}).get("data_dir", "data/dina")).mkdir(
-        parents=True, exist_ok=True)
-    reg.dina = _try(reg, "dina", lambda: DINAModel(cfg))
-    reg.bkt = _try(reg, "bkt", lambda: BayesianKnowledgeTracer())
 
     # ── Knowledge graph ──────────────────────────────────────────────────
     # The Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json).
@@ -188,65 +164,6 @@ def _build_registry() -> SystemRegistry:
                                  hvsae_model=reg.hvsae,
                                  enable_rubric_grader=True,
                                  enable_catalogue_rag=True),
-    )
-
-    # ── Reinforcement learning ───────────────────────────────────────────
-    # Models dict mirrors what server.py passes to the orchestrator and RL
-    # agents — minus Nestor's nestor_profiler/personality_profiler/
-    # intervention_recommender. The orchestrator already handles their
-    # absence (.get() returns None and the psych-assessment path no-ops).
-    models = {
-        "hvsae":                          reg.hvsae,
-        "behavioral_rnn":                 reg.behavioral_rnn,
-        "behavioral_hmm":                 reg.behavioral_hmm,
-        "dina":                           reg.dina,
-        "bkt":                            reg.bkt,
-        "chapter1_graph":                 reg.chapter1_graph,
-        "content_generator":              reg.content_generator,
-        "enhanced_generator":             reg.enhanced_generator,
-        "catalogue":                      reg.catalogue,
-        "lp_diagnostician":               reg.lp_diagnostician,
-    }
-
-    from src.reinforcement_learning.teaching_agent import TeachingRLAgent
-    from src.reinforcement_learning.hierarchical_multi_task_rl import (
-        HierarchicalMultiTaskRL,
-    )
-    from src.reinforcement_learning.knowledge_graph_updater import (
-        DynamicKGUpdater,
-    )
-
-    reg.teaching_rl_agent = _try(reg, "teaching_rl_agent",
-                                  lambda: TeachingRLAgent(cfg, models))
-    reg.hierarchical_rl = _try(reg, "hierarchical_rl",
-                                lambda: HierarchicalMultiTaskRL(cfg))
-    reg.dynamic_kg_updater = _try(reg, "dynamic_kg_updater",
-                                   lambda: DynamicKGUpdater(cfg, models))
-
-    # LPProgressionRanker — S2's historical-sequence ranker. Has a
-    # heuristic fallback so it runs even without a PyTorch checkpoint.
-    # Added to the registry 2026-05-25 so the chat app can consult it
-    # per turn (was previously only used by demo scripts).
-    from src.reinforcement_learning.lp_progression_rnn import (
-        LPProgressionRanker,
-    )
-    reg.lp_progression_ranker = _try(
-        reg, "lp_progression_ranker",
-        lambda: LPProgressionRanker(),
-    )
-
-    # Include LPProgressionRanker in the models dict so the
-    # orchestrator and hierarchical_rl can pick it up via .get().
-    models["teaching_rl_agent"]     = reg.teaching_rl_agent
-    models["hierarchical_rl"]       = reg.hierarchical_rl
-    models["lp_progression_ranker"] = reg.lp_progression_ranker
-
-    # ── Orchestrator (last — depends on everything above) ────────────────
-    from src.orchestrator.orchestrator import InterventionOrchestrator
-    reg.orchestrator = _try(
-        reg, "orchestrator",
-        lambda: InterventionOrchestrator(
-            cfg, models, use_rl=True, use_hierarchical_rl=False),
     )
 
     # ── Summary ──────────────────────────────────────────────────────────

@@ -45,6 +45,7 @@ ENV/
 !/data/processed/
 !/data/processed/.gitkeep
 !/data/chapter1_concept_graph_percpt_lp.json
+!/data/chapter1_execution_facts.json
 
 # Models — only the repo-root models/ and checkpoints/ folders are excluded
 # (where pretrained weights live). The src/models/ Python package is tracked.
@@ -89,6 +90,8 @@ config.yaml
 
 # Output files (optional - uncomment if you don't want to commit outputs)
 # output/
+# Generated student concept maps
+output/concept_maps/
 # *.png
 # *.json
 
@@ -112,3 +115,4 @@ data/cpal.db-*
 
 # Dev-only auth secret. Production uses CPAL_AUTH_SECRET env var.
 src/persistence/.auth_secret_dev
+.last_narrative.md

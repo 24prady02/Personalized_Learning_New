@@ -9,6 +9,14 @@ behind a mistake, and picks a teaching move that fits that level.
 Everything hangs off one graph: the **Chapter-1 concept + LP graph**
 (`data/chapter1_concept_graph_percpt_lp.json`).
 
+**Current scope (2026-10-01):** the system does two things only — it classifies
+each student prompt on the graph's L0–L4 ladder for every concept the prompt is
+about, and it keeps a self-updating concept map for each student. No tutor
+reply is generated; mastery tracking, the teaching-move choice and hierarchical
+RL are archived. The algorithm is specified in
+[`docs/CPAL_LP_Classification_Algorithm.xlsx`](docs/CPAL_LP_Classification_Algorithm.xlsx)
+and implemented in [`src/lp_percpt/`](src/lp_percpt/).
+
 The design target is described in **[The ideal methodology](#the-ideal-methodology-design-target)**
 below, with a framework diagram, a process diagram and a worked example.
 **[Ideal vs current](#ideal-vs-current)** shows how far the code is from it.
@@ -202,64 +210,65 @@ ideal.
 
 | Part | Status |
 |---|---|
-| Chapter-1 concept + LP graph (loads, 70 concepts, 350 LP nodes, 0 broken edges) | ✅ works |
-| Per-student knowledge graph (one node per Chapter-1 concept; LP level, mastery, misconceptions; saved to SQLite) | ✅ works (`scripts/smoke_test_student_graph.py`) |
-| LP classifier, misconception matcher, LP-gated intervention filter | ✅ code works; best accuracy needs the trained heads in `checkpoints/` |
-| Prompt builder (LP header + Chapter-1 context + intervention) | ✅ works |
-| API concept endpoints (`/api/concept/{id}`, `/api/query/concepts`) | ✅ work |
-| Gradio chat app (`scripts/cpal_chat_app.py`) | ❌ won't start: `configs/config.yaml` missing |
-| API server full pipeline (`api/server.py`) | ❌ startup fails: `config.yaml` missing |
-| Student quiz app (`api/student_app.py`) | ❌ `data/quiz_bank.json` missing |
-| Trained models (`checkpoints/`), datasets (`data/…`) | ❌ not in this copy |
-| LLM replies | ❌ need Ollama running locally (`ollama serve`) |
-| `cpal_integration/tests/test_cpal_e2e.py` | ❌ fails (expects L4, gets L2) without the catalogue + trained heads |
+| Chapter-1 concept + LP graph (70 concepts, 90 misconceptions, 350 level nodes, 900 edges) | ✅ works |
+| Knowledge overlay: cues + 151 execution facts (`data/chapter1_execution_facts.json`) | ✅ draft, for teacher review |
+| LP classification on the percpt graph (`src/lp_percpt/`) | ✅ works; `tests/test_lp_percpt.py` (19 tests) passes |
+| Self-updating student graph + concept map (`output/concept_maps/<student>.html`) | ✅ works |
+| CLI (`scripts/lp_concept_map.py`) | ✅ works |
+| Gradio chat app (`scripts/cpal_chat_app.py`) | ⚠️ classifies + maps each message; won't start here: `configs/config.yaml` missing |
+| Student quiz app (`api/student_app.py`) | ⚠️ classifies + maps each belief; `data/quiz_bank.json` and `data/mental_models/` missing |
+| Thresholds | ⚠️ starting values; need checking against teacher-labelled prompts |
+| Wrong-trace check by running the quiz code; edge-direction errors (G10) | ❌ not implemented yet |
 
-To bring the full app up, restore `checkpoints/`, `configs/config.yaml`,
-`data/mental_models/`, `data/dina/`, `data/quiz_bank.json` from the original
-project, then run `python scripts/setup_java_knowledge.py` and start Ollama.
+The embedder (`sentence-transformers/all-MiniLM-L6-v2`) and the NLI model
+(`cross-encoder/nli-deberta-v3-small`) download on first use. Nothing is trained.
 
 ---
 
-## The current process: what the code does on one student turn
-
-The student sees a Java snippet with a multiple-choice question, picks an
-answer, and writes **why**. That answer runs through these steps, in order:
+## The current process: what the code does on one student prompt
 
 ```
- student answer + reasoning
-        │
-  ①  Diagnose LP level ............ how deep is the understanding?  (L0–L4)
-  ②  Match misconception .......... which wrong belief, if any?
-  ③  Update mastery ............... DINA / BKT probability of mastery
-  ④  Probe or teach? .............. ask a sharper question, or teach now
-  ⑤  Pick the teaching move ....... LP gate + RL agent
-  ⑥  Build the prompt ............. LP + misconception + Chapter-1 context
-  ⑦  Stream the tutor reply ....... Ollama LLM
-  ⑧  Record the turn .............. student knowledge graph → SQLite
-  ⑨  Learn from the turn .......... post-reply LP check, RL reward, state save
+ student prompt
+   1  prompt gates ............... too little content? only asking for the answer?
+   2  split into clauses
+   3  link to concept nodes ...... code / word cues + meaning + misconception match
+   4  attribute clauses .......... each clause to the concept it is about
+   5  clause filters ............. questions, symptom reports, parroted text, pasted code
+   6  evidence ................... E1 reference · E2 execution · E3 integration · E4 transfer
+   7  validity filters ........... wrong trace, wrong mechanism, jargon, self-contradiction
+   8  walk the ladder ............ concept@L0 → L1 → … along next_level edges
+   9  caps ....................... boundary misconception, prerequisite, ambiguity
+  10  stability .................. no silent drop, jump, repetition, staleness, override
+  11  confidence
+  12  inference rules ............ accumulate, cap, repair, inferred prerequisites,
+                                   gaps, at risk, plateau, frontier
+  13  save graph, redraw map, log misses for review
 ```
 
-| Step | What it does | Where it happens |
+| Level node | Requires (graph elements) | Evidence |
 |---|---|---|
-| ① LP diagnosis | Classifies the reasoning into **L0 Prestructural → L1 Surface → L2 Rule/Tracing → L3 Mechanism → L4 Transfer**. Uses the trained LP head (sentence-transformer / HVSAE) when present, plus heuristic corrections (substance penalty, mechanism-vocab bump, parroting downgrade, transfer upgrade). Outputs a level, a distribution and a confidence. | `src/orchestrator/lp_diagnostic.py` → `LPDiagnostician.diagnose()` |
-| ② Misconception | Matches the answer against the wrong-model catalogue for the concept; the best match above threshold becomes `wrong_model_id`. Reaching L3+ marks earlier wrong models as refuted. | `src/knowledge_graph/mental_models.py` → `match_wrong_model()`; `src/orchestrator/catalogue_rag.py` |
-| ③ Mastery | DINA (slip/guess) and BKT update the probability the student has mastered the concept. | `src/models/dina.py`, `src/student_modeling/bayesian_knowledge_tracing.py`; chat app `_update_mastery()` |
-| ④ Probe or teach | If confidence is low, asks a depth probe (jargon trap / sub-criterion) before teaching; handles several concepts in one answer. | `scripts/cpal_chat_app.py` → `_decide_probe_or_teach()`, `src/orchestrator/depth_probe.py`, `rubric_grader.py` |
-| ⑤ Teaching move | Candidate interventions are filtered to the ones valid at the student's LP level (`filter_interventions_by_lp`); the trained RL agent (DQN) re-ranks them; a plateau at L2 forces a mechanism-building move. | `lp_diagnostic.py`, `src/reinforcement_learning/teaching_agent.py`, `src/orchestrator/orchestrator.py` → `_select_intervention()` |
-| ⑥ Prompt | Assembles the LP header (current → target level), the wrong-model refutation, a level-specific teaching shape, and the **Chapter-1 graph block**: the concept's prerequisites, what it leads to, catalogued misconceptions, and what the current/target LP level looks like for this exact concept. | `src/orchestrator/enhanced_personalized_generator.py` → `_build_enhanced_prompt()`, `_chapter1_graph_block()` |
-| ⑦ Reply | Streams the reply from a local Ollama model; a guardrail strips misquotes of the student. | `EnhancedPersonalizedGenerator.generate_personalized_response()` |
-| ⑧ Record | Writes the turn onto the student's graph node (LP level, LP history, confidence, mastery + delta, wrong models, cognitive + progression state, intervention, reward) and adds the concept's Chapter-1 neighbours. Saved to `data/cpal.db`. | `src/knowledge_graph/student_graph_service.py` → `record_turn()`, `student_knowledge_graph.py` |
-| ⑨ Learn | Re-classifies the next reply to get Δ-LP, computes the reward (learning gain .32, LP gain .32, engagement .18, ZPD fit .18), pushes an RL experience, and persists LP state. | `orchestrator.py` → `_cpal_stage4_5()`, `src/reinforcement_learning/reward_function.py`, `src/orchestrator/student_state_tracker.py` |
+| `concept@L0` | nothing — the start of every ladder | — |
+| `concept@L1` | the concept node (cues, description) | E1 Reference |
+| `concept@L2` | the concept's execution facts | E2 Execution |
+| `concept@L3` | a causal link across a `prerequisite` / `parallel` edge or the overall purpose, **and** no boundary misconception (`lp_indicator`) held | E3 Integration |
+| `concept@L4` | a boundary misconception refuted with the correct fact, or the mechanism applied to a sibling concept / new code | E4 Transfer / debug |
 
-Alongside the LP, `student_state_tracker.py` keeps a **two-channel state** per
-student: cognitive (encoding strength, dual coding, elaboration) and progression
-(stage, ZPD, scaffold level).
+A clause is judged against the graph statement it matches best: a
+misconception is held only if the clause matches its wrong belief at least as
+well as any correct fact, and a contradiction counts only against the clause's
+best-matching fact. All 22 gates, 9 inference rules and 25 thresholds are in
+the workbook; the numbers live in `src/lp_percpt/thresholds.py`.
 
-**Inputs the system uses:** the student's answer and reasoning, the LP level,
-the matched misconception, mastery (DINA), encoding strength, stage/ZPD,
-debugging-action patterns (HMM/RNN strategy) and Nestor personality/learning
-style. **Emotion and psychological state are not inputs** (see *Retired
-components*).
+| Module | Role |
+|---|---|
+| `src/lp_percpt/knowledge.py` | loads the percpt graph + overlay |
+| `src/lp_percpt/models.py` | embedder + NLI model (pretrained, not trained here) |
+| `src/lp_percpt/identify.py` | Step 3: concept linking |
+| `src/lp_percpt/evidence.py` | Steps 4–7: clauses, gates, E1–E4, misconception status |
+| `src/lp_percpt/ladder.py` | Step 8: ladder walk |
+| `src/lp_percpt/student_graph.py` | Steps 10, 12: stability gates, inference rules, persistence |
+| `src/lp_percpt/engine.py` | Steps 1–13 in order; `get_engine().process(...)` |
+| `src/lp_percpt/render.py` | concept map HTML |
 
 ---
 
@@ -343,23 +352,20 @@ _archive/knowledge_graph_models/ retired CSE-KG, Pedagogical KG and COKE code
 
 ```bash
 pip install -r requirements.txt
-python scripts/setup_java_knowledge.py        # writes data/java_curriculum/
-ollama serve                                  # local LLM; picks the best installed model,
-                                              # override with CPAL_OLLAMA_MODEL=llama3.1:8b
 
-python scripts/cpal_chat_app.py               # chat app  → http://localhost:7860
-python api/server.py                          # API       → http://localhost:8000/docs
-uvicorn api.student_app:app --port 8001       # quiz app  → http://localhost:8001
+# classify prompts and draw the map
+python scripts/lp_concept_map.py --student maya --text "the loop never ends because i is never incremented"
+python scripts/lp_concept_map.py --student maya --override loops.while_loop=L3   # teacher override
+
+python -m pytest tests/test_lp_percpt.py -q       # 19 tests
+
+python scripts/cpal_chat_app.py                  # chat app → http://localhost:7860 (needs configs/config.yaml)
+uvicorn api.student_app:app --port 8001          # quiz app → http://localhost:8001 (needs data/quiz_bank.json)
 ```
 
-All three need the restored config/data/checkpoints listed under *Current status*.
-
-Quick checks that run on this copy as-is:
-
-```bash
-python -m src.knowledge_graph.chapter1_graph       # graph loads + sample lookups
-python scripts/smoke_test_student_graph.py         # builds a student graph → output/maya_student_graph.json
-```
+Student graphs are saved in `data/lp_percpt_students/`, maps in
+`output/concept_maps/`, and the review log (unlinked prompts, meaning-only
+matches, contradicted facts) in `data/lp_percpt_review.jsonl`.
 
 ---
 
@@ -387,6 +393,15 @@ Nothing detects or uses them:
   the behavioural RNN's emotion layer is kept only for checkpoint shape.
 
 The emotion-classifier training script is in `_archive/emotion_and_psych/`.
+
+**Reply generation, mastery tracking, the teaching-move choice and hierarchical
+RL** were taken out of the live path on 2026-10-01: DINA, BKT, the RL teaching
+agent, the LP-progression intervention ranker, the intervention orchestrator,
+`src/teaching/`, the dynamic KG updater and `api/server.py` are in
+`_archive/mastery_and_teaching_choice/` (with snapshots of the chat app, quiz
+app and registry as they were). Scripts that still import them (the
+`demo_full_stack*`, `run_*_scenarios*`, `start_evaluation` and older
+`cpal_demo_*` scripts) no longer run.
 
 ## License
 

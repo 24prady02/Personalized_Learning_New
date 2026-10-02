@@ -18,6 +18,12 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from datetime import datetime
 import time
+import os
+
+# Reply generation is switched off: a session runs the analysis (concept,
+# LP level, student graph) and returns no tutor reply. Set
+# CPAL_GENERATE_REPLIES=1 to turn the LLM reply back on.
+GENERATE_REPLIES = os.environ.get("CPAL_GENERATE_REPLIES", "0") == "1"
 
 
 # Concept detection lives in concept_resolver.py — the single source of
@@ -1418,7 +1424,7 @@ class InterventionOrchestrator:
 
             try:
                 # Use Enhanced Personalized Generator (Ollama)
-                if 'enhanced_generator' not in self.models:
+                if GENERATE_REPLIES and 'enhanced_generator' not in self.models:
                     try:
                         from src.orchestrator.enhanced_personalized_generator import EnhancedPersonalizedGenerator
                         ollama_model = self.config.get('ollama', {}).get('model', 'llama3.1')
@@ -1431,7 +1437,7 @@ class InterventionOrchestrator:
                     except Exception as e:
                         print(f"[WARN] Enhanced generator setup failed: {e}")
 
-                if self.models.get('enhanced_generator'):
+                if GENERATE_REPLIES and self.models.get('enhanced_generator'):
                     try:
                         # Fix 1+2: two-channel data in student_state so
                         # enhanced_personalized_generator can inject it into the prompt.
@@ -1552,7 +1558,7 @@ class InterventionOrchestrator:
 
         # Fallback to original content generator
         content_gen = self.models.get('content_generator')
-        if content_gen:
+        if GENERATE_REPLIES and content_gen:
             content = content_gen.generate(
                 latent=latent,
                 intervention_type=intervention['type'],
@@ -1574,7 +1580,7 @@ class InterventionOrchestrator:
         return {
             'intervention': intervention,
             'content': {
-                'explanation': 'Default explanation',
+                'explanation': 'Default explanation' if GENERATE_REPLIES else '',
                 'type': intervention['type']
             },
             'analysis': {
