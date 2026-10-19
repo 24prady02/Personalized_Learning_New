@@ -1,7 +1,7 @@
 """
 identify.py — Stage A: which Chapter-1 concepts is a student prompt about?
 
-Every prompt is scored against all 70 concepts of the percpt graph:
+Every prompt is scored against all 173 concepts of the Chapter-1 graph:
 
     score = W_CODE * code-cue hits (max 2 counted)
           + W_WORD * word-cue points (max 3 cues; a multi-word phrase counts 2)

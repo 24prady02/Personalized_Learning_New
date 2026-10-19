@@ -15,7 +15,7 @@ Components exercised (checkpoints used):
         latent against the documented Java CS1 misconceptions, classifies
         LP level (L1-L4), and runs the plateau gate.
   7d. Student knowledge graph    (StudentGraphService, grounded in
-        data/chapter1_concept_graph_percpt_lp.json)
+        data/chapter1_kg.json)
   8. RL teaching agent DQN       (checkpoints/rl_teaching_agent.pt)
   9. EnhancedPersonalizedGenerator -> Ollama qwen2.5-coder:7b  (streaming)
 
@@ -437,7 +437,7 @@ def run():
     skg = sg.to_dict()
     matched_wm_id = lp_diag_dict.get("wrong_model_id")
     print(f"\n[7d] STUDENT KNOWLEDGE GRAPH")
-    print(f"    src   : data/chapter1_concept_graph_percpt_lp.json")
+    print(f"    src   : data/chapter1_kg.json")
     print(f"    student      : demo_student")
     print(f"    target       : {TARGET_CONCEPT}  "
           f"(mastery_bkt={new_mastery_dict.get(TARGET_CONCEPT, 0):.2f}, "

@@ -22,8 +22,9 @@ from src.lp_percpt.ladder import walk  # noqa: E402
 from src.lp_percpt.student_graph import StudentGraph  # noqa: E402
 
 KG = get_knowledge()
-WHILE = "loops.while_loop"
-FOR = "loops.for_loop"
+WHILE = "while_loop"
+FOR = "for_loop"
+LOOP_CONTROL = "loop_control"
 
 
 def checks(e1=NOT_MET, e2=NOT_MET, e3=NOT_MET, e4=NOT_MET):
@@ -42,12 +43,12 @@ def evidence(cid, upto=0, text="clause", held=(), refuted=(), wrong_trace=False,
 
 
 # ── knowledge graph ─────────────────────────────────────────────────────────
-def test_graph_loads_with_overlay():
-    assert len(KG.concepts) == 70
+def test_graph_loads():
+    assert len(KG.concepts) == 173
     assert all(c.facts for c in KG.concepts.values())
     assert all(set(c.ladder) == {"L0", "L1", "L2", "L3", "L4"} for c in KG.concepts.values())
     assert "IfIsLoop" in KG.concepts[WHILE].boundary
-    assert "loops.while_loop" in KG.concepts[FOR].prerequisites
+    assert LOOP_CONTROL in KG.concepts[FOR].prerequisites
 
 
 # ── Step 8 ladder walk ──────────────────────────────────────────────────────
@@ -142,17 +143,17 @@ def test_prerequisite_inference_and_gap():                   # R5, R6, G19
     g = fresh()
     turn(g, evidence(FOR, 1, "a"))
     turn(g, evidence(FOR, 2, "b"))
-    pre = g.nodes["loops.while_loop"]
+    pre = g.nodes[LOOP_CONTROL]
     assert not pre.observed and pre.inferred_level == 1
-    assert ["loops.while_loop", FOR] not in g.gaps            # inferred levels never make gaps
-    turn(g, evidence(WHILE, 1, "c"))
-    assert ["loops.while_loop", FOR] in g.gaps                 # observed L1 under an L2 concept
+    assert [LOOP_CONTROL, FOR] not in g.gaps                  # inferred levels never make gaps
+    turn(g, evidence(LOOP_CONTROL, 1, "c"))
+    assert [LOOP_CONTROL, FOR] in g.gaps                      # observed L1 under an L2 concept
 
 
 def test_at_risk_spreads_through_misconception_edges():      # R7
     g = fresh()
     turn(g, evidence(WHILE, 1, "a", held={"IfIsLoop"}))
-    assert "IfIsLoop" in g.nodes["conditionals.if_statement"].at_risk
+    assert "IfIsLoop" in g.nodes["if_statement"].at_risk
 
 
 def test_plateau_and_frontier():                             # R8, R9
@@ -160,7 +161,7 @@ def test_plateau_and_frontier():                             # R8, R9
     for t in ("a", "b", "c"):
         n = turn(g, evidence(WHILE, 1, t))
     assert n.plateau
-    assert g.nodes["conditionals.boolean_expression"].frontier
+    assert g.nodes["boolean_expression"].frontier
 
 
 def test_staleness():                                        # G20
@@ -206,7 +207,7 @@ def test_engine_end_to_end(tmp_path):
     assert "content" in eng.process("s", "idk")["prompt_gates"]
 
     r = eng.process("s", "my loop never stops")
-    assert level(r, "loops.loop_control")["prompt_level"] == "L1"           # symptom report
+    assert level(r, LOOP_CONTROL)["prompt_level"] == "L1"           # symptom report
 
     r = eng.process("s", "the while loop checks the condition before every pass and the body repeats while it is true")
     c = level(r, WHILE)
@@ -214,10 +215,10 @@ def test_engine_end_to_end(tmp_path):
 
     r = eng.process("s", "i is never incremented so the condition i < 10 stays true and the loop "
                          "never ends because the loop variable does not change")
-    assert level(r, "loops.loop_control")["prompt_level"] == "L3"
+    assert level(r, LOOP_CONTROL)["prompt_level"] == "L3"
 
     r = eng.process("s", "I used == to compare two strings and it says false even though they are the same text")
-    c = level(r, "types_expressions.comparison_operators")
+    c = level(r, "comparison_operators")
     assert c["prompt_level"] == "L1" and "EqualityOperatorComparesObjectsValues" in c["held"]
 
     assert (tmp_path / "maps" / "s.html").exists()

@@ -1,11 +1,12 @@
 # Data directory
 
-**Why this folder looks empty on GitHub**
+**Why this folder holds only one file on GitHub**
 
-Dataset files under `data/` are **not committed**. They are large (often gigabytes), may have separate licenses, and can include personal or downloaded artifacts. The repository keeps them **local only** via `.gitignore`.
+Apart from the knowledge graph, dataset files under `data/` are **not committed**. They are large (often gigabytes), may have separate licenses, and can include personal or downloaded artifacts. The repository keeps them **local only** via `.gitignore`.
 
 **What is in git**
 
+- `data/chapter1_kg.json` — the Chapter-1 knowledge graph (v3.9), the one reference graph for LP classification and the concept map.
 - `data/raw/.gitkeep` and `data/processed/.gitkeep` — so the folder layout exists in the repo without storing blobs.
 
 **How to populate `data/` on your machine**

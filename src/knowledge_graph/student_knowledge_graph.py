@@ -1,6 +1,6 @@
 """
 student_knowledge_graph.py — per-student knowledge graph grounded in the
-Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json).
+Chapter-1 concept + LP graph (data/chapter1_kg.json).
 
 This is the central data structure CPAL revolves around. Each student's graph
 is the part of the Chapter-1 graph that student has touched. Each node carries

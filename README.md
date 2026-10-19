@@ -6,8 +6,8 @@ is right. It reads **how deeply they understand the code**, places that on a
 five-level **Learning Progression (LP)**, catches the **specific wrong belief**
 behind a mistake, and picks a teaching move that fits that level.
 
-Everything hangs off one graph: the **Chapter-1 concept + LP graph**
-(`data/chapter1_concept_graph_percpt_lp.json`).
+Everything hangs off one graph: the **Chapter-1 knowledge graph**
+(`data/chapter1_kg.json`, v3.9).
 
 **Current scope (2026-10-01):** the system does two things only — it classifies
 each student prompt on the graph's L0–L4 ladder for every concept the prompt is
@@ -210,9 +210,9 @@ ideal.
 
 | Part | Status |
 |---|---|
-| Chapter-1 concept + LP graph (70 concepts, 90 misconceptions, 350 level nodes, 900 edges) | ✅ works |
-| Knowledge overlay: cues + 151 execution facts (`data/chapter1_execution_facts.json`) | ✅ draft, for teacher review |
-| LP classification on the percpt graph (`src/lp_percpt/`) | ✅ works; `tests/test_lp_percpt.py` (19 tests) passes |
+| Chapter-1 knowledge graph v3.9 (173 concepts, 253 misconceptions + 41 errors, 865 learning-level nodes, 1,891 edges) | ✅ works |
+| Cue lexicon for concept linking (`src/lp_percpt/cues.py`) | ✅ draft, for teacher review |
+| LP classification on the Chapter-1 graph (`src/lp_percpt/`) | ✅ works; `tests/test_lp_percpt.py` (19 tests) passes |
 | Self-updating student graph + concept map (`output/concept_maps/<student>.html`) | ✅ works |
 | CLI (`scripts/lp_concept_map.py`) | ✅ works |
 | Gradio chat app (`scripts/cpal_chat_app.py`) | ⚠️ classifies + maps each message; won't start here: `configs/config.yaml` missing |
@@ -261,7 +261,8 @@ the workbook; the numbers live in `src/lp_percpt/thresholds.py`.
 
 | Module | Role |
 |---|---|
-| `src/lp_percpt/knowledge.py` | loads the percpt graph + overlay |
+| `src/lp_percpt/knowledge.py` | loads the Chapter-1 graph (facts, misconceptions, levels, edges) |
+| `src/lp_percpt/cues.py` | code and word cues per concept, for Step 3 |
 | `src/lp_percpt/models.py` | embedder + NLI model (pretrained, not trained here) |
 | `src/lp_percpt/identify.py` | Step 3: concept linking |
 | `src/lp_percpt/evidence.py` | Steps 4–7: clauses, gates, E1–E4, misconception status |
@@ -272,34 +273,41 @@ the workbook; the numbers live in `src/lp_percpt/thresholds.py`.
 
 ---
 
-## The Chapter-1 concept + LP graph
+## The Chapter-1 knowledge graph
 
-`data/chapter1_concept_graph_percpt_lp.json` (v1.1 + LP + ProgMiscon), loaded by
-`src/knowledge_graph/chapter1_graph.py`.
+`data/chapter1_kg.json` (v3.9, coverage audit), loaded by
+`src/knowledge_graph/chapter1_graph.py` and by the classifier
+(`src/lp_percpt/knowledge.py`). Every concept, rule and misconception is
+checked against the book (Sedgewick & Wayne 1st ed.; Think Java 2nd ed. for
+what S&W Chapter 1 does not cover) and the literature.
 
-| Layer | Contents | Count |
+| Node type | Contents | Count |
 |---|---|---|
-| 1 Chapter | Program structure, Types & expressions, Conditionals, Loops, Arrays, Input & output, Random web surfer | 7 |
-| 2 Concept | e.g. `program_structure.println`, `arrays.array_bounds` | 70 |
-| 3 Misconception | e.g. `PrintEqualsPrintln` — "println and print do the same thing" (ProgMiscon + CS1 additions) | 90 |
-| 4 LP level | one L0–L4 ladder per concept, e.g. `program_structure.println@L2` | 350 |
+| section | 1.1 Your First Program … 1.6 Random Web Surfer | 6 |
+| topic | e.g. 1.1.b Understanding a program (HelloWorld) | 36 |
+| concept | e.g. `println`, `array_bounds`, with rules by type (syntax, trace, one pass, output, relations, …) | 173 |
+| misconception | e.g. `PrintEqualsPrintln`, `WhileStopsMidBody` | 253 |
+| error | e.g. `StatementNeedsNoTerminator` | 41 |
+| learning_level | one L0–L4 ladder per concept, e.g. `println@L2`, with a criterion and a deciding question | 865 |
 
-Edges: `prerequisite` (A before B), `parallel` (sibling constructs),
-`misconception` (concept → wrong belief), `chapter`, `lp_indicator` (concept →
-its level, with a per-concept description of that level), `next_level`
-(Lk → Lk+1).
+Edges: `contains` (section → topic → concept), `precedes` and
+`section_prerequisite` (section order), `prerequisite` (A before B),
+`parallel` (sibling constructs), `misconception` and `error` (concept → wrong
+belief, role `primary` or `context`), `has_level` (concept → its level node;
+the edge lists the ways of reaching that level).
 
-The LP levels follow Jin et al.'s construct map; each per-concept level
-description is derived with the Block Model (Izu et al.). The ordering is
-marked *hypothesized until confirmed against student data*.
+What the classifier takes from it: execution facts from each concept's N, S,
+LT, OS and OP rules and the correct rule of each linked misconception;
+boundary misconceptions from `primary` misconception / error edges; neighbours
+from prerequisite, parallel and R-rule edges; and the L0–L4 criteria.
 
 ```python
 from src.knowledge_graph.chapter1_graph import get_chapter1_graph
 g = get_chapter1_graph()
-g.canonical("println")                        # 'program_structure.println'
-g.get_prerequisites("println")                # ['program_structure.statement', 'program_structure.string_literal']
-g.misconceptions_for("println")               # [{'id': 'PrintEqualsPrintln', 'wrong_belief': ...}, ...]
-g.lp_descriptor("println", "L2")              # what L2 looks like for println
+g.canonical("program_structure.println")      # 'println' (via previous_id)
+g.get_prerequisites("println")                # ['statement', 'string_literal']
+g.misconceptions_for("println")               # [{'id': 'IdentifierCaseInsensitive', 'wrong_belief': ...}, ...]
+g.lp_descriptor("println", "L2")              # the L2 criterion for println
 ```
 
 Older CPAL concept ids (`string_equality`, `array_index`, …) are mapped to
@@ -355,7 +363,7 @@ pip install -r requirements.txt
 
 # classify prompts and draw the map
 python scripts/lp_concept_map.py --student maya --text "the loop never ends because i is never incremented"
-python scripts/lp_concept_map.py --student maya --override loops.while_loop=L3   # teacher override
+python scripts/lp_concept_map.py --student maya --override while_loop=L3   # teacher override
 
 python -m pytest tests/test_lp_percpt.py -q       # 19 tests
 

@@ -1,5 +1,5 @@
 """
-lp_percpt — LP-level classification on the Chapter-1 percpt knowledge graph.
+lp_percpt — LP-level classification on the Chapter-1 knowledge graph (data/chapter1_kg.json).
 
 Per student prompt: link the prompt to concept nodes, collect E1-E4 evidence
 from the graph's own statements and edges, walk each concept's L0-L4 ladder

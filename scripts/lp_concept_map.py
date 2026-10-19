@@ -9,7 +9,7 @@ Usage:
     python scripts/lp_concept_map.py --student maya --turns turns.json
         # turns.json: ["msg", ...] or [{"text": "...", "shown": "...", "session": "..."}, ...]
     python scripts/lp_concept_map.py --student maya          # redraw the map only
-    python scripts/lp_concept_map.py --student maya --override loops.while_loop=L3
+    python scripts/lp_concept_map.py --student maya --override while_loop=L3
 
 The student graph is kept in data/lp_percpt_students/<student>.json and the
 map is written to output/concept_maps/<student>.html.
@@ -50,7 +50,7 @@ def main() -> None:
     ap.add_argument("--shown", help="text the student was shown (for the parroting gate)")
     ap.add_argument("--session", help="session id (for the staleness gate)")
     ap.add_argument("--turns", help="JSON file with a list of prompts")
-    ap.add_argument("--override", help="teacher override, e.g. loops.while_loop=L3")
+    ap.add_argument("--override", help="teacher override, e.g. while_loop=L3")
     args = ap.parse_args()
 
     eng = get_engine()

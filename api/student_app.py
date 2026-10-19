@@ -380,7 +380,7 @@ def _decide_probe_or_explain(sess: Dict, item: Dict) -> Dict:
     """
     accumulated = _accumulated_belief(sess)
 
-    # LP classification on the Chapter-1 percpt graph (src/lp_percpt): the
+    # LP classification on the Chapter-1 graph (src/lp_percpt): the
     # newest message is classified and added to the student's concept map;
     # earlier messages are already on the map as evidence.
     diag_dict: Dict = {}

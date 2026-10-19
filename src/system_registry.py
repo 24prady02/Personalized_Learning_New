@@ -134,7 +134,7 @@ def _build_registry() -> SystemRegistry:
         reg.status["best.pt"] = "missing"
 
     # ── Knowledge graph ──────────────────────────────────────────────────
-    # The Chapter-1 concept + LP graph (data/chapter1_concept_graph_percpt_lp.json).
+    # The Chapter-1 concept + LP graph (data/chapter1_kg.json).
     # CSE-KG, Pedagogical KG and COKE were retired to _archive/.
     from src.knowledge_graph.chapter1_graph import get_chapter1_graph
 

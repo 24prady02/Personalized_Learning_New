@@ -1754,7 +1754,7 @@ class EnhancedPersonalizedGenerator:
 
         # ===== CHAPTER-1 CONCEPT GRAPH CONTEXT =====
         # Where the diagnosed concept sits in the Chapter-1 concept + LP graph
-        # (data/chapter1_concept_graph_percpt_lp.json): prerequisites, what it
+        # (data/chapter1_kg.json): prerequisites, what it
         # leads to, catalogued misconceptions, and what the student's current
         # LP level looks like for this specific concept.
         ch1_block = self._chapter1_graph_block(lp_diag)

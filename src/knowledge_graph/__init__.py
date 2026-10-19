@@ -3,7 +3,7 @@ Knowledge-graph module.
 
 Holds the pieces CPAL uses at run time:
   - chapter1_graph:          the Chapter-1 concept + LP graph
-                             (data/chapter1_concept_graph_percpt_lp.json)
+                             (data/chapter1_kg.json)
   - student_knowledge_graph: per-student graph keyed by Chapter-1 concept
   - student_graph_service:   loads/saves student graphs via SQLite
   - mental_models:           wrong-model (misconception) catalogue

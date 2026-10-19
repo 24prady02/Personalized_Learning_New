@@ -114,7 +114,7 @@ Evidence) attach via typed edges (`prerequisiteOf`, `alignedToLPLevel`,
 
 **The algorithm (two parts).**
 1. **Chapter-1 graph lookup (`chapter1_graph.py`, `get_neighbours`).** The
-   Chapter-1 concept + LP graph (`data/chapter1_concept_graph_percpt_lp.json`)
+   Chapter-1 concept + LP graph (`data/chapter1_kg.json`)
    is indexed once. The concept name is resolved to its Chapter-1 id
    (`canonical()`), and its 1-hop neighbours are pulled: prerequisites, the
    concepts it leads to, and parallel constructs.

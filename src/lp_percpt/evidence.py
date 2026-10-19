@@ -13,8 +13,9 @@ and records, for every decision, the clause and the graph statement behind it.
 Best-match principle: a clause is judged against the graph statement it is
 most about. A misconception is held only when the clause matches its wrong
 belief better than any correct fact of the concept, and a contradiction
-counts as a wrong trace only against the clause's best-matching fact. (The
-NLI model alone flags contradictions with statements a clause is not about.)
+counts as a wrong trace only against the clause's best-matching fact, and
+only when the clause entails none of the concept's facts. (The NLI model alone
+flags contradictions with statements a clause is not about.)
 """
 from __future__ import annotations
 
@@ -287,10 +288,11 @@ def collect(text: str, clauses_txt: List[str], hits: List[ConceptHit], kg: Percp
             if _cue_in(c, cl.text) or desc_sim >= BAND_LO or best_f_sim >= BAND_LO:
                 ev.set("E1", MET, Item("E1", cl.text, _desc(c), max(desc_sim, best_f_sim)))
 
-            # G9 Wrong trace: the clause contradicts the fact it is most about,
-            # checked first, whatever else the clause appears to entail
+            # G9 Wrong trace: the clause contradicts the fact it is most about
+            # and entails none of the concept's facts (the graph's rules are
+            # long sentences; the NLI model misreads some against a correct clause)
             wrong = None
-            if not cl.bare_question:
+            if not cl.bare_question and best_f_ent < FACT_ENT:
                 for j, fact in enumerate(facts):
                     if (f_sims[j] >= BAND_LO and f_sims[j] >= best_f_sim - BEST_MARGIN
                             and f_nli[j]["contradiction"] >= CONTRA):

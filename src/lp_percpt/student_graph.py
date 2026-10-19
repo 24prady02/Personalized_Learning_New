@@ -1,7 +1,7 @@
 """
 student_graph.py — the self-updating student graph (Steps 10 and 12).
 
-One graph per student, laid over the percpt graph. Per concept it keeps the
+One graph per student, laid over the Chapter-1 graph. Per concept it keeps the
 `demonstrates` links (evidence by turn), each misconception's latest status,
 the `reached` level node, and its flags. After every prompt:
 
