@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "The answer applies the rule to this code: main's num1 and num2 keep 7 and 42 because only the copies inside swap are changed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions the assignment statements or how they run."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "The swap result is correct but has no trace or reasoning through the temporary, so a bare result is L1."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Neither the code nor the answer involves reading standard input."
+  }
+ ]
+}

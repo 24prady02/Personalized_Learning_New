@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The answer gives the correct result with the key reason, relating the loop's round count to a value the user supplies at run time (the condition depends on runtime input), which integrates loop and input into one structure rather than merely naming a rule or giving a bare 'No'; it stays within the given program, so L3 not L4."}

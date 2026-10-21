@@ -1,0 +1,521 @@
+{
+ "student_id": "S086",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "loop_control": {
+   "concept": "loop_control",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Probe 1: \"How many times does println run?\" \u2192 \"a few\"",
+      "statement": "loop control: the three slots: init ; condition ; update",
+      "score": 0.35
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "probe 1 how many times does println run a few"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "attribution"
+   ],
+   "last_turn": 1
+  },
+  "println": {
+   "concept": "println",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Probe 1: \"How many times does println run?\" \u2192 \"a few\"",
+      "statement": "println: System.out.println -- output with a trailing newline",
+      "score": 0.467
+     }
+    ],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Probe 2: \"What is printed when i is 0?\" \u2192 \"maybe nothing, maybe a line\"",
+      "statement": "confirmed by the run: i = 0",
+      "score": 1.0
+     }
+    ],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 2,
+   "uncertain_toward": null,
+   "stop_reason": "L2: E2 Execution met; no L3 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     2
+    ]
+   ],
+   "clause_keys": [
+    "turn 1 it prints a triangle going down",
+    "probe 1 how many times does println run a few",
+    "probe 2 what is printed when i is 0 maybe nothing maybe a line"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "medium",
+   "last_gates": [
+    "symptom_report",
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "counter_pattern": {
+   "concept": "counter_pattern",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Probe 1: \"How many times does println run?\" \u2192 \"a few\"",
+      "statement": "counter pattern: counting occurrences across passes",
+      "score": 0.424
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "probe 1 how many times does println run a few"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "attribution"
+   ],
+   "last_turn": 1
+  },
+  "statement": {
+   "concept": "statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "string_literal": {
+   "concept": "string_literal",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "loop_performance": {
+   "concept": "loop_performance",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "infinite_loop": {
+   "concept": "infinite_loop",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "loop_variable": {
+   "concept": "loop_variable",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "off_by_one_error": {
+   "concept": "off_by_one_error",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "for_loop": {
+   "concept": "for_loop",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "increment_operators": {
+   "concept": "increment_operators",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "print": {
+   "concept": "print",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "formatted_output": {
+   "concept": "formatted_output",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "accumulator_pattern": {
+   "concept": "accumulator_pattern",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "monte_carlo_simulation": {
+   "concept": "monte_carlo_simulation",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "loop_body": {
+   "concept": "loop_body",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

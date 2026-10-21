@@ -1,0 +1,1 @@
+{"level": "L0", "why": "With a = 2 and b = 2, `a > b` is false. The correct order is 1, 4, 6. The student also lists line 2, so they run both the if branch and the else branch. That contradicts the if/else rule that exactly one branch runs. It is a wrong rule, not a slip in a correct trace."}

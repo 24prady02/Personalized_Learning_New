@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "a = 7, b = 5, c = 3, because each one gets the old value of the other.",
+   "correct": false,
+   "why": "The answer treats the three assignments as if they happen at once. In Java, b = a reads a's current value, which is already 7, so the final values are a = 7, b = 7 and c = 7."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "each one gets the old value of the other",
+   "correct": false,
+   "why": "The answer acts as if a still holds 5 after a = c, which is the static model: it says a variable keeps its first value after a new assignment."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  }
+ ]
+}

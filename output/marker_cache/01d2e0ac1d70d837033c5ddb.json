@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "indentation vs. if-statement body", "why": "The answer correctly notes that the indentation of \"great\" is misleading, but it doesn't say that only the first println belongs to the if, and it doesn't trace score = 50, where \"great\" is printed."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "grouping loop fragments by purpose (accumulate, count, max, search)", "why": "The answer only notes the shared for-each syntax and doesn't group the fragments by what they do or name any purpose, so it shows no working model of what each loop computes."}

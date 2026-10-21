@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The first part is right (n² = 1,000,000), but the doubling claim is wrong. Doubling n makes the count four times as large, because (2n)² = 4n². The student treats the nested loops as linear, which contradicts how nested loops multiply. Since the rule applied to doubling is wrong, this is L0."}

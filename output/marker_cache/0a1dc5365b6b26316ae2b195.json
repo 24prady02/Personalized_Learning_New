@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "roles of max and i (running maximum and loop index)", "why": "The answer swaps and misreads the roles, treating i as a running total and max as a counter, which is an everyday or wrong-rule reading and not what the code does."}

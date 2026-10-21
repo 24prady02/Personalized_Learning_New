@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The iteration is false at 3, so the condition stops.",
+   "correct": true,
+   "why": "The answer applies the for-loop rule to this code: when i is 3, the test i < 3 is false, so the loop stops and the trace line is wrong (the wording is loose)."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never says what is printed or that 3 is not printed."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss whether the loop ends or could run forever."
+  }
+ ]
+}

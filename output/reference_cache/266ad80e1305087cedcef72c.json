@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The loop only reads the array and assigns to best when a smaller value is found, so it never sorts or reorders the array. The student applies a wrong rule about what the code does, and doesn't explain why each line is there as the question asks."}

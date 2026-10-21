@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly applies the centre rule to this call, so the square is centred in the middle of the window, but it does not give the square's size (side 0.5)."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "This is the listed wrong rule: in the default unit square, (256, 256) is far outside the window, so nothing visible is drawn there."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the point uses pixels",
+   "correct": false,
+   "why": "It assumes pixel coordinates, but StdDraw's default coordinates are the unit square, not pixels."
+  }
+ ]
+}

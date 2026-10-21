@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "modifying array elements in place with an indexed for loop", "why": "The loop is correct and combines the index bound a.length with a[i] on both sides of the assignment, so it changes the array itself. It avoids the for-each copy trap shown in the code, but it never says why, so it doesn't reach L4."}

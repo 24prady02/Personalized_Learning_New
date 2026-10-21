@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "prints numbers",
+   "correct": true,
+   "why": "It correctly says the loop prints numbers, but it gives no output values and doesn't explain print's behaviour."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "It does some math in a loop",
+   "correct": true,
+   "why": "'Some math' is too vague to show anything about assigning to i or isDone."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about the output stream, the order of the output or line breaks."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Type conversion is not mentioned, including the int-to-String concatenation in i + \" \"."
+  }
+ ]
+}

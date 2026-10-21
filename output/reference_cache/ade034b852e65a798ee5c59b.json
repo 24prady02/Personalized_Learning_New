@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims the println is inside the loop and prints every total, but there are no braces and the println is a separate statement after the loop, so the output is a single 15. The answer misreads the code and never gives total after the third pass (3) or the last statement executed before the println (the final total = total + i with i = 5)."}

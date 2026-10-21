@@ -1,0 +1,166 @@
+{
+ "student_id": "S041",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "println": {
+   "concept": "println",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "JAVA, because toUpperCase changes name.",
+      "statement": "println: System.out.println -- output with a trailing newline",
+      "score": 0.797
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "java because touppercase changes name"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [],
+   "last_turn": 1
+  },
+  "string_literal": {
+   "concept": "string_literal",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "formatted_output": {
+   "concept": "formatted_output",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "statement": {
+   "concept": "statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "print": {
+   "concept": "print",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

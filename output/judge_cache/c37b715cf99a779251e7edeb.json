@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "The answer applies the rule that the test runs before each pass to this code: the pass that sets isDone finishes, then the next test fails. It gives no actual values or output (1 4 7 10), so it stays at L2."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "The answer correctly applies the update i = i + 3 to this loop variable, but it does not relate the start value, the test and the update to each other."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about loop bounds or off-by-one errors."
+  }
+ ]
+}

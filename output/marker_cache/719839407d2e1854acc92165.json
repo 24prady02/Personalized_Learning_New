@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "definite assignment of local variable (uninitialised total) causing compile error", "why": "The student correctly identifies that the local variable total is used in total += i without being initialised, so the code does not compile, relating the declaration to the loop and the print statement as a whole."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "array_creation",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "int[] copy = new int[data2.length()];",
+   "correct": false,
+   "why": "It correctly creates a new int array sized to the original, but it writes data2.length() instead of the field data2.length, a slip that would not compile."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int[] copy ... for (int i = 0;",
+   "correct": true,
+   "why": "It uses int correctly as the element type and the index type, with no reasoning about int rules."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The loop header and body are applied correctly to visit indices 0..length-1, but the bound uses length() instead of length."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "int[] copy = new int[data2.length()]; for (...) copy[i] = data2[i];",
+   "correct": false,
+   "why": "It applies the copy pattern (new array, then element-by-element copy) to data2, but writes length() instead of length; it gives no explanation of alias versus copy."
+  }
+ ]
+}

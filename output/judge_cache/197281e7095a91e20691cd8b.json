@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the input format: the N count, the ordered i j pairs or how StdIn reads them."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not evaluate or discuss the 90-10 expression or any other expression."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "quote": "the other pages get rank 0",
+   "correct": true,
+   "why": "The answer describes the surfer getting trapped and the rank results, but never mentions counting visits or dividing visit counts by T, so it shows no frequency_counting way."
+  }
+ ]
+}

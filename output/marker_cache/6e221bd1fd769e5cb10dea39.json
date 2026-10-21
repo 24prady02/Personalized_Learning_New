@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division and operator precedence in a + b / 2", "why": "The answer applies a wrong rule (Java 'rounds down' rather than truncating integer division, and it ignores that the sum is computed after b/2), and it doesn't answer any of (a)-(d), so it shows no working model of the code."}

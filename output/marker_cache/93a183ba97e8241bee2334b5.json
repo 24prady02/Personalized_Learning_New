@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "counterexample for max initialised to 0 (all-negative arrays)", "why": "The chosen input works, and the student concludes the code is correct, which misses the flaw that max = 0 fails for all-negative arrays and doesn't answer the question."}

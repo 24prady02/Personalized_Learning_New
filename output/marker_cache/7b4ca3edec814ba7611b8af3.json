@@ -1,0 +1,1 @@
+{"level": "none", "why": "unparsed: {\"level\":\"L0\",\"concept\":\"Java naming conventions for variables\",\"why\":\"Renaming c to Pass_Count applies a wrong rule, since Java variables use camelCase (passCount) and not underscores or an initial c"}

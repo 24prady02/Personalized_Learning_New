@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't talk about primitive types in general."
+  },
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "A, because r is a double, so the division is done in double.",
+   "correct": false,
+   "why": "Being stored in a double does not make a / b a double division: with two int operands it truncates to 3, which is then stored as 3.0."
+  },
+  {
+   "concept": "int",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "the division is done in double",
+   "correct": false,
+   "why": "The answer treats 7 / 2 as 3.5, but int division drops the fraction and gives 3."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't mention the % operator."
+  }
+ ]
+}

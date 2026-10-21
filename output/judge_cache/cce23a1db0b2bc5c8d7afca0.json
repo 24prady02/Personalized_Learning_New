@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: wrong rule",
+   "quote": "it should print i",
+   "correct": false,
+   "why": "The answer has the code use i after the loop, where i is out of scope, and it misses the real bug, which is that sum = i overwrites sum instead of adding to it."
+  },
+  {
+   "concept": "print",
+   "level": "L0",
+   "way": "diagnose_an_error",
+   "quote": "Line 4 prints the wrong variable",
+   "correct": false,
+   "why": "The answer blames the print line, but line 4 is correct: it prints the final value of sum, which is 3."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception: wrong rule: ++i in the for-update runs before the body each pass.",
+   "quote": "it should print i",
+   "correct": false,
+   "why": "The answer's claim that printing i gives the right result matches the belief that the update runs before the body, but the run of the code contradicts it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions i++ or how it works."
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions storing or updating a variable's value. 'Halves the number' doesn't describe what assignment does."
+  },
+  {
+   "concept": "loop_performance",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only predicts outputs. It says nothing about how many times the loop runs or how long it takes."
+  }
+ ]
+}

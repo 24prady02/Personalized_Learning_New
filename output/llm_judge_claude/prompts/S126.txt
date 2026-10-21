@@ -1,0 +1,96 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): It plays, but the terminal does not come back. Why?
+
+CODE:
+int SR = 44100;
+double hz = 440.0, duration = 1.0;
+int n = (int) (SR * duration);
+double[] a = new double[n + 1];
+for (int i = 0; i <= n; i++) a[i] = 0.5 * Math.sin(2 * Math.PI * i * hz / SR);
+StdAudio.play(a);
+
+STUDENT ANSWER: You need System.exit(0) at the end of main.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: standard_audio
+L0 Prestructural:
+  - everyday_reading: Everyday intuition links 'bigger numbers' with a 'higher note'. In digital sound the sample amplitude (y-value) sets the volume, and the frequency of oscillation sets the pitch (doubling it raises the note an octave).
+  - misconception: wrong rule: Making the sample values larger raises the pitch of the note. 
+  - misconception: wrong rule: A sine wave of any frequency, e.g. 30,000 Hz, plays correctly with StdAudio. 
+  boundary: Any correct, programming-specific statement about standard audio makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: StdAudio is a booksite library for playing, saving and reading sound, which it represents as an array of samples.
+  - states_the_rule: Sound is an array of doubles between -1 and +1, sampled 44,100 times per second. StdAudio.play(double[] a) plays the sound that the array represents.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: N = (int) (sps * duration), a = new double[N+1], then for i = 0..N a[i] = Math.sin(2*Math.PI*i*hz/sps), then StdAudio.play(a). The samples sound in index order, 44,100 per second.
+  - output_prediction: Ten seconds of concert A (440 Hz) needs 441,001 sample values, and each one is in [-1, 1]. play is void: its result is sound.
+  - one_step_execution: play(a) plays a.length/44,100 seconds of sound and leaves a unchanged. play(double x) plays one sample for 1/44,100 second. save writes a .wav file and read returns an array.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each sample is computed with Math.sin at evenly spaced times t = i/sps. The note's frequency comes from Math.pow(2, pitch/12.0).
+  - relation_to_neighbour: Sampling for sound is the same as sampling for a plot. The same array can be sent to StdDraw and to StdAudio.
+  - purpose_of_the_whole: Plan: sample-and-play synthesis. In PlayThatTune it is driven by data: a loop reads (pitch, duration) pairs and plays each note.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Doubling hz moves the note up an octave and keeps the duration. Multiplying all samples by a factor below 1 changes only the volume. Writing pitch / 12 (integer division) instead of pitch / 12.0 breaks the pitch.
+  - diagnose_an_error: rule broken: In the book's setup a StdAudio program should end main() with System.exit(0). Kind: silent logic error. Trigger class: A StdAudio program without System.exit(0): after the sound ends, the terminal does not return to a
+  - transfer_to_a_new_program: Use StdAudio to synthesize or sonify sampled data (tones, tunes, signal processing). Long recordings are stored in binary .wav files, not as text streams.
+  - diagnose_an_error: rule broken: StdAudio.java must be in the working directory or on the classpath. Kind: run-time exception. Trigger class: StdAudio.class is absent at run time: NoClassDefFoundError (javac reports 'cannot find symbol' at compile ti
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: end_of_input
+L0 Prestructural:
+  - everyday_reading: Everyday 'empty' and 'done' suggest that a blank line, or pressing Enter, ends the input. For StdIn, a blank line is only whitespace: input ends only when the end-of-file signal arrives.
+  - misconception: wrong rule: StdIn.isEmpty() becomes true when the user presses Enter on an empty line. 
+  boundary: Any correct, programming-specific statement about end of input makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: End of input is the end-of-file condition of the input stream. Typing the end-of-file sequence or reaching the end of a redirected file signals it, and StdIn.isEmpty() tests it.
+  - states_the_rule: isEmpty() returns true if standard input has no more values (only whitespace may be left). At a terminal the book signals the end with <ctrl-d>; the other widely used convention is <ctrl-z>.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When isEmpty() is called at a terminal, it blocks until a token arrives (it returns false) or the end-of-file sequence is typed (it returns true). With a redirected file, it returns true right after the last token.
+  - output_prediction: isEmpty() returns a boolean: true if there are no more values, false otherwise.
+  - one_step_execution: isEmpty() consumes no value (at most it skips whitespace) and returns a boolean. Only the read that follows advances past a token.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: isEmpty() is the condition of the read loop, so the loop ends exactly when end-of-file is reached (<ctrl-d> at the keyboard, end of file with <).
+  - purpose_of_the_whole: Role: the termination signal of a process-until-done loop, used when the amount of data is unknown.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding blank lines or trailing spaces at the end of the input keeps isEmpty()'s answer (still true at the end). Adding any token changes it.
+  - diagnose_an_error: rule broken: Reading after the stream is exhausted is an error. Test isEmpty() first. Kind: run-time exception. Trigger class: Any read after the end-of-file signal or after the last token of the file.
+  - transfer_to_a_new_program: Ending on end-of-file is right when data come from a file or a pipe, or the count is unknown. For human typists a count or a sentinel can be clearer, because the end-of-file key differs between systems.
+  - diagnose_an_error: rule broken: The end must be signalled with the system's end-of-file key. Kind: silent logic error. Trigger class: At a terminal the user presses Enter, or uses the other system's key, so isEmpty() keeps waiting and the program se
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: standard_audio, end_of_input.

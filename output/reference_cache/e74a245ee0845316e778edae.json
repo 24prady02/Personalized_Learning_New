@@ -1,0 +1,1 @@
+{"level": "none", "pick": "B", "why": "The student's response is only a question about resizing arrays and makes no claim about how to assign 7.9 to the next-to-last index (e.g. sensorReadings[sensorReadings.length - 2]), so there is no reasoning to level; per the boundary rule, a question that makes no claim is 'none', not L0."}

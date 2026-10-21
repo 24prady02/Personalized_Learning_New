@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "char singleLetter = 81;",
+   "correct": true,
+   "why": "Choosing char and giving it the integer code 81, which is 'Q', correctly uses the rule that char is an integral type. But the answer is bare code with no reasoning, and Java convention would use the literal 'Q', so it is not L2 or higher."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "char singleLetter = singleLetter",
+   "correct": true,
+   "why": "The variable is correctly declared with a type, a legal name and an initial value. The answer only applies the declaration rule and does not explain how the parts relate."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about String."
+  }
+ ]
+}

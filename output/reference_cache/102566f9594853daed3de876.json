@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The code sets a=7, then b=7, then c=7, so 'all three are 7' is correct. But it is a bare result with no trace or justification, so it stays at L1."}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "50 is correct: value 2 enters at case 2 and falls through case 3, case 4 and default, so result ends at 50. The answer is only the bare output, with no trace of the fall-through or of the assignments, so it stays at L1."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about array indexing."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Every name must be a full word, so i must be index and c must be count.",
+   "correct": false,
+   "why": "The answer treats 'every name must be a full word' as a binding rule, but Java has no such rule, i is the accepted name for a short loop index, so only c needed renaming, and the answer never says whether the output changes."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer names variables to rename but says nothing correct or incorrect about what a variable is or how it behaves."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about compile-time errors."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment a = b (value copy)", "why": "Says 'a now holds b' (the variable, not the value 20), so a's new value is never stated as 20, which suggests a reference or name-copy reading rather than the value-copy rule, even though b is correctly 20."}

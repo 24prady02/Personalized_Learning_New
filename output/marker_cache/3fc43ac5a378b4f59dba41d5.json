@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment statement (a = b) and variable values", "why": "The answer a = 30 applies a wrong rule (adding the values instead of copying b into a), so it does not match how Java assignment works."}

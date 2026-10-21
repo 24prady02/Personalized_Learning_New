@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length",
+   "correct": true,
+   "why": "Writes the array's length field correctly (no parentheses) as the element count, but the reasoning about it is not applied correctly to this code."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L0",
+   "way": "misconception: Using an array means every cell must be scanned",
+   "quote": "a.length, so every element gets swapped.",
+   "correct": false,
+   "why": "Assumes the loop must visit every index, but going to a.length swaps each pair twice and leaves the array unchanged; the bound should be a.length/2."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about indexing such as a[i] or a[a.length-1-i]."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the enhanced for loop."
+  }
+ ]
+}

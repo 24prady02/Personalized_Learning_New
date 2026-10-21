@@ -1,0 +1,140 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): How do break and continue differ in the first loop?
+
+CODE:
+int sum = 0;
+for (int i = 1; i <= 6; i++) {
+  if (i % 2 == 0) continue;
+  if (i == 5) break;
+  sum += i;
+  System.out.print(i + ",");
+}
+System.out.println(" sum=" + sum);
+outer:
+for (int r = 0; r < 3; r++)
+  for (int c = 0; c < 3; c++) {
+    if (c == r) continue outer;
+    if (r == 2) break outer;
+    System.out.print(r + "" + c + " ");
+  }
+
+STUDENT ANSWER: continue jumps to the next i for the even numbers, break stops the loop completely at 5.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: break_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English 'break' means to pause, or to stop or break out of whatever you are in, so a novice reads it as leaving the enclosing if, as starting the next round, or as stopping the whole program. 
+  - misconception: wrong rule: break leaves the if statement it is written in. 
+  - misconception: wrong rule: break starts the next iteration of the loop. 
+  - misconception: wrong rule: break ends the whole program. 
+  - misconception: wrong rule: break has no effect; the loop body just carries on. 
+  boundary: Any correct, programming-specific statement about break statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.
+  - states_the_rule: `break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When `break` executes: the remaining statements of the body are skipped, the for-loop increment and the condition are not evaluated again, and control continues at the first statement after the loop. In `for (i = 2; i <= N/i; i++)
+  - output_prediction: break is a statement and produces no value. Its effect shows in the variables it leaves: after the primality loop for N = 15, i is 3 (the smallest divisor), so `i > N/i` is false and 'is prime' is not printed.
+  - one_step_execution: One execution of break changes no variable. It changes only the point of control (to after the loop), so every variable keeps its value at the moment of the break.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: break gives a while loop a second exit, in the middle of the body. After the loop, the program has to tell which exit was taken by re-testing the state (as in `if (i > N/i)`), so any variable used for that test must be declared be
+  - relation_to_neighbour: Plain break reaches only the innermost loop. In nested loops, ending the outer loop needs `break label;` on a labeled outer statement (or a flag tested by the outer loop).
+  - relation_to_neighbour: Both skip the rest of the current body. break then leaves the loop (no increment, no further test); continue goes on to the increment and the next test.
+  - relation_to_neighbour: In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Removing the break keeps the loop finite but lets it run to completion. In the prime test, i then ends above N/i for every N, so composites are reported as prime. Invariant kept with break: after the loop, `i <= N/i` holds exactly
+  - transfer_to_a_new_program: Use break when the reason to stop is discovered in the middle of a pass (first divisor, sentinel found) and folding it into the loop condition would be awkward. Prefer a plain loop condition when the exit can be stated up front. I
+  - diagnose_an_error: rule broken: break must be inside a loop or switch. Kind: compile-time. Trigger class: `break;` inside an if that is not inside any loop or switch (break outside switch or loop).
+  - diagnose_an_error: rule broken: Statements after break in the same block can never run. Kind: compile-time. Trigger class: Code written directly after `break;` in the same block (unreachable statement).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: continue_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English 'continue' means carry on with what you are doing, so a novice reads `continue;` as 'keep executing the rest of the body' (no effect) or as 'continue after the loop'. In Java it abandons the rest of the cu
+  - misconception: wrong rule: continue ends the loop. 
+  - misconception: wrong rule: continue means carry on with the rest of the loop body, so it has no effect. 
+  boundary: Any correct, programming-specific statement about continue statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and starts the next one.
+  - states_the_rule: `continue;` may appear only inside a loop. When executed, the rest of the body is skipped. In a for loop control goes to the increment; in a while or do-while it goes to the condition test. (Spec: JLS §14.16.)
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Order after continue in `for (init; test; inc) body`: skip the remaining body statements, execute inc, evaluate test, and run the next pass if it is true. In a while loop there is no separate inc, so control goes directly to the t
+  - output_prediction: continue produces no value. Its effect is on what the loop outputs: `for (int i = 0; i < 5; i++) { if (i % 2 == 0) continue; System.out.print(i); }` prints 13.
+  - one_step_execution: One execution changes no variable; it only moves control to the increment (for) or the test (while). The variables keep their values, and the statements skipped in this pass make no changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: In a for loop the increment still runs after continue, so the loop always advances. This is why the for/while equivalence has an exception: in the rewritten while, a continue jumps past the `<increment>;` at the end of the body.
+  - relation_to_neighbour: Both abandon the rest of the body; continue proceeds to the next pass (increment and test), break leaves the loop with no increment or test.
+  - purpose_of_the_whole: Plan: skip/filter plan. It guards the rest of the body against items that should not be processed (e.g. skip non-matching or invalid entries), avoiding a deeply nested if.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Replacing `if (c) continue; rest;` with `if (!c) { rest; }` keeps the behaviour. Moving the continue below the update in a while loop, or the update below the continue, changes whether the loop advances.
+  - transfer_to_a_new_program: Use continue to skip items early in a long loop body when the alternative is a deeply nested if. Avoid it in while loops whose update is at the end of the body, and avoid it when a simple if around the work is clearer. S&W rarely 
+  - diagnose_an_error: rule broken: continue must be inside a loop. Kind: compile-time. Trigger class: `continue;` in a switch or if that is not inside any loop (continue outside of loop).
+  - diagnose_an_error: rule broken: In a while loop continue goes straight to the test, skipping an update placed later in the body. Kind: silent logic error. Trigger class: `while (i < n) { if (skip(i)) continue; ...; i++; }`: once a skipped i is reach
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: labeled_break
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a label like `outer:` reads like a 'go to' target or bookmark, so `break outer;` is read as jump back to the label and start again. 
+  - misconception: wrong rule: `break outer;` jumps back to the label and restarts the outer loop. 
+  boundary: Any correct, programming-specific statement about labeled break makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Jump statement with target: `break label;` or `continue label;` names an enclosing labeled statement (usually an outer loop) to exit or to continue.
+  - states_the_rule: `label: for (...) { ... break label; ... }`. The label must be on a statement that encloses the break. `break label;` completes that statement; `continue label;` must name an enclosing loop and starts its next iteration. (Spec: JL
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When `break outer;` executes: the rest of the inner body, the inner increment/test, the rest of the outer body and the outer increment/test are all skipped. Execution resumes at the first statement after the outer loop. With `cont
+  - output_prediction: No value is produced. The visible result is fewer passes: for a search over a 2D grid, the loop indices keep the position of the first match when the labeled break fires.
+  - one_step_execution: One execution changes no variables; it only transfers control to after the labeled statement (break) or to its next iteration (continue).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An unlabeled break exits only the innermost loop or switch. Adding a label lets break exit any enclosing labeled statement, and so end several nested loops at once.
+  - relation_to_neighbour: A label is needed only when an inner loop must end or advance an outer loop. The label goes on the outer loop header, and both loops share the outer variables, which keep the values they had at the exit.
+  - purpose_of_the_whole: Plan: early exit from a nested search (find the first (i, j) that matches and stop both loops). It replaces a flag that the outer loop would otherwise test.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Removing the label (plain `break;`) keeps the inner exit but lets the outer loop continue, and the search may find later matches. Replacing the labeled break with a one-way flag tested by both loops keeps the result.
+  - transfer_to_a_new_program: Use a labeled break or continue only in nested loops where the inner loop decides that the outer loop should end or skip ahead. In a method, `return` is usually clearer; in single loops plain break suffices.
+  - diagnose_an_error: rule broken: The label must belong to a statement that encloses the break or continue. Kind: compile-time. Trigger class: `break outer;` where outer labels a different, non-enclosing statement or is misspelled (undefined label).
+  - diagnose_an_error: rule broken: `continue label;` must name a loop. Kind: compile-time. Trigger class: Putting a label on a block or if and using `continue label;` (not a loop label).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: break_statement, continue_statement, labeled_break.

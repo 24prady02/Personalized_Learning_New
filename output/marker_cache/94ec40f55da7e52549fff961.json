@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "accumulator vs counter roles (sum, count)", "why": "Correctly names sum as the accumulator and count as the counter with a brief role description, but doesn't trace the values or say what they count (the 8s) or relate them to the loop."}

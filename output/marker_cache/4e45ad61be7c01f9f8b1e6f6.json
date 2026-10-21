@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "print vs println newline behaviour", "why": "States the general rule of print versus println correctly but does not trace the code or give the actual output line by line."}

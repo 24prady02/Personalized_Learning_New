@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "empty statement after if (stray semicolon)", "why": "The student says positive is not printed, treating the println as the if's body. They miss that the semicolon ends the if, so println always runs, which contradicts the question's premise."}

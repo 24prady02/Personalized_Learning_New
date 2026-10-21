@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code prints only once, after the loop, and it prints the accumulated total, which is 3. The student answered '0 1 2', which treats the statement as printing i on each pass. That ignores how += accumulates and where the println sits, so it is a wrong rule and not a slip in a correct trace."}

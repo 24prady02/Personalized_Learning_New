@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student swaps the roles: max holds the largest value found so far, and i is the loop index. Calling i a running total and max an element counter is wrong, so the answer shows no working model of either variable."}

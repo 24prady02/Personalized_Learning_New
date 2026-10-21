@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Equivalent rewrite of the if statement (isDone assignment)", "why": "The answer addresses only one part of the code (the if could be replaced by a boolean assignment) and gives neither the output nor when the loop stops, so it doesn't trace the values."}

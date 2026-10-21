@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "main method signature (String[] args required)", "why": "It applies a wrong rule: it says main() without String[] args is fine, but the JVM needs that signature to find main and would report 'main method not found'."}

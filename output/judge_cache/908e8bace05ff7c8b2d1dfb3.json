@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "Negative numbers break it.",
+   "correct": true,
+   "why": "Here 'break' means 'make it fail', not Java's break statement, and the code has no break statement, so this concept is not addressed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the int type, its range or int arithmetic."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about i++ or any other increment operator."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the range limits of int literals."
+  }
+ ]
+}

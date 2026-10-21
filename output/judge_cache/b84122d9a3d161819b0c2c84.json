@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "total = total + i is the last thing before the println.",
+   "correct": false,
+   "why": "The answer points to the update statement but never gives total after the third pass (6), and it is wrong about order: after the last update, i++ runs and then the i <= 5 check fails, so that check is the last thing executed before println."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only uses println as a marker in the sequence and says nothing about how it works."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer quotes the assignment statement but says nothing about how assignment works or what values it produces."
+  },
+  {
+   "concept": "char",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention char."
+  }
+ ]
+}

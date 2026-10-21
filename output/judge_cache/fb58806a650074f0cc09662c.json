@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "redirection",
+   "level": "none",
+   "way": "",
+   "quote": "Do I need to change my program to read from a file?",
+   "correct": false,
+   "why": "The answer only asks a question; it says nothing about what redirection does, the terminal output, or args[]."
+  },
+  {
+   "concept": "data_driven_code",
+   "level": "none",
+   "way": "",
+   "quote": "Do I need to change my program to read from a file?",
+   "correct": false,
+   "why": "The answer asks whether the program must change but makes no claim either way, so no level is shown."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about end of input or isEmpty()."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Line 1, sum should start at 1.",
+   "correct": false,
+   "why": "A sum accumulator should start at 0, and the real bug is line 3, where sum = i overwrites the total instead of adding to it (sum += i); starting at 1 would print 4, not 6."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the println output."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how the for loop runs."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention chained assignment, and the code has none."
+  }
+ ]
+}

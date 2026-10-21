@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Max-finding loop (initialise, scan, compare, update)", "why": "The answer gives a correct order and blanks (max = a[0], loop from i=1, a[i] > max, max = a[i]) that fit together as one working structure, but it gives no explanation, so it shows no reasoning beyond the given code."}

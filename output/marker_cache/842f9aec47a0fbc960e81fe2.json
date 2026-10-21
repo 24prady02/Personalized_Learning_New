@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if statement without braces (scope of the if body)", "why": "The student applies the wrong rule that the indented 'done' belongs to the if. Without braces only 'big' is controlled, so 'java Order 3' prints start and done. The student also ignores the 'five' case, which throws NumberFormatException."}

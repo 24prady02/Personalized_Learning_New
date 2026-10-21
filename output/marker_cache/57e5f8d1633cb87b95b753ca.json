@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "selecting and ordering lines for a counting loop", "why": "The answer picks the right count, if and print lines (A, C, E) but also keeps both loop headers B and F. That nests the loops and runs past the array end, and it gives no explanation for the lines left out."}

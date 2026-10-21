@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division in Java", "why": "The answer applies the calculator/maths meaning of 2/5 as 0.4, but in Java int/int truncates to 0, so it uses a wrong rule and never traces the loop or fixes p."}

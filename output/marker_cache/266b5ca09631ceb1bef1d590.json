@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "swapping two variables with a temp (trace table)", "why": "The trace table is correct and covers all three lines value by value, but it never says in words that the code swaps a and b."}

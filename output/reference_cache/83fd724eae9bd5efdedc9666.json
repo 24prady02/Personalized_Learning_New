@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student picks line 1 and says sum should start at 1. This is wrong: the bug is line 3, where `sum = i` overwrites sum instead of accumulating with `sum += i`. Starting at 1 would still print 3. The answer shows no working model of how assignment differs from accumulation."}

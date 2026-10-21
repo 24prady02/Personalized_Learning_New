@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the double type, promotion to double, or how a double prints."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "quote": "depending on how % works",
+   "correct": false,
+   "why": "The answer names % but shows it doesn't know what % does (it guesses 1, 4 or 5) and gives no correct rule."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "num4 is 30.3, or 27.3, or 31.3, depending on how % works.",
+   "correct": false,
+   "why": "It lists three guesses with no reasoning; one matches the run (30.3), but a bare result with no reasoning is at most L1, and here it is only a hedge."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the int value being promoted to double."
+  }
+ ]
+}

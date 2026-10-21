@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer points to the right cause, negative numbers, because max starts at 0. But it gives no input array, doesn't say the array must be all negative, and doesn't say the code returns 0. It doesn't trace any values, so it stays at one correct aspect."}

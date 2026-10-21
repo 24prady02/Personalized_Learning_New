@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims main() works without String[] args because the program uses no arguments. That is a wrong rule: the launcher looks for a specific signature, not for whether the program uses its arguments. The standard answer is that the launcher reports that no main method was found. The answer also leaves out the other parts of the question."}

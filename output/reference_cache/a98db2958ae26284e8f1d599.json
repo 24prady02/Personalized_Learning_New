@@ -1,0 +1,1 @@
+{"level": "L2", "pick": "B", "why": "The answer gives both output lines with the correct values and justifies them by applying the print/println newline rule across all three statements, which is a value-by-value trace (L2), not a bare result (L1); dropping the trailing space is a slip, not a wrong rule."}

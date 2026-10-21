@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "A", "why": "The answer relates two constructs in the given code—readInt consumes the digits but leaves the newline, so the following readLine consumes only that leftover line terminator—giving a causal explanation of why rest is empty rather than a line-by-line trace, which is relational (L3)."}

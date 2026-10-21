@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception: local variables get a default value on their own",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "The answer says declaring a local variable sets it to 0, but in Java a local declared without an initializer has no value, and reading it is a compile error."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only says c is 0 because it was declared, which is a mistake about declaration, not about int; it says nothing about int itself, such as its range or how int arithmetic works."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: local variables get a default value on their own",
+   "quote": "so c is 0",
+   "correct": false,
+   "why": "The answer treats an unassigned local variable as holding 0, which goes against the rule that a variable must be assigned before it is read."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about double."
+  }
+ ]
+}

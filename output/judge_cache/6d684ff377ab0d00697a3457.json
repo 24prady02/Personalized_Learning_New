@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text and print does not.",
+   "correct": true,
+   "why": "The answer correctly states that println adds a newline after the text, which is a correct rule for the println method."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention anything about standard output."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text and print does not.",
+   "correct": true,
+   "why": "The answer correctly implies that print does not add a newline, which is a correct rule for the print method."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention anything about logical errors."
+  }
+ ]
+}

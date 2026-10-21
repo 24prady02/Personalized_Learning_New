@@ -1,0 +1,1 @@
+{"level": "L0", "why": "Fragment 3 finds the maximum value. It starts m at a[0] and only replaces m when a larger value appears, so it never reorders the array. 'Sorts the array' is a wrong reading of the code. The answer also covers only one fragment and does not group or name anything."}

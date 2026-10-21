@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "(c) 2 4",
+   "correct": true,
+   "why": "The output for n + \" \" is right (2 and 4 separated by a space), but the answer gives only the result with no reasoning about concatenation, so it is L1."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "(b) 012 done",
+   "correct": true,
+   "why": "This output is consistent with print and println running in order, but it is a bare result with no reasoning, so it is L1."
+  },
+  {
+   "concept": "block",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "(c) 2 4",
+   "correct": true,
+   "why": "This output fits both statements in the braces repeating each time through the loop, but the answer does not explain the block, so it is L1."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "StdDraw default coordinate scale (0 to 1) and what each call draws", "why": "It correctly covers both calls with their values (square from 0.25 to 0.75, point at 256 off the unit scale) but does not go beyond the given code."}

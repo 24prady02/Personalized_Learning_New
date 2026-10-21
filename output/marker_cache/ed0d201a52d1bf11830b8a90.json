@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "switch fall-through and default", "why": "The answer applies a wrong rule (default always runs at the end) and ignores that matching case 2 starts execution there and falls through. The final result of 50 is correct only by coincidence, because fall-through with no break reaches default anyway."}

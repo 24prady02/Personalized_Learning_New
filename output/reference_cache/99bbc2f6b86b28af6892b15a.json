@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student wrote new code that is correct for the writing task. It starts min at data[0], so it works for any values including all-negative ones. The loop compares each element with Math.min, and the result is printed. Re-checking data[0] is harmless. This counts as writing correct new code, so it is L4."}

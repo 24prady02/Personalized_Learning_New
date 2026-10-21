@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The answer merely copies the condition and body back (if (i%2==1 && i!=73) printf(i); i--;) with no output, no trace, and no interpretation, which the boundary rules classify as L0; it is a restatement rather than a question, so 'none' does not apply."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer is D, but the correct line is B. The student applies a wrong rule for %. a[i] % 2 is 1 for odd numbers and 0 for even numbers, so D counts the odd numbers, not the even ones. The claim that it adds 1 for every even number contradicts Java."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop termination and invariant on p", "why": "The answer applies a wrong rule by claiming the loop never ends, when the condition p*2 <= n fails once p reaches 32 (p*2=64 > 37), so it does not reason about the condition and gives no invariant or final value."}

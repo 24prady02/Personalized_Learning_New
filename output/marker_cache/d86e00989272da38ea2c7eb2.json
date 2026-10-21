@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "array reference assignment (aliasing) vs copying values", "why": "The student says b holds its own copy of the numbers with no arrow, which is a wrong rule (b = a copies the array rather than sharing a reference), and so a[0] would wrongly stay 1."}

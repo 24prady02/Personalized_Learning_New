@@ -1,0 +1,96 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Name the part  public class Hello { ... }  and say which file it must be in.
+
+CODE:
+public class Hello {
+  public static void main(String[] args) {
+    // greet
+    System.out.print("Hi");
+    System.out.println(" there");
+  }
+}
+
+STUDENT ANSWER: That is the class declaration; it holds everything and must be saved as Hello.java.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: class_declaration
+L0 Prestructural:
+  - everyday_reading: Everyday meaning: a 'class' is a group of students or a category, and 'public' means open to everyone. 
+  - misconception: wrong rule: The class name and the file name are independent. 
+  boundary: Any correct, programming-specific statement about class declaration makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A class declaration (public class Name { ... }) is the outer container of a Java program; in Chapter 1 each program is a single class with a single method main().
+  - states_the_rule: A program is written as public class Name { <method declarations> }; the outermost braces contain the class definition and the inner braces contain the method definitions, and the keywords public and class are required.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The class declaration itself does not execute: java Name looks up the class Name and calls its main(); the class is just the container that is searched.
+  - output_prediction: A class declaration produces no output; compiling it produces the file Name.class.
+  - one_step_execution: Declaring the class changes no variable at run time; it only defines the name (Name) that javac uses for Name.class and that java Name uses to find main.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The name after 'class' must equal the file name without .java.
+  - relation_to_neighbour: main must be declared inside the class's braces; java Name looks only inside class Name for main.
+  - purpose_of_the_whole: Purpose: package and name a program so it can be compiled and run by name; copying HelloWorld.java and replacing the name on the first line is how a new program is started.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Renaming the class requires renaming the file (and the java command) to keep it compiling and runnable; moving main outside the class braces breaks compilation.
+  - diagnose_an_error: rule broken: public class Name needs the keyword class (and correct spelling). Kind: compile-time. Trigger class: omitting or misspelling class (or public) on the first line
+  - transfer_to_a_new_program: In Chapter 1 every program is exactly one public class containing main; a separate class (and file) is needed for each separate program. Multiple classes and methods come only in Section 2.1.
+  - diagnose_an_error: rule broken: Every { must be matched by a }. Kind: compile-time. Trigger class: a missing or extra brace around the class or method body
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: main_method
+L0 Prestructural:
+  - everyday_reading: Everyday reading: 'main' sounds like the most important part, and 'void' like empty or invalid. 
+  boundary: Any correct, programming-specific statement about main method makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: main is the method that is the entry point of a Java program: public static void main(String[] args) { statements }.
+  - states_the_rule: The header must be public static void main(String[] args); the keywords are required; its body is a sequence of statements in braces, each followed by a semicolon.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When the program runs, it starts at the first statement in main and ends when it finishes the last statement, executing the statements in order, one by one.
+  - output_prediction: main returns no value (void); the program's observable result is whatever main's statements print.
+  - one_step_execution: Calling main binds args to the array of command-line strings and then runs its body; when its last statement finishes, control goes back to the system.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: main is declared inside the class's braces; java Name looks in class Name for main.
+  - relation_to_neighbour: main's body holds the statements; running the program executes them in order, one by one.
+  - relation_to_neighbour: The command-line arguments arrive in main's parameter args, an array of Strings (args[0], args[1], ...).
+  - purpose_of_the_whole: Purpose: the single place where a Chapter 1 program's work is written; programming at this stage means specifying a class name and the sequence of statements in its main().
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing the order of main's statements changes the order of output; changing public static void main(String[] args) (e.g. dropping static or args) keeps it compiling but leaves the class without a launchable entry point, or break
+  - diagnose_an_error: rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header written as public static void main() (or without static): it compiles, but java Name reports that no main method is fou
+  - transfer_to_a_new_program: Every runnable program needs exactly this main; put Chapter 1 code in it. It is not the place for code that should be reused or tested separately (that needs other methods, Section 2.1).
+  - diagnose_an_error: rule broken: public, static, void and main must be present and correctly spelled. Kind: compile-time. Trigger class: misspelling a keyword (e.g. stati, viod) so the header cannot be parsed
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: class_declaration, main_method.

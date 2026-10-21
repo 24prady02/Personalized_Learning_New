@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "roles of loop variable i and max", "why": "It says i is the element value, which is wrong because i is the index and the element is a[i], and it doesn't mention max at all."}

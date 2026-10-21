@@ -1,0 +1,166 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Why is t needed in the swap?
+
+CODE:
+// Knuth shuffle of String[] a of length n
+for (int i = 0; i < n; i++) {
+  int r = i + (int) (Math.random() * (n - i));
+  String t = a[i]; a[i] = a[r]; a[r] = t;
+}
+// a sample of m items: a[0] .. a[m - 1] after the shuffle
+
+STUDENT ANSWER: Otherwise a[i] is overwritten before it is saved.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: variable_swap
+L0 Prestructural:
+  - everyday_reading: In everyday life two people swap objects at the same moment, hand to hand, and 'b = a' sounds like 'a and b are now the same thing'. Java statements run one at a time, so the first assignment destroys a value unless it was first s
+  - misconception: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. 
+  - misconception: wrong rule: b = a exchanges the values of a and b. 
+  boundary: Any correct, programming-specific statement about variable swap makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Variable swap: the three-assignment idiom that exchanges the values of two variables through a temporary variable.
+  - states_the_rule: int t = a; a = b; b = t; exchanges a and b. The temporary t must have their type, and the three statements must run in exactly this order.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Step 1 saves a in t. Step 2 overwrites a with b. Step 3 copies the saved value from t into b. Each step reads values left by the previous one.
+  - output_prediction: Starting from a = 1234 and b = 99, the swap ends with a = 99, b = 1234 and t = 1234.
+  - one_step_execution: Each of the three statements changes exactly one variable: first t, then a, then b.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A swap is three assignments whose order matters, because each one overwrites the old value of its left variable.
+  - purpose_of_the_whole: Plan: exchange. It is used to reorder two values (make a <= b), and inside sorting and shuffling of arrays. t plays Sajaniemi's temporary role.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Reordering the steps (int t = a; b = t; a = b;) breaks the swap: both variables end up holding a's value. Dropping the temporary breaks it the same way. Running the correct swap twice restores the originals, so a swap is its own i
+  - transfer_to_a_new_program: Use the swap when two variables or array elements must exchange values (sorting, shuffling, ordering a pair). It is not needed when you only need a new variable holding the larger value, or when you can compute directly into new v
+  - diagnose_an_error: rule broken: An assignment overwrites its target, so a value about to be overwritten must be saved first. Kind: silent logic error. Trigger class: Swapping without a temporary (a = b; b = a;) or in the wrong order: both variables 
+  - diagnose_an_error: rule broken: The temporary must have the type of the values being swapped. Kind: compile-time. Trigger class: Using int t to swap doubles: 'possible lossy conversion from double to int'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: indexing
+L0 Prestructural:
+  - everyday_reading: Folk meaning: everyday counting starts at 1 (first = number 1), maths subscripts a_1..a_n run from 1, and f(i) with parentheses means 'apply to i'. 
+  - misconception: wrong rule: i and a[i] are the same thing, so the position is the stored value. 
+  - misconception: wrong rule: The first element of a is a[1]. 
+  - misconception: wrong rule: new int[n] has slots 0 to n, inclusive. 
+  - misconception: wrong rule: a(i) accesses element i of an array. 
+  - misconception: wrong rule: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. 
+  boundary: Any correct, programming-specific statement about indexing makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to.
+  - states_the_rule: Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the array reference is evaluated before the index; the index expression is fully evaluated with current variable values; the bounds are checked; then the element is fetched or, on the left of =, becomes the target. In 
+  - output_prediction: Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.
+  - one_step_execution: State transition: reading a[i] changes nothing. a[i] = v changes only element i (i, a and all other elements are unchanged), and a[i]++ adds 1 to that one element.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An element can be indexed only after the array is created, and the n given to new sets the valid indices 0..n-1.
+  - relation_to_neighbour: A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.
+  - relation_to_neighbour: Every index value is checked against 0 and a.length at run time; any other value throws.
+  - relation_to_neighbour: a[i] on a 2-D array yields row i (itself a 1-D array), and a[i][j] then indexes into that row.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. C
+  - transfer_to_a_new_program: Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for
+  - diagnose_an_error: rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException
+  - diagnose_an_error: rule broken: The index must have type int (after promotion); long or double indices are rejected. Kind: compile-time. Trigger class: a[1.5], a[x] with double x, or a[n] with long n (incompatible types: possible lossy conversion)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: assignment
+L0 Prestructural:
+  - everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). 
+  - misconception: wrong rule: = stores the expression itself, not its computed value. 
+  - misconception: wrong rule: = compares two values instead of assigning. 
+  - misconception: wrong rule: an assignment cannot be used inside a larger expression. 
+  - misconception: wrong rule: a = b copies the value of a into b. 
+  - misconception: wrong rule: a = b adds the value of b to the value already in a (the accumulator model). 
+  boundary: Any correct, programming-specific statement about assignment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable.
+  - states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.
+  - output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned.
+  - one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes.
+  - relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile.
+  - relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
+  - relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary.
+  - diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a;
+  - transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e.
+  - diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclos
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: array_exchange
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. 
+  - misconception: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. 
+  boundary: Any correct, programming-specific statement about array exchange makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
+  - states_the_rule: Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
+  - output_prediction: Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
+  - one_step_execution: State transition: exactly two elements (and t) change; when i == j nothing changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+  - relation_to_neighbour: Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+  - relation_to_neighbour: Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+  - relation_to_neighbour: Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
+  - transfer_to_a_new_program: Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
+  - diagnose_an_error: rule broken: The old value must be saved before it is overwritten. Kind: silent logic error. Trigger class: a[i] = a[j]; a[j] = a[i]; (or the three statements reordered), with a[i] != a[j], leaves both elements equal to the old a[
+  - diagnose_an_error: rule broken: The temporary must have the element type. Kind: compile-time. Trigger class: int t = deck[i]; for a String[] deck (incompatible types)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: variable_swap, indexing, assignment, array_exchange.

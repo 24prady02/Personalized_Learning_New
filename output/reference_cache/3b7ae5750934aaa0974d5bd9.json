@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The line `int k2 = Math.round(2.5);` is a changed version of the given `long k` line. The student correctly predicts a compile error and gives the right reason: `Math.round(double)` returns a long, which can't be assigned to an int without a cast. They don't name the 'lossy conversion' wording, but the reasoning is sound."}

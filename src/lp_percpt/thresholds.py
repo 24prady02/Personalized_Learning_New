@@ -10,14 +10,25 @@ MIN_WORDS = 3
 
 # Step 3 Concept linking
 W_CODE, W_WORD, W_SEM, W_MIS = 2, 1, 4, 3
+W_CODE_SHOWN = 1         # a code cue found only in the question's code, not in the reasoning (max 1 counted)
+W_ASKED = 1              # a cue in the question part asked, or in the code lines it names
 SEM_FLOOR = 0.40
 MIS_FLOOR = 0.50
 KEEP_SCORE = 1.0
 RELATIVE_KEEP = 0.5
 MAX_CONCEPTS = 3
 
+# Gate G4 Attribution: a clause also counts for a linked concept whose topic
+# similarity is within this margin of the best one (and at least BAND_LO)
+ATTR_MARGIN = 0.10
+
 # Gate G5 Weak link
 WEAK_LINK = 0.5
+
+# Steps 6-7: a clause shows an L0 / L3 / L4 way when it entails (NLI >= WAY_ENT) one of the
+# concept's way rules from the graph and is at least WAY_SIM similar to it
+WAY_SIM = 0.50
+WAY_ENT = 0.70          # NLI entailment needed to show a way rule (the small NLI model over-entails at 0.5)
 
 # Gate G7 Parroting
 PARROT_SIM = 0.85

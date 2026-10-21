@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: wrong rule: a = b copies the value of a into b.",
+   "quote": "a = 3, b = 5, c = 5.",
+   "correct": false,
+   "why": "These values come from reading each assignment backwards, copying left into right. Java gives a = 7, b = 7, c = 7."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives only final values and says nothing about variables themselves. The wrong values come from the assignment misconception, not a variable rule."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no multi-operator expressions, and the answer says nothing about precedence."
+  }
+ ]
+}

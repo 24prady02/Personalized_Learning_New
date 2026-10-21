@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "print vs println line-break behaviour", "why": "The output is correct (line break only after the second line), but the answer gives no explanation or line-by-line tracing, so it can't be levelled above L1."}

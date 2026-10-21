@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment a = b (value copy)", "why": "The student says a holds both 10 and 20, which wrongly treats assignment as keeping the old value instead of overwriting it, so this isn't the Java rule."}

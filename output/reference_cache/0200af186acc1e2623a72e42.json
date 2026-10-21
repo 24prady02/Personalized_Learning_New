@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer correctly identifies line 3 and explains that `sum = i` overwrites sum on each pass so it ends as the last i (3). It then gives a fix (`sum += i`) that handles the failing case, which relates the loop to the accumulation purpose. It doesn't generalise beyond this code, so it is L3 and not L4."}

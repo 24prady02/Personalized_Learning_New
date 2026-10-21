@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "loop invariant and termination (largest power of 2 not exceeding n)", "why": "It gives the invariant (a power of 2, at most n), links the doubling update to the exit condition p*2 > 37, and gets p = 32, all within the given code and without generalising beyond it."}

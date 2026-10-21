@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division and assignment to double", "why": "The answer picks C (3) and says it prints 3, but the code assigns to a double, so it prints 3.0; this ignores widening to double, which is a wrong rule for the assignment."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "With {0.1, 0.3, 0.5} the running sums are 0.1, 0.4 and 0.9. Since 0.95 is never less than 0.9, the loop never sets next, so next stays -1. The student says 2 because 'the last page gets whatever is left'. That rule isn't in the code, which has no fallback, and the answer doesn't trace the sums at all."}

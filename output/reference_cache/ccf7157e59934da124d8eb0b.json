@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The loop ends when p*2 exceeds 37 (p goes 1, 2, 4, 8, 16, 32, then stops at 32), so 'It never ends' is wrong. The student applies a wrong rule to the condition and doesn't address the invariant or the final value of p."}

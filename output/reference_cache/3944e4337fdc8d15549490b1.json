@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer claims the loop reads two numbers per pass and crashes on 5 3 8. The code reads one int per pass and prints \"16 3\". This is a wrong rule applied to the trace, and it doesn't address any of parts (a), (b) or (c)."}

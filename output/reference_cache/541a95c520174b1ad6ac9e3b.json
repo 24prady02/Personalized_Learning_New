@@ -1,0 +1,1 @@
+{"level": "L0", "why": "(c) prints \"2 4 \". The condition is only tested at the top of each iteration, so when n becomes 4 the body still finishes and prints 4. The student says the loop stops before the print, which treats the condition as checked in the middle of the body. That is a wrong loop rule. Parts (a) and (b) are not answered."}

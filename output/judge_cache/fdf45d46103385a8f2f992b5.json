@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: = stores the expression itself, not its computed value",
+   "quote": "assignment — stores — the expression itself in the variable",
+   "correct": false,
+   "why": "In Java, assignment evaluates the right-hand expression and stores the resulting value, not the expression itself."
+  },
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "misconception: = stores the expression itself, not its computed value",
+   "quote": "stores — the expression itself in the variable",
+   "correct": false,
+   "why": "It treats an expression as something a variable stores, when in fact an expression is evaluated to give one value."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "the expression itself in the variable",
+   "correct": false,
+   "why": "A variable holds one data-type value, not an expression, so this contradicts what a Java variable is."
+  },
+  {
+   "concept": "array_creation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about creating arrays."
+  }
+ ]
+}

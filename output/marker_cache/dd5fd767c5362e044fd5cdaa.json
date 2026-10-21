@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "StdIn.readInt on non-integer input (loop with isEmpty)", "why": "The answer applies a wrong rule: readInt does not skip 'abc' but throws an InputMismatchException, so nothing is printed. The answer wrongly says it prints 8 2."}

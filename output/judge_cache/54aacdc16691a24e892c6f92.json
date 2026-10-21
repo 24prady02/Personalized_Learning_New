@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "System.out.println(x);",
+   "correct": true,
+   "why": "println is used correctly to print each number on its own line, but the answer gives no reasoning about it."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int x = StdIn.readInt();",
+   "correct": true,
+   "why": "readInt is correctly placed inside the loop so each pass reads a new token, but the answer never explains how it gets each new number, so it is bare code without reasoning."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It stops at 0, because 0 means stop.",
+   "correct": false,
+   "why": "while (true) has no break or condition that tests for 0, so the loop does not stop at 0; the claim that 0 'means stop' is an everyday reading, not Java."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the list-of-links graph input format."
+  }
+ ]
+}

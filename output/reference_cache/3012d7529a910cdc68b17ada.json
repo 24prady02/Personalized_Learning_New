@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states one correct fact: integer division by zero (5 / z) throws an error, which is an ArithmeticException. It doesn't contrast this with 1.0 / 0, which gives Infinity, and it doesn't address the other parts, so it grasps only one aspect."}

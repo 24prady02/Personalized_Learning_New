@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "correct": true,
+   "why": "The answer relates do-while to while: they differ only in the omitted first test, so they match whenever the first test is true. This is adapting to a familiar variant, so it is relational, not L4."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "81 >= 70 is true at the start",
+   "correct": true,
+   "why": "The answer correctly evaluates the loop condition with this code's starting value but does not relate it further."
+  }
+ ]
+}

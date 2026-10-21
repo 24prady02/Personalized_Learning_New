@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "while loop trace (accumulating y while x counts down)", "why": "The answer traces every iteration value by value and reaches the correct output 6, but it never says what the loop is for (summing 3+2+1). The slip about decrementing x was caught and fixed."}

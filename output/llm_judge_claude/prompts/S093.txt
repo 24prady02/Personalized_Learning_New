@@ -1,0 +1,167 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Fix it so it prints 5.5.
+
+CODE:
+// goal: print the average of 4 and 7
+int a = 4, b = 7;
+double avg = a + b / 2;
+System.out.println(avg);
+
+STUDENT ANSWER: Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: double
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a number with a decimal point is the exact real number of school maths, and a whole-looking number such as 207. or 2.3e4 is an integer. 
+  - misconception: wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. 
+  - misconception: wrong rule: 207. and 2.3e4 are int values because they are whole numbers. 
+  boundary: Any correct, programming-specific statement about double makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: double is a primitive data type: Java's 64-bit IEEE 754 floating-point type for representing real numbers.
+  - states_the_rule: Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a float
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operators are applied in precedence order, left operand first; at each operator, if one operand is double the other is widened to double before the operation, and the result is rounded to the nearest double before the next operato
+  - output_prediction: The result has type double: 5.0/3.0 is 1.6666666666666667, 10/3.0 is 3.3333333333333335, 1.0/0.0 is Infinity, Math.sqrt(-1.0) is NaN; println always shows a decimal part (3.0, not 3).
+  - one_step_execution: An assignment to a double variable stores the nearest representable value (x = x + 0.1 replaces x with the rounded sum); no double operation throws an exception, so the variable may end up holding Infinity or NaN.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.33333333333333
+  - relation_to_neighbour: double and boolean never convert into each other (no cast is allowed either way); they meet only through comparisons, which take doubles and produce a boolean, e.g. (x < 3.1).
+  - relation_to_neighbour: char is an integral numeric type, so a char widens automatically to double in arithmetic ('a' + 0.5 is 97.5), but a double needs an explicit cast to become a char.
+  - relation_to_neighbour: Every double operation rounds its result to the nearest representable value, so double results carry rounding error that can accumulate; this is why == on computed doubles is unreliable.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering
+  - transfer_to_a_new_program: Use double for real-valued quantities where approximate results are acceptable (science, geometry, probabilities, averages); do not use it for counts, array indices, loop counters or money that must be exact (use int or long, e.g.
+  - diagnose_an_error: rule broken: A double cannot be assigned to an int (narrowing) without a cast. Kind: compile-time. Trigger class: A double expression assigned or passed where an int is required, e.g. int n = Math.sqrt(x); or int n = 2.0 * k; (pos
+  - diagnose_an_error: rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: integer_division
+L0 Prestructural:
+  - everyday_reading: In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. 
+  - misconception: wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. 
+  - misconception: wrong rule: 10 / 3 evaluates to 3.333. 
+  - misconception: wrong rule: Changing a later literal to 100.0 fixes an earlier int division. 
+  - misconception: wrong rule: Making every variable a double is the right fix for integer division. 
+  boundary: Any correct, programming-specific statement about integer division makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Integer division: / applied to two integer operands, giving the whole-number quotient with the fractional part discarded.
+  - states_the_rule: If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Each / is evaluated when its turn comes (precedence, then left to right), using the types of its own two operands. Promoting the result to double, by a cast or by assignment, happens only afterwards and cannot restore the lost fra
+  - output_prediction: 10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0.
+  - one_step_execution: q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: / and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.
+  - relation_to_neighbour: Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total.
+  - relation_to_neighbour: % gives the remainder of the same truncating division: (a / b) * b + a % b == a.
+  - purpose_of_the_whole: Quotient plans: unit conversion (76 / 12 feet), dropping a digit (n / 10), finding a midpoint ((lo + hi) / 2), and computing a bucket or row index (i / cols).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient
+  - transfer_to_a_new_program: Use integer division when you want the whole quotient (units, digits, indices, half a size). When a fraction is needed, make one operand a double (10.0 / 3 or (double) a / b) rather than turning every variable into a double.
+  - diagnose_an_error: rule broken: With two int operands, / discards the fraction. Kind: silent logic error. Trigger class: Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average.
+  - diagnose_an_error: rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: expression
+L0 Prestructural:
+  - everyday_reading: In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. 
+  - misconception: wrong rule: a single literal or variable "isn't an expression". 
+  - misconception: wrong rule: an assignment cannot be used inside a larger expression. 
+  - misconception: wrong rule: () are optional on a no-argument call like println. 
+  - misconception: wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. 
+  boundary: Any correct, programming-specific statement about expression makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Expression: a literal, a variable, or a sequence of operations (operators, method calls) on them that produces one value.
+  - states_the_rule: Each operand of an operator can itself be any expression, and a parenthesized expression has the same value as the expression inside. Every expression has a type, determined by its operators and operands.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operands are evaluated left to right, each fully before its operator is applied. Precedence and parentheses decide the grouping, and a method's arguments are all evaluated before the method is called.
+  - output_prediction: An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.
+  - one_step_execution: Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A variable name inside an expression contributes the variable's value at the moment of evaluation.
+  - relation_to_neighbour: Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+  - relation_to_neighbour: With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+  - relation_to_neighbour: A comparison takes numeric expressions and yields a boolean expression, and it has lower precedence than arithmetic, so a + b < c compares the sum.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and
+  - transfer_to_a_new_program: Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious.
+  - diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a;
+  - diagnose_an_error: rule broken: Only assignments, increments, method calls and object creation can stand alone as statements. Kind: compile-time. Trigger class: A bare expression line such as x + 1; or a == b;: 'not a statement'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: run_time_error
+L0 Prestructural:
+  - everyday_reading: Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. 
+  - misconception: wrong rule: Code that compiles is code that works. 
+  - misconception: wrong rule: System.out.println(5 / 0); is rejected by the compiler. 
+  - misconception: wrong rule: Integer.parseInt works on any text, e.g. "five" or "12.2". 
+  boundary: Any correct, programming-specific statement about run time error makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A run-time error (exception) is an error that does not show up until the program is executed and makes it impossible to run to completion.
+  - states_the_rule: When a run-time error occurs, the program 'crashes' (terminates) and the JVM prints the exception name, a message, and the method, file and line where it happened.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Statements before the faulty one run normally (their output appears); the faulty statement throws; no later statement runs.
+  - output_prediction: Output: any earlier output, then Exception in thread "main" java.lang.<Name>: <detail> at Class.main(Class.java:<line>).
+  - one_step_execution: The throwing step changes no variable it was meant to set (the operation does not complete) and transfers control out of main, ending the program.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A run-time error appears only while java Name executes, after compiling has succeeded.
+  - relation_to_neighbour: javac cannot detect it because it depends on run-time values (the argument typed, the divisor's value).
+  - relation_to_neighbour: A run-time error stops the program with an exception message; a logic error lets it finish with wrong output and no message.
+  - purpose_of_the_whole: Purpose (of exceptions): stop the program at the point where something impossible was asked, instead of continuing with an undefined value, and report what and where.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: The same compiled program may run fine on one input and throw on another (UseArgument with and without an argument); adding a guard such as checking args.length removes the trigger without changing correct runs.
+  - diagnose_an_error: rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header public static void main(): compiles, but java Name cannot find the main method
+  - diagnose_an_error: rule broken: Array length must be >= 0. Kind: run-time exception. Trigger class: new int[n] with n < 0: NegativeArraySizeException
+  - diagnose_an_error: rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: running without the expected argument: java.lang.ArrayIndexOutOfBoundsException: 0
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: double, integer_division, expression, run_time_error.

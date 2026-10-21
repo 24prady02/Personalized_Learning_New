@@ -1,0 +1,1 @@
+{"level": "L1", "why": "8 is correct: 8→4→2→1 takes three halvings, so the program prints 3. The answer is only the bare value, with no explanation of how it was found. The question asked for that explanation, so the answer stays at L1."}

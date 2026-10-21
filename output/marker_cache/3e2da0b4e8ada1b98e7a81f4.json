@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "find-minimum pattern (running best over array)", "why": "The answer integrates initialisation, loop, comparison and update into one correct structure that finds and prints the smallest value, but it stays within this task and does not go beyond it (e.g., empty array or other edge cases)."}

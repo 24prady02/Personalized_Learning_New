@@ -1,0 +1,164 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Which line converts automatically, and which needs a cast?
+
+CODE:
+int i = 7;
+double d = i;
+int j = (int) 9.99;
+double q = (double) (i / 2);
+double r = (double) i / 2;
+int p = Integer.parseInt("42") + 1;
+String t = "" + i + 1;
+
+STUDENT ANSWER: d = i happens by itself because double is bigger; going from 9.99 to int needs (int).
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: double
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a number with a decimal point is the exact real number of school maths, and a whole-looking number such as 207. or 2.3e4 is an integer. 
+  - misconception: wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. 
+  - misconception: wrong rule: 207. and 2.3e4 are int values because they are whole numbers. 
+  boundary: Any correct, programming-specific statement about double makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: double is a primitive data type: Java's 64-bit IEEE 754 floating-point type for representing real numbers.
+  - states_the_rule: Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a float
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operators are applied in precedence order, left operand first; at each operator, if one operand is double the other is widened to double before the operation, and the result is rounded to the nearest double before the next operato
+  - output_prediction: The result has type double: 5.0/3.0 is 1.6666666666666667, 10/3.0 is 3.3333333333333335, 1.0/0.0 is Infinity, Math.sqrt(-1.0) is NaN; println always shows a decimal part (3.0, not 3).
+  - one_step_execution: An assignment to a double variable stores the nearest representable value (x = x + 0.1 replaces x with the rounded sum); no double operation throws an exception, so the variable may end up holding Infinity or NaN.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.33333333333333
+  - relation_to_neighbour: double and boolean never convert into each other (no cast is allowed either way); they meet only through comparisons, which take doubles and produce a boolean, e.g. (x < 3.1).
+  - relation_to_neighbour: char is an integral numeric type, so a char widens automatically to double in arithmetic ('a' + 0.5 is 97.5), but a double needs an explicit cast to become a char.
+  - relation_to_neighbour: Every double operation rounds its result to the nearest representable value, so double results carry rounding error that can accumulate; this is why == on computed doubles is unreliable.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering
+  - transfer_to_a_new_program: Use double for real-valued quantities where approximate results are acceptable (science, geometry, probabilities, averages); do not use it for counts, array indices, loop counters or money that must be exact (use int or long, e.g.
+  - diagnose_an_error: rule broken: A double cannot be assigned to an int (narrowing) without a cast. Kind: compile-time. Trigger class: A double expression assigned or passed where an int is required, e.g. int n = Math.sqrt(x); or int n = 2.0 * k; (pos
+  - diagnose_an_error: rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: type_conversion
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a number is a number, so 3, 3.0 and "3" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). 
+  - misconception: wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. 
+  - misconception: wrong rule: A double value can be stored in an int variable like an int in a double. 
+  - misconception: wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. 
+  boundary: Any correct, programming-specific statement about type conversion makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Type conversion is changing a value of one type into a value of another type: automatic promotion (widening), an explicit cast, an explicit conversion method (Integer.parseInt, Double.parseDouble, Math.round), or automatic convers
+  - states_the_rule: Java converts automatically to a type with a larger range (promotion) because no information is lost; a conversion that might lose information (double to int) requires an explicit cast or is a compile-time error; Strings and numbe
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the varia
+  - output_prediction: Typical results: "1234" + 99 is the String "123499"; Integer.parseInt("123") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.
+  - one_step_execution: A conversion produces a new value and never changes the source variable or its declared type: after int x = (int) pi; x is 3 and pi still holds 3.14159.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type.
+  - relation_to_neighbour: Parsing methods are explicit type conversion from String to a number: a method takes an argument of one type and produces a result of another.
+  - relation_to_neighbour: A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.
+  - relation_to_neighbour: Widening (promotion) is the automatic kind of conversion, applied at operators and assignments when the target type has a larger range.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to i
+  - transfer_to_a_new_program: Rely on automatic promotion when mixing int with double; write a cast only when you intend to drop information; use parse methods for text input and string conversion for output; paying attention to types avoids subtle bugs.
+  - diagnose_an_error: rule broken: A conversion that may lose information needs an explicit cast. Kind: compile-time. Trigger class: Assigning or passing a double (or long) expression to an int, e.g. int n = 11 * 0.3; (possible loss of precision).
+  - diagnose_an_error: rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: int
+L0 Prestructural:
+  - everyday_reading: In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.
+  - misconception: wrong rule: 10 / 3 evaluates to 3.333. 
+  - misconception: wrong rule: An int result that is too large is automatically stored as a bigger number. 
+  boundary: Any correct, programming-specific statement about int makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: int: Java's 32-bit signed integer primitive type.
+  - states_the_rule: int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.
+  - output_prediction: The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.
+  - one_step_execution: An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.
+  - relation_to_neighbour: int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.
+  - relation_to_neighbour: In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.
+  - relation_to_neighbour: Because int has a fixed 32-bit range, results outside it wrap around silently.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).
+  - transfer_to_a_new_program: Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.
+  - diagnose_an_error: rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped,
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: data_type
+L0 Prestructural:
+  - everyday_reading: Everyday 'type' means a kind or label (a 'whole number' is still just a number), so novices read int and double as tags on the same arithmetic. In Java the type fixes both the set of values and which operation runs: 7 / 2 on two i
+  - misconception: wrong rule: Making every variable a double is the right fix for integer division. 
+  - misconception: wrong rule: A variable declared int can hold 2.5 or "hi"; the type is only a label. 
+  boundary: Any correct, programming-specific statement about data type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Data type: a category of data defined as a set of values together with the set of operations on those values (int, double, boolean, char, String...).
+  - states_the_rule: Java is strongly typed: every variable and expression has a type known at compile time, a variable always holds a value of its type, and the compiler rejects values or operations that do not fit (int x = 1.1; does not compile).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: For each operator, the operand types are found first (after any automatic promotion), and then that type's version of the operator is applied. So in b*b - 4*c with int b and c, the whole expression is computed as int and only then
+  - output_prediction: The result type follows from the operand types: int op int gives int (7 / 2 is 3), any double operand gives double (7 / 2.0 is 3.5), and + with a String operand gives a String ("7" + 2 is "72").
+  - one_step_execution: A declaration fixes a variable's type for good. Each assignment changes only the value, never the type, and a value outside the type (a double into an int) is rejected at compile time unless it is cast.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The eight primitive types are Java's built-in data types. Each one fixes its own values and operators (boolean has && || !, int has + - * / %), so which operators are legal in an expression depends on which primitive type its oper
+  - relation_to_neighbour: A data structure such as an array holds many values of one data type. The element type limits what can be stored in a[i] and which operations apply to it.
+  - purpose_of_the_whole: Choosing a type records what a value represents (int for counts, double for measurements, boolean for conditions, String for text), so the compiler can check that operations match that intent.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-tim
+  - transfer_to_a_new_program: Think in data types whenever you declare a variable or read an expression. Use the built-in primitive types for single numbers, characters and truth values, String for text, and an array or another class when no single built-in ty
+  - diagnose_an_error: rule broken: A value can be stored only in a variable whose type can hold it without loss; narrowing needs an explicit cast. Kind: compile-time. Trigger class: Assigning a double (or long) expression to an int variable, e.g. int x
+  - diagnose_an_error: rule broken: An operator is defined only for certain types. Kind: compile-time. Trigger class: Applying an operator to a type that lacks it: "Hello" - 1, s < t on Strings, !5: 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: double, type_conversion, int, data_type.

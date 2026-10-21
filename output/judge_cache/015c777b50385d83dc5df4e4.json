@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "The program sees count will reach 5, so it prints big first.",
+   "correct": false,
+   "why": "The answer treats count as if it already knows its final value, but at the if count is still 0, so count > 3 is false and \"big\" is never printed. The run prints only 5. The facts block marks this sentence CORRECT, but that check covers only the 5."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about the int type or int arithmetic. The 5 is just the final count."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "quote": "big, 5.",
+   "correct": false,
+   "why": "The answer guesses what is printed but says nothing about how print or println works. The wrong \"big\" comes from the counter mistake, not from an output rule."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention doubles or precision."
+  }
+ ]
+}

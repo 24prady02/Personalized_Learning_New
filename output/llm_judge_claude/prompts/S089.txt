@@ -1,0 +1,126 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Why would compiling and testing in small steps have helped?
+
+CODE:
+A student writes all 200 lines of Big.java, then runs  javac Big.java  for the first time and gets 37 error messages.
+
+STUDENT ANSWER: If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: incremental_development
+L0 Prestructural:
+  - everyday_reading: Everyday writing is drafted all at once and revised at the end. A program is grown in small steps from a version that already works, compiling and running after each step.
+  - misconception: wrong rule: Write the whole program first, then compile and test it all at the end. 
+  boundary: Any correct, programming-specific statement about incremental development makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Incremental development: growing a program in small, tested steps from a version that works.
+  - states_the_rule: Start with a working program and make small, incremental changes; at any point, if there is an error, you will know where to look. Use variables for intermediate values so you can check them.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: write a few lines, compile, run and check them, then add the next few; never more than one untested change at a time.
+  - output_prediction: Result: after every step there is a program that compiles and runs, and does a little more than before.
+  - one_step_execution: State transition: one step adds a small piece of code and ends with the program compiling and passing its checks again.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Running after each step shows at once whether the new lines do what was intended.
+  - relation_to_neighbour: Small steps make debugging local: the newest change is the first suspect.
+  - purpose_of_the_whole: Plan: keep a working program at all times so that errors are found where they are made.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: each step must keep everything that already worked; if a step breaks it, that step is undone or fixed before going on.
+  - transfer_to_a_new_program: For any new program: get a minimal version running first (even just printing the inputs), then add one feature at a time, testing each.
+  - diagnose_an_error: rule broken: Compile and test after each small change. Kind: compile-time or logic error. Trigger class: many lines are written before the first compile, so the messages and wrong outputs cannot be traced to one change
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: compile
+L0 Prestructural:
+  - everyday_reading: Everyday meaning: to 'compile' is to gather or put together (compile a list), and 'running' a program sounds like it starts on its own. 
+  - misconception: wrong rule: Compiling also executes the program. 
+  - misconception: wrong rule: Code that compiles is code that works. 
+  boundary: Any correct, programming-specific statement about compile makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Compiling is translating the whole Java source file into a lower-level form (Java bytecode) before execution; javac is the Java compiler.
+  - states_the_rule: javac Name.java takes the file Name.java as input and, if there are no compile-time errors, produces Name.class (the bytecode version) with the same name.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The compiler first reads (parses) the entire file, then translates it; it does all this before the program starts running, and only if no errors were found does it write Name.class.
+  - output_prediction: Result of javac Name.java: either a new file Name.class and no terminal output, or a list of error messages (file:line: message, then 'N errors') and no Name.class.
+  - one_step_execution: One compile changes only the file system: it creates or overwrites Name.class; it changes no program variable and prints no program output.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: java Name loads the Name.class made by javac, so a successful compile must come before running, and edits take effect only after recompiling.
+  - relation_to_neighbour: A compile-time error stops the translation, so no Name.class is produced and there is nothing new to run.
+  - relation_to_neighbour: javac takes the program text Name.java as input; its file name must match the public class name.
+  - purpose_of_the_whole: Purpose: check the program against the language rules and turn it into a form the JVM can execute, once, so it can then be run repeatedly with different inputs.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Recompiling the same unchanged source gives the same Name.class; any edit to the source is invisible to java Name until recompiled; adding or deleting comments or whitespace changes nothing the program does.
+  - transfer_to_a_new_program: Compile after every change before running, and compile often while making small changes, so each error is found close to its cause; compiling cannot find run-time or logic errors.
+  - diagnose_an_error: rule broken: Source must obey Java's syntax and type rules. Kind: compile-time. Trigger class: any syntax error (missing ; or brace, misspelled keyword) or type error in Name.java
+  - diagnose_an_error: rule broken: javac needs the .java file name. Kind: launch error. Trigger class: typing javac Name (no .java) or the wrong file name / directory
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: compile_time_error
+L0 Prestructural:
+  - everyday_reading: Everyday reading: 'error' means the program will do something wrong when used, and a message points exactly at the mistake. 
+  - misconception: wrong rule: Code that compiles is code that works. 
+  - misconception: wrong rule: The line number in a javac error is always the line that has the mistake. 
+  - misconception: wrong rule: Doing exactly what the compiler message suggests will fix the error. 
+  boundary: Any correct, programming-specific statement about compile time error makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A compile-time error (syntax error) is an error in the source code, caught by javac, that prevents the program from being translated.
+  - states_the_rule: Compile-time errors occur when the code violates the rules of the Java language (syntax, names, types); they are caught when you compile and prevent the translation.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: javac reads the whole file, reports each error with file name, line number and message, tries to recover and continue, and prints a count; the first message is the most reliable.
+  - output_prediction: Result: messages such as Bad.java:4: ';' expected ... 3 errors, and no Name.class; nothing of the program runs.
+  - one_step_execution: A failed compile leaves the file system without a new Name.class (an older one, if any, is not updated) and changes no program state.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A compile-time error is reported while javac compiles Name.java, so no new Name.class is produced.
+  - relation_to_neighbour: Each compile-time error comes with a message; reading it (first error first, line may be late) is how it is found and fixed.
+  - relation_to_neighbour: A compile-time error is found by javac before the program runs; a run-time error only while it runs, so code that compiles can still crash.
+  - purpose_of_the_whole: Purpose (of the check): catch rule violations automatically before running, so they cannot cause wrong behaviour; S&W say treat the compiler as a friend.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Fixing the first error and recompiling can remove many messages at once; a single missing brace or semicolon can cause several messages.
+  - diagnose_an_error: rule broken: Each statement must end with ;. Kind: compile-time. Trigger class: missing ; at the end of a statement: ';' expected
+  - diagnose_an_error: rule broken: Every { must be matched by a }. Kind: compile-time. Trigger class: missing or extra brace: '{' expected, 'class' or 'interface' expected, reached end of file while parsing
+  - diagnose_an_error: rule broken: A String literal is enclosed in a pair of double quotes. Kind: compile-time. Trigger class: missing closing quote: unclosed string literal, often with confusing follow-on errors
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: incremental_development, compile, compile_time_error.

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The loop computes floor(log2(n)) by repeated halving, so n=8 (8→4→2→1, c=3) is a correct input, but the student gives only the bare answer with no explanation of how it was found; a correct result with no justification is levelled L1, and it is a claim rather than a question, so 'none' does not apply."}

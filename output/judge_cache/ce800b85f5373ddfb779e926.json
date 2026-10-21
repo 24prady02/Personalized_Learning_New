@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "Correctly says indentation does not affect the program, but does not apply this to the code or predict the output for score = 50; ignoring the style convention is not a language misconception."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the if statement or its condition."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention braces, blocks or which statements form the if body."
+  }
+ ]
+}

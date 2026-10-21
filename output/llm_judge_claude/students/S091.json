@@ -1,0 +1,409 @@
+{
+ "student_id": "S091",
+ "turn": 1,
+ "sessions": [
+  "j"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "string_literal": {
+   "concept": "string_literal",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "string literal: \"Hello, World\" -- the text being printed",
+      "score": 0.595
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "diagnoses UnclosedStringLiteral: A string literal can be left without its closing quote.",
+      "score": 0.7
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "it will not compile the string has no closing quote so java says unclosed string literal"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "println": {
+   "concept": "println",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "println: System.out.println -- output with a trailing newline",
+      "score": 0.536
+     }
+    ],
+    "E2": [],
+    "E3": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "edge println - string_literal",
+      "score": 1.0
+     }
+    ],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "it will not compile the string has no closing quote so java says unclosed string literal"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "standard_output": {
+   "concept": "standard_output",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "standard output: StdOut / System.out",
+      "score": 0.529
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+      "statement": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "it will not compile the string has no closing quote so java says unclosed string literal"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "statement": {
+   "concept": "statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "stream_model": {
+   "concept": "stream_model",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "escape_sequences": {
+   "concept": "escape_sequences",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "print": {
+   "concept": "print",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "formatted_output": {
+   "concept": "formatted_output",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "standard_drawing": {
+   "concept": "standard_drawing",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "standard_input": {
+   "concept": "standard_input",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "redirection": {
+   "concept": "redirection",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

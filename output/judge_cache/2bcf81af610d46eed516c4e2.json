@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "It gives the correct truth-table rules for && and || but no further reasoning, trace or relation to other concepts."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention evaluation order or skipping the right operand."
+  },
+  {
+   "concept": "boolean",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "true only when both are true ... false only when both are false",
+   "correct": true,
+   "why": "It correctly treats p and q as having only the values true and false, combined by && and ||, but goes no further."
+  }
+ ]
+}

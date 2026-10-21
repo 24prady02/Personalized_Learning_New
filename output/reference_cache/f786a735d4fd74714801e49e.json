@@ -1,0 +1,1 @@
+{"level": "L3", "why": "An empty array is a valid counterexample. The loop never runs, so max stays at its initial 0, and 0 is not a real largest value. The answer ties the starting value to what the code is meant to do. It names only this one case and not the wider class of failing inputs, such as all-negative arrays, so it stops at L3."}

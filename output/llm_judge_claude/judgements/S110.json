@@ -1,0 +1,5 @@
+{"concepts":[
+{"concept":"accumulator_pattern","level":"L1","way":"names_the_element","quote":"sum builds a total","correct":true,"why":"Correctly names sum as the accumulator, without further explanation."},
+{"concept":"counter_pattern","level":"L1","way":"names_the_element","quote":"count counts","correct":true,"why":"Correctly names count as the counter, without explaining the guard or update."},
+{"concept":"naming_convention","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about naming."}
+]}

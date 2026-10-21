@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student reads 'accurate to 5 decimals' from the five printed decimal places, which confuses output formatting with accuracy. A 100-move random walk gives only an estimate. The answer also ignores whether starting at page 3 would change the ranks, so it shows no working model of page rank or simulation."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "15 after the third pass, because it adds up to 5.",
+   "correct": false,
+   "why": "The answer treats the sum as one final quantity rather than a running total; after the third pass total is 1+2+3 = 6, and 15 is only reached after the fifth pass."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not address the last thing executed before the println, or statement order."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "do_while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about do-while loops."
+  }
+ ]
+}

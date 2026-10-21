@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop accumulation trace (total after third pass)", "why": "Total after the third pass is 1+2+3=6, not 15; the answer gives the final value and ignores the loop passes, and it does not say what runs last before println (the i++ and i<=5 check).", "level_note": "wrong rule applied"}

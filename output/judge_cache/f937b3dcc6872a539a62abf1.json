@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Imprime 'Welcome to Java. This is A nice programming language' en la primera línea y 'that I have to learn.' en la segunda, porque solo println cambia de línea.",
+   "correct": true,
+   "why": "The answer explains that print keeps the cursor on the same line and only println ends it, so the print and the println together make the first line and the last print starts the second line."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never talks about the output stream or about calls appending text in the order they run."
+  }
+ ]
+}

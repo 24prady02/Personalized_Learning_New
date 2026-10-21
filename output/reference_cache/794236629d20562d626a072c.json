@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer correctly describes line 4 (adds i*i to s on each pass) and line 5 (prints s), so it covers the loop body and the print. It never states the overall purpose, which is the sum of squares 1² to n², and it never mentions n or the loop bounds. That makes it a line-by-line account (L2) and not a relational one (L3)."}

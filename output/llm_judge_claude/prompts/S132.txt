@@ -1,0 +1,137 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): (a) List the literals and give the type of each.
+(b) Which of int, double, boolean, char, String is not a primitive type?
+(c) What is a data type?
+(d) Make a trace table of a, b and total after each line.
+(e) In  a = b = 5,  which assignment happens first, and why can it be one line?
+(f) What happens if you add  int c;  System.out.println(c + 1); ?
+(g) Why use TAX instead of 0.08, and what does  TAX = 0.1;  later do?
+
+CODE:
+final double TAX = 0.08;
+int a, b;
+a = b = 5;
+double total = a * 2 + 1.5;
+total = total + total * TAX;
+
+STUDENT ANSWER: a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value.
+
+FACTS FROM RUNNING THE CODE:
+CORRECT ('a and b are 5 and total is 11.5;'): confirmed by the run: total = 11.5
+WRONG ('after the last line total is still 11.5, because it already has a value.'): stated total = 11.5 (final); the code gives total = 12.42
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: double
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a number with a decimal point is the exact real number of school maths, and a whole-looking number such as 207. or 2.3e4 is an integer. 
+  - misconception: wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. 
+  - misconception: wrong rule: 207. and 2.3e4 are int values because they are whole numbers. 
+  boundary: Any correct, programming-specific statement about double makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: double is a primitive data type: Java's 64-bit IEEE 754 floating-point type for representing real numbers.
+  - states_the_rule: Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a float
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operators are applied in precedence order, left operand first; at each operator, if one operand is double the other is widened to double before the operation, and the result is rounded to the nearest double before the next operato
+  - output_prediction: The result has type double: 5.0/3.0 is 1.6666666666666667, 10/3.0 is 3.3333333333333335, 1.0/0.0 is Infinity, Math.sqrt(-1.0) is NaN; println always shows a decimal part (3.0, not 3).
+  - one_step_execution: An assignment to a double variable stores the nearest representable value (x = x + 0.1 replaces x with the rounded sum); no double operation throws an exception, so the variable may end up holding Infinity or NaN.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.33333333333333
+  - relation_to_neighbour: double and boolean never convert into each other (no cast is allowed either way); they meet only through comparisons, which take doubles and produce a boolean, e.g. (x < 3.1).
+  - relation_to_neighbour: char is an integral numeric type, so a char widens automatically to double in arithmetic ('a' + 0.5 is 97.5), but a double needs an explicit cast to become a char.
+  - relation_to_neighbour: Every double operation rounds its result to the nearest representable value, so double results carry rounding error that can accumulate; this is why == on computed doubles is unreliable.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering
+  - transfer_to_a_new_program: Use double for real-valued quantities where approximate results are acceptable (science, geometry, probabilities, averages); do not use it for counts, array indices, loop counters or money that must be exact (use int or long, e.g.
+  - diagnose_an_error: rule broken: A double cannot be assigned to an int (narrowing) without a cast. Kind: compile-time. Trigger class: A double expression assigned or passed where an int is required, e.g. int n = Math.sqrt(x); or int n = 2.0 * k; (pos
+  - diagnose_an_error: rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: accumulator_pattern
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'the sum' is a single mathematical quantity that simply exists, and a person adding numbers keeps the running total in mind automatically. In Java the total is a variable that must be declared and initialized before 
+  - misconception: wrong rule: a variable declared in the loop body lives across all iterations. 
+  - misconception: wrong rule: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. 
+  - misconception: wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. 
+  boundary: Any correct, programming-specific statement about accumulator pattern makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: An accumulator is a variable used to accumulate results during a traversal, e.g. the running total of a sum.
+  - states_the_rule: Initialize the accumulator before the loop (0 for a sum, 1 for a product), update it once per pass in the body (total += array[i]), and use it after the loop.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.
+  - output_prediction: After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.
+  - one_step_execution: One pass changes only the accumulator (and the loop variable): sum += x[i] turns sum = 1 into 5 when x[i] = 4.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The update sum += x sits inside the body so it runs once per pass, while the declaration and initialization stay before the loop.
+  - relation_to_neighbour: A counter is an accumulator that adds 1 on each pass that matches (count++), whereas an accumulator adds the current value itself (sum += x).
+  - relation_to_neighbour: In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.
+  - relation_to_neighbour: Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces 
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the initial value shifts the result by that amount (sum starts at 1 gives sum + 1); a product starting at 0 stays 0; reordering the items does not change an integer sum (addition is commutative) but may change a floating-
+  - diagnose_an_error: rule broken: A variable declared in the body is in scope only to the end of the body and is re-declared and re-initialized on every pass. Kind: silent logic error. Trigger class: for (...) { int sum = 0; sum += a[i]; }: sum restar
+  - transfer_to_a_new_program: Use an accumulator whenever many values must be reduced to one (sum, product, average, string); for a maximum or minimum use a most-wanted holder updated by an if instead.
+  - diagnose_an_error: rule broken: The accumulator must be initialized before the loop. Kind: compile-time. Trigger class: Declaring int sum; and then sum += x in the loop: 'variable sum might not have been initialized'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: widening_conversion
+L0 Prestructural:
+  - everyday_reading: Folk meaning: like containers, a bigger box holds a smaller thing, and a smaller box holds a big thing if it happens to fit (3.0 fits in an int). 
+  - misconception: wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. 
+  - misconception: wrong rule: A double value can be stored in an int variable like an int in a double. 
+  boundary: Any correct, programming-specific statement about widening conversion makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Widening conversion (promotion) is the automatic conversion of a value to a type with a larger range, e.g. int to long or double, char to int.
+  - states_the_rule: A value of a numeric type can be used wherever a type with a larger range is expected and is converted automatically; the magnitude is preserved (int to double is exact), though long to double may lose low-order precision.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: At a binary operator, if one operand is double the other is widened to double just before that operation; in an assignment or method argument, the value is widened to the target type after it has been computed.
+  - output_prediction: The widened value has the larger type and the same magnitude: double d = 5; gives 5.0; 11 * 0.3 is double 3.3; 'a' + 1 is int 98; (x < 3.1) with int x = 3 is true.
+  - one_step_execution: Widening creates the converted value for the target; the source variable keeps its type and value (after double d = n; n is still an int).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Widening is the automatic branch of type conversion; every other direction needs an explicit cast or method.
+  - relation_to_neighbour: Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates to
+  - purpose_of_the_whole: Lets int data feed double formulas and library methods without explicit casts, e.g. Math.sqrt(25) or an int count in a double expression.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Widening an int to double and casting back restores the original int (reversible); widening a large long to double may not be reversible; widening an int quotient after the division cannot restore the lost fraction.
+  - transfer_to_a_new_program: Rely on widening when mixing int and double in formulas or passing ints to double methods; do not expect it to fix an int division already performed; when a narrowing is intended, write the cast explicitly.
+  - diagnose_an_error: rule broken: Only widening is automatic; narrowing needs a cast. Kind: compile-time. Trigger class: A double (or long) value assigned or passed where an int is expected.
+  - diagnose_an_error: rule broken: Widening applies to the value after the operation that produced it. Kind: silent logic error. Trigger class: Expecting double d = a / b; with int a, b to keep the fraction (gives the truncated quotient as a double).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: double, accumulator_pattern, widening_conversion.

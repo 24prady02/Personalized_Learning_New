@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It is already the same as an else-if chain, nothing to change.",
+   "correct": true,
+   "why": "It correctly sees that an if-else whose else branch holds another if-else is an else-if chain, but gives no further reasoning."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It is already the same as an else-if chain",
+   "correct": true,
+   "why": "It correctly treats the inner if-else in the else branch as forming an else-if chain, though it does not write the rewrite."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions."
+  },
+  {
+   "concept": "else_if_chain",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It is already the same as an else-if chain, nothing to change.",
+   "correct": true,
+   "why": "It correctly relates the else-if chain to an if-else whose else part is another if-else, with brief reasoning."
+  }
+ ]
+}

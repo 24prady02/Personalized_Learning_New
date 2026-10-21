@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "coordinate_scaling",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Use point(0.5, 0.5), or call setXscale(0, 512) and setYscale(0, 512) first and then (256, 256) is the middle.",
+   "correct": true,
+   "why": "The answer sees that (256, 256) falls outside the default unit square, so the scale was never set, and it gives two correct fixes: draw in unit coordinates, or set the scales to 0..512 first, which puts (256, 256) at the centre."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "function_plotting",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about function plotting."
+  }
+ ]
+}

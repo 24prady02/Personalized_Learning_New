@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "misconception: code after the if is skipped (the program ends after a branch)",
+   "quote": "1 and 4, then the program ends.",
+   "correct": false,
+   "why": "The answer picks the else branch (line 4) correctly, but then says the program ends. In Java, control goes on to the statement after the if-else, so line 6 (z++) must also run."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "misconception: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true.",
+   "quote": "1 and 4, then the program ends.",
+   "correct": false,
+   "why": "Leaving out line 6 treats z++ as if it were inside the if's branch, but it comes after the closing brace and runs on every path."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about launching or running a Java program."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the main method."
+  }
+ ]
+}

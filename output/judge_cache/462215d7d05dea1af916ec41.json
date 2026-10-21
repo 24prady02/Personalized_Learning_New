@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "An empty array: it gives 0, but an empty array has no largest value.",
+   "correct": true,
+   "why": "The answer is right that an empty array leaves max at its start value 0. But it does not show the L4 trigger (all-negative data making max stay above every value), so it shows only the empty-array prediction."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It never mentions data.length or how the loop bound works. An empty array is only implied."
+  },
+  {
+   "concept": "array_creation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about creating arrays."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about separators or handling one item outside the loop."
+  }
+ ]
+}

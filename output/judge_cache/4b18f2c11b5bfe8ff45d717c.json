@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L0",
+   "way": "misconception: ++i in the for-update runs before the body each pass",
+   "quote": "The update i++ runs first and then the body, so 3 is printed.",
+   "correct": false,
+   "why": "The answer says i++ runs before the body, but in a for loop the update runs after each pass of the body, and the code prints 012."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception: ++i in the for-update runs before the body each pass",
+   "quote": "Yes. The update i++ runs first and then the body, so 3 is printed.",
+   "correct": false,
+   "why": "The answer gets the order wrong (the real order is test, body, update) and accepts that 3 < 3 is true, so it wrongly predicts that 3 is printed."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about while loops."
+  }
+ ]
+}

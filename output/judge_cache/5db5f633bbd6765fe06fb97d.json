@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "Writing 3.14159 in the formula is just as clear as a name.",
+   "correct": false,
+   "why": "The answer gives a style opinion about the literal 3.14159 but states no rule or reasoning about the double type."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about long."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student wrongly says StdDraw.point takes pixel coordinates. It uses the same 0–1 scale as square, so point(256, 256) is far off the canvas and not visible. The answer applies this wrong rule, so it is L0."}

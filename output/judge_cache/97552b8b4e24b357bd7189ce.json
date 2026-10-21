@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: wrong rule: = compares two values instead of assigning.",
+   "quote": "Nothing changes; a = b checks whether they are equal.",
+   "correct": false,
+   "why": "The answer treats = as a comparison, but in Java a = b assigns 20 to a, so a becomes 20 and b stays 20."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arrays or references."
+  },
+  {
+   "concept": "array_copy",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about copying arrays."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L0",
+   "way": "everyday_reading: in maths = states that two things are equal",
+   "quote": "a = b checks whether they are equal.",
+   "correct": false,
+   "why": "The answer uses the maths meaning of = for an equality test; in Java the equality test is ==, and = assigns."
+  }
+ ]
+}

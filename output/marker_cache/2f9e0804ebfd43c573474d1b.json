@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop tracing with compound condition", "why": "The answer gives only a vague everyday description ('does some math, prints numbers') with no output, no trace, and no mention of when the loop stops, so it shows no working model of the loop."}

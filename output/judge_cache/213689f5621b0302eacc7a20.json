@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if.",
+   "correct": true,
+   "why": "The answer swaps the if for a direct boolean assignment, which is correct here: isDone is always false before this line and the loop stops as soon as it becomes true. The answer does not give this reason, so the evidence is weak."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "It correctly assigns a boolean expression to a boolean variable but does not trace any values for this code."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only copies i % 5 from the code and says nothing about what % does."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention && or how the loop condition is evaluated."
+  }
+ ]
+}

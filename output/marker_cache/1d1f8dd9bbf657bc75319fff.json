@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division assigned to a double", "why": "The answer applies a wrong rule (the division is done in double because r is double), but Java evaluates a / b as int division first, giving 3 and then 3.0, so the answer A (3.5) is wrong."}

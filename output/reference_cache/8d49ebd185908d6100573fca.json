@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer correctly keeps A, B, D and E, so it has the count initialisation, the in-bounds loop and the print. But it picks G (`count = 1`) instead of C (`count++`), so the program prints only 0 or 1 and not the number of positives. It also gives no explanation of why lines were left out, so it shows only partial, unjustified understanding."}

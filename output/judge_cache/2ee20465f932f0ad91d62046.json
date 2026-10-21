@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "program_text",
+   "level": "L0",
+   "way": "misconception: The computer fills in steps or values the programmer meant but did not write",
+   "quote": "It prints Hi, Ann and then Bye.",
+   "correct": false,
+   "why": "The answer treats the text as if it works as intended. It ignores the missing semicolon and that public class Greeting is saved in Hello.java, so javac rejects the file."
+  },
+  {
+   "concept": "run",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It prints Hi, Ann",
+   "correct": false,
+   "why": "No run can happen because the code does not compile. Even if it ran, args[1] with only one argument would throw ArrayIndexOutOfBoundsException, so the output it predicts is wrong."
+  },
+  {
+   "concept": "comment",
+   "level": "L0",
+   "way": "misconception: A comment line is run like a statement",
+   "quote": "and then Bye",
+   "correct": false,
+   "why": "It says the commented-out println runs, but the compiler ignores // lines."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about char arithmetic."
+  }
+ ]
+}

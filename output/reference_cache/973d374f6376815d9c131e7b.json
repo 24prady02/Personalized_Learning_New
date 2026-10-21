@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student names one part of the code, the loop body `total = total + i`, as the last thing run. They give no value for total after the third pass (6) and no trace. They also miss that the last thing evaluated is the failed `i <= 5` check with i = 6, after `i++`. This is one partial aspect with no values applied."}

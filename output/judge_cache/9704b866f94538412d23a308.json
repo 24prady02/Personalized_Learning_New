@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "1,000,000, and if n doubles it runs twice as often.",
+   "correct": false,
+   "why": "1,000,000 is right but given with no reasoning, so it only counts as L1. The prediction for the change is wrong: the inner loop runs all n passes on every outer pass, so doubling n makes count++ run 4 times as often, not 2."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "if n doubles it runs twice as often",
+   "correct": false,
+   "why": "The answer doesn't explain how the init, test and update fix the n×n passes, and the doubling claim is wrong (2n×2n = 4n²), so it can't reach L4."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about i or j as loop variables."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer has nothing about a simulation or trial loop."
+  }
+ ]
+}

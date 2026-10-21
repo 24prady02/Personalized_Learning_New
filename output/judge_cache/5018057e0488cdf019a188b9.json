@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L0",
+   "way": "misconception: & and | are the same as && and || for conditions, so either can be used",
+   "quote": "Changing && to & changes nothing.",
+   "correct": false,
+   "why": "With &, both operands are evaluated, so 10 / n runs with n = 0 and throws an ArithmeticException. The change does matter."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "L0",
+   "way": "misconception: & and | are the same as && and || for conditions, so either can be used",
+   "quote": "Changing && to & changes nothing.",
+   "correct": false,
+   "why": "The answer misses that && short-circuits and & does not, so swapping them removes the guard on the division by zero."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about array default values."
+  }
+ ]
+}

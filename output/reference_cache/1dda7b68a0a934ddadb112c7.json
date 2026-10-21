@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student gives three different answers (30.3, 27.3, 31.3) and says it depends on how % works. This shows they don't know that % is the remainder operator, so 9 % 5 = 4 and 4 + 26.3 = 30.3. They hedge between answers and give no trace, so there is no working model of the concept."}

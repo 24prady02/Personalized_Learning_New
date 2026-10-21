@@ -1,0 +1,1 @@
+{"overall": "L1", "concepts": [{"concept": "exclusive_or", "level": "L1", "way": "states_the_rule", "quote": "It gives true when the two sides are different.", "correct": true, "why": "States the correct boolean xor rule without applying it to this code's values (n > 5 is false, n < 10 is true, so c is true)."}]}

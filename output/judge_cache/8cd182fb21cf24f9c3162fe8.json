@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions i-- or j-- or how they change the variables."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "It applies the loops to this code's values for two outer passes, and the run confirms them; it does not give the full output with spacing and empty lines, or explain how the loops relate."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about separators or the trailing space."
+  }
+ ]
+}

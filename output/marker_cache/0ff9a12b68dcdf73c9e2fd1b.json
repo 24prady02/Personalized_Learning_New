@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "do-while loop with if condition and decrement", "why": "The answer restates the loop body's condition, print and decrement without tracing any values, giving the output, explaining, or addressing the i=61 case."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student expected 2.5 and blamed the computer, so they read (2 + 3) / 2 with maths meaning. They missed that Java does integer division on two ints, giving 5 / 2 = 2, which is then widened to 2.0 on assignment to double. The answer applies a wrong rule and gives no valid explanation."}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "de_morgan",
+   "level": "none",
+   "way": "",
+   "quote": "You could write b as !(5 < n < 10)",
+   "correct": false,
+   "why": "The rewrite still uses !( ) and does not move the negation inside, flip the comparisons or swap && to ||, so it shows no De Morgan reasoning."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "!(5 < n < 10)",
+   "correct": false,
+   "why": "It uses the maths chained-range form 5 < n < 10, which does not compile in Java because 5 < n gives a boolean that cannot be compared with 10 using <."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "math_random",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Correctly finds the silent logic error: the cast applies only to Math.random(), which always gives 0. It also gives the fix of casting after multiplying."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention picking from a discrete distribution or using cumulative intervals."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "The cast happens first, so (int) Math.random() is 0 ... Cast after multiplying.",
+   "correct": true,
+   "why": "Correctly finds that a cast applies only to the value right after it, explains why that gives the error, and gives the fix."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention shuffling."
+  }
+ ]
+}

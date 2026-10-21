@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about what v >= 0 or v != 99999 evaluates to."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "I removed if (v >= 0)",
+   "correct": false,
+   "why": "The answer deletes the if but says nothing about how an if runs, so there is no evidence about the concept."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements, their order or their effects."
+  },
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "The answer uses an everyday belief that all values are valid data. This breaks the Rainfall rule that only values passing the filter may change sum and count: the -2 would be summed and the output would change from 5.0 to about 2.67. It also answers neither (a) nor (b)."
+  }
+ ]
+}

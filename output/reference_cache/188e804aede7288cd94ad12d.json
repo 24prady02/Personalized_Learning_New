@@ -1,0 +1,1 @@
+{"level": "L4", "why": "Math.abs(Integer.MIN_VALUE) is not in the given code. The student correctly gives -2147483648 and explains why: +2147483648 is above Integer.MAX_VALUE, so the result overflows and wraps back to MIN_VALUE. That applies the int range rule to a new case, so it is L4. The explanation is brief."}

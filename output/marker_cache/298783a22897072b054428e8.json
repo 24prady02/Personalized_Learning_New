@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "line-by-line description of min-finding code", "why": "The answer covers lines 2–4 in order, but it only restates what each line does (e.g. 'sets best to a[0]', 'for loop from 1') and never explains why each line is there or that the code finds the minimum."}

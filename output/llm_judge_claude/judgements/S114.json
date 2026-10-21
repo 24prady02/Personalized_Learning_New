@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"declaration","level":"L1","way":"states_the_rule","quote":"a local variable has no value until you give it one","correct":true,"why":"Correctly states that a declared local has no value until assigned."},
+{"concept":"array_creation","level":"L3","way":"relation_to_neighbour","quote":"new fills the array with 0s","correct":true,"why":"Correctly relates creation with new to the default values in every slot."},
+{"concept":"variable","level":"L1","way":"states_the_rule","quote":"a local variable has no value until you give it one","correct":true,"why":"Correctly states that a variable must be assigned before it has a value."},
+{"concept":"array_default_values","level":"L3","way":"relation_to_neighbour","quote":"new fills the array with 0s, but a local variable has no value until you give it one.","correct":true,"why":"Correctly contrasts array defaults set by new with unassigned locals."}
+]}

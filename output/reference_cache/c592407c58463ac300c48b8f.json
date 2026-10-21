@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The answer states in one sentence what months is for — a lookup table mapping a month number to its name — which integrates the array with the index expression months[m - 1] (number 3 → \"Mar\") and so relates the concept to another construct in the same code rather than merely naming the array; it stays within the given code, so L3 not L4."}

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The student names one correct rule (use a[i].length so each row's own length is respected, allowing ragged arrays) but writes no code and does not apply it to a full solution, so it is a single correct aspect rather than working new code; no correct new program exists to qualify for L4."}

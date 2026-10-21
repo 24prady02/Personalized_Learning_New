@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "testing array value vs index for evenness", "why": "Picks the correct line and states one correct aspect (a[i] tests the value, not the position), but does not trace the other options or apply it to values."}

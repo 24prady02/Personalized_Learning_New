@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "The answer correctly turns the if-else that assigns one of two values into the matching expression form v = c ? a : b, with the right condition and operand order."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements beyond writing one line that ends with a semicolon."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It correctly puts a single variable on the left and an expression on the right, but gives no trace of values or explanation."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Filters are not mentioned."
+  }
+ ]
+}

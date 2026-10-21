@@ -1,0 +1,1 @@
+{"level": "L2", "pick": "A", "why": "The answer walks the procedure value by value (data[0], i=1, i=2, 'and so on to the end') as separate steps; the closing 'so it prints the smallest number' merely restates the task given in the question rather than deducing the purpose from a relation such as 'min always holds the smallest seen so far', so it stays multistructural."}

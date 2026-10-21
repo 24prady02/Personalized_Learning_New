@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code gives a = 7, b = 7, c = 7, because each assignment uses the value just updated. The student answers 7, 5, 3 and explains it as 'each one gets the old value of the other', which is a swap or simultaneous-assignment idea. That is not how Java's sequential assignment works, so the answer applies a wrong rule."}

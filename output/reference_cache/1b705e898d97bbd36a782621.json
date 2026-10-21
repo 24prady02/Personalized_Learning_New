@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly says the printed values are estimates from a finite run, which is one correct aspect. They then claim that starting at page 3 would change the ranks, but the long-run ranks don't depend on the start page. Only the 100-move estimates would shift slightly. The answer gives no reasoning or tracing, so it stays at L1."}

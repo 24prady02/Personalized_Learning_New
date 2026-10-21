@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int j = 1; j <= i; j++) System.out.print(\"*\");",
+   "correct": true,
+   "why": "The student kept print as the inner loop body so the stars from one row stay on the same line, and the run confirms the output is correct."
+  },
+  {
+   "concept": "println",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "System.out.println();\n}",
+   "correct": true,
+   "why": "The student placed println inside the outer braces after the inner loop, so it ends each row once its prints are done (several prints, then one println, make one line)."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The i++ and j++ were copied from the given code, and the answer shows no reasoning about them."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The task has no separators, and the answer does not deal with the fencepost idiom."
+  }
+ ]
+}

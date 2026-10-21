@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+   "correct": true,
+   "why": "For a changed line, it names the broken rule (the missing closing quote), says the error is compile-time, and gives the message 'unclosed string literal'."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements, their order, or semicolons."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+   "correct": true,
+   "why": "It correctly diagnoses the change as a compile-time error caused by the missing closing quote and names the matching javac message."
+  }
+ ]
+}

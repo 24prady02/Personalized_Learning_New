@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A goes backwards so the total comes out different.",
+   "correct": false,
+   "why": "Adding ints in reverse order gives the same sum because integer addition is commutative, so A gives the same result. The claim that order changes the total is a wrong rule."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "'Goes backwards' says nothing about how ++ or -- works."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about char arithmetic."
+  }
+ ]
+}

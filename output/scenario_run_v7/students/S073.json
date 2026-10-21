@@ -1,0 +1,87 @@
+{
+ "student_id": "S073",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "conditional_operator": {
+   "concept": "conditional_operator",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Probe: \"If value is 1, what is result?\"",
+      "statement": "conditional operator: c ? a : b -- an expression that picks one of two values",
+      "score": 0.461
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "turn 1 result is 20",
+    "probe if value is 1 what is result",
+    "turn 2 10",
+    "oh wait then 20 40 50 so for 2 it is 50 too"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "wrong_trace"
+   ],
+   "last_turn": 1
+  },
+  "if_else_statement": {
+   "concept": "if_else_statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

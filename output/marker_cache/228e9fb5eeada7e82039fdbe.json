@@ -1,0 +1,1 @@
+{"level": "none", "concept": "Removing the negative-value check (if v >= 0)", "why": "The answer doesn't give what is printed for either input; it only describes a code change based on an assumption about rain values, so nothing can be levelled."}

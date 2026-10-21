@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Then b = t means b equals a, so both are b.",
+   "correct": false,
+   "why": "The answer treats t = a as a lasting equality, so t seems to follow a's new value. In Java, t keeps the original value of a, so b gets a's old value."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arrays or references."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+   "correct": false,
+   "why": "The answer says both variables end up holding b, but the three lines actually exchange a and b through the saved temporary t."
+  }
+ ]
+}

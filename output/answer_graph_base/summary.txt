@@ -1,0 +1,2 @@
+nli: exact 14/44, within-1 24, MAE 1.39, per level {'L0': '0/8', 'L1': '9/12', 'L2': '3/7', 'L3': '0/4', 'L4': '2/13'}, right concept in map 41/44, main concept right 24/44, right level on right concept 14/44
+full: exact 21/44, within-1 29, MAE 1.00, per level {'L0': '0/8', 'L1': '8/12', 'L2': '3/7', 'L3': '3/4', 'L4': '7/13'}, right concept in map 41/44, main concept right 24/44, right level on right concept 19/44

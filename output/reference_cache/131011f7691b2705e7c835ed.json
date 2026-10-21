@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer traces every part in order with the values: score is set to 42, the test is false so \"pass\" is skipped, then \"done\" is printed. This matches the output. It does not say what the code is for or go beyond it, so it stays at L2."}

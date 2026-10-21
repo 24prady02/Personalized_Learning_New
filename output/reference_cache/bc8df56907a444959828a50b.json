@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer only gives the correct output (6) and doesn't say what steps counts, which is the number of loop iterations (Collatz steps until n reaches 1). A bare correct result with no justification is L1."}

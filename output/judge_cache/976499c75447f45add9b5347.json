@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "1 and 2 are the same, they both add up.",
+   "correct": false,
+   "why": "It links the sum loop and the count loop as one group, but it calls them 'the same' and misses that k++ adds 1 for each match while s += v adds the value itself."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about k++ or what ++ does."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention string concatenation."
+  }
+ ]
+}

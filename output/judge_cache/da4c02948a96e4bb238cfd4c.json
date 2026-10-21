@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The if runs once at the start, when count is still 0.",
+   "correct": true,
+   "why": "The answer applies the rule to this code: the if checks its condition once, while count is 0, so the condition is false and \"big\" is never printed, even though count reaches 5 later."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Only 5.",
+   "correct": true,
+   "why": "The final count of 5 is correct, but the answer gives no reasoning about count++ running once on each of the 5 loop passes, so it is a bare result."
+  },
+  {
+   "concept": "flag_search_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a boolean search flag."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly changed `+=` to `*=`, but kept the initial value 0 from the sum example. Every product is then 0, so the code is wrong. The student also gave no explanation of what changed or why, so only one correct aspect (the operator) is shown."}

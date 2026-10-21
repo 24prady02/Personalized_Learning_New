@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "finding the minimum with a running min over an array", "why": "The answer correctly initialises min from data[0], updates it with Math.min in a for-each loop and prints it, which forms one working structure that achieves the stated purpose, but it gives no tracing or explanation to take it higher."}

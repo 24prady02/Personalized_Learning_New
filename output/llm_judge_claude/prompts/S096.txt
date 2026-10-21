@@ -1,0 +1,163 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What is a data type?
+
+CODE:
+final double TAX = 0.08;
+int a, b;
+a = b = 5;
+double total = a * 2 + 1.5;
+total = total + total * TAX;
+
+STUDENT ANSWER: A set of values plus the operations you can do on them.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: data_type
+L0 Prestructural:
+  - everyday_reading: Everyday 'type' means a kind or label (a 'whole number' is still just a number), so novices read int and double as tags on the same arithmetic. In Java the type fixes both the set of values and which operation runs: 7 / 2 on two i
+  - misconception: wrong rule: Making every variable a double is the right fix for integer division. 
+  - misconception: wrong rule: A variable declared int can hold 2.5 or "hi"; the type is only a label. 
+  boundary: Any correct, programming-specific statement about data type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Data type: a category of data defined as a set of values together with the set of operations on those values (int, double, boolean, char, String...).
+  - states_the_rule: Java is strongly typed: every variable and expression has a type known at compile time, a variable always holds a value of its type, and the compiler rejects values or operations that do not fit (int x = 1.1; does not compile).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: For each operator, the operand types are found first (after any automatic promotion), and then that type's version of the operator is applied. So in b*b - 4*c with int b and c, the whole expression is computed as int and only then
+  - output_prediction: The result type follows from the operand types: int op int gives int (7 / 2 is 3), any double operand gives double (7 / 2.0 is 3.5), and + with a String operand gives a String ("7" + 2 is "72").
+  - one_step_execution: A declaration fixes a variable's type for good. Each assignment changes only the value, never the type, and a value outside the type (a double into an int) is rejected at compile time unless it is cast.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The eight primitive types are Java's built-in data types. Each one fixes its own values and operators (boolean has && || !, int has + - * / %), so which operators are legal in an expression depends on which primitive type its oper
+  - relation_to_neighbour: A data structure such as an array holds many values of one data type. The element type limits what can be stored in a[i] and which operations apply to it.
+  - purpose_of_the_whole: Choosing a type records what a value represents (int for counts, double for measurements, boolean for conditions, String for text), so the compiler can check that operations match that intent.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-tim
+  - transfer_to_a_new_program: Think in data types whenever you declare a variable or read an expression. Use the built-in primitive types for single numbers, characters and truth values, String for text, and an array or another class when no single built-in ty
+  - diagnose_an_error: rule broken: A value can be stored only in a variable whose type can hold it without loss; narrowing needs an explicit cast. Kind: compile-time. Trigger class: Assigning a double (or long) expression to an int variable, e.g. int x
+  - diagnose_an_error: rule broken: An operator is defined only for certain types. Kind: compile-time. Trigger class: Applying an operator to a type that lacks it: "Hello" - 1, s < t on Strings, !5: 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: arithmetic_operators
+L0 Prestructural:
+  - everyday_reading: In maths notation, multiplication can be implicit (2x), ^ or a superscript means a power, ÷ is exact division, and % means percent. In Java * must be written, / depends on the operand types, % is the remainder, and there is no pow
+  - misconception: wrong rule: a^2 computes a squared. 
+  - misconception: wrong rule: "10" - 1 or "6" * "2" works because the strings look like numbers. 
+  boundary: Any correct, programming-specific statement about arithmetic operators makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Arithmetic operators: the binary operators + - * / % that combine two numeric operands into a numeric result.
+  - states_the_rule: Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The left operand is evaluated fully, then the right operand, and then the operator is applied in the promoted type.
+  - output_prediction: With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).
+  - one_step_execution: An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Operators build larger expressions from smaller ones, and each operand can itself be any expression.
+  - relation_to_neighbour: For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.
+  - relation_to_neighbour: int / or % by zero throws a run-time exception, while floating-point division by zero gives Infinity or NaN.
+  - relation_to_neighbour: + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+  - transfer_to_a_new_program: Use the operators for arithmetic on numeric types. Use the Math library for powers, roots and absolute values, and parse numeric Strings before computing with them.
+  - diagnose_an_error: rule broken: int / and % by zero are undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0 (empty count, zero input): ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: Arithmetic operators other than + are not defined for Strings. Kind: compile-time. Trigger class: "10" - 1 or "6" * "2": 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: assignment
+L0 Prestructural:
+  - everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). 
+  - misconception: wrong rule: = stores the expression itself, not its computed value. 
+  - misconception: wrong rule: = compares two values instead of assigning. 
+  - misconception: wrong rule: an assignment cannot be used inside a larger expression. 
+  - misconception: wrong rule: a = b copies the value of a into b. 
+  - misconception: wrong rule: a = b adds the value of b to the value already in a (the accumulator model). 
+  boundary: Any correct, programming-specific statement about assignment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable.
+  - states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.
+  - output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned.
+  - one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes.
+  - relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile.
+  - relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
+  - relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary.
+  - diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a;
+  - transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e.
+  - diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclos
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: array_initializer
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths, braces {1, 2, 3} denote a set (unordered, no repeats) and brackets [1, 2, 3] a list, so novices write int[] a = [1, 2, 3] or expect {1, 1, 2} to have 2 elements. 
+  - misconception: wrong rule: Initializer values go in [] instead of {}. 
+  - misconception: wrong rule: The number of brackets in an array type or initializer is the array's length. 
+  boundary: Any correct, programming-specific statement about array initializer makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: an array initializer is a brace-enclosed, comma-separated list of values that creates and fills an array in one step.
+  - states_the_rule: Declarative: 'T[] a = {v0, ..., vk};' declares, creates (no new needed) and initializes an array of length k+1. For 2-D arrays each row is its own brace list. The bare form is legal only in a declaration; elsewhere write new T[]{.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a.
+  - output_prediction: Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4.
+  - one_step_execution: State transition: one execution creates one array holding the listed values and sets the variable to its reference.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An initializer implies array creation: it is shorthand for new T[k+1] followed by k+1 element assignments, so new is not written.
+  - purpose_of_the_whole: Plan/role: build small fixed tables of constants known when the program is written (suits, ranks, month names), usually used as fixed-value lookup tables.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value.
+  - transfer_to_a_new_program: Applicability: use an initializer when all values are known at compile time and the array is small. When the values must be computed at run time, create the array with new and fill it in a loop.
+  - diagnose_an_error: rule broken: Initializer values are enclosed in braces. Kind: compile-time. Trigger class: brackets are used, as in int[] a = [1, 2, 3]; (illegal start of expression)
+  - diagnose_an_error: rule broken: The bare {...} form is allowed only in a declaration. Kind: compile-time. Trigger class: a = {1, 2, 3}; used as a later assignment (array constants can only be used in initializers)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: data_type, arithmetic_operators, assignment, array_initializer.

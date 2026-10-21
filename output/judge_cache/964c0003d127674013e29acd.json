@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention assignment or how n and steps are updated."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no string literal in the code, and the answer doesn't mention one."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "For n = 10 it prints 6.",
+   "correct": true,
+   "why": "The result is correct (10→5→16→8→4→2→1 takes 6 passes), but it is given with no trace or reasoning, and the answer never says what steps counts."
+  },
+  {
+   "concept": "scientific_notation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Scientific notation doesn't appear in the code or the answer."
+  }
+ ]
+}

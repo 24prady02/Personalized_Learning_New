@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: a = b copies the value of a into b",
+   "quote": "a = 10, b = 10. The value of a goes into b.",
+   "correct": false,
+   "why": "The student says the value moves from a into b, which reverses Java assignment; a = b copies b into a, so a = 20 and b = 20."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives values but says nothing about what a variable is or how it holds values; its only reasoning is about which way assignment goes."
+  }
+ ]
+}

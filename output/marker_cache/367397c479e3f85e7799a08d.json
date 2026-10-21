@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop invariant and final value of p (largest power of 2 ≤ n)", "why": "The answer applies a wrong rule: p doubles from 1 and never reaches 37, so it ends at 32 when p*2 > n, and it gives no invariant."}

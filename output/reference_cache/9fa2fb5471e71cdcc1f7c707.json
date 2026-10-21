@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer gives one correct idea: in r, casting i makes the division a double division. It doesn't contrast this with q, where the cast comes after the integer division 7/2 = 3. It also skips every other part (a, b, d, e, f)."}

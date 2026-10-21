@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about a counter set before a loop and increased on matching passes."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "Is count++ the same as count += 1?",
+   "correct": false,
+   "why": "It only asks a question about count++ and makes no claim about what ++ does, so there is no rule or reasoning to grade."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "Is count++ the same as count += 1?",
+   "correct": false,
+   "why": "It mentions count += 1 only inside a question and never says what += does."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about storing a value with =, such as count = count + 1."
+  }
+ ]
+}

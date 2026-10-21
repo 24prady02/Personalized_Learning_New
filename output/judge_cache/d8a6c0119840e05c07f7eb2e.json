@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "b / 2 is 3, because Java rounds down.",
+   "correct": true,
+   "why": "The answer works out this code's int division (7 / 2 = 3) and gives a reason: the fraction is dropped. For a positive number, rounding down gives the same result as rounding toward 0."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "b / 2 is 3",
+   "correct": true,
+   "why": "The answer applies / to this code's int values and gets the int result, but it says nothing about precedence or how the result relates to the + operation."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not cover how a + b / 2 is grouped or what type the full expression has."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about names or identifiers."
+  }
+ ]
+}

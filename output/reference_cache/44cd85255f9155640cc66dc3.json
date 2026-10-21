@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer is a bare correct result (a = 20, b = 20 after a = b) with no value-by-value justification of the assignment, and the boundary rule says a correct output with no justification is not levelled above L1."}

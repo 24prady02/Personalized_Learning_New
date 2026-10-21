@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Rewriting nested if/else as an else-if chain (mutually exclusive branches)", "why": "The student replaced the else with a separate if, so for x > 0 it prints both \"pos\" and \"zero\", which changes the behaviour. This shows a wrong rule about how if and else pair up."}

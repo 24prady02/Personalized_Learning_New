@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Relates making an operand double to keeping the fraction in division."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+   "correct": true,
+   "why": "Diagnoses the int division in an average and fixes it by making one operand a double."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Correctly relates parentheses to overriding precedence in the grouping."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

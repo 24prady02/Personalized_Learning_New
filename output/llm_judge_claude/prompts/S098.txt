@@ -1,0 +1,153 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What is  Math.abs(Integer.MIN_VALUE) ?
+
+CODE:
+int max = Integer.MAX_VALUE;   // 2147483647
+int over = max + 1;
+long big = max + 1L;
+int neg = -7 / 2;
+int rem = -7 % 2;
+int sq = 3 ^ 2;
+
+STUDENT ANSWER: Still -2147483648, because +2147483648 does not fit in an int.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: integer_constants
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'maximum' is a ceiling that nothing can pass (like a full tank, adding more leaves it full) and an absolute value is never negative. 
+  boundary: Any correct, programming-specific statement about integer constants makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: Integer.MAX_VALUE and Integer.MIN_VALUE are named constants of the wrapper class Integer: the largest int, 2147483647 (2^31 - 1), and the smallest int, -2147483648 (-2^31).
+  - states_the_rule: Each wrapper class defines MIN_VALUE and MAX_VALUE; for int the range is -2147483648 to 2147483647 inclusive, and results outside it are truncated (wrap) without any error signal.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The constant is read like a variable when its expression is evaluated; then operators are applied in precedence order, left operand first, each in 32-bit int arithmetic, wrapping at each step that leaves the range.
+  - output_prediction: Type int, value wrapped modulo 2^32: Integer.MAX_VALUE + 1 is -2147483648, Integer.MIN_VALUE - 1 is 2147483647, 2 * Integer.MAX_VALUE is -2, and Math.abs(Integer.MIN_VALUE) is -2147483648.
+  - one_step_execution: Reading the constant changes nothing (it is final); after int a = Integer.MAX_VALUE; a = a + 1; the variable a holds Integer.MIN_VALUE, and no exception is raised.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Integer.MAX_VALUE marks the overflow boundary: an int result past it wraps to a negative value, so a test such as sum > Integer.MAX_VALUE on an int is always false; an overflow guard must test before the operation (e.g. a > Intege
+  - purpose_of_the_whole: Used as the initial value of a most-wanted holder (Sajaniemi): max = Integer.MIN_VALUE (or min = Integer.MAX_VALUE) so the first real value always replaces it; also used as limits in overflow guards.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing the type from int to long moves the wrap point from 2^31 to 2^63 but does not remove it; replacing the initial max = Integer.MIN_VALUE by max = 0 breaks the search for all-negative inputs. Invariant: the range is asymmetr
+  - transfer_to_a_new_program: Use Integer.MAX_VALUE / MIN_VALUE as sentinels for min/max searches and as bounds in overflow checks instead of typing digits; when values can approach the limits, switch to long rather than relying on the int constants.
+  - diagnose_an_error: rule broken: int arithmetic stays within Integer.MIN_VALUE..Integer.MAX_VALUE by wrapping, without error. Kind: silent logic error. Trigger class: Any int computation whose true result exceeds Integer.MAX_VALUE or is below Integer
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: int
+L0 Prestructural:
+  - everyday_reading: In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.
+  - misconception: wrong rule: 10 / 3 evaluates to 3.333. 
+  - misconception: wrong rule: An int result that is too large is automatically stored as a bigger number. 
+  boundary: Any correct, programming-specific statement about int makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: int: Java's 32-bit signed integer primitive type.
+  - states_the_rule: int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.
+  - output_prediction: The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.
+  - one_step_execution: An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.
+  - relation_to_neighbour: int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.
+  - relation_to_neighbour: In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.
+  - relation_to_neighbour: Because int has a fixed 32-bit range, results outside it wrap around silently.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).
+  - transfer_to_a_new_program: Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.
+  - diagnose_an_error: rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped,
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: int_literal_limit
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths any string of digits names a number, and a very large number simply 'becomes' a bigger kind of number. 
+  - misconception: wrong rule: A large integer literal is automatically long. 
+  boundary: Any correct, programming-specific statement about int literal limit makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: An int literal is a lexical constant: a source-code representation of an int value, written as decimal digits (optionally signed) whose value lies within the int range.
+  - states_the_rule: A digit sequence is an int literal only when its decimal value lies between -2147483648 and 2147483647 inclusive; the magnitude 2147483648 may appear only as -2147483648; larger literals need the long suffix L.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: At compile time the compiler reads the digit token, converts it to a value and checks the range; at run time the literal is simply evaluated to that fixed value, and a leading minus is applied as unary negation to the literal's va
+  - output_prediction: A legal int literal evaluates to the int value it denotes (2147483647 is int 2147483647; -2147483648 is int Integer.MIN_VALUE); an out-of-range literal has no value because the program does not compile.
+  - one_step_execution: Evaluating a literal changes no variable and always yields the same int; in int x = 2147483647; the only state change is x receiving that value.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The general literal rule (a source-code representation of a value) is constrained here by int's range: a digit sequence outside -2147483648..2147483647 is not a valid int literal and must be written as a long literal with L.
+  - relation_to_neighbour: The literal limit is exactly int's 32-bit range, but it is checked only for literals: the literal 2147483648 is a compile-time error, whereas the expression 2147483647 + 1 compiles and overflows at run time to -2147483648.
+  - purpose_of_the_whole: Used to write a fixed integer constant directly in code (Sajaniemi role: fixed value), including the extreme values; for the limits themselves the named constants Integer.MAX_VALUE and Integer.MIN_VALUE are clearer.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding one digit or one unit can push a literal out of range (2147483647 compiles, 2147483648 does not), and adding a leading minus can bring it back (-2147483648 compiles); rewriting the literal as the expression 2147483647 + 1 c
+  - transfer_to_a_new_program: Use a plain int literal for whole-number constants comfortably inside about plus or minus 2.1 billion; when values may reach ten digits use long with L-suffixed literals; for the extreme values use Integer.MAX_VALUE and Integer.MI
+  - diagnose_an_error: rule broken: An int literal must lie within the int range. Kind: compile-time. Trigger class: A digit sequence (without L) whose value exceeds 2147483647, or 2147483648 written without a leading minus, e.g. int big = 3000000000; (
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: long_type
+L0 Prestructural:
+  - everyday_reading: In English 'long' just means lengthy, so novices expect any big number to become a long automatically. In Java long is a separate 64-bit type that must be declared, and an integer literal outside the int range needs the L suffix.
+  - misconception: wrong rule: a large integer literal is automatically long. 
+  boundary: Any correct, programming-specific statement about long type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: long: Java's 64-bit signed integer primitive type.
+  - states_the_rule: long ranges from -9223372036854775808 to 9223372036854775807, and its literals end in L. An integer operation with at least one long operand is done in 64 bits and gives a long. int widens to long automatically, but long to int ne
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: In a mixed expression each operation checks its own operands. Only operations with a long operand run in 64 bits, so pure-int subexpressions that came earlier were already computed in 32 bits.
+  - output_prediction: 2147483647L + 1 is the long 2147483648. Math.round(3.14159) has type long and value 3.
+  - one_step_execution: Assigning to a long variable stores a 64-bit value. Storing a long in an int requires an (int) cast, which keeps only the low 32 bits.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: long is the wider integer type: an int widens to long automatically, and mixing an int with a long in an operation gives a long.
+  - purpose_of_the_whole: long holds huge integers: counts or sums beyond 2 billion, factorials up to 20!, products of large ints, and times in milliseconds.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing int to long removes overflow below about 9.2e18, but a literal product is still computed in int unless one operand is long (1000000 * 1000000 overflows, while 1000000L * 1000000 does not).
+  - transfer_to_a_new_program: Use long when integer values may reach ten digits or more, and int otherwise. Use BigInteger beyond long's range, and double for non-integers.
+  - diagnose_an_error: rule broken: A long value needs an explicit cast to be stored in an int. Kind: compile-time. Trigger class: int r = Math.round(x); or int n = someLong;: 'possible lossy conversion from long to int'.
+  - diagnose_an_error: rule broken: An integer literal outside the int range needs an L suffix. Kind: compile-time. Trigger class: long big = 3000000000;: 'integer number too large'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: integer_constants, int, int_literal_limit, long_type.

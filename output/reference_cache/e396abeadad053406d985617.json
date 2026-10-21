@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student gets the array part right: b is an alias of a, so a[0] is 9. But they apply the same linking rule to the ints and say x is 7 because 'y = x links them'. In Java, y = x copies the value 5, so x stays 5 after y = 7. This is a wrong rule for primitive assignment, not a slip in an otherwise correct trace."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code prints \"ababab\", because each of the 3 iterations runs both prints in order. The student's \"aaabbb\" treats the body as if each statement had its own loop. That contradicts how a Java for loop runs its body, so it is a wrong rule, not a slip in a correct trace."}

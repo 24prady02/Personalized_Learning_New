@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment direction (a = b copies b into a)", "why": "The answer gives a = 10, b = 10 and says a's value goes into b, which reverses the assignment rule. The correct result is a = 20, b = 20."}

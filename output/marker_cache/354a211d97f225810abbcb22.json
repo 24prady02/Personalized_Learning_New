@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "adapting sum loop to product (identity value and operator)", "why": "The answer gives correct code and relates the change of initial value to the operator, explaining that starting at 0 would make every product 0, but it stays within the given code and does not generalise (e.g. empty array, overflow)."}

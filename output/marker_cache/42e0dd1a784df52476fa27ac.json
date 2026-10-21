@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment a = b (value copy)", "why": "The student applies a wrong rule, saying b becomes 0 because the 20 'moved', but assignment copies the value and b stays 20."}

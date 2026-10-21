@@ -1,0 +1,4 @@
+{"concepts":[
+{"concept":"de_morgan","level":"none","way":"","quote":"","correct":false,"why":"The answer keeps !( ) and does not apply or state De Morgan's laws."},
+{"concept":"boolean_expression","level":"L0","way":"everyday_reading","quote":"!(5 < n < 10)","correct":false,"why":"It uses the maths chained range 5 < n < 10, which is not a legal Java boolean expression."}
+]}

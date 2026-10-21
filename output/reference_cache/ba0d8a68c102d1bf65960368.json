@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student treats 'done' as part of the if because of its indentation, but without braces only the 'big' line belongs to the if. For `java Order 3` the real output is 'start' then 'done', so the trace uses a wrong rule. The student also doesn't answer the `five` case, where parseInt throws NumberFormatException before anything prints."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "two_dimensional_array",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "correct": true,
+   "why": "The answer gives each row its own length, which implies that rows are separate arrays and can differ in length (a ragged array), but it does not say this outright."
+  },
+  {
+   "concept": "length_field",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "For new code that must work on any 2-D array, it correctly uses a[i].length as each row's bound instead of a fixed a[0].length."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a[0].length ... a[i].length",
+   "correct": true,
+   "why": "It uses a[i] to mean a row but never says why or how indexing works, so it only names the element."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arrays with three or more dimensions."
+  }
+ ]
+}

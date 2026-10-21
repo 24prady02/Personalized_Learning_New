@@ -1,0 +1,1 @@
+{"level": "L0", "why": "Choosing A is wrong: `i % 2 == 0` tests the index, not the element `a[i]`, so it counts even positions rather than even values. The reason 'i goes through the array' reads `i` as if it were the array's contents, which is a wrong rule for this code."}

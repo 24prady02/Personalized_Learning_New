@@ -1,0 +1,1 @@
+{"level": "none", "why": "unparsed: {\"level\":\"L2\",\"concept\":\"Nested loop iteration count and scaling with n\",\"why\":\"Gives the correct count n² = 1,000,000 but the doubling claim is wrong (it quadruples), so it applies a wrong rule to th"}

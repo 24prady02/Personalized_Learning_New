@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly names the operation (9 mod 5 is added to num3) but gives no values: they never get 4, never get 30.3, and cannot say what 17 % 5 is in either probe. This is one correct aspect, the structure, with no value-by-value application, so it is L1."}

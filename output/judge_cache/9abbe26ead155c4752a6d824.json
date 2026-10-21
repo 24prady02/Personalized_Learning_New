@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "    System.out.print(\"*\");",
+   "correct": true,
+   "why": "The answer indents the print call under the inner loop, which is right, but it says nothing about how print works."
+  },
+  {
+   "concept": "println",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "  System.out.println();",
+   "correct": false,
+   "why": "The answer adds no braces, so indenting println does not put it inside the outer loop: it runs once after both loops and the output is ****** on one line, not three lines."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer copies i++ and j++ unchanged and says nothing about them."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention a fencepost or loop-and-a-half pattern."
+  }
+ ]
+}

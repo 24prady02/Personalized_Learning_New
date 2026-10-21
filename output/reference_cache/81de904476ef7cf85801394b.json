@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims println puts the break after 'the longest string', which is a wrong rule: println ends the line after its own argument whatever its length. The line break position is right by coincidence, and the answer doesn't trace the print/println calls or give the output."}

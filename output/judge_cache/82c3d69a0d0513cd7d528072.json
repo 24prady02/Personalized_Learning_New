@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "B (a[0]), D, A (<, a[i]), C",
+   "correct": true,
+   "why": "The answer uses a[0] for the first element and a[i] for the element at the loop index, both correct zero-based indexing, but gives no trace or reasoning, so it is only a bare result."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "B (a[0])",
+   "correct": true,
+   "why": "Declaring max before the loop with the first element as its starting value is correct, but nothing about its changing value is traced or explained."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A (<, a[i])",
+   "correct": true,
+   "why": "Filling max = a[i] is a correct assignment, but the '<' comparison makes the code keep the smallest value, not the largest, so the task's goal fails and no reasoning is given."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer has a 1-D array only and says nothing about row-major or column-major order."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer says A, B and C give the same sum and treats B as just starting the count at 1. But B starts at i = 1 and runs to i <= a.length, so it skips a[0] and reads a[a.length], which throws ArrayIndexOutOfBoundsException. The answer misreads the loop bounds and gives a wrong result with a wrong rule."}

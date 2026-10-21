@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "Make sum, then read and add in a loop.",
+   "correct": true,
+   "why": "It puts the steps of this code in a correct order: create sum before the loop, then add to it inside the loop. It never says why, so it is not relational."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "read and add in a loop",
+   "correct": true,
+   "why": "It only says a read happens. It says nothing about how StdIn takes tokens from the stream."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "read and add in a loop",
+   "correct": true,
+   "why": "It names a loop whose body reads and processes a value, but it never mentions the isEmpty() test or how the passes run."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about string conversion."
+  }
+ ]
+}

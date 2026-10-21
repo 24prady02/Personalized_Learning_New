@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims b holds its own copy of the numbers (no arrow), which contradicts Java's reference rule: b = a copies the reference, so a and b point to the same array. The answer also never gives the final a[0] (9) or x (5)."}

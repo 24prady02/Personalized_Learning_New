@@ -1,0 +1,2657 @@
+[
+ {
+  "id": "S088",
+  "expected": "L2",
+  "text": "There is a Big.class file now, but nothing is printed because the program has not run yet.",
+  "asked": "After javac Big.java succeeds, what has happened and what has not?",
+  "concepts": [
+   "program_text",
+   "compile",
+   "class_declaration"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "compile",
+   "run"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "program_text",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "There is a Big.class file now, but nothing is printed because the program has not run yet",
+     "correct": true,
+     "why": "Correctly states the result of the text is Big.class and output only appears when it is run."
+    },
+    {
+     "concept": "compile",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "There is a Big.class file now, but nothing is printed",
+     "correct": true,
+     "why": "Correctly applies that a successful javac produces Big.class and prints no program output."
+    },
+    {
+     "concept": "class_declaration",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "program_text": "L2",
+   "compile": "L2"
+  },
+  "final": {
+   "program_text": "L2",
+   "compile": "L2"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S089",
+  "expected": "L3",
+  "text": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+  "asked": "Why would compiling and testing in small steps have helped?",
+  "concepts": [
+   "incremental_development",
+   "compile",
+   "compile_time_error"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "incremental_development"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "incremental_development",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+     "correct": true,
+     "why": "Relates small steps to local debugging: the newest code is where the error is."
+    },
+    {
+     "concept": "compile",
+     "level": "L4",
+     "way": "transfer_to_a_new_program",
+     "quote": "If you compile after every few lines, each error is next to the code you just wrote",
+     "correct": true,
+     "why": "States the practice of compiling often so each error is found close to its cause."
+    },
+    {
+     "concept": "compile_time_error",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "incremental_development": "L3",
+   "compile": "L4"
+  },
+  "final": {
+   "incremental_development": "L3",
+   "compile": "L4"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S090",
+  "expected": "L1",
+  "text": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+  "asked": "Name the part  public class Hello { ... }  and say which file it must be in.",
+  "concepts": [
+   "class_declaration",
+   "main_method"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "class_declaration"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "class_declaration",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+     "correct": true,
+     "why": "Names the class declaration and correctly relates the class name to the file name Hello.java."
+    },
+    {
+     "concept": "main_method",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "class_declaration": "L3"
+  },
+  "final": {
+   "class_declaration": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S091",
+  "expected": "L4",
+  "text": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+  "asked": "A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+  "concepts": [
+   "string_literal",
+   "println",
+   "standard_output",
+   "compile_time_error"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "compile_time_error",
+   "string_literal"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "string_literal",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+     "correct": true,
+     "why": "Correctly diagnoses the missing closing quote as a compile-time unclosed string literal error."
+    },
+    {
+     "concept": "println",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "standard_output",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "compile_time_error",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+     "correct": true,
+     "why": "Identifies the rule broken, the compile-time kind and the compiler message for the new code."
+    }
+   ]
+  },
+  "levels": {
+   "string_literal": "L4",
+   "compile_time_error": "L4"
+  },
+  "final": {
+   "string_literal": "L4",
+   "compile_time_error": "L4"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S093",
+  "expected": "L4",
+  "text": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+  "asked": "Fix it so it prints 5.5.",
+  "concepts": [
+   "double",
+   "integer_division",
+   "expression",
+   "run_time_error"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "integer_division",
+   "operator_precedence"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "double",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "2.0 so the division is not integer division",
+     "correct": true,
+     "why": "Relates making an operand double to keeping the fraction in division."
+    },
+    {
+     "concept": "integer_division",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+     "correct": true,
+     "why": "Diagnoses the int division in an average and fixes it by making one operand a double."
+    },
+    {
+     "concept": "expression",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "parentheses for the order",
+     "correct": true,
+     "why": "Correctly relates parentheses to overriding precedence in the grouping."
+    },
+    {
+     "concept": "run_time_error",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "double": "L3",
+   "integer_division": "L4",
+   "expression": "L3"
+  },
+  "final": {
+   "double": "L3",
+   "integer_division": "L4",
+   "expression": "L3"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S094",
+  "expected": "L4",
+  "text": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+  "asked": "What happens with  java Twice  (no argument)?",
+  "concepts": [
+   "command_line_args",
+   "run",
+   "class_declaration",
+   "args_length"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "array_bounds",
+   "command_line_args"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "command_line_args",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "args is empty and args[0] is out of bounds",
+     "correct": true,
+     "why": "Correctly diagnoses that args[0] does not exist when no argument is typed."
+    },
+    {
+     "concept": "run",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "It crashes when it runs",
+     "correct": true,
+     "why": "Correctly places the error at run time, while java Twice executes."
+    },
+    {
+     "concept": "class_declaration",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "args_length",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "because args is empty and args[0] is out of bounds",
+     "correct": true,
+     "why": "Correctly diagnoses reading args[0] with zero arguments as an out-of-bounds run-time error."
+    }
+   ]
+  },
+  "levels": {
+   "command_line_args": "L4",
+   "run": "L3",
+   "args_length": "L4"
+  },
+  "final": {
+   "command_line_args": "L4",
+   "run": "L3",
+   "args_length": "L4"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S095",
+  "expected": "L1",
+  "text": "String; it is a class. The other four are primitive.",
+  "asked": "Which of int, double, boolean, char, String is not a primitive type?",
+  "concepts": [
+   "primitive_type",
+   "string_type",
+   "primitive_vs_reference",
+   "data_type"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "primitive_type",
+   "primitive_vs_reference",
+   "string_type"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "primitive_type",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "String; it is a class. The other four are primitive.",
+     "correct": true,
+     "why": "Correctly identifies which of the listed types are primitive."
+    },
+    {
+     "concept": "string_type",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "String; it is a class.",
+     "correct": true,
+     "why": "Correctly names String as a non-primitive class type."
+    },
+    {
+     "concept": "primitive_vs_reference",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "data_type",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "primitive_type": "L1",
+   "string_type": "L1"
+  },
+  "final": {
+   "primitive_type": "L1",
+   "string_type": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S096",
+  "expected": "L1",
+  "text": "A set of values plus the operations you can do on them.",
+  "asked": "What is a data type?",
+  "concepts": [
+   "data_type",
+   "arithmetic_operators",
+   "assignment",
+   "array_initializer"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "data_type"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "data_type",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "A set of values plus the operations you can do on them.",
+     "correct": true,
+     "why": "Gives the correct definition of a data type, not applied to the code."
+    },
+    {
+     "concept": "arithmetic_operators",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "assignment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "array_initializer",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "data_type": "L1"
+  },
+  "final": {
+   "data_type": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S097",
+  "expected": "L2",
+  "text": "67, a tab, C; then A12; then 662.",
+  "asked": "Give the three lines printed.",
+  "concepts": [
+   "escape_sequences",
+   "empty_statement",
+   "char_arithmetic",
+   "command_line_args"
+  ],
+  "facts": [
+   "CORRECT ('67, a tab, C;'): confirmed by the run: prints 67 C",
+   "CORRECT ('then A12;'): confirmed by the run: prints A12",
+   "CORRECT ('then 662.'): confirmed by the run: prints 662"
+  ],
+  "run_l0": [],
+  "gold": [
+   "char_arithmetic",
+   "escape_sequences"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "escape_sequences",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "67, a tab, C",
+     "correct": true,
+     "why": "Correctly reads \t as a tab but gives only a bare result without reasoning."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "char_arithmetic",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "67, a tab, C; then A12; then 662.",
+     "correct": true,
+     "why": "The outputs are confirmed correct but given bare, with no reasoning."
+    },
+    {
+     "concept": "command_line_args",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "escape_sequences": "L1",
+   "char_arithmetic": "L1"
+  },
+  "final": {
+   "escape_sequences": "L1",
+   "char_arithmetic": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S098",
+  "expected": "L4",
+  "text": "Still -2147483648, because +2147483648 does not fit in an int.",
+  "asked": "What is  Math.abs(Integer.MIN_VALUE) ?",
+  "concepts": [
+   "integer_constants",
+   "int",
+   "int_literal_limit",
+   "long_type"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "int",
+   "overflow"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "integer_constants",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+     "correct": true,
+     "why": "Correct value of Math.abs(Integer.MIN_VALUE), justified by the int range."
+    },
+    {
+     "concept": "int",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "because +2147483648 does not fit in an int",
+     "correct": true,
+     "why": "Correctly applies the fixed int range to explain the result staying negative."
+    },
+    {
+     "concept": "int_literal_limit",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "long_type",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "integer_constants": "L2",
+   "int": "L2"
+  },
+  "final": {
+   "integer_constants": "L2",
+   "int": "L2"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S101",
+  "expected": "L1",
+  "text": "It gives true when the two sides are different.",
+  "asked": "What does ^ do on two booleans?",
+  "concepts": [
+   "exclusive_or",
+   "assignment"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "exclusive_or"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "exclusive_or",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "It gives true when the two sides are different.",
+     "correct": true,
+     "why": "States the xor rule correctly, not applied to this code."
+    },
+    {
+     "concept": "assignment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "exclusive_or": "L1"
+  },
+  "final": {
+   "exclusive_or": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S103",
+  "expected": "L4",
+  "text": "It does not compile, since round gives a long.",
+  "asked": "What does  int k2 = Math.round(2.5);  do?",
+  "concepts": [
+   "math_round",
+   "long_type",
+   "compile_time_error",
+   "explicit_cast"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "long_type",
+   "math_round"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "math_round",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "It does not compile, since round gives a long.",
+     "correct": true,
+     "why": "Correctly diagnoses the compile-time error of storing the long result of Math.round in an int."
+    },
+    {
+     "concept": "long_type",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "since round gives a long",
+     "correct": true,
+     "why": "Correctly identifies that a long cannot be stored in an int without a cast, causing a compile error."
+    },
+    {
+     "concept": "compile_time_error",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "It does not compile",
+     "correct": true,
+     "why": "Correctly predicts that this line fails to compile and gives the type reason."
+    },
+    {
+     "concept": "explicit_cast",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer does not mention a cast."
+    }
+   ]
+  },
+  "levels": {
+   "math_round": "L4",
+   "long_type": "L4",
+   "compile_time_error": "L2"
+  },
+  "final": {
+   "math_round": "L4",
+   "long_type": "L4",
+   "compile_time_error": "L2"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S104",
+  "expected": "L1",
+  "text": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+  "asked": "Which line converts automatically, and which needs a cast?",
+  "concepts": [
+   "double",
+   "type_conversion",
+   "int",
+   "data_type"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "explicit_cast",
+   "type_conversion"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "double",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "d = i happens by itself because double is bigger",
+     "correct": true,
+     "why": "Correctly applies the widening rule to the assignment of an int to the double d."
+    },
+    {
+     "concept": "type_conversion",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+     "correct": true,
+     "why": "Relates both conversion directions to type range: int to double is automatic, double to int needs a cast."
+    },
+    {
+     "concept": "int",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "going from 9.99 to int needs (int)",
+     "correct": true,
+     "why": "Correctly states that a double becomes an int only through a cast, in contrast to automatic int to double."
+    },
+    {
+     "concept": "data_type",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "going from 9.99 to int needs (int)",
+     "correct": true,
+     "why": "Applies to this code the rule that a double value goes into an int only with a cast."
+    }
+   ]
+  },
+  "levels": {
+   "double": "L2",
+   "type_conversion": "L3",
+   "int": "L3",
+   "data_type": "L2"
+  },
+  "final": {
+   "double": "L2",
+   "type_conversion": "L3",
+   "int": "L3",
+   "data_type": "L2"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S106",
+  "expected": "L2",
+  "text": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+  "asked": "List what runs, in order, and what is printed.",
+  "concepts": [
+   "if_statement",
+   "empty_statement",
+   "comment",
+   "testing"
+  ],
+  "facts": [
+   "CORRECT ('score gets 42, the if test is false so pass is skipped, then done is printed.'): confirmed by the run: score = 42"
+  ],
+  "run_l0": [],
+  "gold": [
+   "if_statement"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "if_statement",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "quote": "the if test is false so pass is skipped, then done is printed",
+     "correct": true,
+     "why": "Correct trace: the false condition skips the body and execution continues after the if."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about an empty statement."
+    },
+    {
+     "concept": "comment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about the comment."
+    },
+    {
+     "concept": "testing",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about testing."
+    }
+   ]
+  },
+  "levels": {
+   "if_statement": "L2"
+  },
+  "final": {
+   "if_statement": "L2"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S108",
+  "expected": "L2",
+  "text": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+  "asked": "Give y, w and x at the end.",
+  "concepts": [
+   "compound_assignment",
+   "loop_variable",
+   "accumulator_pattern",
+   "assignment"
+  ],
+  "facts": [
+   "CORRECT ('y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.'): confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)"
+  ],
+  "run_l0": [],
+  "gold": [
+   "increment_operators"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "compound_assignment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer does not address z += 0.5 or total += i."
+    },
+    {
+     "concept": "loop_variable",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer does not address the loop."
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer does not address total."
+    },
+    {
+     "concept": "assignment",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "quote": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+     "correct": true,
+     "why": "Correct step-by-step trace of the assignments, confirmed by the run."
+    }
+   ]
+  },
+  "levels": {
+   "assignment": "L2"
+  },
+  "final": {
+   "assignment": "L2"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S109",
+  "expected": "L4",
+  "text": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+  "asked": "What is printed for t = 5?",
+  "concepts": [
+   "nested_conditionals",
+   "if_else_statement",
+   "else_if_chain",
+   "continue_statement"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "dangling_else",
+   "nested_conditionals"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "nested_conditionals",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "the outer if fails and the else is part of the inner if",
+     "correct": true,
+     "why": "Correctly attaches the dangling else to the inner if, so nothing prints when the outer test fails."
+    },
+    {
+     "concept": "if_else_statement",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "the else is part of the inner if",
+     "correct": true,
+     "why": "Correctly states that without braces the else pairs with the innermost if."
+    },
+    {
+     "concept": "else_if_chain",
+     "level": "L1",
+     "way": "output_prediction",
+     "quote": "Nothing at all",
+     "correct": true,
+     "why": "Correct that the chain prints nothing for t = 5, but no reasoning about the chain is given."
+    },
+    {
+     "concept": "continue_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about continue."
+    }
+   ]
+  },
+  "levels": {
+   "nested_conditionals": "L3",
+   "if_else_statement": "L3",
+   "else_if_chain": "L1"
+  },
+  "final": {
+   "nested_conditionals": "L3",
+   "if_else_statement": "L3",
+   "else_if_chain": "L1"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S110",
+  "expected": "L1",
+  "text": "sum builds a total, count counts.",
+  "asked": "Which variable is an accumulator and which is a counter?",
+  "concepts": [
+   "accumulator_pattern",
+   "counter_pattern",
+   "naming_convention"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "accumulator_pattern",
+   "counter_pattern"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "accumulator_pattern",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "sum builds a total",
+     "correct": true,
+     "why": "Correctly names sum as the accumulator, without further explanation."
+    },
+    {
+     "concept": "counter_pattern",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "count counts",
+     "correct": true,
+     "why": "Correctly names count as the counter, without explaining the guard or update."
+    },
+    {
+     "concept": "naming_convention",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about naming."
+    }
+   ]
+  },
+  "levels": {
+   "accumulator_pattern": "L1",
+   "counter_pattern": "L1"
+  },
+  "final": {
+   "accumulator_pattern": "L1",
+   "counter_pattern": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S111",
+  "expected": "L4",
+  "text": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+  "asked": "A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  Find the cause by reasoning.",
+  "concepts": [
+   "math_random",
+   "random_move",
+   "explicit_cast",
+   "shuffle"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "explicit_cast",
+   "math_random",
+   "operator_precedence"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "math_random",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+     "correct": true,
+     "why": "Correctly diagnoses that casting Math.random() first always gives 0 and fixes it."
+    },
+    {
+     "concept": "random_move",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about a random move."
+    },
+    {
+     "concept": "explicit_cast",
+     "level": "L4",
+     "way": "predict_a_change",
+     "quote": "The cast happens first, so (int) Math.random() is 0 ... Cast after multiplying.",
+     "correct": true,
+     "why": "Correctly reasons that the cast applies only to the next value and that moving it after the multiplication fixes the bug."
+    },
+    {
+     "concept": "shuffle",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about shuffling."
+    }
+   ]
+  },
+  "levels": {
+   "math_random": "L4",
+   "explicit_cast": "L4"
+  },
+  "final": {
+   "math_random": "L4",
+   "explicit_cast": "L4"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S112",
+  "expected": "L3",
+  "text": "continue jumps to the next i for the even numbers, break stops the loop completely at 5.",
+  "asked": "How do break and continue differ in the first loop?",
+  "concepts": [
+   "break_statement",
+   "continue_statement",
+   "labeled_break"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "break_statement",
+   "continue_statement"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "break_statement",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "break stops the loop completely at 5",
+     "correct": true,
+     "why": "Correctly contrasts break (leaves the loop) with continue (next pass) in this loop."
+    },
+    {
+     "concept": "continue_statement",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "continue jumps to the next i for the even numbers",
+     "correct": true,
+     "why": "Correctly contrasts continue (goes to the next pass) with break (ends the loop)."
+    },
+    {
+     "concept": "labeled_break",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about the labeled loop."
+    }
+   ]
+  },
+  "levels": {
+   "break_statement": "L3",
+   "continue_statement": "L3"
+  },
+  "final": {
+   "break_statement": "L3",
+   "continue_statement": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S113",
+  "expected": "L1",
+  "text": "A loop that never stops because its condition stays true.",
+  "asked": "What is an infinite loop?",
+  "concepts": [
+   "infinite_loop",
+   "loop_control",
+   "convergence_test"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "infinite_loop"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "infinite_loop",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "A loop that never stops because its condition stays true.",
+     "correct": true,
+     "why": "Correct general definition, not applied to this code."
+    },
+    {
+     "concept": "loop_control",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about init, test or update."
+    },
+    {
+     "concept": "convergence_test",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about convergence tests."
+    }
+   ]
+  },
+  "levels": {
+   "infinite_loop": "L1"
+  },
+  "final": {
+   "infinite_loop": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S114",
+  "expected": "L3",
+  "text": "new fills the array with 0s, but a local variable has no value until you give it one.",
+  "asked": "Why can a[0] be printed when a local  int x;  without a value cannot?",
+  "concepts": [
+   "declaration",
+   "array_creation",
+   "variable",
+   "array_default_values"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "array_default_values",
+   "definite_assignment"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "declaration",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "a local variable has no value until you give it one",
+     "correct": true,
+     "why": "Correctly states that a declared local has no value until assigned."
+    },
+    {
+     "concept": "array_creation",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "new fills the array with 0s",
+     "correct": true,
+     "why": "Correctly relates creation with new to the default values in every slot."
+    },
+    {
+     "concept": "variable",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "a local variable has no value until you give it one",
+     "correct": true,
+     "why": "Correctly states that a variable must be assigned before it has a value."
+    },
+    {
+     "concept": "array_default_values",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "new fills the array with 0s, but a local variable has no value until you give it one.",
+     "correct": true,
+     "why": "Correctly contrasts array defaults set by new with unassigned locals."
+    }
+   ]
+  },
+  "levels": {
+   "declaration": "L1",
+   "array_creation": "L3",
+   "variable": "L1",
+   "array_default_values": "L3"
+  },
+  "final": {
+   "declaration": "L1",
+   "array_creation": "L3",
+   "variable": "L1",
+   "array_default_values": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S115",
+  "expected": "L2",
+  "text": "Something like [I@ and a hex code, not the numbers.",
+  "asked": "What does  System.out.println(a);  show?",
+  "concepts": [
+   "println",
+   "printing_array_reference",
+   "standard_output",
+   "literal"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "printing_array_reference"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "println",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about println itself."
+    },
+    {
+     "concept": "printing_array_reference",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "Something like [I@ and a hex code, not the numbers.",
+     "correct": true,
+     "why": "Correctly predicts the reference text for this int array instead of its elements."
+    },
+    {
+     "concept": "standard_output",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about standard output."
+    },
+    {
+     "concept": "literal",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about literals."
+    }
+   ]
+  },
+  "levels": {
+   "printing_array_reference": "L2"
+  },
+  "final": {
+   "printing_array_reference": "L2"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S116",
+  "expected": "L4",
+  "text": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+  "asked": "Write a loop that multiplies every element by 10.",
+  "concepts": [
+   "array_traversal",
+   "indexing",
+   "length_field",
+   "enhanced_for"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "array_traversal"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "array_traversal",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+     "correct": true,
+     "why": "Writes an index traversal with the correct < a.length bound that uses i as the index to write each element, which the for-each in the code cannot do."
+    },
+    {
+     "concept": "indexing",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "a[i] = a[i] * 10",
+     "correct": true,
+     "why": "Correctly reads and writes element i through a[i] on each pass."
+    },
+    {
+     "concept": "length_field",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "quote": "i < a.length",
+     "correct": true,
+     "why": "Uses a.length correctly, without parentheses, as the loop bound for this array."
+    },
+    {
+     "concept": "enhanced_for",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "array_traversal": "L3",
+   "indexing": "L2",
+   "length_field": "L2"
+  },
+  "final": {
+   "array_traversal": "L3",
+   "indexing": "L2",
+   "length_field": "L2"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S117",
+  "expected": "L1",
+  "text": "Otherwise a[i] is overwritten before it is saved.",
+  "asked": "Why is t needed in the swap?",
+  "concepts": [
+   "variable_swap",
+   "indexing",
+   "assignment",
+   "array_exchange"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "variable_swap"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "variable_swap",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "Otherwise a[i] is overwritten before it is saved.",
+     "correct": true,
+     "why": "Explains that the temporary is needed because an assignment overwrites its target, so order and saving matter."
+    },
+    {
+     "concept": "indexing",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "assignment",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "a[i] is overwritten before it is saved",
+     "correct": true,
+     "why": "Relates the need for a temporary to assignment destroying the left variable's old value."
+    },
+    {
+     "concept": "array_exchange",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "Otherwise a[i] is overwritten before it is saved.",
+     "correct": true,
+     "why": "Correctly explains why the array exchange must save a[i] in t before a[i] = a[r]."
+    }
+   ]
+  },
+  "levels": {
+   "variable_swap": "L3",
+   "assignment": "L3",
+   "array_exchange": "L3"
+  },
+  "final": {
+   "variable_swap": "L3",
+   "assignment": "L3",
+   "array_exchange": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S118",
+  "expected": "L1",
+  "text": "It is a table to look up a month name from its number.",
+  "asked": "What is months used for?",
+  "concepts": [
+   "lookup_table",
+   "indexing"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "lookup_table"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "lookup_table",
+     "level": "L3",
+     "way": "purpose_of_the_whole",
+     "quote": "It is a table to look up a month name from its number.",
+     "correct": true,
+     "why": "Correctly states the role of months as a fixed lookup table indexed by month number."
+    },
+    {
+     "concept": "indexing",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "look up a month name from its number",
+     "correct": true,
+     "why": "Implies selecting an element by its position but does not apply indexing to months[m - 1]."
+    }
+   ]
+  },
+  "levels": {
+   "lookup_table": "L3",
+   "indexing": "L1"
+  },
+  "final": {
+   "lookup_table": "L3",
+   "indexing": "L1"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S119",
+  "expected": "L1",
+  "text": "It marks whether k is not prime; everything starts as false.",
+  "asked": "What does composite[k] mean, and what is it at the start?",
+  "concepts": [
+   "boolean_flag_array",
+   "empty_statement",
+   "indexing",
+   "break_statement"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "boolean_flag_array"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "boolean_flag_array",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "It marks whether k is not prime; everything starts as false.",
+     "correct": true,
+     "why": "Correctly states the flag meaning of composite[k] and that new boolean[] starts all flags false, which the sieve relies on."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "indexing",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "It marks whether k",
+     "correct": true,
+     "why": "Recognises composite[k] as the element for value k, without further indexing reasoning."
+    },
+    {
+     "concept": "break_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "boolean_flag_array": "L3",
+   "indexing": "L1"
+  },
+  "final": {
+   "boolean_flag_array": "L3",
+   "indexing": "L1"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S120",
+  "expected": "L4",
+  "text": "No, b times a is 3 4 / 1 2, so the order matters.",
+  "asked": "Would b × a give the same c?",
+  "concepts": [
+   "multidimensional_array",
+   "array_aliasing",
+   "array_initializer",
+   "identifier"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "matrix_operations"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "multidimensional_array",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "array_aliasing",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "array_initializer",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "identifier",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {},
+  "final": {},
+  "best_judge": null,
+  "best": null
+ },
+ {
+  "id": "S121",
+  "expected": "L2",
+  "text": "42, an empty string, and \"Ann Lee\".",
+  "asked": "What are age, rest and name?",
+  "concepts": [
+   "empty_statement",
+   "token_vs_line_input",
+   "standard_input",
+   "string_literal"
+  ],
+  "facts": [
+   "CORRECT ('42, an empty string, and \"Ann Lee\".'): confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)"
+  ],
+  "run_l0": [],
+  "gold": [
+   "standard_input",
+   "token_vs_line_input"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L1",
+     "way": "output_prediction",
+     "quote": "42, an empty string, and \"Ann Lee\".",
+     "correct": true,
+     "why": "Correct values confirmed by the run, but a bare result with no reasoning is L1."
+    },
+    {
+     "concept": "standard_input",
+     "level": "L1",
+     "way": "output_prediction",
+     "quote": "42",
+     "correct": true,
+     "why": "Correct value read, given as a bare result with no reasoning."
+    },
+    {
+     "concept": "string_literal",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "token_vs_line_input": "L1",
+   "standard_input": "L1"
+  },
+  "final": {
+   "token_vs_line_input": "L1",
+   "standard_input": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S122",
+  "expected": "L3",
+  "text": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+  "asked": "Why is rest empty?",
+  "concepts": [
+   "token_vs_line_input",
+   "standard_input",
+   "empty_statement",
+   "interactive_input"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "token_vs_line_input"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "token_vs_line_input",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+     "correct": true,
+     "why": "Correctly relates the token read leaving the line separator to what the following readLine returns."
+    },
+    {
+     "concept": "standard_input",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "readInt takes 42 but not the Enter",
+     "correct": true,
+     "why": "Correctly states that the read advances past one token and leaves the rest of the line."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "interactive_input",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "token_vs_line_input": "L3",
+   "standard_input": "L2"
+  },
+  "final": {
+   "token_vs_line_input": "L3",
+   "standard_input": "L2"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S123",
+  "expected": "L4",
+  "text": "No, the user decides each time, while it is running.",
+  "asked": "A program asks \"Again? (y/n)\" in a loop. Can it know how many rounds it will run before it starts?",
+  "concepts": [
+   "interactive_input",
+   "comment",
+   "empty_statement",
+   "if_statement"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "interactive_input"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "interactive_input",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "No, the user decides each time, while it is running.",
+     "correct": true,
+     "why": "Correctly relates reads during execution to the loop's control flow being chosen by each reply."
+    },
+    {
+     "concept": "comment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    },
+    {
+     "concept": "if_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "interactive_input": "L3"
+  },
+  "final": {
+   "interactive_input": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S124",
+  "expected": "L1",
+  "text": "It reads from standard input and writes to standard output.",
+  "asked": "What makes this program a filter?",
+  "concepts": [
+   "standard_output",
+   "standard_input",
+   "filter",
+   "formatted_output"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "filter"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "standard_output",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "writes to standard output",
+     "correct": true,
+     "why": "Names standard output as the destination without applying it to the code's output."
+    },
+    {
+     "concept": "standard_input",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "It reads from standard input",
+     "correct": true,
+     "why": "Names standard input as the source without further reasoning."
+    },
+    {
+     "concept": "filter",
+     "level": "L1",
+     "way": "states_the_rule",
+     "quote": "It reads from standard input and writes to standard output.",
+     "correct": true,
+     "why": "States the definition of a filter but does not mention the test or relate it to this code or the pipe."
+    },
+    {
+     "concept": "formatted_output",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "standard_output": "L1",
+   "standard_input": "L1",
+   "filter": "L1"
+  },
+  "final": {
+   "standard_output": "L1",
+   "standard_input": "L1",
+   "filter": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S125",
+  "expected": "L4",
+  "text": "The circles are never erased, so you get a trail.",
+  "asked": "What happens without StdDraw.clear()?",
+  "concepts": [
+   "standard_drawing",
+   "animation",
+   "drawing_shapes",
+   "coordinate_scaling"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "animation"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "standard_drawing",
+     "level": "L2",
+     "way": "one_step_execution",
+     "quote": "The circles are never erased",
+     "correct": true,
+     "why": "Correctly implies each drawing command adds marks that stay on the canvas."
+    },
+    {
+     "concept": "animation",
+     "level": "L4",
+     "way": "predict_a_change",
+     "quote": "The circles are never erased, so you get a trail.",
+     "correct": true,
+     "why": "Correctly predicts that removing clear() leaves a track of earlier frames."
+    },
+    {
+     "concept": "drawing_shapes",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "The circles",
+     "correct": true,
+     "why": "Only names the drawn circles."
+    },
+    {
+     "concept": "coordinate_scaling",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "standard_drawing": "L2",
+   "animation": "L4",
+   "drawing_shapes": "L1"
+  },
+  "final": {
+   "standard_drawing": "L2",
+   "animation": "L4",
+   "drawing_shapes": "L1"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S126",
+  "expected": "L4",
+  "text": "You need System.exit(0) at the end of main.",
+  "asked": "It plays, but the terminal does not come back. Why?",
+  "concepts": [
+   "standard_audio",
+   "end_of_input"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "standard_audio"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "standard_audio",
+     "level": "L3",
+     "way": "diagnose_an_error",
+     "quote": "You need System.exit(0) at the end of main.",
+     "correct": true,
+     "why": "Gives the correct fix for this given failing case, which the boundary places at L3, without stating the rule."
+    },
+    {
+     "concept": "end_of_input",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": true,
+     "why": "The answer says nothing about this concept."
+    }
+   ]
+  },
+  "levels": {
+   "standard_audio": "L3"
+  },
+  "final": {
+   "standard_audio": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S127",
+  "expected": "L1",
+  "text": "Page 2, it links nowhere.",
+  "asked": "Which page is dangling?",
+  "concepts": [
+   "comment",
+   "dangling_pages",
+   "input_graph",
+   "teleportation"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "dangling_pages"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "comment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about comments."
+    },
+    {
+     "concept": "dangling_pages",
+     "level": "L1",
+     "way": "names_the_element",
+     "quote": "Page 2, it links nowhere.",
+     "correct": true,
+     "why": "Correctly identifies the page with no outgoing links as dangling, but says nothing about how its row is handled."
+    },
+    {
+     "concept": "input_graph",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer does not discuss the input format or the link pairs."
+    },
+    {
+     "concept": "teleportation",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about the random leap."
+    }
+   ]
+  },
+  "levels": {
+   "dangling_pages": "L1"
+  },
+  "final": {
+   "dangling_pages": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S128",
+  "expected": "L2",
+  "text": "About 0.48, 0.03, 0.48.",
+  "asked": "Give row 1 of p.",
+  "concepts": [
+   "comment",
+   "two_dimensional_array",
+   "transition_matrix",
+   "arithmetic_operators"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "matrix_operations",
+   "transition_matrix"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "comment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about comments."
+    },
+    {
+     "concept": "two_dimensional_array",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about the array structure."
+    },
+    {
+     "concept": "transition_matrix",
+     "level": "L1",
+     "way": "output_prediction",
+     "quote": "About 0.48, 0.03, 0.48.",
+     "correct": true,
+     "why": "The values match .90/2 + .10/3 and .10/3, but they are a bare result with no reasoning, so L1."
+    },
+    {
+     "concept": "arithmetic_operators",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "No arithmetic is shown or explained."
+    }
+   ]
+  },
+  "levels": {
+   "transition_matrix": "L1"
+  },
+  "final": {
+   "transition_matrix": "L1"
+  },
+  "best_judge": "L1",
+  "best": "L1"
+ },
+ {
+  "id": "S129",
+  "expected": "L4",
+  "text": "The surfer gets trapped in that group and the other pages get rank 0.",
+  "asked": "Without the 10% jump, what can happen with a group of pages that only link to each other?",
+  "concepts": [
+   "input_graph",
+   "comment",
+   "remainder_operator",
+   "frequency_counting"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "teleportation"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "input_graph",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer does not discuss the input format."
+    },
+    {
+     "concept": "comment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about comments."
+    },
+    {
+     "concept": "remainder_operator",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer does not use the % operator."
+    },
+    {
+     "concept": "frequency_counting",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer mentions rank but says nothing about counting visits or freq/T."
+    }
+   ]
+  },
+  "levels": {},
+  "final": {},
+  "best_judge": null,
+  "best": null
+ },
+ {
+  "id": "S132",
+  "expected": "L0",
+  "text": "a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value.",
+  "asked": "",
+  "concepts": [
+   "double",
+   "accumulator_pattern",
+   "widening_conversion"
+  ],
+  "facts": [
+   "CORRECT ('a and b are 5 and total is 11.5;'): confirmed by the run: total = 11.5",
+   "WRONG ('after the last line total is still 11.5, because it already has a value.'): stated total = 11.5 (final); the code gives total = 12.42"
+  ],
+  "run_l0": [
+   "double",
+   "accumulator_pattern"
+  ],
+  "gold": [
+   "assignment"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "double",
+     "level": "L1",
+     "way": "output_prediction",
+     "quote": "total is 11.5",
+     "correct": true,
+     "why": "The initial double value 11.5 is right (confirmed by the run) but is a bare result with no reasoning."
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "after the last line total is still 11.5, because it already has a value.",
+     "correct": false,
+     "why": "It believes the update total = total + total * TAX leaves total unchanged; the run gives 12.42."
+    },
+    {
+     "concept": "widening_conversion",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer does not discuss the int being converted to double."
+    }
+   ]
+  },
+  "levels": {
+   "double": "L1",
+   "accumulator_pattern": "L0"
+  },
+  "final": {
+   "double": "L0",
+   "accumulator_pattern": "L0"
+  },
+  "best_judge": "L1",
+  "best": "L0"
+ },
+ {
+  "id": "S133",
+  "expected": "L0",
+  "text": "int c; declares c, so c is 0.",
+  "asked": "",
+  "concepts": [
+   "declaration",
+   "int",
+   "variable",
+   "double"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "declaration",
+   "definite_assignment"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "declaration",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "int c; declares c, so c is 0.",
+     "correct": false,
+     "why": "It uses the wrong rule that local variables get a default value; reading c is a compile error."
+    },
+    {
+     "concept": "int",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "No int-specific rule (range, division) is used; the error belongs to declaration and variable."
+    },
+    {
+     "concept": "variable",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "so c is 0",
+     "correct": false,
+     "why": "It contradicts the rule that a local variable must be assigned before it is read."
+    },
+    {
+     "concept": "double",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about double."
+    }
+   ]
+  },
+  "levels": {
+   "declaration": "L0",
+   "variable": "L0"
+  },
+  "final": {
+   "declaration": "L0",
+   "variable": "L0"
+  },
+  "best_judge": "L0",
+  "best": "L0"
+ },
+ {
+  "id": "S134",
+  "expected": "L0",
+  "text": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+  "asked": "Explain in plain English what these three lines do.",
+  "concepts": [
+   "array_aliasing",
+   "assignment",
+   "statement",
+   "variable_swap"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "assignment",
+   "variable_swap"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "array_aliasing",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "No arrays are involved and none are discussed."
+    },
+    {
+     "concept": "assignment",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "Then b = t means b equals a, so both are b.",
+     "correct": false,
+     "why": "It treats t as tracking a, as if = stored the expression a rather than a's value at that moment, so the swap seems to fail."
+    },
+    {
+     "concept": "statement",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "quote": "After t = a and a = b, a is b. Then b = t",
+     "correct": true,
+     "why": "It runs the three statements one at a time in order; the wrong final value comes from the assignment rule, not the order."
+    },
+    {
+     "concept": "variable_swap",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "so both are b",
+     "correct": false,
+     "why": "It concludes the swap leaves both variables equal to b, but int t = a; a = b; b = t; exchanges them."
+    }
+   ]
+  },
+  "levels": {
+   "assignment": "L0",
+   "statement": "L2",
+   "variable_swap": "L0"
+  },
+  "final": {
+   "assignment": "L0",
+   "statement": "L2",
+   "variable_swap": "L0"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ },
+ {
+  "id": "S135",
+  "expected": "L0",
+  "text": "You could write b as !(5 < n < 10).",
+  "asked": "",
+  "concepts": [
+   "de_morgan",
+   "boolean_expression"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "de_morgan"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "de_morgan",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer keeps !( ) and does not apply or state De Morgan's laws."
+    },
+    {
+     "concept": "boolean_expression",
+     "level": "L0",
+     "way": "everyday_reading",
+     "quote": "!(5 < n < 10)",
+     "correct": false,
+     "why": "It uses the maths chained range 5 < n < 10, which is not a legal Java boolean expression."
+    }
+   ]
+  },
+  "levels": {
+   "boolean_expression": "L0"
+  },
+  "final": {
+   "boolean_expression": "L0"
+  },
+  "best_judge": "L0",
+  "best": "L0"
+ },
+ {
+  "id": "S136",
+  "expected": "L0",
+  "text": "isDone = (i % 5 == 0); would do the same as the if.",
+  "asked": "What is the output? Explain when the loop stops.",
+  "concepts": [
+   "if_statement",
+   "while_loop",
+   "empty_statement",
+   "short_circuit"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "assignment",
+   "if_statement"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "if_statement",
+     "level": "L4",
+     "way": "transfer_to_a_new_program",
+     "quote": "isDone = (i % 5 == 0); would do the same as the if.",
+     "correct": true,
+     "why": "It correctly replaces the if with a direct boolean assignment; this is equivalent here because the loop exits as soon as isDone becomes true."
+    },
+    {
+     "concept": "while_loop",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer gives neither the output nor when the loop stops."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about empty statements."
+    },
+    {
+     "concept": "short_circuit",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about the evaluation of &&."
+    }
+   ]
+  },
+  "levels": {
+   "if_statement": "L4"
+  },
+  "final": {
+   "if_statement": "L4"
+  },
+  "best_judge": "L4",
+  "best": "L4"
+ },
+ {
+  "id": "S137",
+  "expected": "L0",
+  "text": "System.out.println(\"x is 5\"); sets x to 5.",
+  "asked": "What is the exact output, including line breaks? Explain how you got it.",
+  "concepts": [
+   "println",
+   "standard_output",
+   "method_call",
+   "logical_error"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "assignment",
+   "println"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "println",
+     "level": "L0",
+     "way": "everyday_reading",
+     "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+     "correct": false,
+     "why": "println only prints text; it does not set any variable."
+    },
+    {
+     "concept": "standard_output",
+     "level": "L0",
+     "way": "everyday_reading",
+     "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+     "correct": false,
+     "why": "It takes the output text literally, as if printing it set a variable."
+    },
+    {
+     "concept": "method_call",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "Nothing is said about how a call is evaluated."
+    },
+    {
+     "concept": "logical_error",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about logic errors."
+    }
+   ]
+  },
+  "levels": {
+   "println": "L0",
+   "standard_output": "L0"
+  },
+  "final": {
+   "println": "L0",
+   "standard_output": "L0"
+  },
+  "best_judge": "L0",
+  "best": "L0"
+ },
+ {
+  "id": "S138",
+  "expected": "L0",
+  "text": "Add v to sum first, then check if it was negative and subtract it again.",
+  "asked": "",
+  "concepts": [
+   "accumulator_pattern",
+   "increment_operators",
+   "compound_assignment",
+   "read_loop_idiom"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "accumulator_pattern"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "accumulator_pattern",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+     "correct": true,
+     "why": "It adapts the guarded update into a variant that still adds only non-negative values to sum (only relational); it gives no output for the input."
+    },
+    {
+     "concept": "increment_operators",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "count++ is not discussed."
+    },
+    {
+     "concept": "compound_assignment",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "It does not explicitly discuss the += operator."
+    },
+    {
+     "concept": "read_loop_idiom",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about the read or sentinel loop structure."
+    }
+   ]
+  },
+  "levels": {
+   "accumulator_pattern": "L3"
+  },
+  "final": {
+   "accumulator_pattern": "L3"
+  },
+  "best_judge": "L3",
+  "best": "L3"
+ },
+ {
+  "id": "S139",
+  "expected": "L0",
+  "text": "The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle.",
+  "asked": "Describe what appears in the default window.",
+  "concepts": [
+   "standard_drawing",
+   "drawing_shapes",
+   "empty_statement",
+   "coordinate_scaling"
+  ],
+  "facts": [],
+  "run_l0": [],
+  "gold": [
+   "coordinate_scaling",
+   "standard_drawing"
+  ],
+  "judge": {
+   "concepts": [
+    {
+     "concept": "standard_drawing",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "the point uses pixels, so both are in the middle.",
+     "correct": false,
+     "why": "It uses the wrong rule that StdDraw.point(256, 256) draws in the middle; in the default unit square it is not visible."
+    },
+    {
+     "concept": "drawing_shapes",
+     "level": "L2",
+     "way": "output_prediction",
+     "quote": "The square uses 0.5 as the centre",
+     "correct": true,
+     "why": "It correctly applies the rule that square(x, y, r) is centred on (x, y) to this call."
+    },
+    {
+     "concept": "empty_statement",
+     "level": "none",
+     "way": "",
+     "quote": "",
+     "correct": false,
+     "why": "The answer says nothing about empty statements."
+    },
+    {
+     "concept": "coordinate_scaling",
+     "level": "L0",
+     "way": "misconception",
+     "quote": "the point uses pixels",
+     "correct": false,
+     "why": "It assumes pixel coordinates, but the default scale is the unit square."
+    }
+   ]
+  },
+  "levels": {
+   "standard_drawing": "L0",
+   "drawing_shapes": "L2",
+   "coordinate_scaling": "L0"
+  },
+  "final": {
+   "standard_drawing": "L0",
+   "drawing_shapes": "L2",
+   "coordinate_scaling": "L0"
+  },
+  "best_judge": "L2",
+  "best": "L2"
+ }
+]

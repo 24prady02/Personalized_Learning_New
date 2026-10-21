@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 1, then 1 2, so it adds a number each time",
+   "correct": false,
+   "why": "It traces the first output lines but leaves out the third line \"1 2 3\", so the prediction is incomplete."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "with i <= 5 it would print up to 5",
+   "correct": true,
+   "why": "It correctly predicts that changing the guard bound with an inclusive <= makes the output run up to 5."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about variables or how their values change."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue statement and the answer does not mention one."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "interpreting random surfer output as page ranks / effect of start page", "why": "The answer accepts the raw frequencies as the ranks without addressing the start-page question, and its reason (that the simulation counted every move) is only a restatement of the output, so it shows no working model of the concept."}

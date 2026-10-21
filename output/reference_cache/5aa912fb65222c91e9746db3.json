@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct and covers every part in order with values: A always prints, 17 is odd so the else branch runs, 17 % 5 is 2 so E prints, and G follows the inner if-else. It gives the right output AEG, but it is a line-by-line trace. It doesn't state the purpose of the code or go beyond it."}

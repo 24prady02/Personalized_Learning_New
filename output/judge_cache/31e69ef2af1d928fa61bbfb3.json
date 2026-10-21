@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "It prints 8 2",
+   "correct": false,
+   "why": "This is a bare result with no trace of sum += x or count++. The program actually throws InputMismatchException when StdIn.readInt reaches \"abc\", so nothing is printed. The error comes from a wrong belief about the StdIn library, not about assignment."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "It prints 8 2",
+   "correct": false,
+   "why": "The \"8 2\" format matches converting the ints in sum + \" \" + count, but no reasoning is given. The run crashes on \"abc\" before println, so this output never appears."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "It prints 8 2",
+   "correct": false,
+   "why": "It is a bare output that implies joining sum, a space and count, with no reasoning. It is wrong because readInt throws on \"abc\" and nothing is printed."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about char arithmetic."
+  }
+ ]
+}

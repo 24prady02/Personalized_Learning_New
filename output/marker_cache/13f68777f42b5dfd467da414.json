@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "compile-time vs run-time errors (file name, missing semicolon, args index)", "why": "It correctly covers every problem in order (two compile errors, then the args[1] run-time crash, and the comment never runs), but only as a list of separate points with no wider rule or generalisation."}

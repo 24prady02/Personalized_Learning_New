@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+   "correct": true,
+   "why": "The answer evaluates the condition with score = 42, skips the body because the test is false, and continues to the statement after the if, which matches the run."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about testing."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no for loop and the answer does not mention one."
+  }
+ ]
+}

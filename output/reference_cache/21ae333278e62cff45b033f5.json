@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The answer correctly gets n × n = 1,000,000 for n = 1000. It then reasons beyond the given input: doubling n makes (2n)² = 4n², so the count is four times as large. That is a correct prediction for a changed input, with the n × n rule behind it, though the justification is brief."}

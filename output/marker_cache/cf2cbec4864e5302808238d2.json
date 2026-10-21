@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if condition and loop tracing (count > 3 check)", "why": "The answer prints \"big\" even though count is 0 when the if is tested, so it applies a wrong rule by treating the if as looking ahead to the loop's final value."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "naming conventions for variables i and c", "why": "The student applies a wrong rule (every name must be a full word), so they reject the conventional loop index i and wrongly say the output is unaffected. They also never say whether the output changes."}

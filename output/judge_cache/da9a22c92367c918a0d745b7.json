@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "1\n1 2\n1 2 3",
+   "correct": true,
+   "why": "The output is correct, but the answer gives no trace or reasoning, and a bare correct output counts only as L1."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about operator precedence or the j + \" \" expression."
+  }
+ ]
+}

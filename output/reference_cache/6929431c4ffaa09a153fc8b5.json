@@ -1,0 +1,1 @@
+{"overall": "L1", "concepts": [{"concept": "interactive_input", "level": "L1", "way": "states_the_rule", "quote": "No, the user decides each time, while it is running.", "correct": true, "why": "Correctly states that input is read during execution and each reply decides the next round, but gives no trace of the code or reasoned relation beyond the bare rule."}]}

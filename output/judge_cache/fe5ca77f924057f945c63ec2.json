@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "misconception: Calling StdIn.readInt() twice returns the same value twice.",
+   "quote": "while (StdIn.readInt() != 0) System.out.println(StdIn.readInt()); It prints each number.",
+   "correct": false,
+   "why": "Each readInt() takes a new token, so the condition and the body read different numbers. The loop skips every other number and only prints 5, but the student says it prints each number."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "System.out.println(StdIn.readInt()); It prints each number.",
+   "correct": true,
+   "why": "println is used correctly to print a value, but the answer gives no reasoning about how it outputs a line or how that applies to these values."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "while (StdIn.readInt() != 0) System.out.println(...)",
+   "correct": true,
+   "why": "The while syntax with a condition tested before a one-statement body is correct, but there is no trace and no correct reasoning about the passes."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the graph input format."
+  }
+ ]
+}

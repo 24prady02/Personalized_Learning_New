@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "trace of assignments (trace table of a, b, total)", "why": "The first lines trace correctly, but the claim that total stays 11.5 'because it already has a value' applies a wrong assignment rule. Reassignment would give 12.42."}

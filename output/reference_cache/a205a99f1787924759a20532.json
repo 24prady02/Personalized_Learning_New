@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims a Big.class file exists, but javac reported 37 errors, so no class file was produced. That is a wrong rule about what compilation does. The point that nothing has been printed is true, but it does not make up for the wrong main claim."}

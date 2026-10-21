@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student doesn't give next or trace any values. They only claim that `r <= sum` behaves the same, with no justification. That holds for these inputs (sums 0.1, 0.4, 0.9, none equal to r), but not in general, because the two tests differ when r equals a running sum. So this is a bare claim that doesn't answer the question."}

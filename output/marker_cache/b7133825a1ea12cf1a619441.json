@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if/else control flow trace", "why": "With a=2, b=2 the else branch runs, so the lines are 1, 4, 6, but the answer says the program ends after line 4. It skips line 6, which runs after the if/else, so it applies a wrong rule about the code after the branch."}

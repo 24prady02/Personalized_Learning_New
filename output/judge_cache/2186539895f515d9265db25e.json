@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+   "correct": true,
+   "why": "It correctly describes a way to update the running sum, but it does not trace the input, give the output, or explain how the sum and count relate, so it does not reach L2 or L3."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention count++ or any increment."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only says 'add' and 'subtract' in everyday words and never discusses the += operator."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about reading input, the 99999 sentinel, or what happens when the first value is 99999."
+  }
+ ]
+}

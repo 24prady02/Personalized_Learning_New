@@ -1,0 +1,1 @@
+{"level": "L3", "why": "(a) {2, 1, 3} is correct, and (b) states the purpose of the code in one sentence: it swaps the first and last elements. That is L3. The answer doesn't address (c), the length-1 case, so it doesn't reach L4."}

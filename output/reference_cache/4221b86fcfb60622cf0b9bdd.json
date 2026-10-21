@@ -1,0 +1,1 @@
+{"level": "L4", "why": "It states the purpose correctly: the program prints the sum of i² for i = 1 to n. It then goes beyond the given input to the class of inputs where the int overflows. The threshold is exact: the sum at n=1860 is 2,146,682,110, which fits in an int, and at n=1861 it is 2,150,145,431, which exceeds 2,147,483,647."}

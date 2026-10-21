@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The answer correctly traces 7/2 as int division giving 3 and then relates that result to the double assignment (widening to 3.0), integrating the two constructs into one causal explanation of the output; it makes a claim, so 'none' is wrong, and it stays within the given code, so it is L3 not L4."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "it checks whether x is even, and 17 is not even ... so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G",
+   "correct": true,
+   "why": "The answer tests the condition once, runs only the else branch, and correctly traces the nested if-else to get AEG."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2",
+   "correct": true,
+   "why": "The answer works out the correct remainders for this code's values, treating % as the remainder and not the quotient."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "17 divided by 2 leaves 1 ... 17 % 5, which is 2",
+   "correct": true,
+   "why": "The answer gets the correct results of the integer % operations on 17 in this code."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about division by zero."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "String immutability (toUpperCase returns a new string)", "why": "The answer applies a wrong rule, that toUpperCase changes name in place, when Strings are immutable and the result is discarded, so the code prints \"java\"."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer copies the loop body back almost word for word (even as `printf(i)`). It gives no output, no trace of values, and no answer to the 'start at 61' part, so it shows no working model."}

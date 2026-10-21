@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "For x = 0 both fragments set y to 0 (in B the ternary tests x > 0, which is false), so the student's claim that B gives 1 'because x >= 0 is true' applies a rule that contradicts the conditional-operator semantics rather than a slip in an otherwise correct trace; it shows no working model of the ternary, so it is L0, not a relational error."}

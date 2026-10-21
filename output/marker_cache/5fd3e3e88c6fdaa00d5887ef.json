@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "tracing if statement with false condition", "why": "The answer goes through every line in order with the value (score 42, test false, pass skipped, done printed), without stating the purpose of the code or going beyond it."}

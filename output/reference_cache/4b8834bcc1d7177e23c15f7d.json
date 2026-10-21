@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The output is correct (swap prints 42 and 7, main prints 7 and 42). The student links the output to pass-by-value: swap works on copies, so main's variables don't change. That ties the two outputs together with a reason, which is relational. It doesn't go beyond the given code, so it isn't L4."}

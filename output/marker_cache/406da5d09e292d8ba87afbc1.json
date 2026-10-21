@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "array reference aliasing vs primitive copy", "why": "The answer applies a wrong rule (b gets its own copy of the array), contradicting Java's reference semantics where b and a refer to the same array, so a[0] should be 9, not 1."}

@@ -1,0 +1,10 @@
+on the 44 human-labelled (graph-boundary key): labeller  exact 25/44
+on the 44 human-labelled (graph-boundary key): reference exact 32/44
+on the 44 human-labelled (graph-boundary key): system    exact 38/44
+on the 44: the examiner settled 19 disagreements, right on 9
+all 365: classifier and labeller agree on 178/365, kappa 0.33
+disagreements: 187; the examiner sided with {'labeller': 141, 'classifier': 30, 'neither': 16}
+THE 321 UNLABELLED: classifier matches the reference level on 177/321 (55%), within one level 227
+ALL 365 (human label where there is one, else the reference): 215/365 (59%)
+321 by reference level: L0 98/136  L1 34/82  L2 18/34  L3 19/39  L4 5/14  none 3/16
+calls unavailable: 7

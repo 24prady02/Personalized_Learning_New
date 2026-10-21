@@ -1,0 +1,1 @@
+{"level": "L4", "why": "Part (a) is traced correctly: the sums are 0.1 then 0.4, and 0.35 < 0.4 gives next = 1. In part (b) the sums reach only 0.9, so no sum exceeds 0.95 and next stays -1. The student also gives the general cause: the row doesn't add to 1, so any r at or above the total sum leaves next at -1. That reasons about a class of inputs beyond the given code."}

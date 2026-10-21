@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states one correct rule: redirection and pipes don't change Average, which reads standard input whatever the source. It doesn't say what appears after each command, and it doesn't say that args[] is empty because the input comes from stdin. So the rule is stated but not applied to the code."}

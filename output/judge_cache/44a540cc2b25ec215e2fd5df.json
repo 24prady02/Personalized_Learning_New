@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "coordinate_scaling",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "The point is outside the unit square so you do not see it.",
+   "correct": true,
+   "why": "The answer uses the default unit-square scale on this code's values: the square spans 0.25 to 0.75 and (256, 256) lies off the canvas."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type or double arithmetic."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "An outlined square from 0.25 to 0.75, centred in the window. The point is outside the unit square so you do not see it.",
+   "correct": true,
+   "why": "The answer correctly predicts the picture both calls make and gives the reason the point is not visible."
+  },
+  {
+   "concept": "function_plotting",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss sampling or plotting a function."
+  }
+ ]
+}

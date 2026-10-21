@@ -1,0 +1,117 @@
+{
+ "student_id": "S118",
+ "turn": 1,
+ "sessions": [
+  "j"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "lookup_table": {
+   "concept": "lookup_table",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It is a table to look up a month name from its number.",
+      "statement": "lookup table: an array of precomputed values or names indexed by position",
+      "score": 0.573
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "It is a table to look up a month name from its number.",
+      "statement": "definition",
+      "score": 1.0
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "it is a table to look up a month name from its number"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [],
+   "last_turn": 1
+  },
+  "space_time_tradeoff": {
+   "concept": "space_time_tradeoff",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "indexing": {
+   "concept": "indexing",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

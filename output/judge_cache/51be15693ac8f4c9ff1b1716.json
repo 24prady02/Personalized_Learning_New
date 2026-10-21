@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "num1 is 9 and num2 starts at 12.",
+   "correct": true,
+   "why": "The student works out each initial value from the variables already set (num1 = 8+1, num2 = 9+3), and the run confirms both values."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "At i = 9 num2 drops to 11; at i = 11 it drops to 10.",
+   "correct": true,
+   "why": "The student applies num2-- step by step, lowering num2 by exactly 1 at the right iterations, and the run confirms this."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "So it prints 8, 10, 12, 13,",
+   "correct": true,
+   "why": "The predicted output follows the \"%d, \" format for each printed i, keeps the trailing comma and adds no newline, and it comes from a trace the run confirms."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about binary or base conversion."
+  }
+ ]
+}

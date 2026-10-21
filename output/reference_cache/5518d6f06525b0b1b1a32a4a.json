@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct and covers every iteration in order with values: y goes 3, 5, 6, x goes 2, 1, 0, the loop stops when 0 > 0 is false, and it prints 6. It doesn't say what the loop is for (summing 3+2+1), so it stays at line-by-line L2."}

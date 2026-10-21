@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Incrementing a variable (assignment of count + 1 to count)", "why": "The answer gives no statement that stores the result in count, only expressions that don't change count, so it doesn't meet the task and misses the assignment idea."}

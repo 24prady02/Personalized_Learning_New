@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "program_text",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "There is a Big.class file now, but nothing is printed because the program has not run yet",
+   "correct": true,
+   "why": "Correctly states the result of the text is Big.class and output only appears when it is run."
+  },
+  {
+   "concept": "compile",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "There is a Big.class file now, but nothing is printed",
+   "correct": true,
+   "why": "Correctly applies that a successful javac produces Big.class and prints no program output."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

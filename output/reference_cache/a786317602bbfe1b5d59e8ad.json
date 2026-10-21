@@ -1,0 +1,1 @@
+{"level": "L2", "why": "All four links are correct: a variable has a type and holds one value, an expression has a type and a value, and an assignment stores an expression's value. They are separate pairwise links, though. None of them says that an assignment puts the value into a variable, so the answer doesn't join them into one structure."}

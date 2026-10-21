@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "integer division and assignment to a double", "why": "It gives one correct aspect (a double prints as 2.0) but never explains that (2 + 3) / 2 is integer division giving 2 before it is widened, so it doesn't trace the values."}

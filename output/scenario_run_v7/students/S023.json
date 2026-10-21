@@ -1,0 +1,112 @@
+{
+ "student_id": "S023",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "switch_statement": {
+   "concept": "switch_statement",
+   "observed": true,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "the swich no have break so it go down all the case and result become 50",
+      "statement": "edge switch_statement - break_statement",
+      "score": 1.0
+     }
+    ],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 3,
+   "uncertain_toward": null,
+   "stop_reason": "L3: E3 Integration met; no L4 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     3
+    ]
+   ],
+   "clause_keys": [
+    "the swich no have break so it go down all the case and result become 50"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "break_statement": {
+   "concept": "break_statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "nested_conditionals": {
+   "concept": "nested_conditionals",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

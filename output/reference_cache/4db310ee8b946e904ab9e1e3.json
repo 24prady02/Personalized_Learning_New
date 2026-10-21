@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code's fault is line 3, where `sum = i;` overwrites sum instead of accumulating with `sum += i`. Printing `i` would not work, because `i` is out of scope at line 4 and the code would not compile. The student blames the wrong line and uses a wrong rule about variable scope and accumulation."}

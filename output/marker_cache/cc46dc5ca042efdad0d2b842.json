@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "javac error reporting and compile/run errors", "why": "The answer only asks whether javac is wrong and names no problems, order, or lines that never run, so it shows no working model of the compile and run sequence."}

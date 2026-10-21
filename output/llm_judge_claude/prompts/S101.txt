@@ -1,0 +1,97 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What does ^ do on two booleans?
+
+CODE:
+int n = 0;
+boolean a = (n != 0) && (10 / n > 1);
+boolean b = !(n > 5 && n < 10);
+boolean c = (n > 5) ^ (n < 10);
+System.out.println(a + " " + b + " " + c);
+
+STUDENT ANSWER: It gives true when the two sides are different.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: exclusive_or
+L0 Prestructural:
+  - everyday_reading: Folk meaning: on calculators, in spreadsheets and in typed maths ^ means 'to the power of', so a^2 is a squared. 
+  - misconception: wrong rule: a^2 computes a squared. 
+  boundary: Any correct, programming-specific statement about exclusive or makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: ^ applied to boolean operands is the exclusive-or logical operator.
+  - states_the_rule: For booleans, a ^ b is true if a and b are different and false if they are the same (equivalent to a != b); both operands are always evaluated.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the left operand, then the right operand (always, no short-circuit), then compare them.
+  - output_prediction: Boolean result: true ^ true is false, true ^ false is true, false ^ false is false; with int operands ^ gives an int bitwise result, so 10 ^ 6 is 12.
+  - one_step_execution: ^ changes no variable; flag = flag ^ true stores the opposite value, toggling the flag.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: ^ belongs with &&, || and ! as a boolean operator defined by a truth table, but it is not short-circuit and it binds tighter than && and ||; a ^ b equals (a || b) && !(a && b).
+  - purpose_of_the_whole: Expresses 'exactly one of two conditions' (e.g. exactly one of two coordinates is negative) or toggles a parity flag.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Swapping the operands keeps the value (^ is commutative), and applying ^ b twice restores the original value ((a ^ b) ^ b == a), so xor with a fixed operand is reversible.
+  - transfer_to_a_new_program: Use ^ (or the clearer a != b) when the test is 'the two conditions differ'; never use ^ for powers (use multiplication, Math.pow, or e-notation literals such as 1e6).
+  - diagnose_an_error: rule broken: ^ is exclusive or, not exponentiation. Kind: silent logic error. Trigger class: Writing x^2 or 10^n with int operands: it compiles and computes a bitwise xor (10^6 is 12); with double operands such as 2.0^2 it is a co
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: assignment
+L0 Prestructural:
+  - everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). 
+  - misconception: wrong rule: = stores the expression itself, not its computed value. 
+  - misconception: wrong rule: = compares two values instead of assigning. 
+  - misconception: wrong rule: an assignment cannot be used inside a larger expression. 
+  - misconception: wrong rule: a = b copies the value of a into b. 
+  - misconception: wrong rule: a = b adds the value of b to the value already in a (the accumulator model). 
+  boundary: Any correct, programming-specific statement about assignment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable.
+  - states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.
+  - output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned.
+  - one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes.
+  - relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile.
+  - relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
+  - relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary.
+  - diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a;
+  - transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e.
+  - diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclos
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: exclusive_or, assignment.

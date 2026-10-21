@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "for loop accumulating sum of squares", "why": "The answer states in one general formula what the whole program computes (sum of squares 1..n), which is the purpose of the loop and accumulator taken together, but it doesn't go beyond the given code."}

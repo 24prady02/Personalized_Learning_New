@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "exclusive_or",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "It gives true when the two sides are different.",
+   "correct": true,
+   "why": "States the xor rule correctly, not applied to this code."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

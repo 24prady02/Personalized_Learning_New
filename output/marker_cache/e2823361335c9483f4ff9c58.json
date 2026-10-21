@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "integer division in p[j] = counts[j] / outDegree", "why": "It states the integer-division rule (int/int truncates to 0) but doesn't trace the values, say what p holds (all 0.0), say whether it's a probability row, or give a fix."}

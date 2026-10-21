@@ -1,0 +1,139 @@
+{
+ "student_id": "S283",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "incremental_development": {
+   "concept": "incremental_development",
+   "observed": true,
+   "evidence": {
+    "E1": [],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "OK, x is 3 and y is 0.",
+      "statement": "confirmed by the run: x = 3; y = 0",
+      "score": 1.0
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "3 > 0, so y is 3 and x is 2.",
+      "statement": "confirmed by the run: y = 3; x = 2",
+      "score": 1.0
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Then y is 5, x is 1.",
+      "statement": "confirmed by the run: y = 5; x = 1",
+      "score": 1.0
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Then y is 6, x is 0.",
+      "statement": "confirmed by the run: y = 6; x = 0",
+      "score": 1.0
+     }
+    ],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 2,
+   "uncertain_toward": null,
+   "stop_reason": "L2: E2 Execution met; no L3 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     2
+    ]
+   ],
+   "clause_keys": [
+    "ok x is 3 and y is 0",
+    "3 0 so y is 3 and x is 2",
+    "then y is 5 x is 1",
+    "then y is 6 x is 0",
+    "it prints 6"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "attribution",
+    "symptom_report",
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "run": {
+   "concept": "run",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "debugging": {
+   "concept": "debugging",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

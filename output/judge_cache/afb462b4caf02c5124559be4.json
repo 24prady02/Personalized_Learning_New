@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention the input format or how links are read."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't give any row of p or say what the matrix entries mean."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention comments."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Page 2 has no links.",
+   "correct": true,
+   "why": "It correctly picks out page 2 as the page with no outgoing links but doesn't apply any rule for its row or explain how to handle it."
+  }
+ ]
+}

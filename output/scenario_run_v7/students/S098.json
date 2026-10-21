@@ -1,0 +1,440 @@
+{
+ "student_id": "S098",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "int": {
+   "concept": "int",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "int: 32-bit integer primitive",
+      "score": 0.675
+     }
+    ],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.",
+      "score": 0.675
+     }
+    ],
+    "E3": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "edge int - int_literal_limit",
+      "score": 1.0
+     }
+    ],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 3,
+   "uncertain_toward": null,
+   "stop_reason": "L3: E3 Integration met; no L4 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     3
+    ]
+   ],
+   "clause_keys": [
+    "still 2147483648 because 2147483648 does not fit in an int"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "primitive_type": {
+   "concept": "primitive_type",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "primitive type: int, double, boolean, char",
+      "score": 0.523
+     }
+    ],
+    "E2": [],
+    "E3": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "edge primitive_type - int",
+      "score": 1.0
+     }
+    ],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {
+    "E2": 1
+   },
+   "misconceptions": {},
+   "level": 3,
+   "uncertain_toward": null,
+   "stop_reason": "L3: E3 Integration met; no L4 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     3
+    ]
+   ],
+   "clause_keys": [
+    "still 2147483648 because 2147483648 does not fit in an int"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "int_literal_limit": {
+   "concept": "int_literal_limit",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "int literal limit: 2147483648 is legal only as -2147483648",
+      "score": 0.649
+     }
+    ],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "A digit sequence is an int literal only when its decimal value lies between -2147483648 and 2147483647 inclusive; the magnitude 2147483648 may appear only as -2147483648; larger literals need the long suffix L.",
+      "score": 0.649
+     }
+    ],
+    "E3": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "Still -2147483648, because +2147483648 does not fit in an int.",
+      "statement": "edge int_literal_limit - int",
+      "score": 1.0
+     }
+    ],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 3,
+   "uncertain_toward": null,
+   "stop_reason": "L3: E3 Integration met; no L4 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     3
+    ]
+   ],
+   "clause_keys": [
+    "still 2147483648 because 2147483648 does not fit in an int"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "data_type": {
+   "concept": "data_type",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "literal": {
+   "concept": "literal",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "char": {
+   "concept": "char",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "boolean": {
+   "concept": "boolean",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "double": {
+   "concept": "double",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "long_type": {
+   "concept": "long_type",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "overflow": {
+   "concept": "overflow",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "primitive_vs_reference": {
+   "concept": "primitive_vs_reference",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "type_conversion": {
+   "concept": "type_conversion",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

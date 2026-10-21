@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "swap of two variables using a temp", "why": "States the net effect (a and b exchange values) but doesn't trace the three lines or mention t's role, so it covers only one aspect."}

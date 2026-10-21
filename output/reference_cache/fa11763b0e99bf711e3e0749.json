@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code prints 0 1 2. The student says 1 2 3 because ++i runs before the body, but the update expression runs after the body on each pass, and pre- or post-increment makes no difference there. This wrong rule about when the update runs gives a wrong trace, so it is L0."}

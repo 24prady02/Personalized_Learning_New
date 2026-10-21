@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "for and while do exactly the same thing.",
+   "correct": true,
+   "why": "It correctly says that for and while are equivalent loops, but it does not rewrite this code or explain how one maps to the other."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention init, condition or update, or how they fit into a for header."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about empty statements."
+  }
+ ]
+}

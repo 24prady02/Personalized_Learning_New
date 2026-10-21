@@ -1,0 +1,2 @@
+claude best_judge: exact 23/44, within-1 32, MAE 0.86, too high 11, too low 10, per level {'L0': '3/8', 'L1': '7/12', 'L2': '4/7', 'L3': '3/4', 'L4': '6/13'}, right level on right concept 24/44
+claude best: exact 24/44, within-1 32, MAE 0.84, too high 10, too low 10, per level {'L0': '4/8', 'L1': '7/12', 'L2': '4/7', 'L3': '3/4', 'L4': '6/13'}, right level on right concept 24/44

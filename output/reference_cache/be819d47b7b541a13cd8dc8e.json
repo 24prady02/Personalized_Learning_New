@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The student claims B gives the same sum, but B indexes a[1]..a[a.length], skipping a[0] and throwing ArrayIndexOutOfBoundsException at a[a.length]; treating 'starts counting at 1' as harmless shows an everyday/maths reading of array indexing that contradicts Java's 0-based bounds, so the answer makes a claim and is L0, not 'none'."}

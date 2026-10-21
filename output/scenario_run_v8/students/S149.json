@@ -1,0 +1,360 @@
+{
+ "student_id": "S149",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "two_dimensional_array": {
+   "concept": "two_dimensional_array",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "for any 2-D array I need a[i].length.",
+      "statement": "two dimensional array: an array of arrays (a[i][j])",
+      "score": 0.768
+     }
+    ],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "for any 2-D array I need a[i].length.",
+      "statement": "Result: a[i][j] has the element type; a.length is the number of rows M; a[i].length is the length of row i; a[i] is a double[] row.",
+      "score": 0.607
+     }
+    ],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "for any 2-D array I need a[i].length.",
+      "statement": "change predicted",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "for any 2d array i need ailength"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "attribution",
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "length_field": {
+   "concept": "length_field",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "For a 3 \u00d7 3 board I would use a[0].length",
+      "statement": "length field: a.length is a field, not a method",
+      "score": 0.404
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "for any 2-D array I need a[i].length.",
+      "statement": "length field: a.length is a field, not a method",
+      "score": 0.546
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "for any 2-D array I need a[i].length.",
+      "statement": "change predicted",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {
+    "E2": 1
+   },
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "for a 3 3 board i would use a0length",
+    "for any 2d array i need ailength"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "indexing": {
+   "concept": "indexing",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "array_creation": {
+   "concept": "array_creation",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "matrix_operations": {
+   "concept": "matrix_operations",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "ragged_array": {
+   "concept": "ragged_array",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "row_major_order": {
+   "concept": "row_major_order",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "multidimensional_array": {
+   "concept": "multidimensional_array",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "transition_matrix": {
+   "concept": "transition_matrix",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "args_length": {
+   "concept": "args_length",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

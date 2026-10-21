@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code starts with max = 0, so it fails on arrays whose values are all negative. For {0,0,0} it returns 0, which is correct, so this input doesn't show the code is wrong. The answer also doesn't say what the code gives, so it shows no working model of the initialisation bug."}

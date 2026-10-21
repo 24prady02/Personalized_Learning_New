@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "The answer gets the println rule right but never uses it on this code or gives the output."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text and print does not",
+   "correct": true,
+   "why": "The answer gets the general print/println output rule right but doesn't trace this code's output."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "print does not",
+   "correct": true,
+   "why": "The answer correctly says print writes no line terminator but doesn't apply this to the given statements."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about logic errors."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The question asks for three statements that assign count + 1 back to count, and the answer gives none. It only says that println(count + 1) and a bare count + 1 don't change count. Both claims are correct, but they don't answer the task, so the answer shows no working model of how to store the result in count."}

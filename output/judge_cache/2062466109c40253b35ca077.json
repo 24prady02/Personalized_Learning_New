@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: A variable can contain more than one value.",
+   "quote": "a holds 10 and 20 now",
+   "correct": false,
+   "why": "The answer says a holds two values at once, but a Java int variable holds exactly one value, and after the run a is 20."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: a = b adds the value of b to the value already in a (the accumulator model).",
+   "quote": "a holds 10 and 20 now, b holds 20.",
+   "correct": false,
+   "why": "The answer keeps a's old value 10 next to 20, but a = b overwrites a's old value, so a is just 20."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention arrays or references."
+  },
+  {
+   "concept": "piping",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention piping or streams."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The output is correct, but the only justification offered ('the loop always runs four times') is an everyday restatement of the count rather than an application of the stop rule (isDone set when i%5==0 at i=10, then !isDone fails); a bare correct output with no value-by-value trace of the condition is L1, not L2."}

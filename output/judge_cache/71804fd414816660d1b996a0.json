@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the loop only stops after the condition has become true",
+   "correct": false,
+   "why": "The loop stops when i < 3 becomes false. At i = 3 the test is false, so the body never prints 3, and the student accepts the wrong trace line."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Yes, the loop only stops after the condition has become true",
+   "correct": false,
+   "why": "A for loop exits when its condition is false, but the student says the trace is right and thinks it stops when the condition becomes true."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the loop only stops after the condition has become true",
+   "correct": false,
+   "why": "This is the listed misconception 'For and while loops end when the condition becomes true'."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about loops that never end."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "B C A E D — it prints the sum once at the end.",
+   "correct": false,
+   "why": "In this order, E comes before D, so the println is inside the loop body and runs on every pass, printing n running totals. The student's reason, that it prints once at the end, ignores where the statement sits in the code."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "B C A E D — it prints the sum once at the end.",
+   "correct": false,
+   "why": "sum is correctly declared before the loop and updated inside it, but it is then used inside the loop instead of after it, so the claimed single final total is wrong."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about operator precedence."
+  }
+ ]
+}

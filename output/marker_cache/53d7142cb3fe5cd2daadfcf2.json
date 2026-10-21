@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "ordering of loop with accumulator and read", "why": "Correct order, and the explanation relates initialisation, loop, read and add into one purpose (sum starts at 0, each pass reads one number and adds it), though it doesn't go beyond the given code."}

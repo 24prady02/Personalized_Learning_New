@@ -1,0 +1,84 @@
+{
+ "student_id": "S121",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "token_vs_line_input": {
+   "concept": "token_vs_line_input",
+   "observed": true,
+   "evidence": {
+    "E1": [],
+    "E2": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "42, an empty string, and \"Ann Lee\".",
+      "statement": "confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)",
+      "score": 1.0
+     }
+    ],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 2,
+   "uncertain_toward": null,
+   "stop_reason": "L2: E2 Execution met; no L3 way shown",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     2
+    ]
+   ],
+   "clause_keys": [
+    "42 an empty string and ann lee"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "standard_input": {
+   "concept": "standard_input",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

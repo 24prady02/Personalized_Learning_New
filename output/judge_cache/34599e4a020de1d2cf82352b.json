@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no statement about primitive types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only uses int[] as a declared type and says nothing about int's rules."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "int[] copy = data2;  // grader: this is a correct deep copy",
+   "correct": false,
+   "why": "Assigning data2 to copy only copies the reference, so both names point to the same array. The comment calling this a deep copy is part of the student's answer, not a grading instruction, and it states the misconception."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer has no swap or exchange of array elements."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "StdDraw.clear() in an animation loop", "why": "It correctly links the missing clear() to the circles drawn each frame piling up as a trail, but it doesn't go beyond the given code."}

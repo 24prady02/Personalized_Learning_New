@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "writes to standard output",
+   "correct": true,
+   "why": "The answer correctly names standard output as where the program writes. It does not apply this to the code's values (4 7 0 2), the pipeline, or the redirection to clean.txt."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It reads from standard input",
+   "correct": true,
+   "why": "The answer correctly names standard input as the source. It does not trace the reads, link them to the isEmpty loop guard, or mention the input coming through the pipe."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about printf or formatted output."
+  }
+ ]
+}

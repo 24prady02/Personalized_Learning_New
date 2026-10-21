@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "It applies println to this code: the call prints the value count+1 and does not change count."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "System.out.println(count + 1) shows one more, but count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It correctly treats output as showing a value without changing any variable, applied to count."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no statement that increments count and says nothing about the counter plan."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It states one correct point, that evaluating count + 1 stores nothing, but writes no valid assignment statement (and count + 1; would not even compile)."
+  }
+ ]
+}

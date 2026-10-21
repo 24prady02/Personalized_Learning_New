@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "roles of max and i (running maximum and index stepper)", "why": "The answer correctly covers both variables, i as an index stepper and max as the largest value seen so far, but it gives each role separately and doesn't relate them to the code's overall purpose or how they work together."}

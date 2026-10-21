@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "assignment — stores the value of — expression",
+   "correct": true,
+   "why": "It correctly says assignment stores the computed value of an expression, not the expression itself, but it does not apply this to any code or connect it to the variable's type the way the L3 ways describe."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "variable — has — type / variable — holds one — value",
+   "correct": true,
+   "why": "It correctly describes a variable as typed and holding exactly one value, which matches the definition, but it never applies this to code or makes an L3 relation."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "expression — has — type and value",
+   "correct": true,
+   "why": "It states the correct rule that every expression has a type and produces one value, but it does not apply the rule or show how the parts relate."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about declaration."
+  }
+ ]
+}

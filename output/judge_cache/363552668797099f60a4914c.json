@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "it is where you are after one move; you keep multiplying until it stops changing",
+   "correct": true,
+   "why": "It correctly says one move does not give the page rank and that repeated moves converge, but it is not applied as a trace or linked to RandomSurfer."
+  }
+ ]
+}

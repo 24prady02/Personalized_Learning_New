@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says (a) prints A and then B, claiming the else always runs at the end. That contradicts Java, because else runs only when the condition is false. With x = 7 the condition x > 5 is true, so only A prints. This is a wrong rule, not a slip in a correct trace. The student also answers only (a)."}

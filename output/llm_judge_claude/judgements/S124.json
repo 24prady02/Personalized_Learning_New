@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "writes to standard output",
+   "correct": true,
+   "why": "Names standard output as the destination without applying it to the code's output."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "It reads from standard input",
+   "correct": true,
+   "why": "Names standard input as the source without further reasoning."
+  },
+  {
+   "concept": "filter",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "It reads from standard input and writes to standard output.",
+   "correct": true,
+   "why": "States the definition of a filter but does not mention the test or relate it to this code or the pipe."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

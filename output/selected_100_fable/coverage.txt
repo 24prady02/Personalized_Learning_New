@@ -1,0 +1,12 @@
+way       covered 16/16
+level     covered 6/6
+section   covered 6/6
+family    covered 26/26
+concept   covered 83/83
+kind      covered 2/2
+format    covered 1/1
+question  covered 53/53
+levels: {'L4': 7, 'L2': 17, 'L0': 22, 'L3': 19, 'none': 13, 'L1': 22}
+level written by: human 0, Fable 100
+graph ways (13 way names over 5 levels = 14): covered 14; not in any of the 169: []
+algorithm matches the level on 52/100 of the chosen (human 0/0, Fable 52/100)

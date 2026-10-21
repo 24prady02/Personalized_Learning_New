@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "A", "why": "Each fragment is reduced to a single purpose statement deduced from the code itself (sum, count positives, max, membership) with no input/output tracing, and the student also relates all four as array-walking accumulator loops; stating what the code is for, deduced from the code, is relational (L3), not a line-by-line L2 trace."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code does int division (7/2 = 2) before the result is assigned to the double r, so it prints 2.0, and none of the options is correct. The student applies a wrong rule, that the type of the variable being assigned to decides how the division is done, so the answer is L0."}

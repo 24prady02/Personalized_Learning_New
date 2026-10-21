@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "Correctly states the flag meaning of composite[k] and that new boolean[] starts all flags false, which the sieve relies on."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It marks whether k",
+   "correct": true,
+   "why": "Recognises composite[k] as the element for value k, without further indexing reasoning."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

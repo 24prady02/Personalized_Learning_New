@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"println","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about println itself."},
+{"concept":"printing_array_reference","level":"L2","way":"output_prediction","quote":"Something like [I@ and a hex code, not the numbers.","correct":true,"why":"Correctly predicts the reference text for this int array instead of its elements."},
+{"concept":"standard_output","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about standard output."},
+{"concept":"literal","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about literals."}
+]}

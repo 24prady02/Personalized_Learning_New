@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The answer strings four of the given concept names together with dashes but states no link at all (no 'has', 'is', 'produces'), so it asserts no relation that could be checked against Java; it is effectively the concept list copied back in a different order with no interpretation, which is L0 rather than naming one correct aspect."}

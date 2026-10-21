@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student wrote new, correct inverse code. It saves x[0], shifts every element left with the loop i = 0 to length-2, and puts the saved value at the last index. This exactly reverses the right shift, so it solves a new problem beyond the given code."}

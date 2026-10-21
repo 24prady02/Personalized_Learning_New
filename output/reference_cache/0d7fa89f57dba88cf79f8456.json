@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The ordering B, D, A, C with a[0], <, a[i] is correct (max starts at a[0], loop from i=1 replaces max whenever a[i] exceeds it), but the student gives only the bare result with no trace or justification of why each blank/order works, so by the boundary rule a correct result on its own is L1, not L2."}

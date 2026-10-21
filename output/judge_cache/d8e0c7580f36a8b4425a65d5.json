@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "StdIn is a variable that holds all the numbers, like an array.",
+   "correct": false,
+   "why": "StdIn is a library of static methods that read tokens from a stream. It is not a variable that stores all the input values."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: A variable can contain more than one value.",
+   "quote": "a variable that holds all the numbers",
+   "correct": false,
+   "why": "The answer says one variable holds many values, but a Java variable holds exactly one value at a time."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the isEmpty() loop or how it reads and processes values."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "Treating input as stored values you can look back at, like an array, contradicts the rule that a stream is used up one value at a time."
+  }
+ ]
+}

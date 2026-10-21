@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "default value of an uninitialised local int", "why": "The student applies the C rule (garbage value) to Java, where a local int has no value and must be assigned before use, so this is a wrong transferred rule."}

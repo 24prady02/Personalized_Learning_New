@@ -1,0 +1,1 @@
+{"level": "L1", "why": "`char singleLetter = 81;` compiles, and 81 is the code for 'Q', so the variable does hold Q. The student got the type and name right, but did not write the char literal 'Q' that the question's \"following Java convention\" asks for. The answer gives no reasoning, so it shows only one correct aspect."}

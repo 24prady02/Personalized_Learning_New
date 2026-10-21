@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "copying an array with a loop (bounds and element-by-element copy)", "why": "The answer covers the loop parts (index, bound, element assignment) in order but has a multistructural error: `i <= data2.length` goes out of bounds, and `copy` is never created, so it does not integrate the parts into a working copy."}

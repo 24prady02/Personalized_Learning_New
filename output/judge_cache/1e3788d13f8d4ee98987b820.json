@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "How many multiplications are enough?",
+   "correct": false,
+   "why": "The answer is a question and says nothing about counters."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "How many multiplications are enough?",
+   "correct": false,
+   "why": "The answer does not mention blocks or braces."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "How many multiplications are enough?",
+   "correct": false,
+   "why": "The answer makes no statement about assignment."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "quote": "How many multiplications are enough?",
+   "correct": false,
+   "why": "The answer does not address integer overflow."
+  }
+ ]
+}

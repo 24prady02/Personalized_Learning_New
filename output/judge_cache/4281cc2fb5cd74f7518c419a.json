@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions scores[i] or how array elements are accessed. Calling i the 'loop index' is about naming, not about indexing."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the for statement or how it runs. 'It still prints 3' is a bare output with no trace of the loop."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the init, the test or the update, or how many passes the loop makes."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "i is fine because it is only the loop index",
+   "correct": true,
+   "why": "It correctly says i is the loop index, which justifies its short name. It does not trace i's values or explain its stepper role in this code."
+  }
+ ]
+}

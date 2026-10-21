@@ -1,0 +1,387 @@
+{
+ "student_id": "S001",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "println": {
+   "concept": "println",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "println: System.out.println -- output with a trailing newline",
+      "score": 0.782
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "rule stated, not applied: Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+      "score": 0.706
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {
+    "PrintWithoutFinalNewline": {
+     "status": "refuted",
+     "turn": 1,
+     "boundary": false
+    },
+    "PrintNewLineFirst": {
+     "status": "refuted",
+     "turn": 1,
+     "boundary": true
+    },
+    "PrintEqualsPrintln": {
+     "status": "refuted",
+     "turn": 1,
+     "boundary": true
+    }
+   },
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "println adds a newline after the text and print does not"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [],
+   "last_turn": 1
+  },
+  "standard_output": {
+   "concept": "standard_output",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "standard output: StdOut / System.out",
+      "score": 0.797
+     },
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "rule stated, not applied: System.out.println(Math.PI) prints 3.141592653589793 (all digits), and println(\"Sum is \" + 1778) prints Sum is 1778 followed by a newline.",
+      "score": 0.995
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {
+    "PrintfAddsNewline": {
+     "status": "refuted",
+     "turn": 1,
+     "boundary": false
+    },
+    "PrintEqualsPrintln": {
+     "status": "refuted",
+     "turn": 1,
+     "boundary": true
+    }
+   },
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L1: E1 Reference met; no L2 way shown",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "println adds a newline after the text and print does not"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [],
+   "last_turn": 1
+  },
+  "print": {
+   "concept": "print",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "print: System.out.print -- output with no newline",
+      "score": 0.692
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "println adds a newline after the text and print does not.",
+      "statement": "L4 way: Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text.",
+      "score": 0.88
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 4,
+   "uncertain_toward": null,
+   "stop_reason": "L4: E4 Transfer / debug met (top of the ladder)",
+   "provisional": true,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     4
+    ]
+   ],
+   "clause_keys": [
+    "println adds a newline after the text and print does not"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "high",
+   "last_gates": [
+    "jump"
+   ],
+   "last_turn": 1
+  },
+  "string_literal": {
+   "concept": "string_literal",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "statement": {
+   "concept": "statement",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": 1,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "formatted_output": {
+   "concept": "formatted_output",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "standard_input": {
+   "concept": "standard_input",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "standard_drawing": {
+   "concept": "standard_drawing",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "stream_model": {
+   "concept": "stream_model",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "redirection": {
+   "concept": "redirection",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

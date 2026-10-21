@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer mentions a[i] but says nothing about how indexing works."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It says the temporary is needed because an assignment overwrites its target, which explains why the exchange needs three ordered assignments."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It ties the role of t to the fact that each assignment destroys the old value. It does not work out what happens if t is dropped, so it does not reach L4."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It explains that the exchange is built from ordered assignments that overwrite array elements. It does not diagnose the resulting state, such as both elements becoming equal."
+  }
+ ]
+}

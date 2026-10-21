@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "For input '5 3 abc', StdIn.readInt() throws an InputMismatchException on 'abc', so nothing is printed; the student's claim that the loop 'skips abc' and prints '8 2' applies a rule that contradicts Java (readInt does not skip non-integer tokens), which is L0 even though the partial sum 5+3=8 with count 2 is arithmetically right."}

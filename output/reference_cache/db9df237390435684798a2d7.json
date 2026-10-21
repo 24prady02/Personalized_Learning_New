@@ -1,0 +1,1 @@
+{"overall": "L1", "concepts": [{"concept": "char", "level": "L1", "way": "states_the_rule", "quote": "char SingleLetter = 'Q';", "correct": true, "why": "The type char and the single-quoted one-character literal 'Q' are correct Java, but the name SingleLetter breaks the camelCase convention the task required, so the new code is not fully correct and cannot be L4."}]}

@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "compile step vs run step (javac produces Big.class, nothing executed)", "why": "It correctly gives both parts, that Big.class is produced and that nothing has run or printed. It doesn't relate this to the code's situation, such as the 37 errors needing fixes first, or to what compiling does and doesn't check."}

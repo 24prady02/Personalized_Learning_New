@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment or how count++ updates count."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the int type, its range or int arithmetic."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "n × n = 1,000,000 times; if n doubles it runs four times as often.",
+   "correct": true,
+   "why": "It counts n × n passes of the nested loops and correctly predicts that doubling the bound makes count++ run four times as often."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a simulation loop."
+  }
+ ]
+}

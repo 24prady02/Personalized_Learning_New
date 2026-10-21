@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The student correctly locates the cause (unary cast binds tighter than *, so (int) Math.random() is 0, die always 1, sixes never increments, 0.0) and fixes it for the one given failing case, which the boundary rules place at L3; it does not generalise to a class of inputs or errors or reason about new code beyond this fix, so it is not L4."}

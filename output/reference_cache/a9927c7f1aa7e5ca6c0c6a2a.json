@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The table is a correct value-by-value trace of the loop. i takes 10, 6, 2, then -2 ends the loop, and total runs 10, 16, 18. It doesn't say what the loop is for, and it doesn't answer parts (c) to (f), so it stays at L2."}

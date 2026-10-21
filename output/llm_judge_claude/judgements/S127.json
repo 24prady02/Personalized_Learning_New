@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"comment","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about comments."},
+{"concept":"dangling_pages","level":"L1","way":"names_the_element","quote":"Page 2, it links nowhere.","correct":true,"why":"Correctly identifies the page with no outgoing links as dangling, but says nothing about how its row is handled."},
+{"concept":"input_graph","level":"none","way":"","quote":"","correct":false,"why":"The answer does not discuss the input format or the link pairs."},
+{"concept":"teleportation","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about the random leap."}
+]}

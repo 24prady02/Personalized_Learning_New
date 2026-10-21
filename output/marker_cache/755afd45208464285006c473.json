@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Printing an array reference (default toString: type code and hash)", "why": "The answer correctly says println(a) prints the array's type-and-hash form like [I@..., not its contents, which is a correct statement of what the code does. It doesn't go beyond the given code to other programs or classes of inputs."}

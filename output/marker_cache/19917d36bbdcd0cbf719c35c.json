@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Integer division by zero (last line) error", "why": "It correctly states that dividing by zero gives an error, which is one correct aspect of (d), but it doesn't name the ArithmeticException, doesn't contrast it with 1.0 / 0 (Infinity), and doesn't cover the other parts."}

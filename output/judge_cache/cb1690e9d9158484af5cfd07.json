@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "= 7.9;",
+   "correct": true,
+   "why": "The answer only writes a double literal into the array and says nothing about how double works."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "sensorReadings[len(sensorReadings) - 2]",
+   "correct": false,
+   "why": "Using a computed expression as the index is the right approach, but len(...) is Python, not Java; Java needs sensorReadings.length, so this line would not compile."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "len(sensorReadings) - 2",
+   "correct": true,
+   "why": "Subtracting 2 from the array length correctly gives the next-to-last index for this code."
+  },
+  {
+   "concept": "input_format",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the format of standard input."
+  }
+ ]
+}

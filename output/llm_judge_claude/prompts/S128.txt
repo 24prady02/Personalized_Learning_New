@@ -1,0 +1,159 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Give row 1 of p.
+
+CODE:
+// 3 pages; links 0→1, 1→0, 1→2; page 2 has no outgoing links
+// 90-10 rule:  p[i][j] = .90 * counts[i][j] / outDegree[i] + .10 / N
+
+STUDENT ANSWER: About 0.48, 0.03, 0.48.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: comment
+L0 Prestructural:
+  - everyday_reading: Everyday reading: text written in a program is an instruction the computer reads and obeys. 
+  - misconception: wrong rule: A comment line is run like a statement. 
+  boundary: Any correct, programming-specific statement about comment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A comment is explanatory text in the program that the compiler ignores.
+  - states_the_rule: A comment is either text between /* and */ or text from // to the end of the line; the compiler ignores it. A comment that starts with /** is a documentation (Javadoc) comment, written before a class or method; tools turn it into 
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Comments are removed when the source is read by the compiler, so they never take part in execution order; tracing skips them.
+  - output_prediction: A comment produces no value and no output.
+  - one_step_execution: A comment changes no state; adding one and recompiling leaves the program's behaviour identical.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Comments are part of the program text in Name.java but are dropped when it is compiled, so they cannot affect Name.class's behaviour.
+  - purpose_of_the_whole: Purpose: explain what the code does and why, for other programmers and your future self; also used to disable code temporarily.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program.
+  - diagnose_an_error: rule broken: A /* comment needs its closing */. Kind: compile-time. Trigger class: a /* with no matching */: the rest of the file becomes comment, so javac reports an unclosed comment or reached end of file
+  - diagnose_an_error: rule broken: /* and */ are two-character tokens with no space inside. Kind: compile-time. Trigger class: writing / * ... * /: the slashes and stars are read as operators, producing syntax errors
+  - transfer_to_a_new_program: Use comments to document intent where the code alone is unclear; do not rely on them to change what the program does, and keep them in step with the code.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: two_dimensional_array
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a table or matrix is one grid in which rows and columns are symmetric, so a column should be as easy to pick out as a row. 
+  - misconception: wrong rule: Only the innermost elements are accessible. 
+  - misconception: wrong rule: A 2-D int array type is written int[] int[]. 
+  - misconception: wrong rule: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. 
+  - misconception: wrong rule: A 2-D array is one thing, not an array of arrays. 
+  boundary: Any correct, programming-specific statement about two dimensional array makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: a two-dimensional array, an array of arrays used to represent a table or matrix with M rows and N columns.
+  - states_the_rule: Declarative: declare double[][] a; create with new double[M][N] (rows first, then columns); refer to row i, column j as a[i][j]. Entries start at 0 (numbers) or false (boolean).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: new double[M][N] creates an array of M references and then M row arrays of N defaults. a[i][j] evaluates a[i] (checked against a.length = M) and then [j] (checked against a[i].length).
+  - output_prediction: Result: a[i][j] has the element type; a.length is the number of rows M; a[i].length is the length of row i; a[i] is a double[] row.
+  - one_step_execution: State transition: a[i][j] = v changes one element of row i; a[i] = new double[K] replaces the whole row i with a new array; other rows are untouched.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The transition matrix is a 2-D double array p[i][j] with one row per page; each row holds a probability distribution.
+  - relation_to_neighbour: A 2-D array uses two indices, and the first chooses the row array: a[i][j] is (a[i])[j].
+  - relation_to_neighbour: Since each row is a separate array, rows may have different lengths; such arrays are ragged.
+  - relation_to_neighbour: Matrix operations index a[i][j] in nested loops (two for addition, three for multiplication).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: swapping the loop order for an element-wise operation keeps the result but changes the processing order. Swapping the indices (a[j][i]) transposes and goes out of bounds when M != N.
+  - transfer_to_a_new_program: Applicability: use a 2-D array for data naturally indexed by two integers (rows by columns). Use a ragged array when rows differ, a 1-D array when one index suffices, and higher dimensions for 3-D models.
+  - diagnose_an_error: rule broken: Indices must be within each dimension (i < a.length, j < a[i].length). Kind: run-time exception. Trigger class: row and column bounds swapped in a non-square M-by-N array, or j bounded by N on a shorter ragged row (Ar
+  - diagnose_an_error: rule broken: The type is written with one bracket pair per dimension. Kind: compile-time. Trigger class: int[] int[] a; or assigning an int[] where an int[][] is required (incompatible types)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: transition_matrix
+L0 Prestructural:
+  - everyday_reading: In maths classes a transition matrix is often written column-wise (column = from), and "matrix" suggests a table of counts; in SW p[i][j] is a probability, row i = the page the surfer is on, column j = the page moved to, and each 
+  - misconception: wrong rule: A 2-D array is one thing, not an array of arrays. 
+  - misconception: wrong rule: Multi-dimensional arrays must be rectangular. 
+  - misconception: wrong rule: A page with no outgoing links can have an all-zero row. 
+  boundary: Any correct, programming-specific statement about transition matrix makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A data structure: an N-by-N two-dimensional double array p[][] (a stochastic matrix) whose entry p[i][j] is the probability of moving from page i to page j.
+  - states_the_rule: Entry (i, j) is the probability that the surfer on page i moves to page j; by the 90-10 rule it is .90*counts[i][j]/outDegree[i] + .10/N, and every row is a discrete probability distribution summing to 1.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Three steps in order: read N and create counts[][] and outDegree[]; read all links and accumulate counts; then, row by row (outer i) and column by column (inner j), compute and print one probability; the header "N N" is printed be
+  - output_prediction: Output is a matrix file: the row and column counts, then N rows of N doubles printed with %8.5f; for tiny.txt row 0 is 0.02000 0.92000 0.02000 0.02000 0.02000 and row 1 is 0.02000 0.02000 0.38000 0.38000 0.20000.
+  - one_step_execution: One inner-loop pass evaluates one double p for the current (i, j) from counts[i][j], outDegree[i] and N, and prints it; no array is modified by this phase.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Row i depends only on the tallies read for page i (counts[i][] and outDegree[i]); the matrix cannot be computed until all links have been read.
+  - relation_to_neighbour: Dividing counts[i][j] by outDegree[i] (after scaling by .90) and adding .10/N is the normalisation that makes row i sum to 1; the double operand .90 keeps the division from being integer division.
+  - relation_to_neighbour: The random move reads one row p[page] as a 1-D array and accumulates its entries; it only works if that row sums to 1.
+  - relation_to_neighbour: The matrix is double[N][N]: p[i] is the row array for page i and p[i][j] an element; indices must be in 0..N-1 and the first index is the row (from-page).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Invariant: every row sums to 1. Changing the split to 80-20 or 95-5 keeps it (the two weights still sum to 1) but changes the ranks; changing .10/N to .10, or omitting the leap term, breaks it.
+  - transfer_to_a_new_program: Right tool when the model has few enough pages that N*N doubles fit in memory and both simulation and the power method need per-pair probabilities; not for millions of pages (trillions of entries).
+  - diagnose_an_error: rule broken: outDegree[i] must be > 0 (no dangling pages). Kind: silent logic error. Trigger class: A page with no outlinks: .90*counts[i][j] is the double 0.0 and 0.0/0 gives NaN, so the whole row prints NaN with no exception.
+  - diagnose_an_error: rule broken: Each row must sum to 1. Kind: silent logic error. Trigger class: Any row whose entries do not sum to 1 (wrong scaling, missing leap term, unhandled dangling page) makes the RandomSurfer move fail.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: arithmetic_operators
+L0 Prestructural:
+  - everyday_reading: In maths notation, multiplication can be implicit (2x), ^ or a superscript means a power, ÷ is exact division, and % means percent. In Java * must be written, / depends on the operand types, % is the remainder, and there is no pow
+  - misconception: wrong rule: a^2 computes a squared. 
+  - misconception: wrong rule: "10" - 1 or "6" * "2" works because the strings look like numbers. 
+  boundary: Any correct, programming-specific statement about arithmetic operators makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Arithmetic operators: the binary operators + - * / % that combine two numeric operands into a numeric result.
+  - states_the_rule: Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The left operand is evaluated fully, then the right operand, and then the operator is applied in the promoted type.
+  - output_prediction: With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).
+  - one_step_execution: An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Operators build larger expressions from smaller ones, and each operand can itself be any expression.
+  - relation_to_neighbour: For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.
+  - relation_to_neighbour: int / or % by zero throws a run-time exception, while floating-point division by zero gives Infinity or NaN.
+  - relation_to_neighbour: + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+  - transfer_to_a_new_program: Use the operators for arithmetic on numeric types. Use the Math library for powers, roots and absolute values, and parse numeric Strings before computing with them.
+  - diagnose_an_error: rule broken: int / and % by zero are undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0 (empty count, zero input): ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: Arithmetic operators other than + are not defined for Strings. Kind: compile-time. Trigger class: "10" - 1 or "6" * "2": 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: comment, two_dimensional_array, transition_matrix, arithmetic_operators.

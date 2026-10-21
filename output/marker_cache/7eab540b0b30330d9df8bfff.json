@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "array element access and for loop bounds (a[5] with i up to 2)", "why": "The student confuses the loop variable i with the array index, wrongly believing a[5] can't be reached, when the loop prints a[5] (8) three times; this is a wrong rule, not a slip."}

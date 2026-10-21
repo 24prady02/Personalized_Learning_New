@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "p && q is true when both are true, or when one is true, or when either is true.",
+   "correct": false,
+   "why": "The answer says && is true when only one operand is true. That is the everyday 'and/or' reading, and it contradicts Java's rule that && is true only when both are true."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions when the second operand is evaluated."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention if-else."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer 'Yes' is correct, because A and B leave y the same for x>0, x==0 and x<0. But 'they look the same' is only a surface impression. It doesn't trace any values or branches, so it counts as a bare correct result."}

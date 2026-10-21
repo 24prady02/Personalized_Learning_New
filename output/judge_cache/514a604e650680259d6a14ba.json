@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment; the '=' in 'n + n = 2000' is ordinary maths notation, not a claim about Java assignment."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the int type, its range or how int arithmetic behaves."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "n + n = 2000.",
+   "correct": false,
+   "why": "The inner loop makes n passes on each of the outer loop's n passes, so count++ runs n*n = 1,000,000 times, not n + n; the answer also says nothing about what happens when n doubles."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code and the answer involve no user input."
+  }
+ ]
+}

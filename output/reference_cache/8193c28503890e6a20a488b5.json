@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student gives a correct general definition: the loop never stops because its condition stays true. They don't apply it to the code. They don't say that `i += 0.5` on an int casts back to 0, so `i` never changes and `i < 10` stays true."}

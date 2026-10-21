@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A type is int or double.",
+   "correct": true,
+   "why": "It correctly names int as a Java type, but gives no rule and does not apply it to code."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A type is int or double.",
+   "correct": true,
+   "why": "It names two of Java's primitive types as examples, but does not say what a primitive type is or relate them."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A variable is a box.",
+   "correct": false,
+   "why": "This is only the everyday box metaphor, with no Java-specific idea such as a named, typed location holding one value."
+  },
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "An expression is a calculation.",
+   "correct": false,
+   "why": "This is the everyday maths reading of 'expression' and says nothing Java-specific, such as producing one typed value or literals and variables also being expressions."
+  }
+ ]
+}

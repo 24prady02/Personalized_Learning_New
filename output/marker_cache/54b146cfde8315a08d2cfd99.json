@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Purpose of array-traversal fragments (sum, count, max, search)", "why": "Correctly describes what each of the four fragments does, one by one, but does not group them into named categories (such as accumulate, count, or search patterns) or relate them to each other beyond 'all walk through the array'."}

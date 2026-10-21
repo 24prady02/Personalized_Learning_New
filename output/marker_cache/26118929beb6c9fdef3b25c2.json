@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "cast in division (int vs double division)", "why": "The answer correctly states one aspect, that the cast makes the division a double division, but it covers only part (c) and doesn't give the other values or trace the lines."}

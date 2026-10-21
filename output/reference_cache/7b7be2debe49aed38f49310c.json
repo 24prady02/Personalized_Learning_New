@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The 1,000,000 is a bare unjustified result (worth no more than L1 on its own), and the only rule the student actually applies—doubling n doubles the count—contradicts the nested-loop structure (count = n², so it quadruples), showing no working model of nested iteration; a wrong rule applied to the concept is L0, not L1."}

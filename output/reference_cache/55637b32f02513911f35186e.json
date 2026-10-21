@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The answer makes a definite claim about i's role, so it is levelled, but the claim is wrong: i is the loop index (1 to a.length-1) and a[i] is the element value, so the student has no working model of the variable's role, which is L0 (not 'none', since it is an assertion, not a question)."}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student correctly judges that i is fine as a conventional loop index and c needs a descriptive name. They give a reason for the rename (c counts the passing scores) and correctly say the output stays 3. This relates the naming to the purpose of the code, but it stays within the given code and doesn't go beyond it."}

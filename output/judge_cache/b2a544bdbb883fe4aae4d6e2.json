@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "It prints 1 4 7 10",
+   "correct": true,
+   "why": "The predicted output is correct, but the answer does not explain how the print calls build it, so it is a bare result and stays at L1."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "because the loop always runs four times",
+   "correct": true,
+   "why": "The run confirms four passes, but the answer never says the loop stops when isDone becomes true at i = 10, so it does not explain when the loop stops."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "the loop always runs four times",
+   "correct": true,
+   "why": "The number of passes is correct, but the answer does not trace it from the start value, the step of +3 or the condition, so it is a bare count."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a counter."
+  }
+ ]
+}

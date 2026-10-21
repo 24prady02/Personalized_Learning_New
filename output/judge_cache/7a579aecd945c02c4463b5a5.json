@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+   "correct": true,
+   "why": "The student follows x++ and ++x step by step: y gets the old value 5, then x becomes 6, then ++x makes x 7 and w gets 7. The run confirms all of these values."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "y is 5 ... so w is 7",
+   "correct": true,
+   "why": "The student works out each right-hand side with the current value of x and stores the result in y and in w. The values are correct."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "then x is 6, then ++x makes it 7",
+   "correct": true,
+   "why": "The student tracks x as it changes from 5 to 6 to 7 and gives its final value correctly. This shows that x holds one current value at a time."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about operator precedence."
+  }
+ ]
+}

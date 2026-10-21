@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if condition evaluation and loop count tracing", "why": "The student wrongly thinks the if fires from a change made later in the loop, but the if runs once before the loop with count 0. This shows no working model of sequential execution, though the final 5 is correct."}

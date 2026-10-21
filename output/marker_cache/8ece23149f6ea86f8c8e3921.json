@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "implicit widening vs explicit narrowing cast", "why": "Correctly states the rule for d = i (widening) and the (int) cast for 9.99, but doesn't cover the other lines (e.g. q, r, p, t) or trace values across the code."}

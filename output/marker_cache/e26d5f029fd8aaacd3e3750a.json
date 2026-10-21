@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "for-loop trace: accumulator value and loop exit test", "why": "Both parts are correct and use values (total is 6 after pass 3, and the final test i <= 5 fails at i = 6), but the answer doesn't relate them to what the loop is for, so it stays at L2."}

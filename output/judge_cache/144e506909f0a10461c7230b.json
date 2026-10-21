@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how the if works or which statements it controls."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss how statements run in order or what each one does."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "No output is predicted for score = 50, and the answer does not discuss what println does."
+  },
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "great is indented wrong.",
+   "correct": true,
+   "why": "It correctly flags the indentation of 'great' as a layout problem, but it does not say that braces decide the block, that the line still runs, or what gets printed."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "testing evenness with % 2 (choosing the correct condition)", "why": "The student picks C, which uses the wrong rule: a[i] / 2 == 0 is integer division and is true only for 0 and 1, and 'divide by 2' is an everyday meaning of even, not Java's remainder test."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer treats the for loop like a single if check. It says the body runs once, so count is 1, but i++ and the repeated condition make the body run three times and count is 3. This applies a wrong rule for loops."}

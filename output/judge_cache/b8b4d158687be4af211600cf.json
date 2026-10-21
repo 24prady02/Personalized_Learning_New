@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "for (int j = 1; j <= i; j++) System.out.print(\"*\");",
+   "correct": true,
+   "why": "The answer keeps print(\"*\") as the inner loop's body, which is the right element, but it gives no reasoning about what print does here and the program's output is wrong overall."
+  },
+  {
+   "concept": "println",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "}\nSystem.out.println();",
+   "correct": false,
+   "why": "This is a relational error: println sits outside the outer loop, so it never ends each row of prints, and the run shows the program prints ****** on one line instead of three lines."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only copies i++ and j++ from the given code and says nothing about them."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about separators or handling one item outside the loop."
+  }
+ ]
+}

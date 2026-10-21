@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 2.0 because avg is a double.",
+   "correct": true,
+   "why": "The answer applies a correct rule to this code: a double value always prints with a decimal part, so it shows 2.0 and not 2. It does not explain the int division that gives 2, so it stays below L3."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the conditional operator, and the code does not use it."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student describes only fragment 4 (it finds whether t is present) and doesn't group or name the other fragments. Fragment 4 sets a flag to show whether t occurs. It doesn't find where t is, so the description is also imprecise. This covers one part of the code only, so it is L1."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "for x = 0, B gives 1 because x >= 0 is true",
+   "correct": false,
+   "why": "The answer evaluates 0 >= 0 as true, which is right, but it ignores the inner x > 0 (false), so B actually stores 0 and A and B always agree. This is a slip in the trace."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer states no assignment rule. It only claims a wrong value for y (1 instead of 0)."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  }
+ ]
+}

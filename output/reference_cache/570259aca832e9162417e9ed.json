@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student accepts the wrong trace line. The code stops when the condition becomes false, so i = 3 makes i < 3 false and the body never runs. The student's claim that the loop 'stops after the condition has become true' reverses the Java rule for a for loop, so this is L0."}

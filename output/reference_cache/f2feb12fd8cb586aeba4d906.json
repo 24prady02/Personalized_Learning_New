@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule: that a declared local variable defaults to 0. In Java a local `int c;` has no value until it is assigned. So `System.out.println(c + 1);` is a compile-time error (variable might not have been initialized), not 1."}

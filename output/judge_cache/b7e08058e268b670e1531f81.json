@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The answer says that storing Math.round's long result in an int causes a compile-time error, and that is correct."
+  },
+  {
+   "concept": "math_round",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The answer explains the compile error in int k2 = Math.round(2.5) by the long return type, which is exactly this trigger class."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The answer correctly sees that a long-to-int narrowing conversion without a cast does not compile."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions a cast or how to fix the line with one."
+  }
+ ]
+}

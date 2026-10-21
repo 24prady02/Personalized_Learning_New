@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "a = 30, b = 20.",
+   "correct": false,
+   "why": "The value a = 30 fits the wrong rule that a = b adds b to a, but the code makes a 20 because assignment replaces the old value."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives only values and says nothing about variables themselves. The wrong value comes from the assignment error, not from a belief about variables."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no arrays and the answer does not mention aliasing."
+  }
+ ]
+}

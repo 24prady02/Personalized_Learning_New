@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer applies a wrong rule: Java has defined operator precedence, so it doesn't guess, and parentheses aren't required. It also doesn't say that r = 1 + 2*3 = 7, so it shows no working model of precedence."}

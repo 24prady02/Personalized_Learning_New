@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The student reads b = t as 'b equals a' (treating t as an alias of the current a rather than a copy of a's old value), concluding both end as b; this is a wrong rule of assignment, not a one-off slip in an otherwise correct trace, so it is prestructural despite touching all three lines."}

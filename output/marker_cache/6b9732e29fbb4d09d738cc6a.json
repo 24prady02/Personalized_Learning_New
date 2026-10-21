@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop that halves n and counts the halvings", "why": "The answer gives n=3 with no explanation, and 3 actually prints 1 (3→1, c=1), so it looks like the printed value was copied in as the input. A correct input is 8 to 15."}

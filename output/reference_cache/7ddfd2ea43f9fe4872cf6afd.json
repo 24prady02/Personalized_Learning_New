@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student gives only \"3\" with no explanation. For n=3 the loop runs once (3→1), so the program prints 1, not 3. The answer treats the input as the printed value instead of the number of halvings, and shows no working model of the loop. A correct input would be 8 to 15."}

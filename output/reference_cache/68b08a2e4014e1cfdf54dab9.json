@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule: a local int is not given a default value of 0. It is unassigned, and reading it is a compile-time error. The claim 'ints always start at 0' confuses local variables with fields and contradicts Java."}

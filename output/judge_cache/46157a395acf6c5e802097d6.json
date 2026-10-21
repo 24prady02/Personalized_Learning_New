@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no division, and the answer says nothing about integer division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "1 / 1 2 / 1 2 3 4",
+   "correct": false,
+   "why": "The answer is only a wrong output (the last line should be 1 2 3), with no statement about operators; a bare output is not levelled."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "1 / 1 2 / 1 2 3 4",
+   "correct": false,
+   "why": "No reasoning about expressions is given, only an incorrect bare output."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention precedence or grouping."
+  }
+ ]
+}

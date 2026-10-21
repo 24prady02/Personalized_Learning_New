@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "counting positives with a loop (loop bounds and count)", "why": "The answer picks line F, whose bound i <= a.length is wrong and goes out of bounds, and leaves out B. It also gives no explanation of the lines it left out, so it doesn't apply the language rule for the loop."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "if/else branch selection when the condition is false", "why": "It correctly evaluates a > b as false and skips the if body, but it leaves out the else branch (line 4), so the correct order 1, 4, 6 is incomplete."}

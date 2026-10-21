@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Accumulation in a loop: assignment (=) versus compound assignment (+=)", "why": "The answer identifies line 3, explains in one sentence that sum is overwritten on each pass so it ends as the last i, and links that to the loop, then gives the fix sum += i. It stays within the given code and doesn't generalise to other cases."}

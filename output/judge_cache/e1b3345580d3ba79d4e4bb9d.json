@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "No, A has two conditions and B has only one.",
+   "correct": false,
+   "why": "The answer is wrong: B also tests x > 0 in its ?: expression, and both A and B leave y unchanged when x < 0, set it to 0 when x == 0 and set it to 1 when x > 0. Counting the conditions on the surface is not a correct Java reading of the if statements."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arrays or aliasing."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A has two conditions",
+   "correct": false,
+   "why": "The answer uses the number of conditions in A's else-if chain to claim a different result, but the else-if chain sets y exactly as B's nested if with ?: does."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about identifiers."
+  }
+ ]
+}

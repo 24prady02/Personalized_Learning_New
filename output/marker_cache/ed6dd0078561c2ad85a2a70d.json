@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division and assignment to double", "why": "The answer applies a wrong rule (a/b is treated as 3.5 and then rounded up to 4), when Java does integer division to get 3 and then widens it to 3.0, so B is correct."}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "switch (x) { case > 0: … }",
+   "correct": false,
+   "why": "The answer uses a range test as a case label, but Java case labels must be constants, so this range test has to stay an if-else chain."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about break."
+  }
+ ]
+}

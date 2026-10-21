@@ -1,0 +1,1 @@
+{"level": "L1", "why": "B (3.0) is correct, because 7/2 is integer division and gives 3, which is then widened to 3.0. The student states one valid rule (r is a double, so C is out) and says Java doesn't round. They never trace a/b, and they give no reason for B over A. The answer is correct but not justified by the values, so it stays at L1."}

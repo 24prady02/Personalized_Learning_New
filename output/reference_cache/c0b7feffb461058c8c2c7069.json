@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "With i = 5 the condition i < 3 is false on the first test, so the while body never runs and nothing is printed; claiming it prints 5 once applies a wrong rule (treating while as a do-while / 'runs at least once'), which contradicts Java rather than being a slip in an otherwise correct trace, so it is L0, not L2."}

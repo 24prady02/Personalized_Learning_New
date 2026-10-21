@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "a.length - 1, the last index.",
+   "correct": true,
+   "why": "The answer correctly says the last element is at a.length-1, but as a loop bound this swaps almost every pair twice and fails to reverse the array (a.length / 2 is needed), so the rule is not applied to this code."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "the last index",
+   "correct": true,
+   "why": "Calling a.length-1 the last valid index is correct, but there is no trace of how a[i] and a[a.length-1-i] change across the loop."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer writes an expression but says nothing about expressions themselves."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length - 1, the last index.",
+   "correct": true,
+   "why": "The answer names the upper bound of the legal index range but does not link it to this loop's swap logic."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The loop is `while (true)` with no condition or `break`, so it never stops at 0 and would also print the 0. The student says it stops because \"0 means stop\", which is an everyday meaning and not how Java works. The only correct part is that `StdIn.readInt()` reads a new number each time round, and they don't explain that."}

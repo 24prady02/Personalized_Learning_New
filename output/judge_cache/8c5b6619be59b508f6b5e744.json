@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop",
+   "correct": true,
+   "why": "It explains the order by where each part sits relative to the loop: start at 0 before it, update inside it once per pass, and use the result after it."
+  },
+  {
+   "concept": "loop_scope",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions where a variable can be used or how long it exists."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "be added to in every pass",
+   "correct": true,
+   "why": "It correctly says the loop body runs once per pass, but it does not trace the header (start, condition, update) on this code."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss wrong output or errors that give no message."
+  }
+ ]
+}

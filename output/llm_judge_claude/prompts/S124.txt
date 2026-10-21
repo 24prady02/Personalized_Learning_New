@@ -1,0 +1,164 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What makes this program a filter?
+
+CODE:
+// Filter: copy only the non-negative numbers from standard input to standard output
+while (!StdIn.isEmpty()) {
+  int v = StdIn.readInt();
+  if (v >= 0) StdOut.print(v + " ");
+}
+% java RandomInts 6 | java Filter > clean.txt     (RandomInts printed: 4 -1 7 -3 0 2)
+
+STUDENT ANSWER: It reads from standard input and writes to standard output.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: standard_output
+L0 Prestructural:
+  - everyday_reading: Novices take output text literally, as if it acted on the program: printing "The value of X is 1" is read as setting X to 1. They also take 'print' to mean producing a finished line. 
+  - misconception: wrong rule: print and println behave the same (no newline difference). 
+  - misconception: wrong rule: printf() ends the line like println(). 
+  - misconception: wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. 
+  boundary: Any correct, programming-specific statement about standard output makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Standard output (System.out, StdOut) is the library abstraction for a program's text output: an output stream of characters written by print, println and printf.
+  - states_the_rule: print(s) writes s. println(s) writes s and then the line separator. println() only ends the line. A null String prints as "null". By default the stream goes to the terminal window.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the argument expression is evaluated, e.g. the concatenation "Sum is " + sum. Then its string form is appended, and println appends the line separator after it. Successive calls appear in execution order.
+  - output_prediction: The output is the argument's string form. System.out.println(Math.PI) prints 3.141592653589793 (all digits), and println("Sum is " + 1778) prints Sum is 1778 followed by a newline. The methods return void.
+  - one_step_execution: One call appends text to the output (println also appends the line separator). It changes no variables and returns nothing.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each output call appends to the end of the single output stream, so the order of output is the order of execution.
+  - relation_to_neighbour: With `> file`, every print/println/printf writes to the file and nothing appears in the terminal. The program code is unchanged.
+  - relation_to_neighbour: A prompt printed with print (not println) shows on the same line where the user then types, before the following StdIn read blocks. Output and input are separate streams.
+  - relation_to_neighbour: StdOut text and StdDraw pictures are independent outputs: printing does not draw, and drawing does not print.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join.
+  - transfer_to_a_new_program: Use standard output for text results meant for a reader or for the next program in a pipeline. Use printf when digits or column widths matter, and StdDraw/StdAudio for pictures and sound.
+  - diagnose_an_error: rule broken: Output order and line breaks follow the order of the calls and the print/println choice. Kind: silent logic error. Trigger class: Output statements in the wrong order, or a missing println, so text fragments run toget
+  - diagnose_an_error: rule broken: PrintStream methods never throw IOException; a write failure only sets an internal flag. Kind: silent logic error. Trigger class: Output to a closed or failing destination: nothing is reported unless checkError() is c
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: standard_input
+L0 Prestructural:
+  - everyday_reading: In everyday reading of `INPUT A` or `readInt`, the command looks like it inputs the letter A, or 'looks at' a number without using it up. In fact a read takes the next token from the input stream, converts it, and returns the valu
+  - misconception: wrong rule: Calling StdIn.readInt() twice returns the same value twice. 
+  - misconception: wrong rule: Reading a second input value into a variable that already holds one is an error, so the program cannot run. 
+  - misconception: wrong rule: A line read after a number read returns the next line typed. 
+  - misconception: wrong rule: Reading a value once before the loop is enough; the loop will process each new input value. 
+  boundary: Any correct, programming-specific statement about standard input makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: StdIn is a booksite library of static methods that read typed values from the standard input stream: isEmpty, readInt, readDouble, readLong, readBoolean, readChar, readString, readLine, readAll.
+  - states_the_rule: StdIn reads from a stream that may be empty or may contain values separated by whitespace. readInt() reads the next token, parses it as an int and returns it, and the token must have the type the method expects. Outside the book's
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When execution reaches a read, the program blocks until a complete token is available (at the terminal, until <return>). The read then parses the token and returns, the assignment stores the value, and the next statement runs.
+  - output_prediction: readInt returns an int, readDouble a double, readString a String, readBoolean a boolean. AddInts 4 with input 144 233 377 1024 prints Sum is 1778.
+  - one_step_execution: One read moves the input position past one token and returns its value. Assigning that value overwrites the variable's previous value. No other variable changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Every StdIn call takes from the same stream position, so values are delivered once, in order.
+  - relation_to_neighbour: To read an unknown number of values, each read must be guarded by !StdIn.isEmpty() as the condition of a while loop whose body reads.
+  - relation_to_neighbour: With `< file` the same StdIn calls read from the file instead of the keyboard. The program text does not change.
+  - relation_to_neighbour: The reads must follow the file's layout: one readInt() for n first, then pairs of readInt() for each link i j until isEmpty().
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the input data changes the results without recompiling. Swapping two reads swaps the values the two variables get. Changing readInt to readDouble accepts more inputs; the reverse breaks on tokens like 12.2.
+  - diagnose_an_error: rule broken: StdIn/StdOut/StdDraw/StdAudio are not part of Java; their files must be in the working directory or on the classpath. Kind: run-time exception. Trigger class: StdIn.class is absent when the program runs: java.lang.NoC
+  - transfer_to_a_new_program: Use StdIn when the amount of data is large or unknown, comes from a file or another program, or must be supplied while the program runs. Use command-line arguments for a few parameters fixed at launch.
+  - diagnose_an_error: rule broken: The next token must parse as the requested type. Kind: run-time exception. Trigger class: The next token is not an int literal, e.g. abc, 12.2 or true for readInt(). StdIn throws NumberFormatException in the book's ve
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: filter
+L0 Prestructural:
+  - everyday_reading: An everyday filter (a coffee filter) removes things. In the UNIX sense a filter is any program that reads standard input and writes standard output, even one that removes nothing.
+  - misconception: wrong rule: The file a filter processes shows up in args[]. 
+  boundary: Any correct, programming-specific statement about filter makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A filter is a program that converts a standard input stream into a standard output stream.
+  - states_the_rule: A filter reads from standard input and writes to standard output, classically writing a subsequence of its input (e.g. RangeFilter keeps the values between lo and hi).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Each pass of while (!StdIn.isEmpty()) reads one value t, tests lo <= t <= hi, and prints t right away if the test passes. Output is produced while input is still being read.
+  - output_prediction: `java RangeFilter 100 400` with input 358 1330 55 165 689 1014 3066 387 575 843 203 48 292 877 65 998 prints 358 165 387 203 292: the in-range values, in their original order.
+  - one_step_execution: One pass reads one value and appends it to the output only if it passes the test. lo and hi do not change.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Piping connects filters: the output of one becomes the input of the next, so filters compose into pipelines (`java RandomSeq 1000 | more`).
+  - purpose_of_the_whole: Plan: the stream filter, a one-pass read-test-print loop that uses only a fixed number of variables. The value read is a most-recent holder and lo and hi are fixed values.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: A filter keeps the relative order of the values it passes (it outputs a subsequence). Filters can be chained in any number without changing each other.
+  - transfer_to_a_new_program: A filter is the right tool when each output depends only on the current value, or on a fixed amount of state. Tasks that need all the values (sorting, k-th smallest, percentage above the mean) must store them in an array first.
+  - diagnose_an_error: rule broken: Every value must pass the range test before it is output or processed. Kind: silent logic error. Trigger class: Values outside lo..hi (e.g. negatives) are output because the test is missing or uses the wrong bounds or
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: formatted_output
+L0 Prestructural:
+  - everyday_reading: In maths `7.2` (or %2.4f) reads as a decimal number, or as '7 digits before the point, 2 after'. In a format specifier the number before the point is the total field width and the number after it is the digits after the decimal po
+  - misconception: wrong rule: Any conversion code (%d, %f, %s) works with any argument type. 
+  - misconception: wrong rule: %2.4f prints two digits before the decimal point and four after. 
+  - misconception: wrong rule: printf() ends the line like println(). 
+  - misconception: wrong rule: A result printed with many decimal places must be accurate to those places. 
+  boundary: Any correct, programming-specific statement about formatted output makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: printf is the formatted-print method of standard output. It takes a format string and arguments and writes the formatted string.
+  - states_the_rule: A format specifier has the form %[argument_index$][flags][width][.precision]conversion: d for integer types, f for floating-point values, s for String or any type. The width is a minimum character count, and for f the precision is
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The arguments are evaluated first. The format string is then scanned left to right: ordinary characters are copied, and each specifier takes the next argument, converts it, rounds it to the precision and pads it with blanks to the
+  - output_prediction: The output is the formatted text. printf("%7.5f", Math.PI) gives 3.14159, printf("PI is approximately %.2f\n", Math.PI) gives `PI is approximately 3.14` and a newline, and printf("%5d", 42) gives ` 42`. Rounding is half-up.
+  - one_step_execution: One call appends one formatted string to standard output and adds no newline unless \n or %n is in the format. The stored values of the arguments do not change (only their printed form is rounded).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: printf output goes into the same stream as print/println and lands at the point in the stream where it was called. It does not end the line.
+  - relation_to_neighbour: println prints a double with all its digits (about 15 places) and always ends the line. printf("%.2f\n", x) controls the digits and ends the line only because of \n.
+  - purpose_of_the_whole: Plan: table printing. Inside a loop, one fixed format string with a specifier per column prints aligned rows (e.g. a loan table) at a chosen precision.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing the precision changes only the printed digits, not the stored value. Changing the width changes only the padding. A width smaller than the converted text is ignored, so nothing is truncated.
+  - transfer_to_a_new_program: Use printf when the number of digits, the field width or column alignment matters (tables, money, reports). For quick checks of a value, println is enough.
+  - diagnose_an_error: rule broken: The conversion code must match the argument type. Kind: run-time exception. Trigger class: %d with a double, or %f with an int (e.g. printf("%4.2f", 512)): IllegalFormatConversionException.
+  - diagnose_an_error: rule broken: There must be an argument for every specifier, and the format syntax must be legal. Kind: run-time exception. Trigger class: More specifiers than arguments (e.g. printf("%d %d", 3)), or a malformed specifier: an Illeg
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: standard_output, standard_input, filter, formatted_output.

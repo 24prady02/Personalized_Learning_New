@@ -1,0 +1,1 @@
+{"level": "L1", "why": "(a) {2, 1, 3} is correct, but it is a bare result with no trace of the swap. (b) is not answered. (c) is wrong: the code reads a[2], so a length-1 array would throw ArrayIndexOutOfBoundsException, not do nothing. The answer is not levelled above L1."}

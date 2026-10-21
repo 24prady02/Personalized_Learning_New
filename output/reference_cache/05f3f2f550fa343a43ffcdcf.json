@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student wrongly says that going backwards changes the total. Addition gives the same sum in either order, so A matches the original. The student also doesn't say that B starts at 1 and reaches a[a.length], which throws ArrayIndexOutOfBoundsException. Because the answer applies a wrong rule, it is L0, even though C is correct."}

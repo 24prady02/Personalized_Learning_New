@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The bug is on line 3: `sum = i` overwrites sum instead of accumulating with `sum += i`. The student blames the loop condition on line 2 and says `i < 3` would fix it. That change would print 2, not 6, so the answer misreads what the loop does and the fix is wrong."}

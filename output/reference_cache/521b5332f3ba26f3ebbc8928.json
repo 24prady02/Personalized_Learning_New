@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code `p = v * v` replaces p with the square of each element instead of multiplying p by v (`p *= v`). So p ends up as the square of the last element, and the initial value 1 is never used. This is a wrong rule for accumulation, and the answer gives no explanation of what was changed or why."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the comment."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "C, because even numbers divide by 2.",
+   "correct": false,
+   "why": "It reads 'divides by 2' in the everyday sense, but in Java a[i] / 2 == 0 is true only for -1, 0 and 1, so the guard does not count evens (the correct guard is a[i] % 2 == 0)."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about command-line arguments."
+  }
+ ]
+}

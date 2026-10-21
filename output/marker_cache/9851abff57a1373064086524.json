@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Accessing the last-but-one array element using array length", "why": "The answer uses len(sensorReadings), which is Python syntax. Java arrays use sensorReadings.length, so this applies a wrong rule and would not compile, even though the idea of length minus 2 is right."}

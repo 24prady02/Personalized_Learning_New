@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention init, test or update control, or what i += 0.5 does here."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A loop that never stops because its condition stays true.",
+   "correct": true,
+   "why": "It gives a correct general definition but never applies it to this code, where i += 0.5 leaves the int i at 0."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "its condition stays true",
+   "correct": true,
+   "why": "It implies the loop repeats while its condition is true, a correct general rule that is not applied to this code."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about floating-point tolerance tests."
+  }
+ ]
+}

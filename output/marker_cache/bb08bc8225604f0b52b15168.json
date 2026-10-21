@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "loop accumulating sum of squares", "why": "States in one sentence the purpose of the whole program, deduced from the code (sum of i² for 1..n), with a correct check for n=3, but does not go beyond the given code."}

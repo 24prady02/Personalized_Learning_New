@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop halving count (integer division)", "why": "The answer extrapolates a linear pattern (2→1, 4→2, 6→3) instead of tracing the loop, and the claimed values are wrong since 6 gives 2 and the program halves n each time, so it applies a wrong rule."}

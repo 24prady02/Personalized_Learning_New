@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "interactive_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "No, the user decides each time, while it is running.",
+   "correct": true,
+   "why": "Correctly relates reads during execution to the loop's control flow being chosen by each reply."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

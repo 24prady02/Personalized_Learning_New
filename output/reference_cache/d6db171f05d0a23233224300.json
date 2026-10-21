@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student gives the correct output (30.3) but says 9 % 5 means 9 minus 5. That is a wrong rule: % is the remainder operator, and the remainder is 4 because 9 = 1×5 + 4. The subtraction rule happens to give the same value here, so the explanation is wrong even though the result is right. The student also does not show the addition of 26.3."}

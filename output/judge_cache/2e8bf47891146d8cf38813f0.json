@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "a = 7, b = 3, c = 7.",
+   "correct": false,
+   "why": "The answer gives only final values with no reasoning, so it is a bare result (L1), and b = 3 is wrong because b = a stores 7 in b."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "a = 7, b = 3, c = 7.",
+   "correct": false,
+   "why": "These are bare final values with no reasoning, and b keeping its old value 3 contradicts the run, which gives b = 7. The other values show no consistent wrong rule, so this cannot be called the static-model misconception."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no multi-operator expressions and the answer says nothing about precedence."
+  }
+ ]
+}

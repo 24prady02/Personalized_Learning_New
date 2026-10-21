@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "purpose of fragment 3 (find maximum)", "why": "It says fragment 3 sorts the array, but it only tracks the largest value in m and never reorders anything, so the rule it applies is wrong. It also leaves out the other fragments and gives no grouping."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The student uses the right if rule (the body is skipped when the condition is false) on this code, but wrongly treats the println as the if's body, so the predicted output is wrong; the code prints positive, negative and checked."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The student ignores the ';' after if (x > 0) and reads the next line as the if body, but in Java that empty statement is the whole body, so positive is always printed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "The student correctly evaluates x > 0 as false for x = -3."
+  }
+ ]
+}

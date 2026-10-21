@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "The answer uses the code's own input to show that readInt stops right after 42 and leaves the line break, so the readLine that follows returns the empty rest of that line."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "readInt takes 42 but not the Enter",
+   "correct": true,
+   "why": "The answer correctly explains how one read moves the input position past the token 42 on this input."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about prompts, blocking, or a read happening at run time."
+  }
+ ]
+}

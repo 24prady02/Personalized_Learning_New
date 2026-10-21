@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "JAVA",
+   "correct": false,
+   "why": "The answer gives only a printed value, which is wrong, and says nothing about how println works."
+  },
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "Java Strings cannot be changed: toUpperCase returns a new String and leaves name as \"java\", so the output is java, not JAVA."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "because toUpperCase changes name",
+   "correct": false,
+   "why": "A call that returns a value does not change the object it is called on, and here the returned value is never stored or used."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about program text."
+  }
+ ]
+}

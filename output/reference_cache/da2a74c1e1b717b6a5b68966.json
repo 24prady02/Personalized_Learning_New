@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer correctly describes only the first two lines (array creation, variable declaration) and ignores the loop and the comparison that use the concept, so it does not cover every part of the code with its values; naming one or two parts without applying the rule across the whole code is L1."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception: The program knows what later lines will do and acts on that goal at the current line",
+   "quote": "0 1 2",
+   "correct": false,
+   "why": "The answer treats the println as if it ran on every pass of the loop, but only `total += i` is the loop body, so println runs once after the loop. The run prints 3."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how println works; it only gives a wrong output."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the int type or its values."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "0 1 2",
+   "correct": false,
+   "why": "The answer lists each value of i instead of the running total that `total` builds up, which is 3 after the loop."
+  }
+ ]
+}

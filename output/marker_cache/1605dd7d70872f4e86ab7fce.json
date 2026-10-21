@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Compile and run errors, and which lines never run", "why": "The answer ignores the missing semicolon, the Hello.java/Greeting mismatch and args[1] out of bounds, and wrongly says the commented-out Bye line prints, so it applies wrong rules to the code."}

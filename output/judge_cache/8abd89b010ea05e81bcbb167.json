@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Nothing usable yet; Java will not let you read x until you assign it.",
+   "correct": true,
+   "why": "Links the declaration without an initializer to x staying unassigned, so any read before an assignment is not allowed."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Java will not let you read x until you assign it",
+   "correct": true,
+   "why": "States the correct rule that a variable must be assigned before it is read, without tracing any values."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about int as a primitive type."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention any loop."
+  }
+ ]
+}

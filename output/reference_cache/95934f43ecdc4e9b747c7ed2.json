@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code only runs a = b, so a becomes 20 and b stays 20. The student says the values swap (b = 10), which applies a wrong rule: assignment is not a swap and doesn't change b. This is a documented misconception, not a slip in a correct trace."}

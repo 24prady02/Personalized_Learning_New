@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(2 + 3) / 2 is int division, 5 / 2 = 2, and storing it in a double makes 2.0",
+   "correct": true,
+   "why": "The answer explains that int operands decide the division, so the fraction is lost before the value goes into the double and 2.0 is stored, which is the type-flow relation."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "(2 + 3) / 2 is int division, 5 / 2 = 2",
+   "correct": true,
+   "why": "The answer applies the int division rule correctly to this code's values, and 5 / 2 gives 2."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no cast and the answer does not mention explicit casting."
+  }
+ ]
+}

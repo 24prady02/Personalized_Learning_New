@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "A", "why": "The student correctly reasons about an input not in the given run (no argument): args has length 0, so args[0] throws ArrayIndexOutOfBoundsException before parseInt or println runs. Diagnosing the error class for a changed input, with the reason, is extended-abstract (L4), not merely relating constructs within the given code."}

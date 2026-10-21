@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment a = b (value copy)", "why": "The answer applies a wrong rule, treating a = b as a swap so b becomes 10, when the code only copies b into a and gives a = 20, b = 20."}

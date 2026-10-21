@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested if/else versus conditional (ternary) expression equivalence", "why": "The answer ignores the ternary (x > 0) ? 1 : 0, which gives 0 for x = 0, so B gives 0, not 1. It then wrongly concludes that A and B differ, when they always leave y the same."}

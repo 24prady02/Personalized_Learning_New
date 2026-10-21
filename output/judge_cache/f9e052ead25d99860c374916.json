@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "int x = StdIn.readInt(); while (x != 0) { System.out.println(x); x = StdIn.readInt(); } The read at the end of the body gets the next number.",
+   "correct": true,
+   "why": "The student wrote new, working code that reads an unknown number of values: one read before the loop, then a read at the end of each pass to take the next value. The run confirms it works."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "while (x != 0) { System.out.println(x); x = StdIn.readInt(); }",
+   "correct": true,
+   "why": "The student chose a while loop where the number of passes depends on the input, and the read inside the body updates x so the condition can become false. The run ends with x = 0."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "System.out.println(x);",
+   "correct": true,
+   "why": "println is used correctly to print each number on its own line (output '3 / 5'), but the answer gives no reasoning about it."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention run-time errors."
+  }
+ ]
+}

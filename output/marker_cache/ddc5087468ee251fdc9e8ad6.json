@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested for loops with printf and println output", "why": "The rows '3 2 1', '2 1', '1' are right and the inner loop stopping at 1 is correct, but the answer doesn't justify each iteration. It also misses that i=0 still runs println(), which leaves a final empty line, and it ignores the trailing spaces."}

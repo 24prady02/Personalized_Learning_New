@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Reading ints in a while loop with StdIn.isEmpty()", "why": "The student wrongly claims two numbers are read per pass and that 5 3 8 crashes, when the loop reads one int per pass and prints \"16 3\". They also give no outputs for (a), (b) or (c) and only ask a question."}

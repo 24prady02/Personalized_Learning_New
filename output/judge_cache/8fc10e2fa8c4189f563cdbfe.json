@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "L0",
+   "way": "misconception: 10 / 3 evaluates to 3.333.",
+   "quote": "2 / 5 is 0.4 in Java, like on a calculator.",
+   "correct": false,
+   "why": "In Java, 2 / 5 with two int operands is 0, but the answer says it gives the fraction 0.4, as on a calculator."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "2 / 5 is 0.4 in Java, like on a calculator.",
+   "correct": false,
+   "why": "The answer treats / as exact maths division and ignores that in Java the result depends on the operand types."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type or about p being a double array."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention a cast or a fix."
+  }
+ ]
+}

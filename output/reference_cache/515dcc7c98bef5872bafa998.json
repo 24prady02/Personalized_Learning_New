@@ -1,0 +1,1 @@
+{"level": "L3", "why": "Correct: with no argument args is empty, so args[0] throws ArrayIndexOutOfBoundsException before parseInt runs. The answer links the cause (empty args) to the failing expression, which is a one-sentence account of what the code does here. It does not go beyond the given code to a class of inputs or a fix, so it is not L4."}

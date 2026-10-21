@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "It never ends, p keeps doubling.",
+   "correct": false,
+   "why": "The answer misses how the condition p*2 <= n controls the loop. Once p reaches 32, 64 <= 37 is false, so the loop stops, but the answer says it never stops."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "It never ends, p keeps doubling.",
+   "correct": false,
+   "why": "The answer calls the loop infinite. But the doubling moves p toward making p*2 <= 37 false, and the run shows the loop ends with p = 32."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about formatted output."
+  }
+ ]
+}

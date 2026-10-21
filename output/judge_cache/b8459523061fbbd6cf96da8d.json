@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Probe: \"What is 17 % 5?\" Turn 2: \"3.4\"",
+   "correct": false,
+   "why": "The answer gives 17 % 5 as 3.4, which is the result of real division, but in Java 17 % 5 is the remainder 2. The correct phrase '9 mod 5' does not make up for this wrong rule."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the double type, promotion to double, or the printed value 30.3."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "3.4",
+   "correct": false,
+   "why": "The answer treats % between two ints as exact division, giving 3.4, which contradicts Java's % (remainder 2). It never computes num4 = 4 + 26.3 = 30.3."
+  },
+  {
+   "concept": "scientific_notation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code and the answer do not use scientific notation."
+  }
+ ]
+}

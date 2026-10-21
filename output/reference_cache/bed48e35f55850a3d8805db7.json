@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule: they claim Java rounds doubles down when printing. The real cause is that (2 + 3) / 2 is integer division, which gives 2 before it is assigned to the double. The student missed this and invented a printing rule, so the explanation is at L0."}

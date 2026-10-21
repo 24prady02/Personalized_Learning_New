@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It prints A, goes to the odd part and prints the letters there",
+   "correct": true,
+   "why": "The answer correctly says the first print shows A. It never names the letters the odd branch prints (E then G), so the output AEG is not traced or predicted."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no specific statement about the output stream or how output calls add to it."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about char arithmetic."
+  }
+ ]
+}

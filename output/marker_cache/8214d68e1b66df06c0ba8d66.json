@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Accessing and updating object state via getSize()/setSize() vs direct field access", "why": "The answer does not create the object, does not print, and applies a wrong rule by accessing the field directly with sneaker1.size, since Shoe only offers getSize() and setSize(), so it shows no working model of the concept."}

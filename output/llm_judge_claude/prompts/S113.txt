@@ -1,0 +1,131 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What is an infinite loop?
+
+CODE:
+int i = 0;
+while (i < 10) {
+  System.out.print(i);
+  i += 0.5;
+}
+
+STUDENT ANSWER: A loop that never stops because its condition stays true.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: infinite_loop
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in everyday instructions ('lather, rinse, repeat', 'while the road is two lanes, continue north') the reader stops sensibly or watches the condition all the time. A Java loop repeats only while its condition is true 
+  - misconception: wrong rule: A loop whose condition never goes false will still terminate. 
+  - misconception: wrong rule: If my loop never ends, the compiler or Java will warn me. 
+  - misconception: wrong rule: `x += 0.5` adds one half to an int x. 
+  - misconception: wrong rule: A while loop ends by itself even if nothing in the body changes the variable tested in the condition. 
+  boundary: Any correct, programming-specific statement about infinite loop makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Loop bug/behaviour: a loop whose continuation condition never becomes false, so it runs until the program is killed (or overflow intervenes).
+  - states_the_rule: A while or for loop terminates only if some pass makes its condition false at a test (or a break or return runs). Otherwise it repeats forever. The compiler does not check this.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The same order as any loop: test, body, test... In an infinite loop the update either never runs or never moves the tested variables towards false, so every test yields true.
+  - output_prediction: There is no final value. Either output scrolls forever (BadHellos with `i > 3`) or nothing happens and the program 'hangs'. Over a very long run, int overflow may eventually make the test false (BadHellos stops after about 2^31 li
+  - one_step_execution: Each pass leaves the condition's variables either unchanged or moving away from false (i grows while the test is `i > 3`). So the state after the pass satisfies the condition again.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A loop is finite only if its update moves the control variable towards making the condition false. Wrong direction (`i--` with `i < n`), wrong step (`i += 0` or `x += 0.5` on an int), or a condition that the update can step over (
+  - purpose_of_the_whole: Purpose: usually a bug. An intentional `while (true)` with an internal break or return is the 'loop-and-a-half' plan for servers, event loops and read-until-sentinel input.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing the condition or update can turn a terminating loop into an infinite one (`i <= 10` to `i > 3`), or the reverse. The termination argument (a quantity that strictly moves towards the bound on every pass) must survive any c
+  - transfer_to_a_new_program: Write `while (true)` only when the exit is in the middle of the body and is certain (break or return on a sentinel or event). Otherwise, for each loop, state why the condition eventually becomes false. When a program seems stuck, 
+  - diagnose_an_error: rule broken: The body must change a variable in the condition so that it eventually becomes false. Kind: silent logic error. Trigger class: A forgotten `i++` (or an update inside an if or after a continue): the program hangs or pr
+  - diagnose_an_error: rule broken: An empty statement after the loop header becomes the body. Kind: silent logic error. Trigger class: `while (i < 10); { i++; }`: the stray `;` is an empty body that never changes i.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: loop_control
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in mathematics i = 0, i < n and i = i + 1 are equations or constraints that hold at the same time (and i = i + 1 is nonsense). In Java they are three actions run at different moments: init once, test before each pass
+  - misconception: wrong rule: ++i in the for-update runs before the body each pass. 
+  - misconception: wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. 
+  - misconception: wrong rule: a condition that never goes false still terminates. 
+  - misconception: wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. 
+  boundary: Any correct, programming-specific statement about loop control makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Loop control is the init / continuation condition / increment scheme on an index variable that decides how many passes a loop makes and with which values.
+  - states_the_rule: Initialize an index variable, test a loop-continuation condition on it before each pass, and increment it as the last action of each pass; for (<initialize>; <boolean expression>; <increment>) packages the three. Choosing the loop
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.
+  - output_prediction: The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.
+  - one_step_execution: One update changes only the loop variable, by exactly the rule written (i++ adds 1, i = i - 4 subtracts 4); one test reads it and returns true or false without changing it.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: All three control parts act on the loop variable: the init sets it, the condition tests it, the update changes it.
+  - relation_to_neighbour: The for header is exactly the three control slots, separated by semicolons; the body runs after the test and before the update.
+  - relation_to_neighbour: The update i = i + 1 is usually written i++ (or i += k for other steps); as a whole update statement ++i and i++ are equivalent.
+  - relation_to_neighbour: A loop is infinite when the update never moves the variable toward making the condition false (e.g. condition i > 3 with update i = i + 1).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both 
+  - diagnose_an_error: rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside
+  - transfer_to_a_new_program: Use explicit init/test/update control when the passes are counted or follow a fixed step; when the number of passes depends on data computed in the body, control the loop by that data (a while condition) instead.
+  - diagnose_an_error: rule broken: The update must move the loop variable toward making the condition false. Kind: silent logic error. Trigger class: An update in the wrong direction or a condition that the update cannot falsify (e.g. i > 3 with i++, o
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: convergence_test
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths a converging sequence reaches its limit, and 'equal' means exactly equal, so a novice writes `while (t != c/t)` and expects it to stop at the root. Java doubles are approximations, so exact equality may neve
+  - misconception: wrong rule: `Math.sqrt(2) * Math.sqrt(2) == 2` is true. 
+  boundary: Any correct, programming-specific statement about convergence test makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Loop-termination idiom: a while condition that keeps refining a floating-point estimate until its error falls below a tolerance epsilon.
+  - states_the_rule: Stop on a relative-error tolerance, not on equality: `while (Math.abs(t - c/t) > epsilon * t) t = (c/t + t) / 2.0;` with `epsilon = 1e-15`.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Before each pass: evaluate c/t, then t - c/t, then Math.abs, then epsilon * t, then compare. If the error is greater, run the body once (replace t) and test again. If it is not greater, leave the loop with the current t.
+  - output_prediction: The loop leaves a double t whose relative error is at most epsilon. For Sqrt 2.0 it prints 1.414213562373095 after 5 iterations; the result is not exactly the mathematical value.
+  - one_step_execution: One pass changes only the estimate t, replacing it by (c/t + t)/2.0 (2.0 becomes 1.5, then 1.4166666666666665). c and epsilon stay fixed. The test itself changes nothing and yields a boolean.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Because doubles are approximate, the stopping condition has to be a tolerance test, and the tolerance has to be relative (`epsilon * t`). An absolute 1e-15 is smaller than the spacing between doubles near large values such as 1595
+  - relation_to_neighbour: The convergence test is the while condition, evaluated before every pass. The body must move the estimate closer (t = (c/t + t)/2.0), or the condition stays true and the loop never ends.
+  - purpose_of_the_whole: Plan: iterate-until-converged (Newton's method). The estimate t is repeatedly replaced by a better one until it is close enough. Used to compute functions like sqrt, kth roots and Taylor sums.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Making epsilon smaller adds a few iterations and keeps the answer; making it 0, or replacing the test with `t != c/t`, may stop the loop from ever ending. Switching the relative test `epsilon * t` to an absolute `epsilon` keeps be
+  - transfer_to_a_new_program: Use a convergence test when an iterative numeric method has no fixed number of steps (Newton's method, series that are summed until `sum == sum + term`). For a known number of steps use a counted for loop, and in practice call the
+  - diagnose_an_error: rule broken: Do not test doubles for exact equality in a loop condition. Kind: silent logic error. Trigger class: A condition like `while (t != c/t)` or `for (double x = 0.0; x != 1.0; x += 0.1)`, where rounding means the values n
+  - diagnose_an_error: rule broken: The tolerance must be achievable at the magnitude of the result (relative error). Kind: silent logic error. Trigger class: An absolute tolerance much smaller than the spacing between doubles near the answer (e.g. `> 1
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: infinite_loop, loop_control, convergence_test.

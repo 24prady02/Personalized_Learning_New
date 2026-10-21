@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "for (int i = 1; i < x.length; i++) x[i] = x[i - 1];",
+   "correct": false,
+   "why": "The new loop goes upward and copies forward, so it overwrites each value before it is read and fills the array with x[0] instead of undoing the shift."
+  },
+  {
+   "concept": "indexing",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "x[i] = x[i - 1]",
+   "correct": false,
+   "why": "To undo the shift each element must move left (x[i-1] = x[i]) and the old first element must be saved and put back at the end; keeping the original x[i] = x[i-1] cannot reverse it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "i++",
+   "correct": true,
+   "why": "The answer uses i++ correctly as the stand-alone loop update that adds 1, but gives no reasoning about it."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "for (int i = 1; i < x.length; i++)",
+   "correct": true,
+   "why": "The header correctly has an initializer, a condition and an update, but the answer doesn't trace or relate the loop."
+  }
+ ]
+}

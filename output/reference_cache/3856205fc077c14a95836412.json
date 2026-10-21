@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The student correctly applies the Java rule that int / int is integer division (7/2 = 3), but the answer only addresses that one part and ignores the assignment to double r, so the printed value is actually 3.0 (option B); grasping one correct aspect without covering all parts of the code is L1, not a wrong-rule L0."}

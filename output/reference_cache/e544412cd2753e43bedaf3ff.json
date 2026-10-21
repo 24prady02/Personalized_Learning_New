@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code finds the smallest value (the condition is a[i] < best), but the student says best holds the biggest number 'because it is called best'. That reads the variable name with its everyday meaning rather than tracing the comparison, and it covers only one variable with the wrong purpose."}

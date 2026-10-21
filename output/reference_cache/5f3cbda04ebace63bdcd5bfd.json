@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly says b / 2 is 3, but 'rounds down' is a loose description of integer truncation. This covers only one part of the code. It doesn't give the error type, the printed 7.0, why the compiler missed it, or a fix."}

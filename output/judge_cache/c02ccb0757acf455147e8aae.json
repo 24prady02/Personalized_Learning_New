@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "The cast makes the division a double division.",
+   "correct": true,
+   "why": "The answer roughly says that a double operand makes the division floating point, but it doesn't apply this to q or r or give any values."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "The cast makes the division a double division.",
+   "correct": true,
+   "why": "This is one rule about casts that holds for r, but the answer doesn't separate (double)(i / 2) from (double) i / 2, so it isn't applied to the code."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types or about widening and narrowing in general."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions int division dropping the fraction, so it doesn't explain why q is 3.0."
+  }
+ ]
+}

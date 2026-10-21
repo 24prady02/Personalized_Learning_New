@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "(h) nothing, && stops at n != 0",
+   "correct": true,
+   "why": "The answer applies the && rule to this code. With n = 0 the left operand is false, so the right operand is not evaluated, the condition is false and nothing is printed."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "(d) count is 3",
+   "correct": true,
+   "why": "The value is correct, but it is a bare result with no reasoning, so it counts as L1."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "nothing, && stops at n != 0",
+   "correct": true,
+   "why": "The answer applies short-circuiting to n = 0: the left test decides the result, so 10 / n is skipped. It does not explain the guard's purpose (avoiding division by zero), so it is not L3."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no invariant or termination argument for any loop."
+  }
+ ]
+}

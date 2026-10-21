@@ -1,0 +1,1 @@
+{"level": "L1", "why": "System.exit(0) (or StdAudio.close()) is a correct fix, because StdAudio's non-daemon audio thread keeps the JVM alive. The answer gives only the fix. It doesn't say why the program doesn't end, so it is a bare correct result with no justification."}

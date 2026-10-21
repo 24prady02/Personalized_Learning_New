@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "B", "why": "The student writes correct new code for an unseen problem (product) and justifies the change by reasoning about what is conserved: the identity element must be 1 because 0 would zero out every product. Writing correct new code beyond the given program is L4, not merely a fix to one failing case (L3)."}

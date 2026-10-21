@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+   "correct": true,
+   "why": "The answer correctly predicts what changing the specifier to %.3f does (rounds to 3.142, no width so no padding) and notes that only the printed form changes, not the stored value."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing specific about the double type, such as its representation, arithmetic or promotion."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only covers rounding for display and does not discuss representation error or approximate stored values."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The claim is wrong. The shift loses nothing, because `last` is saved and put into x[0], so the original array can be restored. Undoing it means saving x[0], shifting every element left, then writing the saved value to the last index. The student misreads the code and gives no undo code."}

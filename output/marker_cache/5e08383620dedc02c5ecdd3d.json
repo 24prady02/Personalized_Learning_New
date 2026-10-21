@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "temporary variable in swap", "why": "It correctly states the one rule that a[i] would be overwritten before being saved, but does not trace the three assignments or the values, or relate it to the shuffle."}

@@ -1,0 +1,13 @@
+way       covered 16/16
+level     covered 6/6
+section   covered 6/6
+family    covered 26/26
+concept   covered 110/111   missing: ['naming_convention']
+kind      covered 2/2
+format    covered 1/1
+question  covered 73/76   missing: ['Q20', 'Q46', 'TQ14']
+code      covered 73/76   missing: ['4454b0ad31c1', '5ea971cde8b0', 'e98cb82ea3d1']
+levels: {'L4': 18, 'L2': 14, 'L0': 22, 'L3': 20, 'none': 4, 'L1': 22}
+level written by: human 41, Fable 59
+graph ways (13 way names over 5 levels = 14): covered 14; not in any of the 169: []
+algorithm matches the level on 68/100 of the chosen (human 35/41, Fable 33/59)

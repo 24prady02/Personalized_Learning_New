@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "b times a is 3 4 / 1 2, so the order matters",
+   "correct": true,
+   "why": "The swapped product {{3,4},{1,2}} is correct, but the answer shows no working with * and +, so it is only a bare result (L1)."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how an expression is evaluated."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss names or identifiers."
+  }
+ ]
+}

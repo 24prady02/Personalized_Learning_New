@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"double","level":"L2","way":"one_step_execution","quote":"d = i happens by itself because double is bigger","correct":true,"why":"Correctly applies the widening rule to the assignment of an int to the double d."},
+{"concept":"type_conversion","level":"L3","way":"relation_to_neighbour","quote":"d = i happens by itself because double is bigger; going from 9.99 to int needs (int).","correct":true,"why":"Relates both conversion directions to type range: int to double is automatic, double to int needs a cast."},
+{"concept":"int","level":"L3","way":"relation_to_neighbour","quote":"going from 9.99 to int needs (int)","correct":true,"why":"Correctly states that a double becomes an int only through a cast, in contrast to automatic int to double."},
+{"concept":"data_type","level":"L2","way":"one_step_execution","quote":"going from 9.99 to int needs (int)","correct":true,"why":"Applies to this code the rule that a double value goes into an int only with a cast."}
+]}

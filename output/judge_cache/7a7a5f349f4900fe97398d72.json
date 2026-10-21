@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "System.out.println(min);",
+   "correct": true,
+   "why": "The code uses println correctly to print the result, but the answer gives no reasoning about what println outputs."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "double min = data[0];",
+   "correct": true,
+   "why": "The answer correctly declares the variable as double to match the array, but gives no reasoning or trace of double values."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "The code correctly sets min before the loop, starting at the first element, updates it on each pass and reads it only after the loop, applying the running-minimum plan to this task."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about overflow."
+  }
+ ]
+}

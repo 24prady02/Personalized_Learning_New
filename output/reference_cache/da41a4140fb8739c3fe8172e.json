@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student reads the 'e' in 6.02e23 as a separate quantity (like Euler's number) and says 'times e to the power 23'. In Java, e is scientific notation meaning ×10^23, so this is a maths or everyday reading that contradicts the language rule. The other parts (b–e) are not answered."}

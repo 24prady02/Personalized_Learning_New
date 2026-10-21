@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student predicts JAVA, but Java strings are immutable: toUpperCase() returns a new string and leaves name unchanged, so the output is java. The answer applies a wrong rule (that the method changes the variable in place), so the prediction is wrong."}

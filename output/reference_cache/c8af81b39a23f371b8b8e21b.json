@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer is wrong. For x = 0, B assigns y = (0 > 0) ? 1 : 0, which is 0, the same as A, so the two always agree (when x < 0 neither assigns). The student ignores the ternary condition and treats a true x >= 0 as giving 1, which breaks the Java rule, so the conclusion 'No' is also wrong."}

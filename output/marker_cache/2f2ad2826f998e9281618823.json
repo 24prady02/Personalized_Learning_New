@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "counterexample for max initialised to 0 (all-negative array)", "why": "Gives a valid failing input, traces the output 0 vs expected -1, and links the fault to the initial value of max, but it doesn't generalise to the class of all-negative arrays."}

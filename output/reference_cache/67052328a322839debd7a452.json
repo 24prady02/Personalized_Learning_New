@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says 'n squared', which is correct, but then gives 2000, which is 2n and not n² = 1,000,000. This means they switched to a linear rule within one answer. They also don't say that doubling n quadruples the count."}

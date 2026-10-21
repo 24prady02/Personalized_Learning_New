@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the comment line."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "D, it adds 1 for every even number.",
+   "correct": false,
+   "why": "It claims D counts the even numbers, but count += a[i] % 2 adds 1 only for odd values, so this wrong reading of the code cannot be L1-L4."
+  },
+  {
+   "concept": "int",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "it adds 1 for every even number",
+   "correct": false,
+   "why": "It treats a[i] % 2 as 1 for even numbers, but in Java an even int % 2 is 0 and an odd one gives 1 (or -1 if negative)."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention string concatenation, and the code has none."
+  }
+ ]
+}

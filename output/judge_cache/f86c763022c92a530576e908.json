@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "for int x it is 0",
+   "correct": false,
+   "why": "The answer says nothing about int's range or arithmetic; the wrong claim is about declaration defaults, not about int itself."
+  },
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception: local variables get a default value on their own",
+   "quote": "so for int x it is 0",
+   "correct": false,
+   "why": "A local variable declared with int x; is unassigned, not 0, and reading it before assignment is a compile error."
+  },
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "For String s; it would be an empty string",
+   "correct": false,
+   "why": "A declared String is not an empty string: a local is unassigned, and a String default (field or array element) is null, not \"\"."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention arrays or array element defaults."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "variable swap using a temporary variable", "why": "The student wrongly concludes both variables end up equal to b, applying a wrong rule: they treat b = t as copying the new a, not the saved original a, so they miss the swap."}

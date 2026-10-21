@@ -3,7 +3,9 @@ identify.py — Stage A: which Chapter-1 concepts is a student prompt about?
 
 Every prompt is scored against all 173 concepts of the Chapter-1 graph:
 
-    score = W_CODE * code-cue hits (max 2 counted)
+    score = W_CODE * code-cue hits in the student's text (max 2 counted)
+          + W_CODE_SHOWN * code-cue hit only in the question's code (max 1 counted)
+          + W_ASKED * a cue in the question part asked or the code lines it names
           + W_WORD * word-cue points (max 3 cues; a multi-word phrase counts 2)
           + W_SEM  * max(0, meaning_sim - SEM_FLOOR)
           + W_MIS  * max(0, misconception_sim - MIS_FLOOR)      (thresholds.py)
@@ -25,7 +27,7 @@ from typing import Dict, List, Optional
 from .knowledge import Concept, PercptKnowledge
 from . import models
 from .thresholds import (KEEP_SCORE, MAX_CONCEPTS, MIS_FLOOR, RELATIVE_KEEP,
-                         SEM_FLOOR, W_CODE, W_MIS, W_SEM, W_WORD)
+                         SEM_FLOOR, W_ASKED, W_CODE, W_CODE_SHOWN, W_MIS, W_SEM, W_WORD)
 
 _SPLIT_RE = re.compile(r"(?<=[.!?;])\s+|\n+|\s+(?:but|however|whereas|although)\s+", re.I)
 
@@ -59,16 +61,28 @@ class ConceptHit:
     misconception_match: Optional[str] = None
 
 
-def _cue_hits(c: Concept, text_lower: str, raw: str):
-    code = [p.pattern for p in c.code_cues if p.search(raw)]
+def _cue_hits(c: Concept, text_lower: str, text: str, code: str):
+    in_text = [p.pattern for p in c.code_cues if p.search(text)]
+    in_code = [p.pattern for p in c.code_cues if code and p.pattern not in in_text and p.search(code)]
     words = [w for w in c.word_cues if _word_hit(w, text_lower)]
-    return code, words
+    return in_text, in_code, words
+
+
+def _focus(asked: str, code: str) -> str:
+    """The part asked plus the code lines it names (by a variable or call): what
+    the answer is about. "What is months used for?" -> String[] months = {...};"""
+    names = {w for w in re.findall(r"\b[A-Za-z_]\w*\b", asked or "") if len(w) > 2}
+    lines = [l for l in (code or "").split("\n") if names & set(re.findall(r"\b[A-Za-z_]\w*\b", l))]
+    return (asked or "") + "\n" + "\n".join(lines)
 
 
 def identify(text: str, kg: PercptKnowledge, code: str = "",
-             clauses: Optional[List[str]] = None) -> List[ConceptHit]:
-    raw = f"{text}\n{code}" if code else text
+             clauses: Optional[List[str]] = None, asked: str = "") -> List[ConceptHit]:
+    """asked: the question part the prompt answers; a concept it (or the code it
+    names) cues gets W_ASKED, so the answer is linked to what was asked."""
     text_lower = (text or "").lower()
+    focus = _focus(asked, code) if asked else ""
+    focus_lower = focus.lower()
     clauses = clauses if clauses is not None else split_clauses(text)
 
     concepts = list(kg.concepts.values())
@@ -100,19 +114,22 @@ def identify(text: str, kg: PercptKnowledge, code: str = "",
 
     hits: List[ConceptHit] = []
     for c in concepts:
-        code_h, word_h = _cue_hits(c, text_lower, raw)
+        code_h, shown_h, word_h = _cue_hits(c, text_lower, text or "", code)
         s_sim, s_txt = best_sem.get(c.id, (0.0, ""))
         m_sim, m_id = best_mis.get(c.id, (0.0, None))
         # a multi-word phrase cue ("loop variable") is more specific than a single word
         word_pts = sum(2 if " " in w.strip() else 1 for w in word_h[:3])
-        score = (W_CODE * min(len(code_h), 2) + W_WORD * word_pts
+        asked_h = bool(focus) and (any(p.search(focus) for p in c.code_cues)
+                                   or any(_word_hit(w, focus_lower) for w in c.word_cues))
+        score = (W_CODE * min(len(code_h), 2) + W_CODE_SHOWN * min(len(shown_h), 1) + W_WORD * word_pts
+                 + W_ASKED * asked_h
                  + W_SEM * max(0.0, s_sim - SEM_FLOOR)
                  + W_MIS * max(0.0, m_sim - MIS_FLOOR))
         if score <= 0:
             continue
         hits.append(ConceptHit(
             concept=c.id, score=round(score, 3), confidence=round(min(1.0, score / 3.0), 2),
-            code_cues=code_h, word_cues=word_h,
+            code_cues=code_h + shown_h, word_cues=word_h,
             meaning_sim=round(s_sim, 3), meaning_match=s_txt,
             misconception_sim=round(m_sim, 3),
             misconception_match=m_id if m_sim >= MIS_FLOOR else None))

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "equivalence of loop variants (reverse and for-each) for summing", "why": "Correctly picks A and C and gives the order-independence rule, but never traces B (index 1 to length, out-of-bounds, skips a[0]) or goes through the loops value by value."}

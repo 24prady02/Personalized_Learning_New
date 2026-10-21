@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "7 / 2 is int division, so 3, and storing it in a double makes 3.0",
+   "correct": true,
+   "why": "The answer explains that with two int operands the fraction is lost before the value goes into the double, so 3.0 is stored."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "7 / 2 is int division, so 3",
+   "correct": true,
+   "why": "The answer applies int division to this code's values and gets 3."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "7 / 2 is int division, so 3, and storing it in a double makes 3.0",
+   "correct": true,
+   "why": "The answer works out the int division first and widens the result to double only afterwards, so the fraction stays lost."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "storing it in a double makes 3.0",
+   "correct": true,
+   "why": "The answer correctly converts the int result to the variable's type when it is assigned, and gives no reason beyond that."
+  }
+ ]
+}

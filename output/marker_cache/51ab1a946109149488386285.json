@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Equivalence of nested if-else and conditional expression", "why": "The answer judges by appearance ('they look the same') with no tracing, no values and no justification, so it shows no working model of the code's rules."}

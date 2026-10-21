@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "interactive_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "No, the user decides each time, while it is running.",
+   "correct": true,
+   "why": "It correctly says that input is read while the program runs and that the user's reply controls whether it continues, but it does not apply this to the given code or explain how the read and the loop are connected."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about if statements or conditional branching."
+  }
+ ]
+}

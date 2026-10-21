@@ -115,3 +115,9 @@ data/cpal.db-*
 # Dev-only auth secret. Production uses CPAL_AUTH_SECRET env var.
 src/persistence/.auth_secret_dev
 .last_narrative.md
+
+# Cached code runs (rebuilt on demand, ~1 GB)
+output/exec_cache/
+# Local-only: pre-sync backup and the archived superseded run outputs (kept on disk, not in git)
+_backup_before_sync_*/
+_archive/cleanup_2026-10-20/output/

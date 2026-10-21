@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "loop condition check at exit (i < 3 with i = 3)", "why": "The answer correctly says the condition is false at 3 so the loop stops, but it covers only that one part. It doesn't say that 3 is never printed or trace the other iterations."}

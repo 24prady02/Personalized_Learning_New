@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "variable declaration with char type and naming convention", "why": "The answer correctly declares a char initialised with 'Q', but it breaks the camelCase convention by capitalising the name (SingleLetter instead of singleLetter), so it gets only one aspect right."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "variable assignment (a = b copies value)", "why": "Final values are correct, but there is no line-by-line or value-by-value justification, so only the outcome is stated and it can't be placed above L1."}

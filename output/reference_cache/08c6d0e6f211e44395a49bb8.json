@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer makes a claim about one fragment only (so not 'none'): it correctly recognises that (4) searches the array for t, which is one correct aspect, but it never groups the fragments and misstates the result ('where' — the code sets a boolean presence flag, not a position), so it stays at L1 rather than L2/L3."}

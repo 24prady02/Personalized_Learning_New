@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Math.abs overflow on Integer.MIN_VALUE", "why": "The result -2147483648 is correct and the answer gives the reason (+2147483648 does not fit in an int), but it does not go further to the wrap-around rule or the class of inputs affected, and it does not trace the steps in detail."}

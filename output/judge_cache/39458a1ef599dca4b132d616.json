@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "Says correctly that the printed fractions only estimate the ranks, but does not explain it or apply it to these counts."
+  },
+  {
+   "concept": "power_method",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "This is the listed wrong rule that page ranks depend on the start page; the true ranks are the same from any start."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about running the program."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "This contradicts mixing: the long-run probabilities of a chain that mixes are the same whatever the starting page."
+  }
+ ]
+}

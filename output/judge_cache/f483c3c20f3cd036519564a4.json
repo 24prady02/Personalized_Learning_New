@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention arithmetic operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention primitive types."
+  },
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A set of values plus the operations you can do on them.",
+   "correct": true,
+   "why": "It gives the correct definition of a data type but doesn't apply it to the code."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention assignment."
+  }
+ ]
+}

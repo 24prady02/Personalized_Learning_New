@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: The computer recognises the role a variable plays",
+   "quote": "best keeps the biggest number, because it is called best",
+   "correct": false,
+   "why": "The answer infers what the variable holds from its name, but Java gives a name no meaning: best holds whatever is assigned to it, which here is the smallest value, 2."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the statements or the order they run in."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks or loop bodies."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "best keeps the biggest number, because it is called best",
+   "correct": false,
+   "why": "The answer reads the purpose from the everyday meaning of 'best' and ignores the comparison a[i] < best, which finds the minimum, not the maximum."
+  }
+ ]
+}

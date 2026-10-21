@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "initialising max to 0 fails for all-negative arrays", "why": "It identifies the right flaw (negative numbers) but gives no concrete input array and no value of what the code returns, so it states the rule without applying it to values."}

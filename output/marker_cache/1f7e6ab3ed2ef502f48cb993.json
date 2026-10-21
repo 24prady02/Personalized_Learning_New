@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "counting even numbers with % 2 in a loop", "why": "D adds a[i] % 2, which is 1 for odd numbers and 0 for even ones, so the claim that it adds 1 for every even number applies a wrong rule for %."}

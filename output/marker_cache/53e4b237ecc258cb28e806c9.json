@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if/else branch selection with a > b when a equals b", "why": "The student applies a wrong rule, treating a > b as true when the values are equal, so the trace takes the wrong branch (1, 2, 6 instead of 1, 4, 6)."}

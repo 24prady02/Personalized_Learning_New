@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "default value of an uninitialized local int", "why": "Applies a wrong rule (ints default to 0), but a local variable has no default value and is unassigned, so the code can't use it until it's assigned."}

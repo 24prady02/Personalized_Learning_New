@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The order B, D, A, C is correct, and so are the blanks `a[0]` and `a[i]`. All parts are covered, but the operator is wrong. `<` finds the smallest value, not the largest, so the answer needs `>`. This is a single slip in an otherwise rule-correct answer, with no stated purpose, so it is L2 with an error."}

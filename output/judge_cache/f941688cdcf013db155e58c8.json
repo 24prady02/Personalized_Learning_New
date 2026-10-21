@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "s = Σ i² for i = 1..n",
+   "correct": true,
+   "why": "The answer gives the right final value of s but says nothing about how assignment stores or replaces values."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions i++ or how i is incremented."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements, their order or println as a statement."
+  },
+  {
+   "concept": "function_plotting",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "This program does no function plotting, and the answer does not discuss it."
+  }
+ ]
+}

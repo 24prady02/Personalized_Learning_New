@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "other", "why": "The answer correctly applies the widening/narrowing rule to just two lines (d = i and (int) 9.99) and ignores the other conversion lines (q, r, and the String concatenation), so it does not cover every part of the code in order as L2 requires; it also states no purpose or cross-construct relation, so it is not L3."}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is correct for `java Order 3`: it prints start and done, and big is skipped because n > 5 is false. It never covers `java Order five`, where parseInt throws NumberFormatException after start is printed and done never prints. It also doesn't mention that the if controls only the big line. So it handles only one of the two parts."}

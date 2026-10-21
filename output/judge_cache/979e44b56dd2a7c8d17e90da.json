@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int p = 0; for (int v : a) p *= v;",
+   "correct": false,
+   "why": "The int accumulator and *= are valid Java, but starting at 0 makes the product always 0 (it should start at 1), and the answer gives no explanation."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "for (int v : a) p *= v;",
+   "correct": true,
+   "why": "The for-each loop follows the correct form, but the answer gives no trace or reasoning about how it runs over the elements."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int p = 0; for (int v : a) p *= v;",
+   "correct": true,
+   "why": "The declaration and loop statements are correctly formed and end with semicolons, but the answer does not trace their order or effects."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no empty statement and does not discuss one."
+  }
+ ]
+}

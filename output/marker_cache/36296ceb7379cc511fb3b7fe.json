@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "while loop halving n and counting iterations (floor log2)", "why": "It states in one sentence what the loop does (counts halvings until n reaches 1) and uses that to give the correct range 8–15, but it doesn't trace values line by line or go beyond the given code."}

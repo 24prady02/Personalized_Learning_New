@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student put braces around the outer loop body so that println() runs once per row, after the inner loop prints i stars. This fixes the given failing case and gives the triangle, but there is no explanation and it goes no further than the given code, so it is L3, not L4."}

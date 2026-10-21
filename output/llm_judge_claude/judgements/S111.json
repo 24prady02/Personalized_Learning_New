@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"math_random","level":"L4","way":"diagnose_an_error","quote":"(int) Math.random() is 0 and the die is always 1. Cast after multiplying.","correct":true,"why":"Correctly diagnoses that casting Math.random() first always gives 0 and fixes it."},
+{"concept":"random_move","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about a random move."},
+{"concept":"explicit_cast","level":"L4","way":"predict_a_change","quote":"The cast happens first, so (int) Math.random() is 0 ... Cast after multiplying.","correct":true,"why":"Correctly reasons that the cast applies only to the next value and that moving it after the multiplication fixes the bug."},
+{"concept":"shuffle","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about shuffling."}
+]}

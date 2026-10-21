@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct and covers every part in order with values: 9 % 5 gives 4, 4 is promoted to 4.0, 4.0 + 26.3 gives 30.3, and the two println calls print as described. It stays a line-by-line trace. It doesn't go on to state the purpose of the code or reason about changed code or other inputs."}

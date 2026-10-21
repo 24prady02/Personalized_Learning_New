@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "nested for loop trace (triangle pattern)", "why": "The answer correctly traces every iteration of i and j with values and printed output, but it never states in a sentence what the code does."}

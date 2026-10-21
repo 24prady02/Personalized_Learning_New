@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "The answer is correct, because Average gets no typed arguments and the redirected or piped data is not in args. But it is a bare result with no reasoning, so it is L1."
+  },
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "It correctly predicts that nothing shows in the terminal because the output goes to the file, and that the average prints when the file is the input. It does not state the general relation, so it is not L3."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "It correctly predicts that only Average's output appears and that no file is made. It does not state that this has the same effect as > then <, so it is not L3."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the isEmpty() read loop."
+  }
+ ]
+}

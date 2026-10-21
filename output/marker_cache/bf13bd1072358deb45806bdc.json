@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop with a block body (g)", "why": "The correct output is ababab, but the answer groups the prints as aaabbb. That shows the loop body isn't run as a whole on each pass, so the rule applied doesn't match how Java runs a loop."}

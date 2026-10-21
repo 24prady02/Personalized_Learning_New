@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The rewrite is correct. Flattening the nested if inside the else into `else if (x < 0) … else …` gives the same output for every x: pos for x>0, neg for x<0, zero for x==0. This shows the student understands how the nested else relates to the chain, but there is no reasoning beyond the given code, so it is not L4."}

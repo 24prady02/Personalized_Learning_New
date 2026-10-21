@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if statement (single check vs loop) in fragment (c)", "why": "The answer applies a wrong rule, treating the if as a repeating loop that keeps adding 1, when it runs once, so x ends as 1 and not 3."}

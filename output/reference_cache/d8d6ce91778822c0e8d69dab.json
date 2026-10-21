@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "With value 2 the switch falls through case 2, 3, 4 and default with no breaks, so result ends as 50; the student's bare '50' is correct but gives no justification, which the boundary rules fix at L1 (a claim is made, so 'none' does not apply)."}

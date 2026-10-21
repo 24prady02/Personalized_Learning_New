@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements or their order."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It ends when p reaches n, so p is 37.",
+   "correct": false,
+   "why": "The only assignment, p = p * 2, gives p powers of two, so p ends at 32 and can never be 37; the answer treats p as reaching the target n."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "There is no break in the code and the answer does not mention break."
+  }
+ ]
+}

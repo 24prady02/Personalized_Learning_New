@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "primitive vs reference type (String)", "why": "Correctly identifies String as a class and not primitive, but only states the rule without relating it to the types or values used in the given code."}

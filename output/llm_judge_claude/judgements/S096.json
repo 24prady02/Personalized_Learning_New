@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A set of values plus the operations you can do on them.",
+   "correct": true,
+   "why": "Gives the correct definition of a data type, not applied to the code."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

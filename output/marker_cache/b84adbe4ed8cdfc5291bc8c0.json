@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop condition and termination", "why": "The student applies a wrong rule by claiming the condition should be i <= 3, when the real error is that i = 3 makes i < 3 false and the body doesn't run, so they miss the loop rule and misjudge the trace line."}

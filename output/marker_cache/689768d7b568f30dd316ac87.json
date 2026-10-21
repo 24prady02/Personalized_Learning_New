@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if / else if / else chain rewrite", "why": "The answer uses a switch with a relational case, which is not an if/else if/else chain, and it is incomplete and invalid Java for an int x, so it shows no working model of the requested rewrite."}

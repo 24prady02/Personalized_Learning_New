@@ -1,0 +1,1 @@
+{"level": "L1", "why": "a.length / 2 is the correct bound, but the only reason given is 'because it is faster'. The student does not say that each iteration swaps a pair, or that looping to a.length would swap every pair twice and restore the original array. That makes it a correct answer with no valid justification, so it stays at L1."}

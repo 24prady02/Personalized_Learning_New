@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop invariant on p (powers of 2)", "why": "p is a power of 2 and starts at 1, which is odd, so 'always even' is false at the first test. The answer also ignores why the loop ends and the final value of p (32)."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "The order of adding does not change a sum, and C visits every value once.",
+   "correct": true,
+   "why": "The answer correctly says that adding the same int values in reverse order (A) or with for-each (C) gives the same accumulated sum, because addition is commutative."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about ++ or --."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about +=."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions or how they are evaluated."
+  }
+ ]
+}

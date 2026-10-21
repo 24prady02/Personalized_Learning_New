@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is correct: age is 42, rest is the empty string left over after the number on the first line, and name is \"Ann Lee\". But it only states the results. It never explains that readInt leaves the newline unread, so the first readLine returns an empty string. A correct result with no justification stays at L1."}

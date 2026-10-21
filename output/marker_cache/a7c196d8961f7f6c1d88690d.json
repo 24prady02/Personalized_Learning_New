@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "undoing a right shift (rotation) of an array", "why": "The student wrongly claims the shift cannot be undone, because the last value is saved in `last` and moved to x[0], so it is a rotation and nothing is lost, which shows no working model of the code."}

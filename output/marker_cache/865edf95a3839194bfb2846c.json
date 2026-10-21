@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop bound for in-place array reversal (swap loop)", "why": "The bound a.length - 1 makes i run to the last index, so every pair is swapped twice and the array ends up unchanged. This applies a wrong rule, and the answer gives no explanation tied to the swap."}

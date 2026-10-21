@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer is wrong. The loop ends when p * 2 > n, and p ends at 32, not 37. Powers of 2 can never reach 37. It also gives no invariant for p, so it applies a wrong rule to the loop."}

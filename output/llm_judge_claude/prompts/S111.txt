@@ -1,0 +1,164 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  Find the cause by reasoning.
+
+CODE:
+// estimate the chance that a die shows 6
+int trials = 1000, sixes = 0;
+for (int t = 0; t < trials; t++) {
+  if ((int) (Math.random() * 6) + 1 == 6) sixes++;
+}
+System.out.println((double) sixes / trials);
+
+STUDENT ANSWER: The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: math_random
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'a random number between 0 and 1' includes both ends, and a 70% chance means the event will happen next time. 
+  - misconception: wrong rule: Math.random() can return exactly 1.0. 
+  - misconception: wrong rule: A probability (e.g. 70%) predicts what the next single trial will do. 
+  boundary: Any correct, programming-specific statement about math random makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Math.random() is a Math library method with no argument that returns a (pseudo-)random double uniformly distributed in [0, 1).
+  - states_the_rule: Each call returns a new double r with 0 <= r < 1; multiplying by N gives a value in [0, N), and casting truncates it to an int between 0 and N-1.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: In int n = (int) (r * N) with r = Math.random(): the call produces r, the product r * N is computed in double (N promoted), the parenthesized cast truncates it, then n is assigned.
+  - output_prediction: A double in [0, 1) that differs from call to call and run to run (e.g. RandomInt 1000 prints 548, then 141); (int) (Math.random() * 6) + 1 is an int from 1 to 6; Math.random() < 0.5 is true about half the time.
+  - one_step_execution: A call changes none of the program's variables, but each call advances the library's hidden generator state, so the next call returns a different value; the drawn value persists only if stored (double r = Math.random();).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Math.random() is the Math method that takes no argument and, unlike the others, is not a function of its input: it returns a random double in [0, 1).
+  - relation_to_neighbour: Converting to a random int requires the cast to apply to the whole product: (int) (Math.random() * N); (int) Math.random() * N casts first and is always 0.
+  - relation_to_neighbour: Each trial of a Monte Carlo simulation draws fresh values with Math.random(); estimates become reliable only over many trials.
+  - purpose_of_the_whole: Plans: simulate an event of probability p with if (Math.random() < p); pick a random index with (int) (Math.random() * N); generate random points or samples (Sajaniemi role of the drawn value: most-recent holder, overwritten each 
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing N in (int) (Math.random() * N) changes the range to 0..N-1, and adding a constant shifts it; the output changes from run to run, so a program using Math.random() cannot be checked by comparing exact outputs, only by stati
+  - transfer_to_a_new_program: Use Math.random() for simulations, games, random sampling and shuffling, where 'every value equally likely' in [0, 1) is the model; it is not suitable when results must be reproducible or follow another distribution without furthe
+  - diagnose_an_error: rule broken: The scaled range of (int) (Math.random() * N) is 0..N-1. Kind: silent logic error. Trigger class: Expecting N to be possible, or 1..N, without adding 1; or scaling by (b - a) instead of (b - a + 1) for an inclusive ra
+  - diagnose_an_error: rule broken: A cast applies only to the value immediately after it. Kind: silent logic error. Trigger class: Writing (int) Math.random() * N, which always gives 0.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: random_move
+L0 Prestructural:
+  - everyday_reading: Everyday "random" means every outcome equally likely, which is what Math.random() gives; the random move must instead pick page j with the unequal probability p[page][j].
+  - misconception: wrong rule: The cumulative-probability boundary test is inclusive/exclusive interchangeably. 
+  boundary: Any correct, programming-specific statement about random move makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: An algorithm: generating a random integer from a discrete distribution (row p[page]) by locating a uniform random number in cumulative intervals.
+  - states_the_rule: Think of row p[page] as N intervals of (0, 1) whose lengths are the probabilities; a uniform r from Math.random() falls into interval j with probability p[page][j], and the surfer moves to j.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: r = Math.random() is drawn once; sum = 0.0; j goes 0, 1, ...; on each pass sum += p[page][j] and then if (r < sum) set page = j and break, so the first interval whose right end exceeds r wins.
+  - output_prediction: Returns (through page) one integer 0..N-1; at page 4 of tiny.txt sum takes 0.47, 0.49, 0.96, ... and r = .71 gives page 2.
+  - one_step_execution: One move changes page from its current value to j (and leaves freq and p unchanged); the locals r, sum and j live only for that move.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Reads exactly one row p[page]; the row must sum to 1, otherwise r can exceed the final sum and no j is chosen.
+  - relation_to_neighbour: Each move starts from the page the previous move produced, and the simulation repeats it T times; the next row used is p[new page].
+  - relation_to_neighbour: The relational test r < sum decides both the chosen page and the early break; < (not <=) matches the half-open interval endpoint tracked by sum.
+  - relation_to_neighbour: Math.random() supplies one uniform double in [0, 1) per move; it must be called once before the j loop, not inside it.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the search (linear to binary) or the order of pages keeps the distribution of outcomes; replacing r < sum with r <= sum changes it only on a zero-probability event; moving Math.random() into the loop breaks it.
+  - transfer_to_a_new_program: Use to draw from any non-uniform discrete distribution (one row of probabilities); for uniform choice Math.random() scaled is enough, and for large N a binary search over the cumulative sums is faster.
+  - diagnose_an_error: rule broken: Add the entry to sum before testing r < sum. Kind: silent logic error. Trigger class: Test placed before sum += p[page][j]: the first test is r < 0.0 (always false) and every page is chosen from the previous interval,
+  - diagnose_an_error: rule broken: Row p[page] must sum to 1. Kind: silent logic error. Trigger class: Row sum < 1 (e.g. dangling page, NaN): when r exceeds the final sum the loop ends with no break and page is unchanged.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: explicit_cast
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. 
+  - misconception: wrong rule: (int) 2.7 evaluates to 3. 
+  - misconception: wrong rule: (double) (3 / 5) is 0.6. 
+  - misconception: wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. 
+  - misconception: wrong rule: (int) args[0] converts the text "34" into the number 34. 
+  boundary: Any correct, programming-specific statement about explicit cast makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A cast is a unary operator, written (type) expression, that converts a value of one primitive type to another, used when the conversion may lose information.
+  - states_the_rule: (T) e converts the value of e to type T; a double-to-int cast discards the fraction by rounding toward zero; a cast is required for narrowing conversions; it has higher precedence than arithmetic; casts between boolean and numbers
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the operand immediately to the right of the cast (a parenthesized expression is evaluated completely first), convert that value, then continue with the remaining operators of the expression.
+  - output_prediction: (int) 2.71828 is int 2; (int) -2.7 is -2; (int) 11 * 0.3 is double 3.3; (int) (11 * 0.3) is int 3; (double) 3 / 5 is 0.6 but (double) (3 / 5) is 0.0; (char) ('a' + 4) is 'e'.
+  - one_step_execution: A cast yields a new value and changes nothing else: neither the type nor the value of the variable being cast changes (after int x = (int) pi; pi is still 3.14159).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A cast is the explicit conversion between primitive types, needed exactly where automatic conversion is refused because information may be lost.
+  - relation_to_neighbour: To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0.
+  - relation_to_neighbour: x op= e contains an implicit cast back to the type of x, so with int x, x += 0.5 compiles (x = (int) (x + 0.5)) while x = x + 0.5 is a compile-time error.
+  - relation_to_neighbour: Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates to
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Moving the parentheses changes when truncation happens ((int) (a * b) vs (int) a * b); removing a cast from a narrowing assignment turns it into a compile-time error; int to double to int restores the value, but double to int to d
+  - transfer_to_a_new_program: Use a cast when you intend to truncate or narrow (random indices, integer parts, char codes); use Math.round to round, Integer.parseInt for Strings, and put a double into the division itself rather than casting its int result.
+  - diagnose_an_error: rule broken: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);. Kind: compile-time. Trigger class: int n = Math.round(x); with double x.
+  - diagnose_an_error: rule broken: A cast applies only to the value right after it. Kind: compile-time. Trigger class: int n = (int) 11 * 0.3; the product is still a double (possible loss of precision); in a double context the same mistake is a silent 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: shuffle
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'shuffle' means mix randomly, so any random swapping seems good enough. Java/algorithm rule: picking the partner r uniformly from i..N-1 makes all N! orders equally likely; picking from 0..N-1 does not.
+  - misconception: wrong rule: Swapping each a[i] with a random element from the whole array gives a uniformly random order. 
+  boundary: Any correct, programming-specific statement about shuffle makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: the Knuth (Fisher-Yates) shuffle, which produces a random permutation by exchanging each position, left to right, with a uniformly chosen position at or to its right.
+  - states_the_rule: Declarative: for (int i = 0; i < N; i++) { int r = i + (int) (Math.random() * (N-i)); exchange deck[i] and deck[r]; }.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: N = deck.length is read once; on each pass r is computed first (Math.random(), times N-i, cast to int, plus i), then the three-step exchange runs, then i increases.
+  - output_prediction: Result: a permutation of the original elements with every one of the N! orders equally likely; the output differs from run to run.
+  - one_step_execution: State transition: one pass picks r and exchanges deck[i] with deck[r]; afterwards deck[0..i] is fixed for the rest of the shuffle.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Using the exchange idiom guarantees the deck holds the same cards after the shuffle.
+  - relation_to_neighbour: (int) (Math.random() * (N-i)) is a uniform int in 0..N-i-1, so r = i + that value is uniform in i..N-1.
+  - relation_to_neighbour: Stopping the shuffle after the first M passes leaves a uniform random sample in positions 0..M-1.
+  - purpose_of_the_whole: Plan/role: randomize the order of an array in place in linear time (dealing cards, random permutations); the array is an organizer.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: the set of cards is invariant (exchanges only), and after pass i, deck[0..i] is a uniform random sample. Widening r's range to 0..N-1 keeps the set but breaks uniformity.
+  - transfer_to_a_new_program: Applicability: use it to randomize a whole array in place. For only M random items, run the first M passes. When the original order must be kept, shuffle an index permutation and use it to index the data.
+  - diagnose_an_error: rule broken: r must be uniform over i..N-1. Kind: silent logic error. Trigger class: r = (int) (Math.random() * N): the shuffle runs and looks random, but some orders are more likely than others
+  - diagnose_an_error: rule broken: The cast applies to the scaled product. Kind: silent logic error. Trigger class: (int) Math.random() * (N-i) casts first and is always 0, so r == i and nothing moves
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: math_random, random_move, explicit_cast, shuffle.

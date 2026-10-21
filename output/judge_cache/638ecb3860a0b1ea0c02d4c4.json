@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only copies the println calls from the given code and says nothing about how println works."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "misconception: if-else is the same as two separate ifs",
+   "quote": "if (x > 0) System.out.println(\"pos\");\nif (x < 0) System.out.println(\"neg\");\nelse System.out.println(\"zero\");",
+   "correct": false,
+   "why": "The rewrite swaps the outer else for a separate if, so when x > 0 the second test runs too: for x = 4 it prints 'pos' and then 'zero', not just 'pos'."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no empty statement and says nothing about one."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student's code has a logic error, but the answer doesn't discuss logic errors."
+  }
+ ]
+}

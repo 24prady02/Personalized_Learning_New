@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop accumulation (sum = i vs sum += i)", "why": "The student blames the loop condition and proposes i < 3, which would make sum 2, not 6. This misses that line 3 overwrites sum instead of adding to it, so the rule applied is wrong."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L0",
+   "way": "misconception: i and a[i] are the same thing, so the position is the stored value",
+   "quote": "Nothing: i only goes up to 2, so a[5] cannot be reached.",
+   "correct": false,
+   "why": "The answer treats a[5] as reachable only if the loop variable i reaches 5, but a[5] always uses the literal index 5, so the loop prints 8 three times."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about two array variables referring to the same array."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Apart from the loop range of i, the answer makes no statement about variables, and its wrong reasoning is about indexing."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about swapping array elements."
+  }
+ ]
+}

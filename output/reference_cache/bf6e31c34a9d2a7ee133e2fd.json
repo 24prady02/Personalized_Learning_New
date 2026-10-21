@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct (a > b is 2 > 2, false, so lines 1, 4, 6 run). It gives a reason for each step, so it goes beyond a bare result. It covers each executed line in order with the values but does not state the purpose of the code or go beyond it."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The claim that any n works is wrong. The loop ends when n is no longer above 1, not when c reaches 3. c counts the halvings, so the program prints 3 only for n from 8 to 15. The answer gives no specific input and misreads how the loop stops."}

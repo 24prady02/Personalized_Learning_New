@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "{0, 0, 0}",
+   "correct": false,
+   "why": "The answer gives only an input array and says nothing about blocks."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "{0, 0, 0}",
+   "correct": false,
+   "why": "The answer says nothing about indexing. It also does not show the bug, because max = 0 is the correct largest value of {0, 0, 0}; only all-negative arrays expose it."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "{0, 0, 0}",
+   "correct": false,
+   "why": "The answer gives no trace and says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code uses a 1-D array, and the answer says nothing about row-major or column-major order."
+  }
+ ]
+}

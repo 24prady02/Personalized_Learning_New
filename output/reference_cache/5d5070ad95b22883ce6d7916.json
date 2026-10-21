@@ -1,0 +1,1 @@
+{"level": "L3", "why": "B is correct. The student links the loop index i to the element a[i] and says the even test must apply to the value, not the position. This gives a reason tied to the purpose of counting even numbers in the array. It stays within the given code and doesn't trace values or reason about other inputs."}

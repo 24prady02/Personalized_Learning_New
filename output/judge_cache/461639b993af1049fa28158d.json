@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Line 3 is a for loop from 1.",
+   "correct": true,
+   "why": "The answer names the for loop and its starting value but doesn't explain why it's there, trace it or relate its parts."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Line 2 sets best to a[0].",
+   "correct": true,
+   "why": "It names a[0] and a[i] but gives no values, such as a[0] being 4, and no reasoning about positions."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Line 4 is an if that sets best to a[i].",
+   "correct": true,
+   "why": "It describes the loop and the a[i] access only as separate surface parts and never says the loop finds the minimum."
+  }
+ ]
+}

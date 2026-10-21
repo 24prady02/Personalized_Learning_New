@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer says n=20 gives 4 and n=1,000,000 gives 500,000 \"because it halves the number\". These two results don't follow one rule, since halving 20 gives 10, not 4. So the answer switches rules and traces no actual values. It gives a bare guess with a vague \"halves\" explanation."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The claim is wrong. With &, both operands are always evaluated, so 10 / n runs with n = 0 and throws an ArithmeticException (divide by zero). The student treats & as the same as && and misses short-circuiting, so the answer rests on a wrong rule, with no trace or reasoning."}

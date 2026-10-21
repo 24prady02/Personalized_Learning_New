@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "B is the correct choice (a[i] % 2 == 0 tests each element's parity and count++ tallies the evens), but the student gives only the bare answer with no explanation; the boundary rule says a bare correct result with no justification is L1, and 'none' is reserved for a question that makes no claim, which this is not."}

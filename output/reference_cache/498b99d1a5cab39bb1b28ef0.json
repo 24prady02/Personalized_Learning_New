@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The claim is correct (both leave y=1 for x>0, y=0 for x==0, and unchanged for x<0) but it is a bare result with no justification; the boundary rule says a bare correct result is L1, and 'none' applies only to a question making no claim, whereas this does make a claim."}

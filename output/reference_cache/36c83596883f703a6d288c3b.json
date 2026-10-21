@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The code is correct: it starts p at 1 (the identity for multiplication) and uses p = p * v in the same loop. But the answer gives no explanation of what changed or why, which the question asked for. It is a bare correct result with no justification, so it is L1."}

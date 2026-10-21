@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "misconception: When a loop finishes the program ends, so code after the loop never runs.",
+   "quote": "The program ends when the loop ends.",
+   "correct": false,
+   "why": "The answer states this listed wrong rule: in Java, statements after a loop still run."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "misconception: When a loop finishes the program ends, so code after the loop never runs.",
+   "quote": "(b) 012. The program ends when the loop ends.",
+   "correct": false,
+   "why": "The for loop does print 012, but then println(\" done\") runs, so the real output is \"012 done\" and the stated reason is wrong."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks or braces."
+  },
+  {
+   "concept": "main_method",
+   "level": "L0",
+   "way": "contradicts line_by_line_trace: the program ends when main's last statement finishes",
+   "quote": "The program ends when the loop ends.",
+   "correct": false,
+   "why": "The program ends after main's last statement, which here is the println after the loop, not when the loop ends."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer reads the name \"max\" as meaning the array's maximum. In fact, after the first line max is only a[0], and it becomes the maximum only once the loop has finished. It also says nothing about i, which is the index that runs from 1 to a.length-1."}

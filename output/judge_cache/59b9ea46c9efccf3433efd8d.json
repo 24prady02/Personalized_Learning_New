@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "sum builds a total",
+   "correct": true,
+   "why": "It correctly says sum is the variable that builds a running total, but it does not trace values or explain how sum += v[i] works."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "count counts",
+   "correct": true,
+   "why": "It correctly picks out count as the counter, but it does not mention the v[i] == 8 guard, the +1 update or any values."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how variables are named or about naming conventions."
+  }
+ ]
+}

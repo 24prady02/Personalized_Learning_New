@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2 and num2 = 27",
+   "correct": false,
+   "why": "The assignment chain is traced correctly: v += 10 turns -11 into -1, and s = 25 + result. But a slip in the conditional (-1 is negative, so finalAdjust gives -10, not 5) makes num2 wrong: it should be 20, not 27."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention ++ or --."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2",
+   "correct": true,
+   "why": "Int division is applied correctly to this code: 5 / 2 drops the fraction and gives 2, even though the 5 came from an earlier slip."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention MAX_VALUE, MIN_VALUE or overflow."
+  }
+ ]
+}

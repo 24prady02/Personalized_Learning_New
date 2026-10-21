@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "d = i happens by itself because double is bigger",
+   "correct": true,
+   "why": "It gives one correct fact about double having the larger range, but it doesn't trace any values or relate double to another type in more depth."
+  },
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It correctly says a double becomes an int only through a cast and an int widens to double on its own, but it never says the cast truncates."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It ties both conversions to the size of each type's range: int to double happens automatically and double to int needs a cast, applied to the lines in this code."
+  },
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "double is bigger",
+   "correct": true,
+   "why": "It makes one correct point about types having different ranges, with no trace or wider reasoning about data types."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "default value of an uninitialised local variable (int c;)", "why": "It applies a wrong rule, saying a declared local int is 0, when Java leaves it unassigned and `c + 1` gives a compile error."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_constants",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "correct": true,
+   "why": "Correct value of Math.abs(Integer.MIN_VALUE), justified by the int range."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "because +2147483648 does not fit in an int",
+   "correct": true,
+   "why": "Correctly applies the fixed int range to explain the result staying negative."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "B is the correct choice, since a[i] % 2 == 0 tests each element for evenness. The answer gives only the letter with no justification, so it is a bare correct result and stays at L1."}

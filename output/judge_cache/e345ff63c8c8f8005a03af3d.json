@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "It links the filledCircle calls to the persistent canvas: each new shape adds to earlier marks, which stay until cleared, so the circles build up into a trail."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about setXscale or coordinate mapping."
+  }
+ ]
+}

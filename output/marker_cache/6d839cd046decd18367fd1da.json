@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "break vs continue in the first loop", "why": "It correctly says what continue does (skips the even i) and what break does (stops the loop at i == 5), so it covers both parts with their values, but it doesn't relate them to the sum or to what the loop is for."}

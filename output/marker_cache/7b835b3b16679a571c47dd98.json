@@ -1,0 +1,1 @@
+{"level": "none", "concept": "90-10 rule transition matrix row (PageRank)", "why": "The values 0.48, 0.03, 0.48 are correct for row 1, but the answer gives no working or value-by-value justification, so it can't be levelled."}

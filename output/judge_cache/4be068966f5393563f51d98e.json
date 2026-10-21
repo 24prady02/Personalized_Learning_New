@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0: both give 1. x == 0: both give 0. x < 0: neither changes y.",
+   "correct": true,
+   "why": "The answer traces both if structures for every input case and correctly says that when no condition is true, no body runs and y is unchanged."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "both give 1 ... both give 0 ... neither changes y",
+   "correct": true,
+   "why": "The answer correctly gives the value stored in y for each case and correctly says y keeps its old value when no assignment runs."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0: both give 1. x == 0: both give 0.",
+   "correct": true,
+   "why": "The answer correctly applies > and >= to this code by handling the boundary value x == 0 separately, where x > 0 is false and x >= 0 is true."
+  },
+  {
+   "concept": "dangling_else",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention which if an else belongs to, and this code has no nested if without braces followed by an else."
+  }
+ ]
+}

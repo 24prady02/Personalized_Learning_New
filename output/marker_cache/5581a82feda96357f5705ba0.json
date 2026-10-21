@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "for loop with count++ (fragment d)", "why": "The answer gives a wrong value (count is 1, correct is 3) and says only that the body runs once, but it does read the condition as true and the body as executing, which is one correct aspect; it doesn't trace the three iterations, so it covers only part of the code."}

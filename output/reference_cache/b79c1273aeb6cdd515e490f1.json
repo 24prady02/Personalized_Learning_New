@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code runs count++ n*n = 1,000,000 times for n = 1000, so 1000 is wrong. It reflects only one loop's count, not the nested loops multiplying. The answer also ignores the doubling part of the question."}

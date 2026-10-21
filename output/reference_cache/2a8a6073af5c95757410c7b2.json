@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The student makes a definite claim ('aaabbb') for (g), so it is levelled, not 'none'; the actual output is 'ababab', and 'aaabbb' reflects a documented wrong rule (repeating each statement of the body separately rather than executing the whole block each iteration), which contradicts the Java loop rule and is therefore L0."}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "max is the maximum of the array right from the first line.",
+   "correct": false,
+   "why": "After the first line, max holds only a[0]; it becomes the largest value only after the loop has compared every element, so the answer's rule contradicts Java."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about i or how the loop goes through the array."
+  }
+ ]
+}

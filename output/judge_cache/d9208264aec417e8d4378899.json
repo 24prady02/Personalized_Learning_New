@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about declaring a class."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "sneaker1.size = sneaker1.size + 1;",
+   "correct": true,
+   "why": "It writes one correctly formed assignment statement ending in a semicolon, but it does not create the object, print the size or explain any execution order, so it does not reach L2 or higher."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Adding 1 to a double field happens implicitly, but the answer says nothing about types, promotion or values."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention the ?: operator."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "from n = 1861 on, s is too big for an int and overflows",
+   "correct": true,
+   "why": "The answer finds the silent overflow of the int range at the right input: the sum is 2,146,682,110 at n=1860 and 2,150,145,431 at n=1861, which is above 2,147,483,647."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "s is too big for an int and overflows",
+   "correct": true,
+   "why": "The answer correctly reasons that an integer primitive has a fixed range and silently overflows for large inputs."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment or how s is updated."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about input: the program reads args, not StdIn."
+  }
+ ]
+}

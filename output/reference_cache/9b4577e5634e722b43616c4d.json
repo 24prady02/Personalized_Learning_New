@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly braces both loops and keeps the nesting, but moves println inside the inner loop. That prints a newline after every star, so the output is six lines of a single '*', not the triangle. The answer shows one correct aspect (loop bodies need braces) but does not apply the rule to the values, and no reasoning is given."}

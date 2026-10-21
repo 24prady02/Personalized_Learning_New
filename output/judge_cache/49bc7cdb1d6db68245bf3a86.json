@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "total is 11.5",
+   "correct": true,
+   "why": "The value 11.5 for a * 2 + 1.5 is right (the run confirms it), but it is a bare result with no reasoning about how double arithmetic works, so it is only L1."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "after the last line total is still 11.5, because it already has a value.",
+   "correct": false,
+   "why": "The answer claims a variable that already has a value is not changed by total = total + total * TAX, which contradicts Java; the run gives 12.42."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the int value a * 2 being converted to double when 1.5 is added."
+  }
+ ]
+}

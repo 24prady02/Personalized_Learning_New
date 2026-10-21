@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "if (arr[i] == key) return i; else return -1;",
+   "correct": false,
+   "why": "The if-else is valid Java, but putting return -1 in the else branch ends the search at the first non-matching element, and returning i on the first match finds the first occurrence, not the last. This is a logic error, not a wrong rule about Java."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "arr[i]",
+   "correct": true,
+   "why": "Uses arr[i] correctly to get the element at position i, but does not reason about index values or bounds."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "Writes a correct comparison expression that gives a boolean, but never evaluates it."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "for (...)",
+   "correct": true,
+   "why": "Names a for loop but leaves the header out, so it shows no initialization, condition or update, and no pass order such as a backward scan for the last occurrence."
+  }
+ ]
+}

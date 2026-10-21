@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "lookup_table",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "It is a table to look up a month name from its number.",
+   "correct": true,
+   "why": "Correctly states the role of months as a fixed lookup table indexed by month number."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "look up a month name from its number",
+   "correct": true,
+   "why": "Implies selecting an element by its position but does not apply indexing to months[m - 1]."
+  }
+ ]
+}

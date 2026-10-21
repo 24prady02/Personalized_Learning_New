@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "misconception: The else branch of an if-else statement always executes.",
+   "quote": "A and then B, the else always runs at the end.",
+   "correct": false,
+   "why": "In Java only one branch runs, so (a) prints just A, but the answer says the else always runs."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements in general or their order."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss the variable x or its value."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Binary conversion is not part of this answer."
+  }
+ ]
+}

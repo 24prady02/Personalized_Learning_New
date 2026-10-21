@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "println puts the break after the longest string",
+   "correct": false,
+   "why": "println ends the line after its own argument, not after the longest string, so the rule the answer uses is wrong in Java."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says 'line break' to mean a newline and says nothing about Java's break statement."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "The line break comes after language because println puts the break after the longest string",
+   "correct": false,
+   "why": "The answer explains where the line break goes with a made-up rule instead of the print/println rule: println adds the line separator after its own argument."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention logic errors."
+  }
+ ]
+}

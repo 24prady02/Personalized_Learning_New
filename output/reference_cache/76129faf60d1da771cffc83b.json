@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The output is correct, but the only justification covers one part: the if is evaluated once while count is 0 so \"big\" is not printed. The loop's five increments producing 5 are not traced or explained, so the answer grasps one correct aspect rather than covering all parts value by value (L2)."}

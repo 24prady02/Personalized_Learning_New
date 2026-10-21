@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Rewriting nested if/else as an else-if chain (boundary condition)", "why": "It flattens all three branches into a chain, but changing `x > 0` to `x >= 0` makes zero print \"pos\" and leaves \"zero\" unreachable, so it fails to preserve behaviour."}

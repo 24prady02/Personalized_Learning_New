@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Wrong initial value of max (0) in a find-the-maximum loop, shown with a counterexample", "why": "It gives one valid failing input, an empty array, and says what the code returns (0) and why that is wrong against the purpose. It does not generalise to the class of inputs, such as all-negative arrays, so it is not L4."}

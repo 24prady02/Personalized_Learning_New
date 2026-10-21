@@ -1,0 +1,1 @@
+{"level": "L4", "concept": "sum of squares loop and int overflow", "why": "It states what the code does (the sum of squares 1..n) and also names the class of inputs where it fails, n ≥ 1861, where s exceeds Integer.MAX_VALUE. That threshold is correct: the sum is 2,146,682,110 at n=1860 and 2,150,083,381 at n=1861."}

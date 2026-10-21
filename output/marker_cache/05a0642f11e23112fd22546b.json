@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop accumulation: assignment vs. comparison operator", "why": "Applies a wrong rule (== would compare, not accumulate), misidentifying the bug, which is that `=` should be `+=`, so the answer shows no working model of the accumulation."}

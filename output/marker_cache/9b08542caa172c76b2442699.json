@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "loop bound for in-place array reversal", "why": "The correct bound a.length / 2 is given, but the only reason offered is 'faster', which doesn't say that swapping pairs up two ends or that going further would undo the swaps, so it grasps only the bare answer."}

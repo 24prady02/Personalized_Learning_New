@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Array end-swap with temp variable", "why": "The answer states in one sentence what the code does in general (swaps first and last elements), but it doesn't give the value of a after the code, and it doesn't cover the length-1 case, so it goes no further than the purpose of the given code."}

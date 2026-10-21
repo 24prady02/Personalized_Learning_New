@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "All three printed lines are correct, but the answer is a bare output with no value-by-value justification (no mention of promotion, casting, or left-to-right concatenation), so by the boundary rule a correct result alone is L1, not L2."}

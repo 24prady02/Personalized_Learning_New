@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested for loop printing", "why": "It correctly describes only the i=3 row (1 2 3) and does not cover the other iterations or give the full output."}

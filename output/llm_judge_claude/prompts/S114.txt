@@ -1,0 +1,168 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Why can a[0] be printed when a local  int x;  without a value cannot?
+
+CODE:
+int[] a;
+a = new int[4];
+a[1] = 7;
+boolean[] seen = new boolean[3];
+int[] empty = new int[0];
+System.out.println(a[0] + " " + a[1] + " " + a.length + " " + seen[2] + " " + empty.length);
+
+STUDENT ANSWER: new fills the array with 0s, but a local variable has no value until you give it one.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: declaration
+L0 Prestructural:
+  - everyday_reading: In English, to 'declare' something announces a fact or gives it a value, so novices think int x; already sets x to 0, or that x = 5; alone creates x. In Java a declaration creates the variable with a type, and a local variable has
+  - misconception: wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. 
+  - misconception: wrong rule: A variable declared int can hold 2.5 or "hi"; the type is only a label. 
+  - misconception: wrong rule: local variables get a default value on their own. 
+  boundary: Any correct, programming-specific statement about declaration makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Declaration statement: a statement that introduces a variable by giving its type and name, such as int count; or double x = 0.5;.
+  - states_the_rule: Syntax: type name; or type name = expression; or type a, b, c;. Each variable must be declared before it is used, only once per scope, and its type never changes.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When execution reaches the declaration, the variable comes into being. If there is an initializer, it is evaluated and stored. The variable's scope runs from there to the end of the enclosing block, and statements in the block run
+  - output_prediction: A declaration produces no value and no output. Its effect is to fix the variable's name and type for every later compile-time check.
+  - one_step_execution: int x; adds x to the program state with an undefined (unassigned) value. int x = 5; adds x holding 5.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A declaration binds a legal identifier to a type, and that identifier must not already be declared in the same scope.
+  - relation_to_neighbour: An assignment can store into a variable only after the variable's declaration, and only a value of a compatible type.
+  - relation_to_neighbour: A declaration without an initializer leaves a local unassigned, and any read before an assignment on every path is a compile error.
+  - relation_to_neighbour: Adding final to a declaration makes the variable a constant that can be assigned only once.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and
+  - diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclos
+  - diagnose_an_error: rule broken: A declaration must begin with a type (type name = value;); name = value; is only an assignment to an existing variable. Kind: compile-time. Trigger class: First use of a new variable written without its type (total = 
+  - transfer_to_a_new_program: Declare every variable exactly once, in the narrowest block that covers all its uses, with an initializer when the first value is known. Declare it before (outside) a loop when its value must last across iterations or be used afte
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: array_creation
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths, a[5] or a_5 names element 5, and 'new' means 'fresh, empty, ready to fill', so 'new int[5]' is read as 'element 5' or as an empty list that grows. 
+  - misconception: wrong rule: An array grows as you add elements. 
+  - misconception: wrong rule: Arrays are created without the new keyword. 
+  - misconception: wrong rule: An array cannot have length 0. 
+  - misconception: wrong rule: Creating a big array with new takes no time because the elements are not set yet. 
+  boundary: Any correct, programming-specific statement about array creation makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: an array creation expression; new T[n] makes a new array object with n elements of type T and yields a reference to it.
+  - states_the_rule: Declarative: 'new T[expr]', where expr is any int-valued expression evaluated at run time; the resulting length is fixed for the array's lifetime.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: (1) the dimension expression is evaluated; (2) if it is negative, NegativeArraySizeException is thrown; (3) space for n elements is reserved and every element is set to its default; (4) the expression yields the refere
+  - output_prediction: Result: a value of type T[], namely a reference to a new array of length n whose elements all hold the default (0, 0.0, false or null). It produces no output; printing it shows an address, not the elements.
+  - one_step_execution: State transition: one execution creates one new array object (n new element variables at their defaults) and returns its reference. No existing variable changes until that reference is assigned.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The declared element type must match the created one; in 'double[] a = new double[N];' the left side is the declaration and the right side is the creation.
+  - relation_to_neighbour: Elements can be indexed only after creation, and the n given to new fixes the valid index range 0..n-1.
+  - relation_to_neighbour: Creation is what puts the default value (0, 0.0, false, null) in every slot; each execution of new gives fresh defaults.
+  - relation_to_neighbour: The size n given to new becomes a.length and never changes for that array object.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing n changes a.length and the valid index range but not the element type. Moving 'new' inside a loop gives a fresh array of defaults on every pass (SelfAvoidingWalk relies on this). Re-creating an array never c
+  - diagnose_an_error: rule broken: The dimension expression of new must be >= 0. Kind: run-time exception. Trigger class: the size evaluates to a negative int, e.g. a negative command-line value, or int overflow such as new int[N*N*N*N] with N = 1000 (
+  - transfer_to_a_new_program: Applicability: use new T[n] when the number of values is known (at least at run time) before they are stored and stays fixed. Use an initializer when the values are compile-time constants, and a resizing structure when the count i
+  - diagnose_an_error: rule broken: An array must be allocated with new before its elements are accessed. Kind: compile-time. Trigger class: 'int[] a;' followed by a[i] = ... with no creation (variable a might not have been initialized)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: variable
+L0 Prestructural:
+  - everyday_reading: In algebra a variable is an unknown that keeps one value throughout an equation (x in x = 2y), and the 'box' metaphor suggests it can hold several things. In Java a variable is a named storage location holding exactly one value at
+  - misconception: wrong rule: a reference variable holds the whole object, not a reference. 
+  - misconception: wrong rule: A variable can contain more than one value. 
+  - misconception: wrong rule: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. 
+  - misconception: wrong rule: A variable keeps its first value after a new assignment (the static model). 
+  boundary: Any correct, programming-specific statement about variable makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Variable: a name that refers to a typed storage location holding one data-type value.
+  - states_the_rule: A variable must be declared with a type before use. It always holds a value of that type, must be assigned before it is read, and can be used only within its scope (from its declaration to the end of the enclosing block).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Each time execution reaches an expression that uses the variable, its current value is fetched at that moment. An assignment to it takes effect only after its right-hand side has been fully evaluated.
+  - output_prediction: A variable in an expression yields the value most recently assigned to it, with its declared type. After int a = 5; int b = a; a = 3;, a is 3 and b is 5.
+  - one_step_execution: Only an assignment or an input read into the variable changes it, and it changes only that variable, replacing the old value. Other variables keep their values.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Literals commonly give variables their values, and the literal's type must fit the variable's type (int x = 1.1; is rejected).
+  - relation_to_neighbour: Assignment is the only statement that changes a variable, and its left-hand side must be a single variable.
+  - relation_to_neighbour: A variable name is itself an expression whose value is the variable's current value, and it combines with operators into larger expressions.
+  - relation_to_neighbour: Each variable is named by an identifier, which must be legal and unique within the variable's scope.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass.
+  - diagnose_an_error: rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under ano
+  - transfer_to_a_new_program: Use a variable when a value must be remembered, changes during the computation, or deserves a name as an intermediate result. Use a final constant for a value that never changes, and an array when many values of one type must all 
+  - diagnose_an_error: rule broken: A local variable must be assigned before it is read. Kind: compile-time. Trigger class: A read on a path where no assignment has happened (declared without initializer, or assigned only inside an if or loop): 'variabl
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: array_default_values
+L0 Prestructural:
+  - everyday_reading: Folk meaning: an everyday new box is 'empty' (nothing in it), and C-trained intuition says new memory holds garbage. 
+  - misconception: wrong rule: The slots of a new int[n] hold unpredictable values until assigned. 
+  - misconception: wrong rule: Creating a big array with new takes no time because the elements are not set yet. 
+  boundary: Any correct, programming-specific statement about array default values makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: the initial value Java gives each element of a newly created array: zero for numeric types, false for boolean, null for references.
+  - states_the_rule: Declarative: 'The default initial value is zero for all numbers and false for type boolean'; for String and other non-primitive types it is null. The same holds for every entry of a 2-D array.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: defaults are stored during creation, before the reference is returned. An explicit initialization loop that follows simply overwrites them, so the loop is needed only for a non-default start value.
+  - output_prediction: Result: reading an element never assigned gives 0 in an int[], 0.0 in a double[], false in a boolean[] and null in a String[] (println prints the text null).
+  - one_step_execution: State transition: the creation step sets all n element variables to the default in one go. Reading a default changes nothing.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Defaults come from creation, so every execution of new resets them; creating the array inside the trial loop gives each experiment a clean all-false grid.
+  - relation_to_neighbour: new boolean[n] starts every flag at false ('not seen yet'), so CouponCollector needs no initialization loop. PrimeSieve needs true as its start value and so must loop to set it.
+  - relation_to_neighbour: A local variable has no value until it is assigned: using it first is a compile-time error. An array element is given a default value (0, 0.0, false) when the array is created with new, so it can be read before any assignment.
+  - purpose_of_the_whole: Plan/role: lets counter and flag arrays (counts[], found[]) start at 0 or false, ready to accumulate, with no initialization loop; the book calls this using Java's default array initialization convention.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing the element type changes the default (int 0, double 0.0, boolean false, String null). Moving the creation into a loop resets the defaults on each pass. Adding an explicit loop that stores the default changes
+  - transfer_to_a_new_program: Applicability: rely on the defaults when the needed start value is exactly 0, 0.0, false or null (counters, flags, accumulators). Write an initialization loop for any other start value. Plain local variables get no default, so the
+  - diagnose_an_error: rule broken: Defaults are 0/false/null; any other start value must be assigned explicitly. Kind: silent logic error. Trigger class: the code assumes a non-default start value without setting it, e.g. PrimeSieve with its 'isPrime[i
+  - diagnose_an_error: rule broken: Elements of a reference-type array start as null, which refers to no object. Kind: run-time exception. Trigger class: a method is called on an element of a new String[] (or other object array) before it is assigned, e
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: declaration, array_creation, variable, array_default_values.

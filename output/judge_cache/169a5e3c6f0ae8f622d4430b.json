@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "I don't get loops at all.",
+   "correct": false,
+   "why": "The answer says nothing about how a for loop works and gives no output."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention nested loops at all."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the init, the condition or the update."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention number conversion, which this code does not use either."
+  }
+ ]
+}

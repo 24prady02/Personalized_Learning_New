@@ -1,0 +1,1 @@
+{"level": "L1", "why": "For 4 elements, 2 is the right bound, since swapping pairs 0↔3 and 1↔2 reverses the array. But the answer gives only this one value. It has no general expression such as a.length/2, no trace of the swaps and no reasoning, so it is a bare correct result."}

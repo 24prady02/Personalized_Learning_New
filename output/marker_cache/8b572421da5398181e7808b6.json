@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "unknown loop count with sentinel-style user-controlled repetition", "why": "It gives one correct aspect (the user decides each round at run time, so the count isn't known in advance) but doesn't go beyond that or link it to loop structure or other inputs."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "links in the link graph (direction of links)", "why": "It treats 0→1 and 1→0 as the same link, which is wrong because links are directed, and it doesn't address any part of the question."}

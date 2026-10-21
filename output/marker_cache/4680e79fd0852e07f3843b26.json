@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "nested else { if } equivalent to else if chain", "why": "The student correctly recognises that the else block holds only a single if/else, so the code already behaves as an else-if chain, relating the nesting to the chain structure, though they don't write the chain out or go beyond the given code."}

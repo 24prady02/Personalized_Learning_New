@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It works out 9 mod 5",
+   "correct": true,
+   "why": "The student correctly identifies % as a mod/remainder operation, but never gives the value and cannot compute 17 % 5 when probed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "9 mod 5 and adds it",
+   "correct": true,
+   "why": "The student names the remainder and addition steps but does not apply them to the code (9 % 5 = 4, 4 + 26.3 = 30.3) or give the output."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the String literals or the concatenation in println."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The output is correct. The only difference is the trailing space after 'language', which is invisible. The student gave no explanation of how print and println produce the line break, so this is a bare correct result, which is L1."}

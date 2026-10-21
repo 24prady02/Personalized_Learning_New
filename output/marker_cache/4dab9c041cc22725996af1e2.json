@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "integer division in building a probability row, with cast fix", "why": "The answer identifies the int/int cause of the all-zero result, fixes it with a cast, and checks that the corrected row sums to 1, which links the bug, the fix and what a probability row needs, but it stays within the given code."}

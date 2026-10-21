@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule: that the loop skips \"abc\". `isEmpty()` is false while \"abc\" remains, so `readInt()` throws an InputMismatchException. The program crashes after reading 5 and 3, and nothing is printed. The 8 and 2 are correct partial sums, but the claimed skipping contradicts Java."}

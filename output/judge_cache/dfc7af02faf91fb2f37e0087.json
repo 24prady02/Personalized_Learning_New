@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L0",
+   "way": "transliteration (L2 boundary: word-for-word transliteration with no interpretation is L0)",
+   "quote": "printf(i);",
+   "correct": false,
+   "why": "The answer copies the code back with no output or explanation, and it drops the \"%d \" format string, so printf(i) is not valid Java."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L0",
+   "way": "transliteration (L2 boundary: word-for-word transliteration with no interpretation is L0)",
+   "quote": "if (i % 2 == 1 && i != 73)",
+   "correct": false,
+   "why": "The answer repeats the && condition word for word and never says what it evaluates to or which values pass it."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about when the right operand is evaluated."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no break, and the answer does not mention it."
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): (a) What values can a boolean hold?
+(b) What does ^ do on two booleans?
+(c) What is printed?
+(d) Why does 10 / n not crash?
+(e) Rewrite b without !( ) using De Morgan.
+(f) What if && in line 2 were & ?
+
+CODE:
+int n = 0;
+boolean a = (n != 0) && (10 / n > 1);
+boolean b = !(n > 5 && n < 10);
+boolean c = (n > 5) ^ (n < 10);
+System.out.println(a + " " + b + " " + c);
+
+STUDENT ANSWER: You could write b as !(5 < n < 10).
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: de_morgan
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'not (A and B)' is read as 'not A and not B', the way a minus sign is distributed over a sum in algebra without changing the operator. Java (Boolean logic) rule: negating a compound condition negates each term and al
+  - misconception: wrong rule: !(a && b) is the same as !a && !b. 
+  boundary: Any correct, programming-specific statement about de morgan makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: De Morgan's laws are rules of Boolean logic that show how to negate a logical expression.
+  - states_the_rule: !(A && B) is equivalent to !A || !B, and !(A || B) is equivalent to !A && !B; with comparisons, negating a term uses the opposite relational operator (!(x < 5) is x >= 5).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: As a rewrite: move the ! inside the parentheses, negate each term (flipping each comparison), swap && and ||; as evaluation, both forms give the same value on every row of the truth table and short-circuit after the same left oper
+  - output_prediction: The rewritten expression has the same boolean value as the original for all inputs: with x = 1 and y = 0, !(x == 0 || y == 0) and x != 0 && y != 0 are both false.
+  - one_step_execution: Rewriting changes no program state; both forms evaluate the same terms in the same left-to-right order, so side effects and short-circuit points are unchanged.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: De Morgan's laws relate the three logical operators: a negated && becomes an || of negations and a negated || becomes an && of negations.
+  - purpose_of_the_whole: Used to simplify negated conditions into readable positive ones, e.g. turning a stopping condition ('found or at the end') into a loop-continuation condition while (!found && i < n), or simplifying (!(a < b) && !(a > b)) to a == b
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: A correct De Morgan rewrite preserves the value for every input (invariant); dropping the operator flip, or using > instead of >= for !(x < 5), breaks it exactly on mixed or boundary inputs.
+  - transfer_to_a_new_program: Apply De Morgan when a condition is written as !(...) of a compound, or when converting a 'stop when' condition into a 'continue while' condition; leave a condition alone when its positive form is already clear.
+  - diagnose_an_error: rule broken: Negation flips && and || (De Morgan). Kind: silent logic error. Trigger class: Inputs where exactly one term is true (and boundary values of negated comparisons) after a condition was negated term by term without flip
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: boolean_expression
+L0 Prestructural:
+  - everyday_reading: Folk meaning: maths writes a range as 90 <= grade <= 100 and English says 'if x is 1 or 2'. 
+  - misconception: wrong rule: You must write == true / == false to test a boolean. 
+  - misconception: wrong rule: You need an if to turn a boolean expression into a boolean. 
+  - misconception: wrong rule: You need ? : to turn a boolean expression into a boolean (ok = x > y ? true : false). 
+  - misconception: wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). 
+  boundary: Any correct, programming-specific statement about boolean expression makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A boolean expression is any expression whose type is boolean: a boolean literal or variable, a comparison, or such parts combined with &&, || and !.
+  - states_the_rule: A boolean expression has value true or false; it is built from comparisons (lower precedence than arithmetic, higher than boolean operators) and boolean operators; the condition of if, while and for must be one.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operands are evaluated left to right; arithmetic sub-expressions first, then comparisons, then !, then &&, then ||; && and || evaluate their right operand only when the left has not decided the result.
+  - output_prediction: The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.
+  - one_step_execution: Evaluating a boolean expression changes no variable (unless it contains an assignment, ++ or a method with side effects); state changes only when its value is stored, as in isLeapYear = isLeapYear && (year % 100 != 0);.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Comparisons are the atoms of boolean expressions; because they bind tighter than && and ||, month >= 1 && month <= 12 groups as (month >= 1) && (month <= 12) without parentheses.
+  - relation_to_neighbour: &&, || and ! combine boolean sub-expressions into a larger one; ! binds tighter than comparisons, so negating a comparison needs parentheses: !(x > 0).
+  - relation_to_neighbour: The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile.
+  - relation_to_neighbour: The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); cha
+  - diagnose_an_error: rule broken: else takes no condition; a second condition needs else if (...). Kind: compile-time. Trigger class: Writing else (x > 0) { ... } after an if block (the compiler reports e.g. 'not a statement' or '; expected').
+  - transfer_to_a_new_program: Use a boolean expression wherever code must decide or record a yes/no condition, and store it directly (ok = x > y) rather than via if or ? :; when different outcomes are needed for several cases use an if-else chain of such expre
+  - diagnose_an_error: rule broken: The condition must be a boolean expression; = assigns, == compares. Kind: compile-time. Trigger class: if (a = b) with int a and b (with boolean variables it compiles and silently assigns).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: de_morgan, boolean_expression.

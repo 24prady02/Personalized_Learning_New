@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about indices, a[i], or the valid index range."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives a fixed number for 4 elements and never mentions a.length."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "For 4 elements the blank is 2.",
+   "correct": true,
+   "why": "Stopping after 2 passes is right for 4 elements, but it is a bare result with no reasoning and no general bound (a.length / 2), so it stays at L1."
+  }
+ ]
+}

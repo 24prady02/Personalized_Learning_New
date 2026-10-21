@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly says the condition is false at i = 3, so the loop stops and the trace line is wrong. That is the only point made. They don't trace the other iterations (0, 1, 2 print and then i++ reaches 3) or say that 3 is never printed. The wording \"the iteration is false\" is also loose."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention ++ or --."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "int p = 1;",
+   "correct": true,
+   "why": "The answer declares an int but says nothing about int's range, division or overflow."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "I start at 1 instead of 0, because multiplying by 0 always gives 0, and I changed += to *=.",
+   "correct": true,
+   "why": "It correctly uses *= as the update step of a product gatherer and explains why the start value must be 1 to fit that role."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention empty statements."
+  }
+ ]
+}

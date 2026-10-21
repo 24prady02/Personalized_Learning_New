@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "default value of an uninitialised local int", "why": "It applies a wrong rule (locals default to 0, copied by analogy from an invented empty-string default for String), but a local int has no default value and can't be read until assigned."}

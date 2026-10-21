@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if statement without braces (scope of the if body)", "why": "The answer treats (b) as if/else and says B is printed only otherwise, but in (b) print(\"B\") is outside the if, so the output is AB. That applies a wrong rule."}

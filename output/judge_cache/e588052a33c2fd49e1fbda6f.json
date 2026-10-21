@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about a counter pattern."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "1, 2, 6, because 2 and 2 are the same so a > b counts.",
+   "correct": false,
+   "why": "The answer traces the if-else flow correctly: it tests line 1, runs one branch, then continues at line 6. But it misreads 2 > 2 as true, so it picks the wrong branch. The correct lines are 1, 4, 6. This is one slip in an otherwise rule-correct trace, so it is L2 with an error."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about running the program."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about identifiers."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "an empty string, and \"Ann Lee\"",
+   "correct": true,
+   "why": "The values are correct and the answer treats rest and name as String text, but it gives no reasoning about String rules, so it is only a bare result."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no string literals, and the answer does not discuss them; quoting \"Ann Lee\" only marks a value."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "42, an empty string, and \"Ann Lee\"",
+   "correct": true,
+   "why": "The final values are correct, but the answer does not explain the order of execution (readLine taking the rest of the first line), so it is a bare result, not L2."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer involve no + with a String and no conversion of other values to text."
+  }
+ ]
+}

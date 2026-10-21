@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: wrong rule: a = b exchanges/copies values both ways (everyday symmetric reading of =)",
+   "quote": "a = 20, b = 10, they swap.",
+   "correct": false,
+   "why": "The student reads a = b as a two-way exchange, but it only copies b into a, so b stays 20."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "misconception: wrong rule: b = a exchanges the values of a and b.",
+   "quote": "they swap.",
+   "correct": false,
+   "why": "One assignment does not swap two variables; the run gives b = 20, not 10."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives values but says nothing about variables themselves, and its mistake comes from misreading assignment."
+  }
+ ]
+}

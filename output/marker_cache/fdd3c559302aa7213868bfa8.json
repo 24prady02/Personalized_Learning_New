@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop termination with a compound condition and a flag", "why": "The output 1 4 7 10 is right, but the stated reason, that the loop 'always runs four times', ignores the condition and the isDone flag set when i reaches 10. That is a wrong rule, and the answer gives no value-by-value trace."}

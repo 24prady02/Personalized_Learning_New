@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "nested for loops with braces (block scope)", "why": "The braces put the inner loop and println in the outer loop body, so each row prints i stars and then a newline. This relates the two loops and the println correctly, but the answer doesn't explain or trace it or go beyond the given code."}

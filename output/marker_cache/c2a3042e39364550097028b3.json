@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "cumulative sum threshold selection loop", "why": "The student compares r with each row[j] instead of the running sum, which is a wrong rule, and uses the original values rather than part (b)'s, so the result next=2 is wrong."}

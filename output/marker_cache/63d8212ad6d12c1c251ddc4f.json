@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "sequential assignment and value copying", "why": "a=7 and b=7 follow the assignment rule, but c=3 uses b's original value instead of its current value of 7, so the answer switches rules within one trace."}

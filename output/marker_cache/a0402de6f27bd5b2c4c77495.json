@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "PageRank estimates from random surfer simulation and effect of starting page", "why": "It states one correct aspect (the values are estimates) but its claim that starting at page 3 changes the ranks is wrong, and it gives no value-based justification, such as long-run convergence."}

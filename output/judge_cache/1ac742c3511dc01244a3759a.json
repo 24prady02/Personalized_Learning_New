@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "max is a most-wanted holder, the largest value seen so far",
+   "correct": true,
+   "why": "The answer correctly names max's role as the most-wanted holder (largest value seen so far) but does not trace it or relate it to the starting value a[0]."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "i is a stepper going through the indexes",
+   "correct": true,
+   "why": "The answer correctly says i holds index positions but never says that a[i] reaches a different element on each pass, which L3 needs."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "i is a stepper going through the indexes",
+   "correct": true,
+   "why": "The answer identifies a loop that steps an index through the array, but it does not trace the bounds (starting at 1, i < a.length) or relate the parts."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "A local int declared without an initializer has no default value in Java, so x holds nothing readable and using it is a compile error. The student applies a wrong rule, that x defaults to 0. They support it with a wrong analogy: String s; is not an empty string either, since it is unassigned, or null for a field."}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "a.length / 2 is correct. The student ties the loop bound to the swap body: each swap fixes two elements, so half the length is enough. That relates two constructs in the code with a valid reason. It doesn't trace values or reason about changed code, such as looping to a.length, which would swap everything back, so it isn't L4."}

@@ -1,0 +1,1 @@
+{"level": "L2", "why": "Both parts are correct: total is 1+2+3 = 6 after the third pass, and the last step before the println is the failing test i <= 5 with i at 6. The answer applies the loop rules to this code's values but doesn't relate them to the code's purpose, which is summing 1 to 5."}

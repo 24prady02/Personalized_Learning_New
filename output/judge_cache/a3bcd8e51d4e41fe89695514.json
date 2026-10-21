@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "The println is in the loop, so it prints every total.",
+   "correct": false,
+   "why": "The for loop has no braces, so its body is only `total = total + i;`; println runs once after the loop and prints 15, not every total."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no total after the third pass and does not discuss how total is initialized or updated."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "so it prints every total",
+   "correct": false,
+   "why": "It predicts five output lines from a wrong reading of the code; the program writes one line, 15."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about logic errors."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student wrote new code that works: an indexed loop that assigns `a[i] = a[i] * 10` and so changes the array elements. It avoids the for-each bug in the given code, where `x = x * 10` only changes a copy and the output stays `5 4 3 2 1`. Correct new code for the task is L4, even though the student gave no explanation."}

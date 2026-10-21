@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student predicts 'big' is printed, but count is 0 when the if is tested and the if is not inside the loop, so it never fires. This misreads the order of execution and the scope of the if, so the trace applies a wrong rule and the output is wrong."}

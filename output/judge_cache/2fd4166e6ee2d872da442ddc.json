@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "B (a[0]), A (>, a[i])",
+   "correct": true,
+   "why": "The blanks a[0] and a[i] are correct element accesses, but the answer gives no reasoning or trace."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "B (a[0]), A (>, a[i]), D, C",
+   "correct": false,
+   "why": "max is correctly started at a[0], but line A comes before the for loop that declares i, so i is used outside its scope and the code would not compile."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A (>, a[i])",
+   "correct": true,
+   "why": "max = a[i] is the correct update, but it is a bare fill-in with no evaluation or trace, and the misplaced line keeps it from running."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no 2-D array or row/column traversal."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "E B A C D: sum starts at 0, and every pass reads one new number and adds it.",
+   "correct": true,
+   "why": "The order puts the declaration and initialization (E) before the loop and the update sum += x (C) inside the body, and the answer says that it starts at 0 and adds once per pass."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "every pass reads one new number",
+   "correct": true,
+   "why": "The answer correctly says each read takes one new value per pass, but it never explains that the !StdIn.isEmpty() test guards the read, so it does not reach the relational level."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop condition or how the loop decides to stop."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Bounds and pass counts are not discussed."
+  }
+ ]
+}

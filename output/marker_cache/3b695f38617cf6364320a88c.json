@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "array declaration and variable declaration (lines 1-2 only)", "why": "The answer correctly describes only the first two lines, and only superficially. It leaves out the loop and the if, and it doesn't say that best holds a[0] as the starting minimum."}

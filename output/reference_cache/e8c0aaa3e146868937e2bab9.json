@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer talks only about 3.14159 and leaves out the 0 and 1 in the loop, which are not magic numbers. It never says that the classmate's 'every number' claim is wrong. Its one claim, that the literal is as clear as a name, is also doubtful, because a named constant such as Math.PI is clearer."}

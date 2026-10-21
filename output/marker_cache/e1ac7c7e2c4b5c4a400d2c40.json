@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "purpose of best / finding the minimum in a loop", "why": "The student reads the variable name with its everyday meaning and wrongly says it keeps the biggest number, but the `<` comparison keeps the smallest, and the answer doesn't cover the other lines."}

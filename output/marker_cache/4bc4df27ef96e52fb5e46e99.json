@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Evaluating num4: % remainder, int-to-double promotion, and println output", "why": "The answer traces every step with values (9%5=4, 4 promoted to 4.0, 30.3, both println calls) and relates the modulus to the widening addition and the output, but it does not go beyond the given code."}

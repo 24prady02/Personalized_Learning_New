@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "loop accumulation order (sum init, read, add inside while)", "why": "The answer gives only a vague general sequence (declare sum, then read and add in a loop) without placing each line (B, A, C, D) or explaining why, so it covers one part: initialising sum first."}

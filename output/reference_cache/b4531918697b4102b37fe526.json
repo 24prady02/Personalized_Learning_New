@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student correctly finds the cause. The cast binds tighter than `*`, so `(int) Math.random()` is always 0 and the die is always 1, which never equals 6. They also give the right fix, to cast after multiplying. This relates the cast to the arithmetic and fixes the one given failing case, but it doesn't go beyond that case."}

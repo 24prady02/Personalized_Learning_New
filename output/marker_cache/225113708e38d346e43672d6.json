@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "definition of an infinite loop", "why": "States the general rule (condition never becomes false) correctly but doesn't apply it to the given code's values (i is an int, so i += 0.5 leaves i unchanged at 0) or trace any parts of the code."}

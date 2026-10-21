@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The student gives the correct product b×a = {{3,4},{1,2}} (vs c = {{2,1},{4,3}}) but offers no justification: no value-by-value trace of the swapped loop body and no reasoning about why swapping operands changes the sums, so by the boundary rule a bare correct result with no justification is L1, not L4."}

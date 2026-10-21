@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "copying an array (reference assignment vs. creating a new array)", "why": "`int[] copy = data2;` only copies the reference, so both names point to the same array; the answer wrongly treats this as a copy. The comment claiming it is a correct deep copy doesn't change that."}

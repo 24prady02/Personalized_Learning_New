@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "local variable initialisation and for-loop accumulation", "why": "The answer treats the uninitialised local `total` as 0 and gives 3, but Java rejects this code at compile time (\"variable total might not have been initialized\"), so it applies a wrong rule."}

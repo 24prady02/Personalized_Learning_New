@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "No, b times a is 3 4 / 1 2, so the order matters.",
+   "correct": true,
+   "why": "The result b×a = {{3,4},{1,2}} is correct, but the answer shows no products or sums. A bare result with no reasoning is only L1, so it does not reach L4."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the expression c[i][j] += a[i][k] * b[k][j] is evaluated."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't discuss identifiers."
+  }
+ ]
+}

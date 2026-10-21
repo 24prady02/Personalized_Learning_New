@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "2 | 1,2 | 1 2",
+   "correct": true,
+   "why": "The trace table shows that the inner loop restarts at j=1 and runs 1..i on every outer pass, and the run confirms all three rows."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions println or the line break that ends each row."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions ++ or how i and j are increased."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions row-by-row or column-by-column processing order."
+  }
+ ]
+}

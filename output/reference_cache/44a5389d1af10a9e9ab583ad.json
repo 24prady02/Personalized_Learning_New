@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer is correct (y=5, w=7, x=7). It traces each statement in order with values: x++ gives y=5 and x=6, then ++x gives x=7 and w=7. It doesn't go beyond the trace, for example by relating post- and pre-increment to each other or to other code, so it is L2."}

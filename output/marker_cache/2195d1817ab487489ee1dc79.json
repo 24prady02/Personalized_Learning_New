@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "array element swap (first and last elements via temp)", "why": "Part (a) is correct, but the answer gives no line-by-line trace or explanation. Part (b) is missing, and part (c) is a correct but brief statement with no link to the swap. Nothing shows the swap's purpose or goes beyond the given code, so the answer is not L3 or L4."}

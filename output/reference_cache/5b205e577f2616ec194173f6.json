@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly says the inner loop stops at 1 and gives the first three lines. They do not trace the outer loop's last pass, where i=0 runs no inner iterations but still calls println(). They also say there is no empty line at the end, which is wrong. The explanation covers only one part of the code."}

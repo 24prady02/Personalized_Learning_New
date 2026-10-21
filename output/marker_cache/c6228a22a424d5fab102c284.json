@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop termination condition", "why": "The student accepts that i = 3 satisfies i < 3 and says the loop stops after the condition becomes true, which reverses the language rule (the loop stops when the condition is false)."}

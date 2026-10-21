@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The first values are right (a = b = 5, total = 11.5). But the student says total stays 11.5 after the last line 'because it already has a value'. That is a wrong rule, because an assignment always overwrites the old value, so total becomes 11.5 + 11.5*0.08 = 12.42. The answer also gives no line-by-line table."}

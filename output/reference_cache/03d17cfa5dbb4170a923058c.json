@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly names sum as the accumulator and count as the counter, with a brief generic description of each. They don't trace the loop, the values (sum reaching 24, count reaching 2), or the `v[i] == 8` condition, so this is a correct identification without line-by-line justification."}

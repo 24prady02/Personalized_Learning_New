@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "result is 50 because default always runs at the end of a switch.",
+   "correct": false,
+   "why": "The final value 50 is right, but the reason breaks a Java rule: default does not always run. Here it runs only because value 2 has no break and falls through cases 3 and 4 into default."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives a final value but doesn't explain how the assignments store or overwrite values."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no counter and the answer doesn't mention one."
+  }
+ ]
+}

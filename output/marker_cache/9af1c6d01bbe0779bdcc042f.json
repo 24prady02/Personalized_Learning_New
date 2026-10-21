@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "sequential assignment and variable value copying", "why": "Final b should be 7 (b = a copies 7), and the student's b = 3 with c = 7 can't both follow from c = b, so the answer applies assignment rules inconsistently."}

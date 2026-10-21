@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The student correctly traces each step in order with values: (2 + 3) gives 5, int division 5 / 2 gives 2, and the assignment to a double gives 2.0. This is a correct line-by-line trace. It doesn't relate the result to the purpose of the code, such as why an average is computed wrongly, and it doesn't extend to other inputs or a fix."}

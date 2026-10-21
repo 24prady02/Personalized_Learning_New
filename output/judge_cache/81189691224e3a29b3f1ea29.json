@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "67, a tab, C",
+   "correct": true,
+   "why": "The answer reads \\t correctly as a tab, which the run confirms, but it is a bare result with no reasoning."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "67, a tab, C; ... then 662.",
+   "correct": true,
+   "why": "The values 67 and 662 are correct (char promoted to int), but they are given without any explanation, so they count as bare results."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "C",
+   "correct": true,
+   "why": "The answer gets the cast (char)(c + 2) giving 'C' right, but shows no reasoning for it."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention command-line arguments."
+  }
+ ]
+}

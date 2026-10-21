@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never talks about how a variable stores or changes a value. Its mistake is about array indexing and loop bounds."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how sum += or any other assignment works."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int range, int arithmetic or truncation."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "B just starts counting at 1",
+   "correct": false,
+   "why": "'Counting' here means loop index i. That is not the guarded count++ counter pattern, so this concept is not addressed. The claim is also wrong: B skips a[0] and reads a[a.length], which throws ArrayIndexOutOfBoundsException."
+  }
+ ]
+}

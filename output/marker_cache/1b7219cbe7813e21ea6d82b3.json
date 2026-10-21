@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for-loop execution order and final condition check", "why": "The student wrongly says the update runs before the body and accepts 3 as printed, ignoring that i<3 is false when i=3, so the answer applies a wrong loop rule."}

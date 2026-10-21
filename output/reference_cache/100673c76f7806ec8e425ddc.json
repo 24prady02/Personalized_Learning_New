@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says `i` is bad style, but a single-letter loop index like `i` is the standard Java convention. The one that needs renaming is `c`, for example to `count`. The answer applies a wrong rule, never mentions `c`, and never says whether the output changes (it doesn't)."}

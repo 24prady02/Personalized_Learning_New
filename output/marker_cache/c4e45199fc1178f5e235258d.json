@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "sequential assignment and variable values", "why": "The correct finals are a=7, b=7, c=7, but the answer gives a=3, b=5, c=5. a=3 can't come from `a = c`, which copies 7, so the answer doesn't follow the assignment rule."}

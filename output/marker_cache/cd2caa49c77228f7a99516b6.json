@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Scanner leftover newline after readInt", "why": "The answer links readInt leaving the Enter unread to readLine consuming the remainder of that line, which explains why rest is empty, but it doesn't go beyond this code."}

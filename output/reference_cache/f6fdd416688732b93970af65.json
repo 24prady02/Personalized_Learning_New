@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer gives the correct output (5) and one correct observation: the if is checked once, when count is 0. It does not trace the for loop (five increments of count) to explain how 5 is reached, so it covers only one part of the code."}

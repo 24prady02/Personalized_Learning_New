@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "if condition and for-loop count trace", "why": "The answer gives the correct output and notes the if is checked once with count 0, but it doesn't trace the loop value by value or say what the code is for."}

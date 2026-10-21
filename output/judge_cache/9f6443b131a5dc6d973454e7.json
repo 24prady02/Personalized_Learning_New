@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no print call, and the answer's 'prints it' refers to println, so print itself is not addressed."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says 'for every i' but says nothing about i++ or how i changes."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "line 5 prints it",
+   "correct": true,
+   "why": "It correctly says line 5 outputs s, but gives no value, no line terminator and no overall result (the sum of squares)."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "There are no escape sequences in the code or the answer."
+  }
+ ]
+}

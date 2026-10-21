@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested loop iteration count (n*n) and effect of doubling n", "why": "The answer of 1000 applies the wrong rule, counting only one loop's iterations instead of n*n = 1,000,000, and it doesn't address what happens when n doubles."}

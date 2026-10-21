@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The link says assignment stores the expression itself in the variable. In Java, assignment evaluates the expression and stores its resulting value, not the expression. This is a documented wrong rule, so the answer shows no working model of assignment."}

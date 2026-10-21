@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"declaration","level":"L0","way":"misconception","quote":"int c; declares c, so c is 0.","correct":false,"why":"It uses the wrong rule that local variables get a default value; reading c is a compile error."},
+{"concept":"int","level":"none","way":"","quote":"","correct":false,"why":"No int-specific rule (range, division) is used; the error belongs to declaration and variable."},
+{"concept":"variable","level":"L0","way":"misconception","quote":"so c is 0","correct":false,"why":"It contradicts the rule that a local variable must be assigned before it is read."},
+{"concept":"double","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about double."}
+]}

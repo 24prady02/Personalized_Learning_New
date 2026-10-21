@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division assigned to a double", "why": "The answer applies a wrong rule: it treats 7/2 as 3.5 or 3.0 without seeing that integer division gives 3 before widening, and it does not trace the division, so it picks B by guessing between A and B."}

@@ -1,0 +1,1083 @@
+[
+ {
+  "id": "S088",
+  "expected": "L2",
+  "got": "L1",
+  "gold": [
+   "compile",
+   "run"
+  ],
+  "sem_top1": [
+   "array_creation",
+   "class_declaration"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "program_text",
+   "compile"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "program_text",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ },
+ {
+  "id": "S089",
+  "expected": "L3",
+  "got": "L3",
+  "gold": [
+   "incremental_development"
+  ],
+  "sem_top1": [
+   "reading_error_messages"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "incremental_development",
+   "compile"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "incremental_development",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L3 relation_to_neighbour",
+  "level_ok": true
+ },
+ {
+  "id": "S090",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "class_declaration"
+  ],
+  "sem_top1": [
+   "class_declaration",
+   "primitive_vs_reference"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "class_declaration"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "class_declaration",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S091",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "compile_time_error",
+   "string_literal"
+  ],
+  "sem_top1": [
+   "statement"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "string_literal",
+   "println",
+   "standard_output"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "string_literal",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S093",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "integer_division",
+   "operator_precedence"
+  ],
+  "sem_top1": [
+   "integer_division"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "double",
+   "integer_division",
+   "expression"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "expression",
+  "level_source": "NLI (misconception refuted)",
+  "level_way": "L4 predict_a_change",
+  "level_ok": true
+ },
+ {
+  "id": "S094",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "array_bounds",
+   "command_line_args"
+  ],
+  "sem_top1": [
+   "command_line_args"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "command_line_args",
+   "run",
+   "class_declaration"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "command_line_args",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S095",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "primitive_type",
+   "primitive_vs_reference",
+   "string_type"
+  ],
+  "sem_top1": [
+   "naming_convention",
+   "primitive_type",
+   "string_type"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "primitive_type",
+   "string_type",
+   "primitive_vs_reference"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "primitive_type",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S096",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "data_type"
+  ],
+  "sem_top1": [
+   "data_type"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "data_type",
+   "arithmetic_operators",
+   "assignment"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "data_type",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S097",
+  "expected": "L2",
+  "got": "L2",
+  "gold": [
+   "char_arithmetic",
+   "escape_sequences"
+  ],
+  "sem_top1": [
+   "escape_sequences",
+   "math_round",
+   "row_major_order"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "escape_sequences",
+   "empty_statement",
+   "char_arithmetic"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "escape_sequences",
+  "level_source": "code run",
+  "level_way": "L2 output_prediction",
+  "level_ok": true
+ },
+ {
+  "id": "S098",
+  "expected": "L4",
+  "got": "L3",
+  "gold": [
+   "int",
+   "overflow"
+  ],
+  "sem_top1": [
+   "int"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "integer_constants",
+   "int",
+   "int_literal_limit"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "int",
+  "level_source": "relation cue rule",
+  "level_way": "L3 relation_to_neighbour",
+  "level_ok": false
+ },
+ {
+  "id": "S101",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "exclusive_or"
+  ],
+  "sem_top1": [
+   "string_type"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "exclusive_or"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "exclusive_or",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S103",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "long_type",
+   "math_round"
+  ],
+  "sem_top1": [
+   "long_type"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "math_round",
+   "long_type",
+   "compile_time_error"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "math_round",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S104",
+  "expected": "L1",
+  "got": "L4",
+  "gold": [
+   "explicit_cast",
+   "type_conversion"
+  ],
+  "sem_top1": [
+   "arithmetic_operators",
+   "coordinate_scaling"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "double",
+   "type_conversion",
+   "int"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "type_conversion",
+  "level_source": "NLI (way rule)",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": false
+ },
+ {
+  "id": "S106",
+  "expected": "L2",
+  "got": "L2",
+  "gold": [
+   "if_statement"
+  ],
+  "sem_top1": [
+   "testing"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "if_statement",
+   "empty_statement",
+   "comment"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "if_statement",
+  "level_source": "code run",
+  "level_way": "L2 one_step_execution",
+  "level_ok": true
+ },
+ {
+  "id": "S108",
+  "expected": "L2",
+  "got": "L3",
+  "gold": [
+   "increment_operators"
+  ],
+  "sem_top1": [
+   "assignment"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "compound_assignment",
+   "loop_variable",
+   "accumulator_pattern"
+  ],
+  "gold_linked": false,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "compound_assignment",
+  "level_source": "relation cue rule",
+  "level_way": "L3 relation_to_neighbour",
+  "level_ok": false
+ },
+ {
+  "id": "S109",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "dangling_else",
+   "nested_conditionals"
+  ],
+  "sem_top1": [
+   "nested_conditionals"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "nested_conditionals",
+   "if_else_statement",
+   "else_if_chain"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "nested_conditionals",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 predict_a_change",
+  "level_ok": true
+ },
+ {
+  "id": "S110",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "accumulator_pattern",
+   "counter_pattern"
+  ],
+  "sem_top1": [
+   "accumulator_pattern"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "accumulator_pattern",
+   "counter_pattern"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "accumulator_pattern",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 states_the_rule",
+  "level_ok": true
+ },
+ {
+  "id": "S111",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "explicit_cast",
+   "math_random",
+   "operator_precedence"
+  ],
+  "sem_top1": [
+   "math_random",
+   "operator_precedence"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "math_random",
+   "random_move",
+   "explicit_cast"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "math_random",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S112",
+  "expected": "L3",
+  "got": "L4",
+  "gold": [
+   "break_statement",
+   "continue_statement"
+  ],
+  "sem_top1": [
+   "continue_statement"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "break_statement",
+   "continue_statement"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "break_statement",
+  "level_source": "NLI (misconception refuted)",
+  "level_way": "L4 predict_a_change",
+  "level_ok": false
+ },
+ {
+  "id": "S113",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "infinite_loop"
+  ],
+  "sem_top1": [
+   "infinite_loop"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "infinite_loop",
+   "loop_control"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "infinite_loop",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S114",
+  "expected": "L3",
+  "got": "L3",
+  "gold": [
+   "array_default_values",
+   "definite_assignment"
+  ],
+  "sem_top1": [
+   "array_default_values",
+   "variable"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "declaration",
+   "array_creation",
+   "variable"
+  ],
+  "gold_linked": false,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "declaration",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L3 relation_to_neighbour",
+  "level_ok": true
+ },
+ {
+  "id": "S115",
+  "expected": "L2",
+  "got": "L1",
+  "gold": [
+   "printing_array_reference"
+  ],
+  "sem_top1": [
+   "printing_array_reference"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "println",
+   "printing_array_reference",
+   "standard_output"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "printing_array_reference",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ },
+ {
+  "id": "S116",
+  "expected": "L4",
+  "got": "L2",
+  "gold": [
+   "array_traversal"
+  ],
+  "sem_top1": [
+   "array_traversal",
+   "off_by_one_error",
+   "side_effect_order"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "array_traversal",
+   "indexing",
+   "length_field"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "indexing",
+  "level_source": "NLI (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S117",
+  "expected": "L1",
+  "got": "L3",
+  "gold": [
+   "variable_swap"
+  ],
+  "sem_top1": [
+   "assignment"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "variable_swap",
+   "indexing",
+   "assignment"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "variable_swap",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L3 relation_to_neighbour",
+  "level_ok": false
+ },
+ {
+  "id": "S118",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "lookup_table"
+  ],
+  "sem_top1": [
+   "lookup_table"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "lookup_table"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "lookup_table",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S119",
+  "expected": "L1",
+  "got": null,
+  "gold": [
+   "boolean_flag_array"
+  ],
+  "sem_top1": [
+   "break_statement",
+   "two_dimensional_array"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "boolean_flag_array",
+   "empty_statement",
+   "indexing"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": false,
+  "level_concept": null,
+  "level_source": "",
+  "level_way": "",
+  "level_ok": false
+ },
+ {
+  "id": "S120",
+  "expected": "L4",
+  "got": "L2",
+  "gold": [
+   "matrix_operations"
+  ],
+  "sem_top1": [
+   "identifier"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "multidimensional_array",
+   "array_aliasing",
+   "array_initializer"
+  ],
+  "gold_linked": false,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "array_aliasing",
+  "level_source": "NLI (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S121",
+  "expected": "L2",
+  "got": "L2",
+  "gold": [
+   "standard_input",
+   "token_vs_line_input"
+  ],
+  "sem_top1": [
+   "string_literal"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "empty_statement",
+   "token_vs_line_input",
+   "standard_input"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "token_vs_line_input",
+  "level_source": "code run",
+  "level_way": "L2 line_by_line_trace",
+  "level_ok": true
+ },
+ {
+  "id": "S122",
+  "expected": "L3",
+  "got": "L4",
+  "gold": [
+   "token_vs_line_input"
+  ],
+  "sem_top1": [
+   "input_format",
+   "standard_input"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "token_vs_line_input",
+   "standard_input",
+   "empty_statement"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "token_vs_line_input",
+  "level_source": "NLI (way rule)",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": false
+ },
+ {
+  "id": "S123",
+  "expected": "L4",
+  "got": "L1",
+  "gold": [
+   "interactive_input"
+  ],
+  "sem_top1": [
+   "standard_drawing"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "interactive_input",
+   "comment",
+   "empty_statement"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "interactive_input",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ },
+ {
+  "id": "S124",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "filter"
+  ],
+  "sem_top1": [
+   "formatted_output"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "standard_output",
+   "standard_input",
+   "filter"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "standard_output",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S125",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "animation"
+  ],
+  "sem_top1": [
+   "sentinel_loop"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "standard_drawing",
+   "animation",
+   "drawing_shapes"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "drawing_shapes",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S126",
+  "expected": "L4",
+  "got": "L1",
+  "gold": [
+   "standard_audio"
+  ],
+  "sem_top1": [
+   "main_method"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "standard_audio"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "standard_audio",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ },
+ {
+  "id": "S127",
+  "expected": "L1",
+  "got": "L1",
+  "gold": [
+   "dangling_pages"
+  ],
+  "sem_top1": [
+   "dangling_pages"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "comment",
+   "dangling_pages",
+   "input_graph"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "dangling_pages",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": true
+ },
+ {
+  "id": "S128",
+  "expected": "L2",
+  "got": null,
+  "gold": [
+   "matrix_operations",
+   "transition_matrix"
+  ],
+  "sem_top1": [
+   "arithmetic_operators"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "comment",
+   "two_dimensional_array",
+   "transition_matrix"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": null,
+  "level_source": "",
+  "level_way": "",
+  "level_ok": false
+ },
+ {
+  "id": "S129",
+  "expected": "L4",
+  "got": "L4",
+  "gold": [
+   "teleportation"
+  ],
+  "sem_top1": [
+   "frequency_counting"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "input_graph",
+   "comment",
+   "remainder_operator"
+  ],
+  "gold_linked": false,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "input_graph",
+  "level_source": "asked-part / wording rule",
+  "level_way": "L4 diagnose_an_error",
+  "level_ok": true
+ },
+ {
+  "id": "S132",
+  "expected": "L0",
+  "got": "L0",
+  "gold": [
+   "assignment"
+  ],
+  "sem_top1": [
+   "identifier",
+   "type_conversion"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "double",
+   "accumulator_pattern"
+  ],
+  "gold_linked": false,
+  "gold_top": false,
+  "gold_assessed": false,
+  "level_concept": "double",
+  "level_source": "code run",
+  "level_way": "",
+  "level_ok": true
+ },
+ {
+  "id": "S133",
+  "expected": "L0",
+  "got": "L2",
+  "gold": [
+   "declaration",
+   "definite_assignment"
+  ],
+  "sem_top1": [
+   "declaration",
+   "explicit_cast"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "declaration",
+   "int",
+   "variable"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "declaration",
+  "level_source": "similarity (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S134",
+  "expected": "L0",
+  "got": "L2",
+  "gold": [
+   "assignment",
+   "variable_swap"
+  ],
+  "sem_top1": [
+   "variable_swap"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "array_aliasing",
+   "assignment",
+   "statement"
+  ],
+  "gold_linked": true,
+  "gold_top": false,
+  "gold_assessed": true,
+  "level_concept": "array_aliasing",
+  "level_source": "NLI (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S135",
+  "expected": "L0",
+  "got": "L2",
+  "gold": [
+   "de_morgan"
+  ],
+  "sem_top1": [
+   "de_morgan"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "de_morgan"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "de_morgan",
+  "level_source": "similarity (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S136",
+  "expected": "L0",
+  "got": "L1",
+  "gold": [
+   "assignment",
+   "if_statement"
+  ],
+  "sem_top1": [
+   "if_statement",
+   "increment_operators"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "if_statement",
+   "while_loop",
+   "empty_statement"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "if_statement",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ },
+ {
+  "id": "S137",
+  "expected": "L0",
+  "got": "L2",
+  "gold": [
+   "assignment",
+   "println"
+  ],
+  "sem_top1": [
+   "assignment",
+   "string_conversion"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "println",
+   "standard_output",
+   "method_call"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "println",
+  "level_source": "NLI (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S138",
+  "expected": "L0",
+  "got": "L2",
+  "gold": [
+   "accumulator_pattern"
+  ],
+  "sem_top1": [
+   "read_loop_idiom"
+  ],
+  "sem_top3_hit": false,
+  "linked": [
+   "accumulator_pattern",
+   "increment_operators",
+   "compound_assignment"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "accumulator_pattern",
+  "level_source": "NLI (fact)",
+  "level_way": "L2 one_step_execution",
+  "level_ok": false
+ },
+ {
+  "id": "S139",
+  "expected": "L0",
+  "got": "L1",
+  "gold": [
+   "coordinate_scaling",
+   "standard_drawing"
+  ],
+  "sem_top1": [
+   "coordinate_scaling",
+   "standard_drawing"
+  ],
+  "sem_top3_hit": true,
+  "linked": [
+   "standard_drawing",
+   "drawing_shapes",
+   "empty_statement"
+  ],
+  "gold_linked": true,
+  "gold_top": true,
+  "gold_assessed": true,
+  "level_concept": "standard_drawing",
+  "level_source": "similarity (E1)",
+  "level_way": "L1 names_the_element",
+  "level_ok": false
+ }
+]

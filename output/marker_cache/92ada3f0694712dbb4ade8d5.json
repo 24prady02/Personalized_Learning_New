@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "do-while trace with conditional decrement of num2", "why": "The answer correctly traces num1, num2 and the two decrements (i=9, i=11) and reaches the right output 8, 10, 12, 13. It does this value by value without stating the code's purpose, and it gives no for-loop rewrite."}

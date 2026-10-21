@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "Tracing the code: a=c gives a=7, b=a gives b=7, c=b gives c=7, so 'all three are 7' is a correct final result; it is a claim (not a question), so it is levelled, and a bare correct output with no value-by-value justification is L1 per the boundary rules."}

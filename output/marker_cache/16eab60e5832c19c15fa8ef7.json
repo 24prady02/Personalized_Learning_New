@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "product loop accumulator (initialisation and operator)", "why": "The answer copies the sum pattern with `p += v`, which adds instead of multiplying, so it is a wrong rule and not a slip in a correct trace. It also gives no explanation of what changed or why."}

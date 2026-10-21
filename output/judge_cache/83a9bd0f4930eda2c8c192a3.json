@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks, braces or scope."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "swaps the first and last",
+   "correct": true,
+   "why": "It correctly gives the purpose of the code as exchanging the first and last elements, which is L3. The L4 attempt in (c) is wrong: the code always uses a[2], so an array of length 1 throws ArrayIndexOutOfBoundsException instead of leaving the array unchanged."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about int or other primitive types."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives only a bare final array value and does not discuss how variables hold or change values."
+  }
+ ]
+}

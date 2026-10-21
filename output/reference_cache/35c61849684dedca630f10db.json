@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student compares r with each row[j] separately, but the code compares r with the running sum. With the sums 0.1, 0.4, 1.0, the original case stops at j=1, not 2, so the rule is wrong. The student also traces the original data and never answers part (b)."}

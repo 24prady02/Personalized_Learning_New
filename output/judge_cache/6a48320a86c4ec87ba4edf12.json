@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Both arrays are 9 at the start",
+   "correct": true,
+   "why": "It treats position 0 as the first element ('at the start') and gives the correct final value 9, but without any reasoning that applies the indexing rules."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "x is 7 too, because y = x links them",
+   "correct": false,
+   "why": "It treats = as a lasting, two-way equality that links x and y, but y = x only copies x's value (5) into y, so x stays 5."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "x is 7 too",
+   "correct": false,
+   "why": "It says assigning to y changes x, but an assignment changes only its left-hand variable, and the run shows x = 5."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Both arrays are 9 at the start",
+   "correct": true,
+   "why": "The result that a[0] and b[0] are both 9 is correct, but it is a bare result with no reasoning about a shared reference, and 'both arrays' suggests two separate arrays."
+  }
+ ]
+}

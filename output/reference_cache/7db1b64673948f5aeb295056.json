@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer correctly names what composite[k] stands for and asserts its initial value, but gives bare statements with no justification (e.g. boolean default initialisation) and no application to the code's lines or values, so it names the element and states a fact rather than tracing (L2)."}

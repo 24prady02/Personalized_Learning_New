@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer makes a claim (C), so it is levelled, not 'none'; C is indeed equivalent (for-each sums every element), but A (reverse order, same elements, addition commutative) is omitted and B's out-of-bounds error is not mentioned, and no reason is given at all. A bare, partially correct result with no justification is L1."}

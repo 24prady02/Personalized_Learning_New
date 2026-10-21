@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a rule that doesn't exist: that every name must be a full word. By convention, a short loop index like `i` is fine, and only `c` needs a meaningful name such as `count`. They also don't say whether the output changes (it stays 3)."}

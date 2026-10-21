@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested method calls and the ternary in finalAdjust", "why": "The answer traces only the inner calls (finalAdjust, reCalculate, num2) and gives no call order or num1. It also takes the wrong ternary branch for -1 (5 instead of -10), so the correct output is num1 = -11, num2 = 20."}

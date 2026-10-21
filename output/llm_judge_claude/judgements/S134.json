@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"array_aliasing","level":"none","way":"","quote":"","correct":false,"why":"No arrays are involved and none are discussed."},
+{"concept":"assignment","level":"L0","way":"misconception","quote":"Then b = t means b equals a, so both are b.","correct":false,"why":"It treats t as tracking a, as if = stored the expression a rather than a's value at that moment, so the swap seems to fail."},
+{"concept":"statement","level":"L2","way":"line_by_line_trace","quote":"After t = a and a = b, a is b. Then b = t","correct":true,"why":"It runs the three statements one at a time in order; the wrong final value comes from the assignment rule, not the order."},
+{"concept":"variable_swap","level":"L0","way":"misconception","quote":"so both are b","correct":false,"why":"It concludes the swap leaves both variables equal to b, but int t = a; a = b; b = t; exchanges them."}
+]}

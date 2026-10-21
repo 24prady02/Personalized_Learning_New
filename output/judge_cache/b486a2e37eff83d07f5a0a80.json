@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Row i prints the numbers 1 to i, so you get a triangle with 3 rows.",
+   "correct": true,
+   "why": "The answer applies the nested-loop rule to this code: the inner loop runs 1..i on each outer pass, giving 3 rows that grow in length. The run confirms this, but the answer does not explicitly connect the inner and outer loops the way the L3 relations describe."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Row i prints the numbers 1 to i",
+   "correct": true,
+   "why": "The answer says what gets printed but does not explain how print keeps output on one line or how println ends each row, so it is a bare result."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about i++ or j++."
+  },
+  {
+   "concept": "ragged_array",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arrays or rows of different lengths stored in an array."
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "D, Java rounds 3.5 up to 4.",
+   "correct": false,
+   "why": "The answer treats a / b as the real-number result 3.5 and then rounds it up. In Java, int / int drops the fraction, so a / b is 3, and storing it in a double prints 3.0."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int literal ranges or limits."
+  }
+ ]
+}

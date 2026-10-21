@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Reading the edge list line '0 1' as a link direction", "why": "The line '0 1' means page 0 links to page 1 (one direction), so the answer applies a wrong rule by reading it as mutual links, and part (b) is not answered."}

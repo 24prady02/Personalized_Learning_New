@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The line \"0 1\" is a directed edge, so page 0 links to page 1 and page 1 does not link to page 0. The student reads it as a mutual link, which is a wrong rule for this input format, and doesn't answer part (b)."}

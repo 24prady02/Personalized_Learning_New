@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "integer division and operator precedence in an average calculation", "why": "The answer fixes the given failing case with a correct change and explains both causes (precedence and integer division), relating the two constructs, but does not go beyond this code to other inputs or programs."}

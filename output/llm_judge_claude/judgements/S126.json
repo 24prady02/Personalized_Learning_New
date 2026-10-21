@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L3",
+   "way": "diagnose_an_error",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "Gives the correct fix for this given failing case, which the boundary places at L3, without stating the rule."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

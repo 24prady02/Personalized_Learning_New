@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "token_vs_line_input",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "Correct values confirmed by the run, but a bare result with no reasoning is L1."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "42",
+   "correct": true,
+   "why": "Correct value read, given as a bare result with no reasoning."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "First min = data[0], then i = 1, compare data[1] with min, if it is smaller min changes, then i = 2, and so on to the end; then it prints min",
+   "correct": true,
+   "why": "The answer walks through the running-minimum steps in order: start at data[0], compare each element and update when smaller, then print after the loop. It does not explain why the plan works."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "min = data[0] ... min changes",
+   "correct": true,
+   "why": "The answer uses assignment correctly to set and update min, but it does not explain or trace how assignment evaluates and stores the value."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions Integer.MIN_VALUE or MAX_VALUE. It starts from data[0] instead."
+  }
+ ]
+}

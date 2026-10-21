@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "printing_array_reference",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Something like [I@ and a hex code, not the numbers.",
+   "correct": true,
+   "why": "It correctly says that printing the array shows its reference text ([I@ plus hex), not the elements, but it gives no trace or reasoning about this code."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about array indexing."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

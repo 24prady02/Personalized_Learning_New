@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student gives no rewrite and applies a wrong rule. Saying for and while 'do exactly the same thing' ignores the syntax and the loop-variable scope. It also doesn't answer the question about whether every for loop can be written as a while loop. It makes a vague claim and doesn't trace the code."}

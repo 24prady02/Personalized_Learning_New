@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about what print outputs."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It is wrong because it should be i <= 3.",
+   "correct": true,
+   "why": "It is right that the trace line is wrong and it names <=, but it never works out that 3 < 3 is false, so the rule is not applied to this code. It also does not explain that changing < to <= adds one iteration at the boundary."
+  },
+  {
+   "concept": "side_effect_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about i++ or the order of side effects."
+  }
+ ]
+}

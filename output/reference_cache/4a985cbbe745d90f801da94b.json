@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is correct about b (20) but only says 'a now holds b' without giving a's value of 20. It doesn't trace the three lines in order or say that the old value 10 is overwritten, so it covers only part of the code."}

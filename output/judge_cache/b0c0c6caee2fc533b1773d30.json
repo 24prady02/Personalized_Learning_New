@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i++ or how incrementing works."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "sum = i replaces sum every pass, so it ends as the last i, 3. It should be sum += i.",
+   "correct": true,
+   "why": "It finds and fixes the bug for this failing case: the update must add each value to sum, not replace it, and that is L3 by the boundary."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It should be sum += i.",
+   "correct": true,
+   "why": "It names += as the right operator but never explains its rule (sum = sum + i)."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "replaces sum every pass, so it ends as the last i, 3",
+   "correct": true,
+   "why": "It correctly uses the fact that i ends at 3 on the last pass, which the run confirms."
+  }
+ ]
+}

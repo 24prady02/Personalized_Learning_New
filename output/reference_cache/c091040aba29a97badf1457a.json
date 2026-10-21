@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student explains each line's purpose in order and ties them together: best starts at a[0] so the loop has something to compare against, the loop visits the rest, and the comparison keeps the smaller value. They state the whole code's purpose, finding the smallest, and deduce it from the code. They don't go beyond the given code."}

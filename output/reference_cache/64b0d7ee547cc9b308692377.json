@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says max is a double, but the code shows max is an int (int max = a[0]). That is a wrong reading of the code. The answer also never says max holds the largest value found so far, and it only calls i a 'loop variable' without relating it to the array indexing."}

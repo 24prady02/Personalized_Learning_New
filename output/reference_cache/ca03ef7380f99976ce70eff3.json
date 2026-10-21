@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The answer makes a claim (so it is levelled, not 'none'), but 'Pass_Count' itself breaks Java's lowerCamelCase convention for local variables, so the student applies a rule that contradicts the language convention, and it neither addresses i nor states whether output changes (it would not, since renaming conserves behaviour)."}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The code swaps a[0] and a[2] via a temp, so a becomes {2,1,3}. The student states the purpose of the whole code in one correct sentence ('swaps the ends'). They don't give the value of a for (a) or address the length-1 case in (c), and they give no line-by-line trace, so the answer isn't L2 or L4. A purpose statement for the main question (b) is L3."}

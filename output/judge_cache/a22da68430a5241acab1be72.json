@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions the conditional operator ? :."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.",
+   "correct": true,
+   "why": "After the probe, the student traces each assignment replacing result's old value, ending at 50, which matches the run; the earlier answer of 20 was wrong but the student corrected it."
+  },
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "then 20, 40, 50… so for 2 it is 50 too",
+   "correct": true,
+   "why": "The student runs the assignment statements one after another in order through the fall-through and reaches the correct final effect."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  }
+ ]
+}

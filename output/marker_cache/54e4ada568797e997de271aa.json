@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Adapting sum loop to product (accumulator initialisation and operator)", "why": "The loop is correctly adapted to *= but the accumulator starts at 0, so the result is always 0, and the answer gives no explanation of what changed or why, so it shows a rule-correct structure with an error in the initial value."}

@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment or how a variable is updated."
+  },
+  {
+   "concept": "exclusive_or",
+   "level": "none",
+   "way": "",
+   "quote": "2^19 = 524,288 and 2^20 is more than a million",
+   "correct": false,
+   "why": "Here ^ is only maths shorthand for a power in the student's own words, not a claim about Java's ^ operator, so there is no evidence for or against this concept."
+  },
+  {
+   "concept": "scientific_notation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about e-notation literals."
+  }
+ ]
+}

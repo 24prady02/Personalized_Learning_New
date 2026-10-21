@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception: Line breaks and indentation change what the program does",
+   "quote": "The missing ; is fine, the line break ends the statement.",
+   "correct": false,
+   "why": "In Java a simple statement has to end with ';'. A line break is only whitespace, so javac reports ';' expected."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the commented-out line."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention that the file name and class name don't match, or how the program is run."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention escape sequences."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "naming conventions (descriptive variable names vs loop index)", "why": "It correctly judges both names, separating the conventional loop index i from c, and renames c to passCount because the code counts passing scores. It stays within the given code and does not generalise beyond it, and the output of 3 is right."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "newRank as page rank after one multiplication", "why": "The answer asserts one multiplication gives the final page rank, which is wrong because page rank needs repeated multiplication until convergence, and it doesn't address part (a) or trace any values."}

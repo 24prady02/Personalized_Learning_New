@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "1 and 6, because a > b is false so nothing in the if runs.",
+   "correct": false,
+   "why": "The student gets 2 > 2 as false, skips the then branch and goes on to line 6, but misses that the else branch (line 4) runs when the condition is false; the correct order is 1, 4, 6."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention && or || evaluation, and the code has neither."
+  }
+ ]
+}

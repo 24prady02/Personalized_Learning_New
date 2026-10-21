@@ -1,0 +1,1 @@
+{"level": "L2", "pick": "B", "why": "The answer traces the loop body value by value (s += i*i for each i, giving 1 + 4 + 9 …) but never integrates this into a stated purpose such as 'the sum of the squares 1..n', and it reasons about nothing beyond the given code, so it is multistructural (L2), not L4."}

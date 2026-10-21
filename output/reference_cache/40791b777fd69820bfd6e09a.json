@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer doesn't say whether the code is legal Java and doesn't trace it. It gives only a personal preference ('braces are pointless'), which is a wrong rule about style. Braces are legal to omit for a single statement, but omitting them is widely regarded as poor style because it invites bugs when someone adds a second statement."}

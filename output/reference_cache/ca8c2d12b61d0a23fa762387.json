@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student correctly sees that the code is already an if / else-if / else chain in behaviour, since the nested if in the else block is equivalent to 'else if'. This relates the nested structure to the chain construct. The answer gives no trace or explanation of the values, and it does not rewrite the code in the flat form the question asks for."}

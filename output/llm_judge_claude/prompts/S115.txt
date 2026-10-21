@@ -1,0 +1,167 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What does  System.out.println(a);  show?
+
+CODE:
+int[] a = {4, 8, 15};
+int[] b = a;
+int[] c = {4, 8, 15};
+b[0] = 99;
+System.out.println(a[0] + " " + (a == b) + " " + (a == c));
+System.out.println(a);
+int i = 0;
+while (i < a.length && a[i] != 15) i++;
+System.out.println(i);
+
+STUDENT ANSWER: Something like [I@ and a hex code, not the numbers.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: println
+L0 Prestructural:
+  - everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. 
+  - misconception: wrong rule: print and println behave the same. 
+  - misconception: wrong rule: println(s) prints a newline and then s. 
+  - misconception: wrong rule: System.out.Println and System.out.println name the same method. 
+  - misconception: wrong rule: () are optional on a no-argument call like println. 
+  boundary: Any correct, programming-specific statement about println makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line').
+  - states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.
+  - output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
+  - one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+  - relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line.
+  - relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line.
+  - relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same.
+  - transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting.
+  - diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt
+  - diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: printing_array_reference
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'print a' should show what is in a, as when you print a list on paper. 
+  - misconception: wrong rule: System.out.println(a) prints the elements of the array a. 
+  boundary: Any correct, programming-specific statement about printing array reference makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: printing an array variable outputs the text form of its reference ([I@..., [D@...), not a listing of the elements.
+  - states_the_rule: Declarative: any value, including an array reference, is converted to a String when printed or concatenated; for an array this string is its type code and address.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the argument a is evaluated to a reference, string conversion turns it into text, and println writes that text and a newline. The elements are never read.
+  - output_prediction: Result: one line such as [I@bf3f7e0 for an int[] ([D@... for double[]); the hex part changes from run to run. Exception: println(char[]) has its own overload and prints the characters.
+  - one_step_execution: State transition: no variable or element changes; only one line of output is produced.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Two aliases print the same text, and two separately created arrays with equal contents print different text, because println shows the reference that assignment and == also act on.
+  - purpose_of_the_whole: Plan/role: useful only as a diagnostic of identity (do two names hold the same reference?). To show the contents, traverse and print each a[i], or print Arrays.toString(a).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing the elements does not change what println(a) prints (the same array keeps its reference). Replacing println(a) by a loop or Arrays.toString(a) changes the output to the elements.
+  - transfer_to_a_new_program: Applicability: print a reference only when debugging whether two names share an array. For output of values use an element loop (one per line or formatted) or Arrays.toString.
+  - diagnose_an_error: rule broken: println of an array reference prints the reference, not the elements. Kind: silent logic error. Trigger class: an array variable (not an element) is passed to print/println or concatenated, as in "a = " + a, expecting
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: standard_output
+L0 Prestructural:
+  - everyday_reading: Novices take output text literally, as if it acted on the program: printing "The value of X is 1" is read as setting X to 1. They also take 'print' to mean producing a finished line. 
+  - misconception: wrong rule: print and println behave the same (no newline difference). 
+  - misconception: wrong rule: printf() ends the line like println(). 
+  - misconception: wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. 
+  boundary: Any correct, programming-specific statement about standard output makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Standard output (System.out, StdOut) is the library abstraction for a program's text output: an output stream of characters written by print, println and printf.
+  - states_the_rule: print(s) writes s. println(s) writes s and then the line separator. println() only ends the line. A null String prints as "null". By default the stream goes to the terminal window.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the argument expression is evaluated, e.g. the concatenation "Sum is " + sum. Then its string form is appended, and println appends the line separator after it. Successive calls appear in execution order.
+  - output_prediction: The output is the argument's string form. System.out.println(Math.PI) prints 3.141592653589793 (all digits), and println("Sum is " + 1778) prints Sum is 1778 followed by a newline. The methods return void.
+  - one_step_execution: One call appends text to the output (println also appends the line separator). It changes no variables and returns nothing.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each output call appends to the end of the single output stream, so the order of output is the order of execution.
+  - relation_to_neighbour: With `> file`, every print/println/printf writes to the file and nothing appears in the terminal. The program code is unchanged.
+  - relation_to_neighbour: A prompt printed with print (not println) shows on the same line where the user then types, before the following StdIn read blocks. Output and input are separate streams.
+  - relation_to_neighbour: StdOut text and StdDraw pictures are independent outputs: printing does not draw, and drawing does not print.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join.
+  - transfer_to_a_new_program: Use standard output for text results meant for a reader or for the next program in a pipeline. Use printf when digits or column widths matter, and StdDraw/StdAudio for pictures and sound.
+  - diagnose_an_error: rule broken: Output order and line breaks follow the order of the calls and the print/println choice. Kind: silent logic error. Trigger class: Output statements in the wrong order, or a missing println, so text fragments run toget
+  - diagnose_an_error: rule broken: PrintStream methods never throw IOException; a write failure only sets an internal flag. Kind: silent logic error. Trigger class: Output to a closed or failing destination: nothing is reported unless checkError() is c
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: literal
+L0 Prestructural:
+  - everyday_reading: In everyday writing, 1,000,000, 007, 1/2 and $5 all stand for numbers. Java literals have strict forms: commas are not allowed, 1/2 is an int division expression worth 0, and a leading 0 makes the number octal (013 is 11).
+  - misconception: wrong rule: a large integer literal is automatically long. 
+  - misconception: wrong rule: Java has no float literals. 
+  - misconception: wrong rule: Java has no long literals. 
+  - misconception: wrong rule: 207. and 2.3e4 are int values because they are whole numbers. 
+  boundary: Any correct, programming-specific statement about literal makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Literal: a source-code representation of one fixed data-type value, such as 42, 3.14, true, 'a' or "hi".
+  - states_the_rule: A digit sequence within the int range is an int literal. A decimal point or e-notation makes a double (3.14, 6.022e23). Suffix L gives a long and f a float. true and false are boolean, one character in single quotes is a char, and
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: A literal is evaluated at once, with no computation, and its evaluation always completes normally. An expression built from literals, such as 1/2, is still computed by its operators when it is reached.
+  - output_prediction: A literal's value is itself, with a type fixed by its form: 1234 is int 1234, 3.0 is double, '1' is char (code 49), and "2.5" is a String, not a number.
+  - one_step_execution: A literal changes no state by itself. On the right of an assignment it supplies the value stored, e.g. a = 1234; sets a to 1234.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The form of a literal selects its primitive type, and that type must be assignable to the target: int x = 3.0; does not compile even though 3.0 is a whole number.
+  - relation_to_neighbour: Literals commonly initialize variables. The literal's type must equal or widen to the variable's type: double y = 1; widens, but int x = 1.1; is an error.
+  - relation_to_neighbour: E-notation is a form of double literal. 6.022e23 and even 1e6 are doubles, so int n = 1e6; needs a cast.
+  - relation_to_neighbour: A literal without L must lie in -2147483648..2147483647, so 2147483648 alone is a compile error. Larger values need a long literal (2147483648L).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and "5" + 1 is "51" but 5 + 1 is 6.
+  - transfer_to_a_new_program: Use a literal for a self-explanatory value fixed when the program is written (0, 1, "Hello"). Use a final named constant for a meaningful or repeated value, and command-line or standard input for values that change between runs.
+  - diagnose_an_error: rule broken: An int literal must lie within the int range. Kind: compile-time. Trigger class: A digit sequence greater than 2147483647 without an L suffix (e.g. long big = 3000000000;): 'integer number too large'.
+  - diagnose_an_error: rule broken: A char literal holds exactly one character in single quotes, and a String literal must be closed on the same line. Kind: compile-time. Trigger class: Writing 'ab', using single quotes for a word, or leaving out a clos
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: println, printing_array_reference, standard_output, literal.

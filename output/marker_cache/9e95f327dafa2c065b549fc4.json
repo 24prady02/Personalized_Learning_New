@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "while loop with a compound condition and a flag", "why": "It correctly states the step of 3 and that the loop stops after a pass that hits a multiple of 5. It gives no output (1 4 7 10) and doesn't trace the values or mention the flag and condition."}

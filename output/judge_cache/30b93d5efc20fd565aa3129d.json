@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks or how the statements are grouped."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about data.length or the loop bound."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "{1, 5, 3}: it gives 5, so the code is correct.",
+   "correct": true,
+   "why": "5 is the right result for {1, 5, 3}, but it comes with no trace of how max is updated, so it is a bare result (L1); the claim that the code is correct is wrong, since an all-negative array like {-3, -1} gives 0, but it is a testing mistake, not a wrong rule about assignment."
+  },
+  {
+   "concept": "array_reversal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code and the answer do not involve reversing an array."
+  }
+ ]
+}

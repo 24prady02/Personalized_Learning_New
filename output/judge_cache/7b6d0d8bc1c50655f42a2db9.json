@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions long, its range, or 64-bit arithmetic."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types, promotion or value ranges."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "4. For a million I would have to trace it, that is too long.",
+   "correct": true,
+   "why": "A bare output for n = 20 with no reasoning is L1 at most; running the code did not contradict it, and the student gave no answer for n = 1,000,000."
+  }
+ ]
+}

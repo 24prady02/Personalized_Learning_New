@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "B", "why": "This is a writing task and the student produced correct new Java that solves the unseen problem: seeding min with data[0], folding every element through Math.min in an enhanced-for, and printing the result. The boundary rule says writing correct new code is L4; the 'bare output is L1' rule applies to tracing tasks, not to authored code."}

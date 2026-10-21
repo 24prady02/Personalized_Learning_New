@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "tracing if, loops and short-circuit && across fragments", "why": "All eight fragments are traced correctly, each with its own value, but the answer gives no purpose or generalisation beyond the one note that && stops at n != 0."}

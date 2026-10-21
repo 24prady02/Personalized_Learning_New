@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the class declaration."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss main or how its statements run."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints start and done, because big is skipped.",
+   "correct": true,
+   "why": "It correctly predicts the println output for java Order 3 and gives a reason, but it does not answer the 'five' case."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Binary conversion does not appear in the code or the answer."
+  }
+ ]
+}

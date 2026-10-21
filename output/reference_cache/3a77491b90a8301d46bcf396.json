@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer is correct: for t = 5 nothing prints. The student applies the dangling-else rule properly, saying the else pairs with the inner if, so the failed outer if skips everything. That relates the else to the nesting structure. The answer doesn't trace the final if-else chain, but that doesn't change the result."}

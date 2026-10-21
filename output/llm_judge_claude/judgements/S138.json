@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"accumulator_pattern","level":"L3","way":"relation_to_neighbour","quote":"Add v to sum first, then check if it was negative and subtract it again.","correct":true,"why":"It adapts the guarded update into a variant that still adds only non-negative values to sum (only relational); it gives no output for the input."},
+{"concept":"increment_operators","level":"none","way":"","quote":"","correct":false,"why":"count++ is not discussed."},
+{"concept":"compound_assignment","level":"none","way":"","quote":"","correct":false,"why":"It does not explicitly discuss the += operator."},
+{"concept":"read_loop_idiom","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about the read or sentinel loop structure."}
+]}

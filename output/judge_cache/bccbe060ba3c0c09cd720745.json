@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "int x = StdIn.readInt(); ... It keeps reading, because the program knows I want the next number.",
+   "correct": false,
+   "why": "The answer reads once before the loop and then assumes the program will keep reading new values. That matches the wrong rule that reading once before the loop is enough."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "while (x != 0) { System.out.println(x); }",
+   "correct": false,
+   "why": "Nothing in the loop body changes x, so the loop never ends (the run confirms this). The answer relies on the wrong belief that the loop gets new values by itself."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "System.out.println(x);",
+   "correct": true,
+   "why": "The answer uses println but never explains or reasons about it."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about run-time errors."
+  }
+ ]
+}

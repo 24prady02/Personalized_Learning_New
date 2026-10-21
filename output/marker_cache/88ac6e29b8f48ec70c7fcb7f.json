@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested for loop tracing with printf and println", "why": "The student traces the first two outer iterations correctly (3 2 1, 2 1) but stops at 'and so on'. It doesn't cover i=1 or i=0, and it doesn't mention the trailing spaces or the empty line from i=0."}

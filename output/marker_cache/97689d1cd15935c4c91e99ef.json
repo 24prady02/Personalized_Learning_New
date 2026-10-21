@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Java indentation and if-statement scope (no braces)", "why": "The student applies a wrong rule for this code (indentation doesn't matter, so no issue), never traces score = 50, and doesn't recognise that only the first statement belongs to the if and \"great\" prints regardless."}

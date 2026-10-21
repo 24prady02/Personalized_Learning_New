@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "switch to if-else-if conversion (fall-through, else-if syntax)", "why": "The logic is correct (case 2/3 merged with ||, default as else), but 'elif' is Python syntax, not Java, so the answer applies a wrong language rule and would not compile as Java."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "double min = 0;",
+   "correct": true,
+   "why": "The answer declares the minimum as a double, and the int literal 0 widens to double correctly. It never applies or explains any double rule."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "The task data are winter temperatures in Antarctica, they are always negative, so 0 is fine.",
+   "correct": true,
+   "why": "The student argues correctly that a start value of 0 gives the right minimum when no possible data value is above 0; this holds only if the domain assumption is true, and an empty array would still print 0."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types as a concept."
+  },
+  {
+   "concept": "sentinel_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no sentinel-controlled read loop."
+  }
+ ]
+}

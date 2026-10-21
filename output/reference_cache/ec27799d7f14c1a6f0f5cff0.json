@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer makes a claim (so it is levelled, not 'none'), and it correctly states the rules for && and || — true only when both true, false only when both false — but it only states the rules; with no concrete values traced or any explanation of why, it does not reach a value-by-value L2 application."}

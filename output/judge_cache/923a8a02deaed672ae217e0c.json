@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L3",
+   "way": "diagnose_an_error (fix for the one given failing case; L4 boundary)",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "The answer gives the right fix for this failing case: a StdAudio program should end main with System.exit(0). But the L4 boundary says fixing one given failing case is L3, and the answer does not explain the cause."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about end of input or StdIn.isEmpty()."
+  }
+ ]
+}

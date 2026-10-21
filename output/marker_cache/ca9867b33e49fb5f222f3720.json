@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "while loop trace with accumulating sum", "why": "Correctly traces every iteration value by value, including the loop condition check and exit, but never states the purpose (sum of 3+2+1) or goes beyond the code."}

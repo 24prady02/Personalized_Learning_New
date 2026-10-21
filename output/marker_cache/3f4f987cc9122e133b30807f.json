@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Reading input in a loop (StdIn.readInt in while condition)", "why": "The loop calls readInt() twice per iteration, so the number tested is discarded and a different one is printed. The answer doesn't see this, and it doesn't explain how each new number is read, so it doesn't apply the language's input rule correctly."}

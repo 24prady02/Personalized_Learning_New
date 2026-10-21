@@ -1,0 +1,1 @@
+{"level": "L4", "concept": "cumulative sum selection loop, with the -1 fallthrough", "why": "It traces both cases with values (sums 0.1, 0.4, then 0.9 never exceeding 0.95), and it names the general cause of the -1 result: a row that doesn't sum to 1 lets r pass the total."}

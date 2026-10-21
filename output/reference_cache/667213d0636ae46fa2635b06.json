@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "other", "why": "The answer states one correct aspect of assignment (evaluating or printing count + 1 does not store anything back into count) without producing any of the three required storing statements (count = count + 1; count += 1; count++), so it is a single correct rule, not a wrong rule (L0) and not full coverage (L2)."}

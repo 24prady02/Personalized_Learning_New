@@ -1,0 +1,1 @@
+{"level": "L3", "why": "B C A D E is correct. The explanation gives a reason for each placement and ties it to the loop. sum starts at 0 before the loop, is added to on every pass inside it, and is printed once after it. It stays within the given code and does not go on to a changed program or a class of inputs."}

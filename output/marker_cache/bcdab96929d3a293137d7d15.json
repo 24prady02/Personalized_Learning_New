@@ -1,0 +1,1 @@
+{"level": "none", "concept": "loop ordering for summing input", "why": "The answer gives only the order E A B C D with no explanation, so there's nothing to level. The order is also wrong, because A sits outside the loop and only reads one number."}

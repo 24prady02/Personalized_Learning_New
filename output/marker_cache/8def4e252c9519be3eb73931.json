@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Conditional (ternary) operator rewrite of if-else", "why": "The answer is a correct single-line ternary that maps the condition, true value and false value from the if-else, but it gives no explanation relating the parts to the code's purpose or going beyond it."}

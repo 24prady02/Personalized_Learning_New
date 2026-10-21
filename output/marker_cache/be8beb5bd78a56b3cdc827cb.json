@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "purpose of the loop (finding the minimum)", "why": "The answer applies a wrong rule: the loop only compares and updates best, it never sorts or moves array elements, so the claim that best ends up first misreads the code."}

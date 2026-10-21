@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student sees that the loop has to run the opposite way (forward, from 1), which is one correct idea. But `x[i] = x[i-1]` still copies rightward, so it fills the whole array with x[0]. It also never saves the first element or moves it to the end, so it doesn't undo the shift."}

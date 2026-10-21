@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The ordering B(a[0]), D, A(>, a[i]), C is correct and would make max the largest element, but it is a bare correct result with no justification of any line or value; under the boundary rule a correct answer with no value-by-value reasoning is L1, not L2."}

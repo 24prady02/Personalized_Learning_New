@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested loop iteration count (n² growth)", "why": "It states the correct rule, n squared, but never applies it to n=1000, which gives 1,000,000. The 2000 is just n doubled and doesn't say what happens to the count, which should be four times larger."}

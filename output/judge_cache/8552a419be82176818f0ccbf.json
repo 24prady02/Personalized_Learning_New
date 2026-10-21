@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "it does not compile, because total is never given a starting value",
+   "correct": true,
+   "why": "The answer finds the compile-time error: the accumulator total is used in total += i without being initialized before the loop."
+  },
+  {
+   "concept": "declaration",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "total is never given a starting value",
+   "correct": true,
+   "why": "The answer links the declaration int total; without an initializer to the illegal read in the loop, which makes the code fail to compile."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Nothing is printed: it does not compile",
+   "correct": true,
+   "why": "The answer correctly predicts that a compile failure means no part of the program runs and nothing is printed."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention arrays."
+  }
+ ]
+}

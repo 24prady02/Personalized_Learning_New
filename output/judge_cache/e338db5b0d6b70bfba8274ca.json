@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "ints always start at 0",
+   "correct": false,
+   "why": "The answer claims an int always starts at 0, but a local int has no default value, so the rule it uses is wrong in Java."
+  },
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "0, ints always start at 0.",
+   "correct": false,
+   "why": "This matches the listed wrong rule that local variables get a default value on their own. After int x; the local x is unassigned, not 0."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "ints always start at 0",
+   "correct": false,
+   "why": "The answer treats x as holding 0 even though nothing was assigned. That breaks the rule that a local variable must be assigned before it is read."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention Math.round."
+  }
+ ]
+}

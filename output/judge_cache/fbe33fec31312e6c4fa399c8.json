@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception: Dividing by zero always stops the program with an error",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "The answer says every division by zero causes an error, but in this code 1.0 / 0 prints Infinity; only the int division 5 / z throws an ArithmeticException."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int division dropping the fraction or about 7 / 2 compared with 7.0 / 2."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the int type, its range or how int arithmetic works."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention normalization."
+  }
+ ]
+}

@@ -1,0 +1,151 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Which page is dangling?
+
+CODE:
+// 3 pages; links 0→1, 1→0, 1→2; page 2 has no outgoing links
+// 90-10 rule:  p[i][j] = .90 * counts[i][j] / outDegree[i] + .10 / N
+
+STUDENT ANSWER: Page 2, it links nowhere.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: comment
+L0 Prestructural:
+  - everyday_reading: Everyday reading: text written in a program is an instruction the computer reads and obeys. 
+  - misconception: wrong rule: A comment line is run like a statement. 
+  boundary: Any correct, programming-specific statement about comment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A comment is explanatory text in the program that the compiler ignores.
+  - states_the_rule: A comment is either text between /* and */ or text from // to the end of the line; the compiler ignores it. A comment that starts with /** is a documentation (Javadoc) comment, written before a class or method; tools turn it into 
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Comments are removed when the source is read by the compiler, so they never take part in execution order; tracing skips them.
+  - output_prediction: A comment produces no value and no output.
+  - one_step_execution: A comment changes no state; adding one and recompiling leaves the program's behaviour identical.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Comments are part of the program text in Name.java but are dropped when it is compiled, so they cannot affect Name.class's behaviour.
+  - purpose_of_the_whole: Purpose: explain what the code does and why, for other programmers and your future self; also used to disable code temporarily.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program.
+  - diagnose_an_error: rule broken: A /* comment needs its closing */. Kind: compile-time. Trigger class: a /* with no matching */: the rest of the file becomes comment, so javac reports an unclosed comment or reached end of file
+  - diagnose_an_error: rule broken: /* and */ are two-character tokens with no space inside. Kind: compile-time. Trigger class: writing / * ... * /: the slashes and stars are read as operators, producing syntax errors
+  - transfer_to_a_new_program: Use comments to document intent where the code alone is unclear; do not rely on them to change what the program does, and keep them in step with the code.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: dangling_pages
+L0 Prestructural:
+  - everyday_reading: Everyday reading of a "dead-end" page is that the surfer just stops or stays there; in the model the surfer always goes somewhere, so a page with no outlinks must still have a full probability row (1/N to every page).
+  - misconception: wrong rule: A page with no outgoing links can have an all-zero row. 
+  boundary: Any correct, programming-specific statement about dangling pages makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A page with no outgoing links (outDegree 0), also called a dangling page or sink; spider traps are sets of such pages.
+  - states_the_rule: Transition assumes there are none; to handle them, fill the row of every page with no outgoing links with 1/N, which keeps the matrix stochastic.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: For row i: first test outDegree[i] == 0; if true every p[i][j] = 1.0/N; otherwise use .90*counts[i][j]/outDegree[i] + .10/N. The test must come before the division.
+  - output_prediction: A dangling page's row is N equal entries 1/N (for N = 5, 0.20000 each), summing to 1.
+  - one_step_execution: Handling one dangling entry sets p[i][j] to the double 1.0/N; counts and outDegree are unchanged.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A dangling page is the case where the matrix formula breaks (division by outDegree 0); the 1/N row replaces it so the matrix stays stochastic.
+  - purpose_of_the_whole: A guard / special-case plan: detect the zero-total case and substitute a uniform distribution so later code (random move, power method) can assume every row sums to 1.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Filling with 1/N keeps the row-sum invariant; writing 1/N with int operands (0) or leaving the row as computed (NaN) breaks it, and RandomSurfer then fails.
+  - transfer_to_a_new_program: Needed whenever the input may contain pages with no outlinks (as the real web does, e.g. spider traps); unnecessary when every page has at least one outlink, as Transition assumes.
+  - diagnose_an_error: rule broken: Transition assumes no page lacks outlinks. Kind: silent logic error. Trigger class: Input with a page that never appears as i: its row is NaN (0.0/0), and RandomSurfer's test r < sum is always false on that row, so th
+  - diagnose_an_error: rule broken: 1/N must be computed in floating point. Kind: silent logic error. Trigger class: Fill value written as 1/N with int N > 1: every entry is 0 and the row sums to 0.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: input_graph
+L0 Prestructural:
+  - everyday_reading: In everyday graph drawings and in English, "a link between i and j" or "i j on a line" reads as a two-way connection, one record per line; in the input format the pair is ordered (i links to j only) and StdIn ignores line breaks, 
+  - misconception: wrong rule: The pair i j in the input means pages i and j link to each other. 
+  boundary: Any correct, programming-specific statement about input graph makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A data format (the list-of-links representation of a web graph): one integer N, the number of pages 0..N-1, followed by ordered integer pairs i j, one per link.
+  - states_the_rule: Pages are numbered 0 to N-1; the input stream holds N followed by pairs of integers, the first naming the page containing the link and the second the page it refers to; whitespace between tokens is arbitrary.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Transition reads N first with StdIn.readInt(), creates counts[N][N] and outDegree[N], then while !StdIn.isEmpty() reads i, then j, then increments outDegree[i] and counts[i][j]; the loop stops when only whitespace remains.
+  - output_prediction: Reading the input yields integer tallies: counts[i][j] = number of i->j pairs and outDegree[i] = number of pairs starting at i; duplicate pairs count again, so tiny.txt gives counts[1][2] = 2 and outDegree = {1, 5, 1, 1, 2}.
+  - one_step_execution: One pass consumes exactly two tokens (i, j) from standard input and adds 1 to outDegree[i] and to counts[i][j]; no other entry changes and the tokens cannot be read again.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The tallies constrain the matrix: row i of the matrix is computed only from counts[i][] and outDegree[i], so a mistake in reading pair order (i/j swapped) moves probability mass into the wrong row.
+  - relation_to_neighbour: The graph is consumed through StdIn as whitespace-separated tokens: readInt() for N, then a !StdIn.isEmpty() loop reading pairs; each value is consumed once, so the read order fixes which number is N, which is i and which is j.
+  - purpose_of_the_whole: Data-driven code: keep the web model in a file and let a filter (Transition) read it from standard input, so any model can be studied without changing code; counts[i][j] and outDegree[i] act as per-cell counters (gatherers).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Reordering the pairs or the whitespace layout keeps every count (the tally is order-independent); reversing a pair (j i) or adding a duplicate pair changes the graph and hence the page ranks.
+  - transfer_to_a_new_program: Use this list-of-links format whenever a web (graph) model is read as data and then turned into a dense N-by-N matrix; it does not scale to millions of pages, where the matrix cannot be stored and graph data structures (Ch. 4) are
+  - diagnose_an_error: rule broken: Page numbers must be in 0..N-1 (array index range). Kind: run-time exception. Trigger class: A pair containing a page number >= N or negative: counts[i][j] or outDegree[i] throws ArrayIndexOutOfBoundsException.
+  - diagnose_an_error: rule broken: Every token must be an integer (readInt parses an int). Kind: run-time exception. Trigger class: A non-integer token such as a page name (www.com) or 1.5 in the input: StdIn.readInt() throws InputMismatchException.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: teleportation
+L0 Prestructural:
+  - everyday_reading: Everyday "90 percent of the time" reads as a quota (exactly 9 of every 10 moves follow links); in the model it is a probability applied independently on every move, folded into each matrix entry as .90*(link share) + .10/N.
+  - misconception: wrong rule: Without teleporting, the surfer still visits every page. 
+  boundary: Any correct, programming-specific statement about teleportation makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A model rule: the random leap of the 90-10 rule, a jump to a page chosen uniformly from all N pages with probability .10.
+  - states_the_rule: 90 percent of the time the surfer clicks a random link on the current page (each link equally likely) and 10 percent of the time goes directly to a random page (all pages equally likely); in the matrix this adds .10/N to each entr
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Per entry, the link term .90*counts[i][j]/outDegree[i] is computed first and the leap term .10/N is then added to every entry, including entries with no link and the diagonal.
+  - output_prediction: The leap contributes .10/N to each entry: .02 for tiny.txt (N = 5), so an entry with no link is .02 and the single link of page 0 gives .92.
+  - one_step_execution: Adding the leap term raises one entry p by .10/N; summed across a row it adds exactly .10.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Every entry is built as link part plus leap part; the .90 and .10 weights must sum to 1 for each row to remain a distribution.
+  - purpose_of_the_whole: Guarantee mixing: the leap makes every page reachable from every page, so the chain has a unique long-run distribution and spider traps cannot capture the surfer.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing the split to 80-20 or 95-5 keeps rows stochastic and mixing but changes the ranks; removing the leap (100-0) can break mixing.
+  - transfer_to_a_new_program: Use whenever the link graph may not be strongly connected (any real web model) to make the chain mix; the particular 90-10 split is a guess, so it is a modelling parameter, not a fact.
+  - diagnose_an_error: rule broken: The leap is needed for mixing. Kind: silent logic error. Trigger class: Leap term removed and graph has a spider trap or unreachable part: ranks pile up in the trap and depend on the starting page.
+  - diagnose_an_error: rule broken: Leap and link weights must sum to 1. Kind: silent logic error. Trigger class: Leap changed (e.g. .20/N) without changing .90: rows sum to 1.1 and the random move misbehaves.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: comment, dangling_pages, input_graph, teleportation.

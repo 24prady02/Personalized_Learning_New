@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Brace placement for nested for loops (loop body scope)", "why": "The student put println inside the inner loop, so it prints a newline after every star (output is three lines of single stars, 1+2+3 = 6 lines), which shows a wrong rule about which statements belong to which loop body, not a slip in an otherwise rule-correct trace."}

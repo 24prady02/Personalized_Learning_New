@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "String; it is a class. The other four are primitive.",
+   "correct": true,
+   "why": "It correctly says which of the listed types are primitive and which is not, but it states no rule and does not apply one to the code."
+  },
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "String; it is a class.",
+   "correct": true,
+   "why": "It correctly names String as a non-primitive class type, with no further reasoning."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "String; it is a class. The other four are primitive.",
+   "correct": true,
+   "why": "It separates primitive types from a class type, but says nothing about what each kind of variable holds (a value versus an address)."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about data types as sets of values with their operations, or about typing rules."
+  }
+ ]
+}

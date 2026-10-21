@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division and whether p is a probability row", "why": "The answer accepts the all-zero row as valid and explains it as a page with no links. It misses that integer division causes the zeros and that counts sum to 5, so p should be {0, 0, 0.4, 0.4, 0.2}."}

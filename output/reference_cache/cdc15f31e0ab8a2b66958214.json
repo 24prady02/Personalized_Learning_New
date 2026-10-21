@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "Tracing gives p = 1,2,4,8,16,32 at each test with n = 37, so 'p is always less than n' is a correct (if weak) claim about the invariant; it is a claim, not a question, so it is levelled, but it states one partial aspect with no values, no reason the loop ends, and no final p, so it is L1."}

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer gives the correct values (readInt leaves the newline, so readLine returns \"\" and the next readLine returns \"Ann Lee\") but offers no value-by-value justification or mention of the leftover newline; by the boundary rule, a bare correct output with no justification is L1, not L2."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "0.35 < 0.1 no, < 0.3 no, < 0.6 yes",
+   "correct": true,
+   "why": "The individual comparisons are right, but the answer says nothing about double as a type, its rounding, or type flow."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Compare r with each row[j]",
+   "correct": false,
+   "why": "The trace ignores sum += row[j], which keeps a running total (0.1, then 0.4). Treating sum as just row[j] gives next = 2 instead of the actual next = 1."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "each row[j]: ... < 0.1 no, < 0.3 no, < 0.6 yes, so next = 2",
+   "correct": true,
+   "why": "The answer correctly reads row[0]=0.1, row[1]=0.3 and row[2]=0.6, and links 0.6 to index 2, even though the loop logic around it is wrong."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention pages with no outgoing links."
+  }
+ ]
+}

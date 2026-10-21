@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer correctly names both lines and gives a rule for each: d = i widens automatically because double is bigger, and the 9.99 to int narrowing needs (int). It covers both parts of the question with correct reasons. It doesn't relate them to each other or go beyond the code, so it stays at L2."}

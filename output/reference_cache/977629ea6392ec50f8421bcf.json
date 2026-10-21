@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code divides int by int, so counts[j]/outDegree truncates to 0 for every element and p holds 0.0, 0.0, 0.0, 0.0, 0.0. This is not a probability row, because it sums to 0. The student used real-number division and got 0.4, 0.4, 0.2. That is a maths reading, not Java's rule, so the answer is L0."}

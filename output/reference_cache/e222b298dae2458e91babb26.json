@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code counts how many times n can be halved before it reaches 1, so c=3 needs n from 8 to 15. The student pattern-guessed a linear rule (c = n/2) from two inputs and never traced the loop. n=6 goes 6→3→1 and prints 2, not 3, so the answer is wrong."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "`int[] copy = data2;` copies only the reference, so both names point to the same array. It is not a copy, deep or otherwise, and changes through one name show in the other. The comment calling it a deep copy applies a wrong rule about Java reference assignment, so the answer shows no working model of array copying."}

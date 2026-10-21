@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Standard input/output redirection and piping; args[] empty", "why": "It correctly covers all three commands and says args is empty, but it gives no reason, such as input arriving through stdin rather than command-line arguments, and it doesn't generalise beyond the code."}

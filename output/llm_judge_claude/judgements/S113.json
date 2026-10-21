@@ -1,0 +1,5 @@
+{"concepts":[
+{"concept":"infinite_loop","level":"L1","way":"names_the_element","quote":"A loop that never stops because its condition stays true.","correct":true,"why":"Correct general definition, not applied to this code."},
+{"concept":"loop_control","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about init, test or update."},
+{"concept":"convergence_test","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about convergence tests."}
+]}

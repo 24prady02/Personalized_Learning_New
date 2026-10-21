@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student sees that `total` is never initialised, which stops the code compiling, and fixes it with `int total = 0;`. They then give the right result for the fixed code (0+1+2 = 3). This finds and fixes the fault in the given code but does not trace the values or generalise, so it is L3 and not L4."}

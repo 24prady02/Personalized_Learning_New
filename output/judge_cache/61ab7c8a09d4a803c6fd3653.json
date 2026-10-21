@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "It correctly says what the flag means and that a new boolean array starts all false, but it does not trace the code or explain why the code depends on the false start."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the print call or its output."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention break, and the code has none."
+  }
+ ]
+}

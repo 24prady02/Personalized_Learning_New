@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "equivalence of loop variants (reverse, off-by-one index, enhanced for) for summing an array", "why": "The answer names C, which is correct, but A is also equivalent and B is wrong. There is no reasoning, so it covers only one part of the code and does not trace the values."}

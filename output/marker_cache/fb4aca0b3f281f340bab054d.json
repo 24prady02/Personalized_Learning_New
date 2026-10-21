@@ -1,0 +1,1 @@
+{"level": "none", "concept": "printf format specifiers (%.3f variant)", "why": "The answer discusses a changed format (%.3f) and never states what the given code prints or explains %6.2f, %d or %n, so it addresses a different question."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The fragment prints a[5] (8) three times, because the loop body prints a[5] and doesn't use i as an index. The student treats i's range as limiting access to a[5], which is a wrong rule: a[5] is a fixed element and the loop runs 3 times. The answer also covers only (a) and gets it wrong, so it shows no working model of the loop or the array."}

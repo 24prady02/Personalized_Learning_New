@@ -1,0 +1,1 @@
+{"level": "L0", "why": "With n = 0, `n != 0` is false, so Java's short-circuit `&&` never evaluates `10 / n`. Nothing is printed and nothing crashes. The student assumes both operands are always evaluated, which is a wrong rule for `&&`."}

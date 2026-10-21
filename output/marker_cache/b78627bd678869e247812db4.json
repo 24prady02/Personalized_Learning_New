@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "sentinel-controlled while loop with read-ahead (priming read)", "why": "The code is correct and the explanation ties the read at the end of the body to the loop condition and the priming read. It explains how the loop gets each new number, but it does not go beyond this code to other inputs or changed code."}

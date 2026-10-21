@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The code is correct. It reads once before the loop, tests x != 0, prints, then reads the next value at the end of the body, so the 0 is never printed. The explanation ties the read at the end of the body to how the loop gets each new number. It doesn't go beyond this code, so it isn't L4."}

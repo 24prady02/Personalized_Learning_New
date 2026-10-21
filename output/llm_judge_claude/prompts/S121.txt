@@ -1,0 +1,154 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What are age, rest and name?
+
+CODE:
+// the user types:  42<Enter>  then  Ann Lee<Enter>
+int age = StdIn.readInt();
+String rest = StdIn.readLine();
+String name = StdIn.readLine();
+
+STUDENT ANSWER: 42, an empty string, and "Ann Lee".
+
+FACTS FROM RUNNING THE CODE:
+CORRECT ('42, an empty string, and "Ann Lee".'): confirmed by the run: age = 42 (final); rest = "" (final); name = "Ann Lee" (final)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: empty_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English a semicolon just separates or ends a clause, so 'if (x > 0);' still reads as 'if x is positive, do the next thing'. In Java a lone ; is a complete statement that does nothing, and it becomes the whole body
+  boundary: Any correct, programming-specific statement about empty statement makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: The empty (null) statement is a lone semicolon: a statement that does nothing.
+  - states_the_rule: An empty statement does nothing, and its execution always completes normally; any part of a for loop, including its body, may be left empty, but a while loop is better style than null statements.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Executing ; does nothing and passes control to the next statement; as a loop body it means each pass is just test (then update, for a for loop).
+  - output_prediction: An empty statement produces no value and no output; e.g. for (int v = 1; v <= N/2; v *= 2) ; computes the same final v as the while version, but v is out of scope afterwards.
+  - one_step_execution: One execution changes no variable and returns nothing; only the header parts around it (test, update) change state.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The empty statement can stand wherever a statement is required (if body, loop body, for slots), and a block { } can stand alone; a ; after a header therefore silently becomes the body.
+  - purpose_of_the_whole: Plan: placeholder - an intentionally empty body when the loop header does all the work; the book avoids it and prefers a while loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Deleting a ; that stands right after an if or loop header changes the program: the next statement becomes the body. Adding or removing an extra ; between ordinary statements changes nothing.
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a stat
+  - diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after
+  - transfer_to_a_new_program: Use an empty statement only for a loop whose header does all the work, and comment it; otherwise write { } or restructure as a while loop. Never put ; directly after if (...), while (...) or for (...) by habit.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: token_vs_line_input
+L0 Prestructural:
+  - everyday_reading: Everyday 'read a line' means the next full line you see. readLine() returns the rest of the current line from the read position. A preceding readInt() stops right after the number, so the 'line' may be empty.
+  - misconception: wrong rule: A line read after a number read returns the next line typed. 
+  boundary: Any correct, programming-specific statement about token vs line input makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: StdIn's read methods come in two categories: token-based (readInt, readDouble, readString, ... separated by whitespace) and line- or text-based (readLine, readAll).
+  - states_the_rule: A token is a maximal run of non-whitespace characters. readLine() reads and returns the rest of the line without its separator. It is best not to mix the two categories in one program.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: A token read skips whitespace, including line breaks, before the token and stops immediately after it. readLine() collects characters from the current position up to the line separator, consumes the separator, and returns them wit
+  - output_prediction: For input `42\nhello world\n`: readInt() gives 42, then readLine() gives "", then readLine() gives "hello world". readString() on `hello world` gives "hello".
+  - one_step_execution: A token read advances past one token and leaves the line separator. A readLine() advances past exactly one line separator. Each returns what it consumed (minus the separator).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Both kinds of call share the single StdIn position, so a token read changes what the next readLine returns. Mixing them needs care.
+  - purpose_of_the_whole: Token reads suit streams of numbers or words. Line reads suit line-structured records, e.g. a name with spaces followed by numbers on each line.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Replacing line breaks with spaces in the input leaves every token read unchanged but changes what readLine returns.
+  - transfer_to_a_new_program: Use token reads when values are separated by arbitrary whitespace. Use readLine when line boundaries or spaces inside a value matter. Avoid mixing the two in one program.
+  - diagnose_an_error: rule broken: A token read leaves the rest of its line unread. Kind: silent logic error. Trigger class: readInt() followed by readLine() on line-per-record input: the line read returns "" and the records are shifted.
+  - diagnose_an_error: rule broken: Line reads must stop at end of input. Kind: run-time exception. Trigger class: Using the result of readLine() after the input is exhausted (no line left).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: standard_input
+L0 Prestructural:
+  - everyday_reading: In everyday reading of `INPUT A` or `readInt`, the command looks like it inputs the letter A, or 'looks at' a number without using it up. In fact a read takes the next token from the input stream, converts it, and returns the valu
+  - misconception: wrong rule: Calling StdIn.readInt() twice returns the same value twice. 
+  - misconception: wrong rule: Reading a second input value into a variable that already holds one is an error, so the program cannot run. 
+  - misconception: wrong rule: A line read after a number read returns the next line typed. 
+  - misconception: wrong rule: Reading a value once before the loop is enough; the loop will process each new input value. 
+  boundary: Any correct, programming-specific statement about standard input makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: StdIn is a booksite library of static methods that read typed values from the standard input stream: isEmpty, readInt, readDouble, readLong, readBoolean, readChar, readString, readLine, readAll.
+  - states_the_rule: StdIn reads from a stream that may be empty or may contain values separated by whitespace. readInt() reads the next token, parses it as an int and returns it, and the token must have the type the method expects. Outside the book's
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When execution reaches a read, the program blocks until a complete token is available (at the terminal, until <return>). The read then parses the token and returns, the assignment stores the value, and the next statement runs.
+  - output_prediction: readInt returns an int, readDouble a double, readString a String, readBoolean a boolean. AddInts 4 with input 144 233 377 1024 prints Sum is 1778.
+  - one_step_execution: One read moves the input position past one token and returns its value. Assigning that value overwrites the variable's previous value. No other variable changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Every StdIn call takes from the same stream position, so values are delivered once, in order.
+  - relation_to_neighbour: To read an unknown number of values, each read must be guarded by !StdIn.isEmpty() as the condition of a while loop whose body reads.
+  - relation_to_neighbour: With `< file` the same StdIn calls read from the file instead of the keyboard. The program text does not change.
+  - relation_to_neighbour: The reads must follow the file's layout: one readInt() for n first, then pairs of readInt() for each link i j until isEmpty().
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the input data changes the results without recompiling. Swapping two reads swaps the values the two variables get. Changing readInt to readDouble accepts more inputs; the reverse breaks on tokens like 12.2.
+  - diagnose_an_error: rule broken: StdIn/StdOut/StdDraw/StdAudio are not part of Java; their files must be in the working directory or on the classpath. Kind: run-time exception. Trigger class: StdIn.class is absent when the program runs: java.lang.NoC
+  - transfer_to_a_new_program: Use StdIn when the amount of data is large or unknown, comes from a file or another program, or must be supplied while the program runs. Use command-line arguments for a few parameters fixed at launch.
+  - diagnose_an_error: rule broken: The next token must parse as the requested type. Kind: run-time exception. Trigger class: The next token is not an int literal, e.g. abc, 12.2 or true for readInt(). StdIn throws NumberFormatException in the book's ve
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: string_literal
+L0 Prestructural:
+  - everyday_reading: Everyday reading: quotation marks are just decoration, and spacing inside them is tidied up like ordinary text; single and double quotes mean the same thing. 
+  boundary: Any correct, programming-specific statement about string literal makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: A string literal is a sequence of characters written in double quotes in the source code, e.g. "Hello, World"; it is a value of type String.
+  - states_the_rule: A String literal is enclosed in a pair of double quotes; everything inside is taken literally, special characters such as " and newline are written with escape sequences, and the literal must close on the same source line.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The literal is a constant: it is fixed at compile time and simply supplies its value when the expression containing it is evaluated.
+  - output_prediction: Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: "Hi, " has 4 characters, and printing it shows Hi, followed by a space.
+  - one_step_execution: Evaluating a literal changes no state; it just yields the same String value every time.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: print("s") outputs exactly the characters between the quotes, without the quotes.
+  - relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line.
+  - relation_to_neighbour: Escape sequences (\n, \t, \", \\) are written inside string or char literals to stand for one character that cannot be typed directly.
+  - purpose_of_the_whole: Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing any character inside the quotes (including adding a space) changes the output by exactly that character; changing spaces outside the quotes changes nothing.
+  - diagnose_an_error: rule broken: A String literal is enclosed in a pair of double quotes. Kind: compile-time. Trigger class: a missing closing (or opening) quote; the compiler may get very confused and report errors elsewhere
+  - diagnose_an_error: rule broken: String literals use double quotes; single quotes are for one char. Kind: compile-time. Trigger class: 'Hello' (more than one character in single quotes): unclosed character literal
+  - diagnose_an_error: rule broken: A string literal must not span source lines. Kind: compile-time. Trigger class: a line break inside "...": unclosed string literal
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: empty_statement, token_vs_line_input, standard_input, string_literal.

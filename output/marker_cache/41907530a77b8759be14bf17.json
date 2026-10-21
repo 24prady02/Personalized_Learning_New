@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "nested for loops tracing", "why": "The answer traces every iteration value by value and correctly gives the output, but never states the overall purpose, which is to print a triangle of increasing rows of numbers."}

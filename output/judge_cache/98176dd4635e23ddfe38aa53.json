@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "piping",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the same code reads the keyboard, a file or a pipe",
+   "correct": true,
+   "why": "The answer says a pipe and a file both feed the same unchanged program, which relates piping to redirection."
+  },
+  {
+   "concept": "redirection",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "Average does not change at all; the same code reads the keyboard, a file or a pipe",
+   "correct": true,
+   "why": "This is the L4 way: the program stays the same whether input comes from the terminal or a file, so the I/O abstraction is kept."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about launching or running the programs, terminal output or args[]."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the isEmpty() read loop."
+  }
+ ]
+}

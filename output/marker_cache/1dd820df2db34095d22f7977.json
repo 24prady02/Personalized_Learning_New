@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "uninitialised local variable in a loop accumulation", "why": "The student spots the missing initialisation and gives a correct fix with its result of 3, but never says the original code fails to compile and never traces the loop values."}

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer makes claims (so it is levelled, not 'none'): it correctly gives b = 20 and describes the assignment 'a now holds b' without applying the rule to produce a's new value (20), so it grasps one correct aspect without a full value-by-value trace — L1."}

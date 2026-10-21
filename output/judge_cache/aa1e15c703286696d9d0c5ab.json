@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "System.out.print(\"*\");\n    System.out.println();\n  }",
+   "correct": false,
+   "why": "The code relates print to println wrongly: the println sits in the inner loop, so a line of several prints is never built and each star gets its own line (the run prints * six times, one per line)."
+  },
+  {
+   "concept": "println",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int j = 1; j <= i; j++) {\n    System.out.print(\"*\");\n    System.out.println();\n  }",
+   "correct": false,
+   "why": "This is a relational error: println should end each row after the inner loop, but placed inside the inner loop it ends the line after every star."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The i++ and j++ updates are only copied from the given code; the answer says nothing about them."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not address the fencepost loop."
+  }
+ ]
+}

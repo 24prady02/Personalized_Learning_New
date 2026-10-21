@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "finding the minimum with a running-minimum loop", "why": "It lists the steps (initialise min to 0, loop, keep the smaller value) without relating them or reasoning about which inputs the 0 start would break (all-positive data). It also leaves out the print. The 0 start does work for this all-negative data, but the answer doesn't say why."}

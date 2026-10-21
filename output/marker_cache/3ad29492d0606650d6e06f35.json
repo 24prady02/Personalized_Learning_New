@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "naming convention (variable names i and c)", "why": "The answer addresses only one of the two variables (and wrongly calls i bad style, since i is a conventional loop index), and it gives no renaming, no mention of c, and no statement about the output."}

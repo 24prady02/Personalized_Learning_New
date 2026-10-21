@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "operator precedence / need for parentheses", "why": "The answer applies a wrong rule (parentheses are required and Java 'guesses' the order) when Java has defined precedence, and it never evaluates r (7)."}

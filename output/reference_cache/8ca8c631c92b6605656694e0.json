@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The student first stopped at case 3 (20), then corrected to 50 after the probe. The correction traces the fall-through in order (10, 20, 40, 50) and applies it to value 2, which is correct because there is no break. It stays a step-by-step trace and doesn't state the general rule or go beyond this code, so it is L2."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It only names double and widening as keywords and never applies them to compute num4 = 4 + 26.3 = 30.3."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It links println with a newline but never traces the two output lines of this code."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names the remainder operator but never works out 9 % 5 = 4 for this code."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about division by zero."
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+on the 44 human-labelled (label): marker exact 21/44
+on the 44 human-labelled (label): system exact 34/44
+on the 44 human-labelled (graph_label): marker exact 19/44
+on the 44 human-labelled (graph_label): system exact 38/44
+all 365: system and marker agree exactly on 176/365 (48%), within one level 246, Cohen's kappa 0.32
+the 321 unlabelled: agree on 157/321 (49%)
+marker unavailable: 1
+confusion (rows = system, columns = marker):
+             L0     L1     L2     L3     L4   none
+     L0      97     12     10      0      0      5
+     L1      20     34     13     12      1     11
+     L2       7      7     17     10      1      2
+     L3       3      7      5     18      1      1
+     L4       0      5      4     12      0      3
+   none      21     12      2      2      0     10

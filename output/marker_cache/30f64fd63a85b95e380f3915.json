@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "accumulation in a for loop (sum = i vs sum += i)", "why": "The student blames the initial value on line 1, missing that line 3 overwrites sum each iteration, so changing the start value would not give 6 (it would still print 3). This applies a wrong rule for how the loop updates sum."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "1 | 2 | 1\n2 | 2 | 1\n2 | 1 | 1",
+   "correct": true,
+   "why": "Each row changes only the variable just assigned and keeps the others, which matches Java's assignment rules for the assumed starting values a=1, b=2. The 'WRONG' flags are not about these values: the code has no print statement, so it outputs nothing."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arrays or references."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention operators or how they group."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "1 | 2 | –\n1 | 2 | 1\n2 | 2 | 1\n2 | 1 | 1",
+   "correct": true,
+   "why": "The trace correctly shows a saved in t, then a overwritten by b, then b set from t, ending in a swap. It never says the purpose is a swap or why the order matters, so it does not reach L3."
+  }
+ ]
+}

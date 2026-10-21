@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Braces and nesting of for loops (loop body scope)", "why": "The answer applies a wrong scope rule: it leaves println outside the outer loop, so output is '***' on one line rather than a triangle, and it shows no working model of which statements belong to the outer body."}

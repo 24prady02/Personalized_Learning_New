@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "pour a into it, pour b into a, then pour the spare cup into b",
+   "correct": true,
+   "why": "The answer goes through the three statements in order, one after another, and gives each one's effect."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about int or primitive types, or about how their values are copied."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "pour b into a",
+   "correct": true,
+   "why": "Each step stores one value into exactly one variable and replaces what it held. The 'pour' image hints at moving rather than copying, but the answer never says the source is left empty."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "t is like a spare cup: pour a into it, pour b into a, then pour the spare cup into b",
+   "correct": true,
+   "why": "The answer traces the swap steps correctly (save a in t, overwrite a with b, copy t into b) but never states the purpose of exchanging the values or why the order matters."
+  }
+ ]
+}

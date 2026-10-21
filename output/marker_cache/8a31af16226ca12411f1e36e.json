@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if/else execution (else branch)", "why": "The student applies a wrong rule, claiming the else always runs after the if branch, when else runs only if the condition is false, so (a) prints just \"A\"."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Row length in nested loops over a 2-D array (a[i].length vs a[0].length)", "why": "The answer states one correct rule, using a[i].length for each row so ragged arrays work. It doesn't cover the loops, the printing, the spaces or the line breaks."}

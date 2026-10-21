@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "For t = 5 the answer correctly works out that the else branch never runs, because the else belongs to an inner if that is never reached."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Nothing at all, because the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "It correctly links the dangling else to the inner if in the unbraced nesting, so when the outer test fails nothing prints."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about continue."
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): A program asks "Again? (y/n)" in a loop. Can it know how many rounds it will run before it starts?
+
+CODE:
+// the user types:  42<Enter>  then  Ann Lee<Enter>
+int age = StdIn.readInt();
+String rest = StdIn.readLine();
+String name = StdIn.readLine();
+
+STUDENT ANSWER: No, the user decides each time, while it is running.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: interactive_input
+L0 Prestructural:
+  - everyday_reading: Novices read a program as if it already knew all its inputs, e.g. treating AREA = HEIGHT*WIDTH written before the input as using the typed values. In fact each read happens only when execution reaches it, and the typed value can c
+  - misconception: wrong rule: All input to a program is fixed before it starts running. 
+  boundary: Any correct, programming-specific statement about interactive input makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Interactive input is user dialogue through standard I/O: the program prints a prompt, reads the user's reply, and its control flow depends on that reply.
+  - states_the_rule: A value can be read from standard input at any time during execution, and each read blocks until the user enters input.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Each round prints the prompt, then readInt() blocks until the user types a number and <return>. The value is compared, a response is printed, and the loop test (m != N) runs again.
+  - output_prediction: The terminal shows prompts, typed replies and responses interleaved: What's your guess? 500000 / Too high / What's your guess? 250000 / Too low ... and finally You win!.
+  - one_step_execution: One round sets m to the typed value and prints exactly one of You win!, Too low or Too high. N does not change.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Because a StdIn read can run at any point, a read placed inside the game loop lets each reply choose the branch taken in that round.
+  - purpose_of_the_whole: Plan: the prompt-read-respond loop (a guessing game or menu). m is a most-recent holder and N a fixed value. The programmer must plan for every possible user reply.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Redirecting a file of replies instead of typing keeps the same control flow, because the program cannot tell the difference. Only the echo of the typed input disappears from the screen.
+  - transfer_to_a_new_program: Use interactive input when later questions depend on earlier answers (games, menus, tutoring dialogues). For bulk data use files and redirection; modern applications take user input through a GUI.
+  - diagnose_an_error: rule broken: Each reply must be a token of the expected type. Kind: run-time exception. Trigger class: The user types a non-integer (abc, 12.5) at a readInt() prompt: NumberFormatException.
+  - diagnose_an_error: rule broken: No reads after the input ends. Kind: run-time exception. Trigger class: The user sends end-of-file (<ctrl-d>) before the loop ends, so the next readInt() fails.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: comment
+L0 Prestructural:
+  - everyday_reading: Everyday reading: text written in a program is an instruction the computer reads and obeys. 
+  - misconception: wrong rule: A comment line is run like a statement. 
+  boundary: Any correct, programming-specific statement about comment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A comment is explanatory text in the program that the compiler ignores.
+  - states_the_rule: A comment is either text between /* and */ or text from // to the end of the line; the compiler ignores it. A comment that starts with /** is a documentation (Javadoc) comment, written before a class or method; tools turn it into 
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Comments are removed when the source is read by the compiler, so they never take part in execution order; tracing skips them.
+  - output_prediction: A comment produces no value and no output.
+  - one_step_execution: A comment changes no state; adding one and recompiling leaves the program's behaviour identical.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Comments are part of the program text in Name.java but are dropped when it is compiled, so they cannot affect Name.class's behaviour.
+  - purpose_of_the_whole: Purpose: explain what the code does and why, for other programmers and your future self; also used to disable code temporarily.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program.
+  - diagnose_an_error: rule broken: A /* comment needs its closing */. Kind: compile-time. Trigger class: a /* with no matching */: the rest of the file becomes comment, so javac reports an unclosed comment or reached end of file
+  - diagnose_an_error: rule broken: /* and */ are two-character tokens with no space inside. Kind: compile-time. Trigger class: writing / * ... * /: the slashes and stars are read as operators, producing syntax errors
+  - transfer_to_a_new_program: Use comments to document intent where the code alone is unclear; do not rely on them to change what the program does, and keep them in step with the code.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: empty_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English a semicolon just separates or ends a clause, so 'if (x > 0);' still reads as 'if x is positive, do the next thing'. In Java a lone ; is a complete statement that does nothing, and it becomes the whole body
+  boundary: Any correct, programming-specific statement about empty statement makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: The empty (null) statement is a lone semicolon: a statement that does nothing.
+  - states_the_rule: An empty statement does nothing, and its execution always completes normally; any part of a for loop, including its body, may be left empty, but a while loop is better style than null statements.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Executing ; does nothing and passes control to the next statement; as a loop body it means each pass is just test (then update, for a for loop).
+  - output_prediction: An empty statement produces no value and no output; e.g. for (int v = 1; v <= N/2; v *= 2) ; computes the same final v as the while version, but v is out of scope afterwards.
+  - one_step_execution: One execution changes no variable and returns nothing; only the header parts around it (test, update) change state.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The empty statement can stand wherever a statement is required (if body, loop body, for slots), and a block { } can stand alone; a ; after a header therefore silently becomes the body.
+  - purpose_of_the_whole: Plan: placeholder - an intentionally empty body when the loop header does all the work; the book avoids it and prefers a while loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Deleting a ; that stands right after an if or loop header changes the program: the next statement becomes the body. Adding or removing an extra ; between ordinary statements changes nothing.
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a stat
+  - diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after
+  - transfer_to_a_new_program: Use an empty statement only for a loop whose header does all the work, and comment it; otherwise write { } or restructure as a while loop. Never put ; directly after if (...), while (...) or for (...) by habit.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: if_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: English 'if' (and 'whenever') states a standing rule that stays in force and fires whenever its condition becomes true. A Java if is evaluated once, when control reaches it, and then is 'taken off the books'; changin
+  - misconception: wrong rule: an if body repeats while its condition holds. 
+  - misconception: wrong rule: Every if statement requires an else. 
+  - misconception: wrong rule: A false condition with no else ends the program. 
+  - misconception: wrong rule: The then branch always runs. 
+  - misconception: wrong rule: When the then branch runs, the code after the if is skipped. 
+  boundary: Any correct, programming-specific statement about if statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: The if statement is a conditional (selection) statement: it runs a statement or block only when a boolean condition is true.
+  - states_the_rule: Syntax: if (<boolean expression>) <statement or { block }>; the braces are optional when the body is a single statement. The expression must have type boolean (or Boolean), and the body is executed if and only if the expression is
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the condition once; if true, execute the body; then, in either case, continue with the statement after the if.
+  - output_prediction: An if produces no value; its observable result is that the body's effects (assignments, output) happen exactly once when the condition is true and not at all when it is false; e.g. if (x < 0) x = -x; leaves x = 5 for 5 and gives 5
+  - one_step_execution: One execution reads the variables in the condition, changes nothing by the test itself (unless the condition has a side effect), and, when true, applies the body's changes once; control then moves to the next statement.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The condition must be a boolean expression; a non-boolean condition such as if (t = goal) with int t is a compile-time error, while if (b = false) with boolean b compiles and assigns.
+  - relation_to_neighbour: if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.
+  - relation_to_neighbour: An if is a fork in the control flow: one path through the body, one around it, both rejoining at the next statement.
+  - relation_to_neighbour: if and while have the same form, but if tests its condition once and runs the block at most once, while while tests again after every pass and repeats the block as long as the condition is true.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Negating the condition swaps which inputs run the body; changing < to <= changes only the boundary value. Adding a statement under a braceless if does not put it in the body. Whatever the condition, code after the if still runs ex
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a stat
+  - diagnose_an_error: rule broken: The if template is if (<boolean expression>) <statement>: the condition must be enclosed in parentheses. Kind: compile-time. Trigger class: Any if whose condition is written in { } or without ( ), e.g. if {x > 0} ... 
+  - transfer_to_a_new_program: Use an if when an action is needed for some inputs only and the test happens once at that point; use a loop if the action must repeat while the condition holds, and assign a boolean directly (ok = x > y;) when you only need the tr
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: interactive_input, comment, empty_statement, if_statement.

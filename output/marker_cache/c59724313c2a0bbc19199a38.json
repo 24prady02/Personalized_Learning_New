@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Java statement terminators (missing semicolon)", "why": "It applies a wrong rule (a line break ends a statement, as in some other languages), whereas Java requires ';', and it doesn't address the other problems or the lines that never run."}

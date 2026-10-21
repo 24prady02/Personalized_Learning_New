@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Cast precedence causing (int) Math.random() to truncate to 0", "why": "The answer correctly deduces the cause from the code: the cast applies to Math.random() before multiplying, so the result is always 0 and the die always 1. It links this to the fix, but it doesn't extend to a wider class of cases or changed code."}

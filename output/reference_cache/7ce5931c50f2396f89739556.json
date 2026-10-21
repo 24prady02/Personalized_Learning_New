@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "B", "why": "The student writes correct new code for an unseen problem (priming read, while x != 0, print, re-read at end of body) and explains how the trailing read advances the loop; writing correct new code that solves the task is L4 under the boundary rules, not merely a relational reading of given code."}

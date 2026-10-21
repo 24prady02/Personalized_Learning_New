@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is correct. b×a is [[3,4],[1,2]], which differs from c = [[2,1],[4,3]], so the order matters. But it gives only the result and a bare conclusion. It doesn't show the row-by-column working, doesn't state c to compare against, and doesn't explain why the products differ."}

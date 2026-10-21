@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The output 1 4 7 10 is correct, but the answer doesn't trace the values. It also doesn't say that the loop stops because isDone becomes true when i is 10 (10 % 5 == 0), which makes !isDone false. 'Always runs four times' is only a restatement of the result, and it is wrong as a general rule."}

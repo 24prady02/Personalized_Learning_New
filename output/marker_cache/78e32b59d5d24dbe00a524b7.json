@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Math.round return type and assignment to int (long to int narrowing)", "why": "The answer correctly relates round(double) returning long to the int target, concluding a compile error, which integrates the method's return type with the declaration."}

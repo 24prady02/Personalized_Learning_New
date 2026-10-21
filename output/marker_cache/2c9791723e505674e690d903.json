@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "nested loops printing increasing rows", "why": "It correctly describes the first two rows and the pattern of adding a number each time, but it omits the third row (1 2 3) and doesn't trace the inner and outer loop values. The i <= 5 remark extends beyond the code without tracing it."}

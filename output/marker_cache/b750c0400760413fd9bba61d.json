@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "swap using a temporary variable (assignment as copy vs move)", "why": "The answer applies a wrong rule, that `a = b` moves the value and leaves b empty, when Java copies it. It also doesn't trace all three lines or say that the code swaps a and b."}

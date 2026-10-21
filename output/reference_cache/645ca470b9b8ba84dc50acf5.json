@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The answer integrates the two loops into one structure — the inner loop's bound j <= i ties each row to the outer counter, which it expresses as 'row i prints 1 to i' — and states the purpose of the whole (a 3-row triangle) deduced from the code rather than listing line-by-line values; that is relational, not multistructural."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop update expression (++i vs i++) and loop trace", "why": "The answer applies a wrong rule (++i increments before the body, which would give 1 2 3), when the update runs after the body, so the output is 0 1 2."}

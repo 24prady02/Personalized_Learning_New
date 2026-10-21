@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "if-else execution trace", "why": "Correctly traces all executed lines in order (1, 4, 6) with the value-based reason that 2 > 2 is false, but does not state the purpose of the code as a whole."}

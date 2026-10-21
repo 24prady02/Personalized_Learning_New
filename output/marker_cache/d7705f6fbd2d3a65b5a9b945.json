@@ -1,0 +1,1 @@
+{"level": "none", "concept": "tracing output of array element, for loop and while loop", "why": "All three outputs are correct, but the answer gives only final outputs with no line-by-line or value-by-value justification, so by the definitions it can't be levelled."}

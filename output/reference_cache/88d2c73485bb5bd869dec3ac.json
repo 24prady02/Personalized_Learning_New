@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student gives correct values for x (3 2 1 0) and y (0 3 5 6) and the correct output 6, but there is no written justification for any step. It doesn't say what the loop condition does or how each line changes the values. A correct trace with no explanation of the working is not levelled above L1."}

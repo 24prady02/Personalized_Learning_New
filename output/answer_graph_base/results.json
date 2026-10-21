@@ -1,0 +1,3267 @@
+[
+ {
+  "id": "S088",
+  "type": "J2 Part (b) L2",
+  "expected": "L2",
+  "text": "There is a Big.class file now, but nothing is printed because the program has not run yet.",
+  "asked": "After javac Big.java succeeds, what has happened and what has not?",
+  "gold": [
+   "compile",
+   "run"
+  ],
+  "nli": {
+   "levels": {
+    "program_text": "L1",
+    "compile": "L1",
+    "class_declaration": "L1",
+    "compile_time_error": "L1"
+   },
+   "reasons": {
+    "program_text": "L1 names_the_element (on topic, 0.51); no way matched",
+    "compile": "L1 names_the_element (on topic, 0.51); no way matched",
+    "class_declaration": "L1 names_the_element (on topic, 0.59); no way matched",
+    "compile_time_error": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "class_declaration",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "program_text": "L1",
+    "compile": "L1",
+    "class_declaration": "L1",
+    "compile_time_error": "L1"
+   },
+   "reasons": {
+    "program_text": "L1 names_the_element (on topic, 0.51); no way matched",
+    "compile": "L1 names_the_element (on topic, 0.51); no way matched",
+    "class_declaration": "L1 names_the_element (on topic, 0.59); no way matched",
+    "compile_time_error": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "class_declaration",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S089",
+  "type": "J3 Part (c) L3",
+  "expected": "L3",
+  "text": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+  "asked": "Why would compiling and testing in small steps have helped?",
+  "gold": [
+   "incremental_development"
+  ],
+  "nli": {
+   "levels": {
+    "incremental_development": "L1",
+    "compile": "L1",
+    "compile_time_error": "L1",
+    "reading_error_messages": "L1"
+   },
+   "reasons": {
+    "incremental_development": "L1 names_the_element (on topic, 0.65); no way matched",
+    "compile": "L1 names_the_element (on topic, 0.57); no way matched",
+    "compile_time_error": "L1 names_the_element (on topic, 0.57); no way matched",
+    "reading_error_messages": "L1 names_the_element (on topic, 0.67); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "reading_error_messages",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "incremental_development": "L3",
+    "compile": "L3",
+    "compile_time_error": "L1",
+    "reading_error_messages": "L1"
+   },
+   "reasons": {
+    "incremental_development": "L3 relation_to_neighbour (question, 0.90): answers: Why would compiling and testing in small steps have helped?",
+    "compile": "L3 relation_to_neighbour (question, 0.90): answers: Why would compiling and testing in small steps have helped?",
+    "compile_time_error": "L1 names_the_element (on topic, 0.57); no way matched",
+    "reading_error_messages": "L1 names_the_element (on topic, 0.67); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "incremental_development",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why would compiling and testing in small steps have helped?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "compile",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why would compiling and testing in small steps have helped?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "reading_error_messages",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S090",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+  "asked": "Name the part  public class Hello { ... }  and say which file it must be in.",
+  "gold": [
+   "class_declaration"
+  ],
+  "nli": {
+   "levels": {
+    "class_declaration": "L1",
+    "identifier": "L1",
+    "program_text": "L1"
+   },
+   "reasons": {
+    "class_declaration": "L1 names_the_element (on topic, 0.71); no way matched",
+    "identifier": "L1 names_the_element (on topic, 0.62); no way matched",
+    "program_text": "L1 names_the_element (on topic, 0.64); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "class_declaration",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "class_declaration": "L1",
+    "identifier": "L1",
+    "program_text": "L1"
+   },
+   "reasons": {
+    "class_declaration": "L1 names_the_element (on topic, 0.71); no way matched",
+    "identifier": "L1 names_the_element (on topic, 0.62); no way matched",
+    "program_text": "L1 names_the_element (on topic, 0.64); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "class_declaration",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S091",
+  "type": "J4 Part (d) L4",
+  "expected": "L4",
+  "text": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+  "asked": "A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+  "gold": [
+   "compile_time_error",
+   "string_literal"
+  ],
+  "nli": {
+   "levels": {
+    "string_literal": "L1",
+    "println": "L1",
+    "standard_output": "L1",
+    "compile_time_error": "L1",
+    "literal": "L4"
+   },
+   "reasons": {
+    "string_literal": "L1 names_the_element (on topic, 0.60); no way matched",
+    "println": "L1 names_the_element (on topic, 0.54); no way matched",
+    "standard_output": "L1 names_the_element (on topic, 0.53); no way matched",
+    "compile_time_error": "L1 names_the_element (on topic, 0.54); no way matched",
+    "literal": "L4 diagnose_an_error (nli, 0.86): Writing 'ab', using single quotes for a word, or leaving out a closing quote: 'unclosed ch"
+   },
+   "edges": [
+    {
+     "concept": "literal",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.864,
+     "rule": "Writing 'ab', using single quotes for a word, or leaving out a closing quote: 'unclosed character literal' or 'unclosed string literal'.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "string_literal",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "string_literal": "L4",
+    "println": "L4",
+    "standard_output": "L4",
+    "compile_time_error": "L1",
+    "literal": "L4"
+   },
+   "reasons": {
+    "string_literal": "L4 diagnose_an_error (question, 0.90): diagnoses UnclosedStringLiteral: A string literal can be left without its closing quote.",
+    "println": "L4 diagnose_an_error (question, 0.90): answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+    "standard_output": "L4 diagnose_an_error (question, 0.90): answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+    "compile_time_error": "L1 names_the_element (on topic, 0.54); no way matched",
+    "literal": "L4 diagnose_an_error (nli, 0.86): Writing 'ab', using single quotes for a word, or leaving out a closing quote: 'unclosed ch"
+   },
+   "edges": [
+    {
+     "concept": "literal",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.864,
+     "rule": "Writing 'ab', using single quotes for a word, or leaving out a closing quote: 'unclosed character literal' or 'unclosed string literal'.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "string_literal",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "diagnoses UnclosedStringLiteral: A string literal can be left without its closing quote.",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "string_literal",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "println",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "standard_output",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate wrote  System.out.println(\"Hi there);  What happens and why?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "string_literal",
+   "main_level": "L4"
+  }
+ },
+ {
+  "id": "S093",
+  "type": "J4 Part (d) L4",
+  "expected": "L4",
+  "text": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+  "asked": "Fix it so it prints 5.5.",
+  "gold": [
+   "integer_division",
+   "operator_precedence"
+  ],
+  "nli": {
+   "levels": {
+    "double": null,
+    "integer_division": "L1",
+    "expression": "L1",
+    "run_time_error": "L1",
+    "int": "L1"
+   },
+   "reasons": {
+    "double": "not assessed: no way matched and off topic",
+    "integer_division": "L1 names_the_element (on topic, 0.68); no way matched",
+    "expression": "L1 names_the_element (on topic, 0.59); no way matched",
+    "run_time_error": "L1 names_the_element (on topic, 0.55); no way matched",
+    "int": "L1 names_the_element (on topic, 0.60); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "integer_division",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "double": null,
+    "integer_division": "L1",
+    "expression": "L1",
+    "run_time_error": "L1",
+    "int": "L1"
+   },
+   "reasons": {
+    "double": "not assessed: no way matched and off topic",
+    "integer_division": "L1 names_the_element (on topic, 0.68); no way matched",
+    "expression": "L1 names_the_element (on topic, 0.59); no way matched",
+    "run_time_error": "L1 names_the_element (on topic, 0.55); no way matched",
+    "int": "L1 names_the_element (on topic, 0.60); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "integer_division",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S094",
+  "type": "J4 Part (d) L4",
+  "expected": "L4",
+  "text": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+  "asked": "What happens with  java Twice  (no argument)?",
+  "gold": [
+   "array_bounds",
+   "command_line_args"
+  ],
+  "nli": {
+   "levels": {
+    "command_line_args": "L1",
+    "run": "L4",
+    "class_declaration": null,
+    "args_length": "L1",
+    "parsing": "L4"
+   },
+   "reasons": {
+    "command_line_args": "L1 names_the_element (on topic, 0.59); no way matched",
+    "run": "L4 diagnose_an_error (nli, 0.67): A required command-line argument must be typed. run-time exception. running a program that",
+    "class_declaration": "not assessed: no way matched and off topic",
+    "args_length": "L1 names_the_element (on topic, 0.49); no way matched",
+    "parsing": "L4 diagnose_an_error (nli, 0.94): args[k] exists only if at least k+1 arguments were typed. run-time exception."
+   },
+   "edges": [
+    {
+     "concept": "run",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.665,
+     "rule": "A required command-line argument must be typed. run-time exception. running a program that reads args[0] with no argument",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "parsing",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.937,
+     "rule": "args[k] exists only if at least k+1 arguments were typed. run-time exception.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "command_line_args",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "command_line_args": "L4",
+    "run": "L4",
+    "class_declaration": null,
+    "args_length": "L1",
+    "parsing": "L4"
+   },
+   "reasons": {
+    "command_line_args": "L4 diagnose_an_error (question, 0.90): answers: What happens with  java Twice  (no argument)?",
+    "run": "L4 diagnose_an_error (question, 0.90): answers: What happens with  java Twice  (no argument)?",
+    "class_declaration": "not assessed: no way matched and off topic",
+    "args_length": "L1 names_the_element (on topic, 0.49); no way matched",
+    "parsing": "L4 diagnose_an_error (nli, 0.94): args[k] exists only if at least k+1 arguments were typed. run-time exception."
+   },
+   "edges": [
+    {
+     "concept": "run",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.665,
+     "rule": "A required command-line argument must be typed. run-time exception. running a program that reads args[0] with no argument",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "parsing",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.937,
+     "rule": "args[k] exists only if at least k+1 arguments were typed. run-time exception.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "command_line_args",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What happens with  java Twice  (no argument)?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "run",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What happens with  java Twice  (no argument)?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "command_line_args",
+   "main_level": "L4"
+  }
+ },
+ {
+  "id": "S095",
+  "type": "J2 Part (b) L1",
+  "expected": "L1",
+  "text": "String; it is a class. The other four are primitive.",
+  "asked": "Which of int, double, boolean, char, String is not a primitive type?",
+  "gold": [
+   "primitive_type",
+   "primitive_vs_reference",
+   "string_type"
+  ],
+  "nli": {
+   "levels": {
+    "primitive_type": "L1",
+    "string_type": "L1",
+    "primitive_vs_reference": "L1",
+    "char": "L0",
+    "data_type": "L2"
+   },
+   "reasons": {
+    "primitive_type": "L1 names_the_element (on topic, 0.73); no way matched",
+    "string_type": "L1 names_the_element (on topic, 0.73); no way matched",
+    "primitive_vs_reference": "L1 names_the_element (on topic, 0.65); no way matched",
+    "char": "L0 misconception (nli, 0.65): char is not a numeric type.",
+    "data_type": "L2 output_prediction (nli, 0.94): The result type follows from the operand types: int op int gives int (7 / 2 is 3), any dou"
+   },
+   "edges": [
+    {
+     "concept": "char",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.647,
+     "rule": "char is not a numeric type.",
+     "source": "nli",
+     "misconception": "CharNotNumeric"
+    },
+    {
+     "concept": "data_type",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 0.939,
+     "rule": "The result type follows from the operand types: int op int gives int (7 / 2 is 3), any double operand gives double (7 / 2.0 is 3.5), and + with a String operand gives a String (\"7\" + 2 is \"72\").",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "primitive_type",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "primitive_type": "L1",
+    "string_type": "L1",
+    "primitive_vs_reference": "L1",
+    "char": "L0",
+    "data_type": "L2"
+   },
+   "reasons": {
+    "primitive_type": "L1 names_the_element (on topic, 0.73); no way matched",
+    "string_type": "L1 names_the_element (on topic, 0.73); no way matched",
+    "primitive_vs_reference": "L1 names_the_element (on topic, 0.65); no way matched",
+    "char": "L0 misconception (nli, 0.65): char is not a numeric type.",
+    "data_type": "L2 output_prediction (nli, 0.94): The result type follows from the operand types: int op int gives int (7 / 2 is 3), any dou"
+   },
+   "edges": [
+    {
+     "concept": "char",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.647,
+     "rule": "char is not a numeric type.",
+     "source": "nli",
+     "misconception": "CharNotNumeric"
+    },
+    {
+     "concept": "data_type",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 0.939,
+     "rule": "The result type follows from the operand types: int op int gives int (7 / 2 is 3), any double operand gives double (7 / 2.0 is 3.5), and + with a String operand gives a String (\"7\" + 2 is \"72\").",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "primitive_type",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S096",
+  "type": "J3 Part (c) L1",
+  "expected": "L1",
+  "text": "A set of values plus the operations you can do on them.",
+  "asked": "What is a data type?",
+  "gold": [
+   "data_type"
+  ],
+  "nli": {
+   "levels": {
+    "data_type": "L1",
+    "arithmetic_operators": "L1",
+    "assignment": "L1",
+    "array_initializer": null,
+    "literal": "L1"
+   },
+   "reasons": {
+    "data_type": "L1 names_the_element (on topic, 0.67); no way matched",
+    "arithmetic_operators": "L1 names_the_element (on topic, 0.52); no way matched",
+    "assignment": "L1 names_the_element (on topic, 0.56); no way matched",
+    "array_initializer": "not assessed: no way matched and off topic",
+    "literal": "L1 names_the_element (on topic, 0.55); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "data_type",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "data_type": "L1",
+    "arithmetic_operators": "L1",
+    "assignment": "L1",
+    "array_initializer": null,
+    "literal": "L1"
+   },
+   "reasons": {
+    "data_type": "L1 names_the_element (on topic, 0.67); no way matched",
+    "arithmetic_operators": "L1 names_the_element (on topic, 0.52); no way matched",
+    "assignment": "L1 names_the_element (on topic, 0.56); no way matched",
+    "array_initializer": "not assessed: no way matched and off topic",
+    "literal": "L1 names_the_element (on topic, 0.55); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "data_type",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S097",
+  "type": "J2 Part (b) L2",
+  "expected": "L2",
+  "text": "67, a tab, C; then A12; then 662.",
+  "asked": "Give the three lines printed.",
+  "gold": [
+   "char_arithmetic",
+   "escape_sequences"
+  ],
+  "nli": {
+   "levels": {
+    "escape_sequences": "L4",
+    "empty_statement": null,
+    "char_arithmetic": "L2",
+    "char": null,
+    "command_line_args": null
+   },
+   "reasons": {
+    "escape_sequences": "L4 diagnose_an_error (nli, 0.97): Paths or text containing \\t or \\n by accident (\"C:\\temp\" contains a tab).",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "char_arithmetic": "L2 output_prediction (run, 1.00): confirmed by the run: prints A12",
+    "char": "not assessed: no way matched and off topic",
+    "command_line_args": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "escape_sequences",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.966,
+     "rule": "Paths or text containing \\t or \\n by accident (\"C:\\temp\" contains a tab).",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "escape_sequences",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints 67 C",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "char_arithmetic",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints A12",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "char_arithmetic",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints 662",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "char_arithmetic",
+   "main_level": "L2"
+  },
+  "full": {
+   "levels": {
+    "escape_sequences": "L4",
+    "empty_statement": null,
+    "char_arithmetic": "L2",
+    "char": null,
+    "command_line_args": null
+   },
+   "reasons": {
+    "escape_sequences": "L4 diagnose_an_error (nli, 0.97): Paths or text containing \\t or \\n by accident (\"C:\\temp\" contains a tab).",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "char_arithmetic": "L2 output_prediction (run, 1.00): confirmed by the run: prints A12",
+    "char": "not assessed: no way matched and off topic",
+    "command_line_args": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "escape_sequences",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.966,
+     "rule": "Paths or text containing \\t or \\n by accident (\"C:\\temp\" contains a tab).",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "escape_sequences",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints 67 C",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "char_arithmetic",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints A12",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "char_arithmetic",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 1.0,
+     "rule": "confirmed by the run: prints 662",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "char_arithmetic",
+   "main_level": "L2"
+  }
+ },
+ {
+  "id": "S098",
+  "type": "J6 Part (f) L4",
+  "expected": "L4",
+  "text": "Still -2147483648, because +2147483648 does not fit in an int.",
+  "asked": "What is  Math.abs(Integer.MIN_VALUE) ?",
+  "gold": [
+   "int",
+   "overflow"
+  ],
+  "nli": {
+   "levels": {
+    "integer_constants": "L1",
+    "int": "L1",
+    "int_literal_limit": "L1",
+    "long_type": "L1",
+    "overflow": "L1"
+   },
+   "reasons": {
+    "integer_constants": "L1 names_the_element (on topic, 0.53); no way matched",
+    "int": "L1 names_the_element (on topic, 0.68); no way matched",
+    "int_literal_limit": "L1 names_the_element (on topic, 0.65); no way matched",
+    "long_type": "L1 names_the_element (on topic, 0.64); no way matched",
+    "overflow": "L1 names_the_element (on topic, 0.57); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "int",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "integer_constants": "L1",
+    "int": "L1",
+    "int_literal_limit": "L1",
+    "long_type": "L1",
+    "overflow": "L1"
+   },
+   "reasons": {
+    "integer_constants": "L1 names_the_element (on topic, 0.53); no way matched",
+    "int": "L1 names_the_element (on topic, 0.68); no way matched",
+    "int_literal_limit": "L1 names_the_element (on topic, 0.65); no way matched",
+    "long_type": "L1 names_the_element (on topic, 0.64); no way matched",
+    "overflow": "L1 names_the_element (on topic, 0.57); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "int",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S101",
+  "type": "J2 Part (b) L1",
+  "expected": "L1",
+  "text": "It gives true when the two sides are different.",
+  "asked": "What does ^ do on two booleans?",
+  "gold": [
+   "exclusive_or"
+  ],
+  "nli": {
+   "levels": {
+    "exclusive_or": null,
+    "array_aliasing": null,
+    "array_copy": null
+   },
+   "reasons": {
+    "exclusive_or": "not assessed: no way matched and off topic",
+    "array_aliasing": "not assessed: no way matched and off topic",
+    "array_copy": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": null,
+   "main": null,
+   "main_level": null
+  },
+  "full": {
+   "levels": {
+    "exclusive_or": null,
+    "array_aliasing": null,
+    "array_copy": null
+   },
+   "reasons": {
+    "exclusive_or": "not assessed: no way matched and off topic",
+    "array_aliasing": "not assessed: no way matched and off topic",
+    "array_copy": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": null,
+   "main": null,
+   "main_level": null
+  }
+ },
+ {
+  "id": "S103",
+  "type": "J6 Part (f) L4",
+  "expected": "L4",
+  "text": "It does not compile, since round gives a long.",
+  "asked": "What does  int k2 = Math.round(2.5);  do?",
+  "gold": [
+   "long_type",
+   "math_round"
+  ],
+  "nli": {
+   "levels": {
+    "math_round": "L1",
+    "long_type": "L1",
+    "compile_time_error": "L1",
+    "explicit_cast": "L1",
+    "type_conversion": "L1"
+   },
+   "reasons": {
+    "math_round": "L1 names_the_element (on topic, 0.61); no way matched",
+    "long_type": "L1 names_the_element (on topic, 0.61); no way matched",
+    "compile_time_error": "L1 names_the_element (on topic, 0.52); no way matched",
+    "explicit_cast": "L1 names_the_element (on topic, 0.58); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.61); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "long_type",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "math_round": "L4",
+    "long_type": "L4",
+    "compile_time_error": "L4",
+    "explicit_cast": "L1",
+    "type_conversion": "L1"
+   },
+   "reasons": {
+    "math_round": "L4 diagnose_an_error (question, 0.90): answers: What does  int k2 = Math.round(2.5);  do?",
+    "long_type": "L4 diagnose_an_error (question, 0.90): answers: What does  int k2 = Math.round(2.5);  do?",
+    "compile_time_error": "L4 diagnose_an_error (question, 0.90): answers: What does  int k2 = Math.round(2.5);  do?",
+    "explicit_cast": "L1 names_the_element (on topic, 0.58); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.61); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "math_round",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What does  int k2 = Math.round(2.5);  do?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "long_type",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What does  int k2 = Math.round(2.5);  do?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "compile_time_error",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What does  int k2 = Math.round(2.5);  do?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "long_type",
+   "main_level": "L4"
+  }
+ },
+ {
+  "id": "S104",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+  "asked": "Which line converts automatically, and which needs a cast?",
+  "gold": [
+   "explicit_cast",
+   "type_conversion"
+  ],
+  "nli": {
+   "levels": {
+    "double": "L1",
+    "type_conversion": "L1",
+    "int": "L1",
+    "data_type": "L1",
+    "explicit_cast": "L1"
+   },
+   "reasons": {
+    "double": "L1 names_the_element (on topic, 0.60); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.65); no way matched",
+    "int": "L1 names_the_element (on topic, 0.53); no way matched",
+    "data_type": "L1 names_the_element (on topic, 0.56); no way matched",
+    "explicit_cast": "L1 names_the_element (on topic, 0.65); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "explicit_cast",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "double": "L1",
+    "type_conversion": "L1",
+    "int": "L1",
+    "data_type": "L1",
+    "explicit_cast": "L1"
+   },
+   "reasons": {
+    "double": "L1 names_the_element (on topic, 0.60); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.65); no way matched",
+    "int": "L1 names_the_element (on topic, 0.53); no way matched",
+    "data_type": "L1 names_the_element (on topic, 0.56); no way matched",
+    "explicit_cast": "L1 names_the_element (on topic, 0.65); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "explicit_cast",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S106",
+  "type": "J2 Part (b) L2",
+  "expected": "L2",
+  "text": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+  "asked": "List what runs, in order, and what is printed.",
+  "gold": [
+   "if_statement"
+  ],
+  "nli": {
+   "levels": {
+    "if_statement": "L2",
+    "empty_statement": "L2",
+    "comment": null,
+    "testing": "L1",
+    "loop_control": "L1"
+   },
+   "reasons": {
+    "if_statement": "L2 one_step_execution (run, 1.00): confirmed by the run: score = 42",
+    "empty_statement": "L2 one_step_execution (run, 1.00): confirmed by the run: score = 42",
+    "comment": "not assessed: no way matched and off topic",
+    "testing": "L1 names_the_element (on topic, 0.60); no way matched",
+    "loop_control": "L1 names_the_element (on topic, 0.46); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "if_statement",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: score = 42",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "empty_statement",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: score = 42",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "testing",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "if_statement": "L2",
+    "empty_statement": "L2",
+    "comment": null,
+    "testing": "L1",
+    "loop_control": "L1"
+   },
+   "reasons": {
+    "if_statement": "L2 one_step_execution (run, 1.00): confirmed by the run: score = 42",
+    "empty_statement": "L2 one_step_execution (run, 1.00): confirmed by the run: score = 42",
+    "comment": "not assessed: no way matched and off topic",
+    "testing": "L1 names_the_element (on topic, 0.60); no way matched",
+    "loop_control": "L1 names_the_element (on topic, 0.46); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "if_statement",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: score = 42",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "empty_statement",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: score = 42",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "testing",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S108",
+  "type": "J3 Part (c) L2",
+  "expected": "L2",
+  "text": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+  "asked": "Give y, w and x at the end.",
+  "gold": [
+   "increment_operators"
+  ],
+  "nli": {
+   "levels": {
+    "compound_assignment": "L2",
+    "loop_variable": null,
+    "accumulator_pattern": null,
+    "assignment": "L1",
+    "increment_operators": "L1"
+   },
+   "reasons": {
+    "compound_assignment": "L2 line_by_line_trace (run, 1.00): confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)",
+    "loop_variable": "not assessed: no way matched and off topic",
+    "accumulator_pattern": "not assessed: no way matched and off topic",
+    "assignment": "L1 names_the_element (on topic, 0.53); no way matched",
+    "increment_operators": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "compound_assignment",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 1.0,
+     "rule": "confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "assignment",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "compound_assignment": "L2",
+    "loop_variable": null,
+    "accumulator_pattern": null,
+    "assignment": "L1",
+    "increment_operators": "L1"
+   },
+   "reasons": {
+    "compound_assignment": "L2 line_by_line_trace (run, 1.00): confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)",
+    "loop_variable": "not assessed: no way matched and off topic",
+    "accumulator_pattern": "not assessed: no way matched and off topic",
+    "assignment": "L1 names_the_element (on topic, 0.53); no way matched",
+    "increment_operators": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "compound_assignment",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 1.0,
+     "rule": "confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "assignment",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S109",
+  "type": "J4 Part (d) L4",
+  "expected": "L4",
+  "text": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+  "asked": "What is printed for t = 5?",
+  "gold": [
+   "dangling_else",
+   "nested_conditionals"
+  ],
+  "nli": {
+   "levels": {
+    "nested_conditionals": "L0",
+    "if_else_statement": "L1",
+    "else_if_chain": "L1",
+    "continue_statement": null,
+    "dangling_else": "L1"
+   },
+   "reasons": {
+    "nested_conditionals": "L0 misconception (nli, 0.94): A condition on several values has to be written as nested if statements, one value per if.",
+    "if_else_statement": "L1 names_the_element (on topic, 0.57); no way matched",
+    "else_if_chain": "L1 names_the_element (on topic, 0.51); no way matched",
+    "continue_statement": "not assessed: no way matched and off topic",
+    "dangling_else": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "nested_conditionals",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.936,
+     "rule": "A condition on several values has to be written as nested if statements, one value per if.",
+     "source": "nli",
+     "misconception": "NestedIfsInsteadOfLogicalOperators"
+    }
+   ],
+   "best": "L1",
+   "main": "nested_conditionals",
+   "main_level": "L0"
+  },
+  "full": {
+   "levels": {
+    "nested_conditionals": "L0",
+    "if_else_statement": "L4",
+    "else_if_chain": "L1",
+    "continue_statement": null,
+    "dangling_else": "L1"
+   },
+   "reasons": {
+    "nested_conditionals": "L0 misconception (nli, 0.94): A condition on several values has to be written as nested if statements, one value per if.",
+    "if_else_statement": "L4 predict_a_change (question, 0.90): answers: What is printed for t = 5?",
+    "else_if_chain": "L1 names_the_element (on topic, 0.51); no way matched",
+    "continue_statement": "not assessed: no way matched and off topic",
+    "dangling_else": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "nested_conditionals",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.936,
+     "rule": "A condition on several values has to be written as nested if statements, one value per if.",
+     "source": "nli",
+     "misconception": "NestedIfsInsteadOfLogicalOperators"
+    },
+    {
+     "concept": "nested_conditionals",
+     "level": "L4",
+     "way": "predict_a_change",
+     "support": 0.9,
+     "rule": "answers: What is printed for t = 5?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "if_else_statement",
+     "level": "L4",
+     "way": "predict_a_change",
+     "support": 0.9,
+     "rule": "answers: What is printed for t = 5?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "nested_conditionals",
+   "main_level": "L0"
+  }
+ },
+ {
+  "id": "S110",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "sum builds a total, count counts.",
+  "asked": "Which variable is an accumulator and which is a counter?",
+  "gold": [
+   "accumulator_pattern",
+   "counter_pattern"
+  ],
+  "nli": {
+   "levels": {
+    "accumulator_pattern": "L1",
+    "counter_pattern": "L1",
+    "naming_convention": null,
+    "integer_division": null
+   },
+   "reasons": {
+    "accumulator_pattern": "L1 names_the_element (nli, 0.67): An accumulator is a variable used to accumulate results during a traversal, e.g. the runni",
+    "counter_pattern": "L1 names_the_element (on topic, 0.53); no way matched",
+    "naming_convention": "not assessed: no way matched and off topic",
+    "integer_division": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "accumulator_pattern",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.667,
+     "rule": "An accumulator is a variable used to accumulate results during a traversal, e.g. the running total of a sum.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "accumulator_pattern",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "accumulator_pattern": "L1",
+    "counter_pattern": "L1",
+    "naming_convention": null,
+    "integer_division": null
+   },
+   "reasons": {
+    "accumulator_pattern": "L1 names_the_element (nli, 0.67): An accumulator is a variable used to accumulate results during a traversal, e.g. the runni",
+    "counter_pattern": "L1 names_the_element (on topic, 0.53); no way matched",
+    "naming_convention": "not assessed: no way matched and off topic",
+    "integer_division": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "accumulator_pattern",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.667,
+     "rule": "An accumulator is a variable used to accumulate results during a traversal, e.g. the running total of a sum.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "accumulator_pattern",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S111",
+  "type": "J5 Part (e) L4",
+  "expected": "L4",
+  "text": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+  "asked": "A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  Find the cause by reasoning.",
+  "gold": [
+   "explicit_cast",
+   "math_random",
+   "operator_precedence"
+  ],
+  "nli": {
+   "levels": {
+    "math_random": "L1",
+    "random_move": "L1",
+    "explicit_cast": "L3",
+    "char": "L1",
+    "integer_division": "L1"
+   },
+   "reasons": {
+    "math_random": "L1 names_the_element (on topic, 0.69); no way matched",
+    "random_move": "L1 names_the_element (on topic, 0.46); no way matched",
+    "explicit_cast": "L3 relation_to_neighbour (nli, 0.75): To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the ",
+    "char": "L1 names_the_element (on topic, 0.53); no way matched",
+    "integer_division": "L1 names_the_element (on topic, 0.63); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "explicit_cast",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.753,
+     "rule": "To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "math_random",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "math_random": "L4",
+    "random_move": "L4",
+    "explicit_cast": "L4",
+    "char": "L1",
+    "integer_division": "L1"
+   },
+   "reasons": {
+    "math_random": "L4 diagnose_an_error (question, 0.90): answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+    "random_move": "L4 diagnose_an_error (question, 0.90): answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+    "explicit_cast": "L4 diagnose_an_error (question, 0.90): answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+    "char": "L1 names_the_element (on topic, 0.53); no way matched",
+    "integer_division": "L1 names_the_element (on topic, 0.63); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "explicit_cast",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.753,
+     "rule": "To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "math_random",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "random_move",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "explicit_cast",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "explicit_cast",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: A classmate always gets 0.0. Their test is  (int) Math.random() * 6 + 1 == 6.  F",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "math_random",
+   "main_level": "L4"
+  }
+ },
+ {
+  "id": "S112",
+  "type": "J3 Part (c) L3",
+  "expected": "L3",
+  "text": "continue jumps to the next i for the even numbers, break stops the loop completely at 5.",
+  "asked": "How do break and continue differ in the first loop?",
+  "gold": [
+   "break_statement",
+   "continue_statement"
+  ],
+  "nli": {
+   "levels": {
+    "break_statement": "L1",
+    "continue_statement": "L1",
+    "labeled_break": "L1",
+    "nested_loops": "L1"
+   },
+   "reasons": {
+    "break_statement": "L1 names_the_element (on topic, 0.65); no way matched",
+    "continue_statement": "L1 names_the_element (nli, 0.93): Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and",
+    "labeled_break": "L1 names_the_element (on topic, 0.53); no way matched",
+    "nested_loops": "L1 names_the_element (on topic, 0.45); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "continue_statement",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.926,
+     "rule": "Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and starts the next one.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "continue_statement",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "break_statement": "L3",
+    "continue_statement": "L3",
+    "labeled_break": "L1",
+    "nested_loops": "L1"
+   },
+   "reasons": {
+    "break_statement": "L3 relation_to_neighbour (question, 0.90): answers: How do break and continue differ in the first loop?",
+    "continue_statement": "L3 relation_to_neighbour (question, 0.90): answers: How do break and continue differ in the first loop?",
+    "labeled_break": "L1 names_the_element (on topic, 0.53); no way matched",
+    "nested_loops": "L1 names_the_element (on topic, 0.45); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "continue_statement",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.926,
+     "rule": "Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and starts the next one.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "break_statement",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: How do break and continue differ in the first loop?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "continue_statement",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: How do break and continue differ in the first loop?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "continue_statement",
+   "main_level": "L3"
+  }
+ },
+ {
+  "id": "S113",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "A loop that never stops because its condition stays true.",
+  "asked": "What is an infinite loop?",
+  "gold": [
+   "infinite_loop"
+  ],
+  "nli": {
+   "levels": {
+    "infinite_loop": "L1",
+    "loop_control": "L0",
+    "loop_guard": "L1",
+    "while_loop": "L0"
+   },
+   "reasons": {
+    "infinite_loop": "L1 names_the_element (on topic, 0.84); no way matched",
+    "loop_control": "L0 misconception (nli, 0.74): a condition that never goes false still terminates.",
+    "loop_guard": "L1 names_the_element (on topic, 0.75); no way matched",
+    "while_loop": "L0 misconception (nli, 0.74): a condition that never goes false still terminates."
+   },
+   "edges": [
+    {
+     "concept": "loop_control",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.738,
+     "rule": "a condition that never goes false still terminates.",
+     "source": "nli",
+     "misconception": "InfiniteLoopUnnoticed"
+    },
+    {
+     "concept": "while_loop",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.738,
+     "rule": "a condition that never goes false still terminates.",
+     "source": "nli",
+     "misconception": "InfiniteLoopUnnoticed"
+    }
+   ],
+   "best": "L1",
+   "main": "infinite_loop",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "infinite_loop": "L1",
+    "loop_control": "L0",
+    "loop_guard": "L1",
+    "while_loop": "L0"
+   },
+   "reasons": {
+    "infinite_loop": "L1 names_the_element (on topic, 0.84); no way matched",
+    "loop_control": "L0 misconception (nli, 0.74): a condition that never goes false still terminates.",
+    "loop_guard": "L1 names_the_element (on topic, 0.75); no way matched",
+    "while_loop": "L0 misconception (nli, 0.74): a condition that never goes false still terminates."
+   },
+   "edges": [
+    {
+     "concept": "loop_control",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.738,
+     "rule": "a condition that never goes false still terminates.",
+     "source": "nli",
+     "misconception": "InfiniteLoopUnnoticed"
+    },
+    {
+     "concept": "while_loop",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.738,
+     "rule": "a condition that never goes false still terminates.",
+     "source": "nli",
+     "misconception": "InfiniteLoopUnnoticed"
+    }
+   ],
+   "best": "L1",
+   "main": "infinite_loop",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S114",
+  "type": "J5 Part (e) L3",
+  "expected": "L3",
+  "text": "new fills the array with 0s, but a local variable has no value until you give it one.",
+  "asked": "Why can a[0] be printed when a local  int x;  without a value cannot?",
+  "gold": [
+   "array_default_values",
+   "definite_assignment"
+  ],
+  "nli": {
+   "levels": {
+    "declaration": "L1",
+    "array_creation": "L2",
+    "variable": "L1",
+    "definite_assignment": "L1",
+    "array_default_values": "L1"
+   },
+   "reasons": {
+    "declaration": "L1 names_the_element (on topic, 0.58); no way matched",
+    "array_creation": "L2 one_step_execution (nli, 0.97): No existing variable changes until that reference is assigned.",
+    "variable": "L1 names_the_element (on topic, 0.58); no way matched",
+    "definite_assignment": "L1 names_the_element (on topic, 0.58); no way matched",
+    "array_default_values": "L1 names_the_element (on topic, 0.58); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "array_creation",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.968,
+     "rule": "No existing variable changes until that reference is assigned.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "array_creation",
+   "main_level": "L2"
+  },
+  "full": {
+   "levels": {
+    "declaration": "L3",
+    "array_creation": "L2",
+    "variable": "L3",
+    "definite_assignment": "L1",
+    "array_default_values": "L1"
+   },
+   "reasons": {
+    "declaration": "L3 relation_to_neighbour (question, 0.90): answers: Why can a[0] be printed when a local  int x;  without a value cannot?",
+    "array_creation": "L2 one_step_execution (nli, 0.97): No existing variable changes until that reference is assigned.",
+    "variable": "L3 relation_to_neighbour (question, 0.90): answers: Why can a[0] be printed when a local  int x;  without a value cannot?",
+    "definite_assignment": "L1 names_the_element (on topic, 0.58); no way matched",
+    "array_default_values": "L1 names_the_element (on topic, 0.58); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "array_creation",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.968,
+     "rule": "No existing variable changes until that reference is assigned.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "declaration",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why can a[0] be printed when a local  int x;  without a value cannot?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "variable",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why can a[0] be printed when a local  int x;  without a value cannot?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "array_creation",
+   "main_level": "L2"
+  }
+ },
+ {
+  "id": "S115",
+  "type": "J3 Part (c) L2",
+  "expected": "L2",
+  "text": "Something like [I@ and a hex code, not the numbers.",
+  "asked": "What does  System.out.println(a);  show?",
+  "gold": [
+   "printing_array_reference"
+  ],
+  "nli": {
+   "levels": {
+    "println": null,
+    "printing_array_reference": "L1",
+    "standard_output": null,
+    "string_type": null,
+    "arithmetic_operators": null
+   },
+   "reasons": {
+    "println": "not assessed: no way matched and off topic",
+    "printing_array_reference": "L1 names_the_element (nli, 0.94): Identity: printing an array variable outputs the text form of its reference ([I@..., [D@..",
+    "standard_output": "not assessed: no way matched and off topic",
+    "string_type": "not assessed: no way matched and off topic",
+    "arithmetic_operators": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "printing_array_reference",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.939,
+     "rule": "Identity: printing an array variable outputs the text form of its reference ([I@..., [D@...), not a listing of the elements.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "printing_array_reference",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "println": null,
+    "printing_array_reference": "L1",
+    "standard_output": null,
+    "string_type": null,
+    "arithmetic_operators": null
+   },
+   "reasons": {
+    "println": "not assessed: no way matched and off topic",
+    "printing_array_reference": "L1 names_the_element (nli, 0.94): Identity: printing an array variable outputs the text form of its reference ([I@..., [D@..",
+    "standard_output": "not assessed: no way matched and off topic",
+    "string_type": "not assessed: no way matched and off topic",
+    "arithmetic_operators": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "printing_array_reference",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.939,
+     "rule": "Identity: printing an array variable outputs the text form of its reference ([I@..., [D@...), not a listing of the elements.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "printing_array_reference",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S116",
+  "type": "J6 Part (f) L4",
+  "expected": "L4",
+  "text": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+  "asked": "Write a loop that multiplies every element by 10.",
+  "gold": [
+   "array_traversal"
+  ],
+  "nli": {
+   "levels": {
+    "array_traversal": "L1",
+    "indexing": "L0",
+    "length_field": "L1",
+    "for_loop": "L1",
+    "nested_loops": null
+   },
+   "reasons": {
+    "array_traversal": "L1 names_the_element (on topic, 0.63); no way matched",
+    "indexing": "L0 misconception (nli, 0.90): a(i) accesses element i of an array.",
+    "length_field": "L1 names_the_element (on topic, 0.62); no way matched",
+    "for_loop": "L1 names_the_element (on topic, 0.64); no way matched",
+    "nested_loops": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "indexing",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.9,
+     "rule": "a(i) accesses element i of an array.",
+     "source": "nli",
+     "misconception": "ArrayAccessWithParentheses"
+    }
+   ],
+   "best": "L1",
+   "main": "for_loop",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "array_traversal": "L1",
+    "indexing": "L0",
+    "length_field": "L1",
+    "for_loop": "L1",
+    "nested_loops": null
+   },
+   "reasons": {
+    "array_traversal": "L1 names_the_element (on topic, 0.63); no way matched",
+    "indexing": "L0 misconception (nli, 0.90): a(i) accesses element i of an array.",
+    "length_field": "L1 names_the_element (on topic, 0.62); no way matched",
+    "for_loop": "L1 names_the_element (on topic, 0.64); no way matched",
+    "nested_loops": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "indexing",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.9,
+     "rule": "a(i) accesses element i of an array.",
+     "source": "nli",
+     "misconception": "ArrayAccessWithParentheses"
+    }
+   ],
+   "best": "L1",
+   "main": "for_loop",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S117",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "Otherwise a[i] is overwritten before it is saved.",
+  "asked": "Why is t needed in the swap?",
+  "gold": [
+   "variable_swap"
+  ],
+  "nli": {
+   "levels": {
+    "variable_swap": "L1",
+    "indexing": "L1",
+    "assignment": "L1",
+    "array_traversal": "L1",
+    "array_exchange": "L1"
+   },
+   "reasons": {
+    "variable_swap": "L1 names_the_element (on topic, 0.82); no way matched",
+    "indexing": "L1 names_the_element (on topic, 0.64); no way matched",
+    "assignment": "L1 names_the_element (on topic, 0.82); no way matched",
+    "array_traversal": "L1 names_the_element (on topic, 0.63); no way matched",
+    "array_exchange": "L1 names_the_element (on topic, 0.62); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "variable_swap",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "variable_swap": "L3",
+    "indexing": "L3",
+    "assignment": "L3",
+    "array_traversal": "L1",
+    "array_exchange": "L1"
+   },
+   "reasons": {
+    "variable_swap": "L3 relation_to_neighbour (question, 0.90): answers: Why is t needed in the swap?",
+    "indexing": "L3 relation_to_neighbour (question, 0.90): answers: Why is t needed in the swap?",
+    "assignment": "L3 relation_to_neighbour (question, 0.90): answers: Why is t needed in the swap?",
+    "array_traversal": "L1 names_the_element (on topic, 0.63); no way matched",
+    "array_exchange": "L1 names_the_element (on topic, 0.62); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "variable_swap",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why is t needed in the swap?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "indexing",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why is t needed in the swap?",
+     "source": "question",
+     "misconception": null
+    },
+    {
+     "concept": "assignment",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why is t needed in the swap?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "variable_swap",
+   "main_level": "L3"
+  }
+ },
+ {
+  "id": "S118",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "It is a table to look up a month name from its number.",
+  "asked": "What is months used for?",
+  "gold": [
+   "lookup_table"
+  ],
+  "nli": {
+   "levels": {
+    "lookup_table": "L1",
+    "indexing": null,
+    "array_initializer": null
+   },
+   "reasons": {
+    "lookup_table": "L1 names_the_element (on topic, 0.57); no way matched",
+    "indexing": "not assessed: no way matched and off topic",
+    "array_initializer": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "lookup_table",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "lookup_table": "L1",
+    "indexing": null,
+    "array_initializer": null
+   },
+   "reasons": {
+    "lookup_table": "L1 names_the_element (on topic, 0.57); no way matched",
+    "indexing": "not assessed: no way matched and off topic",
+    "array_initializer": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "lookup_table",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S119",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "It marks whether k is not prime; everything starts as false.",
+  "asked": "What does composite[k] mean, and what is it at the start?",
+  "gold": [
+   "boolean_flag_array"
+  ],
+  "nli": {
+   "levels": {
+    "boolean_flag_array": null,
+    "empty_statement": null,
+    "indexing": null,
+    "break_statement": "L1",
+    "two_dimensional_array": "L1"
+   },
+   "reasons": {
+    "boolean_flag_array": "not assessed: no way matched and off topic",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "indexing": "not assessed: no way matched and off topic",
+    "break_statement": "L1 names_the_element (on topic, 0.55); no way matched",
+    "two_dimensional_array": "L1 names_the_element (on topic, 0.53); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "break_statement",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "boolean_flag_array": null,
+    "empty_statement": null,
+    "indexing": null,
+    "break_statement": "L1",
+    "two_dimensional_array": "L1"
+   },
+   "reasons": {
+    "boolean_flag_array": "not assessed: no way matched and off topic",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "indexing": "not assessed: no way matched and off topic",
+    "break_statement": "L1 names_the_element (on topic, 0.55); no way matched",
+    "two_dimensional_array": "L1 names_the_element (on topic, 0.53); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "break_statement",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S120",
+  "type": "J6 Part (f) L4",
+  "expected": "L4",
+  "text": "No, b times a is 3 4 / 1 2, so the order matters.",
+  "asked": "Would b × a give the same c?",
+  "gold": [
+   "matrix_operations"
+  ],
+  "nli": {
+   "levels": {
+    "multidimensional_array": null,
+    "array_aliasing": null,
+    "array_initializer": null,
+    "chained_assignment": null,
+    "identifier": "L1"
+   },
+   "reasons": {
+    "multidimensional_array": "not assessed: no way matched and off topic",
+    "array_aliasing": "not assessed: no way matched and off topic",
+    "array_initializer": "not assessed: no way matched and off topic",
+    "chained_assignment": "not assessed: no way matched and off topic",
+    "identifier": "L1 names_the_element (on topic, 0.53); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "identifier",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "multidimensional_array": null,
+    "array_aliasing": null,
+    "array_initializer": null,
+    "chained_assignment": null,
+    "identifier": "L1"
+   },
+   "reasons": {
+    "multidimensional_array": "not assessed: no way matched and off topic",
+    "array_aliasing": "not assessed: no way matched and off topic",
+    "array_initializer": "not assessed: no way matched and off topic",
+    "chained_assignment": "not assessed: no way matched and off topic",
+    "identifier": "L1 names_the_element (on topic, 0.53); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "identifier",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S121",
+  "type": "J2 Part (b) L2",
+  "expected": "L2",
+  "text": "42, an empty string, and \"Ann Lee\".",
+  "asked": "What are age, rest and name?",
+  "gold": [
+   "standard_input",
+   "token_vs_line_input"
+  ],
+  "nli": {
+   "levels": {
+    "empty_statement": null,
+    "token_vs_line_input": "L2",
+    "standard_input": null,
+    "string_literal": null,
+    "string_conversion": null
+   },
+   "reasons": {
+    "empty_statement": "not assessed: no way matched and off topic",
+    "token_vs_line_input": "L2 line_by_line_trace (run, 1.00): confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)",
+    "standard_input": "not assessed: no way matched and off topic",
+    "string_literal": "not assessed: no way matched and off topic",
+    "string_conversion": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "token_vs_line_input",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 1.0,
+     "rule": "confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "token_vs_line_input",
+   "main_level": "L2"
+  },
+  "full": {
+   "levels": {
+    "empty_statement": null,
+    "token_vs_line_input": "L2",
+    "standard_input": null,
+    "string_literal": null,
+    "string_conversion": null
+   },
+   "reasons": {
+    "empty_statement": "not assessed: no way matched and off topic",
+    "token_vs_line_input": "L2 line_by_line_trace (run, 1.00): confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)",
+    "standard_input": "not assessed: no way matched and off topic",
+    "string_literal": "not assessed: no way matched and off topic",
+    "string_conversion": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "token_vs_line_input",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 1.0,
+     "rule": "confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "token_vs_line_input",
+   "main_level": "L2"
+  }
+ },
+ {
+  "id": "S122",
+  "type": "J3 Part (c) L3",
+  "expected": "L3",
+  "text": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+  "asked": "Why is rest empty?",
+  "gold": [
+   "token_vs_line_input"
+  ],
+  "nli": {
+   "levels": {
+    "token_vs_line_input": "L0",
+    "standard_input": "L1",
+    "empty_statement": null,
+    "interactive_input": "L1",
+    "input_format": "L1"
+   },
+   "reasons": {
+    "token_vs_line_input": "L0 everyday_reading (nli, 0.96): A preceding readInt() stops right after the number, so the 'line' may be empty.",
+    "standard_input": "L1 names_the_element (on topic, 0.77); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "interactive_input": "L1 names_the_element (on topic, 0.56); no way matched",
+    "input_format": "L1 names_the_element (on topic, 0.59); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "token_vs_line_input",
+     "level": "L0",
+     "way": "everyday_reading",
+     "support": 0.955,
+     "rule": "A preceding readInt() stops right after the number, so the 'line' may be empty.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.514,
+     "rule": "StdIn's read methods come in two categories: token-based (readInt, readDouble, readString, ... separated by whitespace) and line- or text-based (readLine, readAll).",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.91,
+     "rule": "A readLine() advances past exactly one line separator.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "standard_input",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "token_vs_line_input": "L0",
+    "standard_input": "L1",
+    "empty_statement": null,
+    "interactive_input": "L1",
+    "input_format": "L1"
+   },
+   "reasons": {
+    "token_vs_line_input": "L0 everyday_reading (nli, 0.96): A preceding readInt() stops right after the number, so the 'line' may be empty.",
+    "standard_input": "L1 names_the_element (on topic, 0.77); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "interactive_input": "L1 names_the_element (on topic, 0.56); no way matched",
+    "input_format": "L1 names_the_element (on topic, 0.59); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "token_vs_line_input",
+     "level": "L0",
+     "way": "everyday_reading",
+     "support": 0.955,
+     "rule": "A preceding readInt() stops right after the number, so the 'line' may be empty.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.514,
+     "rule": "StdIn's read methods come in two categories: token-based (readInt, readDouble, readString, ... separated by whitespace) and line- or text-based (readLine, readAll).",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.91,
+     "rule": "A readLine() advances past exactly one line separator.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "token_vs_line_input",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.9,
+     "rule": "answers: Why is rest empty?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "standard_input",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S123",
+  "type": "J4 Part (d) L4",
+  "expected": "L4",
+  "text": "No, the user decides each time, while it is running.",
+  "asked": "A program asks \"Again? (y/n)\" in a loop. Can it know how many rounds it will run before it starts?",
+  "gold": [
+   "interactive_input"
+  ],
+  "nli": {
+   "levels": {
+    "interactive_input": null,
+    "comment": null,
+    "empty_statement": null,
+    "if_statement": null,
+    "standard_drawing": null
+   },
+   "reasons": {
+    "interactive_input": "not assessed: no way matched and off topic",
+    "comment": "not assessed: no way matched and off topic",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "if_statement": "not assessed: no way matched and off topic",
+    "standard_drawing": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": null,
+   "main": null,
+   "main_level": null
+  },
+  "full": {
+   "levels": {
+    "interactive_input": null,
+    "comment": null,
+    "empty_statement": null,
+    "if_statement": null,
+    "standard_drawing": null
+   },
+   "reasons": {
+    "interactive_input": "not assessed: no way matched and off topic",
+    "comment": "not assessed: no way matched and off topic",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "if_statement": "not assessed: no way matched and off topic",
+    "standard_drawing": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": null,
+   "main": null,
+   "main_level": null
+  }
+ },
+ {
+  "id": "S124",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "It reads from standard input and writes to standard output.",
+  "asked": "What makes this program a filter?",
+  "gold": [
+   "filter"
+  ],
+  "nli": {
+   "levels": {
+    "standard_output": "L1",
+    "standard_input": "L3",
+    "filter": "L2",
+    "formatted_output": "L1",
+    "data_driven_code": "L1"
+   },
+   "reasons": {
+    "standard_output": "L1 names_the_element (on topic, 0.62); no way matched",
+    "standard_input": "L3 relation_to_neighbour (nli, 0.99): The program turns the input stream into the output stream: values read with StdIn are proc",
+    "filter": "L2 line_by_line_trace (nli, 0.85): Output is produced while input is still being read.",
+    "formatted_output": "L1 names_the_element (on topic, 0.65); no way matched",
+    "data_driven_code": "L1 names_the_element (on topic, 0.62); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "standard_input",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.986,
+     "rule": "The program turns the input stream into the output stream: values read with StdIn are processed and the results are written with StdOut.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "filter",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.989,
+     "rule": "A filter is a program that converts a standard input stream into a standard output stream.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "filter",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.847,
+     "rule": "Output is produced while input is still being read.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "formatted_output",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "standard_output": "L1",
+    "standard_input": "L3",
+    "filter": "L2",
+    "formatted_output": "L1",
+    "data_driven_code": "L1"
+   },
+   "reasons": {
+    "standard_output": "L1 names_the_element (on topic, 0.62); no way matched",
+    "standard_input": "L3 relation_to_neighbour (nli, 0.99): The program turns the input stream into the output stream: values read with StdIn are proc",
+    "filter": "L2 line_by_line_trace (nli, 0.85): Output is produced while input is still being read.",
+    "formatted_output": "L1 names_the_element (on topic, 0.65); no way matched",
+    "data_driven_code": "L1 names_the_element (on topic, 0.62); no way matched"
+   },
+   "edges": [
+    {
+     "concept": "standard_input",
+     "level": "L3",
+     "way": "relation_to_neighbour",
+     "support": 0.986,
+     "rule": "The program turns the input stream into the output stream: values read with StdIn are processed and the results are written with StdOut.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "filter",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.989,
+     "rule": "A filter is a program that converts a standard input stream into a standard output stream.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "filter",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.847,
+     "rule": "Output is produced while input is still being read.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L3",
+   "main": "formatted_output",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S125",
+  "type": "J5 Part (e) L4",
+  "expected": "L4",
+  "text": "The circles are never erased, so you get a trail.",
+  "asked": "What happens without StdDraw.clear()?",
+  "gold": [
+   "animation"
+  ],
+  "nli": {
+   "levels": {
+    "standard_drawing": null,
+    "animation": null,
+    "drawing_shapes": null,
+    "coordinate_scaling": null,
+    "flowchart": null
+   },
+   "reasons": {
+    "standard_drawing": "not assessed: no way matched and off topic",
+    "animation": "not assessed: no way matched and off topic",
+    "drawing_shapes": "not assessed: no way matched and off topic",
+    "coordinate_scaling": "not assessed: no way matched and off topic",
+    "flowchart": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": null,
+   "main": null,
+   "main_level": null
+  },
+  "full": {
+   "levels": {
+    "standard_drawing": null,
+    "animation": null,
+    "drawing_shapes": "L4",
+    "coordinate_scaling": null,
+    "flowchart": null
+   },
+   "reasons": {
+    "standard_drawing": "not assessed: no way matched and off topic",
+    "animation": "not assessed: no way matched and off topic",
+    "drawing_shapes": "L4 diagnose_an_error (question, 0.90): answers: What happens without StdDraw.clear()?",
+    "coordinate_scaling": "not assessed: no way matched and off topic",
+    "flowchart": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "drawing_shapes",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: What happens without StdDraw.clear()?",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "drawing_shapes",
+   "main_level": "L4"
+  }
+ },
+ {
+  "id": "S126",
+  "type": "J5 Part (e) L4",
+  "expected": "L4",
+  "text": "You need System.exit(0) at the end of main.",
+  "asked": "It plays, but the terminal does not come back. Why?",
+  "gold": [
+   "standard_audio"
+  ],
+  "nli": {
+   "levels": {
+    "standard_audio": null,
+    "end_of_input": null,
+    "run": "L1"
+   },
+   "reasons": {
+    "standard_audio": "not assessed: no way matched and off topic",
+    "end_of_input": "not assessed: no way matched and off topic",
+    "run": "L1 names_the_element (on topic, 0.49); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "run",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "standard_audio": null,
+    "end_of_input": null,
+    "run": "L1"
+   },
+   "reasons": {
+    "standard_audio": "not assessed: no way matched and off topic",
+    "end_of_input": "not assessed: no way matched and off topic",
+    "run": "L1 names_the_element (on topic, 0.49); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "run",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S127",
+  "type": "J1 Part (a) L1",
+  "expected": "L1",
+  "text": "Page 2, it links nowhere.",
+  "asked": "Which page is dangling?",
+  "gold": [
+   "dangling_pages"
+  ],
+  "nli": {
+   "levels": {
+    "comment": null,
+    "dangling_pages": "L1",
+    "input_graph": "L1",
+    "teleportation": "L1",
+    "transition_matrix": null
+   },
+   "reasons": {
+    "comment": "not assessed: no way matched and off topic",
+    "dangling_pages": "L1 names_the_element (on topic, 0.53); no way matched",
+    "input_graph": "L1 names_the_element (on topic, 0.52); no way matched",
+    "teleportation": "L1 names_the_element (on topic, 0.46); no way matched",
+    "transition_matrix": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "dangling_pages",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "comment": null,
+    "dangling_pages": "L1",
+    "input_graph": "L1",
+    "teleportation": "L1",
+    "transition_matrix": null
+   },
+   "reasons": {
+    "comment": "not assessed: no way matched and off topic",
+    "dangling_pages": "L1 names_the_element (on topic, 0.53); no way matched",
+    "input_graph": "L1 names_the_element (on topic, 0.52); no way matched",
+    "teleportation": "L1 names_the_element (on topic, 0.46); no way matched",
+    "transition_matrix": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "dangling_pages",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S128",
+  "type": "J2 Part (b) L2",
+  "expected": "L2",
+  "text": "About 0.48, 0.03, 0.48.",
+  "asked": "Give row 1 of p.",
+  "gold": [
+   "matrix_operations",
+   "transition_matrix"
+  ],
+  "nli": {
+   "levels": {
+    "comment": null,
+    "two_dimensional_array": null,
+    "transition_matrix": null,
+    "arithmetic_operators": "L1",
+    "type_conversion": "L1"
+   },
+   "reasons": {
+    "comment": "not assessed: no way matched and off topic",
+    "two_dimensional_array": "not assessed: no way matched and off topic",
+    "transition_matrix": "not assessed: no way matched and off topic",
+    "arithmetic_operators": "L1 names_the_element (on topic, 0.54); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.49); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "arithmetic_operators",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "comment": null,
+    "two_dimensional_array": null,
+    "transition_matrix": null,
+    "arithmetic_operators": "L1",
+    "type_conversion": "L1"
+   },
+   "reasons": {
+    "comment": "not assessed: no way matched and off topic",
+    "two_dimensional_array": "not assessed: no way matched and off topic",
+    "transition_matrix": "not assessed: no way matched and off topic",
+    "arithmetic_operators": "L1 names_the_element (on topic, 0.54); no way matched",
+    "type_conversion": "L1 names_the_element (on topic, 0.49); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "arithmetic_operators",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S129",
+  "type": "J5 Part (e) L4",
+  "expected": "L4",
+  "text": "The surfer gets trapped in that group and the other pages get rank 0.",
+  "asked": "Without the 10% jump, what can happen with a group of pages that only link to each other?",
+  "gold": [
+   "teleportation"
+  ],
+  "nli": {
+   "levels": {
+    "input_graph": null,
+    "comment": null,
+    "remainder_operator": null,
+    "markov_chain": "L1",
+    "power_method": null
+   },
+   "reasons": {
+    "input_graph": "not assessed: no way matched and off topic",
+    "comment": "not assessed: no way matched and off topic",
+    "remainder_operator": "not assessed: no way matched and off topic",
+    "markov_chain": "L1 names_the_element (on topic, 0.52); no way matched",
+    "power_method": "not assessed: no way matched and off topic"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "markov_chain",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "input_graph": "L4",
+    "comment": null,
+    "remainder_operator": null,
+    "markov_chain": "L1",
+    "power_method": null
+   },
+   "reasons": {
+    "input_graph": "L4 diagnose_an_error (question, 0.90): answers: Without the 10% jump, what can happen with a group of pages that only link to ea",
+    "comment": "not assessed: no way matched and off topic",
+    "remainder_operator": "not assessed: no way matched and off topic",
+    "markov_chain": "L1 names_the_element (on topic, 0.52); no way matched",
+    "power_method": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "input_graph",
+     "level": "L4",
+     "way": "diagnose_an_error",
+     "support": 0.9,
+     "rule": "answers: Without the 10% jump, what can happen with a group of pages that only link to ea",
+     "source": "question",
+     "misconception": null
+    }
+   ],
+   "best": "L4",
+   "main": "markov_chain",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S132",
+  "type": "J7 L0 way: inconsistent trace",
+  "expected": "L0",
+  "text": "a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value.",
+  "asked": "",
+  "gold": [
+   "assignment"
+  ],
+  "nli": {
+   "levels": {
+    "double": "L0",
+    "accumulator_pattern": "L0",
+    "type_conversion": "L1",
+    "sentinel_loop": null
+   },
+   "reasons": {
+    "double": "L0 inconsistent_trace (run, 1.00): wrong claims >= confirmed claims",
+    "accumulator_pattern": "L0 inconsistent_trace (run, 1.00): wrong claims >= confirmed claims",
+    "type_conversion": "L1 names_the_element (on topic, 0.59); no way matched",
+    "sentinel_loop": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "double",
+     "level": "L0",
+     "way": "inconsistent_trace",
+     "support": 1.0,
+     "rule": "wrong claims >= confirmed claims",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "double",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: total = 11.5",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "L0",
+     "way": "inconsistent_trace",
+     "support": 1.0,
+     "rule": "wrong claims >= confirmed claims",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: total = 11.5",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "type_conversion",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "double": "L0",
+    "accumulator_pattern": "L0",
+    "type_conversion": "L1",
+    "sentinel_loop": null
+   },
+   "reasons": {
+    "double": "L0 inconsistent_trace (run, 1.00): wrong claims >= confirmed claims",
+    "accumulator_pattern": "L0 inconsistent_trace (run, 1.00): wrong claims >= confirmed claims",
+    "type_conversion": "L1 names_the_element (on topic, 0.59); no way matched",
+    "sentinel_loop": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "double",
+     "level": "L0",
+     "way": "inconsistent_trace",
+     "support": 1.0,
+     "rule": "wrong claims >= confirmed claims",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "double",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: total = 11.5",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "L0",
+     "way": "inconsistent_trace",
+     "support": 1.0,
+     "rule": "wrong claims >= confirmed claims",
+     "source": "run",
+     "misconception": null
+    },
+    {
+     "concept": "accumulator_pattern",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 1.0,
+     "rule": "confirmed by the run: total = 11.5",
+     "source": "run",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "type_conversion",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S133",
+  "type": "J7 L0 way: everyday reading",
+  "expected": "L0",
+  "text": "int c; declares c, so c is 0.",
+  "asked": "",
+  "gold": [
+   "declaration",
+   "definite_assignment"
+  ],
+  "nli": {
+   "levels": {
+    "declaration": "L1",
+    "int": "L1",
+    "variable": "L2",
+    "double": null,
+    "array_declaration": "L2"
+   },
+   "reasons": {
+    "declaration": "L1 names_the_element (on topic, 0.62); no way matched",
+    "int": "L1 names_the_element (on topic, 0.52); no way matched",
+    "variable": "L2 output_prediction (nli, 0.98): A variable in an expression yields the value most recently assigned to it, with its declar",
+    "double": "not assessed: no way matched and off topic",
+    "array_declaration": "L2 one_step_execution (nli, 0.93): State transition: after 'int[] a;' the state gains a variable a with no value (not definit"
+   },
+   "edges": [
+    {
+     "concept": "variable",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 0.979,
+     "rule": "A variable in an expression yields the value most recently assigned to it, with its declared type.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "array_declaration",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.933,
+     "rule": "State transition: after 'int[] a;' the state gains a variable a with no value (not definitely assigned).",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "declaration",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "declaration": "L1",
+    "int": "L1",
+    "variable": "L2",
+    "double": null,
+    "array_declaration": "L2"
+   },
+   "reasons": {
+    "declaration": "L1 names_the_element (on topic, 0.62); no way matched",
+    "int": "L1 names_the_element (on topic, 0.52); no way matched",
+    "variable": "L2 output_prediction (nli, 0.98): A variable in an expression yields the value most recently assigned to it, with its declar",
+    "double": "not assessed: no way matched and off topic",
+    "array_declaration": "L2 one_step_execution (nli, 0.93): State transition: after 'int[] a;' the state gains a variable a with no value (not definit"
+   },
+   "edges": [
+    {
+     "concept": "variable",
+     "level": "L2",
+     "way": "output_prediction",
+     "support": 0.979,
+     "rule": "A variable in an expression yields the value most recently assigned to it, with its declared type.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "array_declaration",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.933,
+     "rule": "State transition: after 'int[] a;' the state gains a variable a with no value (not definitely assigned).",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "declaration",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S134",
+  "type": "J7 L0 way: inconsistent trace",
+  "expected": "L0",
+  "text": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+  "asked": "Explain in plain English what these three lines do.",
+  "gold": [
+   "assignment",
+   "variable_swap"
+  ],
+  "nli": {
+   "levels": {
+    "array_aliasing": "L2",
+    "assignment": "L0",
+    "statement": null,
+    "array_copy": "L1",
+    "variable_swap": "L0"
+   },
+   "reasons": {
+    "array_aliasing": "L2 line_by_line_trace (nli, 0.66): In a == b both reference values are evaluated and compared.",
+    "assignment": "L0 misconception (nli, 0.94): b = a exchanges the values of a and b.",
+    "statement": "not assessed: no way matched and off topic",
+    "array_copy": "L1 names_the_element (on topic, 0.55); no way matched",
+    "variable_swap": "L0 misconception (nli, 0.94): b = a exchanges the values of a and b."
+   },
+   "edges": [
+    {
+     "concept": "array_aliasing",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.66,
+     "rule": "In a == b both reference values are evaluated and compared.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "assignment",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.937,
+     "rule": "b = a exchanges the values of a and b.",
+     "source": "nli",
+     "misconception": "AssignmentExchangesValues"
+    },
+    {
+     "concept": "variable_swap",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.937,
+     "rule": "b = a exchanges the values of a and b.",
+     "source": "nli",
+     "misconception": "AssignmentExchangesValues"
+    },
+    {
+     "concept": "variable_swap",
+     "level": "L1",
+     "way": "states_the_rule",
+     "support": 0.555,
+     "rule": "int t = a; a = b; b = t; exchanges a and b.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "variable_swap",
+   "main_level": "L0"
+  },
+  "full": {
+   "levels": {
+    "array_aliasing": "L2",
+    "assignment": "L0",
+    "statement": null,
+    "array_copy": "L1",
+    "variable_swap": "L0"
+   },
+   "reasons": {
+    "array_aliasing": "L2 line_by_line_trace (nli, 0.66): In a == b both reference values are evaluated and compared.",
+    "assignment": "L0 misconception (nli, 0.94): b = a exchanges the values of a and b.",
+    "statement": "not assessed: no way matched and off topic",
+    "array_copy": "L1 names_the_element (on topic, 0.55); no way matched",
+    "variable_swap": "L0 misconception (nli, 0.94): b = a exchanges the values of a and b."
+   },
+   "edges": [
+    {
+     "concept": "array_aliasing",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.66,
+     "rule": "In a == b both reference values are evaluated and compared.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "assignment",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.937,
+     "rule": "b = a exchanges the values of a and b.",
+     "source": "nli",
+     "misconception": "AssignmentExchangesValues"
+    },
+    {
+     "concept": "variable_swap",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.937,
+     "rule": "b = a exchanges the values of a and b.",
+     "source": "nli",
+     "misconception": "AssignmentExchangesValues"
+    },
+    {
+     "concept": "variable_swap",
+     "level": "L1",
+     "way": "states_the_rule",
+     "support": 0.555,
+     "rule": "int t = a; a = b; b = t; exchanges a and b.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "variable_swap",
+   "main_level": "L0"
+  }
+ },
+ {
+  "id": "S135",
+  "type": "J7 L0 way: everyday reading",
+  "expected": "L0",
+  "text": "You could write b as !(5 < n < 10).",
+  "asked": "",
+  "gold": [
+   "de_morgan"
+  ],
+  "nli": {
+   "levels": {
+    "de_morgan": "L1",
+    "boolean_expression": "L1",
+    "variable": "L1"
+   },
+   "reasons": {
+    "de_morgan": "L1 names_the_element (on topic, 0.61); no way matched",
+    "boolean_expression": "L1 names_the_element (on topic, 0.47); no way matched",
+    "variable": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "de_morgan",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "de_morgan": "L1",
+    "boolean_expression": "L1",
+    "variable": "L1"
+   },
+   "reasons": {
+    "de_morgan": "L1 names_the_element (on topic, 0.61); no way matched",
+    "boolean_expression": "L1 names_the_element (on topic, 0.47); no way matched",
+    "variable": "L1 names_the_element (on topic, 0.51); no way matched"
+   },
+   "edges": [],
+   "best": "L1",
+   "main": "de_morgan",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S136",
+  "type": "J7 L0 way: everyday reading",
+  "expected": "L0",
+  "text": "isDone = (i % 5 == 0); would do the same as the if.",
+  "asked": "What is the output? Explain when the loop stops.",
+  "gold": [
+   "assignment",
+   "if_statement"
+  ],
+  "nli": {
+   "levels": {
+    "if_statement": "L1",
+    "while_loop": "L1",
+    "empty_statement": null,
+    "if_else_statement": "L0",
+    "increment_operators": "L2"
+   },
+   "reasons": {
+    "if_statement": "L1 names_the_element (on topic, 0.54); no way matched",
+    "while_loop": "L1 names_the_element (on topic, 0.48); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "if_else_statement": "L0 misconception (nli, 0.53): Writes the same statements in both branches of an if-else.",
+    "increment_operators": "L2 line_by_line_trace (nli, 0.54): i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: "
+   },
+   "edges": [
+    {
+     "concept": "if_else_statement",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.531,
+     "rule": "Writes the same statements in both branches of an if-else.",
+     "source": "nli",
+     "misconception": "DuplicateCodeInBranches"
+    },
+    {
+     "concept": "increment_operators",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.544,
+     "rule": "i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "increment_operators",
+   "main_level": "L2"
+  },
+  "full": {
+   "levels": {
+    "if_statement": "L1",
+    "while_loop": "L1",
+    "empty_statement": null,
+    "if_else_statement": "L0",
+    "increment_operators": "L2"
+   },
+   "reasons": {
+    "if_statement": "L1 names_the_element (on topic, 0.54); no way matched",
+    "while_loop": "L1 names_the_element (on topic, 0.48); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "if_else_statement": "L0 misconception (nli, 0.53): Writes the same statements in both branches of an if-else.",
+    "increment_operators": "L2 line_by_line_trace (nli, 0.54): i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: "
+   },
+   "edges": [
+    {
+     "concept": "if_else_statement",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.531,
+     "rule": "Writes the same statements in both branches of an if-else.",
+     "source": "nli",
+     "misconception": "DuplicateCodeInBranches"
+    },
+    {
+     "concept": "increment_operators",
+     "level": "L2",
+     "way": "line_by_line_trace",
+     "support": 0.544,
+     "rule": "i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "increment_operators",
+   "main_level": "L2"
+  }
+ },
+ {
+  "id": "S137",
+  "type": "J7 L0 way: everyday reading",
+  "expected": "L0",
+  "text": "System.out.println(\"x is 5\"); sets x to 5.",
+  "asked": "What is the exact output, including line breaks? Explain how you got it.",
+  "gold": [
+   "assignment",
+   "println"
+  ],
+  "nli": {
+   "levels": {
+    "println": "L1",
+    "standard_output": "L2",
+    "method_call": "L1",
+    "run_time_error": null,
+    "division_by_zero": null
+   },
+   "reasons": {
+    "println": "L1 names_the_element (on topic, 0.62); no way matched",
+    "standard_output": "L2 one_step_execution (nli, 0.98): One call appends text to the output (println also appends the line separator).",
+    "method_call": "L1 names_the_element (on topic, 0.66); no way matched",
+    "run_time_error": "not assessed: no way matched and off topic",
+    "division_by_zero": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "standard_output",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.982,
+     "rule": "One call appends text to the output (println also appends the line separator).",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "method_call",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "println": "L1",
+    "standard_output": "L2",
+    "method_call": "L1",
+    "run_time_error": null,
+    "division_by_zero": null
+   },
+   "reasons": {
+    "println": "L1 names_the_element (on topic, 0.62); no way matched",
+    "standard_output": "L2 one_step_execution (nli, 0.98): One call appends text to the output (println also appends the line separator).",
+    "method_call": "L1 names_the_element (on topic, 0.66); no way matched",
+    "run_time_error": "not assessed: no way matched and off topic",
+    "division_by_zero": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "standard_output",
+     "level": "L2",
+     "way": "one_step_execution",
+     "support": 0.982,
+     "rule": "One call appends text to the output (println also appends the line separator).",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L2",
+   "main": "method_call",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S138",
+  "type": "J7 L0 way: everyday reading",
+  "expected": "L0",
+  "text": "Add v to sum first, then check if it was negative and subtract it again.",
+  "asked": "",
+  "gold": [
+   "accumulator_pattern"
+  ],
+  "nli": {
+   "levels": {
+    "accumulator_pattern": "L1",
+    "increment_operators": "L1",
+    "compound_assignment": "L0",
+    "read_loop_idiom": "L1",
+    "random_move": null
+   },
+   "reasons": {
+    "accumulator_pattern": "L1 names_the_element (on topic, 0.45); no way matched",
+    "increment_operators": "L1 names_the_element (nli, 0.95): ++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtract",
+    "compound_assignment": "L0 everyday_reading (nli, 0.94): x -= y reads as 'x equals minus y' and x += 0.5 as 'add a half' in arithmetic.",
+    "read_loop_idiom": "L1 names_the_element (on topic, 0.53); no way matched",
+    "random_move": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "increment_operators",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.952,
+     "rule": "++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtracts 1 from) a numeric variable.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "compound_assignment",
+     "level": "L0",
+     "way": "everyday_reading",
+     "support": 0.938,
+     "rule": "x -= y reads as 'x equals minus y' and x += 0.5 as 'add a half' in arithmetic.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "read_loop_idiom",
+   "main_level": "L1"
+  },
+  "full": {
+   "levels": {
+    "accumulator_pattern": "L1",
+    "increment_operators": "L1",
+    "compound_assignment": "L0",
+    "read_loop_idiom": "L1",
+    "random_move": null
+   },
+   "reasons": {
+    "accumulator_pattern": "L1 names_the_element (on topic, 0.45); no way matched",
+    "increment_operators": "L1 names_the_element (nli, 0.95): ++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtract",
+    "compound_assignment": "L0 everyday_reading (nli, 0.94): x -= y reads as 'x equals minus y' and x += 0.5 as 'add a half' in arithmetic.",
+    "read_loop_idiom": "L1 names_the_element (on topic, 0.53); no way matched",
+    "random_move": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "increment_operators",
+     "level": "L1",
+     "way": "names_the_element",
+     "support": 0.952,
+     "rule": "++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtracts 1 from) a numeric variable.",
+     "source": "nli",
+     "misconception": null
+    },
+    {
+     "concept": "compound_assignment",
+     "level": "L0",
+     "way": "everyday_reading",
+     "support": 0.938,
+     "rule": "x -= y reads as 'x equals minus y' and x += 0.5 as 'add a half' in arithmetic.",
+     "source": "nli",
+     "misconception": null
+    }
+   ],
+   "best": "L1",
+   "main": "read_loop_idiom",
+   "main_level": "L1"
+  }
+ },
+ {
+  "id": "S139",
+  "type": "J7 L0 way: inconsistent trace",
+  "expected": "L0",
+  "text": "The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle.",
+  "asked": "Describe what appears in the default window.",
+  "gold": [
+   "coordinate_scaling",
+   "standard_drawing"
+  ],
+  "nli": {
+   "levels": {
+    "standard_drawing": "L0",
+    "drawing_shapes": "L1",
+    "empty_statement": null,
+    "coordinate_scaling": "L0",
+    "math_round": null
+   },
+   "reasons": {
+    "standard_drawing": "L0 misconception (nli, 0.96): StdDraw.point(256, 256) draws in the middle of the default window.",
+    "drawing_shapes": "L1 names_the_element (on topic, 0.66); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "coordinate_scaling": "L0 misconception (nli, 0.96): StdDraw.point(256, 256) draws in the middle of the default window.",
+    "math_round": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "standard_drawing",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.958,
+     "rule": "StdDraw.point(256, 256) draws in the middle of the default window.",
+     "source": "nli",
+     "misconception": "PixelCoordinates"
+    },
+    {
+     "concept": "coordinate_scaling",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.958,
+     "rule": "StdDraw.point(256, 256) draws in the middle of the default window.",
+     "source": "nli",
+     "misconception": "PixelCoordinates"
+    }
+   ],
+   "best": "L1",
+   "main": "coordinate_scaling",
+   "main_level": "L0"
+  },
+  "full": {
+   "levels": {
+    "standard_drawing": "L0",
+    "drawing_shapes": "L1",
+    "empty_statement": null,
+    "coordinate_scaling": "L0",
+    "math_round": null
+   },
+   "reasons": {
+    "standard_drawing": "L0 misconception (nli, 0.96): StdDraw.point(256, 256) draws in the middle of the default window.",
+    "drawing_shapes": "L1 names_the_element (on topic, 0.66); no way matched",
+    "empty_statement": "not assessed: no way matched and off topic",
+    "coordinate_scaling": "L0 misconception (nli, 0.96): StdDraw.point(256, 256) draws in the middle of the default window.",
+    "math_round": "not assessed: no way matched and off topic"
+   },
+   "edges": [
+    {
+     "concept": "standard_drawing",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.958,
+     "rule": "StdDraw.point(256, 256) draws in the middle of the default window.",
+     "source": "nli",
+     "misconception": "PixelCoordinates"
+    },
+    {
+     "concept": "coordinate_scaling",
+     "level": "L0",
+     "way": "misconception",
+     "support": 0.958,
+     "rule": "StdDraw.point(256, 256) draws in the middle of the default window.",
+     "source": "nli",
+     "misconception": "PixelCoordinates"
+    }
+   ],
+   "best": "L1",
+   "main": "coordinate_scaling",
+   "main_level": "L0"
+  }
+ }
+]

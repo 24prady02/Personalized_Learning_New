@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "comparison operator in the cumulative-sum loop (< vs <=)", "why": "It makes one remark about the condition (r <= sum) but never traces the values or gives next (-1, since the sums 0.1, 0.4 and 0.9 never exceed 0.95). The claim is also not strictly true, because the two conditions differ when r equals sum."}

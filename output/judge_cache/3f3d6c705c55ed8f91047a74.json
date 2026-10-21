@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "it swaps the first and last elements",
+   "correct": true,
+   "why": "The answer reads a[0] and a[2] correctly as the first and last elements, but never applies index rules step by step, and the bare result {2, 1, 3} does not count as a trace."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "it swaps the first and last elements",
+   "correct": true,
+   "why": "One sentence correctly states the purpose of the whole code: an exchange of two values."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "(a) {2, 1, 3}  (b) it swaps the first and last elements.",
+   "correct": true,
+   "why": "The answer correctly shows the values at positions 0 and 2 trading places, but does not reach any of the L3 relational ways, and part (c) about length 1 is not answered."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "run",
+   "level": "L0",
+   "way": "line_by_line_trace",
+   "quote": "1, 2, 4, 6.",
+   "correct": false,
+   "why": "Running both lines 2 and 4 means both branches of the if/else run, which Java does not do; with a = b = 2 only lines 1, 4 and 6 run, and the answer gives no reasoning."
+  },
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "1, 2, 4, 6.",
+   "correct": false,
+   "why": "The answer reads the code like a plain list and runs each statement line in turn, ignoring that the if statement picks only one branch."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "1, 2, 4, 6.",
+   "correct": false,
+   "why": "It treats the {x++;} and {y++;} blocks as if both run, instead of seeing each block as a separate branch where only the else block runs because a > b is false."
+  },
+  {
+   "concept": "math_random",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention Math.random()."
+  }
+ ]
+}

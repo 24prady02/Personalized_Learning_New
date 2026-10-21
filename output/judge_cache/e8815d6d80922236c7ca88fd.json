@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never talks about assignment or how s is updated."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "For n = 3 it prints 14",
+   "correct": true,
+   "why": "It correctly predicts the printed value for one input (1+4+9=14), but it says nothing about how print works beyond that output."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "The sum of the squares 1² + 2² + … + n². For n = 3 it prints 14",
+   "correct": true,
+   "why": "It reads i * i as squaring and gets the correct total for n = 3, but it doesn't relate operands, types or evaluation order as the L3 ways require."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention where n comes from or how input is read."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "inverse of an array right-shift (rotation)", "why": "Running the same right-shift again moves elements right a second time instead of restoring them, so the rule applied is wrong (it needs a left shift with the first element moved to the end)."}

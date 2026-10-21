@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "= should be ==",
+   "correct": false,
+   "why": "Putting == in line 3 cannot add i to sum. == only produces a boolean and changes no variable, and `sum == i;` on its own line does not even compile."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how sum's value is stored or overwritten."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Line 3, = should be ==.",
+   "correct": false,
+   "why": "Picking line 3 is right, but the reason treats the assignment as if it should be a comparison. The real bug is that = overwrites sum each time instead of adding to it (it should be sum += i or sum = sum + i)."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions += or adding to sum."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer covers only one of the three steps, adding 1 to the size. It leaves out creating sneaker1 with 10.5 and printing the size. It also reads and writes the field directly instead of using getSize() and setSize(), which won't compile if size is private. The dot notation and the +1 idea are correct, but that is one correct part, not the whole task."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "if / else if chaining and conditions that skip assignment", "why": "For x = -1 the student says the else part runs and sets y to 0, but the else-if condition x >= 0 is false, so A leaves y unchanged. This wrong rule leads to the wrong conclusion, since A and B behave the same for x = -1."}

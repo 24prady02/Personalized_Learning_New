@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested loop iteration count", "why": "The student adds the loop bounds (n + n = 2000) instead of multiplying for nested loops, which is a wrong rule, and doesn't say what happens when n doubles."}

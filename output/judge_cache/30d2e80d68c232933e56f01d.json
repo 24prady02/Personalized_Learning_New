@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "When i is 3 it prints 1 2 3.",
+   "correct": true,
+   "why": "It gives a correct result for one outer pass, but it does not trace the loops or explain how the inner loop depends on i, and it leaves out the full output, so it is a bare result."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention printf, the format string or how lines end."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not involve char arithmetic."
+  }
+ ]
+}

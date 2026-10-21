@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student answers only (e), and `5 < n < 10` is not valid Java: it applies the maths chaining rule, and a boolean can't be compared to an int with `<`. It also keeps the `!( )` the question asked to remove, and the correct De Morgan rewrite is `n <= 5 || n >= 10`."}

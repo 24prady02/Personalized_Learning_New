@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop bound for in-place array reversal", "why": "a.length is wrong because the loop would swap every pair twice and restore the original array, and the explanation 'every element gets swapped' shows no working model of the swap-from-both-ends rule."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "matrix multiplication order (non-commutativity) in the triple loop", "why": "It gives the correct b×a result (3 4 / 1 2) and the correct conclusion that order matters, but it doesn't trace the loop values or show c to compare, so it covers only one aspect."}

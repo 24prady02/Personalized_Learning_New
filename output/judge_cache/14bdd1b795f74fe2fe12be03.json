@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about how any expression is evaluated or what type it has."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "It counts the digits of n, so any three-digit number like 100.",
+   "correct": false,
+   "why": "The loop halves n with n / 2 and counts the halvings, it does not count digits, so 100 gives 6 (100→50→25→12→6→3→1), not 3."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention indexing."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention nested loops."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Not F, because a[a.length] does not exist.",
+   "correct": true,
+   "why": "The answer applies the rule that the last element is a[a.length-1] to this loop: i <= a.length would reach a[a.length], which is out of range."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "Not G, because count would only ever be 0 or 1.",
+   "correct": true,
+   "why": "The answer links the update to the counter's job: count = 1 cannot count how many elements match, while count++ can. It judges a given distractor line, which is L3 under the boundary text, not a change the student made."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the println call."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

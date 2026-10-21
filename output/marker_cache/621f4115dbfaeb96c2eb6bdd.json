@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "magic numbers / named constants", "why": "The answer addresses only 3.14159 with a claim that it is as clear as a name, and it doesn't cover the other numbers (0, 1) or say whether they need constants."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer applies a wrong rule. Declaring a local variable reserves its storage straight away, but the variable is not definitely assigned, so Java refuses to read it (compile error). It does not hold 0, and the claim that it takes no memory until it gets a value contradicts how Java works."}

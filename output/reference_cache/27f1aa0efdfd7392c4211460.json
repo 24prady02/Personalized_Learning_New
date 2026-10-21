@@ -1,0 +1,1 @@
+{"level": "L0", "why": "`len(sensorReadings)` is Python, not Java. A Java array uses the `.length` field, so this code does not compile. The student has mixed up the language rule, so the answer shows no working model of Java array length or indexing, even though `- 2` is the right idea for the next-to-last position."}

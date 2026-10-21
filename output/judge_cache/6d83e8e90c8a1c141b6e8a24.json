@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "a / b is an int, so it prints 3",
+   "correct": true,
+   "why": "The answer applies int division to this code correctly: 7 / 2 is an int and truncates to 3. The wrong printed value comes from the double conversion, which belongs to another concept."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "a / b is an int",
+   "correct": true,
+   "why": "The answer correctly applies the rule that / on two int operands gives an int result to this code's values."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "so it prints 3",
+   "correct": false,
+   "why": "The answer ignores that the int result is automatically widened to double when assigned to r, so the program prints 3.0, not 3."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "so it prints 3",
+   "correct": false,
+   "why": "r is declared double, so it always holds a double value (3.0). Saying it prints 3 treats r as if it held an int."
+  }
+ ]
+}

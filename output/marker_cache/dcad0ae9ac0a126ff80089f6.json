@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "public class name must match file name", "why": "The answer states the file-name rule with one fix (rename the file) but doesn't say whether the code compiles or trace why it fails. It also doesn't cover the other parts of the question, and it keeps the lowercase class name 'hello'."}

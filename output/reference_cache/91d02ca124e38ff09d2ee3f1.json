@@ -1,0 +1,1 @@
+{"level": "L3", "pick": "B", "why": "The answer explains the contrast by relating two constructs in the code — array creation with new (default-initialises elements to 0) versus an unassigned local variable (no value, definitely-unassigned) — giving a reason that integrates the parts rather than merely naming a rule or tracing values, so it is relational (L3)."}

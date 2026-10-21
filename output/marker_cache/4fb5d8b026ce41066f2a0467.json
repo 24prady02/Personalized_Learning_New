@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Reference vs primitive copy semantics (aliasing arrays vs copying int values)", "why": "The student applies a wrong rule, saying y = x links the variables so x becomes 7, though int assignment copies the value and x stays 5. The claim that both arrays are 9 matches the array aliasing, but the answer applies different rules to the two cases."}

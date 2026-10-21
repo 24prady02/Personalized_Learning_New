@@ -1,0 +1,5 @@
+{"concepts":[
+{"concept":"double","level":"L1","way":"output_prediction","quote":"total is 11.5","correct":true,"why":"The initial double value 11.5 is right (confirmed by the run) but is a bare result with no reasoning."},
+{"concept":"accumulator_pattern","level":"L0","way":"misconception","quote":"after the last line total is still 11.5, because it already has a value.","correct":false,"why":"It believes the update total = total + total * TAX leaves total unchanged; the run gives 12.42."},
+{"concept":"widening_conversion","level":"none","way":"","quote":"","correct":false,"why":"The answer does not discuss the int being converted to double."}
+]}

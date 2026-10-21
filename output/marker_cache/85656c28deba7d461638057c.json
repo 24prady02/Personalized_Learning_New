@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Linear search loop with early return (last occurrence)", "why": "The else branch returns -1 on the first mismatch, so the loop never gets past index 0, and it returns the first match rather than the last, which breaks the language's control-flow rules for this task."}

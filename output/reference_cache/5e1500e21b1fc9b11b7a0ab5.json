@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "A", "why": "The answer states the program's purpose (sum of squares 1..n) and goes beyond the given code to identify the class of inputs where int overflow occurs; the threshold is correct (sum for n=1860 is 2,146,682,110 < 2^31-1, for n=1861 it is 2,150,145,431 > 2^31-1), so this is a correct extended-abstract claim, not a bare output."}

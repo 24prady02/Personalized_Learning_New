@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for vs while loop equivalence", "why": "The answer gives no for-loop rewrite and claims the two loops 'do exactly the same thing', which is a wrong rule that ignores their different syntax and structure, so it shows no working model of the concept."}

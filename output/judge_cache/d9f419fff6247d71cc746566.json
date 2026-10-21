@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "public static double calculateMPG(double miles, double gallons) { double mpg = miles / gallons; }",
+   "correct": true,
+   "why": "The answer correctly uses double for the real-valued parameters, the local variable and the return type, and miles / gallons is a floating-point division. It gives no reasoning about the values, and the missing return statement means the method does not compile, so it does not reach L2 or L4."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "double miles, double gallons",
+   "correct": true,
+   "why": "The answer correctly uses the primitive type double, but it never states, applies or relates any rule about primitive types."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention the % operator."
+  }
+ ]
+}

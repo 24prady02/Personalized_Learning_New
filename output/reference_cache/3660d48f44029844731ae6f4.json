@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The answer '3' is a claim (input n=3), but n=3 halves once to 1 and prints 1, not 3 (any n in 8..15 would work); a bare wrong input with no trace shows no working model of the loop, so it is L0 rather than 'none', which is reserved for answers that make no claim."}

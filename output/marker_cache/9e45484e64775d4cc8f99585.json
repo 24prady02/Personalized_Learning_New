@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "default/uninitialised value of a local int variable", "why": "The answer applies a wrong rule: a declared int does occupy memory (a slot) from declaration, and it never says that x holds no definite value and can't be read until assigned. So it doesn't give a correct model of what is in x."}

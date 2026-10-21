@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+   "correct": true,
+   "why": "Names the class declaration and correctly relates the class name to the file name Hello.java."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

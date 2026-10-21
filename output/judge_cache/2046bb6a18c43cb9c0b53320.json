@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A (>, a[i])",
+   "correct": true,
+   "why": "The answer correctly puts a[i] in as the element to compare and assign. It gives no reasoning, and it misses that a loop starting at i = 1 never checks a[0], so the start value should be a[0]."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "B (0)",
+   "correct": false,
+   "why": "Declaring max with a value is right, but 0 is the wrong value. If every element is negative, or a[0] (which the loop skips) is the largest, max ends wrong. It should be a[0]. This is a logic slip, not a misunderstanding of how variables work, and no reasoning is given."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "B (0), D, A (>, a[i]), C",
+   "correct": true,
+   "why": "The order (declaration, loop header, body, closing brace) is correct, but it is a bare result with no explanation of how the statements run in sequence."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer has nothing about 2-D arrays or the order rows and columns are visited."
+  }
+ ]
+}

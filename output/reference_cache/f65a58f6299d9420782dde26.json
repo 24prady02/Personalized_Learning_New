@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student sees the pattern (each row adds one more number) and correctly predicts that changing the outer bound to i <= 5 would extend the last row to 1 2 3 4 5. That is correct reasoning about changed code, which is L4, even though the trace is incomplete and leaves out the third row."}

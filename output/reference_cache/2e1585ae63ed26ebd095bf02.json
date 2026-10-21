@@ -1,0 +1,1 @@
+{"level": "L2", "why": "All three parts are correct: p is a power of 2 and at most n, the loop stops when p*2 exceeds 37, and p ends at 32. The answer gives no pass-by-pass trace (1, 2, 4, 8, 16, 32). It also never says the code finds the largest power of 2 not above n, so it stays at listing the parts and doesn't reach L3."}

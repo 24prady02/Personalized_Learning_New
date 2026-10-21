@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student copied the sum pattern and kept `+=`, so `p` just adds the elements to 1 instead of multiplying them. The answer has no explanation, so it shows no working model of how an accumulator changes between sum and product. The code is wrong and the answer doesn't explain what was changed or why."}

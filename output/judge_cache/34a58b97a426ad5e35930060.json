@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "(e) It prints 5 once, then stops.",
+   "correct": false,
+   "why": "The answer is a bare, wrong output for a while loop. The loop prints nothing because 5 < 3 is false, but the error concerns the loop test, not statement sequencing."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Fragment (e) is a while loop and the answer says nothing about a for loop."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention a counter."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention escape sequences."
+  }
+ ]
+}

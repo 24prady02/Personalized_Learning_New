@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"input_graph","level":"none","way":"","quote":"","correct":false,"why":"The answer does not discuss the input format."},
+{"concept":"comment","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about comments."},
+{"concept":"remainder_operator","level":"none","way":"","quote":"","correct":false,"why":"The answer does not use the % operator."},
+{"concept":"frequency_counting","level":"none","way":"","quote":"","correct":false,"why":"The answer mentions rank but says nothing about counting visits or freq/T."}
+]}

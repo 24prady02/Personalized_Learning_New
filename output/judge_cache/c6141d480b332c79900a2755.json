@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "quote": "3 2 1 / 2 1 / 1",
+   "correct": false,
+   "why": "The answer never mentions the \"%d \" literal or the space inside it, and gives only a bare output that drops the trailing spaces and the final empty line."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about expressions or how they are evaluated."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss any arithmetic operator."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "because the loop stops at 1",
+   "correct": false,
+   "why": "This is about the stopping point of an integer counted loop, not a floating-point tolerance test, and it is wrong anyway because the outer loop also runs for i = 0 and prints an empty line."
+  }
+ ]
+}

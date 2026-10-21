@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "modulus operator in the num4 computation", "why": "The answer correctly names the % step as 'mod' and adds the result, but gives no values or output, and the probes show no working knowledge of remainder."}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "I said 2.5. The computer made a mistake.",
+   "correct": false,
+   "why": "The answer treats the double result as the exact school-maths average and calls Java's correct 2.0 a computer mistake. It never notices that the division happens in int before the value is stored as a double."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "I said 2.5. The computer made a mistake.",
+   "correct": false,
+   "why": "The answer reads / as exact maths division. In Java, (2 + 3) / 2 is integer division and gives 2."
+  }
+ ]
+}

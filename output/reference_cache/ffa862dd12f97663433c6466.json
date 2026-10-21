@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student renames only c, but the new name Pass_Count breaks Java's camelCase convention (it should be passCount) because it has a capital first letter and an underscore. That shows a wrong naming rule. The answer also never says whether i is acceptable or whether the output changes."}

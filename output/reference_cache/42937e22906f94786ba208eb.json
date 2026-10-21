@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states one correct rule: without t, a[i] is overwritten before its value is saved. It does not apply this to the code's values or lines, such as a[i] = a[r] losing the original a[i], so it stays at L1."}

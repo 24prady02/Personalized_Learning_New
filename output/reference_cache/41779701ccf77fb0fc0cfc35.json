@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states one correct point: use a[i].length, not a[0].length, so the loop works for any 2-D array. It gives no print method, no loop structure, no spaces or newlines, and never says that rows of different lengths are the reason. It names one correct aspect without covering the task."}

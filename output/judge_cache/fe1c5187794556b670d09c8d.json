@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception: The computer fills in omitted steps or values the programmer meant.",
+   "quote": "next is 2, because the last page gets whatever is left",
+   "correct": false,
+   "why": "The running sum reaches only 0.1, 0.4 and 0.9, so r < sum is never true and next stays -1; the code does nothing to give the last page whatever is left."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks or braces."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss how sum or next is assigned."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "the last page gets whatever is left",
+   "correct": false,
+   "why": "The answer reads the page-choosing loop as the intended process instead of what the code does: the row sums to 0.9, which is not more than r = 0.95, so no page is chosen and next stays -1, not 2."
+  }
+ ]
+}

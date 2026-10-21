@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int values or int operations."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L0",
+   "way": "misconception: Assigning an array reference copies the array.",
+   "quote": "I changed my copy but the original changed too. Why?",
+   "correct": false,
+   "why": "The student calls the array a 'copy' even though the original changed with it, so it was an alias; they give no correct rule about creating a new array and copying each element."
+  },
+  {
+   "concept": "redirection",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about redirection."
+  }
+ ]
+}

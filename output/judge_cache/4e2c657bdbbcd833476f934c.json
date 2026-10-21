@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the comment."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions indices, x[i], x[i-1] or the bounds."
+  },
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Just run the same three lines again.",
+   "correct": false,
+   "why": "Running the same statements again shifts the array right a second time instead of undoing it, so the answer misjudges what the statements do when run."
+  },
+  {
+   "concept": "incremental_development",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about building or testing a program in small steps."
+  }
+ ]
+}

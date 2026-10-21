@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Scanner-style input: readInt leaves the newline, so readLine returns an empty string", "why": "It gives the correct value for all three variables (42, empty string, \"Ann Lee\"), including the leftover-newline case for rest. It doesn't explain why or say what the code is for, so it stays at L2."}

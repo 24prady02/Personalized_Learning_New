@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "power_method",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Yes, one multiplication gives the page rank.",
+   "correct": false,
+   "why": "The answer says one vector-matrix multiplication gives the exact page ranks, which is wrong: one step from rank = {1,0,0,0,0} only gives row 0 of p, and many iterations are needed to converge."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about frequency counting."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the simulation loop."
+  }
+ ]
+}

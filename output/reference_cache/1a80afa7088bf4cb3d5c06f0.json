@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly braces the outer loop around the inner loop, which is one correct part of the task. But `println()` stays outside the outer loop, so the program still prints `******` on one line instead of the triangle. The answer never places `println` inside the outer loop body, so it doesn't solve the problem."}

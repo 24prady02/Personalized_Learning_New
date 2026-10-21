@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student ties the initial value 0 to the kind of data, and that rule is correct: starting at 0 works only if every value is ≤ 0. But the 'always negative' premise is invented. The task says nothing about it, so the answer is a relational error, and the code is wrong for general double data (all-positive data would print 0)."}

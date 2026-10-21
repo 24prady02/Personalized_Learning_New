@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int p = 1;",
+   "correct": true,
+   "why": "The answer uses int correctly for the product but explains nothing and never mentions the 32-bit range or overflow risk."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "for (int v : a) p = p * v;",
+   "correct": true,
+   "why": "The for-each syntax is correct, but the answer is only the code with no explanation of what changed or why, so it counts as a bare result."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int p = 1; for (int v : a) p = p * v;",
+   "correct": true,
+   "why": "The statements are correctly formed, end in semicolons and come in the right order, but there is no reasoning about how they run."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about empty statements."
+  }
+ ]
+}

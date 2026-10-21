@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions a[0] or any element by its index, so it shows nothing about indexing."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: a reference variable holds the whole object, not a reference",
+   "quote": "b has no arrow; it holds the numbers 1 and 2 itself",
+   "correct": false,
+   "why": "It says the reference variable b holds the array's values directly, but in Java b holds a reference (an arrow) to the array."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L0",
+   "way": "misconception: Assigning an array reference copies the array",
+   "quote": "it holds the numbers 1 and 2 itself, and then 9 and 2",
+   "correct": false,
+   "why": "It treats b = a as making b its own copy of the elements, but b and a actually point to the same array."
+  }
+ ]
+}

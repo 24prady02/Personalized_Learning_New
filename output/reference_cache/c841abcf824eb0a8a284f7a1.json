@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct. It gives the starting values (num1 = 9, num2 = 12) and the two points where num2 drops (at i = 9 it becomes 11, at i = 11 it becomes 10). It then gives the right output, 8, 10, 12, 13. This is value-by-value reasoning, but it doesn't state what the loop is for, and it doesn't attempt the for-loop rewrite, so it stays at L2."}

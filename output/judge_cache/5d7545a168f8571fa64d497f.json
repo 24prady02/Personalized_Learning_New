@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L0",
+   "way": "misconception: ++i in the for-update runs before the body each pass",
+   "quote": "(f) 1 2 3, because ++i adds 1 before the body.",
+   "correct": false,
+   "why": "The update ++i runs only after each pass of the body, so i is 0, 1, 2 inside the body and the output is 0 1 2."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception: ++i in the for-update runs before the body each pass",
+   "quote": "++i adds 1 before the body",
+   "correct": false,
+   "why": "In a for loop the order is init, test, body, then update, so the prefix form does not move the update before the body."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about double."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "for loop trace with i -= 4 and running total", "why": "The trace is correct value by value (i = 10, 6, 2, then -2 stops; total 10, 16, 18), but it never says what the loop does and it doesn't address parts (c)–(f)."}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "B (3.0) is correct, because 7/2 is integer division and gives 3, which widens to 3.0. The student gave only the letter and no justification, and a bare correct result is L1."}

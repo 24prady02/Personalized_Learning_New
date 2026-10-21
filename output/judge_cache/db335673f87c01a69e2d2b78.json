@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "10 | 10 / 6 | 16 / 2 | 18 / -2 | stop",
+   "correct": true,
+   "why": "The trace adds each i into total on every pass and ends at 18, which is correct. The code prints nothing, so the run does not contradict these values."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions, their types or how they are evaluated."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "10 | 10 / 6 | 16 / 2 | 18",
+   "correct": true,
+   "why": "The answer applies -4 and +i correctly to this code's values at each step."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only shows that this loop stops at -2. It says nothing about non-termination, and it skips the z += 0.5 part."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment vs equality comparison (a = b)", "why": "The student reads = as a maths equality check, which is the wrong rule. In Java it assigns b's value to a, so a becomes 20 and b stays 20."}

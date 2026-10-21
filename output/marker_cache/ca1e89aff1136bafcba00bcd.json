@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "dangling else binding in nested if, traced for t = 5", "why": "It correctly says the else pairs with the inner if and uses that with the value t = 5 to get no output, but it doesn't trace the second if-else chain, and it doesn't go beyond the given code."}

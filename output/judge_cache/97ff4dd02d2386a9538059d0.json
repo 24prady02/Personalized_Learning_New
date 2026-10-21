@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The answer explains that int / int truncates to 0, and that casting one operand to double makes the division fractional."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The cast is placed on the operand, and the values it predicts are correct for this code."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree",
+   "correct": true,
+   "why": "The answer finds the silent truncation bug in an all-int division stored in a double, and fixes it by converting an operand before the division."
+  },
+  {
+   "concept": "normalization",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "All zeros, because int / int is integer division ... gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "correct": true,
+   "why": "The answer finds the int-division bug that makes every probability 0, fixes it, and checks that the corrected row sums to 1."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is a bare 'C' with no reasoning. C is correct, but A also gives the same sum, because addition doesn't depend on order. B is wrong because it starts at 1 and reaches a[a.length], which throws an exception. The answer is incomplete and unjustified, so it grasps only one correct aspect."}

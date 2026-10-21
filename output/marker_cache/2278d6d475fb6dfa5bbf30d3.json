@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Flattening nested if/else into an else-if chain", "why": "The student correctly restructures the nested else-if into an equivalent chain, relating the conditions in one structure, but doesn't trace values or go beyond the given code."}

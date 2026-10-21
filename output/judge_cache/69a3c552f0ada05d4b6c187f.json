@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "the loop stops when c reaches 3",
+   "correct": false,
+   "why": "The answer says c controls the loop, but the condition only tests n > 1. c is just a counter, so the number of passes depends on n."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Any n works, the loop stops when c reaches 3",
+   "correct": false,
+   "why": "The answer makes up a stopping rule that isn't in the code. The while loop keeps going until n > 1 is false, so not every n prints 3."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions how n / 2 works on ints or any other int behavior."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Any n works",
+   "correct": false,
+   "why": "The answer claims a result for every input but gives no correct reasoning or stopping argument. Only n from 8 to 15 makes the loop run three times."
+  }
+ ]
+}

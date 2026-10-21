@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "while loop halving count (floor log2) – finding input", "why": "The answer gives a correct input (8) found by trial but does not trace the loop or explain why 8 gives 3, so it covers only one aspect."}

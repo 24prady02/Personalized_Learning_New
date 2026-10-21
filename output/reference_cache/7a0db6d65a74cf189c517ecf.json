@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule: they say `a = b` moves the value out of b, leaving b empty. In Java assignment copies the value and b keeps it. The real reason for `t` is that `a = b` overwrites a's old value, so the answer's reasoning contradicts the language. It also never explains the three lines or that the swap exchanges a and b."}

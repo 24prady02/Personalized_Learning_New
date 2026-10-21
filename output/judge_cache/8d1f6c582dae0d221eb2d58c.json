@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "5 / 2 is done with ints before it is stored, so it is 2, then 2.0",
+   "correct": true,
+   "why": "The answer explains that the int operands decide the division and that storing the int result in a double only turns 2 into 2.0. It does not bring the fraction back."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "5 / 2 is done with ints before it is stored, so it is 2",
+   "correct": true,
+   "why": "The answer applies the int-division rule to this code's values and says the change to double happens only after the division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "5 / 2 is done with ints",
+   "correct": true,
+   "why": "The answer evaluates (2 + 3) to 5 first, then applies / to int operands, giving 2."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention casts."
+  }
+ ]
+}

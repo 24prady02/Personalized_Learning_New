@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "maybe nothing, maybe a line",
+   "correct": false,
+   "why": "The answer only hedges about the i = 0 pass and never applies init/test/update to work out how many passes run or which j values appear, so it does not reach L2. The run confirms that i reaches 0, so this is a weak L1 at best."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "a few",
+   "correct": false,
+   "why": "'A few' gives no count (println runs 4 times) and states no rule about what println does."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about counting; this code has no counter anyway."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions printf or the \"%d \" format."
+  }
+ ]
+}

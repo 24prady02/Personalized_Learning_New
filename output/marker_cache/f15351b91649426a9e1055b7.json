@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "swapping two variables using a temporary variable", "why": "The cup analogy traces all three lines in order and shows t's role as temporary storage, which relates the lines into one swap purpose, but it stays within the given code."}

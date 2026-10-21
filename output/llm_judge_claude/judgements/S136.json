@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"if_statement","level":"L4","way":"transfer_to_a_new_program","quote":"isDone = (i % 5 == 0); would do the same as the if.","correct":true,"why":"It correctly replaces the if with a direct boolean assignment; this is equivalent here because the loop exits as soon as isDone becomes true."},
+{"concept":"while_loop","level":"none","way":"","quote":"","correct":false,"why":"The answer gives neither the output nor when the loop stops."},
+{"concept":"empty_statement","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about empty statements."},
+{"concept":"short_circuit","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about the evaluation of &&."}
+]}

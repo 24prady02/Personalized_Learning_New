@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "x does not take any memory until it gets a value.",
+   "correct": false,
+   "why": "Matches the listed wrong rule that int x; without a value sets aside no memory; in Java the declaration creates the variable, which is merely unassigned."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "x does not take any memory until it gets a value.",
+   "correct": false,
+   "why": "Denies that a declared variable is a named storage location, which contradicts Java."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements as program steps or their execution order."
+  },
+  {
+   "concept": "array_reference",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention arrays or references."
+  }
+ ]
+}

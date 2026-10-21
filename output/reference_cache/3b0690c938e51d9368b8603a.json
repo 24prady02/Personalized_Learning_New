@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The trace is correct for i = 3 and i = 2, but it stops at \"and so on\". It doesn't cover i = 1 or i = 0, doesn't mention the trailing spaces, and doesn't mention the empty line that i = 0 produces. It also doesn't give the exact output. It covers only part of the code, so it stays at L1."}

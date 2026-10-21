@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "De Morgan rewrite of a negated condition", "why": "The answer uses the maths chained-comparison form !(5 < n < 10), which isn't valid Java and isn't a De Morgan rewrite (n <= 5 || n >= 10), so it reads the code with a maths meaning."}

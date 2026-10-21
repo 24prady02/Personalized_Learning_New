@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student states in one sentence what the program does (sum of squares 1² to n²), which is correct for the loop `s += i*i`. They check it with n = 3 (1+4+9 = 14). The purpose is deduced from the code, but the answer goes no further than the given code, so it is L3 and not L4."}

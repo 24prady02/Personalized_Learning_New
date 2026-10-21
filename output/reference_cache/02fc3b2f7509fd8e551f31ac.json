@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer correctly states in one sentence what the code does: row i prints 1 to i, giving a triangle of 3 rows. It relates the inner loop's bound to the outer loop variable and deduces the purpose from the code. It doesn't go beyond the given code, so it isn't L4."}

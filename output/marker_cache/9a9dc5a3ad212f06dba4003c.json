@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "sequential assignment of variables", "why": "The answer treats the three assignments as happening at once, using the old values (a=7, b=5, c=3). Java runs them in order, so all three end as 7, and the answer's rule contradicts that."}

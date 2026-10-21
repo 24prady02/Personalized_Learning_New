@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The loop condition i < 3 is false at the start (i is 5), so the body never runs and nothing is printed. The student says it prints 5 once, which treats the while loop as running its body before testing the condition. That is a wrong rule, and there is no trace to support it."}

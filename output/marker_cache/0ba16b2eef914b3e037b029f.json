@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "finding the maximum in an array with a for loop (ordering lines and filling blanks)", "why": "All blanks are correct (a[0], >, a[i]) and every line is placed, but the if comes before the for loop and so uses i outside it. That shows the parts weren't related into one structure."}

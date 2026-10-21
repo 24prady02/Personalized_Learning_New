@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer covers only fragment (b) and gives '012' without ' done'. It justifies that with 'the program ends when the loop ends', which is wrong, because the statement after the loop still runs. The correct output is '012 done'. The answer applies a wrong rule about control flow."}

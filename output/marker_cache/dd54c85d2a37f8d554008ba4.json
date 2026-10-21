@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop index i vs array element a[i] in counting evens", "why": "The student treats the index i as the array's values, applying a wrong rule by testing i % 2 instead of a[i] % 2, so it counts even indexes rather than even numbers."}

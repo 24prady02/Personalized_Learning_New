@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer is a list of correct terms naming the elements involved (remainder/modulus, widening to double, string concatenation, println newline) without applying any rule to the values or giving the output; naming the elements with no wrong rule is L1, not L0."}

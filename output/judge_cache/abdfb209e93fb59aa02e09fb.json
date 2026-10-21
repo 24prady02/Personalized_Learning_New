@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about array indexing or a[0]."
+  },
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "3 sorts the array",
+   "correct": false,
+   "why": "Fragment 3's statements only assign to m to find the maximum and never change the array, so saying it sorts the array guesses an intent the code does not have."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about input or output streams."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "Writes an index traversal with the correct < a.length bound that uses i as the index to write each element, which the for-each in the code cannot do."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "Correctly reads and writes element i through a[i] on each pass."
+  },
+  {
+   "concept": "length_field",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "Uses a.length correctly, without parentheses, as the loop bound for this array."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

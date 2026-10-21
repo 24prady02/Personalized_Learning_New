@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Benefit of incremental compilation and testing (error localisation)", "why": "The answer links compiling after a few lines to each error being next to the code just written, which explains why the 37 errors would have been easy to find, but it stays within the given scenario and doesn't generalise."}

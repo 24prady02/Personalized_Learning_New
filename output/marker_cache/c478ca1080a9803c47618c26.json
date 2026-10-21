@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "accumulating a product in a for-each loop", "why": "The student correctly sets p = 1 but uses p = v * v, which replaces p with v squared each pass instead of accumulating with p *= v, so the loop does not compute a product of all elements and the answer gives no explanation of what was changed or why."}

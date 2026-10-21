@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The student correctly sees that a long result cannot be stored in an int without a cast, which is a compile-time error, in code that is not in the given program."
+  },
+  {
+   "concept": "math_round",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The student correctly finds the compile-time error in int k2 = Math.round(2.5): Math.round(double) returns a long."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The student correctly sees that the narrowing conversion from long to int is not automatic, so the line fails to compile."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions a cast or the (int) fix, so there is no evidence about explicit casts."
+  }
+ ]
+}

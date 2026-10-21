@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "loop counting halvings, i.e. floor(log2 n)", "why": "Both outputs are correct, and the answer explains the second one by what the code computes (the largest power of 2 not above n), not by tracing each step. It stays within the given code, so it does not reach L4."}

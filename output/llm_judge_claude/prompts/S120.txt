@@ -1,0 +1,163 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Would b × a give the same c?
+
+CODE:
+int[][] a = {{1, 2}, {3, 4}};
+int[][] b = {{0, 1}, {1, 0}};
+int[][] c = new int[2][2];
+for (int i = 0; i < 2; i++)
+  for (int j = 0; j < 2; j++)
+    for (int k = 0; k < 2; k++)
+      c[i][j] += a[i][k] * b[k][j];
+int[][][] cube = new int[2][3][4];
+
+STUDENT ANSWER: No, b times a is 3 4 / 1 2, so the order matters.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: multidimensional_array
+L0 Prestructural:
+  - everyday_reading: Folk meaning: '3-D' suggests three elements, or one solid block. 
+  - misconception: wrong rule: The number of dimensions of an array is its length. 
+  - misconception: wrong rule: The number of brackets in an array type or initializer is the array's length. 
+  boundary: Any correct, programming-specific statement about multidimensional array makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: a multidimensional array, an array with three or more indices built as nested arrays of arrays.
+  - states_the_rule: Declarative: double[][][] a = new double[N][N][N]; refer to an entry as a[i][j][k].
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: a[i] (a 2-D array) is evaluated, then [j] (a 1-D row), then [k] (the element); each step is bounds-checked against the length of that level.
+  - output_prediction: Result: new double[N][N][N] holds N*N*N doubles, all 0.0; a.length is N, and a[i] is a double[][].
+  - one_step_execution: State transition: a[i][j][k] = v changes one element; nothing else changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A 3-D array generalizes 2-D: a[i] is itself a 2-D array, and the same declaration, creation and indexing rules apply one level deeper.
+  - purpose_of_the_whole: Plan/role: model data with three or more coordinates, e.g. a 3-D lattice for self-avoiding walks or physical space.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: adding a dimension multiplies memory and creation time by the new extent (N^3 values for N per side), because creation time is proportional to the number of elements.
+  - transfer_to_a_new_program: Applicability: use one when data naturally has three or more integer coordinates and N is small enough for N^3 storage. Use 2-D or 1-D arrays when fewer indices suffice.
+  - diagnose_an_error: rule broken: The total size must be a non-negative int and fit in memory. Kind: run-time exception. Trigger class: large N in new double[N][N][N] exhausts memory (OutOfMemoryError), or a negative dimension (NegativeArraySizeExcept
+  - diagnose_an_error: rule broken: Each index must be within its own level. Kind: run-time exception. Trigger class: an index >= the length of its level (ArrayIndexOutOfBoundsException)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: array_aliasing
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. 
+  - misconception: wrong rule: a == b is true when a and b hold the same values. 
+  - misconception: wrong rule: Assigning an array reference copies the array. 
+  boundary: Any correct, programming-specific statement about array aliasing makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: aliasing is the situation in which two or more array variables refer to the same array object.
+  - states_the_rule: Declarative: an assignment makes the names a and b refer to the same array; an equality test a == b checks whether the two names refer to the same array.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: in b = a, a is evaluated to its reference value, which is then stored in b; no element is read or copied. In a == b both reference values are evaluated and compared.
+  - output_prediction: Result: for int[] a = {1, 2, 3}; int[] b = {1, 2, 3};, the test a == b is false; after b = a it is true. A read through either name gives the same element.
+  - one_step_execution: State transition: b = a changes only the variable b (it now holds a's reference). A later b[0] = 17 changes the one shared array, so a[0] then reads 17 too.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Only new creates a distinct array; to copy, create a new array and copy each element (or use Arrays.copyOf).
+  - relation_to_neighbour: Assignment, == and println(a) all act on the reference value: two aliases print the same address, while two equal-content arrays print different ones.
+  - relation_to_neighbour: b = a makes a second name for the same array (an alias); copying makes a second array: after a copy, changing b[i] leaves a[i] unchanged.
+  - purpose_of_the_whole: Plan/role: aliasing lets two names work on one array without copying (as when an array is passed to a method), but in Chapter 1 code it is mostly a source of subtle bugs.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: replacing b = a with an element-copy loop keeps b's initial contents but breaks the link, so later changes to a no longer show in b. Reassigning a = new int[n] after b = a leaves b on the old array.
+  - transfer_to_a_new_program: Applicability: assign an array variable when you want a second name for the same data. Use a copy loop or Arrays.copyOf for an independent copy, and an element loop or Arrays.equals to compare contents.
+  - diagnose_an_error: rule broken: Assignment copies the reference, not the elements. Kind: silent logic error. Trigger class: b = a is used as a 'copy', and then b is modified while a is expected to stay unchanged (or the reverse)
+  - diagnose_an_error: rule broken: == on arrays compares references, not contents. Kind: silent logic error. Trigger class: two separately created arrays with equal elements are compared with == (always false)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: array_initializer
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in maths, braces {1, 2, 3} denote a set (unordered, no repeats) and brackets [1, 2, 3] a list, so novices write int[] a = [1, 2, 3] or expect {1, 1, 2} to have 2 elements. 
+  - misconception: wrong rule: Initializer values go in [] instead of {}. 
+  - misconception: wrong rule: The number of brackets in an array type or initializer is the array's length. 
+  boundary: Any correct, programming-specific statement about array initializer makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: an array initializer is a brace-enclosed, comma-separated list of values that creates and fills an array in one step.
+  - states_the_rule: Declarative: 'T[] a = {v0, ..., vk};' declares, creates (no new needed) and initializes an array of length k+1. For 2-D arrays each row is its own brace list. The bare form is legal only in a declaration; elsewhere write new T[]{.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a.
+  - output_prediction: Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4.
+  - one_step_execution: State transition: one execution creates one array holding the listed values and sets the variable to its reference.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An initializer implies array creation: it is shorthand for new T[k+1] followed by k+1 element assignments, so new is not written.
+  - purpose_of_the_whole: Plan/role: build small fixed tables of constants known when the program is written (suits, ranks, month names), usually used as fixed-value lookup tables.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value.
+  - transfer_to_a_new_program: Applicability: use an initializer when all values are known at compile time and the array is small. When the values must be computed at run time, create the array with new and fill it in a loop.
+  - diagnose_an_error: rule broken: Initializer values are enclosed in braces. Kind: compile-time. Trigger class: brackets are used, as in int[] a = [1, 2, 3]; (illegal start of expression)
+  - diagnose_an_error: rule broken: The bare {...} form is allowed only in a declaration. Kind: compile-time. Trigger class: a = {1, 2, 3}; used as a later assignment (array constants can only be used in initializers)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: identifier
+L0 Prestructural:
+  - everyday_reading: In English, Total, total and TOTAL are the same word, and names may contain spaces or hyphens (max-value). Java identifiers are case-sensitive and may use only letters, digits, _ and $, so total and Total are different names and m
+  - misconception: wrong rule: System.out.Println and System.out.println name the same method. 
+  - misconception: wrong rule: keywords may be reused as identifiers. 
+  boundary: Any correct, programming-specific statement about identifier makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identifier: a name for a variable, method or class, made of letters, digits, _ and $ and not starting with a digit.
+  - states_the_rule: An identifier is a sequence of letters, digits, _ and $ whose first character is not a digit. Identifiers are case-sensitive, and reserved words such as int, public or class cannot be used.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When an identifier appears, the compiler looks it up by exact spelling among the declarations in scope (an error if none matches). At run time a variable's name is replaced by that variable's current value.
+  - output_prediction: An identifier used as an expression yields the current value of the variable it names, with that variable's declared type. abc, Ab$, abc123 and a_b are legal names; Ab*, 1abc and a+b are not.
+  - one_step_execution: A name does nothing at run time. Only an assignment (or ++ or op=) with the name on its left changes the variable it names.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each variable is named by one identifier, which must be unique within its scope: declaring a second local with the same name in that scope is a compile error.
+  - relation_to_neighbour: A declaration binds the identifier to a type. Every later use must repeat exactly that spelling, or the compiler cannot resolve it.
+  - purpose_of_the_whole: Identifiers let code refer to values and code by name. Descriptive names make each variable's role readable to people, though names have no effect on what the program computes.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'.
+  - diagnose_an_error: rule broken: Identifiers are case-sensitive and must match a declaration exactly; a name that matches nothing in scope cannot be resolved. Kind: compile-time. Trigger class: Any use whose spelling or capitalization differs from th
+  - transfer_to_a_new_program: Every variable, method and class needs an identifier. Pick descriptive lowerCamelCase names, and use single letters only for short-lived loop indices or standard maths symbols. A name never stands in for a value; only literals and
+  - diagnose_an_error: rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under ano
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: multidimensional_array, array_aliasing, array_initializer, identifier.

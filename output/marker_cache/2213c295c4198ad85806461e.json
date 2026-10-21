@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop body scope: where the closing brace ends the loop", "why": "Putting E before D places println inside the loop, so it prints every iteration, but the student says it prints once at the end, which shows they are not reading the braces by the language rule."}

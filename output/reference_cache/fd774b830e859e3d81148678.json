@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The student gives a correct line-by-line trace table with values (t=1, then a=2, then b=1), so it covers every line in order. They never say in words that the lines swap a and b, so it stays at L2 and not L3."}

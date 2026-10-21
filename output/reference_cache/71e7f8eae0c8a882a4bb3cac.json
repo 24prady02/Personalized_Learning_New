@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The claim that p is always less than n is true here, because p goes 1, 2, 4, 8, 16, 32 and never reaches 37. It is only one stated property. The student does not trace the values, explain why the loop ends, or say that p is 32 at the end."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer stores 7.9 but says nothing about the double type, its values or how it behaves."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "next-to-last is sensorReadings[sensorReadings.length - 2] = 7.9;",
+   "correct": true,
+   "why": "After the hint, the student works out the index of the next-to-last element and writes 7.9 to exactly that element. Turn 1 used sensorReadings[sensorReadings.length], which is out of bounds, but turn 2 corrects it."
+  },
+  {
+   "concept": "length_field",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "length - 1, so next-to-last is sensorReadings[sensorReadings.length - 2]",
+   "correct": true,
+   "why": "The student uses the rule that the last element is at a.length-1 and correctly gets length-2 for this task, with no parentheses after length."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "length - 1",
+   "correct": true,
+   "why": "Only after the hint does the student correctly state that the last legal index is length-1. They never say why the turn-1 index sensorReadings.length was out of range."
+  }
+ ]
+}

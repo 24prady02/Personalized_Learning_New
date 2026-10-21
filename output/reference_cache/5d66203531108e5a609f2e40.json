@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The student traces every iteration of the outer loop in order with the correct values and line breaks (1; 1 2; 1 2 3). They never say what the code is for, such as printing a growing triangle of numbers, and they don't relate the inner loop bound j <= i to the outer loop, so this is a value-by-value trace and not a relational answer."}

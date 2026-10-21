@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "r is a double",
+   "correct": true,
+   "why": "The answer names r's primitive type correctly but never uses the promotion rules (int / int stays int) on this code."
+  },
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Not C because r is a double, not D because Java does not round, so A or B. I will say B.",
+   "correct": true,
+   "why": "The answer rules out C because a double always prints with a decimal part, which applies the rule to this code. But it guesses between 3.5 and 3.0 without explaining integer division, so it does not reach L3."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about println or how it prints."
+  },
+  {
+   "concept": "algorithm_pseudocode",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention algorithms or pseudocode."
+  }
+ ]
+}

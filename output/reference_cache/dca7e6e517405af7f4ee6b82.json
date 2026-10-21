@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer gives only a general sequence (make sum, then read and add in a loop). It doesn't give the line order (E, B, A, C, D), doesn't map the lines to the order, and doesn't explain why A and C go inside the loop or why E goes before it. It shows one correct idea without tracing the lines in order."}

@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the double type, how it rounds values or how it is printed."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "They are accurate to 5 decimals, it says 0.31000.",
+   "correct": false,
+   "why": "It treats a 100-move simulation's 5-decimal printout as accurate, matching the listed misconceptions that printed decimal places mean accuracy and that a short simulation gives exact ranks."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions any arithmetic operator."
+  }
+ ]
+}

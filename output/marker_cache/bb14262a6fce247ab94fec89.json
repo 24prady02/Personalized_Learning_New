@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "integer division then assignment to double", "why": "The student correctly explains the whole chain (int division 5/2=2, then widening to 2.0), relating the division to the double assignment, but does not go beyond the given code."}

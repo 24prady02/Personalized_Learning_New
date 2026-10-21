@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Equivalence of loop variants for summing an array (traversal order and bounds)", "why": "The answer applies a wrong rule (reversed order changes the sum, so A is wrongly rejected) and misses that B goes out of bounds (starts at 1, reaches a[a.length]), so it doesn't follow the language rule."}

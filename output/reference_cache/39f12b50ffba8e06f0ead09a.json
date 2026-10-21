@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly notes that the indentation of \"great\" is misleading, which is one correct aspect. But they don't say that indentation doesn't affect Java's execution, that the if controls only the first println, or that \"great\" is printed for score = 50."}

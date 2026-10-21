@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "meaning and initial value of composite array", "why": "Correctly gives both the meaning (marks k as not prime) and the initial value (all false), covering both parts asked, but without relating it to the sieve's purpose or going beyond the code."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "if/else branching on x % 2 (odd path) with nested conditions", "why": "It correctly says A prints and the odd branch runs, but it doesn't trace the inner x % 5 test with x = 17 or give the actual output (AFG), so it covers only one part."}

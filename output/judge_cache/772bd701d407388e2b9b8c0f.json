@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "The answer only declares an int loop counter. It says nothing about int's range or how int arithmetic works."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "Using <= data2.length treats data2.length as the last valid index (the everyday counting reading). The last index is actually data2.length-1, so data2[data2.length] throws ArrayIndexOutOfBoundsException."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The header and body are set up correctly to step through the indexes, but the bound runs one pass too far."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "copy[i] = data2[i];",
+   "correct": false,
+   "why": "It copies the elements one by one into copy, but it never creates the new array (new int[data2.length]), and the off-by-one bound makes it crash."
+  }
+ ]
+}

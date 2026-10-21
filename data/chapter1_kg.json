@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9 (coverage audit; six node types; ways are has_level edge logic)",
+ "version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -8665,7 +8665,8 @@
     "UnbalancedBraces",
     "UnclosedComment",
     "UnclosedStringLiteral",
-    "AssignToFinal"
+    "AssignToFinal",
+    "MissingKeyword"
    ],
    "book_status": "taught in SW-1e",
    "book_location": {
@@ -28539,6 +28540,22 @@
        }
       ],
       "source_status": "verified"
+     },
+     {
+      "node": "AbsAlwaysNonNegative",
+      "wrong": "Math.abs always returns a non-negative number.",
+      "right": "Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative.",
+      "sources": [
+       {
+        "type": "book",
+        "book": "SW-1e",
+        "pdf_page": 46,
+        "quote": "Q. What is the value of Math.abs(-2147483648)? A. -2147483648. This strange (but true) result is a typical example of the effects of integer overflow.",
+        "check": "exact"
+       }
+      ],
+      "source_status": "verified",
+      "note": "added in v3.9.1 from data already in the graph"
      }
     ],
     "T": {
@@ -60636,7 +60653,9 @@
    "misconceptions": [
     "RedirectionIsArgument"
    ],
-   "errors": [],
+   "errors": [
+    "ReadPastEndOfInput"
+   ],
    "book_status": "taught in SW-1e",
    "book_location": {
     "book": "SW-1e",
@@ -75113,6 +75132,24 @@
       ],
       "note": null,
       "source_status": "verified"
+     },
+     {
+      "node": "WrongIterationCount",
+      "rule_broken": "The init, test and update together decide the number of passes; trace them to check the count.",
+      "kind": "logic error",
+      "trigger": "Updates the loop counter so that the loop runs the wrong number of times.",
+      "sources": [],
+      "source_status": "carried over",
+      "note": "added in v3.9.1 from data already in the graph (from the error node)"
+     },
+     {
+      "node": "FencepostExtraSeparator",
+      "rule_broken": "Handle one item outside the loop so n items get n - 1 separators.",
+      "kind": "logic error",
+      "trigger": "Prints item and separator together in the loop, leaving an extra separator at the end.",
+      "sources": [],
+      "source_status": "carried over",
+      "note": "added in v3.9.1 from data already in the graph (from the error node)"
      }
     ],
     "X": {
@@ -99502,6 +99539,7 @@
    "type": "error",
    "concepts": [
     "class_declaration",
+    "compile_time_error",
     "main_method"
    ]
   },
@@ -102086,6 +102124,7 @@
    "concepts": [
     "end_of_input",
     "read_loop_idiom",
+    "redirection",
     "standard_input"
    ]
   },
@@ -179451,6 +179490,52 @@
        "book": "SW-1e",
        "pdf_page": 39,
        "quote": "Note 2: Angles are expressed in radians. Use toDegrees() and toRadians() to convert.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: Math.abs always returns a non-negative number. Right rule: Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative.",
+     "exact_rule": "wrong rule: Math.abs always returns a non-negative number. Right rule: Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node (added in v3.9.1 from data already in the graph)",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "page": 36,
+       "section": "1.2",
+       "quote": "Q. What is the value of Math.abs(-2147483648)? A. -2147483648. This strange (but true) result is a typical example of the effects of integer overflow.",
+       "match": "exact",
+       "support": "exercise_or_QA"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "AbsAlwaysNonNegative"
+     ],
+     "literature_content": [],
+     "scope": "library",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "Q. What is the value of Math.abs(-2147483648)? A. -2147483648. This strange (but true) result is a typical example of the effects of integer overflow.",
        "check": "exact"
       }
      ],
@@ -284363,6 +284448,39 @@
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
     }
    ]
+  },
+  {
+   "source": "compile_time_error",
+   "target": "MissingKeyword",
+   "type": "error",
+   "logic": "Leaves out a required keyword such as static or class.",
+   "twin_logic": "public class Name and public static void main(String[] args) need their keywords, which are required; omitting or misspelling one is an error, usually caught by the compiler as a syntax error.",
+   "violates_rule": [
+    "main_method.R1",
+    "main_method.R2"
+   ],
+   "role": "context",
+   "provenance": "derived",
+   "sources": [
+    "SW-1e"
+   ],
+   "note": "added in v3.9.1 from data already in the graph: the compile_time_error@L4 diagnose_an_error way already links MissingKeyword"
+  },
+  {
+   "source": "redirection",
+   "target": "ReadPastEndOfInput",
+   "type": "error",
+   "logic": "Calls StdIn.readInt() again after the input has run out.",
+   "twin_logic": "Reading after standard input is exhausted is a run-time error; test StdIn.isEmpty() before each read.",
+   "violates_rule": [
+    "end_of_input.B1"
+   ],
+   "role": "context",
+   "provenance": "derived",
+   "sources": [
+    "SW-1e"
+   ],
+   "note": "added in v3.9.1 from data already in the graph: the redirection@L4 diagnose_an_error way already links ReadPastEndOfInput"
   }
  ],
  "counts": {
@@ -284372,10 +284490,10 @@
   "prerequisite": 207,
   "parallel": 34,
   "misconception": 471,
-  "error": 93,
+  "error": 95,
   "has_level": 865,
   "learning_level_nodes": 865,
-  "ways_in_has_level_edge_logic": 3079
+  "ways_in_has_level_edge_logic": 3080
  },
  "references": {
   "SW-1.1": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 2nd ed., Sec. 1.1 'Your First Program'. https://introcs.cs.princeton.edu/java/11hello/",
@@ -284450,5 +284568,12 @@
   "Chen2020": "B. Chen, S. Azad, R. Haldar, M. West and C. Zilles, \"A Validated Scoring Rubric for Explain-in-Plain-English Questions\", SIGCSE 2020. https://zilles.cs.illinois.edu/papers/EiPE_rubric_sigcse_2020.pdf",
   "VrachnosJimoyiannis2017": "E. Vrachnos and A. Jimoyiannis, SOLO and secondary students' difficulties with arrays, Themes in Science & Technology Education 10(1), 2017. https://files.eric.ed.gov/fulltext/EJ1164709.pdf",
   "Caceffo2019ITiCSE": "R. Caceffo, P. Frank-Bolton, R. Souza, R. Azevedo, \"Identifying and Validating Java Misconceptions Toward a CS1 Concept Inventory\", ITiCSE 2019, 23-29. doi:10.1145/3304221.3319771"
- }
+ },
+ "changes_v3_9_1": [
+  "error edge compile_time_error -> MissingKeyword (context): the compile_time_error@L4 way linked MissingKeyword but no edge existed",
+  "error edge redirection -> ReadPastEndOfInput (context): the redirection@L4 way linked ReadPastEndOfInput but no edge existed",
+  "L0 misconception way on math_library for AbsAlwaysNonNegative (scope library), plus its M rule",
+  "D rule on off_by_one_error for WrongIterationCount (from the error node)",
+  "D rule on off_by_one_error for FencepostExtraSeparator (from the error node)"
+ ]
 }

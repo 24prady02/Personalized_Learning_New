@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer is only a list of keywords (remainder, modulus, widening, double, concatenation, println, newline). It gives no output, no trace of 9 % 5 = 4 and 4 + 26.3 = 30.3, and no explanation of how num4 is computed. This is not a working model of the concept. It is vocabulary with no interpretation, so it doesn't reach L1."}

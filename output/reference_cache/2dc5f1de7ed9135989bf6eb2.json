@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student wrongly says the condition should be i <= 3. That would print 0123, which is not what the code does. The student also misses that the condition 3 < 3 is false, so the loop ends before the body runs with i = 3. The answer does reject the trace line, but its reasoning contradicts how the loop condition works."}

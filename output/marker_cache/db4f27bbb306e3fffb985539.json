@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division assigned to a double / how doubles print", "why": "The student applies a wrong rule (Java rounds doubles down when printing) instead of recognising that (2 + 3) / 2 is integer division giving 2, which is then widened to 2.0."}

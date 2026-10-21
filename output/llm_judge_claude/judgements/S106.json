@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"if_statement","level":"L2","way":"line_by_line_trace","quote":"the if test is false so pass is skipped, then done is printed","correct":true,"why":"Correct trace: the false condition skips the body and execution continues after the if."},
+{"concept":"empty_statement","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about an empty statement."},
+{"concept":"comment","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about the comment."},
+{"concept":"testing","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about testing."}
+]}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "Turn 1 only names the structure ('9 mod 5 is added to 26.3') and gives no values. The probe shows the real model: the student answered 3.4 for 17 % 5, which is 17/5, so they treat % as ordinary division. The correct result is 2. That contradicts the Java remainder rule, so the answer is L0."}

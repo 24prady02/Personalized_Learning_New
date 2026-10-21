@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "finding the maximum with a for loop (initialise, compare, update)", "why": "The answer fills every blank and orders all four lines correctly with correct values (max = a[0], <, a[i]), but it only lists the pieces and never says what the code does or how it works."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_body",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "p doubles each pass, so p * 2 soon goes past 37 and the loop ends. p is 32.",
+   "correct": true,
+   "why": "The answer says each pass of the body doubles p, carries that into the next test, and gets the confirmed final value 32."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "p * 2 soon goes past 37 and the loop ends",
+   "correct": true,
+   "why": "The answer evaluates the condition's expression p * 2 with p's current values and explains when it stops being <= 37, but it does not state a general rule that relates the parts."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "p doubles each pass",
+   "correct": true,
+   "why": "The answer applies * correctly to this code: the assignment p = p * 2 stores twice the old value, reaching 32."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no counter variable and the answer does not mention counting."
+  }
+ ]
+}

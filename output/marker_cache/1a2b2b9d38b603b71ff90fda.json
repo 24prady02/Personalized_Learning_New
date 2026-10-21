@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Max-finding loop: initialisation, loop order and comparison", "why": "The answer orders all four lines and fills each blank correctly (a[0], >, i), but it only lists the pieces and never says how they work together or why max ends as the largest value."}

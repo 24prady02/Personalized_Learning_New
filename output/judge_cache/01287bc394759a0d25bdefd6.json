@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "If counts were a double[], the same line p[j] = counts[j] / outDegree; would be fine; with int it gives 0.",
+   "correct": true,
+   "why": "The answer correctly predicts that changing the type from int to double turns the truncating division (which gives 0 here) into a fractional one."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "If counts were a double[], the same line ... would be fine; with int it gives 0",
+   "correct": true,
+   "why": "The answer correctly predicts that swapping the int type for double keeps the fractions that int division throws away."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only quotes counts[j] from the code and says nothing about how indexing works."
+  },
+  {
+   "concept": "normalization",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "with int it gives 0",
+   "correct": true,
+   "why": "The answer finds the silent int-division error, where each count is smaller than outDegree so every entry becomes 0, and gives a fix using a double operand."
+  }
+ ]
+}

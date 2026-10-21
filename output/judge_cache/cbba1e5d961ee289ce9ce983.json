@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "The answer correctly says that an unbraced else belongs to the innermost if, so it does not run when the outer test fails."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+   "correct": true,
+   "why": "For the new input t = 5, it ignores the misleading indentation, pairs the else with the inner if, and correctly concludes that nothing is printed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention continue."
+  }
+ ]
+}

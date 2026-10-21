@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It counts how many times n can be halved before it gets to 1",
+   "correct": true,
+   "why": "The answer connects the update (halving n) to the condition (n > 1), which decides how many passes the loop makes and when it stops."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "It counts how many times n can be halved",
+   "correct": true,
+   "why": "The answer correctly says what c is for: it counts the passes in which n is halved."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Any n from 8 to 15",
+   "correct": true,
+   "why": "Inputs 9 to 15 print 3 only because int / drops the fraction (15→7→3→1), so this range applies integer division correctly, though the answer never says so."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer states no invariant, termination argument or postcondition."
+  }
+ ]
+}

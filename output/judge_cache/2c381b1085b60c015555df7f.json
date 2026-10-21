@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "r <= sum would work the same.",
+   "correct": false,
+   "why": "The answer says < and <= behave the same with no condition, but they give different results when r equals sum exactly (for example r = 0.1 picks a different index), and it gives no boundary reasoning."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about sum being built up as a running total."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "random_move",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "r <= sum would work the same.",
+   "correct": false,
+   "why": "This matches the listed wrong rule that the boundary test can be inclusive or exclusive interchangeably, and it doesn't note that the two differ when r lands exactly on a boundary (the zero-probability case) or answer what next is."
+  }
+ ]
+}

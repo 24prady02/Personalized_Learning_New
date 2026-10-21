@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "break stops the loop completely at 5",
+   "correct": true,
+   "why": "It applies break correctly to this code: at i == 5 the whole loop ends. It is not L3 because the answer never says that both statements skip the rest of the body."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "continue jumps to the next i for the even numbers",
+   "correct": true,
+   "why": "It applies continue correctly to this code's values: the even i are skipped and the loop goes on to the next i. The contrast with break is two separate rules applied side by side, not a stated relation."
+  },
+  {
+   "concept": "labeled_break",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the labeled loop."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the nested loops."
+  }
+ ]
+}

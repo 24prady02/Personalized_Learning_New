@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "main_method",
+   "level": "L0",
+   "way": "diagnose_an_error (contradicted)",
+   "quote": "main() without String[] args is fine because the program uses no arguments.",
+   "correct": false,
+   "why": "A main written as public static void main() still compiles, but java Hello then reports that no main method was found, so it is not fine."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "without String[] args is fine because the program uses no arguments",
+   "correct": false,
+   "why": "The answer treats the String[] args parameter as optional when no arguments are used, but Java requires it in main's header so the program can be launched."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about launching or running the program with java Hello."
+  }
+ ]
+}

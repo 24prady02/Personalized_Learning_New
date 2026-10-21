@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "loop execution and placement of println", "why": "The student wrongly claims the println is inside the loop and prints every total, which contradicts the code where println comes after the loop, and they give neither total after pass three nor the last statement executed."}

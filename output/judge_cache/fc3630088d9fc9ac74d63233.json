@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the input format, the ordered i j pairs, or how the links are read."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention comments."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss how any expression, such as the 90-10 formula, is evaluated or what type it has."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "quote": "the other pages get rank 0",
+   "correct": true,
+   "why": "The answer correctly describes what happens to ranks without the jump, but it never mentions counting visits, freq[], or dividing by T, so it shows no way listed for this concept."
+  }
+ ]
+}

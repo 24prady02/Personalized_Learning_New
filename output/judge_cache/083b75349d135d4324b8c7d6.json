@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It should be int total = 0;",
+   "correct": true,
+   "why": "It uses int correctly in the declaration, but the output 3 comes with no int reasoning or trace."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It should be int total = 0; then it prints 3.",
+   "correct": true,
+   "why": "It finds and fixes the missing initialization before the loop and gives the correct sum 3, but it does not state the broken rule or the compile error, so it is not L4."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int total = 0;",
+   "correct": true,
+   "why": "It writes a correct initializing assignment but never explains or traces how assignment works."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a counter."
+  }
+ ]
+}

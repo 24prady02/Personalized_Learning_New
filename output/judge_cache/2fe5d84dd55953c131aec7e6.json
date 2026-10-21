@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "i = 2: prints 1 2, new line. i = 3: prints 1 2 3, new line.",
+   "correct": true,
+   "why": "Traces each pass and correctly shows the j values printed on one line, each line ended by println, and the run confirms it."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only lists values of i and j and never discusses how = stores a value."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions i++ or j++ or how the counters change."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no 2-D array, and the answer says nothing about row-major or column-major order."
+  }
+ ]
+}

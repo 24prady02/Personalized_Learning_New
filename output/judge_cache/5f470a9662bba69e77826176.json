@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "a = 20, b = 20.",
+   "correct": true,
+   "why": "The final values are right, but the answer gives no reasoning, so the bare result counts only as L1."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "a = 20, b = 20.",
+   "correct": true,
+   "why": "The values for a and b are right, but the answer doesn't explain how they were reached, so it stays at L1."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arrays or aliasing."
+  }
+ ]
+}

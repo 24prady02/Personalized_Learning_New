@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "modulus operator % in an arithmetic expression", "why": "Turn 1 only says '9 mod 5 is added to 26.3' without computing it, and in turn 2 the student answers 3.4 for 17 % 5, which is the quotient 17/5. That treats % as division, not remainder (the correct answer is 2)."}

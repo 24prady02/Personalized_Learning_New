@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "A", "why": "The answer is not a bare output: 'n × n' relates the two nested loops into one closed form (relational), and it then uses that quadratic rule to correctly predict the effect of a changed input (doubling n → 4× the count), which is reasoning about what is conserved across inputs beyond the single given case."}

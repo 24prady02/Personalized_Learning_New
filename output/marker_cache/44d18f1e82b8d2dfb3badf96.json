@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Loop with sentinel 0 and reading input each iteration", "why": "The loop reads and prints each number, but it has no check for 0, so it never stops. The explanation only asserts that it stops at 0, and it gives no account of how the loop gets each new number. So it shows one correct part (readInt inside a loop) without the stopping logic."}

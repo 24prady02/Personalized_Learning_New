@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't say anything about the expression counts[j] / outDegree or what type it has."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions integer division, the actual cause of the all-zero row."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "An all-zero row is fine; it just means the page has no links.",
+   "correct": false,
+   "why": "This states the listed wrong rule that a page with no outgoing links can have an all-zero row; such a row must hold 1/N in every entry. Also, this page has links (outDegree 5)."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "Every row must be a probability distribution that sums to 1, so an all-zero row is not acceptable. This is the listed misconception."
+  }
+ ]
+}

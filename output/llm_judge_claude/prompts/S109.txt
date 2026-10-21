@@ -1,0 +1,170 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What is printed for t = 5?
+
+CODE:
+int t = 25;
+if (t > 10)
+  if (t > 30)
+    System.out.println("hot");
+else
+  System.out.println("cold");
+if (t > 30) System.out.println("A");
+else if (t > 20) System.out.println("B");
+else if (t > 10) System.out.println("C");
+
+STUDENT ANSWER: Nothing at all, because the outer if fails and the else is part of the inner if.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: nested_conditionals
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in prose, indentation and line layout show what belongs to what, and two consecutive 'if' sentences can be heard as one combined condition. The Java compiler ignores indentation: an inner if belongs to the branch tha
+  - misconception: wrong rule: An inner if runs its body whenever its own condition is true, even if the outer if condition is false. 
+  - misconception: wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. 
+  - misconception: wrong rule: The else belongs to the if it is lined up with. 
+  - misconception: wrong rule: Every true branch of an else-if chain runs. 
+  boundary: Any correct, programming-specific statement about nested conditionals makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Nested conditionals are if or if-else statements placed inside a branch of another conditional; an else-if chain is the common special case.
+  - states_the_rule: An if/if-else is a statement, so it can be the body (branch) of another conditional; without braces an else belongs to the innermost if to which it might belong, so braces should be used to resolve ambiguities.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Test the outer condition; only if control enters the branch that contains the inner if is the inner condition tested; after the inner statement, control leaves the outer statement too.
+  - output_prediction: The output is the action of the single path whose conditions all hold along the way: if (a > b) { if (b > c) X; else Y; } else Z; runs X when a > b > c, Y when a > b and b <= c, and Z otherwise.
+  - one_step_execution: One execution evaluates the conditions along one path only (outer, then possibly inner) and applies one leaf action; conditions on other paths are never evaluated.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Nesting puts an if or if-else inside a branch of another if-else; when the inner statement fills the else branch it forms an else-if chain.
+  - relation_to_neighbour: The dangling-else ambiguity arises when ifs are nested without braces: if <e1> if <e2> A else B attaches else to the inner if.
+  - relation_to_neighbour: For more than two mutually exclusive alternatives a chain of if-else statements works, but a switch tests one expression against many values directly.
+  - purpose_of_the_whole: Plan: decision tree - refine a case analysis step by step (e.g. find the smallest of three values, classify a value into ranges).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Combining if (c1) { if (c2) S; } into if (c1 && c2) S; preserves behaviour when there are no else parts; adding or removing braces around an inner if can move an else to a different if. Swapping some branches can keep the specific
+  - transfer_to_a_new_program: Nest conditionals when a second test only makes sense once the first has succeeded or when cases form a tree; use && for a simple conjunction, an else-if chain for mutually exclusive ranges, and a switch for many discrete values; 
+  - diagnose_an_error: rule broken: Without braces an else pairs with the innermost if, whatever the indentation. Kind: silent logic error. Trigger class: if (a) if (b) X; else Y; written with else under the outer if: Y runs when a is true and b false, 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: if_else_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English 'otherwise' can be heard as 'and then also', and 'if ... else ...' as two separate rules that are each checked. In Java the condition is tested once and exactly one of the two branches runs.
+  - misconception: wrong rule: if-else is the same as two separate ifs. 
+  - misconception: wrong rule: The else branch of an if-else statement always executes. 
+  - misconception: wrong rule: Both the then branch and the else branch run. 
+  - misconception: wrong rule: Writes the same statements in both branches of an if-else. 
+  boundary: Any correct, programming-specific statement about if else statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: The if-else statement is a two-way conditional: it executes one of two statements (or blocks) depending on a boolean condition.
+  - states_the_rule: Syntax: if (<boolean expression>) <statements T> else <statements F>; it executes one or the other, but not both: T if the condition is true, F otherwise.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).
+  - output_prediction: Exactly one branch's effects occur; e.g. if (x > y) max = x; else max = y; leaves max equal to the larger value, and the coin flip prints either Heads or Tails, never both.
+  - one_step_execution: One execution reads the condition's variables and applies the effects of exactly one branch; a change made by the then branch to the condition's variables cannot cause the else branch to run.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: if-else is an if with a second branch for the false case; dropping the else gives a plain if in which the false case does nothing.
+  - relation_to_neighbour: Either branch may itself be an if or if-else, which nests conditionals; without braces an inner else pairs with the innermost if.
+  - relation_to_neighbour: c ? a : b is the expression form of if (c) v = a; else v = b;: it yields a value of one branch, evaluating only the selected operand.
+  - relation_to_neighbour: An else-if chain is an if-else whose else part is another if-else, repeated; the final else catches all remaining cases.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Swapping the two branches and negating the condition preserves behaviour; swapping the branches alone inverts it. Replacing if-else with two separate ifs is not equivalent when the then branch changes a variable used in the condit
+  - diagnose_an_error: rule broken: else takes no condition: it is the branch for the false case of the preceding if; a further test needs else if (...). Kind: compile-time. Trigger class: Writing else (x > 0) stmt; the compiler reads (x > 0) as the sta
+  - transfer_to_a_new_program: Use if-else when exactly one of two actions must happen; use a plain if when nothing happens in the false case, an else-if chain or switch for more than two mutually exclusive cases, and c ? a : b when you only need to choose a va
+  - diagnose_an_error: rule broken: Code common to both branches belongs before or after the if-else. Kind: silent logic error. Trigger class: A statement duplicated in both branches and later edited in only one: the two cases silently diverge.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: else_if_chain
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a list of rules 'if A ...; else if B ...' reads like a set of independent rules where every one that applies is followed, in any order. In Java the conditions are tested top to bottom and only the first true branch r
+  - misconception: wrong rule: Java has an elsif keyword for multi-way branches. 
+  - misconception: wrong rule: Every true branch of an else-if chain runs. 
+  - misconception: wrong rule: An else-if chain can finish before it has tested all its conditions, even when no branch has run. 
+  - misconception: wrong rule: The conditions of an else-if chain can be tested in any order (e.g. the matching or most specific one first). 
+  boundary: Any correct, programming-specific statement about else if chain makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: An else-if chain (multiway if-else) is a sequence of if-else statements in which each else is another if, choosing among mutually exclusive possibilities.
+  - states_the_rule: Written if (c1) S1 else if (c2) S2 ... else Sn; the ifs are nested to test from among a number of mutually exclusive possibilities, and the final else needs no condition.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Test c1; if true run S1 and leave the chain; otherwise test c2, and so on; if no condition is true, run the final else (if any); then continue after the chain.
+  - output_prediction: Exactly one branch (or none, without a final else) runs: in the tax example an income of 100000 gives rate .25, because income < 47450 is false and income < 114650 is the first true test.
+  - one_step_execution: One execution evaluates conditions in order until the first true one, applies that branch's changes, and skips all later tests.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An else-if chain is an if-else whose else part is another if-else, so every rule of if-else (one test, one branch) applies at each link.
+  - purpose_of_the_whole: Plan: multiway selection / classification into ranges - pick one category for a value (tax bracket, sign of x, grade).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Reordering the tests preserves behaviour only if the conditions are mutually exclusive; with overlapping, ordered thresholds (income < 47450, < 114650 ...) swapping two tests changes the result. Replacing else if by separate ifs m
+  - transfer_to_a_new_program: Use an else-if chain when exactly one of several mutually exclusive, ordered conditions applies; use separate ifs when several actions may apply, and a switch when testing one expression against many fixed values.
+  - diagnose_an_error: rule broken: Java has no elsif/elif keyword; the chain is written else if. Kind: compile-time. Trigger class: Writing elsif (c) or elif (c): the compiler reports a missing semicolon or unknown symbol.
+  - diagnose_an_error: rule broken: The first true condition wins, so a broader test placed earlier hides later ones. Kind: silent logic error. Trigger class: if (x < 100) ... else if (x < 10) ...: the second branch is unreachable for every input; no co
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: continue_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English 'continue' means carry on with what you are doing, so a novice reads `continue;` as 'keep executing the rest of the body' (no effect) or as 'continue after the loop'. In Java it abandons the rest of the cu
+  - misconception: wrong rule: continue ends the loop. 
+  - misconception: wrong rule: continue means carry on with the rest of the loop body, so it has no effect. 
+  boundary: Any correct, programming-specific statement about continue statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and starts the next one.
+  - states_the_rule: `continue;` may appear only inside a loop. When executed, the rest of the body is skipped. In a for loop control goes to the increment; in a while or do-while it goes to the condition test. (Spec: JLS §14.16.)
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Order after continue in `for (init; test; inc) body`: skip the remaining body statements, execute inc, evaluate test, and run the next pass if it is true. In a while loop there is no separate inc, so control goes directly to the t
+  - output_prediction: continue produces no value. Its effect is on what the loop outputs: `for (int i = 0; i < 5; i++) { if (i % 2 == 0) continue; System.out.print(i); }` prints 13.
+  - one_step_execution: One execution changes no variable; it only moves control to the increment (for) or the test (while). The variables keep their values, and the statements skipped in this pass make no changes.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: In a for loop the increment still runs after continue, so the loop always advances. This is why the for/while equivalence has an exception: in the rewritten while, a continue jumps past the `<increment>;` at the end of the body.
+  - relation_to_neighbour: Both abandon the rest of the body; continue proceeds to the next pass (increment and test), break leaves the loop with no increment or test.
+  - purpose_of_the_whole: Plan: skip/filter plan. It guards the rest of the body against items that should not be processed (e.g. skip non-matching or invalid entries), avoiding a deeply nested if.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Replacing `if (c) continue; rest;` with `if (!c) { rest; }` keeps the behaviour. Moving the continue below the update in a while loop, or the update below the continue, changes whether the loop advances.
+  - transfer_to_a_new_program: Use continue to skip items early in a long loop body when the alternative is a deeply nested if. Avoid it in while loops whose update is at the end of the body, and avoid it when a simple if around the work is clearer. S&W rarely 
+  - diagnose_an_error: rule broken: continue must be inside a loop. Kind: compile-time. Trigger class: `continue;` in a switch or if that is not inside any loop (continue outside of loop).
+  - diagnose_an_error: rule broken: In a while loop continue goes straight to the test, skipping an update placed later in the body. Kind: silent logic error. Trigger class: `while (i < n) { if (skip(i)) continue; ...; i++; }`: once a skipped i is reach
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: nested_conditionals, if_else_statement, else_if_chain, continue_statement.

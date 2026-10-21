@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division in a double assignment", "why": "The student applies the maths rule (2.5) rather than Java's integer division of 5/2 giving 2, and blames the computer instead of explaining the result, so no correct working model is shown."}

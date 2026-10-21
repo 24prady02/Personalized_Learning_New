@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type or double values."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L0",
+   "way": "misconception: An array grows as you add elements.",
+   "quote": "How do I make my array bigger after I create it?",
+   "correct": false,
+   "why": "The question assumes an array can be enlarged after creation, but its length is fixed when it is created."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not use sensorReadings.length to find the next-to-last index, or mention length at all."
+  }
+ ]
+}

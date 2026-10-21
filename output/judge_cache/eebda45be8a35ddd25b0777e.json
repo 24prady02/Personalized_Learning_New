@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L0",
+   "way": "word-for-word transliteration (L2 boundary)",
+   "quote": "for (int j = 1; j <= i; j++); { System.out.printf(\"%d \", j); }",
+   "correct": false,
+   "why": "The answer copies the code back with no output and no explanation, and the added ';' after the for header makes j out of scope in the block."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about separators or handling an item outside the loop."
+  }
+ ]
+}

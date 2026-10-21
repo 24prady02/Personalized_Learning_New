@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "With no breaks, every case falls into default, so result ends as 50.",
+   "correct": true,
+   "why": "The answer says that leaving out break makes cases fall through into default, and uses that to get the result 50, which the run confirms."
+  },
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "falls into default, so result ends as 50",
+   "correct": true,
+   "why": "It assumes the statements after the matching label run in order to the last one, which gives the correct final effect."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "result ends as 50",
+   "correct": true,
+   "why": "It implies that each later assignment replaces the earlier value, so the last one stored (50) is the final value. This is shown only implicitly."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about counting."
+  }
+ ]
+}

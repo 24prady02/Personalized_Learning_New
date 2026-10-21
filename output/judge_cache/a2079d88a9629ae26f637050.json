@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "A (>, i)",
+   "correct": false,
+   "why": "The answer fills the update as max = i, which stores the position i instead of the element a[i], so it treats the index as if it were the stored value."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "B (a[0])",
+   "correct": true,
+   "why": "It declares max with a type and gives it a value before the loop reads it, but it gives no trace of how max changes."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int max = a[0] ... max = i",
+   "correct": true,
+   "why": "Both assignments are written correctly with a single variable on the left, but there is no reasoning about evaluation. The wrong value in max = i is an indexing error, not an assignment error."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer uses a 1-D array and says nothing about row-major or column-major order."
+  }
+ ]
+}

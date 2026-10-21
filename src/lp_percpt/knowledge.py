@@ -14,6 +14,11 @@ comes from this one file:
                      (must be repaired to reach L3)
     neighbours       prerequisite, parallel and R (relation) neighbours
     ladder           the criterion of each concept@L0..L4 learning-level node
+    ways             every way on the concept -> L0..L4 has_level edges: the
+                     way's name, its exact rule (for an L0 way, the wrong
+                     reading it describes), the concepts it requires and the
+                     misconceptions it stands for. The level a prompt reaches
+                     is the highest level whose way the prompt shows (ladder.py).
 
 The only thing not in the graph is the cue lexicon (cues.py), which says how a
 concept shows up in a student's text.
@@ -37,6 +42,10 @@ FACT_RULES = ("N", "S", "LT", "OS", "OP")      # rules_by_type keys that state w
 
 _SENTENCE_RE = re.compile(r"(?<=[.;])(?<!e\.g\.)(?<!i\.e\.)\s+(?=[A-Z0-9(])")
 _STEP_RE = re.compile(r"^\s*\d+\.\s*")
+_RULE_PREFIX_RE = re.compile(r"\b(rule broken|Kind|Trigger class|Plan):\s*", re.I)
+# an L0 way states the wrong reading, then the Java rule it breaks
+_WRONG_PART_RE = re.compile(r"^\s*(?:everyday (?:reading|meaning)|folk meaning|wrong rule)\s*:\s*", re.I)
+_RIGHT_PART_RE = re.compile(r"\b(?:Java rule|Right rule|In Java)\b\s*:?\s*")
 
 
 def _sentences(text: str) -> List[str]:
@@ -57,6 +66,29 @@ class Misconception:
 
 
 @dataclass
+class Way:
+    """One way on a concept -> level has_level edge."""
+    name: str                                   # e.g. output_prediction, relation_to_neighbour
+    level: str                                  # L0..L4
+    rules: List[str]                            # sentences of its exact rule (L0: the wrong reading)
+    right: List[str] = field(default_factory=list)          # L0: the Java rule the reading breaks
+    requires: List[str] = field(default_factory=list)       # requires_concept (relation ways)
+    misconceptions: List[str] = field(default_factory=list)
+
+
+def _way(level: str, w: Dict) -> Way:
+    text = _RULE_PREFIX_RE.sub("", w.get("exact_rule", ""))
+    right: List[str] = []
+    if level == "L0":
+        text = text.split("(here mixing in", 1)[0]
+        parts = _RIGHT_PART_RE.split(_WRONG_PART_RE.sub("", text), maxsplit=1)
+        text, right = parts[0], _sentences(parts[1]) if len(parts) > 1 else []
+    rules = _sentences(text) or ([text.strip()] if text.strip() else [])
+    return Way(w.get("way", ""), level, rules, right, list(w.get("requires_concept") or []),
+               list(w.get("linked_misconception") or []))
+
+
+@dataclass
 class Concept:
     id: str
     label: str
@@ -72,10 +104,19 @@ class Concept:
     parallel: Set[str] = field(default_factory=set)
     related: Set[str] = field(default_factory=set)               # R-rule neighbours
     ladder: Dict[str, str] = field(default_factory=dict)         # level -> per-concept criterion
+    ways: Dict[str, List[Way]] = field(default_factory=dict)       # L0..L4 -> the ways of that has_level edge
+    deciding: Dict[str, str] = field(default_factory=dict)       # level -> the level node's deciding question
 
     @property
     def neighbours(self) -> Set[str]:
         return self.prerequisites | self.leads_to | self.parallel | self.related
+
+    def way_rules(self, level: str) -> List[str]:
+        return list(dict.fromkeys(r for w in self.ways.get(level, []) for r in w.rules))
+
+    def relation_targets(self) -> Set[str]:
+        """The concepts the L3 relation ways relate this concept to."""
+        return {t for w in self.ways.get("L3", []) for t in w.requires}
 
 
 def _word_cues(c: Dict, extra: List[str]) -> List[str]:
@@ -131,6 +172,7 @@ class PercptKnowledge:
         for lv in g["learning_levels"]:
             if lv["concept"] in self.concepts:
                 self.concepts[lv["concept"]].ladder[lv["level"]] = lv.get("criterion", "")
+                self.concepts[lv["concept"]].deciding[lv["level"]] = lv.get("deciding_question", "")
 
         for e in g["edges"]:
             s, t, kind = e["source"], e["target"], e["type"]
@@ -140,6 +182,8 @@ class PercptKnowledge:
             elif kind == "parallel" and s in self.concepts and t in self.concepts:
                 self.concepts[s].parallel.add(t)
                 self.concepts[t].parallel.add(s)
+            elif kind == "has_level" and s in self.concepts and e.get("level") in LEVELS:
+                self.concepts[s].ways[e["level"]] = [_way(e["level"], w) for w in e.get("ways") or []]
             elif kind in ("misconception", "error") and s in self.concepts and t in self.misconceptions:
                 self.concepts[s].misconceptions.add(t)
                 self.misconceptions[t].concepts.add(s)

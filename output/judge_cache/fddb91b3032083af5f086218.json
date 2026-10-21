@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "B (a[0]), D, A (>, a[i])",
+   "correct": true,
+   "why": "Fills in the right accesses for this code: max starts at the first element a[0], and the loop compares and takes a[i] as i moves along the array. No reasoning is given, so it can't go higher."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "B (a[0]), D",
+   "correct": true,
+   "why": "Puts the declaration of max first, before it is used, which is correct but shows no trace or explanation."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A (>, a[i])",
+   "correct": true,
+   "why": "Correctly fills in max = a[i] without tracing values or giving reasons, so this is a bare correct answer."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions 2-D arrays or traversal order."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "none", "concept": "sequential assignment of int variables", "why": "The final values (all 7) are correct, but the answer gives no line-by-line or value-by-value trace, so by the L2 rule it can't be levelled."}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception: assignment empties/moves the source (b becomes 0)",
+   "quote": "a = 20, b = 0, because the 20 moved over to a.",
+   "correct": false,
+   "why": "The student thinks a = b moves the value and leaves b empty. Assignment actually copies the value, so b stays 20."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: a variable loses its value when it is the source of an assignment",
+   "quote": "b = 0, because the 20 moved over to a",
+   "correct": false,
+   "why": "The student thinks reading b in an assignment empties it. Only an assignment to b changes b, so b keeps 20."
+  }
+ ]
+}

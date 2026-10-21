@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "loop bound for in-place array reversal (swap up to the midpoint)", "why": "The answer gives a correct value (2) for one case (4 elements) but gives no general expression like a.length/2, no line-by-line trace, and no explanation of why the loop stops at the midpoint."}

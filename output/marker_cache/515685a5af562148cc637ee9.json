@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "truth conditions of && (and ||)", "why": "The answer applies a wrong rule by saying && is true when only one is true or either is true, which is the rule for ||, and it never addresses when p || q is false."}

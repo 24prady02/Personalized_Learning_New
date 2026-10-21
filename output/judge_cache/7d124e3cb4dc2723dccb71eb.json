@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Line 2 starts best at the first value, so there is something to compare with. Line 3 visits every other element.",
+   "correct": true,
+   "why": "It correctly says that a[0] is the first value and that the loop reaches the remaining elements. It never says that a[i] reaches a different element on each pass, so it does not show the L3 relation."
+  },
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "Line 1 makes the data. Line 2 starts best at the first value... Line 3 visits every other element. Line 4 keeps the smaller one",
+   "correct": true,
+   "why": "It goes through every line in order and gives each line's effect correctly. It does not use any L3 statement relation."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "Line 4 keeps the smaller one, so at the end best is the smallest.",
+   "correct": true,
+   "why": "It applies the conditional correctly to this code: best is updated only when a[i] is smaller. It does not relate the if to else, to a control-flow fork or to while."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about swapping."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "integer division before assignment to double", "why": "The student explains that (2+3)/2 is integer division giving 2 before widening to 2.0, relating the int arithmetic to the double assignment, but doesn't go beyond this code to other inputs."}

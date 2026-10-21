@@ -1,0 +1,151 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Describe what appears in the default window.
+
+CODE:
+StdDraw.square(0.5, 0.5, 0.25);
+StdDraw.point(256, 256);
+
+STUDENT ANSWER: The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: standard_drawing
+L0 Prestructural:
+  - everyday_reading: In geometry a point has no size, and on screens positions are pixels with y pointing down. StdDraw.point(x, y) draws a visible spot (a circle of the pen radius) in user coordinates: the default is the unit square, with (0, 0) at t
+  - misconception: wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. 
+  - misconception: wrong rule: With double buffering on, each drawing command appears on screen immediately. 
+  boundary: Any correct, programming-specific statement about standard drawing makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: StdDraw is a booksite library of static methods for graphical output: lines, points, shapes and text drawn on a 2-D canvas in a window.
+  - states_the_rule: StdDraw models an abstract device that draws lines and points on a two-dimensional canvas. The default scale is the unit square, and methods with no arguments reset to the defaults.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Calls run in program order. Each control command (setXscale, setPenRadius, setPenColor) affects only the drawing commands after it, and each drawing command paints over what is already on the canvas.
+  - output_prediction: The result is a picture in a window, not a value: the methods are void. Triangle's three line() calls and one point() call produce an equilateral triangle with a dot inside.
+  - one_step_execution: One drawing command adds marks to the canvas (shown at once by default). One control command changes the drawing state (scale, pen radius or color) without drawing anything.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: StdIn values can be drawn directly: PlotFilter reads the bounding box, then point coordinates, and calls StdDraw.point for each pair. Both libraries must be downloaded into the program's directory.
+  - relation_to_neighbour: StdOut writes text to a stream, while StdDraw draws in a separate window at (x, y) coordinates. Neither affects the other.
+  - relation_to_neighbour: Animation reuses StdDraw's drawing commands but adds clear() and show(t), which control when the canvas is erased and displayed.
+  - relation_to_neighbour: setXscale and setYscale set the coordinate system that every later StdDraw command uses.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Rescaling the coordinates together with the data keeps the picture. The pen radius is not affected by scaling. Reordering drawing commands changes which mark covers which.
+  - transfer_to_a_new_program: Use StdDraw for simple plots, data visualizations and teaching animations. It is crude compared with production graphics libraries, and exact numeric results belong on standard output.
+  - diagnose_an_error: rule broken: StdDraw.java must be in the working directory or on the classpath. Kind: run-time exception. Trigger class: Running without StdDraw.class available: NoClassDefFoundError: StdDraw (javac reports 'cannot find symbol' if
+  - diagnose_an_error: rule broken: Coordinates must lie inside the current scale to be visible. Kind: silent logic error. Trigger class: Pixel-style coordinates such as (256, 256) with the default unit square: nothing visible is drawn.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: drawing_shapes
+L0 Prestructural:
+  - everyday_reading: In everyday geometry, square(x, y, r) reads as a square with side r, with (x, y) as a corner. In StdDraw, r is the half-side: the square has side 2r and is centred on (x, y). For circles, r is the radius.
+  - misconception: wrong rule: StdDraw.square(x, y, r) draws a square with side length r. 
+  boundary: Any correct, programming-specific statement about drawing shapes makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Shape commands are StdDraw drawing methods: circle, square and polygon, each with a filled version, plus text and pen color.
+  - states_the_rule: A method named after the shape traces its outline, and one whose name begins with filled fills it solid. circle(x, y, r) has radius r and square(x, y, r) has side 2r, both centred on (x, y).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: polygon(x[], y[]) draws a line from point 0 to point 1, then 1 to 2, and so on, and finally from the last point back to point 0. Each shape is drawn in the pen color current at the call.
+  - output_prediction: square(.2, .8, .1) draws an outline square 0.2 wide with corners (.1, .7) and (.3, .9). filledSquare(.8, .8, .2) draws a solid 0.4-wide square. The methods return void.
+  - one_step_execution: A shape call adds one outlined or filled shape in the current pen color. setPenColor only changes the ink used by later calls (the default is BLACK).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Shapes use StdDraw's current coordinate scale, pen radius and color, and paint over earlier marks.
+  - purpose_of_the_whole: Shapes, color and text annotate and highlight drawings, and color can represent data values.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Switching shape(...) to filledShape(...) keeps the geometry and only fills it. A diamond is the polygon of a 2r-by-2r square rotated 45 degrees about the same centre.
+  - transfer_to_a_new_program: Use circle and square (and their filled versions) for those shapes. For any other shape, use polygon or filledPolygon.
+  - diagnose_an_error: rule broken: square's r is the half-length. Kind: silent logic error. Trigger class: Passing the side length as r, so squares come out twice as large and overlap.
+  - diagnose_an_error: rule broken: setPenColor takes a Color constant, not a String. Kind: compile-time. Trigger class: StdDraw.setPenColor("red"): no method accepts a String (use StdDraw.RED).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: empty_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English a semicolon just separates or ends a clause, so 'if (x > 0);' still reads as 'if x is positive, do the next thing'. In Java a lone ; is a complete statement that does nothing, and it becomes the whole body
+  boundary: Any correct, programming-specific statement about empty statement makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: The empty (null) statement is a lone semicolon: a statement that does nothing.
+  - states_the_rule: An empty statement does nothing, and its execution always completes normally; any part of a for loop, including its body, may be left empty, but a while loop is better style than null statements.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Executing ; does nothing and passes control to the next statement; as a loop body it means each pass is just test (then update, for a for loop).
+  - output_prediction: An empty statement produces no value and no output; e.g. for (int v = 1; v <= N/2; v *= 2) ; computes the same final v as the while version, but v is out of scope afterwards.
+  - one_step_execution: One execution changes no variable and returns nothing; only the header parts around it (test, update) change state.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The empty statement can stand wherever a statement is required (if body, loop body, for slots), and a block { } can stand alone; a ; after a header therefore silently becomes the body.
+  - purpose_of_the_whole: Plan: placeholder - an intentionally empty body when the loop header does all the work; the book avoids it and prefers a while loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Deleting a ; that stands right after an if or loop header changes the program: the next statement becomes the body. Adding or removing an extra ; between ordinary statements changes nothing.
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a stat
+  - diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after
+  - transfer_to_a_new_program: Use an empty statement only for a loop whose header does all the work, and comment it; otherwise write { } or restructure as a while loop. Never put ; directly after if (...), while (...) or for (...) by habit.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: coordinate_scaling
+L0 Prestructural:
+  - everyday_reading: Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
+  - misconception: wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. 
+  boundary: Any correct, programming-specific statement about coordinate scaling makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
+  - states_the_rule: setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
+  - output_prediction: After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
+  - one_step_execution: One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+  - relation_to_neighbour: Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+  - purpose_of_the_whole: Scaling matches the drawing to the data, so values can be drawn in their own units.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
+  - transfer_to_a_new_program: Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
+  - diagnose_an_error: rule broken: Data must fall inside the scaled box to be visible. Kind: silent logic error. Trigger class: The scale is not set, or set to the wrong range (e.g. the y-range misses the function's min and max), so parts of the plot f
+  - diagnose_an_error: rule broken: A scale applies only to drawing done after it. Kind: silent logic error. Trigger class: setXscale is called after the points are drawn, so they were placed in unit-square coordinates.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: standard_drawing, drawing_shapes, empty_statement, coordinate_scaling.

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says positive is not printed, but the run output shows it is. They read the code as if the if controlled the println and missed that the stray semicolon is an empty statement. That is a wrong model of how this code runs. The remark that x > 0 is false is true but is only one fact and does not explain the output."}

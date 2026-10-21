@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "Explains that the temporary is needed because an assignment overwrites its target, so order and saving matter."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "a[i] is overwritten before it is saved",
+   "correct": true,
+   "why": "Relates the need for a temporary to assignment destroying the left variable's old value."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "Correctly explains why the array exchange must save a[i] in t before a[i] = a[r]."
+  }
+ ]
+}

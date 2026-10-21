@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The correct blank is a.length/2. With a.length, every pair is swapped twice, so the array ends up unchanged. The student assumes each iteration moves only one element and ignores that each swap fixes two positions. That is a wrong model of the in-place reversal, and the answer has no trace to support it."}

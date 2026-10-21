@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The correct finals are a=7, b=7, c=7, because each assignment copies the current value in sequence. The student's answer (3, 5, 5) matches no consistent reading of assignment. It looks like the values were swapped or moved around, so it shows no working model of assignment, and no reasoning is given."}

@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "for loop accumulating sum of squares", "why": "It describes line 4 and line 5 accurately but doesn't say what the loop range is or what the program computes overall (sum of squares 1..n), so it gives parts without a stated purpose."}

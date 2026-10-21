@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "for loop accumulating sum of squares", "why": "The answer correctly describes the loop's per-iteration action and the pattern 1 + 4 + 9 up to n, but it never states the overall purpose (sum of the first n squares) and doesn't trace the values or the print."}

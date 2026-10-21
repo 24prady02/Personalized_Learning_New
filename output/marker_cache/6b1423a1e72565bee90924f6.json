@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop reading input until sentinel 0", "why": "The loop tests x before it is declared (x is declared inside the body, so it won't compile and the condition never sees the new value), and there is no explanation of how each number is obtained, so the answer shows no working model of the loop/input pattern."}

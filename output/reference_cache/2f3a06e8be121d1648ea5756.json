@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states a correct general definition of a data type (a set of values plus the operations on them). It doesn't apply that definition to the code's types (final double TAX, int a and b, double total) or to their values, so it only states the rule."}

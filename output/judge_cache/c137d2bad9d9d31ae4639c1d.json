@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The real-valued results are correct (.9*1/2+.1/3 ≈ 0.483 and .1/3 ≈ 0.033), but they are given with no reasoning, and a bare result counts as L1."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The values match the 90-10 formula with outDegree 2, but the answer only states them and does not show how the operators were applied, so it is L1."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about promotion, casts or any other type conversion."
+  }
+ ]
+}

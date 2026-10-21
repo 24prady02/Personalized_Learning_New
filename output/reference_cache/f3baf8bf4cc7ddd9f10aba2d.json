@@ -1,0 +1,1 @@
+{"level": "L1", "why": "All eight results are correct, including (b) printing A then B and (h) short-circuiting, but they are almost all bare outputs. Only (h) gives a reason, and that reason is brief. There is no value-by-value tracing, no link to the purpose of the code, and nothing beyond the given code."}

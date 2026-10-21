@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer states one correct aspect of a filter: it reads from standard input and writes to standard output. It doesn't cover the selective copying (only v >= 0), the loop, or how the program sits in the pipe, so it doesn't reach L2 or L3."}

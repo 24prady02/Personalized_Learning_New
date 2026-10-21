@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "nested if-else tracing with % (x=17)", "why": "The answer correctly traces every step in order with values (A, odd so else branch, 17%5==2 gives E, then G) to reach AEG, but it never says what the code is for."}

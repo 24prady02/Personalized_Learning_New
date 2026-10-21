@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Every expression must be fully in parentheses",
+   "correct": false,
+   "why": "The answer claims every expression must be fully parenthesized, but in Java a + b * c is a valid expression without parentheses."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int or any other primitive type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions + or * or what they compute, and gives no value for r."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "otherwise Java guesses the order",
+   "correct": false,
+   "why": "Java does not guess: * binds before +, so a + b * c is 1 + (2 * 3) = 7, and the code is fine."
+  }
+ ]
+}

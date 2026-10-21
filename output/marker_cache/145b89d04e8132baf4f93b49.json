@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "boolean ^ (XOR) operator", "why": "It correctly states the rule of ^ (true when operands differ) but doesn't apply it to the values in the code (n>5 false, n<10 true, so c is true)."}

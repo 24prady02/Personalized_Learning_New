@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "System.out.println(\"pos\");",
+   "correct": true,
+   "why": "The answer copies the println calls from the question but says nothing about how println works."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "if (x > 0) System.out.println(\"pos\");\nelse if (x < 0) System.out.println(\"neg\");\nelse System.out.println(\"zero\");",
+   "correct": true,
+   "why": "The rewrite correctly treats the inner if-else that fills the else branch as an else-if chain, and the run confirms the output is the same for every x tried."
+  },
+  {
+   "concept": "else_if_chain",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "else if (x < 0) System.out.println(\"neg\");\nelse System.out.println(\"zero\");",
+   "correct": true,
+   "why": "The answer turns the nested if-else into an equivalent else-if chain, which shows that the chain is an if-else whose else part is another if-else. Because this adapts familiar code, it is relational rather than L4."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about logic errors."
+  }
+ ]
+}

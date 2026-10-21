@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop reading input until sentinel", "why": "The loop never reads a new value inside the body, so it would print x forever, and the explanation ('the program knows I want the next number') is an everyday meaning rather than the rule that a read statement must be re-executed in the loop."}

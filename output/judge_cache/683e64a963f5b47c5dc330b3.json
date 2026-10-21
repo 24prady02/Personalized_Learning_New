@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "scientific_notation",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "6.02e23 is 6.02 times e to the power 23.",
+   "correct": false,
+   "why": "The answer reads e as Euler's number. In Java, e means times 10 to the power, so 6.02e23 is 6.02 x 10^23."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type or how double arithmetic works."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no correct or incorrect rule about what form or type a literal has. Its only claim is about what e means, and that is graded under scientific_notation."
+  }
+ ]
+}

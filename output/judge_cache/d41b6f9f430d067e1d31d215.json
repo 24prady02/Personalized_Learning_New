@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "idk but I think it prints numbers going down?",
+   "correct": false,
+   "why": "The answer doesn't mention printf, format specifiers or how the output is formatted."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment or how the loop variables are updated."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "idk but I think it prints numbers going down?",
+   "correct": false,
+   "why": "It only guesses vaguely that something is printed, with no rule about println, line ends or exact output."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about escape sequences or newlines."
+  }
+ ]
+}

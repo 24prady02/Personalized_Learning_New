@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "p is 0, 0, 0.4, 0.4, 0.2",
+   "correct": false,
+   "why": "The student assumes counts[j] / outDegree keeps the fraction because p is a double array, but int / int truncates, so the run gives p = [0.0, 0.0, 0.0, 0.0, 0.0]."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks or the loop body."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "diagnose_an_error",
+   "quote": "so it is already a probability row",
+   "correct": false,
+   "why": "The answer calls p a valid probability row when it is all zeros and sums to 0, so it misses the non-stochastic row error and offers no fix."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "The answer sees that the average divides two ints with no double operand, a silent logic error, and fixes it by making the divisor the double 2.0."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Use (a + b) / 2.0 ... 2.0 so the division is not integer division",
+   "correct": true,
+   "why": "The answer finds that sum / n truncates in an average and fixes it by making one operand a double instead of making every variable a double."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "The answer correctly uses parentheses to override precedence so the sum is computed before the division."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about run-time errors."
+  }
+ ]
+}

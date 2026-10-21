@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "post- and pre-increment tracing", "why": "The answer traces each statement in order with values (x++ gives y=5, x becomes 6, ++x makes x=7 and w=7) and states correct final values, but it doesn't say what the code is for or go beyond it."}

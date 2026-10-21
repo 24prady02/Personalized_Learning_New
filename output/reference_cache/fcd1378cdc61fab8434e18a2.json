@@ -1,0 +1,1 @@
+{"level": "L3", "why": "A and C is correct. The student gives one reason that covers the loops: addition order doesn't change a sum, so reversing in A is fine, and C visits every element once. They stay within the given code and don't explain why B fails (it skips a[0] and throws ArrayIndexOutOfBoundsException at a[a.length]), so this is L3, not L4."}

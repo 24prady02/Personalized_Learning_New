@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims that a > b is true when a equals b, reading '>' as 'greater than or equal to'. That contradicts the Java rule, since 2 > 2 is false and the else branch (lines 1, 4, 6) runs. The wrong rule leads to the wrong trace 1, 2, 6."}

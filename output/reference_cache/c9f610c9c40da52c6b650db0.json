@@ -1,0 +1,1 @@
+{"level": "L0", "why": "In (b) the code prints \"AB\", because print(\"B\") sits outside the if and always runs. The student answers \"Only A\" and treats B as the else branch. That is a wrong rule: it reads the second statement as an else that isn't there."}

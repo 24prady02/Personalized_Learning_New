@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer picks C, which is wrong: a[i] / 2 == 0 is integer division, so it is true only for 0 and 1. It reads 'divide by 2' with an everyday meaning and ignores the remainder operator. The correct line is B."}

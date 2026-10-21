@@ -1,0 +1,1 @@
+{"level": "L0", "why": "In Java a local variable has no default value. It is unassigned, and reading it is a compile-time error. The student applies the C rule of a random leftover value, which contradicts Java, so the answer shows no working model of the concept."}

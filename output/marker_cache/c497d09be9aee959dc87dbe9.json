@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "modulus operator (%) in computing num4", "why": "The answer does not know what % does, offers three guesses (30.3, 27.3, 31.3) and none is the correct 30.3 reached by 9%5=4 plus 26.3, so it shows no working model of the rule."}

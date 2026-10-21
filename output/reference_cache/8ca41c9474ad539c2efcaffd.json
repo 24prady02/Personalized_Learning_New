@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The ordering (B, D, A, C) and the blanks (a[0], >, a[i]) are all correct. The answer gives no justification and doesn't trace any values or explain why it works, so a bare correct result stays at L1."}

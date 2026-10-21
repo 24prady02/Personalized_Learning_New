@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "dangling page (page with no outgoing links)", "why": "It correctly identifies page 2 as having no outgoing links, which answers only part (a), and it doesn't address parts (b) to (e)."}

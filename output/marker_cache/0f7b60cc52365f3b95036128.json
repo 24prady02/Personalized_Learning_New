@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "switch fall-through without break", "why": "After the probe the student traces the fall-through value by value (10, 20, 40, 50) and correctly applies it to value 2 to get 50. They don't state the general rule or purpose, so this is a multistructural trace rather than L3."}

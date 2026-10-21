@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop termination / counting halvings", "why": "The answer wrongly claims the loop stops when c reaches 3 and that any n works, ignoring the actual condition n > 1 and the halving of n, so it applies a wrong rule."}

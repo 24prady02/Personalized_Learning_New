@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "The answer treats println as something that assigns a variable, but println only writes the characters in quotes and then a line separator."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how a method is called, its arguments or its return value."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "This is the listed everyday reading: it takes printed text as if it acted on the program and set x, when output changes no variables."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention logic errors."
+  }
+ ]
+}

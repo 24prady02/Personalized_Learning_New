@@ -1,0 +1,466 @@
+{
+ "graph_key": {
+  "S104": [
+   "L3",
+   "relation_to_neighbour: a reason relating double and int ('because double is bigger')"
+  ],
+  "S117": [
+   "L3",
+   "relation_to_neighbour: the reason t is needed ('otherwise a[i] is overwritten')"
+  ],
+  "S126": [
+   "L3",
+   "L4 diagnose boundary: 'Locating and fixing the mistake for one given failing case is L3'"
+  ],
+  "S115": [
+   "L1",
+   "L2 boundary: 'A bare correct output is not levelled'"
+  ],
+  "S128": [
+   "L1",
+   "L2 boundary: 'A bare correct output is not levelled'"
+  ]
+ },
+ "rows": [
+  {
+   "id": "S088",
+   "label": "L2",
+   "graph_label": "L2",
+   "v7": "L1",
+   "judge": "L2",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "There is a Big.class file now, but nothing is printed because the program has not run yet."
+  },
+  {
+   "id": "S089",
+   "label": "L3",
+   "graph_label": "L3",
+   "v7": "L3",
+   "judge": "L4",
+   "fused": "L3",
+   "why": "kept (asked-part / wording rule)",
+   "text": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find."
+  },
+  {
+   "id": "S090",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L3",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "That is the class declaration; it holds everything and must be saved as Hello.java."
+  },
+  {
+   "id": "S091",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "It will not compile: the string has no closing quote, so Java says unclosed string literal."
+  },
+  {
+   "id": "S093",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "judge replaces NLI (misconception refuted)",
+   "text": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division."
+  },
+  {
+   "id": "S094",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "It crashes when it runs, because args is empty and args[0] is out of bounds."
+  },
+  {
+   "id": "S095",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "String; it is a class. The other four are primitive."
+  },
+  {
+   "id": "S096",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "A set of values plus the operations you can do on them."
+  },
+  {
+   "id": "S097",
+   "label": "L2",
+   "graph_label": "L2",
+   "v7": "L2",
+   "judge": "L1",
+   "fused": "L2",
+   "why": "kept (code run)",
+   "text": "67, a tab, C; then A12; then 662."
+  },
+  {
+   "id": "S098",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L3",
+   "judge": "L2",
+   "fused": "L2",
+   "why": "judge replaces relation cue rule",
+   "text": "Still -2147483648, because +2147483648 does not fit in an int."
+  },
+  {
+   "id": "S101",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "It gives true when the two sides are different."
+  },
+  {
+   "id": "S103",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "It does not compile, since round gives a long."
+  },
+  {
+   "id": "S104",
+   "label": "L1",
+   "graph_label": "L3",
+   "v7": "L4",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "judge replaces NLI (way rule)",
+   "text": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)."
+  },
+  {
+   "id": "S106",
+   "label": "L2",
+   "graph_label": "L2",
+   "v7": "L2",
+   "judge": "L2",
+   "fused": "L2",
+   "why": "kept (code run)",
+   "text": "score gets 42, the if test is false so pass is skipped, then done is printed."
+  },
+  {
+   "id": "S108",
+   "label": "L2",
+   "graph_label": "L2",
+   "v7": "L3",
+   "judge": "L2",
+   "fused": "L2",
+   "why": "judge replaces relation cue rule",
+   "text": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7."
+  },
+  {
+   "id": "S109",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L3",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "Nothing at all, because the outer if fails and the else is part of the inner if."
+  },
+  {
+   "id": "S110",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "sum builds a total, count counts."
+  },
+  {
+   "id": "S111",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying."
+  },
+  {
+   "id": "S112",
+   "label": "L3",
+   "graph_label": "L3",
+   "v7": "L4",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "judge replaces NLI (misconception refuted)",
+   "text": "continue jumps to the next i for the even numbers, break stops the loop completely at 5."
+  },
+  {
+   "id": "S113",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "A loop that never stops because its condition stays true."
+  },
+  {
+   "id": "S114",
+   "label": "L3",
+   "graph_label": "L3",
+   "v7": "L3",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "kept (asked-part / wording rule)",
+   "text": "new fills the array with 0s, but a local variable has no value until you give it one."
+  },
+  {
+   "id": "S115",
+   "label": "L2",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L2",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "Something like [I@ and a hex code, not the numbers."
+  },
+  {
+   "id": "S116",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L2",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "judge replaces NLI (fact)",
+   "text": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;"
+  },
+  {
+   "id": "S117",
+   "label": "L1",
+   "graph_label": "L3",
+   "v7": "L3",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "kept (asked-part / wording rule)",
+   "text": "Otherwise a[i] is overwritten before it is saved."
+  },
+  {
+   "id": "S118",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L3",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "It is a table to look up a month name from its number."
+  },
+  {
+   "id": "S119",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L3",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "It marks whether k is not prime; everything starts as false."
+  },
+  {
+   "id": "S120",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": null,
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "No, b times a is 3 4 / 1 2, so the order matters."
+  },
+  {
+   "id": "S121",
+   "label": "L2",
+   "graph_label": "L2",
+   "v7": "L2",
+   "judge": "L1",
+   "fused": "L2",
+   "why": "kept (code run)",
+   "text": "42, an empty string, and \"Ann Lee\"."
+  },
+  {
+   "id": "S122",
+   "label": "L3",
+   "graph_label": "L3",
+   "v7": "L4",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "judge replaces NLI (way rule)",
+   "text": "readInt takes 42 but not the Enter, so readLine just finishes that line."
+  },
+  {
+   "id": "S123",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L1",
+   "judge": "L3",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "No, the user decides each time, while it is running."
+  },
+  {
+   "id": "S124",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "It reads from standard input and writes to standard output."
+  },
+  {
+   "id": "S125",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": "L4",
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "The circles are never erased, so you get a trail."
+  },
+  {
+   "id": "S126",
+   "label": "L4",
+   "graph_label": "L3",
+   "v7": "L1",
+   "judge": "L3",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "You need System.exit(0) at the end of main."
+  },
+  {
+   "id": "S127",
+   "label": "L1",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "Page 2, it links nowhere."
+  },
+  {
+   "id": "S128",
+   "label": "L2",
+   "graph_label": "L1",
+   "v7": "L1",
+   "judge": "L1",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "About 0.48, 0.03, 0.48."
+  },
+  {
+   "id": "S129",
+   "label": "L4",
+   "graph_label": "L4",
+   "v7": "L4",
+   "judge": null,
+   "fused": "L4",
+   "why": "kept (asked-part / wording rule)",
+   "text": "The surfer gets trapped in that group and the other pages get rank 0."
+  },
+  {
+   "id": "S132",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L0",
+   "judge": "L0",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value."
+  },
+  {
+   "id": "S133",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L2",
+   "judge": "L0",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "int c; declares c, so c is 0."
+  },
+  {
+   "id": "S134",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L2",
+   "judge": "L2",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b."
+  },
+  {
+   "id": "S135",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L2",
+   "judge": "L0",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "You could write b as !(5 < n < 10)."
+  },
+  {
+   "id": "S136",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L1",
+   "judge": "L4",
+   "fused": "L1",
+   "why": "kept (similarity (E1))",
+   "text": "isDone = (i % 5 == 0); would do the same as the if."
+  },
+  {
+   "id": "S137",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L2",
+   "judge": "L0",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "System.out.println(\"x is 5\"); sets x to 5."
+  },
+  {
+   "id": "S138",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L2",
+   "judge": "L3",
+   "fused": "L3",
+   "why": "judge replaces NLI (fact)",
+   "text": "Add v to sum first, then check if it was negative and subtract it again."
+  },
+  {
+   "id": "S139",
+   "label": "L0",
+   "graph_label": "L0",
+   "v7": "L1",
+   "judge": "L2",
+   "fused": "L0",
+   "why": "judge or code run: wrong rule (L0 way)",
+   "text": "The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle."
+  }
+ ]
+}

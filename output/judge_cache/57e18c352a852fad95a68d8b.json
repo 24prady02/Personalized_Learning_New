@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "bare result (no reasoning)",
+   "quote": "Why are my first two sentences on the same line?",
+   "correct": true,
+   "why": "It correctly notes that the first two strings appear on one line, but it asks why instead of explaining that print does not end the line, so it is a bare result."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions println ending the line or the third string going onto a new line."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no array exchange and the answer does not mention one."
+  }
+ ]
+}

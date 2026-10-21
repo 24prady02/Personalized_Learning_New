@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't mention i++ or what it does."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "Line 2, it should be i < 3.",
+   "correct": false,
+   "why": "The answer only talks about the loop condition and says nothing about statements or the order they run in. Its fix is also wrong: i < 3 would print 2, and the real bug is line 3 (sum = i should be sum += i)."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about println or the output."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "There is no array exchange in this code or in the answer."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"overall": "L3", "concepts": [{"concept": "println", "level": "L3", "way": "relation_to_neighbour", "quote": "porque solo println cambia de línea", "correct": true, "why": "Correctly predicts the two output lines for this code and explains them by relating print (stays on the line) to println (ends the line), i.e. print followed by println makes one line."}]}

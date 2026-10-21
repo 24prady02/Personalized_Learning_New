@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no rule about print or println. Its error comes from how the loop runs, not from printing."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how the loop variable is set, tested and updated. Its wrong claim is about when a while loop exits, so it is graded under while_loop."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "misconception: The loop stops the moment the condition becomes false, even in the middle of the body.",
+   "quote": "When n becomes 4 the loop stops before the print.",
+   "correct": false,
+   "why": "Java only checks the condition before each pass, so the pass that sets n to 4 still prints 4 and the output is \"2 4 \", not \"2\"."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never states a fact that holds on every pass, or a reason the loop ends."
+  }
+ ]
+}

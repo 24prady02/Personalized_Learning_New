@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "array as lookup table (months)", "why": "It states the purpose of months correctly but doesn't trace the code, such as the m - 1 index or the value printed."}

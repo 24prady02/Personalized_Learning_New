@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer does not give an if / else if / else chain as asked. `switch (x) { case > 0: … }` is also not valid Java for an int `x`, because a relational test can't be used as a case label. It shows no working model of the construct, and it leaves out the neg and zero branches."}

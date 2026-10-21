@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "System.out.println(x);",
+   "correct": true,
+   "why": "The answer uses println correctly to print each value on its own line but never explains what println does."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "{ int x = StdIn.readInt(); System.out.println(x); }",
+   "correct": true,
+   "why": "Placing StdIn.readInt() inside the loop body means each pass reads a new token, which correctly links the input stream to the loop; no explanation is given."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "while (x != 0) { int x = StdIn.readInt(); ... }",
+   "correct": false,
+   "why": "The condition is tested before the first pass, but x is declared only inside the body, so the condition cannot use it and the code does not compile."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the graph input format."
+  }
+ ]
+}

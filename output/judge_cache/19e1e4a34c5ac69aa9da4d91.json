@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "because count goes over 3 in the loop and the if fires",
+   "correct": false,
+   "why": "The answer treats the if as a standing rule that fires later, but a Java if is tested only once, when count is 0, so \"big\" is never printed."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "and then 5",
+   "correct": true,
+   "why": "The answer gets the final count of 5 right, but it gives no trace of the increments, so it is a bare result."
+  },
+  {
+   "concept": "flag_search_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention a boolean flag or a search loop."
+  }
+ ]
+}

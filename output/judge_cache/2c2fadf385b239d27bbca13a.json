@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "10 % 5 is 0 so isDone becomes true",
+   "correct": true,
+   "why": "The answer works out % on this code's value and uses the result to set isDone, and the run confirms it."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 1 4 7 10 13… no wait, it stops after 10",
+   "correct": true,
+   "why": "It predicts the values printed in order up to 10 and gives a reason for where they stop, so this is more than a bare output."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "10 % 5 is 0 so isDone becomes true before the next test",
+   "correct": true,
+   "why": "It evaluates the condition expression on the current value and gives the right result, but it does not explain how the parts relate in general."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about user input."
+  }
+ ]
+}

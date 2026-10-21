@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "lookup_table",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "It is a table to look up a month name from its number.",
+   "correct": true,
+   "why": "In one sentence the answer gives the right role of the whole array: a fixed table that turns a month number into its name, which the code does with months[m - 1]."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions array access, index values or bounds, so it shows nothing about indexing."
+  }
+ ]
+}

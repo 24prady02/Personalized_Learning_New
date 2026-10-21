@@ -1,0 +1,1 @@
+{"level": "none", "concept": "char arithmetic, casting and string concatenation order", "why": "All three printed lines are correct (67, tab, C; A12; 662), but the answer gives only the output with no value-by-value justification, so by the L2 rule it can't be levelled."}

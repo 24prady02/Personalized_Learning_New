@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "for loop accumulating into a local variable (total += i), and the uninitialized variable", "why": "The answer treats the loop as printing each i, although println sits outside the loop and prints total once. It also misses that total is never initialised, so the code does not compile. That means it applies a wrong rule rather than tracing the code."}

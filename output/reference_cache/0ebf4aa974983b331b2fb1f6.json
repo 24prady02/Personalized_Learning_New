@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a calculator/maths rule, saying 2/5 gives 0.4. In Java, int/int is integer division, so 2/5 is 0. That wrong rule leads the student to miss that p holds all zeros, so it isn't a probability row. They also give no fix and don't trace the loop."}

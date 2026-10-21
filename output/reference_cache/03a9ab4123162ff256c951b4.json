@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer correctly states the rule: `new` gives array elements default values (0), and a local variable has no value until it is assigned. It doesn't apply the rule to this code's values (`a[0]` is 0, `seen[2]` is false, `empty` has no elements). It also doesn't mention that the compiler rejects reading an unassigned local."}

@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer correctly keeps the counter (A), the positive test (C) and the print (E), and it leaves out G. But it uses both loop headers B and F, which nests the loops. That redeclares `i`, which won't compile. The `<=` loop would also run past the end of the array. It gives no explanation of why lines were left out, so only part of the task is met."}

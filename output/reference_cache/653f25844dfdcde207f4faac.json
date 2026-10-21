@@ -1,0 +1,1 @@
+{"level": "L1", "why": "All three lines are correct (67, tab, C; A12; 662). The student gives only the result, with no justification for the char-to-int promotion or the left-to-right + evaluation. A bare correct output is L1."}

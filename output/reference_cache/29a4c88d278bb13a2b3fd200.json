@@ -1,0 +1,1 @@
+{"level": "L2", "pick": "A", "why": "The answer traces the given code line by line with the values (a > b false, else body runs line 4, then line 6), which is applying the rule to this code's lines in order with justification; it does not relate the if/else to another construct or state the purpose of the whole, so it is L2, not L3."}

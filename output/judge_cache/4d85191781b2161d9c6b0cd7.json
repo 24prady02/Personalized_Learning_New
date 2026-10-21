@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "The loop also sorts the array so that best ends up first.",
+   "correct": false,
+   "why": "The loop only reads a[i] and updates best. It never writes to the array, so it does not sort it. That wrong rule about what the traversal does is L0."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the init, the test or the update of the loop variable."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer mentions 'the loop' but says nothing about how a for statement works or about its header."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no 2-D array and the answer does not talk about row or column order."
+  }
+ ]
+}

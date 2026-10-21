@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer correctly sums up the whole loop in one sentence. It steps by 3, and it stops after the pass where i is a multiple of 5 (i=10), because the flag is set and then the loop condition fails. This links the increment to the flag condition, but it never lists the output or traces values."}

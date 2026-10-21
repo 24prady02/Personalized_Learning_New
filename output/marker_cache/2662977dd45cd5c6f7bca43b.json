@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "while loop trace of x and y (running sum)", "why": "The trace is correct and lists the x and y values at each step, ending with 6, but it never says what the code is for (summing 3+2+1)."}

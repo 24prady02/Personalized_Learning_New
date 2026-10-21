@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says a holds both 10 and 20, so they treat a variable as keeping its old value after assignment. In Java, a = b overwrites a, so a is 20 and b is 20. The rule they apply contradicts Java, even though their value for b is right."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "correct": true,
+   "why": "The answer says to compile often during small changes so that each error is found close to its cause, which is the L4 transfer way."
+  },
+  {
+   "concept": "incremental_development",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "each error is next to the code you just wrote, so it is easy to find",
+   "correct": true,
+   "why": "The answer links small steps to local debugging, where the newest code is the first suspect. It does not go on to diagnose the 37-error case as a broken rule, so it reaches L3 but not L4."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about reading or interpreting error messages."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote",
+   "correct": true,
+   "why": "The answer only implies that compiling finds errors in the source. It does not relate this to messages, the .class file or the 37 errors."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "role of max (running maximum) and i", "why": "It describes only max, and loosely and wrongly claims it already holds the array's maximum after the first line. It says nothing about i or the loop. The one correct point is that max starts at a[0]."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student only rewrites a fragment of the code with a stray semicolon after the inner for header, and gives neither the output nor an explanation. That semicolon changes the meaning of the loop, so this is a copy with a mistake, not an interpretation."}

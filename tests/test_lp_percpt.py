@@ -59,9 +59,17 @@ def test_walk_climbs_while_requirements_met():
     assert walk(checks(MET, MET, MET, MET), set()).level == 4
 
 
-def test_walk_stops_at_first_unmet_requirement():
-    r = walk(checks(MET, NOT_MET, MET, MET), set())
-    assert r.level == 1 and "E2" in r.stop_reason
+def test_walk_reaches_highest_way_shown():
+    # an L4 way (e.g. diagnose_an_error) counts without the code also being retraced
+    r = walk(checks(MET, NOT_MET, MET, MET), set(), {4: "L4 diagnose_an_error"})
+    assert r.level == 4 and "diagnose_an_error" in r.stop_reason
+
+
+def test_walk_l0_way():
+    # an L0 way puts the prompt at L0 unless a correct way above L1 is also shown
+    assert walk(checks(MET), set(), l0_way="everyday_reading").level == 0
+    assert walk(checks(MET, MET, MET), set(), l0_way="inconsistent_trace").level == 0
+    assert walk(checks(MET, MET, MET), set(), l0_way="misconception (X)").level == 3
 
 
 def test_walk_ambiguity_stays_lower():                       # G15
@@ -186,6 +194,38 @@ def test_graph_round_trip():
     assert g2.nodes[WHILE].level == 2 and g2.nodes[WHILE].held == {"IfIsLoop"}
 
 
+# ── claims checked against a run (no Java needed: hand-made runs) ──────────
+def test_claims_checked_against_run():
+    from src.lp_percpt.claims import check, extract
+    from src.lp_percpt.execution import Run
+    run = Run(True, output="8, 10, 12, 13, ", values={"a": ["10", "20"], "b": ["20"]},
+              lines=[1, 3, 4, 6], passes={1: 5})
+    names = {"a", "b"}
+
+    def verdicts(text, final=False):
+        return [check(c, run) for c in extract(text, names, final_default=final)]
+    assert verdicts("a = 20, b = 20.", final=True) == [True, True]
+    assert verdicts("a = 10, b = 10.", final=True) == [False, False]   # first value, not the new one
+    assert verdicts("it prints 8, 10, 12") == [True]
+    assert verdicts("it prints 8, 9, 12") == [False]
+    assert verdicts("the loop runs 5 times") == [True]
+    assert verdicts("lines 1, 3, 4 and 6 run") == [True]
+    assert verdicts("lines 1, 2 and 6 run") == [False]
+    assert verdicts("the loop never ends") == [False]
+
+
+def test_misconception_named_by_its_run():
+    from src.lp_percpt.claims import check, extract
+    from src.lp_percpt.execution import Run
+    real = Run(True, values={"a": ["10", "20"], "b": ["20"]})
+    mutants = {"AssignmentOppositeDirection": Run(True, values={"a": ["10"], "b": ["20", "10"]}),
+               "AssignmentAddsToTarget": Run(True, values={"a": ["10", "30"], "b": ["20"]})}
+    claims = extract("a = 10, b = 10.", {"a", "b"}, final_default=True)
+    assert any(check(c, real) is False for c in claims)
+    explained = [m for m, r in mutants.items() if all(check(c, r) for c in claims)]
+    assert explained == ["AssignmentOppositeDirection"]
+
+
 # ── integration: real models ────────────────────────────────────────────────
 def _models_ok():
     try:
@@ -209,9 +249,10 @@ def test_engine_end_to_end(tmp_path):
     r = eng.process("s", "my loop never stops")
     assert level(r, LOOP_CONTROL)["prompt_level"] == "L1"           # symptom report
 
+    # the rule stated without applying it to any code is L1 (the graph's "states the rule" way)
     r = eng.process("s", "the while loop checks the condition before every pass and the body repeats while it is true")
     c = level(r, WHILE)
-    assert c["prompt_level"] == "L2" and "IfIsLoop" not in c["held"]      # best-match principle
+    assert c["prompt_level"] == "L1" and "IfIsLoop" not in c["held"]      # best-match principle
 
     r = eng.process("s", "i is never incremented so the condition i < 10 stays true and the loop "
                          "never ends because the loop variable does not change")
@@ -219,6 +260,7 @@ def test_engine_end_to_end(tmp_path):
 
     r = eng.process("s", "I used == to compare two strings and it says false even though they are the same text")
     c = level(r, "comparison_operators")
-    assert c["prompt_level"] == "L1" and "EqualityOperatorComparesObjectsValues" in c["held"]
+    # a held misconception with nothing correct above L1 is the graph's L0 misconception way
+    assert c["prompt_level"] == "L0" and "EqualityOperatorComparesObjectsValues" in c["held"]
 
     assert (tmp_path / "maps" / "s.html").exists()

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The output is correct, with the line break placed after the println text, but the student gives no reasoning, and a bare result is L1."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the methods are called or what they return."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never explains that statements run one at a time in order; it only gives the output."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention output being added to the end of one stream."
+  }
+ ]
+}

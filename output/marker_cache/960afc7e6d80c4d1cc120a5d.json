@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested for loop tracing and output of printf/println", "why": "The answer gives only a vague guess ('a triangle going down', 'a few', 'maybe nothing, maybe a line') with no trace of the loops or values, and it is unsure whether println runs when i is 0. That shows no working model of the loop rules."}

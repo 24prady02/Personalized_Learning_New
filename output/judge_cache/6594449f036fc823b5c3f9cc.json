@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "variable — assignment — expression — value",
+   "correct": true,
+   "why": "The answer places assignment between variable and expression, which matches its role, but it never says how they relate (for example, that the expression's value is stored in the variable)."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "expression — value",
+   "correct": true,
+   "why": "Linking expression to value fits the idea that an expression produces a value, but this is only a bare link with no stated rule or relation."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "variable — assignment",
+   "correct": true,
+   "why": "The answer names variable and links it to assignment without labelling the link, so it shows no relation (for example, that assignment changes a variable)."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention chained assignment."
+  }
+ ]
+}

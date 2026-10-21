@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "javac points to the line after my mistake",
+   "correct": true,
+   "why": "The answer correctly treats javac as the compiler that reports a mistake, but it doesn't apply the compile rules to this code (no .class file, file-name mismatch)."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about running the program, args[1] or which lines never execute."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention the Hello.java/Greeting name mismatch or the comment line."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "javac points to the line after my mistake. Is javac wrong?",
+   "correct": true,
+   "why": "The student sees that the reported line can differ from the mistake's line, but asks whether javac is wrong instead of explaining that the reported line is where javac noticed the problem, so this isn't L4 diagnosis."
+  }
+ ]
+}

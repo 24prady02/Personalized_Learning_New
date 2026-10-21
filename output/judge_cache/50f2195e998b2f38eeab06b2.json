@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about statements or the order they run in. It only reports what happened when the student ran the code."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop's block or about which statements repeat."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "8 printed 3",
+   "correct": true,
+   "why": "8 is a correct input (8→4→2→1 gives c=3), but the student found it by running the code, not by reasoning, so this bare result is only L1."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no simulation loop in this code, and the answer does not mention one."
+  }
+ ]
+}

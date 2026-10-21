@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The trace is correct and follows every iteration in order: x goes 2, 1, 0 and y goes 3, 5, 6. It is a value-by-value trace with no statement of what the code is for (it sums 3+2+1), so it stays at L2."}

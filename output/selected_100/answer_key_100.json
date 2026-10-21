@@ -1,0 +1,602 @@
+[
+ {
+  "id": "S001",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S002",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S004",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S005",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S007",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S008",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S009",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S010",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S012",
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S013",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S014",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S015",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S016",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S017",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S020",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S021",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S022",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S023",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S026",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "none"
+ },
+ {
+  "id": "S028",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S034",
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S036",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S037",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S038",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S039",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S041",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S042",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "none"
+ },
+ {
+  "id": "S043",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S047",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S048",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S049",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S050",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S051",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S052",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S054",
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S057",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S060",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S061",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S065",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S068",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S069",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S073",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S076",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S080",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S084",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S088",
+  "level": "L2",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S089",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S091",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S092",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S093",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S094",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S095",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S097",
+  "level": "L2",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S098",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S099",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S100",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S101",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S103",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S104",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S106",
+  "level": "L2",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S107",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S108",
+  "level": "L2",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S109",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S110",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S111",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S112",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S113",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S114",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S115",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S116",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S117",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L3"
+ },
+ {
+  "id": "S118",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S119",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S120",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S121",
+  "level": "L2",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S122",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S123",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S124",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S125",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S126",
+  "level": "L3",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S127",
+  "level": "L1",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S129",
+  "level": "L4",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S132",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S133",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S134",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S135",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S136",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S137",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S138",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S139",
+  "level": "L0",
+  "level_by": "workbook (LLM)",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S140",
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S141",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S142",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S143",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S145",
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S149",
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4"
+ },
+ {
+  "id": "S150",
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L2"
+ },
+ {
+  "id": "S156",
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1"
+ },
+ {
+  "id": "S164",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L0"
+ },
+ {
+  "id": "S169",
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3"
+ }
+]

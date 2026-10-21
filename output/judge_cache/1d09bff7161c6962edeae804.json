@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "System.out.printf(\"%d \", i);",
+   "correct": false,
+   "why": "The answer only copies the code word for word and gives no output or meaning, so it is a transliteration with no interpretation (Chen score 0)."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "do { ... } while (i >= 70);",
+   "correct": false,
+   "why": "The loop code is repeated as written, with no trace, output or explanation, so it is a transliteration with no interpretation."
+  },
+  {
+   "concept": "int",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "int i = 81;",
+   "correct": false,
+   "why": "The answer copies the code and never evaluates i % 2 or any int value, so it is a transliteration with no interpretation."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about separators or handling one item outside the loop."
+  }
+ ]
+}

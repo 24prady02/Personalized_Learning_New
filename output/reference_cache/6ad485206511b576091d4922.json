@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The answer makes a claim, so it is levelled, and the claim is false: p starts at 1 (odd) when the condition is first tested, so 'p is always even' is not a working invariant but a wrong rule, with no trace of values or reason for termination."}

@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer is correct that A and B always leave y the same. It checks each case (x>0, x==0, x<0) with the resulting values, which is a complete multistructural trace. It doesn't say why the two forms are equivalent, for example that B's nested ternary splits x>=0 into the same two branches as A's else-if, so it stays at L2."}

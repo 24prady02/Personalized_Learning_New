@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says x ends as 3 because 'the if keeps adding 1 while x < 3'. That treats `if` as a loop. In Java the `if` runs once, so x ends as 1. This is a wrong rule for the construct, so it is L0."}

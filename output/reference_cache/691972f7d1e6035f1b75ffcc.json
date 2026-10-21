@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student added only indentation and no braces. They seem to think indentation puts println() inside the outer loop, but Java ignores indentation. The outer loop's body is still just the inner for, so println runs once at the end and the output is still ******. This is a wrong rule for what a loop body is."}

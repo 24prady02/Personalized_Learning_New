@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer correctly says A prints first and that the odd branch runs, but it never traces the inner condition (17 % 5 == 2) or names E and G. It gives one correct part and no values, so it stays at L1."}

@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Random surfer estimates vs. long-run page rank, start independence", "why": "The answer relates the finite-run estimate to the long-run limit and says the start page doesn't matter, which goes beyond the code to a general principle, but it makes a mistake by mentioning 'zeros' that don't appear in the output, so it isn't a clean L4."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says the update i++ runs before the body, which is wrong: in a Java for loop the update runs after the body. The student also accepts that the body runs with i = 3, but the condition 3 < 3 is false, so 3 is never printed. The output 012 shows this. The answer is built on a wrong loop rule, so it is L0."}

@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "switch fall-through without break", "why": "It gives the correct fall-through rule and the correct result of 50, but it doesn't trace value 2 through cases 2, 3, 4 and default, so it only states the rule."}

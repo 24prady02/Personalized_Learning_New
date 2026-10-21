@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The logic is right: value==1, then 2||3, then else. But 'elif' is Python, not Java, so it won't compile. The answer mixes in a rule from another language, so it doesn't show a working model of Java's if-else-if."}

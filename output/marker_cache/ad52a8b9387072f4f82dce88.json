@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "short-circuit evaluation of && in an if condition", "why": "The answer applies a wrong rule by claiming 10 / 0 is computed, when n != 0 is false and && short-circuits, so nothing is printed and there is no crash."}

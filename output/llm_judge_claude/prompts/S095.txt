@@ -1,0 +1,162 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Which of int, double, boolean, char, String is not a primitive type?
+
+CODE:
+final double TAX = 0.08;
+int a, b;
+a = b = 5;
+double total = a * 2 + 1.5;
+total = total + total * TAX;
+
+STUDENT ANSWER: String; it is a class. The other four are primitive.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: primitive_type
+L0 Prestructural:
+  - everyday_reading: In English 'primitive' means crude or old-fashioned, which suggests these are a lesser type or that anything simple-looking (String) is primitive. In Java a primitive type is one of eight types predefined by the language and named
+  - misconception: wrong rule: String is a primitive type like int. 
+  - misconception: wrong rule: The slots of a new int[n] hold unpredictable values until assigned. 
+  boundary: Any correct, programming-specific statement about primitive type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Primitive type: one of Java's eight built-in data types (boolean, char, byte, short, int, long, float, double). Its values are simple values, not objects.
+  - states_the_rule: byte, short, int and long are 8/16/32/64-bit signed two's-complement integers. char is 16-bit unsigned. float and double are IEEE 754 32-bit and 64-bit. boolean has exactly the values true and false. The other four primitive types
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: In an expression over primitives, the left operand is evaluated, then the right one. Both are then promoted to a common type (at least int, or long or double if either operand has that type), and the operator is applied in that ty
+  - output_prediction: The result is a primitive value whose type comes from promotion: byte, short, char and int combinations give int, any long operand gives long, and any double operand gives double (e.g. 'a' + 1 is int 98, 1 + 2L is long 3, 1 + 2.0 
+  - one_step_execution: Assigning to a primitive variable copies the value into it. After int b = a; a = 3;, b still holds the old value because nothing is shared (unlike array references).
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: How a literal is written fixes its primitive type (1234 int, 3.14 double, true boolean, 'c' char), and it must fit the primitive type of the variable it initializes.
+  - relation_to_neighbour: Between numeric primitive types, widening (int to double) happens automatically, while narrowing (double to int) needs a cast that drops information. boolean converts to no numeric type.
+  - relation_to_neighbour: Each primitive type is a data type: a fixed set of values plus the operators defined for them.
+  - relation_to_neighbour: int is the 32-bit signed integral primitive. Arithmetic on byte, short and char is also carried out in int.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks 
+  - transfer_to_a_new_program: Use a primitive type for a single numeric, character or true/false value. Use String for text, arrays for collections, BigInteger for integers beyond long, and int cents rather than double when money must be exact.
+  - diagnose_an_error: rule broken: A narrowing primitive conversion needs an explicit cast. Kind: compile-time. Trigger class: Storing a double or long value in an int (or an int in a char) without a cast: 'possible lossy conversion'.
+  - diagnose_an_error: rule broken: Integer primitives have fixed ranges and integer operators do not report overflow. Kind: silent logic error. Trigger class: Any int or long result outside the type's range (large products, factorials): the stored valu
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: string_type
+L0 Prestructural:
+  - everyday_reading: In everyday writing, quotes only mark words, "10" is the number ten, and two texts are 'equal' when they read the same. In Java a String is an object reached through a reference: "10" is text, + concatenates, and == compares refer
+  - misconception: wrong rule: a string literal isn't a String object until the constructor is called. 
+  - misconception: wrong rule: .equals() compares references, not contents. 
+  - misconception: wrong rule: "10" - 1 or "6" * "2" works because the strings look like numbers. 
+  - misconception: wrong rule: String is a primitive type like int. 
+  boundary: Any correct, programming-specific statement about string type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: String: Java's built-in non-primitive (reference) type for a sequence of characters.
+  - states_the_rule: A String literal is characters in double quotes and denotes a String object. + concatenates. Contents are compared with equals, not ==. < and > are not defined for Strings, and Strings are immutable.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: A String expression is evaluated left to right. At each + with a String operand, the other operand is converted to a String and a new String object is made. Methods such as toUpperCase return a new String and leave the original un
+  - output_prediction: "Hi, " + "Bob" is "Hi, Bob" and "1234" + "99" is "123499". s.equals(t) is true exactly when the characters match, while "abc" == "ab" + x can be false for x = "c".
+  - one_step_execution: No operation changes an existing String. s = s + "x" makes s refer to a new String, and other variables still referring to the old one are unaffected.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: + produces a new String whenever at least one operand is a String; the other operand is converted to text first.
+  - relation_to_neighbour: 'a' is a char (one 16-bit character code, a primitive); "a" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while "a" + "b" is "ab".
+  - purpose_of_the_whole: Strings handle all text: messages, labels, formatted output and command-line arguments (args[] are Strings and must be parsed before arithmetic).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing "5" to 5 turns concatenation into addition.
+  - transfer_to_a_new_program: Use String for any text: names, messages, tokens and output lines. Convert to int or double with Integer.parseInt or Double.parseDouble before arithmetic. Use char for a single character whose code matters.
+  - diagnose_an_error: rule broken: String contents are compared with equals; == compares references. Kind: silent logic error. Trigger class: Comparing a String read from input or built by + against a literal with == or !=: false even though the text m
+  - diagnose_an_error: rule broken: < and > (and - * /) are defined only for primitive types, not for Strings. Kind: compile-time. Trigger class: s < t, "10" - 1, "6" * "2": 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: primitive_vs_reference
+L0 Prestructural:
+  - everyday_reading: Everyday thinking pictures a variable as a box that holds the thing itself. That is true for int, double, char and boolean; an array variable holds only the address of the array, which is stored elsewhere.
+  - misconception: wrong rule: A reference variable holds the whole object, not a reference. 
+  - misconception: wrong rule: String is a primitive type like int. 
+  boundary: Any correct, programming-specific statement about primitive vs reference makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Primitive versus reference variable: the first holds its value, the second holds the address of an object.
+  - states_the_rule: When you declare a variable of a primitive type, Java reserves memory that stores its value. An array variable stores a reference to the array: Java treats the array name as a variable whose value is the memory address of the arra
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: x = y copies the value of y into x; b = a copies the address in a into b. In both cases the right side is evaluated first and its value stored, but the value of an array variable is an address.
+  - output_prediction: Result: after int y = x; y++, x is unchanged; after int[] b = a; b[0]++, a[0] has changed too, because a and b refer to the same array.
+  - one_step_execution: State transition: assigning to a primitive variable changes only that variable; assigning to an element through a reference changes the array that every reference to it sees.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The eight primitive types are the ones whose variables hold the value itself.
+  - relation_to_neighbour: An array variable is the standard example of a reference: its value is the memory address of the array.
+  - purpose_of_the_whole: Plan: the model predicts when an assignment shares data (arrays, Strings) and when it copies it (primitives), which decides when a copy is needed.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing a primitive copy never affects the original; changing an array through any reference affects every alias.
+  - transfer_to_a_new_program: Draw a memory diagram (value in a box for primitives, an arrow to the array for references) whenever code assigns or compares arrays.
+  - diagnose_an_error: rule broken: == on references compares addresses. Kind: silent logic error. Trigger class: two arrays with the same elements are compared with == and found unequal (or two Strings with the same text)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: data_type
+L0 Prestructural:
+  - everyday_reading: Everyday 'type' means a kind or label (a 'whole number' is still just a number), so novices read int and double as tags on the same arithmetic. In Java the type fixes both the set of values and which operation runs: 7 / 2 on two i
+  - misconception: wrong rule: Making every variable a double is the right fix for integer division. 
+  - misconception: wrong rule: A variable declared int can hold 2.5 or "hi"; the type is only a label. 
+  boundary: Any correct, programming-specific statement about data type makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Data type: a category of data defined as a set of values together with the set of operations on those values (int, double, boolean, char, String...).
+  - states_the_rule: Java is strongly typed: every variable and expression has a type known at compile time, a variable always holds a value of its type, and the compiler rejects values or operations that do not fit (int x = 1.1; does not compile).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: For each operator, the operand types are found first (after any automatic promotion), and then that type's version of the operator is applied. So in b*b - 4*c with int b and c, the whole expression is computed as int and only then
+  - output_prediction: The result type follows from the operand types: int op int gives int (7 / 2 is 3), any double operand gives double (7 / 2.0 is 3.5), and + with a String operand gives a String ("7" + 2 is "72").
+  - one_step_execution: A declaration fixes a variable's type for good. Each assignment changes only the value, never the type, and a value outside the type (a double into an int) is rejected at compile time unless it is cast.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The eight primitive types are Java's built-in data types. Each one fixes its own values and operators (boolean has && || !, int has + - * / %), so which operators are legal in an expression depends on which primitive type its oper
+  - relation_to_neighbour: A data structure such as an array holds many values of one data type. The element type limits what can be stored in a[i] and which operations apply to it.
+  - purpose_of_the_whole: Choosing a type records what a value represents (int for counts, double for measurements, boolean for conditions, String for text), so the compiler can check that operations match that intent.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-tim
+  - transfer_to_a_new_program: Think in data types whenever you declare a variable or read an expression. Use the built-in primitive types for single numbers, characters and truth values, String for text, and an array or another class when no single built-in ty
+  - diagnose_an_error: rule broken: A value can be stored only in a variable whose type can hold it without loss; narrowing needs an explicit cast. Kind: compile-time. Trigger class: Assigning a double (or long) expression to an int variable, e.g. int x
+  - diagnose_an_error: rule broken: An operator is defined only for certain types. Kind: compile-time. Trigger class: Applying an operator to a type that lacks it: "Hello" - 1, s < t on Strings, !5: 'bad operand types for binary operator'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: primitive_type, string_type, primitive_vs_reference, data_type.

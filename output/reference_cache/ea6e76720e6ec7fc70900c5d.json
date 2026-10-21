@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student correctly gives the role of both variables: i steps through the indexes, and max holds the largest value seen so far. Stating the purpose of max as 'largest so far' and relating it to the loop index goes beyond a line-by-line trace. It stays within the given code, so it is not L4."}

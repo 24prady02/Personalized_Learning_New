@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The fix is correct: (a + b) / 2.0 gives 11 / 2.0 = 5.5. The student ties the two changes to the two causes in the code, precedence making b / 2 run first and integer division truncating. This fixes the one given failing case and doesn't go beyond it, so it is L3 and not L4."}

@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "misconception: The else branch of an if-else statement always executes",
+   "quote": "for x = -1, A sets y to 0 because the else part runs",
+   "correct": false,
+   "why": "The else part is itself `if (x >= 0) y = 0;`, and its condition is false for x = -1, so y is never assigned; treating 'else runs' as 'y = 0 runs' ignores the else-if test, and in fact A and B are equivalent."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only says y is 'set', as part of a wrong control-flow trace, and gives no reasoning about how assignment works."
+  },
+  {
+   "concept": "dangling_else",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss which if an else belongs to."
+  }
+ ]
+}

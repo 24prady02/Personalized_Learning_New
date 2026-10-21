@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "{-3, -1, -2}: it gives 0, but the largest is -1, because max starts at 0.",
+   "correct": true,
+   "why": "The answer gives an all-negative input that triggers the bug, says the code returns 0 instead of -1, and blames the start value of 0, which is the error the diagnose_an_error way describes."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention arithmetic operators."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention overflow."
+  }
+ ]
+}

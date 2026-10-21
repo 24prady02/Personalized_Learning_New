@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly traces {1, 5, 3} to 5, but that input doesn't expose the bug. Starting `max` at 0 makes the code return 0 for an all-negative array such as {-3, -1, -2}, when the answer should be -1. The student concludes the code is correct from one passing case and never examines the initial value, so only one part of the code is covered."}

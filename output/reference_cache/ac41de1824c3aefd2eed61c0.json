@@ -1,0 +1,1 @@
+{"level": "none", "why": "unparsed: {\"level\":\"L2\",\"why\":\"The answer correctly gives both conditions (p && q true only when both true; p || q false only when both false), but only states the rules without tracing the four value combinati"}

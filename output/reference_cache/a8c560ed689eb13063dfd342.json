@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly sees that a / b is integer division giving 3. They don't trace the assignment to the double r, which makes the value 3.0, so the output is 3.0 (B), not 3. Only one part of the code is covered, and the final answer is wrong."}

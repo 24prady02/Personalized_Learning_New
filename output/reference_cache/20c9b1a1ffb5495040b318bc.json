@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer relates the practice of compiling after every few lines to the location of errors, saying each error sits next to the code just written and is easy to find. This gives a reason that links the process to the debugging outcome. It stays within the given scenario and does not extend to a changed program or a class of inputs."}

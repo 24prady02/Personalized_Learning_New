@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The ordering B, D, A, C is correct, and so are the blanks: a[0], >, and i, which gives max = a[i]. But the answer is a bare correct result with no reasoning. It doesn't explain why max starts at a[0] or why the loop starts at 1. So it stays at L1."}

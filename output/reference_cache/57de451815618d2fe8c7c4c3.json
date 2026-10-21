@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The final value 50 is correct, but the reason is a wrong rule. A default clause does not always run at the end of a switch. It runs here only because case 2 enters at the match and falls through case 3, case 4 and default, since there are no breaks. The answer never mentions matching or fall-through."}

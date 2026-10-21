@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "nested loop iteration count and scaling with n", "why": "The answer correctly gives n×n = 1,000,000 and says doubling n quadruples the count, which relates the two loops to each other and goes slightly beyond the traced value, but it gives no line-by-line justification and doesn't generalise beyond this code."}

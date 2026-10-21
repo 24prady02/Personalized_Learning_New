@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "cumulative-sum selection loop when r exceeds the total (no match)", "why": "The student says next is 2 by assuming the last page gets the leftover probability. The code doesn't do that: the sums reach only 0.9, so r < sum is never true and next stays -1. The answer uses a wrong rule and has no trace."}

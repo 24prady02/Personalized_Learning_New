@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "print vs println line break placement", "why": "It correctly places the line break after the println output but gives a wrong rule ('longest string') and doesn't give the full output or trace all three statements with values."}

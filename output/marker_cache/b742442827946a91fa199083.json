@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "reversing an array shift (left shift with wrap-around)", "why": "The answer reproduces only the loop part of the idea and gets the direction wrong: x[i] = x[i-1] going upward fills the whole array with x[0]. It also never saves the first element or restores it at the end."}

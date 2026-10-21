@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "if/else control flow trace with a = 2, b = 2", "why": "The answer correctly traces every executed line in order (1, 2, 4, 6) but includes line 2, which is wrong because 2 > 2 is false, so the else branch runs instead; this is a slip in an otherwise rule-correct trace of if/else, not a wrong rule."}

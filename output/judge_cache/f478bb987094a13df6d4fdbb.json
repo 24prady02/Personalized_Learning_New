@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "The new code writes each element by its position with a[i] on the left of =, which an enhanced for cannot do, and the run gives [50, 40, 30, 20, 10]."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "for (int i = 0; i < a.length; i++)",
+   "correct": true,
+   "why": "The student wrote a correct new index traversal that visits every valid index once and updates every element, as the run confirms."
+  },
+  {
+   "concept": "length_field",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "The new code uses the a.length field, with no parentheses, as the loop bound so it follows the array's real size."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions the for-each loop or why it fails to change the array; it only uses an index loop instead."
+  }
+ ]
+}

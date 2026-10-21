@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "The answer correctly turns the switch into an else-if chain whose final else plays the role of default, but `elif` is Python, not Java. Java needs `else if`, so this code would not compile."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "if (value == 1) result = 30;",
+   "correct": true,
+   "why": "It writes a valid braceless if with a boolean condition, but does not trace it or explain why it works."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(value == 2 || value == 3)",
+   "correct": true,
+   "why": "It correctly joins two comparisons with || into one boolean condition that covers the fall-through from case 2 to case 3."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about short-circuit evaluation."
+  }
+ ]
+}

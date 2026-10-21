@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student states the array's purpose in one correct sentence. It is an index-to-name lookup table, which fits `months[m - 1]` giving \"Mar\" for month 3. The student gives the purpose without tracing values, but the purpose is deduced correctly from the code."}

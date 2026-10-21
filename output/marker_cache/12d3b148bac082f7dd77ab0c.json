@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "array element swap using a temp variable", "why": "Correct result for (a), states the general purpose (swap first and last) in one sentence, and (c) correctly relates the swap to the length-1 case where first and last are the same element. It stays within the given code, so it doesn't reach L4."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims 'big' is printed because the program 'sees' count will reach 5. That is not how Java works. The if is checked once, when count is 0, so 0 > 3 is false and 'big' is never printed. Only 5 is printed. The student's rule that the program looks ahead is wrong, so the answer shows no working model of execution order."}

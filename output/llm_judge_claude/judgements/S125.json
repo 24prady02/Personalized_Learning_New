@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "standard_drawing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "The circles are never erased",
+   "correct": true,
+   "why": "Correctly implies each drawing command adds marks that stay on the canvas."
+  },
+  {
+   "concept": "animation",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "Correctly predicts that removing clear() leaves a track of earlier frames."
+  },
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "The circles",
+   "correct": true,
+   "why": "Only names the drawn circles."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

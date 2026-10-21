@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested for loop output with printf and println", "why": "The answer is a vague guess that the output counts down, with no trace, values, spacing or empty line, and it shows no working model of the nested loops."}

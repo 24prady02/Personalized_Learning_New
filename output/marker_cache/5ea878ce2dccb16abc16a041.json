@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "nested for loops printing a triangle pattern", "why": "The answer states in one sentence what the code does (row i prints 1 to i, forming a 3-row triangle), relating the inner loop to the outer loop's i, but it doesn't trace values or go beyond the given code."}

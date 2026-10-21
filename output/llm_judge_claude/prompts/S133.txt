@@ -1,0 +1,170 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): (a) List the literals and give the type of each.
+(b) Which of int, double, boolean, char, String is not a primitive type?
+(c) What is a data type?
+(d) Make a trace table of a, b and total after each line.
+(e) In  a = b = 5,  which assignment happens first, and why can it be one line?
+(f) What happens if you add  int c;  System.out.println(c + 1); ?
+(g) Why use TAX instead of 0.08, and what does  TAX = 0.1;  later do?
+
+CODE:
+final double TAX = 0.08;
+int a, b;
+a = b = 5;
+double total = a * 2 + 1.5;
+total = total + total * TAX;
+
+STUDENT ANSWER: int c; declares c, so c is 0.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: declaration
+L0 Prestructural:
+  - everyday_reading: In English, to 'declare' something announces a fact or gives it a value, so novices think int x; already sets x to 0, or that x = 5; alone creates x. In Java a declaration creates the variable with a type, and a local variable has
+  - misconception: wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. 
+  - misconception: wrong rule: A variable declared int can hold 2.5 or "hi"; the type is only a label. 
+  - misconception: wrong rule: local variables get a default value on their own. 
+  boundary: Any correct, programming-specific statement about declaration makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Declaration statement: a statement that introduces a variable by giving its type and name, such as int count; or double x = 0.5;.
+  - states_the_rule: Syntax: type name; or type name = expression; or type a, b, c;. Each variable must be declared before it is used, only once per scope, and its type never changes.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When execution reaches the declaration, the variable comes into being. If there is an initializer, it is evaluated and stored. The variable's scope runs from there to the end of the enclosing block, and statements in the block run
+  - output_prediction: A declaration produces no value and no output. Its effect is to fix the variable's name and type for every later compile-time check.
+  - one_step_execution: int x; adds x to the program state with an undefined (unassigned) value. int x = 5; adds x holding 5.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A declaration binds a legal identifier to a type, and that identifier must not already be declared in the same scope.
+  - relation_to_neighbour: An assignment can store into a variable only after the variable's declaration, and only a value of a compatible type.
+  - relation_to_neighbour: A declaration without an initializer leaves a local unassigned, and any read before an assignment on every path is a compile error.
+  - relation_to_neighbour: Adding final to a declaration makes the variable a constant that can be assigned only once.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and
+  - diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclos
+  - diagnose_an_error: rule broken: A declaration must begin with a type (type name = value;); name = value; is only an assignment to an existing variable. Kind: compile-time. Trigger class: First use of a new variable written without its type (total = 
+  - transfer_to_a_new_program: Declare every variable exactly once, in the narrowest block that covers all its uses, with an initializer when the first value is known. Declare it before (outside) a loop when its value must last across iterations or be used afte
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: int
+L0 Prestructural:
+  - everyday_reading: In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.
+  - misconception: wrong rule: 10 / 3 evaluates to 3.333. 
+  - misconception: wrong rule: An int result that is too large is automatically stored as a bigger number. 
+  boundary: Any correct, programming-specific statement about int makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: int: Java's 32-bit signed integer primitive type.
+  - states_the_rule: int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.
+  - output_prediction: The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.
+  - one_step_execution: An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.
+  - relation_to_neighbour: int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.
+  - relation_to_neighbour: In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.
+  - relation_to_neighbour: Because int has a fixed 32-bit range, results outside it wrap around silently.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).
+  - transfer_to_a_new_program: Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.
+  - diagnose_an_error: rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped,
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: variable
+L0 Prestructural:
+  - everyday_reading: In algebra a variable is an unknown that keeps one value throughout an equation (x in x = 2y), and the 'box' metaphor suggests it can hold several things. In Java a variable is a named storage location holding exactly one value at
+  - misconception: wrong rule: a reference variable holds the whole object, not a reference. 
+  - misconception: wrong rule: A variable can contain more than one value. 
+  - misconception: wrong rule: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. 
+  - misconception: wrong rule: A variable keeps its first value after a new assignment (the static model). 
+  boundary: Any correct, programming-specific statement about variable makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Variable: a name that refers to a typed storage location holding one data-type value.
+  - states_the_rule: A variable must be declared with a type before use. It always holds a value of that type, must be assigned before it is read, and can be used only within its scope (from its declaration to the end of the enclosing block).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Each time execution reaches an expression that uses the variable, its current value is fetched at that moment. An assignment to it takes effect only after its right-hand side has been fully evaluated.
+  - output_prediction: A variable in an expression yields the value most recently assigned to it, with its declared type. After int a = 5; int b = a; a = 3;, a is 3 and b is 5.
+  - one_step_execution: Only an assignment or an input read into the variable changes it, and it changes only that variable, replacing the old value. Other variables keep their values.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Literals commonly give variables their values, and the literal's type must fit the variable's type (int x = 1.1; is rejected).
+  - relation_to_neighbour: Assignment is the only statement that changes a variable, and its left-hand side must be a single variable.
+  - relation_to_neighbour: A variable name is itself an expression whose value is the variable's current value, and it combines with operators into larger expressions.
+  - relation_to_neighbour: Each variable is named by an identifier, which must be legal and unique within the variable's scope.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass.
+  - diagnose_an_error: rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under ano
+  - transfer_to_a_new_program: Use a variable when a value must be remembered, changes during the computation, or deserves a name as an intermediate result. Use a final constant for a value that never changes, and an array when many values of one type must all 
+  - diagnose_an_error: rule broken: A local variable must be assigned before it is read. Kind: compile-time. Trigger class: A read on a path where no assignment has happened (declared without initializer, or assigned only inside an if or loop): 'variabl
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: double
+L0 Prestructural:
+  - everyday_reading: Folk meaning: a number with a decimal point is the exact real number of school maths, and a whole-looking number such as 207. or 2.3e4 is an integer. 
+  - misconception: wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. 
+  - misconception: wrong rule: 207. and 2.3e4 are int values because they are whole numbers. 
+  boundary: Any correct, programming-specific statement about double makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: double is a primitive data type: Java's 64-bit IEEE 754 floating-point type for representing real numbers.
+  - states_the_rule: Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a float
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Operators are applied in precedence order, left operand first; at each operator, if one operand is double the other is widened to double before the operation, and the result is rounded to the nearest double before the next operato
+  - output_prediction: The result has type double: 5.0/3.0 is 1.6666666666666667, 10/3.0 is 3.3333333333333335, 1.0/0.0 is Infinity, Math.sqrt(-1.0) is NaN; println always shows a decimal part (3.0, not 3).
+  - one_step_execution: An assignment to a double variable stores the nearest representable value (x = x + 0.1 replaces x with the rounded sum); no double operation throws an exception, so the variable may end up holding Infinity or NaN.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.33333333333333
+  - relation_to_neighbour: double and boolean never convert into each other (no cast is allowed either way); they meet only through comparisons, which take doubles and produce a boolean, e.g. (x < 3.1).
+  - relation_to_neighbour: char is an integral numeric type, so a char widens automatically to double in arithmetic ('a' + 0.5 is 97.5), but a double needs an explicit cast to become a char.
+  - relation_to_neighbour: Every double operation rounds its result to the nearest representable value, so double results carry rounding error that can accumulate; this is why == on computed doubles is unreliable.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering
+  - transfer_to_a_new_program: Use double for real-valued quantities where approximate results are acceptable (science, geometry, probabilities, averages); do not use it for counts, array indices, loop counters or money that must be exact (use int or long, e.g.
+  - diagnose_an_error: rule broken: A double cannot be assigned to an int (narrowing) without a cast. Kind: compile-time. Trigger class: A double expression assigned or passed where an int is required, e.g. int n = Math.sqrt(x); or int n = 2.0 * k; (pos
+  - diagnose_an_error: rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: declaration, int, variable, double.

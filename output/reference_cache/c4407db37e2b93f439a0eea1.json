@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student correctly predicts the effect of removing clear(). Without it, each circle drawn while the mouse is pressed stays on the canvas, so the circles leave a trail. This is correct reasoning about changed code. It does not mention that the sine polyline would also stay visible, because clear() currently wipes it on the first frame."}

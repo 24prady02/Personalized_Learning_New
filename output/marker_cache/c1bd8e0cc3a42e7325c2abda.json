@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Copying an array with a loop (array length and indexing)", "why": "The answer uses data2.length(), which is the String method syntax, but an array's length is the field data2.length, so the code does not follow the Java rule for arrays and would not compile, even though the loop structure is otherwise sound."}

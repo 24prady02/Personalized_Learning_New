@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student correctly explains the cause: (2+3)/2 is integer division, giving 2, which is then widened to 2.0 when stored in the double. They relate the division to the assignment in one coherent explanation, but they stay within the given code and don't generalise."}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer is correct (No) and gives the reason. The number of rounds depends on the user's input at run time, so the loop's exit condition is tied to the user's replies. That links the loop to input and explains the purpose. It doesn't go beyond the given scenario to other cases, such as a fixed count or a sentinel loop, so it isn't L4."}

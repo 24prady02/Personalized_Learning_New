@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "StdDraw default 0-1 coordinate scale and the off-screen point", "why": "It doesn't describe the window directly. It does fix the failing point(256,256) in two ways, by using 0.5 or by rescaling to 0-512, which shows the default scale is understood, but it stays within the given code."}

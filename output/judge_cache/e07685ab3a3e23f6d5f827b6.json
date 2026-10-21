@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "max is a double",
+   "correct": false,
+   "why": "max is declared int and holds the largest value seen so far. Calling it a double gets its type wrong and says nothing about its running-maximum role."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "i is the loop variable",
+   "correct": true,
+   "why": "Correctly names i as the loop variable but does not apply any rule to this code."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "max is a double",
+   "correct": false,
+   "why": "Says the wrong type for max, which is declared int, so the variable's declared type is misread."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention a convergence test."
+  }
+ ]
+}

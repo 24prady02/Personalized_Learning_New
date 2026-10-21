@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "sentinel-controlled loop with conditional accumulation (skipping negatives)", "why": "The answer doesn't give the printed output for either input and describes a wrong rule (add then subtract negatives) that doesn't match the code, which just skips negative values and never adds them."}

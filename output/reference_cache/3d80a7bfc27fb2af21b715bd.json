@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The answer gives no output and no explanation; it merely copies the inner loop back (with a stray semicolon), and the boundary rule says copying the code with no interpretation is L0. The 'none' label is reserved for a student question that makes no claim, which this is not."}

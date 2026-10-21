@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer says the code prints 'Hi, Ann' and then 'Bye'. But the code has a missing semicolon, so it won't compile. The 'Bye' line is commented out, and the file name doesn't match the class. The answer treats the comment as live code and ignores every real problem, so it shows no working model of how Java handles this code."}

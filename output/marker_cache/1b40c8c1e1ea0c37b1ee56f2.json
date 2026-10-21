@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "while loop with a false initial condition", "why": "The loop condition 5 < 3 is false, so nothing prints; the answer says 5 prints once, which applies a wrong rule (body runs before the condition is checked)."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Why does Java have both char and String?",
+   "correct": true,
+   "why": "The answer only names char in a question. It states no rule, gives no declaration and does not relate it to anything."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Why does Java have both char and String?",
+   "correct": true,
+   "why": "The answer only names String next to char. It gives no rule and does not say how the two relate."
+  },
+  {
+   "concept": "printing_array_reference",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arrays or printing."
+  }
+ ]
+}

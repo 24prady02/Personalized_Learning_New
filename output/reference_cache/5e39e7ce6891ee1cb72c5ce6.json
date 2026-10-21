@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code gives a=7, b=7, c=7. The student has a and b right, which needs b=a to use the updated a. Then c=3 reads the old value of b, so the answer uses different assignment rules within one trace. It also gives no justification, so it shows no consistent working model of assignment."}

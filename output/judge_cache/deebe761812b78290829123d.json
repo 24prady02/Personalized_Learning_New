@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "a = 7, b = 7, c = 3.",
+   "correct": false,
+   "why": "The answer gives only final values with no reasoning, so it counts as a bare result. It is also wrong: c = b should copy b's current value 7, so c is 7, not 3."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "c = 3",
+   "correct": false,
+   "why": "The answer itself says b became 7, but then gives c the value 3, which is b's old value. That is an unexplained slip, and the run shows c is 7."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no multi-operator expressions and the answer says nothing about precedence."
+  }
+ ]
+}

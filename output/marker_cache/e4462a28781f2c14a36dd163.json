@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Locating the bug in a loop accumulation (sum = i vs sum += i)", "why": "The answer blames the print statement and misses the real fault, the assignment on line 3 that overwrites sum instead of adding to it. Printing i would give an error because i is out of scope after the loop, so the answer applies a wrong rule about the code."}

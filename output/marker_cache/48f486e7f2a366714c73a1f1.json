@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "for loop condition and termination at i = 3", "why": "The answer correctly rejects the trace line and links the false condition i < 3 to the loop ending and 3 never being printed, relating condition and loop control within the given code."}

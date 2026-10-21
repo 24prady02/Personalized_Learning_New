@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Effect of & vs && (short-circuit evaluation) in line 2", "why": "With n=0, & would evaluate 10 / n and throw ArithmeticException, so 'changes nothing' applies a wrong rule that ignores short-circuiting."}

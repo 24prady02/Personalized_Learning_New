@@ -1,0 +1,1 @@
+{"level": "none", "why": "unparsed: {\"level\":\"L2\",\"why\":\"The student wrongly picks B (3.0), but the code prints 3.0 since 7/2 is int division giving 3, then widened to double. The trace is correct and covers both steps with values, so i"}

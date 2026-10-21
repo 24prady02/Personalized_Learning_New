@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer a = 30 applies a wrong rule: it treats `a = b` as adding the values (or as a maths equation) instead of copying b's value into a. The correct result is a = 20, b = 20. The answer does not follow Java assignment semantics."}

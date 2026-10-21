@@ -1,0 +1,1 @@
+{"level": "L0", "why": "A and B always leave y the same. x>0 gives 1 in both, x==0 gives 0 in both, and x<0 changes nothing in either. The student answers 'No' by counting conditions, which says nothing about the values y gets. The count is also wrong, because B has two tests: the if and the ternary. The answer has no working model of how the code runs."}

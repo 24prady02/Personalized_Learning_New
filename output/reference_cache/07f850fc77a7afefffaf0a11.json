@@ -1,0 +1,1 @@
+{"level": "L2", "why": "This is correct. A local int has no default value, and the compiler rejects any read before x is definitely assigned. The answer applies that rule to x, but it only restates the rule for this one line. It doesn't go on to a changed program or a class of cases, so it stays at L2."}

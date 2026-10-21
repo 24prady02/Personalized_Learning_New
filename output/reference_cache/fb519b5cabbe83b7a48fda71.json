@@ -1,0 +1,1 @@
+{"level": "L0", "why": "After the third pass total is 6 (1+2+3), not 15. The student gives the final value and says it 'adds up to 5', which misreads the loop as a running sum to the bound rather than tracing each pass. They also don't answer what runs last before the println, which is the i++ update and the failed i <= 5 check. This shows no working model of the loop trace."}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The range 8 to 15 is correct, because the loop runs floor(log2 n) times. The student states the code's purpose, counting how many halvings it takes to reach 1, and ties it to 8 = 2×2×2. They don't trace the loop value by value or justify the upper bound of 15, so this is not L4."}

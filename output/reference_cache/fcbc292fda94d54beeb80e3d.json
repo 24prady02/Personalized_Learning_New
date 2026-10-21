@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code runs count++ n*n = 1,000,000 times, but the student added n + n, which treats the nested loops as sequential or additive. That is the wrong rule for nested loops, and they didn't say what happens when n doubles."}

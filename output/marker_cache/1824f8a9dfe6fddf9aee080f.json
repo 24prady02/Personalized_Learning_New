@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "selecting lines to count positives, with reasons for excluding F and G", "why": "The answer picks the correct lines A–E and explains why F (out-of-bounds index at a[a.length]) and G (count only 0 or 1) are wrong, relating each to what the program is meant to do, but doesn't go beyond the given code."}

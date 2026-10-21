@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The answer correctly covers all parts in order: a and b share one array (now [9, 2]), x stays 5 and y is 7 in a separate box. It gives the right values for a[0] and x, but it only describes each part and doesn't explain why (aliasing versus copying a primitive), so it stays at L2."}

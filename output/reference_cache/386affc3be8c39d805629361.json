@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The code does integer division 7/2 = 3, then widens to double 3.0, so B is the correct output; the student gives only the bare correct result with no justification, which by the boundary rules is L1 (a correct output alone is not levelled above L1), not 'none', since it makes a claim rather than asking a question."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "the int 4 is added to the double 26.3, so Java treats it as 4.0, giving 30.3",
+   "correct": true,
+   "why": "The answer widens the int operand to double on this code's values and gets the correct result, 30.3."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "9 % 5 is computed; % gives the remainder, which is 4",
+   "correct": true,
+   "why": "The answer states the remainder rule and applies it correctly to 9 % 5, giving 4."
+  },
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The first println prints 'Result is ' and ends the line; the second prints 'num4 = 30.3'.",
+   "correct": true,
+   "why": "The answer traces both calls, printing the text and then ending the line, and gets the output the run confirms."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about method-call mechanics such as argument evaluation, return value or void."
+  }
+ ]
+}

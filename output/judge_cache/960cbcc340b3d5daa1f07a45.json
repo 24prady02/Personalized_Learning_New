@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions or uses how n = n / 2 or c++ store values."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about integer division; it only lists outputs and never shows how n / 2 is computed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "n = 2 gives 1 and n = 4 gives 2",
+   "correct": false,
+   "why": "These are bare outputs with no trace of the test and update, and the prediction for n = 6 is wrong because the loop runs only twice (6→3→1)."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "n = 2 gives 1 and n = 4 gives 2, so n = 6 gives 3",
+   "correct": false,
+   "why": "It guesses a pattern from two tried cases instead of reasoning about the loop (c counts halvings, so it needs 8 ≤ n ≤ 15), and the guess is wrong because 6 prints 2."
+  }
+ ]
+}

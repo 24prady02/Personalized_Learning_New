@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions array positions or index expressions."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "You cannot undo it, the last value is lost.",
+   "correct": false,
+   "why": "The answer misuses the idea that assignment destroys the old value: the code saves x[x.length-1] in last and writes it to x[0], so nothing is lost and the rotation can be undone."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about reading input."
+  }
+ ]
+}

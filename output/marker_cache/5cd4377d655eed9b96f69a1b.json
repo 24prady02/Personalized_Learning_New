@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "reference aliasing of arrays vs. independent primitive copies", "why": "The answer correctly covers every variable (a and b sharing one array [9, 2], x as 5 and y as 7) and gives the right values, but it describes each part separately and never explains why the array and the primitives behave differently."}

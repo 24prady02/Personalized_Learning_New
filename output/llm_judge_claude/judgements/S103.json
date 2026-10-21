@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"math_round","level":"L4","way":"diagnose_an_error","quote":"It does not compile, since round gives a long.","correct":true,"why":"Correctly diagnoses the compile-time error of storing the long result of Math.round in an int."},
+{"concept":"long_type","level":"L4","way":"diagnose_an_error","quote":"since round gives a long","correct":true,"why":"Correctly identifies that a long cannot be stored in an int without a cast, causing a compile error."},
+{"concept":"compile_time_error","level":"L2","way":"output_prediction","quote":"It does not compile","correct":true,"why":"Correctly predicts that this line fails to compile and gives the type reason."},
+{"concept":"explicit_cast","level":"none","way":"","quote":"","correct":true,"why":"The answer does not mention a cast."}
+]}

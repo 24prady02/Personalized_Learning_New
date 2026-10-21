@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "for-each loop accumulating a product (adapting sum to product)", "why": "The code is correct, with the right initialiser 1 and the right operator * in the loop, but the answer gives no explanation of what was changed or why. It stays within the given pattern and doesn't reason about other inputs such as an empty array or zeros."}

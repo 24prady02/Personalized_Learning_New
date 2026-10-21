@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "while loop with a boolean flag stopping condition", "why": "The output 1 4 7 10 is correct, and the answer links the if that sets isDone at i=10 to the loop test failing next, which shows how the parts work together. It doesn't trace each value's %5 check, and it doesn't go beyond the given code."}

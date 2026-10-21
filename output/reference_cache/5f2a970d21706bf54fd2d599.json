@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The student applies a rule that contradicts Java: a > b is read as true when a and b are equal (treating > like ≥ or 'counts'), so the trace 1, 2, 6 follows from a wrong rule rather than a slip, which is prestructural, not a correct partial grasp."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "loop_body",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "I read two numbers in each pass",
+   "correct": false,
+   "why": "The body has only one readInt(), so each pass reads one number, not two; the student misreads what the body repeats."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer states no rule about StdIn or readInt and does not apply one; its claims about reading and crashing are graded under read_loop_idiom."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "I read two numbers in each pass and with 5 3 8 it crashes at the end",
+   "correct": false,
+   "why": "Each pass reads exactly one value after the isEmpty() check, so 5 3 8 prints 16 3 with no crash; the odd-count crash reasoning does not apply to this code."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention count or any loop-control variable."
+  }
+ ]
+}

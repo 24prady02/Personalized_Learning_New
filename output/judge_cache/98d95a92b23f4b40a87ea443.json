@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "a.length / 2",
+   "correct": true,
+   "why": "The answer writes the array length correctly as the field a.length, with no parentheses, but gives no reasoning about it in this code."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length / 2",
+   "correct": true,
+   "why": "The answer gives a valid int expression for the loop bound, but it does not evaluate it or explain how it works."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length / 2",
+   "correct": true,
+   "why": "Integer division by 2 is the right choice, but the answer does not reason about how it truncates for odd lengths."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "because it is faster",
+   "correct": false,
+   "why": "The fill-in is right but the reason is wrong: the loop stops halfway because a full pass would swap every pair twice and put the array back as it was, not because it is faster."
+  }
+ ]
+}

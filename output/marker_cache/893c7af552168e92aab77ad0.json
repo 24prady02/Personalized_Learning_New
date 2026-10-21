@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "StdDraw default coordinate system (0–1 scale)", "why": "The student wrongly assumes point(256, 256) is in pixels, when StdDraw's default scale is 0–1 and the point falls off-canvas, so the answer applies a wrong rule."}

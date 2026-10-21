@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The claim is wrong. p starts at 1, which is odd, so p is not even the first time the condition is tested. The real invariant is that p is a power of 2 with p <= n. The answer also doesn't say why the loop ends or what p is at the end, which is 32."}

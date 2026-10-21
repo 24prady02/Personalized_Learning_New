@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The code does integer division (7/2 = 3), which is then widened to 3.0, so the output is 3.0. The student picks D and claims Java rounds 3.5 up to 4. That rule is wrong: Java never evaluates 3.5 here and doesn't round, it truncates. So the answer shows no working model."}

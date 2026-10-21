@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about array indexing."
+  },
+  {
+   "concept": "input_graph",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "1→0 and 0→1 are the same link written twice.",
+   "correct": false,
+   "why": "It treats a link pair as two-way, but in the input i j is ordered: 0→1 and 1→0 are separate links with separate counts."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about loop bounds or off-by-one errors."
+  }
+ ]
+}

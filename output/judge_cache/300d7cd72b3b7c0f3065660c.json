@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no rule about the if statement and does not say whether the code is legal."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "Calling braces pointless contradicts Java: braces form a block, and without them only one statement is the body, so the claim is a wrong rule and not just a style choice."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the if template or its optional braces."
+  }
+ ]
+}

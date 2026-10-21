@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a wrong rule. For x = -1, `x >= 0` is false, so the inner `else if` doesn't run and A leaves y unchanged. It does not set y to 0. A and B are in fact equivalent for every x, so the answer 'No' is wrong. The reasoning comes from treating `else if` as a plain `else` that always runs."}

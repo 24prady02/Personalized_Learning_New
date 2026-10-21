@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Loop body scope with braces (nested for loops)", "why": "The student only added indentation and no braces, so the code is unchanged and still prints '***' followed by one newline. This shows no working model of how a loop body is delimited, because indentation does not affect scope in Java."}

@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The student makes a definite claim (not a question), so it is levelled; the claim applies C semantics to Java, where an uninitialized local has no usable value at all and any read is a compile-time 'might not have been initialized' error. Reading Java with a contradicting language rule is prestructural, L0."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer uses no ++ or -- operator and says nothing about them."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int p = 1;",
+   "correct": true,
+   "why": "It declares an int accumulator correctly, but it never applies int rules to values or mentions overflow."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "p += v;",
+   "correct": false,
+   "why": "It keeps += for a product, which shows it does not see that the operator decides the operation. The code computes 1 + sum, not the product, so *= was needed."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about what the loop keeps true or when it ends."
+  }
+ ]
+}

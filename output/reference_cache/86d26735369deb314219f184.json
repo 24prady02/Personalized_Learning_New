@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer is wrong. One vector-matrix multiplication only gives the rank after one step, here row 0 of p. Page rank needs repeated multiplication until it converges. The student gives a bare 'yes' based on that wrong rule, with no trace, and does not answer (a)."}

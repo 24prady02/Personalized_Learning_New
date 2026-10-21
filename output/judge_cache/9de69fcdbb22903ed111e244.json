@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "array_aliasing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "a and b both have arrows to the same array [9, 2]. ... So a[0] = 9",
+   "correct": true,
+   "why": "The answer applies aliasing to this code: b[0] = 9 changed the one shared array, so reading a[0] gives 9, which the run confirms."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "the same array [9, 2]. ... So a[0] = 9",
+   "correct": true,
+   "why": "The answer reads position 0 of the drawn array contents [9, 2] and gets 9, so the result comes from the diagram and is not a bare guess."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "x is a box with 5, y is a box with 7. So ... x = 5",
+   "correct": true,
+   "why": "The answer shows that y = 7 changed only y and left x at 5, which the run confirms."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "a and b both have arrows to the same array [9, 2]. x is a box with 5, y is a box with 7.",
+   "correct": true,
+   "why": "The answer uses the model correctly on this code: the shared array changed through b, while the separate int copy y left x unchanged. It gives no general explanation of why, so it does not reach L3."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer is correct. It relates readInt, which leaves the newline unread, to readLine, which then consumes only the rest of that first line. That is why rest is \"\". It stays within the given code and does not extend to changed code or a general class of inputs."}

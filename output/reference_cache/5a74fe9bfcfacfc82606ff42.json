@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The blanks are right: `int max = a[0]`, `>`, and `max = a[i]`. The order B, A, D, C puts the `if` before the `for` header and its `}`, so `i` is undeclared and the loop never wraps the comparison. The correct order is B, D, A, C. The student has some correct parts but has not built a working whole."}

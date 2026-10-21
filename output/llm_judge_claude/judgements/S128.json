@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"comment","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about comments."},
+{"concept":"two_dimensional_array","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about the array structure."},
+{"concept":"transition_matrix","level":"L1","way":"output_prediction","quote":"About 0.48, 0.03, 0.48.","correct":true,"why":"The values match .90/2 + .10/3 and .10/3, but they are a bare result with no reasoning, so L1."},
+{"concept":"arithmetic_operators","level":"none","way":"","quote":"","correct":false,"why":"No arithmetic is shown or explained."}
+]}

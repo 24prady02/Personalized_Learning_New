@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Choosing lines to count positive elements (counting loop with count++)", "why": "The answer picks the correct setup, loop and print lines (A, B, D, E) but uses G (count = 1) instead of C (count++), so it gives only 0 or 1. It also gives no explanation for the lines it left out."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "After `a = b` the correct values are a = 20 and b = 20, because assignment copies b's value and leaves b unchanged. The student says b = 0 and that the 20 'moved over', which is a move-not-copy rule that contradicts Java. That is a wrong model of assignment, not a slip in a correct trace."}

@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "nested for loop tracing", "why": "The first two rows are correct, but the third row \"1 2 3 4\" adds a 4 that the loop never prints (j stops at i = 3), and the answer gives no explanation of what the code does, so the trace is not reliable."}

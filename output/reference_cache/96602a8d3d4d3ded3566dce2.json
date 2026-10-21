@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student claims StdIn is a variable holding all the numbers, like an array. In Java, StdIn is a class with static methods that read from an input stream, so this rule is wrong. The answer also doesn't give an output for any of the three inputs (16 3, 0 0, or an exception for abc)."}

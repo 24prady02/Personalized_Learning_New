@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Line 2 makes a variable.",
+   "correct": true,
+   "why": "The answer correctly says that line 2 declares a variable, but it gives no type, value or purpose for best and does not apply any rule to this code."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions that best gets the value of a[0] or that best is updated inside the loop."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Line 1 makes an array of three numbers.",
+   "correct": true,
+   "why": "The answer correctly identifies line 1 as making an array of three ints, but it does not trace how the array is created and stored or explain why it is there."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code contains no exchange, and the answer says nothing about one."
+  }
+ ]
+}

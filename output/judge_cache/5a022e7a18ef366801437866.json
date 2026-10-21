@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "int p = 1;",
+   "correct": true,
+   "why": "The answer declares an int accumulator with 1, the right starting value for a product, but it gives no reasoning or trace. The body p = v * v is a logic slip, not a wrong rule about int."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "for (int v : a)",
+   "correct": true,
+   "why": "The for-each header is written correctly, but the body overwrites p on every pass, so the loop does not gather a product. With no explanation, nothing higher is shown."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer uses no index loop with init, test and update, and says nothing about loop control."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about empty statements."
+  }
+ ]
+}

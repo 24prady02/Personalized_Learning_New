@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The table gives the correct values for each i and j, but it is only a bare trace of the output. It has no explanation of how the inner loop depends on i or what the code does overall, so it is not levelled above L1."}

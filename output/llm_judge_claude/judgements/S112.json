@@ -1,0 +1,5 @@
+{"concepts":[
+{"concept":"break_statement","level":"L3","way":"relation_to_neighbour","quote":"break stops the loop completely at 5","correct":true,"why":"Correctly contrasts break (leaves the loop) with continue (next pass) in this loop."},
+{"concept":"continue_statement","level":"L3","way":"relation_to_neighbour","quote":"continue jumps to the next i for the even numbers","correct":true,"why":"Correctly contrasts continue (goes to the next pass) with break (ends the loop)."},
+{"concept":"labeled_break","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about the labeled loop."}
+]}

@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "Why does my while loop with == on strings never end?",
+   "correct": false,
+   "why": "The answer is an unrelated question. It gives no output and does not explain when this loop stops."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "none",
+   "way": "",
+   "quote": "Why does my while loop with == on strings never end?",
+   "correct": false,
+   "why": "The answer says nothing about this code's condition (i < 100 && !isDone) and states no rule about boolean expressions."
+  }
+ ]
+}

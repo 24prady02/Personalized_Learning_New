@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "while loop halving count (c = floor(log2 n))", "why": "8 is a correct input (8→4→2→1 gives c=3), but the answer shows no trace and no explanation of how it was found, so it shows only one correct piece."}

@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer stores 7.9 but says nothing about the double type, its range or its arithmetic."
+  },
+  {
+   "concept": "length_field",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2",
+   "correct": true,
+   "why": "It correctly uses the length field with no parentheses and applies the last-index rule to this array to get length - 2."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It writes a correct index expression but gives no reasoning about expressions, how they are evaluated or their type."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "the last index is length - 1, so next-to-last is length - 2",
+   "correct": true,
+   "why": "It correctly applies the upper bound (length - 1) to this array to find the legal next-to-last index."
+  }
+ ]
+}

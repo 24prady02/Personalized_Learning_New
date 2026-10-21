@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "67, a tab, C",
+   "correct": true,
+   "why": "Correctly reads \t as a tab but gives only a bare result without reasoning."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "67, a tab, C; then A12; then 662.",
+   "correct": true,
+   "why": "The outputs are confirmed correct but given bare, with no reasoning."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

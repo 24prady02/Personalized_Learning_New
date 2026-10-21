@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student applies a rule that contradicts Java. A public class must be declared in a file with the same name, so keeping `public class hello` in Greeting.java would not compile. The original code already compiles and runs, and the student never says so."}

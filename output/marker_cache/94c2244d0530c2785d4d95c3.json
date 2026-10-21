@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "print vs println line breaks", "why": "The answer correctly traces all three statements and justifies the break with the println rule, but it omits the trailing space before the line break and doesn't relate the parts to the code's purpose, so it stays at value-by-value tracing."}

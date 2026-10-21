@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer doesn't trace the code or give either output (5.0, then nothing printed). It says the filter was removed because 'rain values are always fine', which is an everyday assumption that ignores the -2 in the input. It also misses that the `v >= 0` test is what skips negatives and gives 5.0."}

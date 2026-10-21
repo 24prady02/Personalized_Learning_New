@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Ordering of accumulator initialisation, loop, and print", "why": "The order is correct and the explanation relates the initialisation, the loop body and the single print to one purpose (a running sum printed once), but it does not go beyond the given code."}

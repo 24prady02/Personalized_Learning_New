@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer is an attempt that makes a claim (so not 'none'): it correctly expresses one aspect, the MPG rule as miles / gallons with the right signature, but omits the return statement so the method does not compile and never yields the value; one correct part without a complete working solution is L1, not correct new code (L4)."}

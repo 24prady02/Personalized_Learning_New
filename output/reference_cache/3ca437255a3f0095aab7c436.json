@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The link 'type — is — the value' confuses two distinct concepts: a type is the set of values a variable can hold, not the value itself. This contradicts the Java rule, so the answer shows no working model."}

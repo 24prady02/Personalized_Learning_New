@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "Fragment 3 finds the maximum element (m updated whenever v > m), not a sort; the student makes a definite but wrong claim about what the code does, showing no working model of the loop/conditional, so it is L0 rather than unlevelled ('none' is only for a question that makes no claim)."}

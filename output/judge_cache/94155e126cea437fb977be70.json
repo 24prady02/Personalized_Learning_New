@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L0",
+   "way": "misconception: The class name and the file name are independent.",
+   "quote": "I can rename the file to Greeting.java and keep public class hello.",
+   "correct": false,
+   "why": "The answer treats the public class name and the file name as independent. In Java, public class hello must be saved as hello.java."
+  },
+  {
+   "concept": "program_text",
+   "level": "L0",
+   "way": "misconception: The class name and the file name are independent, so public class HelloWorld can be saved as hello.java or Program.java.",
+   "quote": "I can rename the file to Greeting.java and keep public class hello.",
+   "correct": false,
+   "why": "This is the listed wrong rule: saving public class hello as Greeting.java makes javac reject the file."
+  },
+  {
+   "concept": "compile",
+   "level": "L0",
+   "way": "misconception (contradicts relation: javac takes Name.java as input; its file name must match the public class name)",
+   "quote": "rename the file to Greeting.java and keep public class hello",
+   "correct": false,
+   "why": "The answer suggests Greeting.java would still compile, but javac gives a compile-time error when the file name and public class name differ."
+  }
+ ]
+}

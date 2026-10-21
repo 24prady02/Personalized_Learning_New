@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "All four walk through the array ... 3 finds the largest",
+   "correct": true,
+   "why": "The answer correctly says what fragment 3 does as a whole: it finds the maximum in one pass through the array, without tracing it line by line."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "All four walk through the array",
+   "correct": true,
+   "why": "The fragments use for-each loops with no index, and the answer says nothing about a start value, a test or an update."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "2 counts the positives",
+   "correct": true,
+   "why": "The answer correctly names the job of the counting plan: how many elements meet the condition v > 0."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer have nothing to do with floating-point convergence tests."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The code tests v >= 0 before adding, never adds-then-subtracts; the answer describes a mechanism that contradicts the given code and gives no output, so it shows no working model of the conditional rather than one correct aspect of it."}

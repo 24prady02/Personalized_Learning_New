@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "loop invariant on p relative to n", "why": "It states one correct aspect (p stays below n, true for 1,2,4,8,16,32 with n=37) but doesn't address why the loop ends, the final value of p, or trace the values."}

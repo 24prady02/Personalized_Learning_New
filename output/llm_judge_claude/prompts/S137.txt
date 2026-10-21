@@ -1,0 +1,165 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What is the exact output, including line breaks? Explain how you got it.
+
+CODE:
+System.out.print("Welcome to Java. This is ");
+System.out.println("A nice programming language ");
+System.out.print("that I have to learn.");
+
+STUDENT ANSWER: System.out.println("x is 5"); sets x to 5.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: println
+L0 Prestructural:
+  - everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. 
+  - misconception: wrong rule: print and println behave the same. 
+  - misconception: wrong rule: println(s) prints a newline and then s. 
+  - misconception: wrong rule: System.out.Println and System.out.println name the same method. 
+  - misconception: wrong rule: () are optional on a no-argument call like println. 
+  boundary: Any correct, programming-specific statement about println makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line').
+  - states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.
+  - output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
+  - one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+  - relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line.
+  - relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line.
+  - relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same.
+  - transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting.
+  - diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt
+  - diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: standard_output
+L0 Prestructural:
+  - everyday_reading: Novices take output text literally, as if it acted on the program: printing "The value of X is 1" is read as setting X to 1. They also take 'print' to mean producing a finished line. 
+  - misconception: wrong rule: print and println behave the same (no newline difference). 
+  - misconception: wrong rule: printf() ends the line like println(). 
+  - misconception: wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. 
+  boundary: Any correct, programming-specific statement about standard output makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Standard output (System.out, StdOut) is the library abstraction for a program's text output: an output stream of characters written by print, println and printf.
+  - states_the_rule: print(s) writes s. println(s) writes s and then the line separator. println() only ends the line. A null String prints as "null". By default the stream goes to the terminal window.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: First the argument expression is evaluated, e.g. the concatenation "Sum is " + sum. Then its string form is appended, and println appends the line separator after it. Successive calls appear in execution order.
+  - output_prediction: The output is the argument's string form. System.out.println(Math.PI) prints 3.141592653589793 (all digits), and println("Sum is " + 1778) prints Sum is 1778 followed by a newline. The methods return void.
+  - one_step_execution: One call appends text to the output (println also appends the line separator). It changes no variables and returns nothing.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each output call appends to the end of the single output stream, so the order of output is the order of execution.
+  - relation_to_neighbour: With `> file`, every print/println/printf writes to the file and nothing appears in the terminal. The program code is unchanged.
+  - relation_to_neighbour: A prompt printed with print (not println) shows on the same line where the user then types, before the following StdIn read blocks. Output and input are separate streams.
+  - relation_to_neighbour: StdOut text and StdDraw pictures are independent outputs: printing does not draw, and drawing does not print.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join.
+  - transfer_to_a_new_program: Use standard output for text results meant for a reader or for the next program in a pipeline. Use printf when digits or column widths matter, and StdDraw/StdAudio for pictures and sound.
+  - diagnose_an_error: rule broken: Output order and line breaks follow the order of the calls and the print/println choice. Kind: silent logic error. Trigger class: Output statements in the wrong order, or a missing println, so text fragments run toget
+  - diagnose_an_error: rule broken: PrintStream methods never throw IOException; a write failure only sets an internal flag. Kind: silent logic error. Trigger class: Output to a closed or failing destination: nothing is reported unless checkError() is c
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: method_call
+L0 Prestructural:
+  - everyday_reading: Folk meaning: maths function notation f(x) or sqrt(x), where the name alone suffices, a constant needs no brackets, and the reader infers which argument is which from meaning. 
+  - misconception: wrong rule: () are optional on a no-argument call like println. 
+  - misconception: wrong rule: Nested calls run outside-in, not arguments-first. 
+  - misconception: wrong rule: Java works out from the variable names which argument goes where, so Math.pow(n, 2) and Math.pow(2, n) mean the same. 
+  - misconception: wrong rule: A method call lists the parameter types, as in Math.pow(double a, double b). 
+  boundary: Any correct, programming-specific statement about method call makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A method call is an expression that invokes a (library) method by its name, with arguments in parentheses, and evaluates to the value the method returns.
+  - states_the_rule: A library method is used by typing its (class-qualified) name followed by arguments of the specified types, in parentheses and separated by commas; the call can be used in expressions like a variable or literal; void methods retur
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate the argument expressions from left to right (inner calls first), convert each to its parameter type if needed, transfer control to the method, and when it returns substitute the returned value for the call in the enclosin
+  - output_prediction: The call's value has the method's return type: Math.sqrt(5.0*5.0 - 4.0*4.0) is double 3.0, Math.round(3.14159) is long 3, Integer.parseInt("123") is int 123; a void method such as println has no value.
+  - one_step_execution: Calling a Math method changes none of the caller's variables (arguments are passed as values); the program's state changes only if the returned value is stored or used, e.g. double d = Math.sqrt(x);.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Arguments may be arbitrary expressions of the right type, and the call itself is an expression usable inside larger ones (Math.sin(x) * Math.cos(y)).
+  - relation_to_neighbour: Math methods are called through the class name, Math.sqrt(x); without the prefix the compiler looks for the method in the current class and reports cannot find symbol.
+  - relation_to_neighbour: The call must match a signature in the API (name, number, order and types of arguments), and the API's return type tells how the value can be used.
+  - purpose_of_the_whole: Delegates a computation to existing library code used as a black box, and composes computations by passing one call's result into another, e.g. Math.exp(Math.log(10.0)).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Changing an argument changes only the returned value, never the argument variable; swapping arguments changes the meaning (Math.pow(2, n) vs Math.pow(n, 2)); replacing a call by its value keeps behaviour for mathematical functions
+  - diagnose_an_error: rule broken: Each argument must have (or automatically widen to) the type the method's API lists. Kind: compile-time. Trigger class: An argument whose type cannot be converted to the parameter type, e.g. Math.sqrt("2"), or the wro
+  - diagnose_an_error: rule broken: A value-returning call does not change its argument; its result must be stored or used. Kind: silent logic error. Trigger class: A non-void call written as a statement on its own, e.g. Math.round(x); or Math.abs(d); e
+  - transfer_to_a_new_program: Call a library method whenever a well-specified computation exists in an API (square roots, powers, conversions); write your own code only when no method fits; store a result in a variable rather than repeating an identical call.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: logical_error
+L0 Prestructural:
+  - everyday_reading: Everyday reading: the computer understands what you meant and will complain if the program is wrong. 
+  - misconception: wrong rule: Code that compiles is code that works. 
+  boundary: Any correct, programming-specific statement about logical error makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A logic error is an error that makes a program do something other than what the programmer intended, without any compiler or run-time message.
+  - states_the_rule: If a program has a logic error, it will compile and run without generating error messages, but it will not do the right thing; the compiler and JVM cannot detect it since they don't know what the right thing is.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Execution proceeds normally, statement by statement; the faulty statement executes without complaint and passes a wrong value or output onward.
+  - output_prediction: Result is a normal-looking but wrong output, e.g. println("Hello, "); println("World!"); prints two lines where one was intended.
+  - one_step_execution: Each step makes a legal state change (e.g. an empty statement after if, or resetting sum each pass), but not the intended one.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: A logic error is seen only by running the program and comparing its output with the intended output.
+  - relation_to_neighbour: A run-time error stops the program with an exception; a logic error lets it finish with wrong output.
+  - relation_to_neighbour: Debugging is mostly the search for logic errors, which give wrong output without any message.
+  - purpose_of_the_whole: Purpose (of the category): name the errors that only testing against the intended behaviour can find, so they are found by tracing, test cases and added print statements.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: A logic error survives recompiling and rerunning unchanged; changing input may hide or reveal it; fixing it changes output only on the inputs it affected.
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole if body. Kind: silent logic error. Trigger class: if (x > 0); System.out.println("positive"); prints for every x
+  - diagnose_an_error: rule broken: The accumulator must be declared and initialized before the loop. Kind: silent logic error. Trigger class: int sum = 0; written inside the loop body: sum is reset each pass (and is out of scope after the loop)
+  - transfer_to_a_new_program: Suspect a logic error when the program compiles and runs to the end but the output is wrong for some inputs; locate it by hand tracing, minimal test cases and print statements, since tools give no message.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: println, standard_output, method_call, logical_error.

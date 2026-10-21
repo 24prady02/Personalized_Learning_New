@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "A", "why": "The answer applies one correct aspect (r is a double, so the printed form has a decimal and Java does not round) but never applies the integer-division rule to a / b with the values 7 and 2; the choice of B over A is an unjustified guess, so the correct output is not levelled above L1."}

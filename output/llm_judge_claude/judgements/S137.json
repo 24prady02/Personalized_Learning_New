@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"println","level":"L0","way":"everyday_reading","quote":"System.out.println(\"x is 5\"); sets x to 5.","correct":false,"why":"println only prints text; it does not set any variable."},
+{"concept":"standard_output","level":"L0","way":"everyday_reading","quote":"System.out.println(\"x is 5\"); sets x to 5.","correct":false,"why":"It takes the output text literally, as if printing it set a variable."},
+{"concept":"method_call","level":"none","way":"","quote":"","correct":false,"why":"Nothing is said about how a call is evaluated."},
+{"concept":"logical_error","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about logic errors."}
+]}

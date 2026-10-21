@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "count is 1: the condition is true, so the body runs.",
+   "correct": false,
+   "why": "It correctly treats each execution of count++ as adding 1, but the result is wrong because count++ runs 3 times, so count is 3."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the condition is true, so the body runs.",
+   "correct": false,
+   "why": "It treats the for like an if whose body runs at most once, but the loop repeats while i < 3, which gives 3 passes."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about i or how it is updated."
+  },
+  {
+   "concept": "do_while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention do-while."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer doesn't give the output or trace the three print/println statements. It claims println(\"x is 5\") sets x to 5, which reads the string as an assignment and is not how Java works. It doesn't address the given code at all."}

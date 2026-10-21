@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer is correct: println(a) prints a type-and-hash form like [I@61f8bee4, not the elements. It gives only the result, with a brief note that the numbers aren't shown. It doesn't explain why (a holds a reference, and arrays don't override toString), so it stays at L1."}

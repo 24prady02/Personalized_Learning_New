@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"nested_conditionals","level":"L3","way":"relation_to_neighbour","quote":"the outer if fails and the else is part of the inner if","correct":true,"why":"Correctly attaches the dangling else to the inner if, so nothing prints when the outer test fails."},
+{"concept":"if_else_statement","level":"L3","way":"relation_to_neighbour","quote":"the else is part of the inner if","correct":true,"why":"Correctly states that without braces the else pairs with the innermost if."},
+{"concept":"else_if_chain","level":"L1","way":"output_prediction","quote":"Nothing at all","correct":true,"why":"Correct that the chain prints nothing for t = 5, but no reasoning about the chain is given."},
+{"concept":"continue_statement","level":"none","way":"","quote":"","correct":true,"why":"The answer says nothing about continue."}
+]}

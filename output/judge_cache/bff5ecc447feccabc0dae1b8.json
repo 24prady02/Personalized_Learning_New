@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int i = 0; i < x.length - 1; i++) x[i] = x[i + 1];",
+   "correct": true,
+   "why": "The code uses the loop variable as the index, so x[i] and x[i+1] reach new elements on each pass. The bound x.length - 1 keeps x[i+1] inside 0..length-1. A left rotation is a familiar variant, so this is relational rather than L4."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "int first = x[0]; for (int i = 0; i < x.length - 1; i++) x[i] = x[i + 1]; x[x.length - 1] = first;",
+   "correct": true,
+   "why": "Saving x[0] first and stepping the index upward, the opposite of the original downward loop, makes a correct left shift. Adapting the given code to a familiar variant counts only as relational."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "i++",
+   "correct": true,
+   "why": "i++ is used correctly as the usual for-loop update, adding 1 to the index on each pass."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int i = 0; i < x.length - 1; i++)",
+   "correct": true,
+   "why": "The header correctly packages the start value, the guard and the update, so i covers 0..length-2 for the shift. The new code adapts a familiar pattern, so it is relational rather than L4."
+  }
+ ]
+}

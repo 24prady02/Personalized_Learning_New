@@ -1,0 +1,1 @@
+{"level": "L1", "why": "8 is a correct input (8→4→2→1 gives c=3), but the student only reports having run inputs 1 to 10 and gives the result with no trace or reasoning about halving. A correct answer with no justification is L1."}

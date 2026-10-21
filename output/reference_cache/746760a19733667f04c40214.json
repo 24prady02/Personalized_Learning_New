@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student correctly computes miles / gallons with double parameters and a double result, but never returns it. The method won't compile (missing return), so only one part of the task is covered."}

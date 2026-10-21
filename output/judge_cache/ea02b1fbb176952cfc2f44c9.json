@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't talk about assignment at all. It only gives output values."
+  },
+  {
+   "concept": "space_time_tradeoff",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't talk about saving memory to gain time or about precomputing values. It only gives output values with a log-base-2 estimate."
+  }
+ ]
+}

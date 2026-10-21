@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "integer division in computing p from counts", "why": "The answer applies maths division (0.4, 0.4, 0.2) instead of Java's integer division, which gives all 0s, so p is 0,0,0,0,0 and not a probability row, and it does not fix it."}

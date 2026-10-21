@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It tests the value a[i], not the position i.",
+   "correct": true,
+   "why": "The answer correctly says that a[i] is the stored element value and i is only its position, but it gives no values, trace or relation to the loop, so it does not reach a higher level."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about exchanging array elements."
+  }
+ ]
+}

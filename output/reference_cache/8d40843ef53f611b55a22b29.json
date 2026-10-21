@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer gives no printed output for either input. It also misdescribes the code. The code tests v >= 0 before adding and never subtracts anything, so 'add first, then subtract if negative' is a different algorithm. It does not trace the values (5.0 for the first input, nothing printed for the second)."}

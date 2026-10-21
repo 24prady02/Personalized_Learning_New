@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "declaring a char variable with a character literal", "why": "The type char and the name singleLetter are right, and 81 does give 'Q' in a char. But it does not use the conventional literal 'Q', so only part of the declaration follows the convention."}

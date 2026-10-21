@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "Accessing next-to-last array element using length - 2", "why": "The answer gives correct code and relates the last index (length - 1) to length - 2 in one explanation, but it stays within the given task without covering other cases such as arrays shorter than 2 elements."}

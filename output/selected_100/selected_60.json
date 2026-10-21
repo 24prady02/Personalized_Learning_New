@@ -1,0 +1,1995 @@
+[
+ {
+  "id": "S057",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "H7 Correct",
+  "kind": "Student answer",
+  "question": "Q32",
+  "text": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+  "ways": [
+   "L3 diagnose_an_error",
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error",
+   "L4 predict_a_change",
+   "L4 transfer_to_a_new_program"
+  ],
+  "concepts": [
+   "explicit_cast",
+   "int",
+   "normalization",
+   "type_conversion"
+  ]
+ },
+ {
+  "id": "S150",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L2",
+  "type": "P2 Context flip: expression as argument vs as statement",
+  "kind": "Student answer",
+  "question": "Q13",
+  "text": "System.out.println(count + 1) shows one more, but count + 1 on its own line does not change count.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L2 one_step_execution",
+   "L2 output_prediction"
+  ],
+  "concepts": [
+   "counter_pattern",
+   "println",
+   "standard_output",
+   "statement"
+  ]
+ },
+ {
+  "id": "S016",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "A1 Correct output, wrong reasoning",
+  "kind": "Student answer",
+  "question": "Q02",
+  "text": "num4 = 30.3, because 9 % 5 means 9 minus 5, which is 4.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 output_prediction",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "double",
+   "remainder_operator"
+  ]
+ },
+ {
+  "id": "S076",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L2",
+  "type": "I6 Compile error caused by a misconception",
+  "kind": "Student answer",
+  "question": "Q11",
+  "text": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+  "ways": [
+   "L1 names_the_element",
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "array_copy",
+   "array_creation",
+   "for_loop",
+   "int"
+  ]
+ },
+ {
+  "id": "S034",
+  "human": false,
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "E8 Conceptual \"why\" question",
+  "kind": "Student's own question",
+  "question": "Q16",
+  "text": "Why does Java have both char and String?",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "char",
+   "primitive_type",
+   "string_type"
+  ]
+ },
+ {
+  "id": "S113",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ20",
+  "text": "A loop that never stops because its condition stays true.",
+  "ways": [
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "infinite_loop",
+   "loop_control",
+   "while_loop"
+  ]
+ },
+ {
+  "id": "S164",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "M7 Python terms in a Java answer (stored)",
+  "kind": "Student answer",
+  "question": "Q25",
+  "text": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+  "ways": [
+   "L0 inconsistent_trace",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "if_else_statement",
+   "if_statement",
+   "logical_operators"
+  ]
+ },
+ {
+  "id": "S036",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "F9 Correct in an unexpected style",
+  "kind": "Student answer",
+  "question": "Q12",
+  "text": "double min = data[0]; for (double v : data) min = Math.min(min, v); System.out.println(min);",
+  "ways": [
+   "L1 names_the_element",
+   "L3 purpose_of_the_whole"
+  ],
+  "concepts": [
+   "double",
+   "println",
+   "running_extreme"
+  ]
+ },
+ {
+  "id": "S008",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L2",
+  "type": "Correct, traced",
+  "kind": "Student answer",
+  "question": "Q08",
+  "text": "num1 is 9 and num2 starts at 12. At i = 9 num2 drops to 11; at i = 11 it drops to 10. So it prints 8, 10, 12, 13,",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L2 output_prediction"
+  ],
+  "concepts": [
+   "assignment",
+   "formatted_output",
+   "increment_operators"
+  ]
+ },
+ {
+  "id": "S009",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "Correct",
+  "kind": "Student answer",
+  "question": "Q10",
+  "text": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour",
+   "L4 transfer_to_a_new_program"
+  ],
+  "concepts": [
+   "array_bounds",
+   "double",
+   "expression",
+   "length_field"
+  ]
+ },
+ {
+  "id": "S092",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "J8 Trap",
+  "kind": "Student answer",
+  "question": "TQ02",
+  "text": "main() without String[] args is fine because the program uses no arguments.",
+  "ways": [
+   "L0 diagnose_an_error",
+   "L0 everyday_reading",
+   "L0 misconception"
+  ],
+  "concepts": [
+   "command_line_args",
+   "main_method"
+  ]
+ },
+ {
+  "id": "S089",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L3",
+  "type": "J3 Part (c) L3",
+  "kind": "Student answer",
+  "question": "TQ01",
+  "text": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error",
+   "L4 transfer_to_a_new_program"
+  ],
+  "concepts": [
+   "compile",
+   "compile_time_error",
+   "incremental_development",
+   "reading_error_messages"
+  ]
+ },
+ {
+  "id": "S023",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "B8 Non-native English / typos",
+  "kind": "Student answer",
+  "question": "Q05",
+  "text": "the swich no have break so it go down all the case and result become 50",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "break_statement",
+   "switch_statement"
+  ]
+ },
+ {
+  "id": "S037",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "Correct (out of graph scope)",
+  "kind": "Student answer",
+  "question": "Q17",
+  "text": "in swap: num1 = 42 num2 = 7, then in main: num1 = 7 num2 = 42. Java passes copies of the values, so main's variables do not change.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 output_prediction",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "assignment",
+   "variable",
+   "variable_swap"
+  ]
+ },
+ {
+  "id": "S169",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "N1 Parsons: correct with reason",
+  "kind": "Student answer",
+  "question": "Q47",
+  "text": "B C A D E: sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "accumulator_pattern",
+   "for_loop",
+   "loop_scope"
+  ]
+ },
+ {
+  "id": "S139",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: inconsistent trace",
+  "kind": "Student answer",
+  "question": "Q31",
+  "text": "The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 names_the_element",
+   "L2 output_prediction"
+  ],
+  "concepts": [
+   "coordinate_scaling",
+   "double",
+   "drawing_shapes",
+   "standard_drawing"
+  ]
+ },
+ {
+  "id": "S001",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Rule only, not applied",
+  "kind": "Student answer",
+  "question": "Q01",
+  "text": "println adds a newline after the text and print does not.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "print",
+   "println",
+   "standard_output"
+  ]
+ },
+ {
+  "id": "S005",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "Beyond the code",
+  "kind": "Student answer",
+  "question": "Q04",
+  "text": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+  "ways": [
+   "L2 output_prediction",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "boolean_expression",
+   "while_loop"
+  ]
+ },
+ {
+  "id": "S007",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "Almost correct",
+  "kind": "Student answer",
+  "question": "Q06",
+  "text": "3 2 1 / 2 1 / 1\" (no empty line at the end), \"because the loop stops at 1.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 output_prediction",
+   "L2 line_by_line_trace",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "expression",
+   "string_literal"
+  ]
+ },
+ {
+  "id": "S039",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Catalogue misconception (not in graph)",
+  "kind": "Student answer",
+  "question": "Q19",
+  "text": "for (...) { if (arr[i] == key) return i; else return -1; }",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "expression",
+   "for_loop",
+   "if_else_statement",
+   "indexing"
+  ]
+ },
+ {
+  "id": "S049",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H3 Student asks (stored error)",
+  "kind": "Student's own question",
+  "question": "Q28",
+  "text": "I read two numbers in each pass and with 5 3 8 it crashes at the end. Why?",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "loop_body",
+   "read_loop_idiom",
+   "standard_input"
+  ]
+ },
+ {
+  "id": "S065",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "H9 Correct",
+  "kind": "Student answer",
+  "question": "Q34",
+  "text": "Only estimates; 100 moves is far too few and the zeros mean nothing. In the long run the start page does not matter.",
+  "ways": [
+   "L1 names_the_element",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "long_type",
+   "primitive_type",
+   "run",
+   "simulation_loop"
+  ]
+ },
+ {
+  "id": "S097",
+  "human": true,
+  "level": "L2",
+  "level_by": "human",
+  "algorithm": "L2",
+  "type": "J2 Part (b) L2",
+  "kind": "Student answer",
+  "question": "TQ06",
+  "text": "67, a tab, C; then A12; then 662.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L2 output_prediction"
+  ],
+  "concepts": [
+   "char_arithmetic",
+   "escape_sequences",
+   "explicit_cast"
+  ]
+ },
+ {
+  "id": "S111",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J5 Part (e) L4",
+  "kind": "Student answer",
+  "question": "TQ18",
+  "text": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+  "ways": [
+   "L4 diagnose_an_error"
+  ],
+  "concepts": [
+   "explicit_cast",
+   "math_random",
+   "random_move"
+  ]
+ },
+ {
+  "id": "S114",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L3",
+  "type": "J5 Part (e) L3",
+  "kind": "Student answer",
+  "question": "TQ21",
+  "text": "new fills the array with 0s, but a local variable has no value until you give it one.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "array_creation",
+   "array_default_values",
+   "declaration",
+   "variable"
+  ]
+ },
+ {
+  "id": "S127",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ32",
+  "text": "Page 2, it links nowhere.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "dangling_pages",
+   "input_graph"
+  ]
+ },
+ {
+  "id": "S004",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Ambiguous",
+  "kind": "Student answer",
+  "question": "Q03",
+  "text": "It prints A, goes to the odd part and prints the letters there.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "assignment",
+   "print"
+  ]
+ },
+ {
+  "id": "S014",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Correct",
+  "kind": "Student answer",
+  "question": "Q15",
+  "text": "p && q is true only when both are true; p || q is false only when both are false.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "boolean",
+   "logical_operators",
+   "short_circuit"
+  ]
+ },
+ {
+  "id": "S026",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "none",
+  "type": "C4 Swap: ambiguous wording",
+  "kind": "Student answer",
+  "question": "Q24",
+  "text": "a becomes b and b becomes a.",
+  "ways": [
+   "L1 output_prediction"
+  ],
+  "concepts": []
+ },
+ {
+  "id": "S038",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "In-scope part of an out-of-scope question",
+  "kind": "Student answer",
+  "question": "Q18",
+  "text": "finalAdjust(-1) gives 5, so reCalculate returns 2 and num2 = 27.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "assignment",
+   "increment_operators"
+  ]
+ },
+ {
+  "id": "S041",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Stored but out-of-scope misconception",
+  "kind": "Student answer",
+  "question": "Q22",
+  "text": "JAVA, because toUpperCase changes name.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "println"
+  ]
+ },
+ {
+  "id": "S051",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H4 Stored error (writing)",
+  "kind": "Student answer",
+  "question": "Q29",
+  "text": "I removed if (v >= 0) because rain values are always fine.",
+  "ways": [
+   "L0 misconception",
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "comparison_operators",
+   "if_statement",
+   "sentinel_loop"
+  ]
+ },
+ {
+  "id": "S052",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "H5 Correct",
+  "kind": "Student answer",
+  "question": "Q30",
+  "text": "1: nothing, the numbers go into data.txt. 2: the average. 3: an average of 5 new numbers, no file. args is empty.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "command_line_args",
+   "piping",
+   "redirection"
+  ]
+ },
+ {
+  "id": "S080",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "H11 Correct",
+  "kind": "Student answer",
+  "question": "Q36",
+  "text": "Two compile errors first: the class must be in Greeting.java and the ; is missing. After that it compiles, but args[1] crashes at run time because Ann is args[0]. The comment never runs.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 line_by_line_trace",
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error"
+  ],
+  "concepts": [
+   "command_line_args",
+   "comment",
+   "compile",
+   "program_text"
+  ]
+ },
+ {
+  "id": "S068",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H9 Partly right",
+  "kind": "Student answer",
+  "question": "Q34",
+  "text": "They are estimates. But starting at page 3 would change the ranks.",
+  "ways": [
+   "L0 misconception",
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "frequency_counting",
+   "markov_chain",
+   "power_method"
+  ]
+ },
+ {
+  "id": "S012",
+  "human": false,
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Student asks",
+  "kind": "Student's own question",
+  "question": "Q13",
+  "text": "Is count++ the same as count += 1?",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "compound_assignment",
+   "counter_pattern",
+   "increment_operators"
+  ]
+ },
+ {
+  "id": "S093",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J4 Part (d) L4",
+  "kind": "Student answer",
+  "question": "TQ03",
+  "text": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "double",
+   "expression",
+   "integer_division"
+  ]
+ },
+ {
+  "id": "S094",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J4 Part (d) L4",
+  "kind": "Student answer",
+  "question": "TQ04",
+  "text": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "args_length",
+   "array_bounds",
+   "command_line_args",
+   "run"
+  ]
+ },
+ {
+  "id": "S095",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J2 Part (b) L1",
+  "kind": "Student answer",
+  "question": "TQ05",
+  "text": "String; it is a class. The other four are primitive.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "primitive_type",
+   "primitive_vs_reference",
+   "string_type"
+  ]
+ },
+ {
+  "id": "S098",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J6 Part (f) L4",
+  "kind": "Student answer",
+  "question": "TQ07",
+  "text": "Still -2147483648, because +2147483648 does not fit in an int.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "int",
+   "int_literal_limit",
+   "primitive_type"
+  ]
+ },
+ {
+  "id": "S101",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J2 Part (b) L1",
+  "kind": "Student answer",
+  "question": "TQ09",
+  "text": "It gives true when the two sides are different.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "exclusive_or"
+  ]
+ },
+ {
+  "id": "S103",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J6 Part (f) L4",
+  "kind": "Student answer",
+  "question": "TQ10",
+  "text": "It does not compile, since round gives a long.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error"
+  ],
+  "concepts": [
+   "long_type",
+   "math_round",
+   "primitive_type"
+  ]
+ },
+ {
+  "id": "S104",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L3",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ11",
+  "text": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "data_type",
+   "double",
+   "int",
+   "type_conversion"
+  ]
+ },
+ {
+  "id": "S106",
+  "human": true,
+  "level": "L2",
+  "level_by": "human",
+  "algorithm": "L2",
+  "type": "J2 Part (b) L2",
+  "kind": "Student answer",
+  "question": "TQ12",
+  "text": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "if_statement",
+   "testing"
+  ]
+ },
+ {
+  "id": "S109",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J4 Part (d) L4",
+  "kind": "Student answer",
+  "question": "TQ16",
+  "text": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "if_else_statement",
+   "nested_conditionals"
+  ]
+ },
+ {
+  "id": "S112",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L3",
+  "type": "J3 Part (c) L3",
+  "kind": "Student answer",
+  "question": "TQ19",
+  "text": "continue jumps to the next i for the even numbers, break stops the loop completely at 5.",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "break_statement",
+   "continue_statement"
+  ]
+ },
+ {
+  "id": "S115",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J3 Part (c) L2",
+  "kind": "Student answer",
+  "question": "TQ22",
+  "text": "Something like [I@ and a hex code, not the numbers.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "printing_array_reference"
+  ]
+ },
+ {
+  "id": "S116",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J6 Part (f) L4",
+  "kind": "Student answer",
+  "question": "TQ23",
+  "text": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+  "ways": [
+   "L1 names_the_element",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour",
+   "L4 transfer_to_a_new_program"
+  ],
+  "concepts": [
+   "array_traversal",
+   "indexing",
+   "length_field"
+  ]
+ },
+ {
+  "id": "S117",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L3",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ24",
+  "text": "Otherwise a[i] is overwritten before it is saved.",
+  "ways": [
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "array_exchange",
+   "assignment",
+   "indexing",
+   "variable_swap"
+  ]
+ },
+ {
+  "id": "S118",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ25",
+  "text": "It is a table to look up a month name from its number.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "lookup_table"
+  ]
+ },
+ {
+  "id": "S122",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L2",
+  "type": "J3 Part (c) L3",
+  "kind": "Student answer",
+  "question": "TQ28",
+  "text": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "standard_input",
+   "token_vs_line_input"
+  ]
+ },
+ {
+  "id": "S126",
+  "human": true,
+  "level": "L3",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J5 Part (e) L4",
+  "kind": "Student answer",
+  "question": "TQ31",
+  "text": "You need System.exit(0) at the end of main.",
+  "ways": [
+   "L1 names_the_element",
+   "L3 diagnose_an_error"
+  ],
+  "concepts": [
+   "standard_audio"
+  ]
+ },
+ {
+  "id": "S043",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L3",
+  "type": "H1 Correct, relation to role",
+  "kind": "Student answer",
+  "question": "Q26",
+  "text": "i is fine because it is only the loop index. c should be passCount, since it counts the passing scores. It still prints 3.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 output_prediction",
+   "L3 purpose_of_the_whole"
+  ],
+  "concepts": [
+   "for_loop",
+   "indexing",
+   "loop_control",
+   "loop_variable"
+  ]
+ },
+ {
+  "id": "S099",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "J8 Trap",
+  "kind": "Student answer",
+  "question": "TQ08",
+  "text": "6.02e23 is 6.02 times e to the power 23.",
+  "ways": [
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "double",
+   "scientific_notation"
+  ]
+ },
+ {
+  "id": "S141",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "P1 Under-application (stored)",
+  "kind": "Student answer",
+  "question": "Q39",
+  "text": "Braces are pointless, I never write them.",
+  "ways": [
+   "L0 everyday_reading",
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "block"
+  ]
+ },
+ {
+  "id": "S142",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "P1 Over-application",
+  "kind": "Student answer",
+  "question": "Q40",
+  "text": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception"
+  ],
+  "concepts": [
+   "expression",
+   "operator_precedence"
+  ]
+ },
+ {
+  "id": "S143",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "P1 Under-application (stored)",
+  "kind": "Student answer",
+  "question": "Q41",
+  "text": "Indentation does not matter, I indent however I like.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "program_layout"
+  ]
+ },
+ {
+  "id": "S145",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "P1 Related stored misconception",
+  "kind": "Student answer",
+  "question": "Q43",
+  "text": "I can rename the file to Greeting.java and keep public class hello.",
+  "ways": [
+   "L0 misconception"
+  ],
+  "concepts": [
+   "class_declaration",
+   "compile",
+   "program_text"
+  ]
+ },
+ {
+  "id": "S149",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "P2 Context flip: rectangular vs any array",
+  "kind": "Student answer",
+  "question": "Q21",
+  "text": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 predict_a_change",
+   "L4 transfer_to_a_new_program"
+  ],
+  "concepts": [
+   "indexing",
+   "length_field",
+   "two_dimensional_array"
+  ]
+ },
+ {
+  "id": "S156",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "M2 One worked example instead of a general answer",
+  "kind": "Student answer",
+  "question": "Q09",
+  "text": "When i is 3 it prints 1 2 3.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 output_prediction"
+  ],
+  "concepts": [
+   "assignment",
+   "formatted_output",
+   "nested_loops"
+  ]
+ },
+ {
+  "id": "S002",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Bare correct output",
+  "kind": "Student answer",
+  "question": "Q01",
+  "text": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 output_prediction"
+  ],
+  "concepts": [
+   "println"
+  ]
+ },
+ {
+  "id": "S010",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "Off-by-one in the loop",
+  "kind": "Student answer",
+  "question": "Q11",
+  "text": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+  "ways": [
+   "L0 everyday_reading",
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L2 line_by_line_trace"
+  ],
+  "concepts": [
+   "array_copy",
+   "for_loop",
+   "int",
+   "length_field"
+  ]
+ },
+ {
+  "id": "S015",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Stored misconception",
+  "kind": "Student answer",
+  "question": "Q16",
+  "text": "char SingleLetter = 'Q';",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "char"
+  ]
+ },
+ {
+  "id": "S028",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "D4 Keyword stuffing",
+  "kind": "Student answer",
+  "question": "Q02",
+  "text": "remainder modulus widening double concatenation println newline",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "double",
+   "println",
+   "remainder_operator"
+  ]
+ },
+ {
+  "id": "S048",
+  "human": false,
+  "level": "L1",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "H3 Stored error",
+  "kind": "Student answer",
+  "question": "Q28",
+  "text": "(c) It prints 8 2 and skips abc.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 output_prediction"
+  ],
+  "concepts": [
+   "assignment",
+   "string_concatenation",
+   "string_conversion"
+  ]
+ },
+ {
+  "id": "S108",
+  "human": true,
+  "level": "L2",
+  "level_by": "human",
+  "algorithm": "L2",
+  "type": "J3 Part (c) L2",
+  "kind": "Student answer",
+  "question": "TQ15",
+  "text": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+  "ways": [
+   "L2 line_by_line_trace"
+  ],
+  "concepts": [
+   "assignment",
+   "increment_operators",
+   "variable"
+  ]
+ },
+ {
+  "id": "S110",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ17",
+  "text": "sum builds a total, count counts.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "accumulator_pattern",
+   "counter_pattern"
+  ]
+ },
+ {
+  "id": "S119",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ26",
+  "text": "It marks whether k is not prime; everything starts as false.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "statement"
+  ]
+ },
+ {
+  "id": "S120",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J6 Part (f) L4",
+  "kind": "Student answer",
+  "question": "TQ27",
+  "text": "No, b times a is 3 4 / 1 2, so the order matters.",
+  "ways": [
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "expression",
+   "integer_division"
+  ]
+ },
+ {
+  "id": "S124",
+  "human": true,
+  "level": "L1",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J1 Part (a) L1",
+  "kind": "Student answer",
+  "question": "TQ29",
+  "text": "It reads from standard input and writes to standard output.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "standard_input",
+   "standard_output"
+  ]
+ },
+ {
+  "id": "S125",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J5 Part (e) L4",
+  "kind": "Student answer",
+  "question": "TQ30",
+  "text": "The circles are never erased, so you get a trail.",
+  "ways": [
+   "L3 relation_to_neighbour",
+   "L4 diagnose_an_error"
+  ],
+  "concepts": [
+   "drawing_shapes"
+  ]
+ },
+ {
+  "id": "S136",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J7 L0 way: everyday reading",
+  "kind": "Student answer",
+  "question": "Q07",
+  "text": "isDone = (i % 5 == 0); would do the same as the if.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "if_statement"
+  ]
+ },
+ {
+  "id": "S013",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "Correct",
+  "kind": "Student answer",
+  "question": "Q14",
+  "text": "outputValue = (inValue >= 0) ? 100 : -50;",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "assignment",
+   "statement"
+  ]
+ },
+ {
+  "id": "S042",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "none",
+  "type": "Catalogue misconception (not in graph)",
+  "kind": "Student answer",
+  "question": "Q23",
+  "text": "public static double calculateMPG(double miles, double gallons) { double mpg = miles / gallons; }",
+  "ways": [
+   "L1 names_the_element",
+   "L2 one_step_execution"
+  ],
+  "concepts": []
+ },
+ {
+  "id": "S047",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "H2 Predicts a change",
+  "kind": "Student answer",
+  "question": "Q27",
+  "text": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "double",
+   "formatted_output"
+  ]
+ },
+ {
+  "id": "S061",
+  "human": false,
+  "level": "L4",
+  "level_by": "Fable",
+  "algorithm": "L2",
+  "type": "H8 Correct",
+  "kind": "Student answer",
+  "question": "Q33",
+  "text": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1. (b) the sums only reach 0.9, so next stays -1 because the row does not add to 1.",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 one_step_execution",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "accumulator_pattern",
+   "arithmetic_operators",
+   "double"
+  ]
+ },
+ {
+  "id": "S069",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "H10 Correct",
+  "kind": "Student answer",
+  "question": "Q35",
+  "text": "(a) No, 0 1 is only a link from 0 to 1. (b) No, it is where you are after one move; you keep multiplying until it stops changing.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "assignment",
+   "expression",
+   "simulation_loop"
+  ]
+ },
+ {
+  "id": "S084",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H12 Stored misconception",
+  "kind": "Student answer",
+  "question": "Q37",
+  "text": "Only start, because done is inside the if and 3 is not > 5.",
+  "ways": [
+   "L0 misconception"
+  ],
+  "concepts": [
+   "if_statement"
+  ]
+ },
+ {
+  "id": "S107",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "J8 Trap",
+  "kind": "Student answer",
+  "question": "TQ13",
+  "text": "positive is not printed, because x > 0 is false.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 inconsistent_trace",
+   "L1 states_the_rule",
+   "L2 output_prediction"
+  ],
+  "concepts": [
+   "assignment",
+   "comparison_operators",
+   "if_statement"
+  ]
+ },
+ {
+  "id": "S140",
+  "human": false,
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "P1 Under-application (stored)",
+  "kind": "Student answer",
+  "question": "Q38",
+  "text": "Writing 3.14159 in the formula is just as clear as a name.",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "double"
+  ]
+ },
+ {
+  "id": "S123",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J4 Part (d) L4",
+  "kind": "Student answer",
+  "question": "TQ28",
+  "text": "No, the user decides each time, while it is running.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "interactive_input"
+  ]
+ },
+ {
+  "id": "S134",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: inconsistent trace",
+  "kind": "Student answer",
+  "question": "Q24",
+  "text": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+  "ways": [
+   "L0 everyday_reading",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "array_aliasing",
+   "assignment",
+   "variable_swap"
+  ]
+ },
+ {
+  "id": "S135",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: everyday reading",
+  "kind": "Student answer",
+  "question": "TQ09",
+  "text": "You could write b as !(5 < n < 10).",
+  "ways": [
+   "L0 everyday_reading",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "boolean_expression",
+   "de_morgan"
+  ]
+ },
+ {
+  "id": "S137",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: everyday reading",
+  "kind": "Student answer",
+  "question": "Q01",
+  "text": "System.out.println(\"x is 5\"); sets x to 5.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "method_call",
+   "println",
+   "standard_output"
+  ]
+ },
+ {
+  "id": "S050",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H3 Prerequisite gap",
+  "kind": "Student answer",
+  "question": "Q28",
+  "text": "StdIn is a variable that holds all the numbers, like an array.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception"
+  ],
+  "concepts": [
+   "standard_input",
+   "stream_model",
+   "variable"
+  ]
+ },
+ {
+  "id": "S060",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "H7 Stored misconception",
+  "kind": "Student answer",
+  "question": "Q32",
+  "text": "An all-zero row is fine; it just means the page has no links.",
+  "ways": [
+   "L0 misconception",
+   "L3 diagnose_an_error"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "dangling_pages",
+   "expression",
+   "transition_matrix"
+  ]
+ },
+ {
+  "id": "S073",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "I1 Multi-turn: answer changes after the probe",
+  "kind": "Student answer",
+  "question": "Q05",
+  "text": "Turn 1: \"result is 20.\"\nProbe: \"If value is 1, what is result?\"\nTurn 2: \"10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.\"",
+  "ways": [
+   "L0 inconsistent_trace",
+   "L2 line_by_line_trace",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "conditional_operator"
+  ]
+ },
+ {
+  "id": "S100",
+  "human": false,
+  "level": "L0",
+  "level_by": "Fable",
+  "algorithm": "L0",
+  "type": "J9 Ambiguous",
+  "kind": "Student answer",
+  "question": "TQ08",
+  "text": "Dividing by zero gives an error.",
+  "ways": [
+   "L0 misconception"
+  ],
+  "concepts": [
+   "division_by_zero"
+  ]
+ },
+ {
+  "id": "S054",
+  "human": false,
+  "level": "none",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "H5 Student asks",
+  "kind": "Student's own question",
+  "question": "Q30",
+  "text": "Do I need to change my program to read from a file?",
+  "ways": [
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "data_driven_code",
+   "redirection"
+  ]
+ },
+ {
+  "id": "S088",
+  "human": true,
+  "level": "L2",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J2 Part (b) L2",
+  "kind": "Student answer",
+  "question": "TQ01",
+  "text": "There is a Big.class file now, but nothing is printed because the program has not run yet.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 one_step_execution",
+   "L2 output_prediction",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "program_text",
+   "run"
+  ]
+ },
+ {
+  "id": "S091",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J4 Part (d) L4",
+  "kind": "Student answer",
+  "question": "TQ02",
+  "text": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+  "ways": [
+   "L4 diagnose_an_error"
+  ],
+  "concepts": [
+   "compile_time_error",
+   "statement",
+   "string_literal"
+  ]
+ },
+ {
+  "id": "S121",
+  "human": true,
+  "level": "L2",
+  "level_by": "human",
+  "algorithm": "L2",
+  "type": "J2 Part (b) L2",
+  "kind": "Student answer",
+  "question": "TQ28",
+  "text": "42, an empty string, and \"Ann Lee\".",
+  "ways": [
+   "L1 output_prediction",
+   "L2 line_by_line_trace"
+  ],
+  "concepts": [
+   "string_literal",
+   "string_type"
+  ]
+ },
+ {
+  "id": "S129",
+  "human": true,
+  "level": "L4",
+  "level_by": "human",
+  "algorithm": "L4",
+  "type": "J5 Part (e) L4",
+  "kind": "Student answer",
+  "question": "TQ32",
+  "text": "The surfer gets trapped in that group and the other pages get rank 0.",
+  "ways": [
+   "L4 diagnose_an_error",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "input_graph"
+  ]
+ },
+ {
+  "id": "S132",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: inconsistent trace",
+  "kind": "Student answer",
+  "question": "TQ05",
+  "text": "a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 inconsistent_trace",
+   "L0 misconception"
+  ],
+  "concepts": [
+   "accumulator_pattern",
+   "double"
+  ]
+ },
+ {
+  "id": "S133",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L0",
+  "type": "J7 L0 way: everyday reading",
+  "kind": "Student answer",
+  "question": "TQ05",
+  "text": "int c; declares c, so c is 0.",
+  "ways": [
+   "L0 everyday_reading",
+   "L0 misconception",
+   "L1 names_the_element"
+  ],
+  "concepts": [
+   "declaration",
+   "int",
+   "variable"
+  ]
+ },
+ {
+  "id": "S138",
+  "human": true,
+  "level": "L0",
+  "level_by": "human",
+  "algorithm": "L1",
+  "type": "J7 L0 way: everyday reading",
+  "kind": "Student answer",
+  "question": "Q29",
+  "text": "Add v to sum first, then check if it was negative and subtract it again.",
+  "ways": [
+   "L1 names_the_element",
+   "L1 states_the_rule"
+  ],
+  "concepts": [
+   "accumulator_pattern"
+  ]
+ },
+ {
+  "id": "S017",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "A3 Partial trace",
+  "kind": "Student answer",
+  "question": "Q06",
+  "text": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "assignment",
+   "for_loop",
+   "increment_operators"
+  ]
+ },
+ {
+  "id": "S020",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "B5 Pseudocode answer",
+  "kind": "Student answer",
+  "question": "Q12",
+  "text": "best = first; for each element: if smaller than best → best = element; print best",
+  "ways": [
+   "L1 names_the_element",
+   "L3 relation_to_neighbour"
+  ],
+  "concepts": [
+   "assignment",
+   "print"
+  ]
+ },
+ {
+  "id": "S021",
+  "human": false,
+  "level": "L3",
+  "level_by": "Fable",
+  "algorithm": "L4",
+  "type": "B6 Long, rambling answer",
+  "kind": "Student answer",
+  "question": "Q03",
+  "text": "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G, so overall I think the answer would be AEG, which makes sense because…",
+  "ways": [
+   "L2 line_by_line_trace",
+   "L2 output_prediction",
+   "L3 purpose_of_the_whole",
+   "L4 predict_a_change"
+  ],
+  "concepts": [
+   "arithmetic_operators",
+   "if_else_statement",
+   "remainder_operator"
+  ]
+ },
+ {
+  "id": "S022",
+  "human": false,
+  "level": "L2",
+  "level_by": "Fable",
+  "algorithm": "L1",
+  "type": "B7 Informal words",
+  "kind": "Student answer",
+  "question": "Q07",
+  "text": "It keeps jumping up by 3 and quits after the pass where it hits a multiple of 5.",
+  "ways": [
+   "L1 names_the_element",
+   "L2 one_step_execution"
+  ],
+  "concepts": [
+   "while_loop"
+  ]
+ }
+]

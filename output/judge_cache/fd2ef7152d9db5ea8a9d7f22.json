@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "(c) it crashes, because a[2] does not exist.",
+   "correct": true,
+   "why": "The student goes beyond the given code: an array of length 1 has only index 0, so a[2] is out of bounds and the program fails at run time (ArrayIndexOutOfBoundsException)."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(b) it swaps the first and the third element  (c) it crashes, because a[2] does not exist.",
+   "correct": true,
+   "why": "The student states the swap's purpose, correctly predicts {2, 1, 3}, and links the exchange to the rule that both indices must be in bounds. The L4 error ways for exchange cover the temporary variable and statement order, which the answer does not discuss."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about row-major or column-major order."
+  }
+ ]
+}

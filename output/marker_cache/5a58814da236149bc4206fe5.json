@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "equivalence of loop variants (index bounds and traversal)", "why": "The answer claims B gives the same sum, saying it just starts at 1. That misses that B skips a[0] and goes out of bounds at a[a.length], so it applies a wrong rule about the loop bounds."}

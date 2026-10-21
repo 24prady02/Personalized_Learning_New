@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "definition of a data type", "why": "It states the general rule (values plus operations) correctly but does not apply it to the code's int, double, or final double variables or their values."}

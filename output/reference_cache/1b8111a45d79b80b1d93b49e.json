@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The chosen lines A B C D E are correct and in the right order. The student gave no explanation, though, and the question asked why lines F and G were left out (F's `<=` goes out of bounds, and G's `count = 1` doesn't count). A correct answer with no justification stays at L1."}

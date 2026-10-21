@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "standard input/output redirection in a filter", "why": "States one correct aspect (reads stdin, writes stdout) but does not mention the selective non-negative copying or apply it to the values, nor relate it to the pipe/redirect."}

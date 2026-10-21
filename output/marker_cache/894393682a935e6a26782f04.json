@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "roles of max and i (variable purpose and type)", "why": "Calling i the loop variable is a correct but partial point, and saying max is a double is wrong because max is an int holding the largest value so far, so the answer includes a wrong rule and doesn't describe max's role."}

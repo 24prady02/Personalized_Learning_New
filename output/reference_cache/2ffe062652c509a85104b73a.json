@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student's output ends with '1 2 3 4', but the inner loop stops at j <= i, so the last row is '1 2 3'. The student also gave no explanation of the code. The '4' shows a wrong rule for the loop bound (the pattern is continued instead of the condition being applied), so the answer shows no working model of the nested loop."}

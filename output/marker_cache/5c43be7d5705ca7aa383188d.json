@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "modulus operator (%) in a mixed int/double expression", "why": "The student applies a wrong rule, reading 9 % 5 as subtraction (giving 4 instead of the remainder 4 by coincidence), so the output 30.3 is right only by accident. Their stated rule does not match Java's remainder operation."}

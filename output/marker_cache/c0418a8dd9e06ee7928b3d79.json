@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Equivalence of nested if-else and conditional-expression code, compared by cases", "why": "The answer correctly covers every case (x>0, x==0, x<0) with values for both snippets, but it doesn't state the purpose of the code or generalise beyond the cases."}

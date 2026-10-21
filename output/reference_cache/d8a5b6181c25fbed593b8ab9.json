@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says b got its own copy, which is wrong, because b = a copies the reference and both point to the same array. So the final a[0] is 9, not 1. The student switches rules between the array and the int, since x = 5 is correct, so the answer shows no working model of reference assignment."}

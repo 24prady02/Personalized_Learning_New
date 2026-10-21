@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "misconception: an if body repeats while its condition holds",
+   "quote": "x ends as 3, the if keeps adding 1 while x < 3",
+   "correct": false,
+   "why": "A Java if tests its condition once and runs x++ at most once, so x ends as 1, not 3."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about assignment; the wrong value comes from the if misconception."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss while loops, even though it treats the if as if it were one."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about template notation."
+  }
+ ]
+}

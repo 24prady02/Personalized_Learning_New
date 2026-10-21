@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions i++ or what it does; 'for each i up to n' is about the loop range, not the increment operator."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "it does s += i*i for each i up to n, so like 1 + 4 + 9 …",
+   "correct": true,
+   "why": "It applies s += i*i to this code's values and gets the running terms 1, 4, 9 added into s; this is a purpose induced from a few traced cases, which is L2, and it never states the sum-of-squares purpose outright."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about plain = assignment (int s = 0 or int n = ...)."
+  }
+ ]
+}

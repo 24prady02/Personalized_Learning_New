@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "B", "why": "The answer reads 'add up' with an everyday meaning and misapplies it: fragment (1) sums the values while fragment (2) counts positives, so grouping them as 'the same' contradicts what the code does, shows no working model of the accumulator pattern, and gives no value-by-value coverage of any fragment."}

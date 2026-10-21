@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The code is correct. The student explains that the start value must be 1 because starting at 0 would make every product 0, and that += becomes *=. Linking the initial value to the operator's role is a relational explanation that stays within the given code, so it is L3 and not L4."}

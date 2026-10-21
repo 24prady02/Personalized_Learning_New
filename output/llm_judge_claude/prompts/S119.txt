@@ -1,0 +1,163 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What does composite[k] mean, and what is it at the start?
+
+CODE:
+int n = 20;
+boolean[] composite = new boolean[n + 1];
+for (int i = 2; i * i <= n; i++)
+  if (!composite[i])
+    for (int j = i * i; j <= n; j += i) composite[j] = true;
+for (int i = 2; i <= n; i++) if (!composite[i]) System.out.print(i + " ");
+
+STUDENT ANSWER: It marks whether k is not prime; everything starts as false.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: boolean_flag_array
+L0 Prestructural:
+  - everyday_reading: Folk meaning: using a value (a card number) as a position is not how everyday checklists work; people search a list to see whether they have seen something. 
+  - misconception: wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. 
+  - misconception: wrong rule: The slots of a new boolean[n] hold unpredictable values until assigned. 
+  boundary: Any correct, programming-specific statement about boolean flag array makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: a boolean array indexed by value, in which flag[v] records whether v has been seen or has a property.
+  - states_the_rule: Declarative: create boolean[] flags = new boolean[N] (all false); mark v with flags[v] = true; test with if (!flags[v]). Values must lie in 0..N-1.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing (CouponCollector): generate val, increment cardcnt, test found[val], and if it is false increment valcnt and set found[val] = true; repeat while valcnt < N.
+  - output_prediction: Result: the count derived from the flags, e.g. CouponCollector prints the number of cards drawn, and PrimeSieve 25 prints 9; at the end of the collector found[] is all true.
+  - one_step_execution: State transition: one step sets at most one flag from false to true and never back, so each element is a one-way flag.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: new boolean[n] starts every flag at false, which CouponCollector relies on; PrimeSieve needs true and so sets it with a loop.
+  - relation_to_neighbour: The sieve traverses isPrime[] to set every flag to true and later traverses it again to count the flags still true.
+  - purpose_of_the_whole: Plan/role: set membership by direct indexing. Each element is a one-way flag (Sajaniemi), and the array lets data index into the array, turning 'have I seen v?' into one step.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: in CouponCollector, valcnt always equals the number of true entries in found[]. Enlarging the value range requires enlarging the array (N+1 when N itself is an index).
+  - transfer_to_a_new_program: Applicability: use a flag array when the values are small non-negative integers (card values, numbers up to N) and memory for N flags is affordable. Do not use one for huge, negative or non-integer keys.
+  - diagnose_an_error: rule broken: Values used as indices must lie in 0..length-1. Kind: run-time exception. Trigger class: new boolean[N] used with value N as an index (the sieve needs N+1), or a negative value (ArrayIndexOutOfBoundsException)
+  - diagnose_an_error: rule broken: A start value other than false must be set explicitly. Kind: silent logic error. Trigger class: PrimeSieve without its initial isPrime[i] = true loop: no number is ever prime, so it prints 0
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: empty_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English a semicolon just separates or ends a clause, so 'if (x > 0);' still reads as 'if x is positive, do the next thing'. In Java a lone ; is a complete statement that does nothing, and it becomes the whole body
+  boundary: Any correct, programming-specific statement about empty statement makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: The empty (null) statement is a lone semicolon: a statement that does nothing.
+  - states_the_rule: An empty statement does nothing, and its execution always completes normally; any part of a for loop, including its body, may be left empty, but a while loop is better style than null statements.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Executing ; does nothing and passes control to the next statement; as a loop body it means each pass is just test (then update, for a for loop).
+  - output_prediction: An empty statement produces no value and no output; e.g. for (int v = 1; v <= N/2; v *= 2) ; computes the same final v as the while version, but v is out of scope afterwards.
+  - one_step_execution: One execution changes no variable and returns nothing; only the header parts around it (test, update) change state.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The empty statement can stand wherever a statement is required (if body, loop body, for slots), and a block { } can stand alone; a ; after a header therefore silently becomes the body.
+  - purpose_of_the_whole: Plan: placeholder - an intentionally empty body when the loop header does all the work; the book avoids it and prefers a while loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Deleting a ; that stands right after an if or loop header changes the program: the next statement becomes the body. Adding or removing an extra ; between ordinary statements changes nothing.
+  - diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a stat
+  - diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after
+  - transfer_to_a_new_program: Use an empty statement only for a loop whose header does all the work, and comment it; otherwise write { } or restructure as a while loop. Never put ; directly after if (...), while (...) or for (...) by habit.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: indexing
+L0 Prestructural:
+  - everyday_reading: Folk meaning: everyday counting starts at 1 (first = number 1), maths subscripts a_1..a_n run from 1, and f(i) with parentheses means 'apply to i'. 
+  - misconception: wrong rule: i and a[i] are the same thing, so the position is the stored value. 
+  - misconception: wrong rule: The first element of a is a[1]. 
+  - misconception: wrong rule: new int[n] has slots 0 to n, inclusive. 
+  - misconception: wrong rule: a(i) accesses element i of an array. 
+  - misconception: wrong rule: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. 
+  boundary: Any correct, programming-specific statement about indexing makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to.
+  - states_the_rule: Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the array reference is evaluated before the index; the index expression is fully evaluated with current variable values; the bounds are checked; then the element is fetched or, on the left of =, becomes the target. In 
+  - output_prediction: Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.
+  - one_step_execution: State transition: reading a[i] changes nothing. a[i] = v changes only element i (i, a and all other elements are unchanged), and a[i]++ adds 1 to that one element.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: An element can be indexed only after the array is created, and the n given to new sets the valid indices 0..n-1.
+  - relation_to_neighbour: A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.
+  - relation_to_neighbour: Every index value is checked against 0 and a.length at run time; any other value throws.
+  - relation_to_neighbour: a[i] on a 2-D array yields row i (itself a 1-D array), and a[i][j] then indexes into that row.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. C
+  - transfer_to_a_new_program: Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for
+  - diagnose_an_error: rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException
+  - diagnose_an_error: rule broken: The index must have type int (after promotion); long or double indices are rejected. Kind: compile-time. Trigger class: a[1.5], a[x] with double x, or a[n] with long n (incompatible types: possible lossy conversion)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: break_statement
+L0 Prestructural:
+  - everyday_reading: Folk meaning: in English 'break' means to pause, or to stop or break out of whatever you are in, so a novice reads it as leaving the enclosing if, as starting the next round, or as stopping the whole program. 
+  - misconception: wrong rule: break leaves the if statement it is written in. 
+  - misconception: wrong rule: break starts the next iteration of the loop. 
+  - misconception: wrong rule: break ends the whole program. 
+  - misconception: wrong rule: break has no effect; the loop body just carries on. 
+  boundary: Any correct, programming-specific statement about break statement makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.
+  - states_the_rule: `break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: When `break` executes: the remaining statements of the body are skipped, the for-loop increment and the condition are not evaluated again, and control continues at the first statement after the loop. In `for (i = 2; i <= N/i; i++)
+  - output_prediction: break is a statement and produces no value. Its effect shows in the variables it leaves: after the primality loop for N = 15, i is 3 (the smallest divisor), so `i > N/i` is false and 'is prime' is not printed.
+  - one_step_execution: One execution of break changes no variable. It changes only the point of control (to after the loop), so every variable keeps its value at the moment of the break.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: break gives a while loop a second exit, in the middle of the body. After the loop, the program has to tell which exit was taken by re-testing the state (as in `if (i > N/i)`), so any variable used for that test must be declared be
+  - relation_to_neighbour: Plain break reaches only the innermost loop. In nested loops, ending the outer loop needs `break label;` on a labeled outer statement (or a flag tested by the outer loop).
+  - relation_to_neighbour: Both skip the rest of the current body. break then leaves the loop (no increment, no further test); continue goes on to the increment and the next test.
+  - relation_to_neighbour: In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Removing the break keeps the loop finite but lets it run to completion. In the prime test, i then ends above N/i for every N, so composites are reported as prime. Invariant kept with break: after the loop, `i <= N/i` holds exactly
+  - transfer_to_a_new_program: Use break when the reason to stop is discovered in the middle of a pass (first divisor, sentinel found) and folding it into the loop condition would be awkward. Prefer a plain loop condition when the exit can be stated up front. I
+  - diagnose_an_error: rule broken: break must be inside a loop or switch. Kind: compile-time. Trigger class: `break;` inside an if that is not inside any loop or switch (break outside switch or loop).
+  - diagnose_an_error: rule broken: Statements after break in the same block can never run. Kind: compile-time. Trigger class: Code written directly after `break;` in the same block (unreachable statement).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: boolean_flag_array, empty_statement, indexing, break_statement.

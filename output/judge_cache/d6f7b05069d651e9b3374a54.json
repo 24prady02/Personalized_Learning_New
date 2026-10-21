@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "b → [9, 2]",
+   "correct": true,
+   "why": "Applying b[0] = 9 changes only element 0, the first slot, of b's array. That is correct indexing. The wrong a[0] comes from the aliasing mistake, not from indexing."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "x = 5",
+   "correct": true,
+   "why": "x = 5 is right but given with no reasoning, and y = 7 is never traced, so it is only a bare result."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a → [1, 2] and b → [9, 2]",
+   "correct": true,
+   "why": "The answer draws variables as names with arrows to arrays and gets x = 5 right, but it never applies the variable rules step by step."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "because b got its own copy. a[0] = 1",
+   "correct": false,
+   "why": "It treats b = a as copying the array, but b = a only copies the reference, so a[0] becomes 9 (the run confirms a = [9, 2])."
+  }
+ ]
+}

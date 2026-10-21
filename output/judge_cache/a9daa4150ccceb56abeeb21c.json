@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+   "correct": true,
+   "why": "It predicts that typing fewer arguments than the program reads causes an out-of-bounds failure at run time."
+  },
+  {
+   "concept": "run",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "It links the failure to execution time (a run-time error stops the program), but says nothing beyond that."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "It diagnoses the run-time error caused by reading a[0] on an empty array in this new situation."
+  },
+  {
+   "concept": "args_length",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "It finds the run-time error that happens when the program runs with fewer arguments than it reads: with none, args[0] does not exist."
+  }
+ ]
+}

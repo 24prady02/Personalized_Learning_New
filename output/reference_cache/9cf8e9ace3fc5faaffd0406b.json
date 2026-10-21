@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The code leaves a = 7, b = 7 and c = 7. The student gets a = 7 right, which fits applying only `a = c`. They leave b at 3 and c at 7, so `b = a` and `c = b` were not carried out. The answer is a bare result with no trace, and it grasps one correct part of the code but does not cover all the lines."}

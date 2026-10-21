@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention the long type."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about running or executing a program."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention primitive types."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing. In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It correctly says a short run gives only estimates and that changing the start page keeps the limit (mixing), which predicts the effect of a change."
+  }
+ ]
+}

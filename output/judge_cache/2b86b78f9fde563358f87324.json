@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "double min = 0;",
+   "correct": true,
+   "why": "The answer declares min as a double, which is correct, but it doesn't apply any double rules to values or show any reasoning about them."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "double min = 0; then loop and keep the smaller value.",
+   "correct": false,
+   "why": "Starting the running minimum at 0 follows the everyday idea of 'start from zero', but here all readings are below zero, so the start value is wrong and the result is wrong."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types as a concept."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about input or output streams."
+  }
+ ]
+}

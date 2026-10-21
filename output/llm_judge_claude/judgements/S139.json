@@ -1,0 +1,6 @@
+{"concepts":[
+{"concept":"standard_drawing","level":"L0","way":"misconception","quote":"the point uses pixels, so both are in the middle.","correct":false,"why":"It uses the wrong rule that StdDraw.point(256, 256) draws in the middle; in the default unit square it is not visible."},
+{"concept":"drawing_shapes","level":"L2","way":"output_prediction","quote":"The square uses 0.5 as the centre","correct":true,"why":"It correctly applies the rule that square(x, y, r) is centred on (x, y) to this call."},
+{"concept":"empty_statement","level":"none","way":"","quote":"","correct":false,"why":"The answer says nothing about empty statements."},
+{"concept":"coordinate_scaling","level":"L0","way":"misconception","quote":"the point uses pixels","correct":false,"why":"It assumes pixel coordinates, but the default scale is the unit square."}
+]}

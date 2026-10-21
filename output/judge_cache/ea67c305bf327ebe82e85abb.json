@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "print best",
+   "correct": true,
+   "why": "The answer uses print to output the result, but it never applies the print rules or says what is printed or in what form."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions double or any primitive type."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "best = first; for each element: if smaller than best → best = element",
+   "correct": true,
+   "why": "The answer applies assignment correctly to this task: best is set from the first element and then replaced by any smaller element."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about input or output streams."
+  }
+ ]
+}

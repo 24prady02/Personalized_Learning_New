@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Java must round doubles down when it prints them.",
+   "correct": false,
+   "why": "The answer blames printing for rounding, but the real cause is int division: (2 + 3) / 2 gives 2, which is then stored as 2.0."
+  },
+  {
+   "concept": "scientific_notation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention scientific notation."
+  }
+ ]
+}

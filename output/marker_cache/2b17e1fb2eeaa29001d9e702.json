@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "integer division before assignment to double", "why": "Correctly traces both steps in order with values (7/2 int division gives 3, then widening to 3.0), but only as a step-by-step trace and without stating a general purpose or going beyond the code."}

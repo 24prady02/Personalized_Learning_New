@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the input format or how pairs are read."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention comments."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "It correctly names page 2 as the page with no outgoing links, but it does not trace the rule through this code or give the 1/N row."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the random leap or the .10/N term."
+  }
+ ]
+}

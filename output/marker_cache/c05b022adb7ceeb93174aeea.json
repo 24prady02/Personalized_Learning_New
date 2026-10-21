@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "loop bound for in-place array reversal (swap pairs)", "why": "The answer gives the correct bound and justifies it by the purpose of the loop, since each swap fixes two elements, so the loop only needs half the length. It does not trace values or go beyond the given code."}

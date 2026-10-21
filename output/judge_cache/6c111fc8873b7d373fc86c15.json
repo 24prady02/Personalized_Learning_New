@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "A, because i goes through the array.",
+   "correct": false,
+   "why": "The answer treats the index i as the stored value: it tests i % 2 when it should test a[i] % 2, which mixes up the position with the element."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the comment."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about the counter; it only picks the option that contains count++."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention swapping elements."
+  }
+ ]
+}

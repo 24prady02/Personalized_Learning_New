@@ -1,0 +1,20 @@
+{
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": true,
+   "why": "The answer correctly declares a char holding one letter in single quotes, but it is bare code with no reasoning. The capitalised name SingleLetter breaks Java's naming convention (it should be singleLetter), which is a style slip, not a misconception about char."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention String."
+  }
+ ]
+}

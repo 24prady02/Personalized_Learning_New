@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "array element swap using a temp variable", "why": "The answer gives the correct final array and states in one sentence that the code swaps the first and last elements, but it doesn't trace the values and doesn't answer the length-1 case, so it doesn't reach L4."}

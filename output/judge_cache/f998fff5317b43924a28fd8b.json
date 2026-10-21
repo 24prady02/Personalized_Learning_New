@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "1, 4, 6: the test is false, so the else body runs, then z++.",
+   "correct": true,
+   "why": "For a = 2, b = 2 the answer says the condition is false, so only the else branch runs, and then execution moves on to line 6."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer mentions z++ only as a line that runs and says nothing about what ++ does."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about launching or executing a program."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no loop and the answer says nothing about a loop variable."
+  }
+ ]
+}

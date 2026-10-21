@@ -1,0 +1,1 @@
+{"level": "L2", "concept": "Finding the maximum with a loop (ordering and blanks)", "why": "The answer gives the order and fills each blank (0, >, a[i]) but never relates the parts or explains the purpose, and the initial value 0 is wrong for negative values, so this is a multistructural error."}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says i is 'the value of each element', but i is the loop index (position) and a[i] is the element value, so this applies a wrong rule. It also says nothing about max, which holds the largest value found so far."}

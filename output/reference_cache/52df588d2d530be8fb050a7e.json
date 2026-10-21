@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The student states in one line what the whole program prints: the sum of squares from 1 to n. That is correct and matches the loop and accumulator, so it states the purpose of the code. It does not go beyond the given code, for example to n ≤ 0 or int overflow, so it is not L4."}

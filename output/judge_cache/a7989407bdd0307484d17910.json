@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so the loop ends and 3 is never printed",
+   "correct": true,
+   "why": "It works out from the loop condition that print never runs with 3, which the run confirms."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "At i = 3 the condition i < 3 is false, so the loop ends",
+   "correct": true,
+   "why": "It applies the condition test to the loop variable's value 3 in this code and gets false, which the run confirms."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "the condition i < 3 is false, so the loop ends",
+   "correct": true,
+   "why": "It applies the termination rule to this code: the test turns false at i = 3, so the loop ends."
+  }
+ ]
+}

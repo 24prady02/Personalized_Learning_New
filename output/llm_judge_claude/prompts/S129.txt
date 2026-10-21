@@ -1,0 +1,154 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Without the 10% jump, what can happen with a group of pages that only link to each other?
+
+CODE:
+// 3 pages; links 0→1, 1→0, 1→2; page 2 has no outgoing links
+// 90-10 rule:  p[i][j] = .90 * counts[i][j] / outDegree[i] + .10 / N
+
+STUDENT ANSWER: The surfer gets trapped in that group and the other pages get rank 0.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: input_graph
+L0 Prestructural:
+  - everyday_reading: In everyday graph drawings and in English, "a link between i and j" or "i j on a line" reads as a two-way connection, one record per line; in the input format the pair is ordered (i links to j only) and StdIn ignores line breaks, 
+  - misconception: wrong rule: The pair i j in the input means pages i and j link to each other. 
+  boundary: Any correct, programming-specific statement about input graph makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A data format (the list-of-links representation of a web graph): one integer N, the number of pages 0..N-1, followed by ordered integer pairs i j, one per link.
+  - states_the_rule: Pages are numbered 0 to N-1; the input stream holds N followed by pairs of integers, the first naming the page containing the link and the second the page it refers to; whitespace between tokens is arbitrary.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Transition reads N first with StdIn.readInt(), creates counts[N][N] and outDegree[N], then while !StdIn.isEmpty() reads i, then j, then increments outDegree[i] and counts[i][j]; the loop stops when only whitespace remains.
+  - output_prediction: Reading the input yields integer tallies: counts[i][j] = number of i->j pairs and outDegree[i] = number of pairs starting at i; duplicate pairs count again, so tiny.txt gives counts[1][2] = 2 and outDegree = {1, 5, 1, 1, 2}.
+  - one_step_execution: One pass consumes exactly two tokens (i, j) from standard input and adds 1 to outDegree[i] and to counts[i][j]; no other entry changes and the tokens cannot be read again.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The tallies constrain the matrix: row i of the matrix is computed only from counts[i][] and outDegree[i], so a mistake in reading pair order (i/j swapped) moves probability mass into the wrong row.
+  - relation_to_neighbour: The graph is consumed through StdIn as whitespace-separated tokens: readInt() for N, then a !StdIn.isEmpty() loop reading pairs; each value is consumed once, so the read order fixes which number is N, which is i and which is j.
+  - purpose_of_the_whole: Data-driven code: keep the web model in a file and let a filter (Transition) read it from standard input, so any model can be studied without changing code; counts[i][j] and outDegree[i] act as per-cell counters (gatherers).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Reordering the pairs or the whitespace layout keeps every count (the tally is order-independent); reversing a pair (j i) or adding a duplicate pair changes the graph and hence the page ranks.
+  - transfer_to_a_new_program: Use this list-of-links format whenever a web (graph) model is read as data and then turned into a dense N-by-N matrix; it does not scale to millions of pages, where the matrix cannot be stored and graph data structures (Ch. 4) are
+  - diagnose_an_error: rule broken: Page numbers must be in 0..N-1 (array index range). Kind: run-time exception. Trigger class: A pair containing a page number >= N or negative: counts[i][j] or outDegree[i] throws ArrayIndexOutOfBoundsException.
+  - diagnose_an_error: rule broken: Every token must be an integer (readInt parses an int). Kind: run-time exception. Trigger class: A non-integer token such as a page name (www.com) or 1.5 in the input: StdIn.readInt() throws InputMismatchException.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: comment
+L0 Prestructural:
+  - everyday_reading: Everyday reading: text written in a program is an instruction the computer reads and obeys. 
+  - misconception: wrong rule: A comment line is run like a statement. 
+  boundary: Any correct, programming-specific statement about comment makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A comment is explanatory text in the program that the compiler ignores.
+  - states_the_rule: A comment is either text between /* and */ or text from // to the end of the line; the compiler ignores it. A comment that starts with /** is a documentation (Javadoc) comment, written before a class or method; tools turn it into 
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Comments are removed when the source is read by the compiler, so they never take part in execution order; tracing skips them.
+  - output_prediction: A comment produces no value and no output.
+  - one_step_execution: A comment changes no state; adding one and recompiling leaves the program's behaviour identical.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Comments are part of the program text in Name.java but are dropped when it is compiled, so they cannot affect Name.class's behaviour.
+  - purpose_of_the_whole: Purpose: explain what the code does and why, for other programmers and your future self; also used to disable code temporarily.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program.
+  - diagnose_an_error: rule broken: A /* comment needs its closing */. Kind: compile-time. Trigger class: a /* with no matching */: the rest of the file becomes comment, so javac reports an unclosed comment or reached end of file
+  - diagnose_an_error: rule broken: /* and */ are two-character tokens with no space inside. Kind: compile-time. Trigger class: writing / * ... * /: the slashes and stars are read as operators, producing syntax errors
+  - transfer_to_a_new_program: Use comments to document intent where the code alone is unclear; do not rely on them to change what the program does, and keep them in step with the code.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: remainder_operator
+L0 Prestructural:
+  - everyday_reading: In everyday use % means percent (50% of x), and in maths 'mod' always gives a non-negative result. In Java % is the remainder of truncating division, and its sign follows the left operand (-14 % 3 is -2).
+  - misconception: wrong rule: 17 % 5 is 3 (the quotient). 
+  - misconception: wrong rule: a % b is never negative, and integer division of a negative number rounds down. 
+  boundary: Any correct, programming-specific statement about remainder operator makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Remainder operator %: the binary operator that gives the remainder after dividing a by b.
+  - states_the_rule: For ints, a % b is defined so that (a / b) * b + a % b equals a. The result takes the sign of a, % by zero throws ArithmeticException, and % also works on doubles.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Evaluate a, then b, take the quotient rounded toward 0, and give what is left over. % has the same precedence as * and /, and they group left to right.
+  - output_prediction: 17 % 3 is 2, 76 % 12 is 4, 1234 % 99 is 46, -14 % 3 is -2, and 14 % -3 is 2.
+  - one_step_execution: r = a % b stores a remainder smaller in size than b and leaves a and b unchanged. If b is 0, ArithmeticException is thrown before anything is stored.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: % is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.
+  - purpose_of_the_whole: Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Negating a flips the remainder's sign, so n % 2 == 1 fails for negative odd n while n % 2 != 0 still works. Changing the divisor changes the cycle length. Swapping % with / swaps the remainder for the quotient.
+  - transfer_to_a_new_program: Use % for divisibility, parity, digits, cyclic indices and unit splitting. Do not use it for percentages (use * / 100.0), and do not use it where a non-negative mathematical mod is needed for negative values (adjust the result or 
+  - diagnose_an_error: rule broken: int remainder by zero is undefined. Kind: run-time exception. Trigger class: x % 0, or a divisor variable that is 0: ArithmeticException: / by zero.
+  - diagnose_an_error: rule broken: The remainder takes the sign of the dividend. Kind: silent logic error. Trigger class: Negative inputs in an odd test written as x % 2 == 1, or in a wrap-around index computed as (i - 1) % n.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: frequency_counting
+L0 Prestructural:
+  - everyday_reading: Everyday "rank" means a position in a list (1st, 2nd) and "frequency" a rate; here a page's rank is a probability, estimated by the fraction freq[i]/T of moves that land on it.
+  - misconception: wrong rule: A short simulation gives the exact page ranks. 
+  - misconception: wrong rule: A result printed with many decimal places must be accurate to those places. 
+  boundary: Any correct, programming-specific statement about frequency counting makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A counting technique: an int array freq[] with one counter per page, incremented each time the surfer lands there; dividing by T gives the visit frequencies.
+  - states_the_rule: RandomSurfer counts the number of times the surfer visits each page; dividing that count by the number of moves estimates the probability of ending on the page (its rank).
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: freq is created (all zeros) before the loop; each pass ends with freq[page]++; after the loop, each (double) freq[i] / T is computed (cast first, then divide) and printed.
+  - output_prediction: Integer counts summing to T; the printed fractions are doubles in [0, 1] summing to about 1 (e.g. 0.27280 0.26530 0.14820 0.24830 0.06540 after 10000 moves).
+  - one_step_execution: One count step adds 1 to exactly one element, freq[page]; all other counts are unchanged.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The increment is the last statement of each pass, so the counts tally the pages reached by the T moves (sum = T).
+  - relation_to_neighbour: freq[i]/T converges to the same page ranks the power method computes, but only as an estimate.
+  - purpose_of_the_whole: Counter plan per bucket (a tally array indexed by outcome): each freq[i] is a gatherer accumulating visits to page i, and the array holds the histogram that stabilises to the ranks.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Invariant: the counts sum to T, so the fractions sum to 1; dividing before casting ((double)(freq[i] / T)) or counting outside the loop breaks it.
+  - transfer_to_a_new_program: Use whenever a probability is estimated from repeated random trials (histograms, Monte Carlo); not when the exact probabilities can be computed, as with the power method.
+  - diagnose_an_error: rule broken: Casting must apply before the division. Kind: silent logic error. Trigger class: (double) (freq[i] / T) or freq[i] / T: integer division gives 0 for every page that is not visited on every move.
+  - diagnose_an_error: rule broken: A local array must be created before use. Kind: compile-time. Trigger class: int[] freq; declared without new int[N] and then incremented: compile error, variable might not have been initialized.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: input_graph, comment, remainder_operator, frequency_counting.

@@ -1,0 +1,1 @@
+{"level": "L2", "why": "The student traces the loop body in order with the values (i*i for each i up to n, giving 1 + 4 + 9 …), and that is correct. They do not say in one sentence that the program prints the sum of squares 1² to n², so this is not L3."}

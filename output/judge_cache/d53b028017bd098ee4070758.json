@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "The last thing before the println",
+   "correct": true,
+   "why": "The answer mentions println only as a point in time and says nothing about what it does."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "the loop test i <= 5, which is false when i is 6",
+   "correct": true,
+   "why": "It evaluates the comparison with this code's actual value (i = 6) and gets the boolean false, which the run confirms."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "6 after the third pass. The last thing before the println is the loop test i <= 5, which is false when i is 6.",
+   "correct": true,
+   "why": "It traces i through this loop correctly: the total is 1+2+3=6 after three passes, and i holds 6, the first value that fails the test, at the final check."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about handling separators or one item outside the loop."
+  }
+ ]
+}

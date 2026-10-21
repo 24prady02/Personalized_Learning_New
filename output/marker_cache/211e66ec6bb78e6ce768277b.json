@@ -1,0 +1,1 @@
+{"level": "L3", "concept": "purpose of each line in a find-minimum loop", "why": "The answer explains every line and ties them together (best starts at a[0] to compare with, loop visits the rest, the if keeps the smaller, so best ends as the smallest), which states the purpose of the whole code from the code itself, but it doesn't go beyond the given code."}

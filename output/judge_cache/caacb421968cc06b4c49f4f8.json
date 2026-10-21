@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "max counts the elements",
+   "correct": false,
+   "why": "max actually holds the largest value seen so far, not a count of the elements, so this role contradicts the code."
+  },
+  {
+   "concept": "indexing",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "i is the total so far",
+   "correct": false,
+   "why": "i is the loop index used to reach each a[i], not a running total, so the answer confuses the index with a stored or summed value."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements or the order in which they run."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "i is the total so far and max counts the elements",
+   "correct": false,
+   "why": "The answer gives accumulator and counter roles to variables that are really an index and a running maximum, and no variable here sums or counts."
+  }
+ ]
+}

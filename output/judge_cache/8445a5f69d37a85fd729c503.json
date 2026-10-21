@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Some random leftover number, like in C.",
+   "correct": false,
+   "why": "A Java local int has no leftover value; it is definitely unassigned, and reading it before assignment is a compile-time error."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Some random leftover number, like in C.",
+   "correct": false,
+   "why": "This applies C's garbage-value rule to a Java primitive, close to the listed misconception that unassigned primitive slots hold unpredictable values."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about statements or their execution."
+  },
+  {
+   "concept": "math_random",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "'Random' is used in its everyday sense, not about Math.random()."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student says the loop counts the digits of n, which is wrong. It halves n until n is 1 or less, so it counts halvings (floor of log2 n). The answer 100 gives 6, not 3, because 100 halves through 50, 25, 12, 6, 3 and 1. A correct input would be 8 to 15."}

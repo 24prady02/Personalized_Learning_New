@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Correctly diagnoses that args[0] does not exist when no argument is typed."
+  },
+  {
+   "concept": "run",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "Correctly places the error at run time, while java Twice executes."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "args_length",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Correctly diagnoses reading args[0] with zero arguments as an out-of-bounds run-time error."
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"level": "L1", "pick": "B", "why": "The answer makes a correct claim (8 prints 3, since 8→4→2→1 takes three halvings) but justifies it only by running the program, not by applying the halving/loop rule to the code; a bare correct result without code-based justification is L1, and 'none' is reserved for answers that make no claim."}

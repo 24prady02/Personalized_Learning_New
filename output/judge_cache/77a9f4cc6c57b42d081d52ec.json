@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+   "correct": true,
+   "why": "It correctly predicts that running without the expected argument makes args[0] fail at run time."
+  },
+  {
+   "concept": "run",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "It correctly links the failure to run time (a run-time error), but says nothing beyond that about running."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "It correctly finds the out-of-bounds index for this new input: index 0 on an empty array."
+  },
+  {
+   "concept": "args_length",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "It correctly finds that with no arguments args has length 0, so reading args[0] fails at run time."
+  }
+ ]
+}

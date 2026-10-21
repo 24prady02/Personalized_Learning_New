@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The selection A–E is correct. The student justifies each excluded line by what the program is for. F's `<=` reaches `a[a.length]`, which is out of bounds, and G's `count = 1` would give only 0 or 1 instead of a count. This integrates the lines into a working counting loop, but it stays within the given code, so it is not L4."}

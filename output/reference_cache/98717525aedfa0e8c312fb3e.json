@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The answer correctly says there is no break, so execution falls through, and it gives the right final value of 50. It doesn't trace the path from case 2 through case 3, case 4 and default, and it doesn't show result going 20, then 40, then 50. It only states the fall-through rule and the result."}

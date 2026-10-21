@@ -1,0 +1,133 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): Which variable is an accumulator and which is a counter?
+
+CODE:
+int[] v = {3, 8, 5, 8};
+int sum = 0, count = 0;
+for (int i = 0; i < v.length; i++) {
+  sum += v[i];
+  if (v[i] == 8) count++;
+}
+System.out.print(v[0]);
+for (int i = 1; i < v.length; i++) System.out.print(", " + v[i]);
+System.out.println();
+
+STUDENT ANSWER: sum builds a total, count counts.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: accumulator_pattern
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'the sum' is a single mathematical quantity that simply exists, and a person adding numbers keeps the running total in mind automatically. In Java the total is a variable that must be declared and initialized before 
+  - misconception: wrong rule: a variable declared in the loop body lives across all iterations. 
+  - misconception: wrong rule: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. 
+  - misconception: wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. 
+  boundary: Any correct, programming-specific statement about accumulator pattern makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: An accumulator is a variable used to accumulate results during a traversal, e.g. the running total of a sum.
+  - states_the_rule: Initialize the accumulator before the loop (0 for a sum, 1 for a product), update it once per pass in the body (total += array[i]), and use it after the loop.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.
+  - output_prediction: After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.
+  - one_step_execution: One pass changes only the accumulator (and the loop variable): sum += x[i] turns sum = 1 into 5 when x[i] = 4.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The update sum += x sits inside the body so it runs once per pass, while the declaration and initialization stay before the loop.
+  - relation_to_neighbour: A counter is an accumulator that adds 1 on each pass that matches (count++), whereas an accumulator adds the current value itself (sum += x).
+  - relation_to_neighbour: In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.
+  - relation_to_neighbour: Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces 
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the initial value shifts the result by that amount (sum starts at 1 gives sum + 1); a product starting at 0 stays 0; reordering the items does not change an integer sum (addition is commutative) but may change a floating-
+  - diagnose_an_error: rule broken: A variable declared in the body is in scope only to the end of the body and is re-declared and re-initialized on every pass. Kind: silent logic error. Trigger class: for (...) { int sum = 0; sum += a[i]; }: sum restar
+  - transfer_to_a_new_program: Use an accumulator whenever many values must be reduced to one (sum, product, average, string); for a maximum or minimum use a most-wanted holder updated by an if instead.
+  - diagnose_an_error: rule broken: The accumulator must be initialized before the loop. Kind: compile-time. Trigger class: Declaring int sum; and then sum += x in the loop: 'variable sum might not have been initialized'.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: counter_pattern
+L0 Prestructural:
+  - everyday_reading: Folk meaning: 'count' in everyday speech is done by looking at the whole collection at once, so a novice expects `count` to 'know' how many items matched. In Java a counter is just an int that changes only when `count++` executes,
+  - misconception: wrong rule: Java recognises which variable is the counter and which is the running total, and keeps their values apart even if one variable is used for both. 
+  boundary: Any correct, programming-specific statement about counter pattern makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Loop plan (Soloway counter plan): an int variable set to 0 before a loop and increased by 1 on each pass that meets a condition, so it ends holding the number of matches.
+  - states_the_rule: Declare and initialise the counter before the loop (`int wins = 0;`); inside the loop guard `wins++` with the condition being counted (`if (cash == goal) wins++;`); read it after the loop.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Order: the initialisation `count = 0` runs once before the loop; then on each pass the loop test, the guard (`if (...)`) and, only when the guard is true, `count++`; the counter is read once after the loop ends.
+  - output_prediction: The result is an int equal to the number of passes on which the guard was true (0 if none); it is between 0 and the number of passes. Turning it into a rate with ints truncates: `100*wins/T` with wins = 503, T = 1000 prints 50.
+  - one_step_execution: One matching pass changes only the counter, by exactly +1 (`wins++` turns 7 into 8); a non-matching pass leaves it unchanged. `count++` as a statement returns nothing that is used.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The `count++` (with its guard) must be inside the loop body, while the declaration `int count = 0;` must be outside and before it. Inside the body it runs once for each matching pass. After the loop it runs only once, so the count
+  - relation_to_neighbour: Same skeleton (initialise before, update inside, read after); the accumulator adds the current value (`sum += x`), the counter adds the constant 1 on matching passes (`count++`). The two are often combined to compute an average `s
+  - relation_to_neighbour: A Monte Carlo estimate is the counter divided by the number of trials (`(double) wins / T`). So the counter has to be initialised once, before the trial loop, and must not be reset inside it.
+  - purpose_of_the_whole: Plan: counting plan; the counter variable plays a Sajaniemi 'stepper'-like counting role (Soloway's counter variable). Its job is to answer 'how many passes satisfied P?', e.g. wins or number of bets.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Invariant: after k passes, count equals the number of matching passes among those k. Moving the guard or the update changes the count. Moving `count++` out of the `if` turns it into a pass counter. Starting at 1 instead of 0 makes
+  - diagnose_an_error: rule broken: The counter/accumulator must be declared and initialised before the loop. `int count = 0;` inside the body re-creates and resets it on every pass. Kind: silent logic error. Trigger class: Any loop with two or more pas
+  - transfer_to_a_new_program: Use a counter when the question is 'how many' (wins, bets, primes, distinct values); use an accumulator when it is 'how much in total', and a boolean flag when you only need 'whether any'. When you need a count for each of many va
+  - diagnose_an_error: rule broken: A variable declared inside the loop body is out of scope after the loop. Kind: compile-time. Trigger class: Printing or using a counter after the loop when it was declared inside the body (cannot find symbol).
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: naming_convention
+L0 Prestructural:
+  - everyday_reading: In everyday language a label tells you what a thing is (a jar labelled 'sugar' holds sugar), so novices expect a variable called max to hold the maximum. Java gives names no meaning: conventions exist only for human readers, and o
+  - misconception: wrong rule: Naming a variable max (or average) makes it hold the largest value (or the average) without code that computes it. 
+  boundary: Any correct, programming-specific statement about naming convention makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Naming convention: a style rule (not a language rule) for choosing identifiers. Variables and methods use lowerCamelCase, classes UpperCamelCase, constants UPPER_CASE_WITH_UNDERSCORES, and names describe meaning.
+  - states_the_rule: Variable names begin with a lowercase letter and capitalize each later word (firstName). Class names begin with a capital. Constants are all uppercase with _ between words. Names should indicate what the variable means.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Conventions have no execution order: the compiler checks only that an identifier is legal and declared, never whether it follows convention.
+  - output_prediction: A program's output does not depend on its names: renaming total to t everywhere gives identical results.
+  - one_step_execution: Following or breaking a convention changes no state; it only changes how readable the code is.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: Each variable's name should describe what it holds (count, sum, maxSoFar). Single letters suit only short-lived loop indices.
+  - relation_to_neighbour: Constants are written in ALL_CAPS with underscores, which sets them apart from lowerCamelCase variables and signals that they never change.
+  - purpose_of_the_whole: Good names make each variable's role visible (sum for a gatherer, count for a counter, max for a most-wanted holder, i for a stepper), so a reader can recognize the plan without tracing.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Renaming consistently keeps the program's meaning, because what it computes does not depend on names. A misleading name (max holding a minimum) still compiles and runs the same, but readers draw wrong conclusions.
+  - transfer_to_a_new_program: Apply the conventions to every name you write. Short names fit only tiny scopes (loop index i, coordinates x and y). No naming convention can replace the code that actually computes the value.
+  - diagnose_an_error: rule broken: A name does not compute or guarantee a value. Kind: silent logic error. Trigger class: Trusting a descriptive name instead of the code (e.g. assuming average holds the mean although it was never divided): wrong output
+  - diagnose_an_error: rule broken: Names that differ only in case are different identifiers. Kind: silent logic error. Trigger class: Declaring both count and Count (or total and Total) and updating one while printing the other.
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Grade the answer for each concept: accumulator_pattern, counter_pattern, naming_convention.

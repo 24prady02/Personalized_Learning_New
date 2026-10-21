@@ -1,0 +1,1 @@
+{"level": "L3", "why": "The answer is correct. It says p is all zeros because int / int truncates, and it fixes this with a (double) cast, which gives 0, 0, 0.4, 0.4, 0.2. It then checks that the row sums to 1, so the fix is tied to the code's purpose as a probability row. It stays within the given code and doesn't generalise to other inputs, so it is L3 and not L4."}

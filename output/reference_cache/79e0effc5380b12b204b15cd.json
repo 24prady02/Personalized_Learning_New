@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student states the correct rule for ^ on booleans (true when the two sides differ) but doesn't apply it to the code's values. They don't trace (n > 5) = false and (n < 10) = true to get c = true, so this is L1: a correct rule with no application."}

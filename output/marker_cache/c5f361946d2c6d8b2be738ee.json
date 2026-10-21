@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "braces on single-statement if (legality and style)", "why": "The answer doesn't say whether the code is legal and gives a personal opinion instead of judging style, so it applies no working rule about braces, and it ignores the usual style guidance that braces prevent errors when statements are added later."}

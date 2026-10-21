@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The answer gives the correct case (both true) but then says p && q is also true when only one or either is true. That is the everyday sense of 'or', not Java's && rule, so it contradicts itself. It also never says when p || q is false."}

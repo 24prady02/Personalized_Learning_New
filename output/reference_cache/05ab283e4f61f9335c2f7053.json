@@ -1,0 +1,1 @@
+{"overall": "none", "concepts": [{"concept": "while_loop", "level": "none", "way": "", "quote": "Why does my while loop with == on strings never end?", "correct": false, "why": "The answer is only a question that makes no claim about this code; it neither traces the loop nor states any rule about while, so nothing can be levelled."}]}

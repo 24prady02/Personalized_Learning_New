@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "The answer uses the loop variable as the index, so the same a[i] reads and writes a different element on each pass."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int i = 0; i < a.length; i++)",
+   "correct": true,
+   "why": "It writes the standard traversal with bound < a.length, so i takes every valid index exactly once and every element is changed."
+  },
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "It writes a.length correctly as a field with no parentheses but gives no further reasoning about it."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the for-each loop or why it fails to change the array."
+  }
+ ]
+}

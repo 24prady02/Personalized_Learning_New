@@ -1,0 +1,1 @@
+{"level": "L1", "why": "The student gives a correct but shallow description of the first line (an array of three numbers) and only says line 2 'makes a variable'. They don't say why it is there (it holds the first element as the current smallest) and they skip the loop and the if. So only part of the code is covered, which makes it L1."}

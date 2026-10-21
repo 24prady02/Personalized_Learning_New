@@ -1,0 +1,157 @@
+You grade one student answer about Java on a 5-level learning ladder (L0-L4), for given concepts.
+You are given, for each concept, the WAYS of reaching each level, taken from a knowledge graph. Use only them.
+Rules:
+- The level is the highest level whose way the answer actually shows, with correct content.
+- L0 if the answer's reasoning states or uses a rule that contradicts Java (an everyday reading or a wrong rule listed under L0), even if it uses Java words. A wrong explanation is not L1-L4.
+- L1: names the element or states one correct rule, not applied to this code.
+- L2: applies the rules correctly to this code (values, trace, output). A bare result with no reasoning is L1.
+- L3: correctly relates parts (why, purpose, relation to another concept) as the L3 ways say.
+- L4: correctly reasons beyond the given code (a change, a new input, diagnosing an error, new code) as the L4 ways say.
+- Respect each level's boundary text.
+- FACTS FROM RUNNING THE CODE are certain: a value the run contradicts is wrong.
+- If the answer says nothing about a concept, give "none".
+Return JSON only: {"concepts":[{"concept":"<id>","level":"L0|L1|L2|L3|L4|none","way":"<way name>","quote":"<words from the answer>","correct":true|false,"why":"<one short sentence>"}]}
+
+---
+
+QUESTION (part asked): What happens with  java Twice  (no argument)?
+
+CODE:
+public class Twice {
+  public static void main(String[] args) {
+    int n = Integer.parseInt(args[0]);
+    System.out.println(args[0] + args[0] + " " + 2 * n);
+  }
+}
+% java Twice 21
+
+STUDENT ANSWER: It crashes when it runs, because args is empty and args[0] is out of bounds.
+
+FACTS FROM RUNNING THE CODE:
+(no claim of the answer could be checked by running the code)
+
+CONCEPTS AND THEIR WAYS:
+
+### Concept: command_line_args
+L0 Prestructural:
+  - everyday_reading: Everyday/maths reading: '1234' typed on the command line is a number, and the first item in a list is item 1. 
+  - misconception: wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. 
+  boundary: Any correct, programming-specific statement about command line args makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Command-line arguments are the strings typed after the class name in java Name a b c; they reach main as the String array args.
+  - states_the_rule: args[0] represents the first string typed on the command line, args[1] the second, and so on (counting starts at 0); every element is a String.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: At launch the JVM splits the words after java Name at spaces, stores them in order in args, then calls main(args); the program reads args[k] whenever that expression is evaluated.
+  - output_prediction: args[k] evaluates to the k-th typed string, e.g. java UseArgument Alice gives args[0] = "Alice" and prints Hi, Alice. How are you?
+  - one_step_execution: Reading args[k] changes nothing; args is set once at launch and the same program gives different outputs only because different arguments were typed.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: args[k] is always a String, so Integer.parseInt(args[k]) or Double.parseDouble(args[k]) must convert it before arithmetic.
+  - relation_to_neighbour: The arguments arrive in main's parameter args (String[] args).
+  - relation_to_neighbour: args.length is the number of arguments typed (0 if none), so valid indices are 0 to args.length-1.
+  - relation_to_neighbour: In the black-box view the command-line argument is the input string and what the program prints is the output string.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read.
+  - diagnose_an_error: rule broken: Counting starts at 0: the first argument is args[0]. Kind: silent logic error. Trigger class: using args[1] for the first argument: wrong argument used, or ArrayIndexOutOfBoundsException: 1 if only one was typed
+  - transfer_to_a_new_program: Use command-line arguments for a few small inputs known at launch (sizes, names, seeds); use standard input for long or interactive input.
+  - diagnose_an_error: rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: running without the expected argument: java.lang.ArrayIndexOutOfBoundsException: 0
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: run
+L0 Prestructural:
+  - everyday_reading: Everyday meaning: 'run the program' as if the file ran itself, or the program 'looks at all of itself at once'. 
+  - misconception: wrong rule: Compiling also executes the program. 
+  boundary: Any correct, programming-specific statement about run makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: Running (executing) a program is launching it with java Name so that the Java Virtual Machine follows its instructions.
+  - states_the_rule: Typing java followed by a class name makes the system call the main() method defined in that class and execute its statements; java Name args... also passes the command-line arguments to main. The development cycle is the same in 
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The JVM starts at the first statement of main and ends when it finishes the last statement; statements run one by one, in order, and control returns to the system when main finishes.
+  - output_prediction: The result of a run is what the program prints to the terminal (for java HelloWorld: Hello, World), or an exception message if a run-time error occurs.
+  - one_step_execution: One execution step runs one statement of main, which changes the program state (a variable or the output) and passes control to the next statement.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: java Name runs the Name.class that javac produced, so compiling must succeed first; the run reflects the source as of the last successful compile.
+  - relation_to_neighbour: A run-time error appears only while java Name executes; the JVM stops the program and prints the exception.
+  - relation_to_neighbour: A logic error is seen only by running the program and comparing its output with the intended output.
+  - relation_to_neighbour: A program is tested by running it on chosen inputs and comparing what it prints with what it should print.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+L4 Extended abstract:
+  - predict_a_change: Running again with the same arguments reproduces the same output (for programs without randomness or input); changing the arguments changes the output without recompiling; editing the source changes nothing until recompiled.
+  - transfer_to_a_new_program: Run the program to test it on chosen inputs and to see run-time and logic errors that compiling cannot find; adding print statements and rerunning is a simple way to check what is actually executing.
+  - diagnose_an_error: rule broken: In the book's setup a StdAudio program should end main() with System.exit(0). Kind: silent logic error. Trigger class: a program that uses StdAudio and finishes main without System.exit(0): the terminal hangs and need
+  - diagnose_an_error: rule broken: Run only after a successful compile; java takes a class name. Kind: launch error. Trigger class: running java Name when Name.class is missing or stale, or typing java Name.java
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Reproducing or slightly varying a familiar program is L1 to L3.
+
+### Concept: class_declaration
+L0 Prestructural:
+  - everyday_reading: Everyday meaning: a 'class' is a group of students or a category, and 'public' means open to everyone. 
+  - misconception: wrong rule: The class name and the file name are independent. 
+  boundary: Any correct, programming-specific statement about class declaration makes the answer L1 or higher.
+  boundary: A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.
+L1 Unistructural:
+  - names_the_element: A class declaration (public class Name { ... }) is the outer container of a Java program; in Chapter 1 each program is a single class with a single method main().
+  - states_the_rule: A program is written as public class Name { <method declarations> }; the outermost braces contain the class definition and the inner braces contain the method definitions, and the keywords public and class are required.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: The class declaration itself does not execute: java Name looks up the class Name and calls its main(); the class is just the container that is searched.
+  - output_prediction: A class declaration produces no output; compiling it produces the file Name.class.
+  - one_step_execution: Declaring the class changes no variable at run time; it only defines the name (Name) that javac uses for Name.class and that java Name uses to find main.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: The name after 'class' must equal the file name without .java.
+  - relation_to_neighbour: main must be declared inside the class's braces; java Name looks only inside class Name for main.
+  - purpose_of_the_whole: Purpose: package and name a program so it can be compiled and run by name; copying HelloWorld.java and replacing the name on the first line is how a new program is started.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Renaming the class requires renaming the file (and the java command) to keep it compiling and runnable; moving main outside the class braces breaks compilation.
+  - diagnose_an_error: rule broken: public class Name needs the keyword class (and correct spelling). Kind: compile-time. Trigger class: omitting or misspelling class (or public) on the first line
+  - transfer_to_a_new_program: In Chapter 1 every program is exactly one public class containing main; a separate class (and file) is needed for each separate program. Multiple classes and methods come only in Section 2.1.
+  - diagnose_an_error: rule broken: Every { must be matched by a }. Kind: compile-time. Trigger class: a missing or extra brace around the class or method body
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+### Concept: args_length
+L0 Prestructural:
+  - everyday_reading: Folk meaning: like a conversation partner, the program is thought to 'get' the input it expects; arguments are always there. 
+  boundary: Any correct, programming-specific statement about args length makes the answer L1 or higher.
+L1 Unistructural:
+  - names_the_element: Identity: args.length is the length field of main's String[] parameter args; it counts the command-line arguments.
+  - states_the_rule: Declarative: args is a String[] whose elements args[0] .. args[args.length-1] are the typed arguments, as strings; numbers must be converted with Integer.parseInt or Double.parseDouble.
+  boundary: Covering every part of the code in order is L2.
+  boundary: Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.
+L2 Multistructural:
+  - line_by_line_trace: Sequencing: the command line is split at whitespace, and the pieces are stored in order in args before main's first statement runs. Reading args.length then behaves like any length field.
+  - output_prediction: Result: an int equal to the number of typed arguments: 'java Max' gives 0, and 'java Max 10 -3 55 0 14' gives 5.
+  - one_step_execution: State transition: reading args.length changes nothing; args itself is fixed for the whole run.
+  boundary: One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).
+  boundary: A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.
+L3 Relational:
+  - relation_to_neighbour: args[i] may be read only for i < args.length; with no arguments even args[0] is out of bounds.
+  - relation_to_neighbour: args.length is the ordinary array length field applied to the String[] args.
+  - purpose_of_the_whole: Plan/role: validate input before use (print a usage message and return when args.length is too small), or loop over a variable number of arguments.
+  boundary: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+  boundary: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+L4 Extended abstract:
+  - predict_a_change: Conservation: extra arguments do not break code that reads args[0]; fewer arguments than the code reads break it at run time. Adding an args.length check keeps behaviour for correct input and only changes what happens for bad inpu
+  - diagnose_an_error: rule broken: args[i] exists only if i < args.length. Kind: run-time exception. Trigger class: the program is run with fewer command-line arguments than it reads, e.g. none at all (java.lang.ArrayIndexOutOfBoundsException: 0)
+  - transfer_to_a_new_program: Applicability: use args.length to validate or iterate over a small, variable number of command-line values. For large or open-ended input, read standard input instead.
+  - diagnose_an_error: rule broken: An argument is a String and must be a valid numeral to be parsed. Kind: run-time exception. Trigger class: a non-numeric argument is passed to Integer.parseInt, e.g. 'five' (NumberFormatException)
+  boundary: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+  boundary: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Grade the answer for each concept: command_line_args, run, class_declaration, args_length.

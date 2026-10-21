@@ -1,0 +1,28 @@
+{
+ "concepts": [
+  {
+   "concept": "incremental_development",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "correct": true,
+   "why": "Relates small steps to local debugging: the newest code is where the error is."
+  },
+  {
+   "concept": "compile",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote",
+   "correct": true,
+   "why": "States the practice of compiling often so each error is found close to its cause."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

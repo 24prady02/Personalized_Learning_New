@@ -1,0 +1,1 @@
+{"level": "L0", "pick": "A", "why": "The student makes a definite claim about (b), so it is levelled, not 'none'. In (b) there is no else: print(\"B\") is an unconditional following statement, so the real output is AB; treating B as 'what happens otherwise' reads a sequenced statement as an else branch, a rule that contradicts Java, which is L0."}

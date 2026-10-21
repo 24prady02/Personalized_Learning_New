@@ -1,0 +1,1 @@
+{"level": "L2", "pick": "B", "why": "The answer applies the correct rule for each statement to this code's values (continue on even i, break at i==5), but it is two parallel segments mapped onto two lines with no integration into what the loop as a whole does (prints and sums the odd numbers below 5, giving 1,3, sum=4), so it is multistructural rather than relational."}

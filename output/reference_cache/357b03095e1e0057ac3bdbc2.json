@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student gives a correct counterexample (all-negative array), says the code outputs 0 instead of -1, and explains that max starts at 0. That reasoning applies to a class of inputs beyond the code's own values, so it is L4."}

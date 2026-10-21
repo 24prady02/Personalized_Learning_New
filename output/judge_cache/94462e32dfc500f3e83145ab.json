@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "a.length / 2, because each swap puts two elements in place",
+   "correct": true,
+   "why": "It uses a.length correctly as the element count. The loop bound is tied to the array's real size: each swap places two elements, so half the length is enough."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length / 2",
+   "correct": true,
+   "why": "It writes a valid compound expression as the loop bound but never explains how it is evaluated or what type it has."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a.length / 2",
+   "correct": true,
+   "why": "It uses / correctly to halve the length but never mentions that int division truncates or what happens to the middle element when the length is odd."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "each swap puts two elements in place",
+   "correct": true,
+   "why": "It ties the purpose of the swap to the reversal plan: one exchange places two elements, which sets how many times the loop must run."
+  }
+ ]
+}

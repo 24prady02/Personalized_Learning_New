@@ -1,0 +1,1 @@
+{"level": "L0", "why": "The student reads `a = b` as an equality check, which is the maths meaning of `=`. In Java it's assignment, so a becomes 20 and b stays 20. The answer's claim that nothing changes follows from that wrong rule."}

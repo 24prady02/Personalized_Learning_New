@@ -1,0 +1,1 @@
+{"level": "L1", "concept": "Shorthand equivalents (y += x, x--) of the loop body statements", "why": "The answer correctly gives shorthand for two statements in the loop, which is one correct part of the code. It does not trace the loop or give any values, so it can't go higher."}

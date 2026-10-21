@@ -1,0 +1,1 @@
+{"level": "L4", "pick": "B", "why": "The trace is correct ({2,1,3}), the purpose (swap first and third) is deduced from the code (L3), and part (c) correctly reasons beyond the given code: with length 1, a[2] is out of bounds and the access throws (ArrayIndexOutOfBoundsException), which is correct reasoning about an input not in the given code, so L4."}

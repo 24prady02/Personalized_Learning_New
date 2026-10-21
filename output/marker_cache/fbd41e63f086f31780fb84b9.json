@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "scientific (e) notation for doubles", "why": "The student reads 'e' as Euler's number raised to a power, a maths meaning, instead of Java's rule that 6.02e23 means 6.02 × 10^23."}

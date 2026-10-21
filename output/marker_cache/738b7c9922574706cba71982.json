@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "Repeated halving loop (what is printed for n=20 and n=1,000,000)", "why": "The answer gives 4 for n=20, which looks like a count of steps, but gives 500,000 for a million by halving once. It switches rules between the two cases and doesn't trace the code."}

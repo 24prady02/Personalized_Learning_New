@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arithmetic operators beyond the division-by-zero claim, which is graded under division_by_zero."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "It crashes, because 10 / 0 is computed.",
+   "correct": false,
+   "why": "&& short-circuits because n != 0 is false, so 10 / n is never run and nothing is printed; the predicted crash is wrong."
+  },
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "because 10 / 0 is computed",
+   "correct": false,
+   "why": "The answer treats both operands of && as always evaluated, which contradicts Java's short-circuit evaluation."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention doubles."
+  }
+ ]
+}

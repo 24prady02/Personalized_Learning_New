@@ -1,0 +1,36 @@
+{
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "Correctly relates the token read leaving the line separator to what the following readLine returns."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "readInt takes 42 but not the Enter",
+   "correct": true,
+   "why": "Correctly states that the read advances past one token and leaves the rest of the line."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

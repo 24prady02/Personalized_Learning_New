@@ -1,0 +1,1 @@
+{"level": "L0", "concept": "assignment storing an expression in a variable", "why": "It applies a wrong rule, saying assignment stores the expression itself rather than its evaluated value, and it gives only one link and leaves out type and value."}

@@ -1,0 +1,1 @@
+{"level": "L4", "why": "The student correctly sees that int/int division truncates, so each p[j] becomes 0. They also correctly predict that a double[] counts would give true division, which is reasoning about changed code. They never say outright that p is all zeros, that it sums to 0 rather than 1, or give a fix as such, but the double[] change is an implied fix."}
