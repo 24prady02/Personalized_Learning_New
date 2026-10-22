@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "assignment",
+ "why": "The answer uses a rule that is wrong in Java. StdIn.readInt() does not skip a token that is not an integer: on \"abc\" it throws an InputMismatchException, so the program crashes after adding 5 and 3 and the println line never runs. Nothing is printed, not \"8 2\".",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "assignment@L1#1",
+   "quote": "It prints 8 2",
+   "correct": false,
+   "why": "The answer gives bare totals (sum 8, count 2) with no trace of sum += x or count++. The totals are only reachable because it assumes the loop ends normally, and it does not: the program crashes on abc."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "output_prediction",
+   "way_id": "string_concatenation@L2#2",
+   "quote": "8 2",
+   "correct": false,
+   "why": "The answer gives a bare output in the sum + \" \" + count form with no reasoning about how + joins the values. Under the boundary rule that makes it L1, and the output is wrong because that line never runs."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about turning the ints into a String."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This code does no arithmetic on chars."
+  }
+ ]
+}

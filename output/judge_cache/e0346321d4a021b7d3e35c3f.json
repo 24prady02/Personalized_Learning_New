@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "incremental_development",
+ "why": "The answer gives one correct reason that ties how often you compile to where errors show up: if you compile after every few lines, each error sits in the code you just wrote, so debugging stays local.",
+ "concepts": [
+  {
+   "concept": "incremental_development",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "correct": true,
+   "why": "It makes the point that small steps keep debugging local, because the newest change is the first suspect."
+  },
+  {
+   "concept": "compile",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "compile after every few lines, each error is next to the code you just wrote",
+   "correct": true,
+   "why": "It explains that compiling often means each error is found close to its cause, but only for this scenario, not as a rule for new programs."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how to read or interpret the 37 messages."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It mentions errors in general but says nothing about what compile-time errors are or how javac reports them."
+  }
+ ]
+}

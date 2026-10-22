@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "type_conversion",
+ "why": "The answer correctly applies the conversion rule to two of the code's lines: d = i widens by itself because double has the larger range, and 9.99 needs (int). It does not cover the other casts or tie the two cases together under one rule, such as information loss, so it is L2 rather than L3.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about double values or how double arithmetic works."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how int behaves."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "type_conversion@L2#1",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+   "correct": true,
+   "why": "It applies the widening rule and the narrowing rule to the actual lines of the code, and both are correct."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "explicit_cast@L2#1",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It correctly finds the line where the double-to-int cast is required, but gives no reason such as loss of the fraction."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss primitive types as such."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss how assignment works."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss any operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss how expressions are evaluated."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss data types in general."
+  }
+ ]
+}

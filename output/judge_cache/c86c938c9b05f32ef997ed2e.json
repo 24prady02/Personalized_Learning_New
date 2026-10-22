@@ -1,0 +1,23 @@
+{
+ "answer_level": "L1",
+ "main_concept": "standard_audio",
+ "why": "The answer gives the right fix from the book (end main with System.exit(0)) but never explains why the terminal hangs, so it is a bare correct rule with no justification.",
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "It repeats the book's rule for StdAudio programs but does not say why the program keeps running after the sound ends."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about standard input or end-of-file; the hang is not caused by waiting for input."
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "conditional_operator",
+ "why": "The student correctly rewrote the if-else as one equivalent line, `outputValue = c ? 100 : -50;`, which is the expression form of the if-else statement in this code (relation_to_neighbour, L3).",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It maps `if (c) v = a; else v = b;` correctly onto `v = c ? a : b;`, with the condition, the true value and the false value in the right places."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It writes one correct simple statement ending with a semicolon, and does not trace or relate statements beyond that."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It correctly combines the assignment with the conditional expression, putting the selected value on the right-hand side of one assignment to outputValue."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about filters."
+  }
+ ]
+}

@@ -1,0 +1,125 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student gives the correct output, with the line break after the println text, but does not explain how they got it, so it counts as a bare correct result (L1).",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "output_prediction",
+   "way_id": "println@L2#2",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The line break after println's text is in the right place, but no rule or trace backs it up. A bare output is L1."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about method calls."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student gives no reasoning about statement order."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept is not relevant to the code or the answer."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output stream itself."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "output_prediction",
+   "way_id": "print@L2#2",
+   "quote": "Welcome to Java. This is A nice programming language",
+   "correct": true,
+   "why": "The text from print and println is correctly joined on one line, but there is no justification. A bare output is L1."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept is not relevant."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about string literals."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about streams."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "stream_model -prerequisite-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "print -parallel-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

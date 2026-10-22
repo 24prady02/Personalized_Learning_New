@@ -1,0 +1,102 @@
+{
+ "answer_level": "L3",
+ "main_concept": "incremental_development",
+ "why": "The answer explains why small steps help, and the reason comes from the situation: if you compile after every few lines, any error is in the code you just wrote, so it is easy to find.",
+ "concepts": [
+  {
+   "concept": "incremental_development",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "incremental_development@L3#2",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "correct": true,
+   "why": "It links working in small steps to local debugging, where the newest change is the first place to look, and this is correct."
+  },
+  {
+   "concept": "compile",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Compiling is mentioned only as the action repeated in each step; the answer makes no claim about what compiling itself does."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how to read error messages."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the program text or file names."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention testing or running the program on inputs."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention running the program."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "'Each error' is only used to make the point about where errors are; the answer does not describe compile-time errors."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "compile -prerequisite-> run",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "compile -prerequisite-> compile_time_error",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "compile_time_error -prerequisite-> reading_error_messages",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "program_text -prerequisite-> compile",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "run -prerequisite-> testing",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "run -prerequisite-> incremental_development",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

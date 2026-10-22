@@ -1,0 +1,100 @@
+{
+ "answer_level": "L2",
+ "main_concept": "nested_loops",
+ "why": "The student gets the values in every printed row right, but the prediction is wrong in two places: it leaves out the empty line printed on the last outer pass (i = 0), because the student says the loop 'stops at 1', and it drops the space after each number.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about expressions."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the format string; it just leaves out the trailing spaces."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the int type."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "loop_variable@L2#2",
+   "quote": "because the loop stops at 1",
+   "correct": false,
+   "why": "The student gives the values the loop variable takes but says the outer loop ends at 1. Its condition is i >= 0, so it also runs for i = 0. This reads like a slip, perhaps mixing it up with the inner test j > 0."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "nested_loops@L2#2",
+   "quote": "3 2 1 / 2 1 / 1\" (no empty line at the end)",
+   "correct": false,
+   "why": "The student predicts the rows of the inner loop for each outer pass correctly, but misses the fourth outer pass, where the inner loop runs zero times and println still prints an empty line."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not apply to this code."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> integer_division",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

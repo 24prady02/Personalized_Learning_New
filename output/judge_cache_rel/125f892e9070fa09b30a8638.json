@@ -1,0 +1,115 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The student copies the array one element at a time in a loop, which is the right approach, but the code has two faults: i <= data2.length goes one index too far and throws ArrayIndexOutOfBoundsException, and copy is never created with new int[data2.length].",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int itself."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "length_field@L0#1",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "It treats data2.length as the last valid index, but the last valid index is data2.length-1."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "for_loop@L2#1",
+   "quote": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The init, test, update and body are all well formed, but the test allows one pass too many."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ is only the standard loop update, and the answer makes no claim about it."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "copy[i] = data2[i];",
+   "correct": false,
+   "why": "Copying element by element is correct, but no new array is created and the bound goes past the end."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "off_by_one_error@L0#2",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "Using <= instead of < with the array length is the OffByOneBound wrong rule."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "loop_control@L0#3",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "It treats < and <= as interchangeable, so the loop runs length+1 times."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention aliasing."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> off_by_one_error",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_copy -parallel-> array_aliasing",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

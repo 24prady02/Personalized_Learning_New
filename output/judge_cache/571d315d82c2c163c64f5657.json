@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "For t = 5 nothing is printed. The outer if (t > 10) is false, and because the else belongs to the inner if (the dangling-else rule), no 'cold' is printed. All three tests in the else-if chain are also false. The student gets the right result and explains it by tying the else to the nested if structure, but does not mention the second chain.",
+ "concepts": [
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "nested_conditionals@L3#2",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "Correctly uses the dangling-else rule: without braces the else pairs with the inner if, so a false outer test skips both branches."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#2",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "Correctly sees that the if-else is the branch of an outer if, so its else is never reached here."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "the outer if fails",
+   "correct": true,
+   "why": "Tests the outer condition with t = 5 and correctly skips its body."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue and the answer makes no claim about it."
+  }
+ ]
+}

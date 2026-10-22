@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "double",
+ "why": "The answer only lists the right terms (remainder, widening, double, println, newline). It never gives the output or works out num4 = (9 % 5) + 26.3 = 4 + 26.3 = 30.3, so it names parts without applying them to the code.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It says the int is widened to double but never applies this to 4 + 26.3 or to the printed 30.3."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It links println with a newline but doesn't use that to give the two output lines."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names % as the remainder but never works out 9 % 5 = 4."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about division by zero, and the code has none."
+  }
+ ]
+}

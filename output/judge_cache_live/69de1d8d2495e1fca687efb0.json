@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "while_loop",
+ "why": "The answer traces the do-while loop with values: num1 = 9, num2 starts at 12, num2 drops to 11 at i = 9 and to 10 at i = 11, and the output is 8, 10, 12, 13. All of this is correct and confirmed by the run, but it never states what the code is for, and part (b), the for-loop rewrite, is not answered.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "num1 is 9 and num2 starts at 12.",
+   "correct": true,
+   "why": "Works out each initial value from the current values (8+1 = 9, 9+3 = 12) and stores it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "increment_operators@L2#1",
+   "quote": "At i = 9 num2 drops to 11; at i = 11 it drops to 10.",
+   "correct": true,
+   "why": "Applies num2-- one step at a time, at the right passes, lowering num2 by exactly 1 each time."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how printf formats the output."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about standard output."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only states the results of the additions, not how the operators work."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about print."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Part (b), the for-loop rewrite, is missing, so the answer never reasons about the loop's start, test and update."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "while_loop@L2#2",
+   "quote": "So it prints 8, 10, 12, 13,",
+   "correct": true,
+   "why": "The predicted output follows from the traced passes and the num2 changes, but the answer gives no purpose."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept does not apply to this code."
+  }
+ ]
+}

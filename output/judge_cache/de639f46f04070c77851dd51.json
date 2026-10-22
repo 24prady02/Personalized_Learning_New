@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "switch_statement",
+ "why": "The answer explains the final result by linking the switch to the missing break statements, which cause fall-through and make result 50; this is correct, although it does not trace from case 2 step by step.",
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the swich no have break so it go down all the case and result become 50",
+   "correct": true,
+   "why": "It correctly says that without break the cases fall through until the end of the switch, so the default sets result to 50."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "It makes no claim about statements running in order beyond the fall-through."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "result become 50",
+   "correct": true,
+   "why": "It gives the correct final value but does not explain how each assignment (20, then 40, then 50) overwrites the one before."
+  },
+  {
+   "concept": "break_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "no have break so it go down all the case",
+   "correct": true,
+   "why": "It correctly links the missing break to fall-through in the switch."
+  }
+ ]
+}

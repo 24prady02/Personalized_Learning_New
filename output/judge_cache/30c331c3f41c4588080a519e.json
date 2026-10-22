@@ -1,0 +1,34 @@
+{
+ "answer_level": "L2",
+ "main_concept": "token_vs_line_input",
+ "why": "The answer traces the two relevant calls in order and gives the correct reason: readInt consumes 42 but leaves the line break, so readLine returns the empty rest of that line; it does not state the shared-position relation as a general rule.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "token_vs_line_input@L2#1",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "It correctly applies the token-read rule and then the line-read rule to this input, in order, which is a sequential trace (L2), not a general relation (L3)."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "standard_input@L2#1",
+   "quote": "readInt takes 42 but not the Enter",
+   "correct": true,
+   "why": "It correctly traces what each read takes from the input stream for these values."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about input being typed while the program runs or about control flow that depends on it."
+  }
+ ]
+}

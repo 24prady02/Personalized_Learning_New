@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "compile",
+ "why": "The answer finds each problem in the given code and puts them in the right order: compile errors stop the program first, and only after they are fixed and it compiles does the args[1] index error appear at run time. This links compiling to running for this one case, but it does not reason about a class of errors or about changed code.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "args[1] crashes at run time because Ann is args[0]",
+   "correct": true,
+   "why": "It links the one typed argument to valid indices (only args[0] exists), so args[1] throws ArrayIndexOutOfBoundsException in this given case."
+  },
+  {
+   "concept": "compile",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Two compile errors first ... After that it compiles, but ... crashes at run time",
+   "correct": true,
+   "why": "It correctly says compile-time errors block any run, and the run-time error only shows up after a successful compile."
+  },
+  {
+   "concept": "program_text",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the class must be in Greeting.java",
+   "correct": true,
+   "why": "It applies the rule that a public class's name sets the file name, to this code's Hello.java and Greeting."
+  },
+  {
+   "concept": "comment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The comment never runs.",
+   "correct": true,
+   "why": "It correctly marks the commented-out println line in this code as skipped during execution."
+  }
+ ]
+}

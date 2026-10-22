@@ -1,0 +1,105 @@
+{
+ "answer_level": "L4",
+ "main_concept": "formatted_output",
+ "why": "The student doesn't trace the given %6.2f call. Instead they correctly predict what a precision change to %.3f would print (3.142, no padding) and say what stays the same: the stored value of price is unchanged and only the printed digits differ.",
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "formatted_output@L4#1",
+   "quote": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+   "correct": true,
+   "why": "The answer correctly reasons that changing the precision changes only the printed digits, not the stored value, and that dropping the width removes the padding."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how double works."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arithmetic operators."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output stream or newlines."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss assignment."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss string literals."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The point that the value is unchanged is made as part of the formatting explanation, not as reasoning about variables."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the remainder operator."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss how doubles are represented or rounding error."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "double -prerequisite-> floating_point_precision",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_output -prerequisite-> formatted_output",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

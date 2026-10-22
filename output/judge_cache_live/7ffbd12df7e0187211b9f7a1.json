@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "accumulator_pattern",
+ "why": "The student follows the running sum through both rows, up to its final value of 0.9 in (b), and justifies next = -1 because r = 0.95 is never less than any sum; this is a correct value-by-value use of the accumulator on the given data, not a general statement about a class of rows.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about how double values behave."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about the operators themselves."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "accumulator_pattern@L2#1",
+   "quote": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1. (b) the sums only reach 0.9, so next stays -1",
+   "correct": true,
+   "why": "The student tracks the running total pass by pass, checks it against r each time and gets the correct results (next = 1, and next = -1 after a final sum of 0.9)."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about assignment as such."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about expressions."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student never talks about += as an operator."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about int."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about j++."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer mentions that rows should add to 1, but it says nothing about pages with no outgoing links."
+  }
+ ]
+}

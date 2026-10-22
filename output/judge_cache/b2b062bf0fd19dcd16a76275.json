@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student only gives the general print/println newline rule and never uses it on this code's three statements or writes out the output, so this is L1.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "println@L1#2",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "Correct rule for println, but it is not applied to the given lines."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about standard output itself."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "print@L1#2",
+   "quote": "print does not",
+   "correct": true,
+   "why": "Correctly says print adds no line terminator, but does not apply this to the code."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

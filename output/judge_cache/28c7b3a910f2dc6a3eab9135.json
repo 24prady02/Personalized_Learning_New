@@ -1,0 +1,34 @@
+{
+ "answer_level": "L2",
+ "main_concept": "printing_array_reference",
+ "why": "The answer correctly predicts that the output has the form [I@ plus a hex code and says the elements are not printed, applying the rule to this println(a) line.",
+ "concepts": [
+  {
+   "concept": "printing_array_reference",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "printing_array_reference@L2#2",
+   "quote": "Something like [I@ and a hex code, not the numbers.",
+   "correct": true,
+   "why": "It predicts the int[] type code [I@ followed by a hex hash, and contrasts this with printing the elements, which matches the run output [I@67b92f0a."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about indexing."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

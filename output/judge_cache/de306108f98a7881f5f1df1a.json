@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "if_statement",
+ "why": "The student claims without any reason that assigning the boolean directly would act like the if; this is true for this code, but it does not give the output or say when the loop stops, so it is one correct but unjustified point (L1).",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "if_statement@L1#2",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if.",
+   "correct": true,
+   "why": "The claim is correct here because the loop exits right after isDone first becomes true, so it is never set back to false; but the student only asserts it and does not explain why the two are the same, so it does not reach L4 (predict a change)."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "assignment@L1#2",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "Correctly stores the boolean result of a comparison straight into the variable, but does not apply this to the code's values."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about what % gives."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about how && is evaluated in the loop condition."
+  }
+ ]
+}

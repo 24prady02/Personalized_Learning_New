@@ -1,0 +1,70 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_drawing",
+ "why": "The student says StdDraw.point(256, 256) lands in the middle because it uses pixels. That is the PixelCoordinates misconception: the default scale is the unit square, so (256, 256) is far outside the window and the point is not visible, and only the square appears in the middle.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "drawing_shapes@L1#2",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly gives (0.5, 0.5) as the square's centre but never works out the square's size (side 2r = 0.5), so it covers only one aspect."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "standard_drawing@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "It applies the wrong rule that point(256, 256) is the middle of the default window."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "coordinate_scaling@L0#2",
+   "quote": "the point uses pixels",
+   "correct": false,
+   "why": "The default coordinates are the unit square, not pixels, so (256, 256) is outside the visible area."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about empty statements."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about Math.round."
+  }
+ ]
+}

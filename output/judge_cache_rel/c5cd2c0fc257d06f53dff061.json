@@ -1,0 +1,120 @@
+{
+ "answer_level": "L2",
+ "main_concept": "method_call",
+ "why": "The student gives both output lines correctly and explains them with the pass-by-value rule applied to this call, but does not trace the swap or relate parameter passing to another construct.",
+ "concepts": [
+  {
+   "concept": "method_call",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "method_call@L2#3",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "Uses the pass-by-value rule to show that the call to swap leaves main's num1 and num2 at 7 and 42."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "in main: num1 = 7 num2 = 42 ... main's variables do not change",
+   "correct": true,
+   "why": "Correctly says that main's variables keep their values because nothing assigns to them."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "output_prediction (bare result)",
+   "way_id": "variable_swap@L1#1",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "Gives the correct swapped values inside swap but does not trace the three assignments through temp."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the individual assignments."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Talks about copied values but does not mention types."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Gives the output text but does not reason about printf or line breaks."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -parallel-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "expression -prerequisite-> method_call",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> variable_swap",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

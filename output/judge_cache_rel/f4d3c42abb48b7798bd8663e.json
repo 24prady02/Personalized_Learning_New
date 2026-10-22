@@ -1,0 +1,120 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The answer makes a new array and copies data2 into it one element at a time, which is the right plan; but it writes data2.length(), which is wrong because length is a field, not a method, so the code does not compile. That makes this an L2 answer with an error.",
+ "concepts": [
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "It applies the copy pattern to data2 in the right order, but the code does not compile because it calls length() on an array."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "length_field@L0#2",
+   "quote": "data2.length()",
+   "correct": false,
+   "why": "It calls length() as if it were a method, but an array's size is the field data2.length, written without brackets."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "array_creation@L1#1",
+   "quote": "int[] copy = new int[...]",
+   "correct": true,
+   "why": "It correctly uses new int[n] to make a separate array, but says nothing more about how creation works."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_traversal@L2#1",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The loop visits every index from 0 to length-1 with the right < bound, but the bound is written with length()."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The for loop is only used as part of the traversal, with no reasoning about the loop itself."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ is only used, with no claim about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about init, test or update."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_creation -prerequisite-> length_field",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "for_loop -prerequisite-> array_traversal",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_traversal -prerequisite-> array_copy",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

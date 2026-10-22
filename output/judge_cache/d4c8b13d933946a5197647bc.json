@@ -1,0 +1,52 @@
+{
+ "answer_level": "L4",
+ "main_concept": "dangling_pages",
+ "why": "For the changed row in part (b), the student gets the correct result (next stays -1) and explains it with the rule that each row must add up to 1. The cumulative sum only reaches 0.9, so r = 0.95 never falls below it. This is reasoning about a change beyond the given code, not just re-tracing values.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "double@L2#1",
+   "quote": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1",
+   "correct": true,
+   "why": "The student adds the double values in order and compares them correctly."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "arithmetic_operators@L2#1",
+   "quote": "sum is 0.1 then 0.4",
+   "correct": true,
+   "why": "Each addition is applied in order with the right values."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "accumulator_pattern@L2#2",
+   "quote": "the sums only reach 0.9, so next stays -1",
+   "correct": true,
+   "why": "The student correctly gives the running total's final value and uses it to explain the result."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "compound_assignment@L2#2",
+   "quote": "sum is 0.1 then 0.4",
+   "correct": true,
+   "why": "The values of sum after each sum += row[j] are correct."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "dangling_pages@L4#1",
+   "quote": "next stays -1 because the row does not add to 1",
+   "correct": true,
+   "why": "The student connects the changed row to the broken rule that each row must add up to 1, which makes the random move fail."
+  }
+ ]
+}

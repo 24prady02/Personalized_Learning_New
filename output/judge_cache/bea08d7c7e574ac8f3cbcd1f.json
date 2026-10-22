@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The rows for i = 3 and i = 2 are right, but 'and so on' skips the i = 1 row, the empty line for i = 0, and the trailing spaces and line breaks, so the answer neither gives the exact output nor explains it for every pass.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed apart from the nesting."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about the init, test or update, or about when the loops stop."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about the printf spacing or the println line breaks."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "nested_loops@L1#2",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "Correctly links each outer i to a complete inner countdown, but covers only two outer passes and leaves out i = 1, i = 0 and the line ends, so it is not a full L2 trace."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

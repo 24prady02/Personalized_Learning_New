@@ -1,0 +1,125 @@
+{
+ "answer_level": "L0",
+ "main_concept": "scientific_notation",
+ "why": "The student reads e in 6.02e23 as Euler's number (6.02 × e^23). That is the documented ExponentIsPower misconception: in a Java literal, e means times ten to the power.",
+ "concepts": [
+  {
+   "concept": "scientific_notation",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "scientific_notation@L0#2",
+   "quote": "6.02e23 is 6.02 times e to the power 23.",
+   "correct": false,
+   "why": "In a Java literal, e23 means ×10^23, not Euler's e to the 23rd."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about double."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about integer division."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about floating-point precision."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about method calls."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not treat 6.02e23 as a literal or give its type."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "primitive_type -prerequisite-> literal",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> integer_division",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "double -prerequisite-> floating_point_precision",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "literal -prerequisite-> scientific_notation",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "answer_level": "L2",
+ "main_concept": "input_graph",
+ "why": "The student applies the ordered-pair rule to the one given line (0 1 links only 0 to 1, so 1 does not link to 0), and correctly says one multiplication gives the one-move distribution, not the page rank; the concept that part (b) is about (power method) is not on the shortlist.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "input_graph",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "input_graph@L2#3",
+   "quote": "No, 0 1 is only a link from 0 to 1.",
+   "correct": true,
+   "why": "It applies the ordered-pair rule correctly to the single pair in tiny.txt, which is the whole fragment asked about, and avoids the LinksAreSymmetric misconception."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the rank initializer."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Part (b) is about the power method's iteration, not the random-surfer simulation loop."
+  }
+ ]
+}

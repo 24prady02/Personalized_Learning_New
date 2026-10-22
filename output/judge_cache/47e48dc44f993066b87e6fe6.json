@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "printing_array_reference",
+ "why": "The answer correctly says println(a) prints the text form [I@hex rather than the elements, but it gives no reasoning (reference evaluated, converted to a string, elements never read), so it is a bare correct identification.",
+ "concepts": [
+  {
+   "concept": "printing_array_reference",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Something like [I@ and a hex code, not the numbers.",
+   "correct": true,
+   "why": "It names the reference-text output instead of the elements, which matches the run output [I@67b92f0a, but gives no justification or trace."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about array element access."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statement execution or order."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

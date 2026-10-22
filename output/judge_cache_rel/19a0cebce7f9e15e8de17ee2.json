@@ -1,0 +1,120 @@
+{
+ "answer_level": "L1",
+ "main_concept": "filter",
+ "why": "The student gives the general definition of a filter (it reads standard input and writes standard output) but never applies it to this code: nothing about the non-negative test, the read loop or the pipeline is mentioned.",
+ "concepts": [
+  {
+   "concept": "filter",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "filter@L1#2",
+   "quote": "It reads from standard input and writes to standard output.",
+   "correct": true,
+   "why": "The rule for what makes a program a filter is correct, but it is not applied to this code's test v >= 0 or its values."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Standard output is named only as part of the filter definition, with no claim about it."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Standard input is named only as part of the filter definition, with no claim about it."
+  },
+  {
+   "concept": "piping",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "redirection",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "standard_output -prerequisite-> redirection",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -prerequisite-> redirection",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "redirection -prerequisite-> piping",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -parallel-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_output -prerequisite-> formatted_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "piping -prerequisite-> filter",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

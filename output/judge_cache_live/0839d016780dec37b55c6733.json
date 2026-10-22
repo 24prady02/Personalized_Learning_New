@@ -1,0 +1,79 @@
+{
+ "answer_level": "L3",
+ "main_concept": "double",
+ "why": "The student correctly uses double operands so that miles / gallons keeps the fraction, which fits double with division into one formula, but the method has no return statement, so it will not compile and does not return the MPG. Because new code must be correct to reach L4, the answer stays at L3 with an error.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "double calculateMPG(double miles, double gallons) { double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Both operands are double, so the division keeps the fraction and the result is stored in a double."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no statement about primitive types in general."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions apart from what the double division already covers."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "arithmetic_operators@L2#3",
+   "quote": "miles / gallons",
+   "correct": true,
+   "why": "The single division correctly computes miles per gallon from the two parameters."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "assignment@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "The quotient is correctly stored in mpg, but mpg is never returned, so the method does not give back its value."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The braces match, and the answer says nothing about blocks."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use the remainder operator."
+  }
+ ]
+}

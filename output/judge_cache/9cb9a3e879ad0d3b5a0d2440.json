@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer gives no output for any of the three inputs. Its only claim is that StdIn is a variable holding all the numbers like an array, and that contradicts Java: StdIn is a library that reads tokens one at a time from an input stream, and each read uses up its token.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_input@L0#1",
+   "quote": "StdIn is a variable that holds all the numbers, like an array.",
+   "correct": false,
+   "why": "It treats StdIn as stored data you can look at, not a stream where each readInt() takes the next token."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#3",
+   "quote": "a variable that holds all the numbers",
+   "correct": false,
+   "why": "It says one variable can hold many values, which matches the MultiValueVariable misconception."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the loop or isEmpty()."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about end of input."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about sum or count."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No output is predicted."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about the while loop."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "stream_model@L0#1",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "It reads the input as a list stored in place that can be revisited, not a stream whose values are used up as they are read."
+  }
+ ]
+}

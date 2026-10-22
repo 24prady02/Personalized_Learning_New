@@ -1,0 +1,130 @@
+{
+ "answer_level": "L0",
+ "main_concept": "declaration",
+ "why": "The student says that declaring the local variable c gives it the value 0, but in Java a local variable has no value until it is assigned, so c + 1 does not compile.",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "declaration@L0#5",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "This is the wrong rule that local variables get a default value; the code actually gives the compile error 'variable c might not have been initialized'."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int's range or arithmetic."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The claim is covered under declaration; no listed variable way matches it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about primitive types."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about assignment."
+  },
+  {
+   "concept": "named_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about constants."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not evaluate c + 1."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about chained assignment."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about double."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "declaration -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> chained_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "declaration -prerequisite-> named_constants",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_drawing",
+ "why": "The student thinks StdDraw.point(256, 256) lands in the middle of the default window, which is the PixelCoordinates misconception: the default scale is the unit square, so the point is outside the canvas and does not show, and the window holds only the square centred at (0.5, 0.5).",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "drawing_shapes@L1#2",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly says the square is centred on (x, y) but says nothing about its size (side 2r = 0.5) or its corners."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "standard_drawing@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "It matches PixelCoordinates: StdDraw uses unit-square coordinates by default, so (256, 256) is off the canvas and does not appear."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "coordinate_scaling@L0#2",
+   "quote": "the point uses pixels",
+   "correct": false,
+   "why": "No setXscale or setYscale call is made, so the default unit-square scale applies and pixel values are not a coordinate system."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code and the answer do not involve Math.round."
+  }
+ ]
+}

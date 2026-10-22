@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "ragged_array",
+ "why": "The student names the right inner-loop bound for any 2-D array (a[i].length, not a[0].length), but never says why (rows can differ in length) and writes no printing code, so this is one correct rule stated without being applied.",
+ "concepts": [
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about the structure of 2-D arrays or how they are indexed."
+  },
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "length_field@L1#2",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "Correctly uses the length field (no parentheses) for each row, but only states it and does not apply it in code."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about index ranges or how elements are accessed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention arrays with three or more dimensions."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the order of the loops or the order of the output."
+  },
+  {
+   "concept": "ragged_array",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "ragged_array@L1#2",
+   "quote": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "correct": true,
+   "why": "States that each row should be processed up to a[i].length, but gives no reason (rows may differ in length) and writes no loop, so it does not reach L3 or L4."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention default values."
+  }
+ ]
+}

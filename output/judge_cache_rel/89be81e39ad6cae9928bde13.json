@@ -1,0 +1,130 @@
+{
+ "answer_level": "L4",
+ "main_concept": "do_while_loop",
+ "why": "The student predicts what happens if the do-while becomes a while loop: the output stays the same because 81 >= 70 is true at the start, and the two loops would differ only when i starts below 70. This correctly reasons about changed code and a class of inputs. However, it never gives the actual output for i = 61, which is \"61 \".",
+ "concepts": [
+  {
+   "concept": "do_while_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "do_while_loop@L4#1",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "correct": true,
+   "why": "It correctly says a while loop behaves the same when the condition is true before the first pass, and differs (0 passes instead of 1) when i starts below 70."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The while loop is only the changed code the student compares against. The answer gives no separate reasoning about the while loop itself."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "81 >= 70 is true at the start",
+   "correct": true,
+   "why": "It correctly works out the condition as true for the value 81."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed beyond the single comparison."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "comparison_operators -prerequisite-> boolean_expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "boolean_expression -prerequisite-> if_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "boolean_expression -prerequisite-> while_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "while_loop -prerequisite-> do_while_loop",
+   "stated": true,
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70."
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -parallel-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -parallel-> while_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

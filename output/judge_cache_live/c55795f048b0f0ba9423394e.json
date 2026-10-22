@@ -1,0 +1,79 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The student correctly says the printed values are only rough estimates from 100 moves, and correctly predicts that starting at page 3 (a change not in the run) would not change the long-run ranks.",
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student talks about the simulation, not about matrix multiplication."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing.",
+   "correct": true,
+   "why": "States the correct rule that visit fractions are only estimates and that extra printed digits do not mean accuracy, but does not work through the counts."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "simulation_loop@L4#1",
+   "quote": "In the long run the start page does not matter.",
+   "correct": true,
+   "why": "Correctly predicts that changing the start page keeps the limit, because the chain mixes in the long run."
+  }
+ ]
+}

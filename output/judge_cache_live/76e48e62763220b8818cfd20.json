@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "boolean_flag_array",
+ "why": "The student correctly says what composite[k] stands for and that every entry starts false, but does not explain why the entries start false or connect either fact to how the sieve uses the array.",
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "boolean_flag_array@L1#1",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "It correctly names composite[k] as a flag for a property of k and gives the false starting value without applying it or relating it to the sieve."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the if statement."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the comparisons."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the loops are controlled."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer does not mention one."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables in general."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the assignment composite[j] = true."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about evaluating expressions."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no break statement."
+  }
+ ]
+}

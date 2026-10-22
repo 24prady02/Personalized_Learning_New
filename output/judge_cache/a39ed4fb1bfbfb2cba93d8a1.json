@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "main_method",
+ "why": "The answer applies the documented wrong rule MainWithoutStringArgs: it says public static void main() works as an entry point, but java Hello needs public static void main(String[] args). It compiles, then fails at launch because the main method isn't found.",
+ "concepts": [
+  {
+   "concept": "main_method",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "main_method@L0#1",
+   "quote": "main() without String[] args is fine because the program uses no arguments.",
+   "correct": false,
+   "why": "This matches the MainWithoutStringArgs error edge: the String[] args parameter is required even when the program reads no arguments."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "the program uses no arguments",
+   "correct": true,
+   "why": "Saying the program uses no arguments is true of this code, but the answer makes no claim about how command-line arguments work."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how java Hello launches or runs the program."
+  }
+ ]
+}

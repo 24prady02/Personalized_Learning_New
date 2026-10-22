@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "integer_division",
+ "why": "The student fixes the one failing case correctly. They explain the bug through two linked constructs: precedence, which needs parentheses so the sum is taken first, and operand type, which needs 2.0 so the division keeps the fraction. Fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Correctly says that a double operand makes / keep the fraction, and uses this to fix the given case."
+  },
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(a + b) / 2.0",
+   "correct": true,
+   "why": "Uses the type rule that one double operand promotes the int sum 11, so the result is 5.5."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Sees that precedence made b / 2 run first, and that parentheses override it."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about run-time errors."
+  }
+ ]
+}

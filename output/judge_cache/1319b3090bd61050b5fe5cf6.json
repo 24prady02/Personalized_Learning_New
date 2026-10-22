@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "normalization",
+ "why": "The student explains that int / int division turns every entry into 0. They fix this one failing case by casting the numerator to double, and check that the fixed row now sums to 1. Locating and fixing the mistake for one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "int@L2#2",
+   "quote": "All zeros, because int / int is integer division",
+   "correct": true,
+   "why": "Applies the int / int rule to this code's values to predict the all-zero result."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "explicit_cast@L3#6",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "Casts the numerator, not the quotient, so the division keeps the fraction."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "type_conversion@L3#5",
+   "quote": "(double) counts[j] / outDegree",
+   "correct": true,
+   "why": "Converts the int counts to double so the division gives a fraction."
+  },
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "int / int is integer division. Cast: (double) counts[j] / outDegree gives ... 0.4",
+   "correct": true,
+   "why": "Links the operand types to the kind of division: two ints truncate, while a double operand keeps the fraction."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "All zeros, because int / int is integer division",
+   "correct": true,
+   "why": "Sees that dividing counts by a larger total truncates to 0, and that normalising must divide as doubles."
+  },
+  {
+   "concept": "normalization",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "normalization@L3#2",
+   "quote": "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "correct": true,
+   "why": "Fixes the given failing row with a double division and confirms it is now a probability row that sums to 1."
+  }
+ ]
+}

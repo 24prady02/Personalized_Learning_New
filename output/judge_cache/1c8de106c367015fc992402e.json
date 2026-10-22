@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "infinite_loop",
+ "why": "The student gives a correct general definition of an infinite loop (its condition stays true, so it never stops) but does not apply it to this code, where i += 0.5 is truncated back to 0 and i never changes.",
+ "concepts": [
+  {
+   "concept": "infinite_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "infinite_loop@L1#1",
+   "quote": "A loop that never stops because its condition stays true.",
+   "correct": true,
+   "why": "It correctly names the behaviour and its cause in general terms but does not trace i or the int cast in this code."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "while_loop@L1#1",
+   "quote": "its condition stays true",
+   "correct": true,
+   "why": "It indirectly states the correct rule that a loop keeps repeating while its condition is true, without applying it to i < 10."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about the init, the update or the loop variable."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no convergence test in the code or the answer."
+  }
+ ]
+}

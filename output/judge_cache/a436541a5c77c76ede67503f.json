@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_traversal",
+ "why": "The student wrote a correct index loop that writes each product back into a[i]. This fixes the given code's failing for-each loop, which only changed the copy x. Fixing one given failing case with a familiar canonical traversal is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_traversal@L3#1",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "The loop variable is used as the index, so a[i] reaches and updates a different element on each pass. The run turns [5,4,3,2,1] into [50,40,30,20,10]."
+  },
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "indexing@L3#2",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "It reads and writes each element through the loop index, so the same expression a[i] reaches every position in turn."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "a.length is used correctly, without parentheses, as the loop bound, so the loop fits the array's real size instead of a hard-coded number."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't use or say anything about the for-each loop. Avoiding it is only an implicit fix, not a claim about the concept."
+  }
+ ]
+}

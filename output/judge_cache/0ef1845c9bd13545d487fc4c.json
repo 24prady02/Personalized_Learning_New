@@ -1,0 +1,34 @@
+{
+ "answer_level": "L3",
+ "main_concept": "double",
+ "why": "The student writes their own method that turns the task into one formula, with double parameters and a double division miles / gallons that keeps the fraction. But the method never returns mpg, so it does not compile ('missing return statement'). New code must be correct to reach L4, so this is a relational answer with an error.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "double mpg = miles / gallons;",
+   "correct": false,
+   "why": "Dividing double by double correctly gives real-valued miles per gallon, but the missing return statement makes the method incorrect."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "primitive_type@L1#1",
+   "quote": "double miles, double gallons",
+   "correct": true,
+   "why": "It only declares double, a primitive type, for its parameters and variable and applies no further rule of the concept."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use the % operator."
+  }
+ ]
+}

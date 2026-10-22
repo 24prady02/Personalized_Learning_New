@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "method_call",
+ "why": "The student gives the correct output from both printf calls and explains it with a correct pass-by-value rule: swap gets copies, so main's num1 and num2 stay 7 and 42. This applies the rule to this code's values but is not related to the code's purpose through a listed graph edge.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not trace the assignments."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "output_prediction",
+   "way_id": "variable_swap@L2#2",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "This is a bare correct swapped result with no trace of the three steps, so it is L1. The way id is the closest match even though that way is L2."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and answer use no arithmetic operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "primitive_type@L2#3",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "The student correctly applies value copying of int arguments to this code, where nothing is shared."
+  },
+  {
+   "concept": "method_call",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "method_call@L2#3",
+   "quote": "then in main: num1 = 7 num2 = 42. Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "The student correctly states that the call changes none of the caller's variables because arguments are passed as values, and backs this with the predicted output."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "standard_output@L2#2",
+   "quote": "in swap: num1 = 42 num2 = 7, then in main: num1 = 7 num2 = 42",
+   "correct": true,
+   "why": "Both printf outputs are predicted correctly and in the right order."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code reads no input."
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_operators",
+ "why": "The answer gives the correct truth-table rules for && and || but only as definitions. It doesn't go through each combination of p and q, so it is L1, not L2.",
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "logical_operators@L1#2",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "It states the correct && and || rules without tracing the four combinations of values."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the order operands are evaluated in, or about skipping the right operand."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "control_flow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about control flow."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about the operators, not about the boolean type itself."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no if-else in the code or in the answer."
+  }
+ ]
+}

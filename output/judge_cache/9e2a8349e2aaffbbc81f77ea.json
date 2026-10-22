@@ -1,0 +1,23 @@
+{
+ "answer_level": "L4",
+ "main_concept": "while_loop",
+ "why": "For part (b), the student compares the do-while with a plain while loop, which is code that isn't given, and names the inputs where they behave differently (a start below 70, which includes 61). That correct reasoning about a change is L4, even though the answer never gives the exact output for 61, which would be \"61 \".",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "correct": true,
+   "why": "A while loop tests before its first pass, so it runs zero times when i starts below 70; the do-while runs once and prints 61, so the student's rule is right."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "81 >= 70 is true at the start",
+   "correct": true,
+   "why": "The student works out the loop condition correctly with the starting value 81."
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "drawing_shapes",
+ "why": "The student correctly predicts what happens when clear() is removed: shapes stay on the canvas, so the filled circles drawn each frame pile up into a trail.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "Without clear(), each filledCircle stays painted over the earlier marks, so the circles build up into a trail."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how statements run or in what order."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about setXscale or coordinates."
+  }
+ ]
+}

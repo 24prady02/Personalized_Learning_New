@@ -1,0 +1,105 @@
+{
+ "answer_level": "L3",
+ "main_concept": "lookup_table",
+ "why": "In one correct sentence the student says what the months array is for: a table that turns a month number into its name. This matches what months[m - 1] does, printing Mar for m = 3.",
+ "concepts": [
+  {
+   "concept": "lookup_table",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "lookup_table@L3#3",
+   "quote": "It is a table to look up a month name from its number.",
+   "correct": true,
+   "why": "It gives the array's role as a fixed-value table that maps a month number to its name, which is correct for this code."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the declaration."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says the name comes from the number but never says how the index is worked out (m - 1) or how elements are read."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention aliasing."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the initializer."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the m - 1 arithmetic."
+  },
+  {
+   "concept": "space_time_tradeoff",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention trading memory for time."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> lookup_table",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "lookup_table -prerequisite-> space_time_tradeoff",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

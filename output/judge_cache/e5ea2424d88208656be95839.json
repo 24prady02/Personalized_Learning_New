@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "frequency_counting",
+ "why": "The student correctly predicts what happens if the 10% random jump is removed: for any group of pages that only link to each other, the surfer gets stuck there and every page outside the group ends up with rank 0. This is reasoning about a changed version of the code and a whole class of graphs, which goes beyond tracing the given code.",
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "correct": true,
+   "why": "Without the jump, all later visits fall inside the closed group, so the visit counts for the other pages stop growing and their share of visits (their rank) goes to 0."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the input pairs are read or counted."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not work through the 90-10 formula as an expression."
+  }
+ ]
+}

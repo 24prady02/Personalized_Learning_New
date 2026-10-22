@@ -1,0 +1,31 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_operators",
+ "why": "The answer gives the correct truth-table rules for && and ||, but it only states the rules and does not apply them to values or relate them to any other part of the code.",
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "This is the correct definition of && and ||, stated as a rule."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the order in which operands are evaluated or about skipping the right operand."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about the boolean type itself."
+  }
+ ]
+}

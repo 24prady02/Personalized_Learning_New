@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_type",
+ "why": "The answer says name.toUpperCase() changes name, but that rule is wrong in Java: Strings are immutable, so toUpperCase returns a new String that is thrown away here, and the program prints \"java\", not \"JAVA\".",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "string_type@L0#1",
+   "quote": "JAVA, because toUpperCase changes name.",
+   "correct": false,
+   "why": "It treats the String as text that can be changed in place, but no operation changes an existing String."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "method_call@L0#1",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "It thinks a value-returning call changes the variable it is called on; in fact the returned value has to be stored or used."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how println works."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the program text."
+  }
+ ]
+}

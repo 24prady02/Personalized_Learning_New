@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "printing_array_reference",
+ "why": "The student gives the correct kind of output ([I@ plus a hex code, not the numbers), which is the identity of a printed array reference, but does not explain why: no reference-to-string conversion and no tie to this code's values or neighbouring lines.",
+ "concepts": [
+  {
+   "concept": "printing_array_reference",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "printing_array_reference@L1#1",
+   "quote": "Something like [I@ and a hex code, not the numbers.",
+   "correct": true,
+   "why": "It correctly says that printing the array shows the text form of its reference, not the elements, but gives no further justification."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about indexing."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about standard output."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about string concatenation."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about string literals."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how println works."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about literals."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student wrote a correct, general plan for a new task: start the minimum at the first element, update it whenever a smaller element appears in one pass, then print it; this is the running-extreme plan for the minimum, built from the task statement rather than traced from given code.",
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "print best",
+   "correct": true,
+   "why": "The answer only says to print the result and makes no claim about how print works."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "best = element",
+   "correct": true,
+   "why": "Assignment is used only as a step in the plan; the answer makes no claim about how assignment works."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "for each element",
+   "correct": true,
+   "why": "'For each element' is pseudocode for a traversal; the answer makes no claim about the enhanced for statement."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "best = first; for each element: if smaller than best → best = element; print best",
+   "correct": true,
+   "why": "It gives the most-wanted-holder plan for the minimum, using <, in one pass and starting from the first element (a valid start value), so the plan is correct; since it only reproduces this textbook plan, it stays at L3 rather than L4 transfer."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

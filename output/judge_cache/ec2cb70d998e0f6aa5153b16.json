@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "The answer is correct: the student says the braceless else belongs to the inner if, so when the outer test t > 10 fails for t = 5 the nested statement prints nothing; this ties the dangling-else rule to the nesting, which is a relational reasoning.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#2",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "The student correctly pairs the braceless else with the innermost if inside the nested if."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "nested_conditionals@L3#2",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "The student uses the dangling-else rule to explain why neither branch runs once the outer condition is false."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer's reasoning is about how the ifs are nested, not about a plain if on its own."
+  },
+  {
+   "concept": "else_if_chain",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about the A/B/C chain."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how printing works."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer does not mention one."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statement order."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue statement."
+  }
+ ]
+}

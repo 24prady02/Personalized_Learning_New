@@ -1,0 +1,105 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_else_statement",
+ "why": "The student follows the code in order with x = 17. They work out each condition, pick the right branch of both the outer and inner if-else, and keep going after the inner if-else, which gives AEG. The sentence giving a purpose is cut off, so the answer never says what the code is for.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_else_statement@L2#1",
+   "quote": "it checks whether x is even, and 17 is not even ... so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G",
+   "correct": true,
+   "why": "Each condition is checked once, exactly one branch runs at each level, and execution continues after the inner if-else, all applied to x = 17."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "remainder_operator@L2#1",
+   "quote": "17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2",
+   "correct": true,
+   "why": "Both remainders are worked out correctly for the code's values: 17 % 2 is 1 and 17 % 5 is 2."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Apart from %, which is levelled under remainder_operator, the answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not reason about expressions as a concept."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "print@L2#2",
+   "quote": "the first thing it does is print A, which always happens no matter what x is ... so overall I think the answer would be AEG",
+   "correct": true,
+   "why": "The answer follows which print calls run and puts their characters together in order to get the output."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about the output stream or the difference between print and println."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "All the conditionals are if-else statements, and they are levelled under if_else_statement."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention division by zero."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -prerequisite-> if_else_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> division_by_zero",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

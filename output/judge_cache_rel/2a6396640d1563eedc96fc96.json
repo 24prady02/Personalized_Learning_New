@@ -1,0 +1,100 @@
+{
+ "answer_level": "L3",
+ "main_concept": "switch_statement",
+ "why": "The student turns the switch into an equivalent else-if chain, deduced from the code: case 1 becomes the first test, the case 2 to case 3 fall-through becomes one || condition, and default becomes the final else; the branch logic is correct, but 'elif' is Python, not Java, so the code would not compile.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#4",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "The else-if chain with a final catch-all else is the right structure, but Java has no 'elif' keyword; it must be 'else if'."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Covered only as part of the else-if chain."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "logical_operators@L3#1",
+   "quote": "(value == 2 || value == 3)",
+   "correct": true,
+   "why": "Two comparisons are correctly joined with || into one condition, matching the grouped case labels."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Assignments are copied from the switch, not reasoned about."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "switch_statement@L3#1",
+   "quote": "elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": true,
+   "why": "Each case is correctly mapped to an equality test on the same expression, including the case 2/3 fall-through and the default."
+  },
+  {
+   "concept": "side_effect_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "logical_operators -prerequisite-> short_circuit",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -prerequisite-> if_else_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

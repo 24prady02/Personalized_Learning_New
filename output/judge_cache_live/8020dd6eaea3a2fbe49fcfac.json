@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "type_conversion",
+ "why": "The student correctly says that int to double is automatic because double is bigger, and that 9.99 to int needs (int), but only for two of the seven lines; the casts in q and r, parseInt in p and the String conversion in t are left out, and nothing links the two facts beyond 'bigger'.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double's own rules."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int's own rules."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "type_conversion@L1#2",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It states the widening and narrowing rule correctly for two lines but does not apply it to all the conversions in the code."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "explicit_cast@L1#2",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It correctly says a narrowing conversion needs a cast, but gives no value and does not deal with the other casts."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is not about primitive types as such."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about data types in general."
+  }
+ ]
+}

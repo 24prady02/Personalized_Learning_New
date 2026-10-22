@@ -20,13 +20,14 @@ score; at most MAX_CONCEPTS are returned, best first.
 """
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from .knowledge import Concept, PercptKnowledge
 from . import models
-from .thresholds import (KEEP_SCORE, MAX_CONCEPTS, MIS_FLOOR, RELATIVE_KEEP,
+from .thresholds import (KEEP_SCORE, MAX_CONCEPTS, MAX_CONCEPTS_PICK, MAX_CONCEPTS_V2, MIS_FLOOR, RELATIVE_KEEP,
                          SEM_FLOOR, W_ASKED, W_CODE, W_CODE_SHOWN, W_MIS, W_SEM, W_WORD)
 
 _SPLIT_RE = re.compile(r"(?<=[.!?;])\s+|\n+|\s+(?:but|however|whereas|although)\s+", re.I)
@@ -121,10 +122,27 @@ def identify(text: str, kg: PercptKnowledge, code: str = "",
         word_pts = sum(2 if " " in w.strip() else 1 for w in word_h[:3])
         asked_h = bool(focus) and (any(p.search(focus) for p in c.code_cues)
                                    or any(_word_hit(w, focus_lower) for w in c.word_cues))
-        score = (W_CODE * min(len(code_h), 2) + W_CODE_SHOWN * min(len(shown_h), 1) + W_WORD * word_pts
-                 + W_ASKED * asked_h
-                 + W_SEM * max(0.0, s_sim - SEM_FLOOR)
-                 + W_MIS * max(0.0, m_sim - MIS_FLOOR))
+        mode = link_meaning_mode()
+        meaning = W_SEM * max(0.0, s_sim - SEM_FLOOR) + W_MIS * max(0.0, m_sim - MIS_FLOOR)
+        if mode == "student":
+            # only the student's own sentences: no points for cues found only in the question's code or text
+            score = W_CODE * min(len(code_h), 2) + W_WORD * word_pts + meaning
+        elif mode == "grounded":
+            # student's sentences only, and a code cue counts only when the sentence also means the concept
+            cue = W_CODE * min(len(code_h), 2) if s_sim > SEM_FLOOR or m_sim > MIS_FLOOR else 0.0
+            score = cue + W_WORD * word_pts + meaning
+        elif mode == "grounded_q":
+            # original scoring, but the answer's code-symbol points count only when the sentence also means the concept
+            cue = W_CODE * min(len(code_h), 2) if s_sim > SEM_FLOOR or m_sim > MIS_FLOOR else 0.0
+            score = (cue + W_CODE_SHOWN * min(len(shown_h), 1) + W_WORD * word_pts + W_ASKED * asked_h + meaning)
+        elif mode == "meaning":
+            # meaning first (doubled weights), the student's own cues only break ties
+            score = 2 * meaning + 0.25 * min(len(code_h), 2) + 0.1 * min(word_pts, 3)
+        else:
+            score = (W_CODE * min(len(code_h), 2) + W_CODE_SHOWN * min(len(shown_h), 1) + W_WORD * word_pts
+                     + W_ASKED * asked_h
+                     + W_SEM * max(0.0, s_sim - SEM_FLOOR)
+                     + W_MIS * max(0.0, m_sim - MIS_FLOOR))
         if score <= 0:
             continue
         hits.append(ConceptHit(
@@ -133,8 +151,39 @@ def identify(text: str, kg: PercptKnowledge, code: str = "",
             meaning_sim=round(s_sim, 3), meaning_match=s_txt,
             misconception_sim=round(m_sim, 3),
             misconception_match=m_id if m_sim >= MIS_FLOOR else None))
-    hits.sort(key=lambda h: -h.score)
+    if link_pick():
+        # a wide shortlist for the judge to choose from: every concept scoring >= KEEP_SCORE, best first
+        # (ties broken by meaning), up to MAX_CONCEPTS_PICK; the judge keeps only the ones the answer is about
+        hits.sort(key=lambda h: (-h.score, -max(h.meaning_sim, h.misconception_sim)))
+        return [h for h in hits if h.score >= KEEP_SCORE][:MAX_CONCEPTS_PICK]
+    if link_v2():
+        # ties broken by meaning, not graph order; a concept needs some meaning (or misconception)
+        # similarity to be kept, never code cues alone; up to MAX_CONCEPTS_V2 kept
+        hits.sort(key=lambda h: (-h.score, -max(h.meaning_sim, h.misconception_sim)))
+        hits = [h for h in hits if h.meaning_sim > SEM_FLOOR or h.misconception_sim > MIS_FLOOR]
+        cap = MAX_CONCEPTS_V2
+    else:
+        hits.sort(key=lambda h: -h.score)
+        cap = MAX_CONCEPTS
     if not hits or hits[0].score < KEEP_SCORE:
         return []
     top = hits[0].score
-    return [h for h in hits if h.score >= KEEP_SCORE and h.score >= RELATIVE_KEEP * top][:MAX_CONCEPTS]
+    return [h for h in hits if h.score >= KEEP_SCORE and h.score >= RELATIVE_KEEP * top][:cap]
+
+
+def link_meaning_mode() -> str:
+    """LP_LINK_MODE = student | grounded | meaning (default: the original scoring). The keep rule is unchanged:
+    score >= KEEP_SCORE and >= RELATIVE_KEEP x best, at most MAX_CONCEPTS."""
+    return os.environ.get("LP_LINK_MODE", "")
+
+
+def link_pick() -> bool:
+    """LP_LINK_PICK=1: send the judge a shortlist of up to MAX_CONCEPTS_PICK concepts; the engine stores only
+    the ones the judge gives a level (the judge chooses what the answer is about)."""
+    return os.environ.get("LP_LINK_PICK") == "1"
+
+
+def link_v2() -> bool:
+    """LP_LINK_V2=1: the wider keep rule (cap 5, meaning tie-break, no cue-only concepts);
+    the engine then stores only the kept concepts the judge gives a level."""
+    return os.environ.get("LP_LINK_V2") == "1"

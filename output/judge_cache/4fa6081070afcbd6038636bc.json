@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "do_while_loop",
+ "why": "The student reasons beyond the given code. They correctly predict that changing the do-while to a while loop gives the same output when the condition is true at the start (81 >= 70). They also correctly name the class of inputs where the two loops differ: any start value below 70, such as 61. However, they never say what the code prints for i = 61, which is \"61 \".",
+ "concepts": [
+  {
+   "concept": "do_while_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "do_while_loop@L4#1",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "correct": true,
+   "why": "The student correctly says that switching to while keeps the behaviour when the condition starts true and changes it only when the condition starts false."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#2",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start",
+   "correct": true,
+   "why": "The student relates while to do-while: the only difference is the first test, which matters only when it is false."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only evaluates the guard in passing and makes no separate claim about comparison operators."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the if statement."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about loop control."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about i--."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept is not present in the code or the answer."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about boolean expressions."
+  }
+ ]
+}

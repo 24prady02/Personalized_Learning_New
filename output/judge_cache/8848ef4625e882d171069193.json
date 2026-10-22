@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "boolean_flag_array",
+ "why": "The answer correctly says what each flag means (k is not prime) and that every slot starts false, but it only names the element and states the default rule, without tracing any values or explaining why the sieve depends on all slots starting false.",
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "composite[k] becomes true for crossed-out (non-prime) k from 2 to n, and a new boolean[] holds all false; this is stated as a fact, not applied or related to the code."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements or their order."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no break, and the answer does not mention one."
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "conditional_operator",
+ "why": "The student correctly rewrote the if-else as the matching conditional expression `v = c ? a : b`, which relates the if-else statement to its expression form (L3 relation_to_neighbour, the graph edge if_else_statement -prerequisite-> conditional_operator).",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "conditional_operator@L3#1",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It correctly turns the if-else into its equivalent expression form, with the condition and both values in the right order."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements in general."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "assignment@L1#1",
+   "quote": "outputValue = ... ;",
+   "correct": true,
+   "why": "It writes one correct assignment statement but gives no further reasoning about assignment."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "comparison_operators@L1#1",
+   "quote": "(inValue >= 0)",
+   "correct": true,
+   "why": "It reuses the boolean comparison correctly as the first operand, without reasoning about it."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#3",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It relates the if-else to `c ? a : b` as its expression form that gives a value."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Filters are not involved in this code."
+  }
+ ]
+}

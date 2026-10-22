@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "division_by_zero",
+ "why": "The answer gives one blanket rule, that any division by zero is an error, which the run output disproves (1.0 / 0 printed Infinity), so it matches the ZeroDivisionAlwaysCrashes misconception and does not answer the difference part (d) asks about.",
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "division_by_zero@L0#2",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "Only int division by zero, as in 5 / z, throws ArithmeticException; 1.0 / 0 is legal and gives Infinity, but the answer treats every division by zero as an error."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int division discarding the fraction."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the int type."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about precision."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double or Infinity."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about operators as such."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Normalization is not relevant to this answer."
+  }
+ ]
+}

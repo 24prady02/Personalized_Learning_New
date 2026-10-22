@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "if_else_statement",
+ "why": "The answer turns the whole switch into one else-if chain: case 1 becomes an if, the case 2 fall-through into case 3 becomes value == 2 || value == 3, and default becomes the final else, so the logic is right; but it uses Python's 'elif' instead of Java's 'else if', so the code would not compile, which makes this a relational answer with an error.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "The chain is correct, with the final else catching every other value as default does, but 'elif' is not a Java keyword and should be 'else if'."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "if (value == 1) result = 30;",
+   "correct": true,
+   "why": "The first if is valid Java syntax with a boolean condition, but the answer does not trace it."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "value == 2 || value == 3",
+   "correct": true,
+   "why": "It joins two comparisons with || into one condition, which matches the fall-through from case 2 into case 3."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about which operands get evaluated."
+  }
+ ]
+}

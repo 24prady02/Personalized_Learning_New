@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "de_morgan",
+ "why": "The student writes the range the maths way, 5 < n < 10, which is not legal Java, and keeps the !( ). So no De Morgan rewrite happens and the rule used contradicts Java.",
+ "concepts": [
+  {
+   "concept": "de_morgan",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "de_morgan@L0#1",
+   "quote": "You could write b as !(5 < n < 10).",
+   "correct": false,
+   "why": "The !( ) is not moved inside, the terms are not negated and && is not turned into ||. This is a maths-style rewrite, not De Morgan."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how &&, || or ! work."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Short-circuiting is not mentioned."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "String concatenation is not mentioned."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Arithmetic operators are not mentioned."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no general claim about expressions."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "boolean_expression@L0#1",
+   "quote": "!(5 < n < 10)",
+   "correct": false,
+   "why": "This is maths range notation. In Java 5 < n gives a boolean, so 5 < n < 10 does not compile and the two tests must be joined with &&."
+  }
+ ]
+}

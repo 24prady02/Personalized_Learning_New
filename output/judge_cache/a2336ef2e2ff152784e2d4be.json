@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "scientific_notation",
+ "why": "The student reads e as Euler's number, so 6.02e23 becomes 6.02 × e^23 instead of 6.02 × 10^23 (Java's rule), which is the ExponentIsPower misconception.",
+ "concepts": [
+  {
+   "concept": "scientific_notation",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "scientific_notation@L0#2",
+   "quote": "6.02e23 is 6.02 times e to the power 23.",
+   "correct": false,
+   "why": "In a Java literal, e means times 10 to the power, not Euler's number, so this is the ExponentIsPower wrong rule."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type, its precision or its arithmetic."
+  },
+  {
+   "concept": "literal",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "literal@L0#1",
+   "quote": "6.02 times e to the power 23",
+   "correct": false,
+   "why": "It reads the literal with its everyday maths meaning instead of Java's literal form, where e-notation means a power of ten in a double."
+  }
+ ]
+}

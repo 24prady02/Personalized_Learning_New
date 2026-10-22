@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "if_statement",
+ "why": "The student predicts the effect of a change to the code: replacing the if with a direct boolean assignment. This prediction is correct for this loop because isDone is false until i % 5 == 0 and the loop ends as soon as it becomes true. The answer does not give the output (1 4 7 10) or say when the loop stops.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "if_statement@L4#1",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if",
+   "correct": true,
+   "why": "Says that changing the if to a direct assignment keeps the behaviour. That holds here because the loop exits the first time isDone becomes true, so the false values written before then change nothing."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how assignment works."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not reason about the values of %."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about expressions."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention && evaluation."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "way_id": "boolean_expression@L4#3",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "Stores the comparison's result straight into the boolean instead of using an if, which is the correct rule."
+  }
+ ]
+}

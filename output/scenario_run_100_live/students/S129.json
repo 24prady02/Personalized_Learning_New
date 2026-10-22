@@ -1,0 +1,163 @@
+{
+ "student_id": "S129",
+ "turn": 1,
+ "sessions": [
+  "scenarios"
+ ],
+ "graph_version": "3.9.1 (v3.9 + consistency fixes: 2 error edges, 1 L0 way, 2 D rules)",
+ "gaps": [],
+ "nodes": {
+  "markov_chain": {
+   "concept": "markov_chain",
+   "observed": true,
+   "evidence": {
+    "E1": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "The surfer gets trapped in that group and the other pages get rank 0.",
+      "statement": "markov chain: random process where the next state depends only on the current state",
+      "score": 0.519
+     }
+    ],
+    "E2": [],
+    "E3": [],
+    "E4": [
+     {
+      "turn": 1,
+      "session": 0,
+      "clause": "The surfer gets trapped in that group and the other pages get rank 0.",
+      "statement": "answers: Without the 10% jump, what can happen with a group of pages that only link to ea",
+      "score": 1.0
+     }
+    ]
+   },
+   "contested": [],
+   "uncertain": {
+    "E2": 1
+   },
+   "misconceptions": {
+    "StartPageMatters": {
+     "status": "held",
+     "turn": 1,
+     "boundary": true
+    }
+   },
+   "level": 1,
+   "uncertain_toward": null,
+   "stop_reason": "L3 blocked: boundary misconception held (StartPageMatters)",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [
+    [
+     1,
+     1
+    ]
+   ],
+   "clause_keys": [
+    "the surfer gets trapped in that group and the other pages get rank 0"
+   ],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [
+    "StartPageMatters"
+   ],
+   "frontier": false,
+   "confidence": "medium",
+   "last_gates": [
+    "weak_link",
+    "boundary_misconception"
+   ],
+   "last_turn": 1
+  },
+  "two_models": {
+   "concept": "two_models",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [
+    "StartPageMatters"
+   ],
+   "frontier": false,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "power_method": {
+   "concept": "power_method",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [
+    "StartPageMatters"
+   ],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  },
+  "transition_matrix": {
+   "concept": "transition_matrix",
+   "observed": false,
+   "evidence": {
+    "E1": [],
+    "E2": [],
+    "E3": [],
+    "E4": []
+   },
+   "contested": [],
+   "uncertain": {},
+   "misconceptions": {},
+   "level": 0,
+   "uncertain_toward": null,
+   "stop_reason": "",
+   "provisional": false,
+   "pinned_level": null,
+   "inferred_level": null,
+   "history": [],
+   "clause_keys": [],
+   "plateau": false,
+   "stale": false,
+   "at_risk": [],
+   "frontier": true,
+   "confidence": "",
+   "last_gates": [],
+   "last_turn": 0
+  }
+ }
+}

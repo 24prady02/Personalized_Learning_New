@@ -1,0 +1,100 @@
+{
+ "answer_level": "L0",
+ "main_concept": "main_method",
+ "why": "The student says public static void main() is a fine entry point because the program uses no arguments. That is the MainWithoutStringArgs wrong rule: Java needs public static void main(String[] args) to launch, and without it java Hello reports that no main method was found.",
+ "concepts": [
+  {
+   "concept": "main_method",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "main_method@L0#1",
+   "quote": "main() without String[] args is fine because the program uses no arguments.",
+   "correct": false,
+   "why": "This matches the MainWithoutStringArgs error edge: the header main() compiles, but the class then has no launchable entry point, so java Hello fails whether or not arguments are used."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student only mentions arguments to defend the wrong main header and makes no claim about how args works."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student does not explain why java Hello starts at main or what happens at launch."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "print -parallel-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "main_method -prerequisite-> command_line_args",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

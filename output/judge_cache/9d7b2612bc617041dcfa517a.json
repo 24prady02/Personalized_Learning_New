@@ -1,0 +1,43 @@
+{
+ "answer_level": "L4",
+ "main_concept": "drawing_shapes",
+ "why": "The answer correctly predicts what happens when clear() is taken out, a change to the given code, and gives the reason: each filledCircle stays on the canvas and later circles are added on top, so the circles leave a trail.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "drawing_shapes@L4#1",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "It reasons about what stays the same once clear() is removed (drawn shapes stay on the canvas and pile up) and correctly predicts a trail of circles."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about coordinate scaling."
+  }
+ ]
+}

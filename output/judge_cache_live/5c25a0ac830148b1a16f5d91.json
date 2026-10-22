@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_type",
+ "why": "The student predicts JAVA because they think toUpperCase changes name, but Java Strings are immutable: the call returns a new String that is thrown away, so the code prints java.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how println works."
+  },
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "string_type@L0#1",
+   "quote": "JAVA, because toUpperCase changes name.",
+   "correct": false,
+   "why": "The student treats the String as changeable text, but Java Strings are immutable and toUpperCase returns a new String."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "method_call@L0#1",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "The student thinks a value-returning call changes the variable it is called on, but its result has to be stored or used."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about names."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assigning to the variable."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about the output stream."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements or their order."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the literal."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the program text."
+  }
+ ]
+}

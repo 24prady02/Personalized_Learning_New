@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "operator_precedence",
+ "why": "The answer says Java needs full parentheses or else guesses the order, but Java has fixed precedence rules: a + b * c groups as a + (b * c) and gives r = 7, so the student's rule is wrong and they never give r.",
+ "concepts": [
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "operator_precedence@L0#1",
+   "quote": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+   "correct": false,
+   "why": "Java does not guess: * binds tighter than +, so the code is valid and r is 1 + 6 = 7."
+  },
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "expression@L0#1",
+   "quote": "Every expression must be fully in parentheses",
+   "correct": false,
+   "why": "In Java an operand can be any expression and parentheses are optional, so the stated rule is wrong."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the int type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never applies + or * to the values."
+  }
+ ]
+}

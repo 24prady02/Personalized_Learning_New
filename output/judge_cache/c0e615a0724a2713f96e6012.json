@@ -1,0 +1,70 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_drawing",
+ "why": "The answer says StdDraw.point(256, 256) is drawn in pixels at the middle of the default window, which is the documented PixelCoordinates misconception: the default scale is the unit square, so (256, 256) lies far outside the window and only the square shows.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "drawing_shapes@L1#2",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly says the square is centred on (0.5, 0.5) but says nothing about its size (side 0.5) or the rest of the call."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "standard_drawing@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "This is the PixelCoordinates wrong rule: the default coordinates are the unit square, not pixels, so the point is off the canvas."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "coordinate_scaling@L0#2",
+   "quote": "the point uses pixels",
+   "correct": false,
+   "why": "Without setXscale or setYscale the scale stays the unit square, so (256, 256) is not the centre."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about empty statements."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about Math.round."
+  }
+ ]
+}

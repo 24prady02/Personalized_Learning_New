@@ -1,0 +1,34 @@
+{
+ "answer_level": "L1",
+ "main_concept": "program_layout",
+ "why": "The answer gives one correct rule, that the compiler ignores indentation, but it doesn't apply that rule to this code, doesn't say that \"great\" is printed for score = 50, and doesn't notice that the indentation here is misleading.",
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "program_layout@L1#2",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "Correct that Java ignores whitespace, but it is a bare rule that misses the point that this layout misleads the reader. \"However I like\" is a style breach, not a language misconception."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the if condition, its body, or what runs when score = 50."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never says that only the first println belongs to the braceless if."
+  }
+ ]
+}

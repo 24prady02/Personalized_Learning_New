@@ -1,0 +1,605 @@
+﻿LP CLASSIFIER - CONCEPT MAP PICTURES: CHECK AND CORRECTIVE ACTIONS
+Document checked: output/LP_Classifier_20_Scenarios_workflow (2).docx  (20 scenarios, 18 pictures)
+Checked against:  output/scenario_run_100_rubric (the 74/100 run): students/<id>.json + data/chapter1_kg.json
+Date: 2026-10-21
+
+==========================================================================================
+SUMMARY
+==========================================================================================
+Nodes:          correct in all 18 pictures (every kept, extra and neighbour node matches the run).
+Edge count:     correct in all 18 (same prerequisite and parallel edges as the run).
+Edges as drawn: misleading in 13 pictures. Straight lines pass through other circles, so the reader sees
+                edges that do not exist (S007 S008 S009 S010 S016 S021 S047 S052 S057 S068 S080 S134 S137).
+Misconceptions: wrong in 2 pictures. S001 and S047 draw REFUTED misconceptions as 'misconception held'.
+Missing nodes:  2 pictures (S023 'statement' and S068 'run' were kept in Step 3 but are not drawn).
+Levels:         the number on each node is Claude's level; the rule level stored in the map often differs.
+Fine as drawn:  S005, S015 (minor), S073; S012 has no picture (correct). S026 needs a one-line note.
+
+Verdict per scenario:
+  S001  WRONG (misconceptions)
+  S005  OK, minor
+  S007  WRONG (edges through nodes)
+  S008  WRONG (edges through nodes)
+  S009  WRONG (edges through nodes, clutter)
+  S010  WRONG (edges through nodes; text mismatch)
+  S012  OK
+  S015  OK, minor
+  S016  WRONG (edges through nodes)
+  S021  WRONG (edge through node, labels collide)
+  S023  INCOMPLETE
+  S026  NO PICTURE, explain it
+  S047  WRONG (misconception, edges through nodes)
+  S052  WRONG (edges through nodes)
+  S057  WRONG (edges through nodes)
+  S068  WRONG (edge through node; node missing)
+  S073  OK (drawing matches the data)
+  S080  WRONG (edges through nodes)
+  S134  WRONG (edges through nodes)
+  S137  WRONG (edges through nodes, clutter)
+
+==========================================================================================
+CORRECTIVE ACTIONS FOR ALL PICTURES (fix the drawing once)
+==========================================================================================
+
+G1 Edges through circles
+  Do not draw an edge as a straight line when it crosses another circle. Either curve it around (a quadratic curve bent away from the circle it would hit), or place nodes so no line crosses a circle: kept nodes in the middle, each neighbour on the side of the kept node it connects to. After layout, test each edge segment against every circle (distance from circle centre to segment < radius + 4 px = crossing) and re-route any that cross.
+
+G2 Hidden arrowheads
+  End every line at the edge of the target circle, not its centre: shorten it by the target radius (+2 px), then draw the arrowhead. Now prerequisite arrows into a kept node vanish under the circle, so the direction (A must come before B) is lost.
+
+G3 Misconceptions
+  Draw a misconception diamond only when its status in students/<id>.json is not 'refuted'. 'refuted' means the answer disproves it: leave it out, or draw it grey with the word 'refuted' and a legend entry. Fix the Step 4 text the same way ('Misconceptions held' lists only held ones) and remove duplicates.
+
+G4 Levels on nodes
+  Each kept node has two levels: Claude's level (Step 6) and the rule level stored in the map. Print both, e.g. 'L4 Claude / L1 rule', or print Claude's level and add a legend line 'number = Claude's level'. 'no level' should read 'no level from Claude (rule L3)'.
+
+G5 Extra node
+  The extra node is judge-only and has no edges of its own in the map. Draw it outside the cluster (e.g. top-right corner) with a dashed circle so no edge passes through it. When the extra is also a stored neighbour (S005 boolean_expression, S023 break_statement, S068 markov_chain, S080 comment, S134 variable_swap), keep it at its neighbour position with a dashed outline and the note 'extra + neighbour'.
+
+G6 Kept but not stored
+  A concept kept in Step 3 that Claude gave no level is not stored (S023 statement, S068 run). Draw it as a grey circle 'kept, no level, not stored', or add one line under the picture. Otherwise Step 3 and the picture disagree.
+
+G7 Labels
+  Put long names on two lines (split at '_') inside or below the circle, and shrink the font for names over 14 characters. Collisions now: S021 'remainder_operatorarithmetic_operators', S001 standard_output, S016 arithmetic_operators/remainder_operator, S057 type_conversion/normalization, S047 FieldWidthIsIntegerDigits.
+
+G8 Neighbour levels
+  Neighbours with an inferred level show none. Add it in small grey text under the name, e.g. 'variable (inferred L1)'.
+
+G9 Clutter
+  Pictures with 17+ edges (S010 23, S009 21, S057 21, S016 17, S137 17) are hard to read. Optionally draw only edges that touch a kept node and list the neighbour-to-neighbour edges (e.g. primitive_type -> int, int <-> char) in a line under the picture.
+
+==========================================================================================
+PER SCENARIO: WHAT IS WRONG, AND THE CORRECT GRAPH TO DRAW
+==========================================================================================
+
+------------------------------------------------------------------------------------------
+S001   final L1   reference L1   VERDICT: WRONG (misconceptions)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. The 2 diamonds PrintNewLineFirst and PrintEqualsPrintln are drawn as 'misconception held'. In the run their status is REFUTED: the answer (println adds a newline, print does not) disproves them. Remove both diamonds and their 3 dotted edges, or draw them grey with the label 'refuted'.
+  2. Step 4 text says 'Misconceptions held: PrintEqualsPrintln, PrintNewLineFirst, PrintEqualsPrintln'. Change it to 'Misconceptions held: none (PrintEqualsPrintln and PrintNewLineFirst refuted)'. The name is also listed twice.
+  3. The 'standard_output' and 'PrintEqualsPrintln' labels overflow their shapes.
+  4. Arrowheads of string_literal->println, statement->println, string_literal->print, statement->print and stream_model->standard_output are hidden under the circles, so the prerequisite direction cannot be seen.
+Correct graph to draw:
+  KEPT      println                  Claude L1        rule L1; refuted, do not draw as held: PrintEqualsPrintln, PrintNewLineFirst
+  KEPT      standard_output          Claude L1        rule L1; refuted, do not draw as held: PrintEqualsPrintln
+  KEPT      print                    Claude L1        rule L1
+  NEIGHBOURS: string_literal, statement, formatted_output, standard_input, redirection, stream_model, standard_drawing
+  EDGES (14):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    print <-> println
+    string_literal -> println
+    statement -> println
+    println <-> formatted_output
+    standard_output -> formatted_output
+    standard_input <-> standard_output
+    standard_output -> redirection
+    stream_model -> standard_output
+    standard_output <-> standard_drawing
+    string_literal -> print
+    statement -> print
+    standard_input -> redirection
+    stream_model -> standard_input
+    standard_input <-> standard_drawing
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S005   final L4   reference L4   VERDICT: OK, minor
+------------------------------------------------------------------------------------------
+What to correct:
+  1. while_loop shows L4 (Claude's level). The rule level stored in the map is L1. Label the node 'L4 (Claude) / rule L1', or say in the legend that the number is Claude's level.
+  2. boolean_expression is the extra node AND a stored neighbour (boolean_expression -> while_loop, boolean_expression -> if_statement). Keep the dashed circle but note 'extra + neighbour'.
+  3. The arrowhead of boolean_expression -> while_loop is hidden under while_loop.
+Correct graph to draw:
+  KEPT      while_loop               Claude L4        rule L1
+  EXTRA     boolean_expression       Claude L2   (also a stored neighbour)
+  NEIGHBOURS: convergence_test, break_statement, loop_invariant_reasoning, if_statement, boolean_expression, do_while_loop, loop_variable, loop_body, animation, number_conversion
+  EDGES (11):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    while_loop -> convergence_test
+    while_loop -> break_statement
+    while_loop -> loop_invariant_reasoning
+    if_statement <-> while_loop
+    boolean_expression -> while_loop
+    while_loop -> do_while_loop
+    while_loop -> loop_variable
+    while_loop -> loop_body
+    while_loop -> animation
+    while_loop -> number_conversion
+    boolean_expression -> if_statement
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S007   final L2   reference L0   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. string_literal -> print is drawn straight through the expression circle, so it reads as string_literal-expression and expression->print. Neither edge exists.
+  2. variable -> expression runs through arithmetic_operators, so it reads as variable-arithmetic_operators. Neither edge exists.
+  3. expression -> comparison_operators runs through arithmetic_operators, so it reads as arithmetic_operators->comparison_operators. Neither edge exists.
+  4. expression and arithmetic_operators say 'no level' (Claude gave none), but the map stores them at rule level L3 (provisional). Label them 'no level (Claude) / rule L3'.
+  5. The neighbour variable has an inferred level L1 that is not shown.
+Correct graph to draw:
+  KEPT      string_literal           Claude L2        rule L1
+  KEPT      expression               Claude no level  rule L3 (provisional)
+  KEPT      arithmetic_operators     Claude no level  rule L3 (provisional)
+  NEIGHBOURS: variable (inferred L1), println, escape_sequences, print, operator_precedence, method_call, comparison_operators, integer_division, string_concatenation, division_by_zero
+  EDGES (12):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    string_literal -> println
+    string_literal -> escape_sequences
+    string_literal -> print
+    arithmetic_operators -> expression
+    variable -> expression
+    expression -> operator_precedence
+    expression -> method_call
+    expression -> comparison_operators
+    arithmetic_operators -> integer_division
+    string_concatenation <-> arithmetic_operators
+    arithmetic_operators -> division_by_zero
+    print <-> println
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S008   final L2   reference L2   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. variable -> assignment runs through formatted_output, so it reads as two edges, formatted_output-variable and assignment-formatted_output. Neither edge exists.
+  2. println <-> formatted_output (parallel) runs through increment_operators, so it reads as println-increment_operators. Neither edge exists.
+  3. assignment -> program_trace runs through increment_operators, so it reads as increment_operators->program_trace. Neither edge exists.
+  4. Neighbours variable, declaration, loop_control and standard_output have inferred level L1, which is not shown.
+Correct graph to draw:
+  KEPT      assignment               Claude L2        rule L2 (provisional)
+  KEPT      increment_operators      Claude L2        rule L2 (provisional)
+  KEPT      formatted_output         Claude L2        rule L2 (provisional)
+  NEIGHBOURS: variable (inferred L1), declaration (inferred L1), loop_control (inferred L1), standard_output (inferred L1), chained_assignment, compound_assignment, program_trace, comparison_operators, array_exchange, variable_swap, side_effect_order, println
+  EDGES (14):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    assignment -> increment_operators
+    variable -> assignment
+    declaration -> assignment
+    assignment -> chained_assignment
+    assignment -> compound_assignment
+    assignment -> program_trace
+    assignment <-> comparison_operators
+    assignment -> array_exchange
+    assignment -> variable_swap
+    loop_control -> increment_operators
+    increment_operators <-> compound_assignment
+    increment_operators -> side_effect_order
+    standard_output -> formatted_output
+    println <-> formatted_output
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S009   final L3   reference L4   VERDICT: WRONG (edges through nodes, clutter)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. array_bounds is the extra node (judge only, not stored, no edges in the map), but it is drawn in the middle of the kept nodes. Lines pass through it (length_field -> args_length, arithmetic_operators -> expression), so it looks connected. Move it outside the cluster.
+  2. 21 edges are drawn as straight lines across the whole picture. primitive_type -> char/boolean/int/double and int <-> char/boolean cross the kept nodes.
+  3. length_field shows L3 (Claude). The stored rule level is L1. Show both.
+Correct graph to draw:
+  KEPT      double                   Claude L1        rule L1
+  KEPT      length_field             Claude L3        rule L1
+  KEPT      expression               Claude L1        rule L3 (provisional)
+  EXTRA     array_bounds             Claude L3   (judge only, no edges: draw outside the cluster)
+  NEIGHBOURS: variable (inferred L1), arithmetic_operators (inferred L1), division_by_zero, char, boolean, floating_point_precision, primitive_type, int, array_creation, args_length, operator_precedence, method_call, comparison_operators
+  EDGES (21):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    double -> division_by_zero
+    double <-> char
+    double <-> boolean
+    double -> floating_point_precision
+    primitive_type -> double
+    int <-> double
+    array_creation -> length_field
+    length_field -> args_length
+    variable -> expression
+    arithmetic_operators -> expression
+    expression -> operator_precedence
+    expression -> method_call
+    expression -> comparison_operators
+    arithmetic_operators -> division_by_zero
+    boolean <-> char
+    primitive_type -> char
+    int <-> char
+    primitive_type -> boolean
+    int <-> boolean
+    boolean -> comparison_operators
+    primitive_type -> int
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S010   final L2   reference L0   VERDICT: WRONG (edges through nodes; text mismatch)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. array_copy (extra, not stored, no edges) sits in the middle. for_loop -> array_traversal and length_field -> args_length pass through it, so they read as array_copy edges. Move it outside.
+  2. int <-> double/char/boolean (parallel) and primitive_type -> int/char/boolean/double cross the length_field and int circles. 23 edges, hard to read.
+  3. int says 'no level' (Claude). The stored rule level is L1. length_field shows L0 (Claude), but the stored rule level is L2 (provisional). Show both.
+  4. Matching-check text says 'the <= bound was caught as a length_field misconception'. No misconception node is stored, and the picture correctly shows none. Change the text to 'Claude gave length_field L0 for the <= bound; no misconception node was stored'.
+Correct graph to draw:
+  KEPT      int                      Claude no level  rule L1
+  KEPT      length_field             Claude L0        rule L2 (provisional)
+  KEPT      for_loop                 Claude L2        rule L2 (provisional)
+  EXTRA     array_copy               Claude L2   (judge only, no edges: draw outside the cluster)
+  NEIGHBOURS: array_creation (inferred L1), loop_control (inferred L1), primitive_type, char, overflow, boolean, int_literal_limit, double, long_type, args_length, nested_loops, flag_search_loop, array_traversal, continue_statement, loop_scope, fencepost_loop, simulation_loop
+  EDGES (23):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    primitive_type -> int
+    int <-> char
+    int -> overflow
+    int <-> boolean
+    int -> int_literal_limit
+    int <-> double
+    int -> long_type
+    array_creation -> length_field
+    length_field -> args_length
+    loop_control -> for_loop
+    for_loop -> nested_loops
+    for_loop -> flag_search_loop
+    for_loop -> array_traversal
+    for_loop -> continue_statement
+    for_loop -> loop_scope
+    for_loop -> fencepost_loop
+    for_loop -> simulation_loop
+    primitive_type -> char
+    primitive_type -> boolean
+    primitive_type -> double
+    boolean <-> char
+    double <-> char
+    double <-> boolean
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S012   final none   reference none   VERDICT: OK
+------------------------------------------------------------------------------------------
+What to correct:
+  1. No claim, so there are no nodes and no picture. Correct.
+Correct graph: no nodes, no edges (nothing stored).
+
+------------------------------------------------------------------------------------------
+S015   final L2   reference L0   VERDICT: OK, minor
+------------------------------------------------------------------------------------------
+What to correct:
+  1. int <-> boolean (parallel) runs straight through the char circle, so it reads as int-char-boolean. It is a separate edge. Curve it around char.
+  2. char shows L2 (Claude). The stored rule level is L1. Show both.
+Correct graph to draw:
+  KEPT      char                     Claude L2        rule L1
+  NEIGHBOURS: string_type, boolean, char_arithmetic, double, primitive_type, int
+  EDGES (12):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    char <-> string_type
+    boolean <-> char
+    char -> char_arithmetic
+    double <-> char
+    primitive_type -> char
+    int <-> char
+    double <-> boolean
+    primitive_type -> boolean
+    int <-> boolean
+    primitive_type -> double
+    int <-> double
+    primitive_type -> int
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S016   final L0   reference L0   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. double <-> char (parallel) runs through arithmetic_operators, so it reads as arithmetic_operators-char. Neither edge exists.
+  2. double <-> boolean (parallel) runs through remainder_operator, so it reads as remainder_operator-boolean. Neither edge exists.
+  3. int <-> char (parallel) runs through double and arithmetic_operators.
+  4. arithmetic_operators shows L0 (Claude), but the stored rule level is L3. double shows L1 (Claude), stored L2. remainder_operator shows L0 (Claude), stored L2. Show both.
+  5. Neighbours primitive_type and integer_division have inferred level L1, which is not shown.
+Correct graph to draw:
+  KEPT      arithmetic_operators     Claude L0        rule L3 (provisional)
+  KEPT      double                   Claude L1        rule L2 (provisional)
+  KEPT      remainder_operator       Claude L0        rule L2 (provisional)
+  NEIGHBOURS: primitive_type (inferred L1), integer_division (inferred L1), string_concatenation, division_by_zero, expression, char, boolean, floating_point_precision, int
+  EDGES (17):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    arithmetic_operators -> integer_division
+    string_concatenation <-> arithmetic_operators
+    arithmetic_operators -> division_by_zero
+    arithmetic_operators -> expression
+    primitive_type -> double
+    double -> division_by_zero
+    double <-> char
+    double <-> boolean
+    double -> floating_point_precision
+    int <-> double
+    integer_division -> remainder_operator
+    primitive_type -> char
+    primitive_type -> boolean
+    primitive_type -> int
+    boolean <-> char
+    int <-> char
+    int <-> boolean
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S021   final L2   reference L2   VERDICT: WRONG (edge through node, labels collide)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. if_else_statement -> nested_conditionals runs through arithmetic_operators, so it reads as two edges, if_else_statement-arithmetic_operators and arithmetic_operators->nested_conditionals. Neither edge exists. nested_conditionals hangs only on if_else_statement.
+  2. The 'remainder_operator' and 'arithmetic_operators' labels run into each other ('remainder_operatorarithmetic_operators').
+  3. All 3 nodes show L2 (Claude). The stored rule level is L4 (provisional) for all 3. Show both.
+Correct graph to draw:
+  KEPT      if_else_statement        Claude L2        rule L4 (provisional)
+  KEPT      remainder_operator       Claude L2        rule L4 (provisional)
+  KEPT      arithmetic_operators     Claude L2        rule L4 (provisional)
+  NEIGHBOURS: if_statement (inferred L1), integer_division (inferred L1), conditional_operator, else_if_chain, nested_conditionals, string_concatenation, division_by_zero, expression
+  EDGES (9):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    if_statement -> if_else_statement
+    if_else_statement -> conditional_operator
+    if_else_statement -> else_if_chain
+    if_else_statement -> nested_conditionals
+    integer_division -> remainder_operator
+    arithmetic_operators -> integer_division
+    string_concatenation <-> arithmetic_operators
+    arithmetic_operators -> division_by_zero
+    arithmetic_operators -> expression
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S023   final L3   reference L3   VERDICT: INCOMPLETE
+------------------------------------------------------------------------------------------
+What to correct:
+  1. Step 3 keeps 'statement' (score 2.00), but it is not drawn. Claude gave it no level, so it was not stored. Draw it greyed as 'kept, no level, not stored', or add a note under the picture.
+  2. break_statement is the extra node AND a stored neighbour (break_statement -> switch_statement, inferred L1). The arrowhead into switch_statement is hidden, so the direction cannot be seen.
+  3. assignment (extra, judge only) is fine with no edges.
+Correct graph to draw:
+  KEPT      switch_statement         Claude L3        rule L3 (provisional)
+  KEPT, NOT STORED  statement (Claude gave no level): grey circle or a note
+  EXTRA     assignment               Claude L1   (judge only, no edges: draw outside the cluster)
+  EXTRA     break_statement          Claude L3   (also a stored neighbour)
+  NEIGHBOURS: break_statement (inferred L1), nested_conditionals
+  EDGES (2):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    break_statement -> switch_statement
+    nested_conditionals <-> switch_statement
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S026   final none   reference L1   VERDICT: NO PICTURE, explain it
+------------------------------------------------------------------------------------------
+What to correct:
+  1. No picture, because nothing was stored: Claude gave no level to assignment, array_aliasing or variable. Add one line in place of the picture: 'No concept map: 3 concepts were linked (assignment, array_aliasing, variable) but Claude gave none of them a level, so nothing was stored.'
+Correct graph: no nodes, no edges (nothing stored).
+
+------------------------------------------------------------------------------------------
+S047   final L4   reference L4   VERDICT: WRONG (misconception, edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. The FieldWidthIsIntegerDigits diamond is drawn as 'misconception held'. In the run its status is REFUTED (the answer is right about %.3f). Remove it and its dotted edge, or draw it grey and label it 'refuted'.
+  2. Step 4 text says 'Misconceptions held: FieldWidthIsIntegerDigits'. Change it to 'none (FieldWidthIsIntegerDigits refuted)'.
+  3. double <-> char and double <-> boolean (parallel) run through formatted_output, so they read as formatted_output-char and formatted_output-boolean. Neither edge exists.
+  4. primitive_type -> boolean runs through double, so it reads as a solid arrow double->boolean. The real double-boolean edge is parallel (dashed).
+Correct graph to draw:
+  KEPT      formatted_output         Claude L4        rule L4 (provisional); refuted, do not draw as held: FieldWidthIsIntegerDigits
+  KEPT      double                   Claude L1        rule L1
+  NEIGHBOURS: standard_output (inferred L1), println, division_by_zero, char, boolean, floating_point_precision, primitive_type, int
+  EDGES (14):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    standard_output -> formatted_output
+    println <-> formatted_output
+    double -> division_by_zero
+    double <-> char
+    double <-> boolean
+    double -> floating_point_precision
+    primitive_type -> double
+    int <-> double
+    boolean <-> char
+    primitive_type -> char
+    int <-> char
+    primitive_type -> boolean
+    int <-> boolean
+    primitive_type -> int
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S052   final L2   reference L3   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. command_line_args -> parsing runs through redirection, so it reads as redirection->parsing. Neither edge exists.
+  2. standard_output -> redirection runs through piping, so it reads as piping-standard_output. Neither edge exists.
+  3. command_line_args shows L1, and redirection and piping show L2 (Claude). The stored rule level is L1 for all 3. Show both.
+Correct graph to draw:
+  KEPT      command_line_args        Claude L1        rule L1
+  KEPT      redirection              Claude L2        rule L1
+  KEPT      piping                   Claude L2        rule L1
+  NEIGHBOURS: standard_input, parsing, black_box_model, main_method, args_length, data_driven_code, standard_output, filter
+  EDGES (11):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    standard_input <-> command_line_args
+    command_line_args -> parsing
+    command_line_args -> black_box_model
+    main_method -> command_line_args
+    command_line_args -> args_length
+    redirection -> piping
+    standard_input -> redirection
+    redirection -> data_driven_code
+    standard_output -> redirection
+    piping -> filter
+    standard_input <-> standard_output
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S057   final L3   reference L3   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. normalization (extra, not stored, no edges) sits in the middle. primitive_type -> int and primitive_type -> type_conversion pass through it and draw as a double line, and widening_conversion <-> explicit_cast passes through it too. normalization looks connected to primitive_type and widening_conversion, which is wrong. Move it outside.
+  2. explicit_cast -> compound_assignment runs through int, so it reads as int->compound_assignment. Neither edge exists.
+  3. int -> overflow runs through type_conversion, so it reads as type_conversion->overflow. Neither edge exists.
+  4. int shows L2 (Claude). The stored rule level is L3 (provisional). Show both.
+Correct graph to draw:
+  KEPT      int                      Claude L2        rule L3 (provisional)
+  KEPT      explicit_cast            Claude L3        rule L3 (provisional)
+  KEPT      type_conversion          Claude L3        rule L3 (provisional)
+  EXTRA     normalization            Claude L3   (judge only, no edges: draw outside the cluster)
+  NEIGHBOURS: primitive_type (inferred L1), parsing (inferred L1), char, overflow, boolean, int_literal_limit, double, long_type, math_random, compound_assignment, math_round, widening_conversion
+  EDGES (21):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    primitive_type -> int
+    int <-> char
+    int -> overflow
+    int <-> boolean
+    int -> int_literal_limit
+    int <-> double
+    int -> long_type
+    type_conversion -> explicit_cast
+    explicit_cast -> math_random
+    explicit_cast -> compound_assignment
+    math_round <-> explicit_cast
+    widening_conversion <-> explicit_cast
+    primitive_type -> type_conversion
+    parsing -> type_conversion
+    type_conversion -> widening_conversion
+    primitive_type -> char
+    primitive_type -> boolean
+    primitive_type -> double
+    boolean <-> char
+    double <-> char
+    double <-> boolean
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S068   final L0   reference L0   VERDICT: WRONG (edge through node; node missing)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. frequency_counting -> two_models runs through markov_chain, so it reads as frequency_counting->markov_chain and markov_chain->two_models. Neither edge exists.
+  2. Step 3 keeps 'run' (score 1.00), but it is not drawn: Claude gave it no level, so it was not stored. Draw it greyed or add a note.
+  3. power_method says 'no level' (Claude). The stored rule level is L1. Show both.
+  4. markov_chain is the extra node AND a stored neighbour (markov_chain -> power_method).
+Correct graph to draw:
+  KEPT      frequency_counting       Claude L1        rule L1
+  KEPT      power_method             Claude no level  rule L1
+  KEPT, NOT STORED  run (Claude gave no level): grey circle or a note
+  EXTRA     markov_chain             Claude L0   (also a stored neighbour)
+  NEIGHBOURS: two_models, simulation_loop, matrix_operations, markov_chain, convergence_rate
+  EDGES (7):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    frequency_counting -> two_models
+    simulation_loop -> frequency_counting
+    power_method -> two_models
+    simulation_loop <-> power_method
+    matrix_operations -> power_method
+    markov_chain -> power_method
+    power_method -> convergence_rate
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S073   final L0   reference L2   VERDICT: OK (drawing matches the data)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. The drawing matches the run. conditional_operator says 'no level' (Claude), but the stored rule level is L1. Show both.
+  2. The matching problem (conditional_operator linked instead of switch_statement and break_statement) is a semantic-matching issue, not a drawing issue. The text already says so.
+Correct graph to draw:
+  KEPT      conditional_operator     Claude no level  rule L1
+  EXTRA     assignment               Claude L2   (judge only, no edges: draw outside the cluster)
+  EXTRA     statement                Claude L2   (judge only, no edges: draw outside the cluster)
+  NEIGHBOURS: if_else_statement
+  EDGES (1):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    if_else_statement -> conditional_operator
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S080   final L3   reference L3   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. standard_input <-> command_line_args (parallel) runs through comment, so it reads as comment-standard_input. Neither edge exists.
+  2. main_method -> command_line_args runs through compile, so it reads as main_method-compile. Neither edge exists.
+  3. command_line_args -> parsing runs through compile, so it reads as compile->parsing. Neither edge exists.
+  4. compile -> run passes through program_text.
+  5. All 3 kept nodes show L3 (Claude). The stored rule level is L1 for all 3. Show both.
+  6. comment is the extra node AND a stored neighbour (program_text -> comment).
+Correct graph to draw:
+  KEPT      command_line_args        Claude L3        rule L1
+  KEPT      compile                  Claude L3        rule L1
+  KEPT      program_text             Claude L3        rule L1
+  EXTRA     comment                  Claude L2   (also a stored neighbour)
+  NEIGHBOURS: standard_input, parsing, black_box_model, main_method, args_length, run, compile_time_error, comment, class_declaration
+  EDGES (11):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    standard_input <-> command_line_args
+    command_line_args -> parsing
+    command_line_args -> black_box_model
+    main_method -> command_line_args
+    command_line_args -> args_length
+    program_text -> compile
+    compile -> run
+    compile -> compile_time_error
+    program_text -> comment
+    program_text -> class_declaration
+    class_declaration -> main_method
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S134   final L0   reference L0   VERDICT: WRONG (edges through nodes)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. assignment -> increment_operators runs through array_aliasing, so it reads as array_aliasing->increment_operators. Neither edge exists.
+  2. assignment -> program_trace runs through variable_swap, so it reads as variable_swap->program_trace. Neither edge exists.
+  3. array_copy <-> array_aliasing (parallel) runs through variable_swap, so it reads as array_copy-variable_swap. Neither edge exists.
+  4. array_aliasing says 'no level' (Claude). The stored rule level is L2 (provisional). Show both.
+  5. variable_swap is the extra node AND a stored neighbour (assignment -> variable_swap).
+Correct graph to draw:
+  KEPT      assignment               Claude L0        rule L1
+  KEPT      array_aliasing           Claude no level  rule L2 (provisional)
+  EXTRA     variable_swap            Claude L0   (also a stored neighbour)
+  NEIGHBOURS: array_creation (inferred L1), chained_assignment, compound_assignment, declaration, program_trace, comparison_operators, array_exchange, variable, variable_swap, increment_operators, array_copy, printing_array_reference
+  EDGES (13):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    assignment -> chained_assignment
+    assignment -> compound_assignment
+    declaration -> assignment
+    assignment -> program_trace
+    assignment <-> comparison_operators
+    assignment -> array_exchange
+    variable -> assignment
+    assignment -> variable_swap
+    assignment -> increment_operators
+    array_creation -> array_aliasing
+    array_copy <-> array_aliasing
+    array_aliasing <-> printing_array_reference
+    increment_operators <-> compound_assignment
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).
+
+------------------------------------------------------------------------------------------
+S137   final L0   reference L0   VERDICT: WRONG (edges through nodes, clutter)
+------------------------------------------------------------------------------------------
+What to correct:
+  1. statement -> print runs through method_call, so it reads as method_call->print. Neither edge exists.
+  2. standard_output -> redirection runs through method_call, so it reads as method_call->redirection. Neither edge exists.
+  3. method_call -> api runs through standard_output, so it reads as standard_output->api. Neither edge exists.
+  4. standard_output <-> standard_drawing (parallel) runs through method_call.
+  5. println and method_call say 'no level', and standard_output shows L0 (Claude). The stored rule level is L2 (provisional) for all 3. Show both.
+  6. Neighbours string_literal, statement, expression and stream_model have inferred level L1, which is not shown.
+Correct graph to draw:
+  KEPT      println                  Claude no level  rule L2 (provisional)
+  KEPT      method_call              Claude no level  rule L2 (provisional)
+  KEPT      standard_output          Claude L0        rule L2 (provisional)
+  NEIGHBOURS: string_literal (inferred L1), statement (inferred L1), expression (inferred L1), stream_model (inferred L1), print, formatted_output, math_library, api, standard_input, redirection, standard_drawing
+  EDGES (17):   A -> B = A is a prerequisite of B (solid arrow);   A <-> B = parallel (dashed, no arrow)
+    string_literal -> println
+    statement -> println
+    print <-> println
+    println <-> formatted_output
+    expression -> method_call
+    method_call -> math_library
+    method_call -> api
+    stream_model -> standard_output
+    standard_output -> formatted_output
+    standard_input <-> standard_output
+    standard_output -> redirection
+    standard_output <-> standard_drawing
+    string_literal -> print
+    statement -> print
+    stream_model -> standard_input
+    standard_input -> redirection
+    standard_input <-> standard_drawing
+  MISCONCEPTION DIAMONDS: none to draw (no misconception is held).

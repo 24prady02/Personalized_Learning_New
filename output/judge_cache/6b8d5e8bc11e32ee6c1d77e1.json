@@ -1,0 +1,23 @@
+{
+ "answer_level": "L1",
+ "main_concept": "interactive_input",
+ "why": "The answer gets the main point right: input is read while the program runs and the user's reply decides whether it goes again. It states this as a general rule, though, without linking a read inside the loop to the loop test or working through any rounds.",
+ "concepts": [
+  {
+   "concept": "interactive_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "No, the user decides each time, while it is running.",
+   "correct": true,
+   "why": "It correctly says input arrives during execution and decides the control flow, but it doesn't apply this to a loop's structure."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about if statements."
+  }
+ ]
+}

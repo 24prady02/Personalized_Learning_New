@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "sentinel_loop",
+ "why": "The student doesn't answer what is printed. Instead they remove the if (v >= 0) filter, saying everyday rain values are 'always fine'. That ignores what the code does: for this input the filter drops -2. Without it, -2 would be added and 8/3 ≈ 2.67 would print instead of 5.0.",
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how v >= 0 is evaluated."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer deletes the if but makes no claim about how an if runs."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the empty statement."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the while loop."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about reading input."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "sentinel_loop@L0#1",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "The student reasons from everyday rain data rather than the code. The given input includes -2, which only the filter keeps out of sum and count, so removing it changes the result (the NegativeNotFiltered error)."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer applies an everyday, wrong model of StdIn: it calls StdIn a variable holding all the numbers like an array, not a stream that each read consumes once. It makes no correct prediction for any of the three inputs.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_input@L0#1",
+   "quote": "StdIn is a variable that holds all the numbers, like an array.",
+   "correct": false,
+   "why": "StdIn is a library class of static methods that read the next token from the input stream, not a variable that stores the values."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#3",
+   "quote": "a variable that holds all the numbers, like an array",
+   "correct": false,
+   "why": "This assumes one variable holds many values at once, which is the multi-value variable misconception."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the loop, the isEmpty test, or what is printed."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about empty input or isEmpty()."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about sum or count."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the output."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the while loop."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "stream_model@L0#1",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "It treats input as a stored collection that stays in place, but each read consumes the next value and cannot go back."
+  }
+ ]
+}

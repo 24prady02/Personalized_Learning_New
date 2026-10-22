@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "string_type",
+ "why": "The three values are correct (confirmed by the run), but the answer gives no reasoning. It does not say why readLine returns an empty string (it reads the rest of the line after 42), and a bare correct result is L1.",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_type@L1#1",
+   "quote": "an empty string, and \"Ann Lee\"",
+   "correct": true,
+   "why": "It names the correct String values for rest and name but does not explain how they arise."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "statement@L1#1",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "The results fit the statements running in order, but it gives no trace of how each statement acts on the input."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "none",
+   "way_id": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no string literals and the answer makes no claim about them."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "none",
+   "way_id": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no string conversion and the answer makes no claim about it."
+  }
+ ]
+}

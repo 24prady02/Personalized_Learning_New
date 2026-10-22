@@ -1,0 +1,100 @@
+{
+ "answer_level": "L1",
+ "main_concept": "token_vs_line_input",
+ "why": "The student gives the right three values (42, \"\", \"Ann Lee\") but doesn't explain why readLine returns an empty string after readInt, so this is a bare correct result, which is L1.",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the String type itself."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about string literals."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "token_vs_line_input",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "token_vs_line_input@L1#1",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "The values are correct, and the empty string shows the student avoided the NextLineAfterNextInt misconception, but no reason is given for why readLine returns \"\"."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how variables work."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept doesn't apply to the code or the answer."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about how StdIn reads work."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept doesn't apply to the code or the answer."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "standard_input -prerequisite-> token_vs_line_input",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

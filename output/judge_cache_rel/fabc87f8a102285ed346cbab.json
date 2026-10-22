@@ -1,0 +1,115 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable_swap",
+ "why": "The student says t holds the variable a itself rather than the value a had when t = a ran, so they conclude both variables end up as b and miss that the three lines swap a and b.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "assignment@L0#2",
+   "quote": "Then b = t means b equals a, so both are b.",
+   "correct": false,
+   "why": "Because t = a copied a's old value, b = t gives b that old value. The student's reading ignores this, as if = stored the expression a and not its value."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No arrays are involved."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "variable_swap@L0#1",
+   "quote": "so both are b",
+   "correct": false,
+   "why": "The student reads the assignments as making the variables 'the same thing', so they miss that t saves a's old value and the code swaps the two values."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The error is about what assignment stores, so it is levelled under assignment."
+  },
+  {
+   "concept": "array_copy",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No arrays are involved."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer keeps the statement order but makes no claim about statements."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss int."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no chained assignment."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> variable_swap",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> chained_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_copy -parallel-> array_aliasing",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

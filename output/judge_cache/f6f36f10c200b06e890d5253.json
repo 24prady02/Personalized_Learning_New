@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "sentinel_loop",
+ "why": "The student doesn't predict any output. They delete the non-negative filter because real-world rain is never negative, but the given input contains -2, so without the filter it would be added to the total and the result would change from 5.0 to 2.666…",
+ "concepts": [
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "sentinel_loop@L0#1",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "This uses the everyday idea that rain values are always valid instead of the code's rule that only in-range values are processed, so it leads to the NegativeNotFiltered error on the -2 in the input."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how the comparison is evaluated."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer removes the if but makes no claim about how an if executes."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't mention assignment."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer doesn't mention empty statements."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the loop."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about reading input."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about blocks."
+  }
+ ]
+}

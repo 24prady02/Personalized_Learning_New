@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "interactive_input",
+ "why": "The answer gives one correct rule about interactive input: the user decides while the program runs, so the number of rounds isn't fixed beforehand. It doesn't trace the code or relate the reply to the loop's control flow.",
+ "concepts": [
+  {
+   "concept": "interactive_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "interactive_input@L1#2",
+   "quote": "No, the user decides each time, while it is running.",
+   "correct": true,
+   "why": "It correctly says input comes in during execution and affects how many rounds run, but it doesn't apply this to the code's parts or explain the loop test."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about an if statement."
+  }
+ ]
+}

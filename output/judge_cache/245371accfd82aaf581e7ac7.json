@@ -1,0 +1,61 @@
+{
+ "answer_level": "L0",
+ "main_concept": "if_else_statement",
+ "why": "The code puts 'else return -1' inside the loop, so the method gives an answer after checking only arr[0]. It is written as if 'else' meant 'if no element matches'. It also returns the first match rather than the last, so the new code is wrong and cannot reach L4.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_else_statement@L0#1",
+   "quote": "if (arr[i] == key) return i; else return -1;",
+   "correct": false,
+   "why": "It reads 'else' as 'otherwise, after all are checked', but in Java the else runs on the first mismatch and its return ends the search at once."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "for_loop@L0#2",
+   "quote": "for (...) { if (arr[i] == key) return i; else return -1; }",
+   "correct": false,
+   "why": "Both branches return, so the loop body runs at most once and the loop never goes past index 0, unlike the multi-pass search the task needs."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "indexing@L1#1",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "It correctly uses arr[i] to mean the element at position i, and returns i as the position, but this is not applied any further."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "expression@L1#1",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "It writes a valid comparison expression, but does not evaluate it for any values."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "if_statement@L1#1",
+   "quote": "if (arr[i] == key) return i;",
+   "correct": true,
+   "why": "It uses a correct conditional with a boolean test, but the reasoning about it stops there."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about declaring an array."
+  }
+ ]
+}

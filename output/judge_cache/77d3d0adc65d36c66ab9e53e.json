@@ -1,0 +1,23 @@
+{
+ "answer_level": "L3",
+ "main_concept": "lookup_table",
+ "why": "The answer says what months is for (a table that maps a month number to its name), which is the array's role in the code and is drawn from the months[m - 1] lookup, so it is a relational purpose statement.",
+ "concepts": [
+  {
+   "concept": "lookup_table",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "It is a table to look up a month name from its number.",
+   "correct": true,
+   "why": "It correctly gives the array's role as a fixed lookup table from month number to name, which matches months[m - 1] printing Mar for m = 3."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "look up a month name from its number",
+   "correct": true,
+   "why": "The answer says nothing about index values, zero-based positions or the m - 1 offset, so it makes no levelable claim about indexing."
+  }
+ ]
+}

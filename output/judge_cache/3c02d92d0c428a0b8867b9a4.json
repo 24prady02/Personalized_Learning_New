@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "token_vs_line_input",
+ "why": "The three values are correct (age = 42, rest = \"\", name = \"Ann Lee\") but the answer gives no reason, such as readInt stopping before the newline, and the rules make a bare correct result L1.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "token_vs_line_input@L1#2",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "The run confirms the values, but no rule is applied to show why rest is empty, so it cannot be L2."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the String type."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about string literals."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Variables are only listed by value; there is no reasoning about them."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept does not apply to the code."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The input behaviour is covered under token_vs_line_input, and there is no separate claim."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept does not apply to the code."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable",
+ "why": "The trace says total stays 11.5 'because it already has a value', so it uses the static-variable rule: a variable keeps its first value. That contradicts Java, where total = total + total * TAX replaces the value with 12.42.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type itself."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no loop or accumulator reasoning."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#5",
+   "quote": "after the last line total is still 11.5, because it already has a value.",
+   "correct": false,
+   "why": "It applies the static model (a variable keeps its first value after a new assignment), but the code gives total = 12.42."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives the value 11.5 but does not reason about any operator."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The error is levelled under the variable concept's static-model misconception."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no arrays."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the int type."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not evaluate any expression step by step."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the int-to-double promotion."
+  }
+ ]
+}

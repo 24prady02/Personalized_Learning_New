@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "markov_chain",
+ "why": "The student is right that the printed values are estimates, but the main claim, that starting at page 3 would change the page ranks, is the documented wrong rule that ranks depend on the start page; the chain mixes, so the limiting ranks are the same from any start.",
+ "concepts": [
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "By the basic limit theorem the ranks of a mixing chain do not depend on the start page; only the short-run estimate would differ."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "A short 100-move run only estimates the ranks, but the student gives no reasoning from the counts or the run length."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about vector-matrix multiplication or exact computation."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about running the program."
+  }
+ ]
+}

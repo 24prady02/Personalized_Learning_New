@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "infinite_loop",
+ "why": "The answer gives a correct general definition of an infinite loop but never applies it to this code, for example it doesn't say that i += 0.5 on an int leaves i at 0, so i < 10 stays true.",
+ "concepts": [
+  {
+   "concept": "infinite_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A loop that never stops because its condition stays true.",
+   "correct": true,
+   "why": "Correct definition of an infinite loop, but not applied to the given code or its values."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about the init, condition and update pattern."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about how the while statement runs here."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "answer_level": "L0",
+ "main_concept": "scientific_notation",
+ "why": "The answer uses the documented wrong rule that 6.02e23 means 6.02 times Euler's number e to the power 23, but in Java e-notation means 6.02 × 10^23.",
+ "concepts": [
+  {
+   "concept": "scientific_notation",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "6.02e23 is 6.02 times e to the power 23.",
+   "correct": false,
+   "why": "In Java, e in a literal means 'times 10 to the power', not Euler's number."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type or double arithmetic."
+  },
+  {
+   "concept": "literal",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "6.02 times e to the power 23",
+   "correct": false,
+   "why": "It reads the literal with its maths meaning instead of Java's literal form, which is a double equal to 6.02 × 10^23."
+  }
+ ]
+}

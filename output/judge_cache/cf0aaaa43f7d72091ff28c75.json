@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "break_statement",
+ "why": "The answer correctly applies both jump rules to the first loop's values (continue at the even i, break at i == 5). It does not relate them through a shared mechanism such as both skipping the rest of the body, so it reads as two rules each mapped onto the code rather than one integrated contrast.",
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "break_statement@L2#1",
+   "quote": "break stops the loop completely at 5",
+   "correct": true,
+   "why": "Correctly says break ends the whole loop at i == 5, applied to this code's value."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "continue_statement@L2#1",
+   "quote": "continue jumps to the next i for the even numbers",
+   "correct": true,
+   "why": "Correctly says continue moves on to the next pass for the even i values in this loop."
+  },
+  {
+   "concept": "labeled_break",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the labeled loop."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Only implied by 'even numbers'; no claim is made about the % operator itself."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

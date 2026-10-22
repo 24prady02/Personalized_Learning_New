@@ -1,0 +1,110 @@
+{
+ "answer_level": "L1",
+ "main_concept": "exclusive_or",
+ "why": "The student correctly states the rule that boolean ^ is true when the two operands differ, but does not apply it to this code's values (n > 5 is false, n < 10 is true, so c is true).",
+ "concepts": [
+  {
+   "concept": "exclusive_or",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "exclusive_or@L1#2",
+   "quote": "It gives true when the two sides are different.",
+   "correct": true,
+   "why": "This is the correct rule for ^ on booleans, stated without applying it to the code's operands."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss &&, || or !."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the boolean type itself."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  },
+  {
+   "concept": "de_morgan",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "logical_operators -prerequisite-> short_circuit",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "logical_operators -prerequisite-> exclusive_or",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "logical_operators -prerequisite-> de_morgan",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "boolean -prerequisite-> logical_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

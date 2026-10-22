@@ -1,0 +1,31 @@
+{
+ "answer_level": "L2",
+ "main_concept": "double",
+ "why": "The answer sets up the double parameters and divides miles / gallons with double operands, but it never returns mpg, so the method does not compile (missing return statement); it does not reach the correct new code that L4 needs.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "double mpg = miles / gallons;",
+   "correct": false,
+   "why": "The division of two doubles is correct, but the double result is stored and never returned, so the method fails to compile."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "public static double calculateMPG(double miles, double gallons)",
+   "correct": true,
+   "why": "It correctly uses double as the primitive type for the parameters, the local variable and the return type, without reasoning further about types."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention the % operator."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The student says the indented println(\"done\") is inside the braceless if. In Java only the next single statement belongs to the if, so for 3 the program prints start and then done. The answer also says nothing about 'five', where Integer.parseInt throws a NumberFormatException before anything is printed.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_statement@L0#1",
+   "quote": "done is inside the if and 3 is not > 5",
+   "correct": false,
+   "why": "It tests 3 > 5 correctly as false, but takes the if body to be everything indented under it, which is not Java's rule."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "block@L0#4",
+   "quote": "done is inside the if",
+   "correct": false,
+   "why": "It treats the statement after the braceless if as part of its branch; without braces, the branch ends after its single statement."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed separately."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not cover the 'five' run or the exception it causes."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not relevant."
+  }
+ ]
+}

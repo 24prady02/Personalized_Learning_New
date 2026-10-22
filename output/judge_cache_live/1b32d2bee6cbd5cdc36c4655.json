@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "operator_precedence",
+ "why": "The student says Java 'guesses' the order of operators when parentheses are missing, but Java's precedence rules fix the order, so a * b + c needs no parentheses and r = 1 + (2 * 3) = 7.",
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer talks about the order operators are applied in, not about what an expression is."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about what + or * computes."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no if-else statement."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "operator_precedence@L0#1",
+   "quote": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+   "correct": false,
+   "why": "This rule contradicts Java, where * binding before + fixes the grouping without guessing; it treats an optional style habit as a required language rule, and it gives no value for r."
+  }
+ ]
+}

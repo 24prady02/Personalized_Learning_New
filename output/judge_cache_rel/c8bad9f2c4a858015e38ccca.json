@@ -1,0 +1,68 @@
+{
+ "answer_level": "L0",
+ "main_concept": "markov_chain",
+ "why": "The student is right that the printed values are only estimates, but says that starting at page 3 would change the ranks. That is the StartPageMatters misconception: the random-surfer chain mixes, so its long-run probabilities are the same from every starting page.",
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "The student correctly says that a short simulation only estimates the ranks, but does not apply this to the counts or to T."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about repeated vector-matrix multiplication."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about running the program."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about double values."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the conditional operator."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "markov_chain@L0#2",
+   "quote": "But starting at page 3 would change the ranks.",
+   "correct": false,
+   "why": "This applies the wrong rule that the ranks depend on the starting page. In fact the chain mixes, so the limit does not depend on where it starts."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "markov_chain -prerequisite-> power_method",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

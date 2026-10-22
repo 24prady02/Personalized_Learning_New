@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "assignment",
+ "why": "The answer traces the call chain with values (-1, then 5/2 = 2, then 25 + 2 = 27), but slips at the ternary: finalAdjust(-1) is -1 - 9 = -10, so reCalculate returns -5 and num2 = 20; it also omits num1 = -11 and the call order (update, reCalculate, finalAdjust), so it is L2 with an error.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2 and num2 = 27",
+   "correct": false,
+   "why": "The value-by-value trace through the assignments is right for v += 10 (-1), but finalAdjust(-1) should be -10, so the stored results -5 and 20 come out wrong."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no ++ or --, and the answer makes no claim about them."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "int@L2#1",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2",
+   "correct": true,
+   "why": "It applies int division correctly (5 / 2 = 2, fraction dropped) to the value it had."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no Integer.MAX_VALUE or MIN_VALUE, and the answer makes no claim about them."
+  }
+ ]
+}

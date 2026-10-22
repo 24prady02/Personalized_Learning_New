@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The answer correctly writes the task with sensorReadings.length instead of a hard-coded index, and backs it up by working from the last index (length - 1) to the next-to-last (length - 2), so the length field is used for its purpose of fitting any array size.",
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "correct": true,
+   "why": "It uses the length field instead of a magic number to find a position near the end, which works for any array size."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "expression@L2#2",
+   "quote": "sensorReadings.length - 2",
+   "correct": true,
+   "why": "It correctly works out the index expression as length minus 2, with no relation to other constructs."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "indexing@L2#3",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9;",
+   "correct": true,
+   "why": "A correct single-element assignment with square brackets, which is the whole fragment asked for."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_bounds@L3#1",
+   "quote": "the last index is length - 1, so next-to-last is length - 2",
+   "correct": true,
+   "why": "It links the last valid index, a.length-1, to the index of the target position."
+  }
+ ]
+}

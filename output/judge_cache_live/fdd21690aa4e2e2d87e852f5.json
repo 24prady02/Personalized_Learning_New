@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_traversal",
+ "why": "The student wrote a correct index loop in which i serves as the index, so a[i] = a[i] * 10 updates every element. This is a familiar traversal idiom that replaces the given for-each loop, which never changed the array, so it counts as fixing the given code (L3), not solving an unseen problem (L4).",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "indexing@L3#2",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "Because the loop variable is the index, a[i] reaches a different element on each pass, and the write goes back into the array."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_traversal@L3#1",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "The index traversal writes every element. The run confirms the result [50, 40, 30, 20, 10]."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "a.length is used correctly as the loop bound, with no parentheses and no hard-coded size."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only uses i++ as the standard loop update and makes no claim about it."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "for_loop@L3#3",
+   "quote": "for (int i = 0; i < a.length; i++)",
+   "correct": true,
+   "why": "The standard for header gives i each valid index 0..n-1 once, which processes every element."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not deal with the swap."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int arithmetic."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Loop control is covered by the for_loop and traversal levels, and the student makes no separate claim about it."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student avoids the for-each loop but never says why it fails."
+  }
+ ]
+}

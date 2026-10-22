@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "lookup_table",
+ "why": "The student gives the purpose of the months array as a whole, and this matches the code: an index computed from a month number (months[m - 1]) reads a stored name, which is the lookup-table role, so the answer is relational and correct.",
+ "concepts": [
+  {
+   "concept": "lookup_table",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "lookup_table@L3#3",
+   "quote": "It is a table to look up a month name from its number.",
+   "correct": true,
+   "why": "Correctly states the role of the fixed-value table: it maps a month number to its name by indexed lookup."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the declaration."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing specific about indices or bounds."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about aliasing."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the initializer."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about m - 1."
+  },
+  {
+   "concept": "space_time_tradeoff",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about trading memory for time."
+  }
+ ]
+}

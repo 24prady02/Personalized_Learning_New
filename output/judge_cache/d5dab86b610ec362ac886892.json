@@ -1,0 +1,61 @@
+{
+ "answer_level": "L4",
+ "main_concept": "markov_chain",
+ "why": "The question asks what happens if the code loses its random leap, and the answer predicts the result correctly: once the surfer enters a closed group it never leaves, so mixing breaks and every page outside the group ends up with rank 0.",
+ "concepts": [
+  {
+   "concept": "markov_chain",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "markov_chain@L4#1",
+   "quote": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "correct": true,
+   "why": "It reasons about changed code with no leap term and correctly says that removing the jump can break mixing and leave long-run probability only inside the trap."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the input pairs or how they are read."
+  },
+  {
+   "concept": "two_models",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not compare simulation with the power method."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss matrix entries or row sums."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a closed group of pages and does not mention pages with no outgoing links."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention visit counts or estimating the ranks."
+  }
+ ]
+}

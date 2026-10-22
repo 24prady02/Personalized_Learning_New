@@ -1,0 +1,68 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The answer calls braces pointless and says the student never writes them, which matches the MissingBraces misconception; it contradicts the rule that only braces group several statements into one body.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how the if or its condition works; it only implies the code is legal and gives no reason."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "block@L0#1",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "This matches the MissingBraces misconception edge (no L0 way is listed for it, so the closest way, the everyday reading, is used): braces are only optional for a single-statement body, and without them later statements fall outside the if."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about statements."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about count++."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about counting."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about the template form."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

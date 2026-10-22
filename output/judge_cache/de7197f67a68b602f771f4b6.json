@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "The answer is correct (nothing is printed for t = 5) because it applies the dangling-else rule to this code: the else belongs to the inner if, so a false outer condition skips both the inner if and its else. It does not trace the else-if chain, but all three of its tests are also false for t = 5.",
+ "concepts": [
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "It correctly pairs the else with the innermost if, whatever the indentation, and so sees that a false outer test leaves nothing to run."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "It correctly says that without braces the else attaches to the nested inner if, not the outer one."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the assignment."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue statement and the answer does not mention one."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "char_arithmetic",
+ "why": "The three lines (67, tab, C / A12 / 662) are all correct, but the answer gives no justification, so it is a bare correct result, which is L1.",
+ "concepts": [
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "escape_sequences@L1#1",
+   "quote": "67, a tab, C",
+   "correct": true,
+   "why": "It correctly reads \\t as one tab character but does not explain or apply the rule."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "char_arithmetic@L1#1",
+   "quote": "67, a tab, C; ... then 662.",
+   "correct": true,
+   "why": "The values from the char codes (67, C, 66) are right but given with no reasoning, so this is a bare correct result."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "explicit_cast@L1#1",
+   "quote": "C",
+   "correct": true,
+   "why": "The cast result 'C' is correct but is not explained."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "then A12; then 662.",
+   "correct": true,
+   "why": "It gets the left-to-right difference between adding and joining strings right, but does not say why."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about how the expressions are evaluated."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Command-line arguments do not appear in this code."
+  }
+ ]
+}

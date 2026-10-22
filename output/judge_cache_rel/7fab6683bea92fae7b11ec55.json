@@ -1,0 +1,120 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer gives correct output for two outer passes (i = 3 and i = 2) and then says \"and so on\", but it never covers i = 1 or i = 0 (the empty line), the trailing spaces, or the println, and it gives no explanation, so it is a correct but partial and unexplained result rather than a full trace.",
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "nested_loops@L1#2",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "It shows that the inner loop prints i down to 1 for each outer pass, which the run confirms, but it covers only two outer passes and leaves out the trailing spaces, the line ends and the empty line for i = 0."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the decrement operator."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Apart from the nesting, the answer makes no claim about how a for loop runs."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the start value, the test or the update."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not explain printf versus println, the spaces or the empty line."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code is not a fencepost loop, and the answer does not discuss one."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "for_loop -prerequisite-> nested_loops",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "for_loop -prerequisite-> fencepost_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

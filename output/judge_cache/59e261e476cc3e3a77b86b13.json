@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "conditional_operator",
+ "why": "The student turned the given if-else into its matching expression form `v = c ? a : b;`. The condition and both branch values are mapped correctly onto one assignment, which ties the conditional operator to the if-else construct.",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "conditional_operator@L3#1",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "Correctly rewrites the if (c) v = a; else v = b; statement as v = c ? a : b, so the operator is related to the if-else."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Assignment is used correctly, but the student gives no reasoning about it."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The condition is copied unchanged, with no reasoning about it."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#3",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "Gives the if-else in its correct conditional-expression form."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about plain if statements."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  }
+ ]
+}

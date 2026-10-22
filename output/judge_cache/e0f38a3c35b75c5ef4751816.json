@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "dangling_pages",
+ "why": "For part (b) the student gets next = -1, which the run confirms, and explains it by linking the loop's result to the rule that each row must sum to 1, but only for this one case and not for a class of inputs, so it is L3 rather than L4.",
+ "concepts": [
+  {
+   "concept": "dangling_pages",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "next stays -1 because the row does not add to 1",
+   "correct": true,
+   "why": "Says the move fails here because the row is not stochastic, which ties the r < sum test to the row-sum rule."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1. (b) the sums only reach 0.9",
+   "correct": true,
+   "why": "Follows the running sum pass by pass and gives the correct final totals."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "the sums only reach 0.9",
+   "correct": true,
+   "why": "Gives a correct double result but says nothing about how doubles behave in this comparison."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "sum is 0.1 then 0.4",
+   "correct": true,
+   "why": "Gives correct sums without explaining how the operator is applied."
+  }
+ ]
+}

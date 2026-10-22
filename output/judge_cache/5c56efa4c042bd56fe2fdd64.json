@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "sentinel_loop",
+ "why": "The question asks for the output, but the student instead deletes the non-negative filter because \"rain values are always fine\". That is an everyday belief about rain, not the code's rule, and the given input contains -2, so the change would wrongly add that value into the average (making it 8/3 instead of 5.0, the actual output).",
+ "concepts": [
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "sentinel_loop@L0#1",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "It uses an everyday idea about rainfall instead of the code's rule that only values in the range of interest are processed (the NegativeNotFiltered error), and it ignores the -2 in the input."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "I removed if (v >= 0)",
+   "correct": false,
+   "why": "It removes the guard but says nothing about how an if statement works."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about v >= 0 or v != 99999 as comparisons."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how statements run."
+  }
+ ]
+}

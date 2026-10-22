@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "block",
+ "why": "The answer gets one thing right, that braces are optional for this single-statement body. It never says the code is legal or why, and its blanket claim that braces are 'pointless' is wrong as a style rule, because without braces only one statement belongs to the if.",
+ "concepts": [
+  {
+   "concept": "block",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "Braces really are optional around one statement, but they are needed for a body with more than one statement, and S&W and TJ advise using them even for one."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Braces are pointless",
+   "correct": true,
+   "why": "It hints at the rule that an if body without braces may be a single statement, but it never applies this to the question of whether the code is legal."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the count++ statement."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "states_the_rule",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not check the code against the if template."
+  }
+ ]
+}

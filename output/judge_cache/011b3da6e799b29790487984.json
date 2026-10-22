@@ -1,0 +1,52 @@
+{
+ "answer_level": "L4",
+ "main_concept": "if_statement",
+ "why": "The answer correctly predicts a change that is not in the given code: it says the if can be replaced by the direct boolean assignment isDone = (i % 5 == 0). In this loop that works, because isDone is false until i = 10 and the loop stops as soon as it becomes true. The answer gives no output and does not say when the loop stops.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "if_statement@L4#1",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if",
+   "correct": true,
+   "why": "It correctly says that replacing the if with a direct boolean assignment keeps the behaviour the same here, because isDone is never true before the last pass."
+  },
+  {
+   "concept": "assignment",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "assignment@L4#1",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "It correctly proposes storing the comparison's boolean value directly in isDone, which does not appear in the given code."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "i % 5 == 0",
+   "correct": true,
+   "why": "It reuses the remainder test without making any claim about its values."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It makes no claim about arithmetic."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It makes no claim about how the && loop condition is evaluated."
+  }
+ ]
+}

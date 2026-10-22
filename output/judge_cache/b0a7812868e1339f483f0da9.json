@@ -1,0 +1,25 @@
+{
+ "answer_level": "L0",
+ "main_concept": "if_statement",
+ "why": "The student treats the indented println(\"done\") as part of the if body. In Java a braceless if controls only the next statement, so java Order 3 prints \"start\" and then \"done\"; the answer also never addresses java Order five, which throws a NumberFormatException before anything is printed.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_statement@L0#1",
+   "quote": "Only start, because done is inside the if and 3 is not > 5",
+   "correct": false,
+   "why": "The student uses indentation to decide what is in the if body, but without braces the body is only the first statement (println(\"big\")), so \"done\" always prints."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "Only start",
+   "correct": false,
+   "why": "The answer makes no claim about main as the entry point, its statement order or its args parameter, and it says nothing about parseInt failing on \"five\"."
+  }
+ ]
+}

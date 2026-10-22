@@ -1,0 +1,120 @@
+{
+ "answer_level": "L2",
+ "main_concept": "dangling_pages",
+ "why": "The student uses the graph's values to pick out the correct page (page 2) and gives a short reason (it has no outgoing links), so this is the dangling-page definition applied to this code. That is L2, not just stating the rule (L1).",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the input pairs are read or stored."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "dangling_pages@L2#2",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "The student finds the right page from this graph and justifies it with the fact that page 2 has no outgoing links, which is the dangling-page rule applied to these values."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention matrix rows or probabilities."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about array indexing."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about 2-D arrays."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the 90-10 leap."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "input_graph -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "two_dimensional_array -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> two_dimensional_array",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "transition_matrix -prerequisite-> dangling_pages",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "teleportation -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

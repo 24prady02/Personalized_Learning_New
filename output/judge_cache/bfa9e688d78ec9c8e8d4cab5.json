@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "transition_matrix",
+ "why": "The student says an all-zero row is fine for a page with no links. That is the documented RowsNeedNotSumToOne misconception, because every row has to sum to 1. The student also misses that the row is all zero because int division truncates, not because the page has no links: counts sum to 5, so the page does have links.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the / operator."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about expression types or how they are evaluated."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "dangling_pages@L0#2",
+   "quote": "An all-zero row is fine; it just means the page has no links.",
+   "correct": false,
+   "why": "This is the wrong rule that a page with no links can have an all-zero row. Its row should be 1/N in every column, and this page does have links anyway."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the input format."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss int versus double."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about indexing."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "array_creation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about creating the array."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "transition_matrix@L0#4",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "It accepts a row that sums to 0 as valid, but a transition-matrix row has to be a probability distribution that sums to 1."
+  }
+ ]
+}

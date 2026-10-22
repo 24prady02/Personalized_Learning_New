@@ -1,0 +1,34 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer correctly says sum is the accumulator (it builds a total) and count is the counter, but it only names the roles: it never applies them to the code's lines or values (sum += v[i], count++ guarded by v[i] == 8) and never compares how the two update.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "accumulator_pattern@L1#1",
+   "quote": "sum builds a total",
+   "correct": true,
+   "why": "It correctly names sum as the running total but does not trace or explain its update."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "counter_pattern@L1#1",
+   "quote": "count counts",
+   "correct": true,
+   "why": "It correctly names count as the counter but says nothing about the guard v[i] == 8 or the increment by 1."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about naming conventions."
+  }
+ ]
+}

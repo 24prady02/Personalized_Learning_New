@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "remainder_operator",
+ "why": "The answer is only a list of keywords that name the constructs involved. It gives no output, no values for num1 % num2 or num4, and no trace, so it names elements without applying any rule to this code.",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names the % operator as remainder but never works out 9 % 5 = 4."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It names double and widening but never applies them to 4 + 26.3 = 30.3."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_concatenation@L1#1",
+   "quote": "concatenation",
+   "correct": true,
+   "why": "It names concatenation but does not build the line \"num4 = 30.3\"."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It says println ends the line but does not apply this to the two output lines."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about primitive types beyond the bare word 'widening', which is counted under double."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about the + addition or about operator precedence."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about the output stream."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Turning the double into text is not mentioned."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

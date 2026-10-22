@@ -1,0 +1,105 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer correctly names sum as the accumulator (it builds a total) and count as the counter, but it does not apply this to the code's lines or values and does not contrast the two updates.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "accumulator_pattern@L1#1",
+   "quote": "sum builds a total",
+   "correct": true,
+   "why": "It names sum's role as a running total, which is correct, without tracing sum += v[i] over the values."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "counter_pattern@L1#1",
+   "quote": "count counts",
+   "correct": true,
+   "why": "It names count as the counter, which is correct, but does not mention the guard v[i] == 8 or the +1 update."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables as such."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the output."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention concatenation."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the traversal."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the loop."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention +=."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about naming."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "for_loop -prerequisite-> array_traversal",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "accumulator_pattern -parallel-> counter_pattern",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> naming_convention",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

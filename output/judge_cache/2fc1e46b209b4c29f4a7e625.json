@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "statement",
+ "why": "Turn 1 gave a wrong bare result (20), but after the probe the student traced the fall-through value by value (10, 20, 40, 50) and correctly concluded that value 2 also gives 50, which is a correct trace with no stated purpose.",
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.",
+   "correct": true,
+   "why": "With no break, the student runs each later case statement in order to the end of the switch."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "10. Oh wait, then 20, 40, 50",
+   "correct": true,
+   "why": "Each assignment replaces result's old value, so the last one (50) is what remains."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer have no ?: operator."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  }
+ ]
+}

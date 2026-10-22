@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer gives correct inner-loop output for only two outer passes, then says 'and so on'; it skips i = 1, the empty line for i = 0 and the trailing spaces, and does not explain the loop mechanics.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the decrement operators."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer reasons about the loops only as a nested pair, which is levelled under nested_loops."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the init, the test or the update, so it never explains why i = 0 gives no numbers."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not address the printf spacing or the println line breaks."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "nested_loops@L1#2",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "It correctly pairs two outer values with full inner runs, but 'and so on' leaves out the remaining passes and the empty line, so it does not cover every part."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss variables."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss int."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code is not a fencepost loop."
+  }
+ ]
+}

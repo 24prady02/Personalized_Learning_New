@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable_swap",
+ "why": "The student treats t = a as linking t to a, so t seems to follow a when a changes. From that wrong rule they conclude both variables end up as b. In fact t keeps a's old value, so b gets the old a and the two values are exchanged.",
+ "concepts": [
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "variable_swap@L0#1",
+   "quote": "Then b = t means b equals a, so both are b.",
+   "correct": false,
+   "why": "They miss that t saved a's old value, so they don't see the exchange and wrongly decide both variables hold b."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "assignment@L0#2",
+   "quote": "b = t means b equals a",
+   "correct": false,
+   "why": "They treat t as holding 'a' itself rather than the value a had when t = a ran, so t seems to change when a changes."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no arrays, and the answer says nothing about array references."
+  }
+ ]
+}

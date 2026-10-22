@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "statement",
+ "why": "After the probe, the student follows the fall-through value by value (10, then 20, 40, 50) and correctly fixes their first answer to 50 for value 2, but never says in general why the cases fall through, so this is a multistructural trace, not a relational explanation.",
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "statement@L2#1",
+   "quote": "10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.",
+   "correct": true,
+   "why": "The student runs the statements after the matching case one at a time to the end of the switch, which gives the correct final result of 50 (their first answer, 20, was wrong)."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "then 20, 40, 50",
+   "correct": true,
+   "why": "Each assignment replaces the previous value of result, so the last one, 50, is the value that remains."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer contain no conditional operator."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L1",
+ "main_concept": "data_type",
+ "why": "The answer gives the correct textbook definition of a data type (a set of values plus the operations on them) but never applies it to the types or lines in the code, so it is L1.",
+ "concepts": [
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "data_type@L1#1",
+   "quote": "A set of values plus the operations you can do on them.",
+   "correct": true,
+   "why": "It states the correct definition but does not apply it to int, double or the expressions in this code."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types or link them to data types."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about double."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no array initializer and the answer does not mention one."
+  }
+ ]
+}

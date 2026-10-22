@@ -1,0 +1,100 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer does not say what is printed for either input; instead it proposes adding v to sum and then subtracting it back if v is negative, which correctly describes one part of the accumulator update but is not applied to the values, does not mention count or the sentinel, and does not reach the output 5.0 or the empty output when the first value is 99999.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "accumulator_pattern@L1#1",
+   "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+   "correct": true,
+   "why": "It correctly describes the running-total update as a separate step (adding then removing a negative leaves the same sum), but it never applies it to 4 -2 6 or covers count and the output."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention count++."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Add and subtract are mentioned only as part of the accumulator idea; the answer makes no claim about how op= works."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about what is printed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int arithmetic or the cast to double."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "if_statement@L1#1",
+   "quote": "then check if it was negative and subtract it again",
+   "correct": true,
+   "why": "It describes a conditional action that runs only for negative values, without tracing the given if (v >= 0)."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the loop or when it ends."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions the sentinel 99999 or the case where 99999 is the first value."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "increment_operators -parallel-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -parallel-> while_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student wrote correct code that uses the running-minimum plan as one structure: it starts min at data[0], updates it with Math.min on every element in one pass, and prints it after the loop. This is a small change from the familiar running-maximum program, so it is L3 and not L4 transfer.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "The code tracks the minimum in one pass, starting from a real data value, which is the same plan as the running maximum; data[0] would fail only if the array were empty."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "System.out.println(min);",
+   "correct": true,
+   "why": "println is used correctly to print the result, but no rule is stated or traced."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "double min = data[0];",
+   "correct": true,
+   "why": "min is correctly declared as a double to match the element type, but nothing more is said about double."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "standard_output@L1#1",
+   "quote": "System.out.println(min);",
+   "correct": true,
+   "why": "The result is correctly written to System.out, with no further reasoning about output."
+  },
+  {
+   "concept": "math_library",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "math_library@L1#1",
+   "quote": "Math.min(min, v)",
+   "correct": true,
+   "why": "Math.min is called correctly with two double arguments, but nothing is traced or explained."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about overflow."
+  }
+ ]
+}

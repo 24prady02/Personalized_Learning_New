@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "if_else_statement",
+ "why": "The student tries to combine the loop and an if-else into a search, but the plan is wrong: 'else return -1' inside the loop stops the method after the first element, and returning on the first match finds the first occurrence, not the last, so this is a relational error.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "if_else_statement@L3#5",
+   "quote": "if (arr[i] == key) return i; else return -1;",
+   "correct": false,
+   "why": "It treats the found/not-found choice as an if-else on each element, but not-found can only be decided after the whole loop has finished."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "indexing@L1#1",
+   "quote": "arr[i] == key) return i",
+   "correct": true,
+   "why": "It correctly uses arr[i] for the stored value and i for the position, but the loop header is left out, so the indexing is never applied to values."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer uses no arithmetic operators."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Covered under if_else_statement."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer declares no array."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "for (...)",
+   "correct": true,
+   "why": "The loop header is left out, so there is nothing to judge."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "for (...)",
+   "correct": true,
+   "why": "Only a placeholder header is given, with no claim about how the loop runs."
+  }
+ ]
+}

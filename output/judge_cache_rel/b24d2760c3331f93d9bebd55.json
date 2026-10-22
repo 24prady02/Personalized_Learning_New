@@ -1,0 +1,120 @@
+{
+ "answer_level": "L2",
+ "main_concept": "increment_operators",
+ "why": "The student goes through x++ and ++x in order with the values. They correctly show that y gets the old value 5, x becomes 6, and then ++x makes x 7 and gives that new value to w. This applies the rule step by step without stating the code's purpose.",
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "increment_operators@L2#1",
+   "quote": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+   "correct": true,
+   "why": "It correctly follows post-increment (old value to y, then x becomes 6) and pre-increment (x becomes 7, new value to w), in order."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about assignment as its own idea."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only tracks values and makes no statement about variables themselves."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention z += 0.5."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the total loop."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There are no arrays in the code or the answer."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the loop."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the loop."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about precedence."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "increment_operators -parallel-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

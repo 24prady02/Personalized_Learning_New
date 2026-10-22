@@ -1,0 +1,31 @@
+{
+ "answer_level": "L3",
+ "main_concept": "token_vs_line_input",
+ "why": "The answer explains that the empty rest comes from the shared read position: readInt leaves the line separator unread, so the next readLine only finishes that line. This relates the token read to the line read that follows it, and the reasoning is correct.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "It ties the token read's stopping point to what the next readLine returns, which is the shared-position relation."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "readInt takes 42 but not the Enter",
+   "correct": true,
+   "why": "It correctly says one read moves past one token and leaves what follows it in the stream."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about prompts, blocking or the user dialogue."
+  }
+ ]
+}

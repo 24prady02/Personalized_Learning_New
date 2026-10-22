@@ -1,0 +1,31 @@
+{
+ "answer_level": "L0",
+ "main_concept": "program_text",
+ "why": "The student says the file can be renamed to Greeting.java while it still contains public class hello, which treats the file name and class name as independent; that contradicts Java's rule that public class hello must be in hello.java, so javac would reject it.",
+ "concepts": [
+  {
+   "concept": "program_text",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "I can rename the file to Greeting.java and keep public class hello.",
+   "correct": false,
+   "why": "This applies the documented wrong rule that a public class can be saved under any file name."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "keep public class hello",
+   "correct": false,
+   "why": "This treats the class name as independent of the file name, which is the documented misconception for class declarations."
+  },
+  {
+   "concept": "compile",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "I can rename the file to Greeting.java",
+   "correct": false,
+   "why": "It implies javac would accept Greeting.java containing public class hello, but this is a compile-time error."
+  }
+ ]
+}

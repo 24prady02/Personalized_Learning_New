@@ -1,0 +1,96 @@
+{
+ "answer_level": "L2",
+ "main_concept": "switch_statement",
+ "why": "The student reaches the correct value of 50 for value = 2 by applying Java's fall-through rule: with no break, execution runs on to default. They justify the result but don't trace which cases run or say what the code is for.",
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "switch_statement@L2#2",
+   "quote": "the swich no have break so it go down all the case and result become 50",
+   "correct": true,
+   "why": "The final value 50 is right and is explained by the no-break rule, though the student doesn't say that execution starts at case 2 and passes through 20 and 40."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how assignment works."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't discuss statements."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Array aliasing isn't relevant to this answer."
+  },
+  {
+   "concept": "break_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "break_statement@L1#2",
+   "quote": "no have break so it go down all the case",
+   "correct": true,
+   "why": "The student names the missing break as the reason the switch doesn't stop, but doesn't develop the point further."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't discuss blocks."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The conditional operator isn't relevant to this answer."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Variable swapping isn't relevant to this answer."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> variable_swap",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "break_statement -prerequisite-> switch_statement",
+   "stated": true,
+   "quote": "the swich no have break so it go down all the case"
+  }
+ ]
+}

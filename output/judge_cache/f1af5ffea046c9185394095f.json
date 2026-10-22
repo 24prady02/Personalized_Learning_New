@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "empty_statement",
+ "why": "The student reads `if (x > 0);` as if the semicolon only ends the clause, so they treat the println as the if's body. In Java the lone `;` is the whole body, so the println always runs, and the code prints positive, negative and checked.",
+ "concepts": [
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The answer misses that the `;` after `if (x > 0)` is an empty statement that forms the whole then branch, so the println is not controlled by the if."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "positive is not printed, because x > 0 is false",
+   "correct": false,
+   "why": "The answer treats the next line as the if body even though Java ends the body at the semicolon, so the predicted output is wrong."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "The answer evaluates -3 > 0 as false, which is correct."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  }
+ ]
+}

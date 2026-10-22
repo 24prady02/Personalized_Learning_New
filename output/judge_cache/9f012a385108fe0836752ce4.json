@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "compile",
+ "why": "The answer correctly applies the compile rule to this case: a successful javac Big.java produces Big.class and prints no program output, and the program has not run yet. It gives the result with a reason but does not explain that java Big must load the Big.class that javac made.",
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "compile@L2#2",
+   "quote": "There is a Big.class file now, but nothing is printed because the program has not run yet.",
+   "correct": true,
+   "why": "It correctly predicts what javac gives here (Big.class, no output) and does not fall into the misconception that compiling runs the program."
+  },
+  {
+   "concept": "run",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "run@L1#2",
+   "quote": "nothing is printed because the program has not run yet",
+   "correct": true,
+   "why": "It correctly says the program has not run, but never says that running needs java Big."
+  },
+  {
+   "concept": "program_text",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "program_text@L2#2",
+   "quote": "There is a Big.class file now, but nothing is printed",
+   "correct": true,
+   "why": "It correctly says the legal text produces only Big.class, and that output comes later, when the program runs."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the class declaration."
+  }
+ ]
+}

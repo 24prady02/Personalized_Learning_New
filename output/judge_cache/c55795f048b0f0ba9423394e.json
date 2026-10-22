@@ -1,0 +1,79 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The student correctly says that 100 moves only give estimates whose trailing zeros mean nothing, and correctly predicts that starting at page 3 would not change the long-run ranks, which is reasoning about a change to the given run.",
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student reasons about the simulation and does not mention matrix iteration."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing.",
+   "correct": true,
+   "why": "States correctly that visit fractions are only estimates and that printed digits are not accuracy, without working through the counting."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "simulation_loop@L4#1",
+   "quote": "In the long run the start page does not matter.",
+   "correct": true,
+   "why": "Correctly predicts that changing the start page keeps the long-run limit."
+  }
+ ]
+}

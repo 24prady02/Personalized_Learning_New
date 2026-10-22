@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "class_declaration",
+ "why": "The student correctly names the part as the class declaration, calls it the outer container and gives the right file name, Hello.java, but never states or explains the rule that a public class's name must match its file name, so this is a correct identification with no justification.",
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "class_declaration@L1#1",
+   "quote": "That is the class declaration; it holds everything",
+   "correct": true,
+   "why": "Correctly names the class declaration and describes it as the outer container, without explaining how the class name and file name are linked."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "program_text",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "program_text@L1#1",
+   "quote": "must be saved as Hello.java",
+   "correct": true,
+   "why": "Gives the correct source file name Hello.java as a bare result, without stating or applying the name-matching rule."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The answer writes the standard element-by-element copy loop for this task, but it has two errors: it never creates copy with new int[data2.length], and the bound i <= data2.length reads data2[data2.length], which throws ArrayIndexOutOfBoundsException. New code has to be correct to reach L4, so this is a multistructural answer with an error.",
+ "concepts": [
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "copy[i] = data2[i];",
+   "correct": false,
+   "why": "It copies each element into the matching index, but it never creates the new array and runs one index past the end."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "length_field@L0#1",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "It treats length as the last valid index (the everyday counting reading), but the last valid index is data2.length-1."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "for_loop@L2#1",
+   "quote": "for (int i = 0; i <= data2.length; i++)",
+   "correct": false,
+   "why": "The init, test and update are well formed, but <= makes one pass too many (the WrongIterationCount error)."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "none",
+   "way_id": "none",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "The answer declares i as an int but makes no claim about how int works."
+  }
+ ]
+}

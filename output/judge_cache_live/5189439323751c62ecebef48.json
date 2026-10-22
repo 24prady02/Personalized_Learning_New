@@ -1,0 +1,79 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The code is correct and the student explains it by linking the length field to the last valid index: the last index is length - 1, so the next-to-last is length - 2. This ties length and indexing together in one structure without hard-coding a number, but it does not reason beyond this task.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the double type."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "the last index is length - 1, so next-to-last is length - 2",
+   "correct": true,
+   "why": "It uses sensorReadings.length in place of a fixed number to find a position counted back from the end."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions as such."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Subtracting 2 is used, but the answer says nothing about how the operator works."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "indexing@L2#1",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9;",
+   "correct": true,
+   "why": "The index is a computed int expression that picks the element to write to, which is correct."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The assignment is written correctly, but the answer gives no reasoning about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_bounds@L3#1",
+   "quote": "the last index is length - 1",
+   "correct": true,
+   "why": "It correctly says the last valid index is length - 1 and works out the next-to-last index from it."
+  }
+ ]
+}

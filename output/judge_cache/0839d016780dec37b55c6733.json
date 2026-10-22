@@ -1,0 +1,79 @@
+{
+ "answer_level": "L2",
+ "main_concept": "double",
+ "why": "The student declares double parameters and correctly assigns the double quotient miles / gallons to a variable, but the method has no return statement, so it does not compile and never returns the MPG; that keeps the answer below L4, which needs correct new code.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "double@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Dividing two doubles and storing the result in a double variable keeps the fraction, which is right, but the value is never returned."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no statement or reasoning about primitive types in general."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer contains no reasoning about expressions beyond the division covered under the other concepts."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "arithmetic_operators@L2#3",
+   "quote": "miles / gallons",
+   "correct": true,
+   "why": "The / operator is applied correctly in double and the result is stored by an assignment."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The local variable is only used as the target of the assignment, which is levelled under assignment."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "assignment@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": false,
+   "why": "The quotient is correctly stored in mpg, but it is never returned, so the method fails with 'missing return statement'."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The remainder operator is not used."
+  }
+ ]
+}

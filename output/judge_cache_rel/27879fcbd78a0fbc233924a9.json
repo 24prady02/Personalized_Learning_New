@@ -1,0 +1,115 @@
+{
+ "answer_level": "L1",
+ "main_concept": "ragged_array",
+ "why": "The student correctly says that a general printing method must bound each row by a[i].length rather than a[0].length, but never says why (that rows can have different lengths) and gives no loop or trace, so this is one correct rule stated without being applied.",
+ "concepts": [
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how a 2-D array is built or indexed."
+  },
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "length_field@L1#2",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "It names the correct length expression for each row but does not apply it to loops or values."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about element access."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the order of the loops or rows."
+  },
+  {
+   "concept": "ragged_array",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "ragged_array@L1#2",
+   "quote": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "correct": true,
+   "why": "It correctly states that row i must be processed up to a[i].length, but does not explain that rows can differ or apply this in code."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> two_dimensional_array",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "two_dimensional_array -prerequisite-> ragged_array",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "two_dimensional_array -prerequisite-> multidimensional_array",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "two_dimensional_array -prerequisite-> row_major_order",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

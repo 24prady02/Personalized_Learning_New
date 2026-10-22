@@ -1,0 +1,43 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The answer correctly says that 100 moves give only rough estimates, with meaningless trailing zeros, and correctly predicts that changing the start page leaves the long-run ranks the same.",
+ "concepts": [
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "simulation_loop@L4#1",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing. In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It reasons about a change not in the given run (start at page 3) and says the limit is kept, which is the mixing property; it also rejects the 'few trials are exact' misconception."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about long."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about running a program."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  }
+ ]
+}

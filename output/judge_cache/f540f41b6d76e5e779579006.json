@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The answer writes correct code for this task. Its justification ties length to the last index (length - 1) and so to the next-to-last (length - 2). Using a.length to adapt to any array size instead of a hard-coded number is the relational purpose_of_the_whole way.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "= 7.9;",
+   "correct": true,
+   "why": "The student just assigns a double literal to a double element and says nothing about the type."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "correct": true,
+   "why": "Uses the length field as a fixed value that locates positions relative to the end, so no index is hard-coded."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "sensorReadings.length - 2",
+   "correct": true,
+   "why": "Writes a correct index expression but gives no evaluation or trace of it."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "the last index is length - 1",
+   "correct": true,
+   "why": "Correctly relates the upper bound (last index = length - 1) to the index it wants."
+  }
+ ]
+}

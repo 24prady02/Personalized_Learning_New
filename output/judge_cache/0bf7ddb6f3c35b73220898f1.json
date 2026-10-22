@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_else_statement",
+ "why": "The answer goes through the code step by step and gets the right output, AEG. It prints A, finds that 17 is odd so the outer else runs, works out 17 % 5 = 2 so the inner then branch prints E, and then prints G. It never says what the code is for (the unfinished 'which makes sense because…' adds nothing), so it stays at L2.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_else_statement@L2#1",
+   "quote": "17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G",
+   "correct": true,
+   "why": "It tests each condition once, runs only the branch that was chosen, and then carries on after the inner if-else, which is the correct rule."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "remainder_operator@L2#1",
+   "quote": "17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2",
+   "correct": true,
+   "why": "It works out both remainders correctly for this code's values."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "arithmetic_operators@L2#1",
+   "quote": "17 % 5, which is 2",
+   "correct": true,
+   "why": "It applies the operator correctly to the actual values in the code."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about division by zero."
+  }
+ ]
+}

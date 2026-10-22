@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "redirection",
+ "why": "The answer gives the correct terminal result for each of the three commands, with short reasons ('the numbers go into data.txt', 'no file'), but never ties them together into one structure, such as saying that > then < does the same job as a pipe.",
+ "concepts": [
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "redirection@L2#2",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "It correctly predicts that > sends the output to the file, so the terminal shows nothing, and that < data.txt makes Average print the average of the file's numbers."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "piping@L2#2",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "It correctly predicts that only Average's output appears and that no file is made, but it does not explicitly compare the pipe with > then <."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "command_line_args@L1#2",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "It gives the correct result without saying why: the redirected or piped input is not an argument, so this is a bare correct result, which is L1, and it avoids the misconception that a redirected file shows up in args."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how Average reads its input."
+  }
+ ]
+}

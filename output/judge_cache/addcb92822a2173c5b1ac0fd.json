@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer gives the correct output for only one outer pass (i = 3) without explaining it, and never covers the passes i = 1 and i = 2 or the full exact output that the question asks for.",
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "nested_loops@L1#1",
+   "quote": "When i is 3 it prints 1 2 3.",
+   "correct": true,
+   "why": "It correctly describes one part, the inner loop's output for i = 3, but does not trace every outer pass or justify the result."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about printf formatting."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about i++ or j++."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about print."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about println or line breaks."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output stream."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables as such."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer do not involve chars."
+  }
+ ]
+}

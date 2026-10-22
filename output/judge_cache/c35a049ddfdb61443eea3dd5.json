@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The answer correctly states the general rule that println adds a newline and print does not, but it doesn't use the rule on the three statements to give the exact output or explain where the line break falls.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "It states println's rule correctly but doesn't apply it to show the break after 'A nice programming language '."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "println adds a newline after the text and print does not.",
+   "correct": true,
+   "why": "It gives the print/println output rule but doesn't trace the calls in order into the output stream."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "print does not",
+   "correct": true,
+   "why": "It correctly says print writes no line terminator but doesn't apply this to join the first two strings on one line."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about logic errors."
+  }
+ ]
+}

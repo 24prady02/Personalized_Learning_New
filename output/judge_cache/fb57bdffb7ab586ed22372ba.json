@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_traversal",
+ "why": "The student wrote a correct index loop that does what the given for-each loop failed to do. The output facts confirm the array becomes [50, 40, 30, 20, 10]. This fixes the one failing part of the given code, so it is L3; the student does not explain why the for-each loop failed, which rules out L4.",
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "The guard i < a.length visits every valid index exactly once, and the loop variable is used as the index to write each element."
+  },
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "The same expression a[i] reads and writes a different element on each pass, so every stored value is updated."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "a.length is written correctly as a field and used as the loop bound, so the loop fits the array's real size instead of a hard-coded number."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the for-each loop or why assigning to x has no effect; it simply avoids that loop."
+  }
+ ]
+}

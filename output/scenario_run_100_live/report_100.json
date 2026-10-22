@@ -1,0 +1,6680 @@
+{
+ "n": 100,
+ "exact": 75,
+ "within": 88,
+ "levelled_pairs": 95,
+ "mae": 0.34,
+ "per_level": {
+  "L0": [
+   26,
+   31
+  ],
+  "L1": [
+   16,
+   20
+  ],
+  "L2": [
+   6,
+   8
+  ],
+  "L3": [
+   13,
+   22
+  ],
+  "L4": [
+   10,
+   15
+  ],
+  "none": [
+   4,
+   4
+  ]
+ },
+ "confusion": {
+  "L0>L0": 26,
+  "L0>L1": 2,
+  "L0>L2": 2,
+  "L0>L3": 1,
+  "L0>L4": 0,
+  "L0>none": 0,
+  "L1>L0": 0,
+  "L1>L1": 16,
+  "L1>L2": 1,
+  "L1>L3": 2,
+  "L1>L4": 0,
+  "L1>none": 1,
+  "L2>L0": 1,
+  "L2>L1": 0,
+  "L2>L2": 6,
+  "L2>L3": 0,
+  "L2>L4": 1,
+  "L2>none": 0,
+  "L3>L0": 0,
+  "L3>L1": 0,
+  "L3>L2": 6,
+  "L3>L3": 13,
+  "L3>L4": 3,
+  "L3>none": 0,
+  "L4>L0": 0,
+  "L4>L1": 0,
+  "L4>L2": 0,
+  "L4>L3": 5,
+  "L4>L4": 10,
+  "L4>none": 0,
+  "none>L0": 0,
+  "none>L1": 0,
+  "none>L2": 0,
+  "none>L3": 0,
+  "none>L4": 0,
+  "none>none": 4
+ },
+ "set_by": {
+  "LLM judge (overall)": [
+   60,
+   82
+  ],
+  "code run (L0)": [
+   11,
+   13
+  ],
+  "no-claim check": [
+   4,
+   4
+  ],
+  "per-concept fusion": [
+   0,
+   1
+  ]
+ },
+ "per_concept_fusion_exact": 75,
+ "concept_matching": {
+  "answers": 41,
+  "gold_in_linked": 36,
+  "top_linked_right": 23,
+  "judge_main_right": 34
+ },
+ "linked_counts": [
+  [
+   "assignment",
+   46
+  ],
+  [
+   "variable",
+   36
+  ],
+  [
+   "arithmetic_operators",
+   35
+  ],
+  [
+   "expression",
+   35
+  ],
+  [
+   "statement",
+   30
+  ],
+  [
+   "primitive_type",
+   29
+  ],
+  [
+   "int",
+   28
+  ],
+  [
+   "standard_output",
+   26
+  ],
+  [
+   "double",
+   18
+  ],
+  [
+   "if_statement",
+   17
+  ],
+  [
+   "method_call",
+   16
+  ],
+  [
+   "empty_statement",
+   16
+  ],
+  [
+   "block",
+   15
+  ],
+  [
+   "println",
+   14
+  ],
+  [
+   "loop_control",
+   14
+  ],
+  [
+   "increment_operators",
+   14
+  ],
+  [
+   "indexing",
+   13
+  ],
+  [
+   "array_aliasing",
+   13
+  ],
+  [
+   "print",
+   11
+  ],
+  [
+   "string_literal",
+   11
+  ],
+  [
+   "for_loop",
+   10
+  ],
+  [
+   "run",
+   10
+  ],
+  [
+   "while_loop",
+   7
+  ],
+  [
+   "accumulator_pattern",
+   7
+  ],
+  [
+   "integer_division",
+   6
+  ],
+  [
+   "if_else_statement",
+   6
+  ],
+  [
+   "remainder_operator",
+   6
+  ],
+  [
+   "string_concatenation",
+   6
+  ],
+  [
+   "standard_input",
+   6
+  ],
+  [
+   "explicit_cast",
+   6
+  ],
+  [
+   "logical_operators",
+   5
+  ],
+  [
+   "short_circuit",
+   5
+  ],
+  [
+   "array_declaration",
+   5
+  ],
+  [
+   "counter_pattern",
+   5
+  ],
+  [
+   "compound_assignment",
+   5
+  ],
+  [
+   "comment",
+   5
+  ],
+  [
+   "formatted_output",
+   4
+  ],
+  [
+   "comparison_operators",
+   4
+  ],
+  [
+   "loop_variable",
+   4
+  ],
+  [
+   "length_field",
+   4
+  ],
+  [
+   "conditional_operator",
+   4
+  ],
+  [
+   "variable_swap",
+   4
+  ],
+  [
+   "string_conversion",
+   4
+  ],
+  [
+   "array_traversal",
+   4
+  ],
+  [
+   "command_line_args",
+   4
+  ],
+  [
+   "input_graph",
+   4
+  ],
+  [
+   "program_text",
+   4
+  ],
+  [
+   "string_type",
+   4
+  ],
+  [
+   "break_statement",
+   3
+  ],
+  [
+   "array_copy",
+   3
+  ],
+  [
+   "running_extreme",
+   3
+  ],
+  [
+   "math_library",
+   3
+  ],
+  [
+   "type_conversion",
+   3
+  ],
+  [
+   "dangling_pages",
+   3
+  ],
+  [
+   "array_creation",
+   3
+  ],
+  [
+   "long_type",
+   3
+  ],
+  [
+   "compile",
+   3
+  ],
+  [
+   "class_declaration",
+   3
+  ],
+  [
+   "main_method",
+   3
+  ],
+  [
+   "nested_loops",
+   2
+  ],
+  [
+   "control_flow",
+   2
+  ],
+  [
+   "boolean",
+   2
+  ],
+  [
+   "end_of_input",
+   2
+  ],
+  [
+   "redirection",
+   2
+  ],
+  [
+   "piping",
+   2
+  ],
+  [
+   "power_method",
+   2
+  ],
+  [
+   "array_initializer",
+   2
+  ],
+  [
+   "compile_time_error",
+   2
+  ],
+  [
+   "run_time_error",
+   2
+  ],
+  [
+   "reading_error_messages",
+   2
+  ],
+  [
+   "testing",
+   2
+  ],
+  [
+   "floating_point_precision",
+   2
+  ],
+  [
+   "de_morgan",
+   2
+  ],
+  [
+   "declaration",
+   2
+  ],
+  [
+   "coordinate_scaling",
+   2
+  ],
+  [
+   "standard_drawing",
+   2
+  ],
+  [
+   "transition_matrix",
+   2
+  ],
+  [
+   "two_dimensional_array",
+   2
+  ],
+  [
+   "logical_error",
+   1
+  ],
+  [
+   "do_while_loop",
+   1
+  ],
+  [
+   "off_by_one_error",
+   1
+  ],
+  [
+   "char",
+   1
+  ],
+  [
+   "enhanced_for",
+   1
+  ],
+  [
+   "identifier",
+   1
+  ],
+  [
+   "read_loop_idiom",
+   1
+  ],
+  [
+   "args_length",
+   1
+  ],
+  [
+   "frequency_counting",
+   1
+  ],
+  [
+   "incremental_development",
+   1
+  ],
+  [
+   "array_bounds",
+   1
+  ],
+  [
+   "parsing",
+   1
+  ],
+  [
+   "primitive_vs_reference",
+   1
+  ],
+  [
+   "escape_sequences",
+   1
+  ],
+  [
+   "char_arithmetic",
+   1
+  ],
+  [
+   "int_literal_limit",
+   1
+  ],
+  [
+   "scientific_notation",
+   1
+  ],
+  [
+   "division_by_zero",
+   1
+  ],
+  [
+   "exclusive_or",
+   1
+  ],
+  [
+   "math_round",
+   1
+  ],
+  [
+   "nested_conditionals",
+   1
+  ],
+  [
+   "else_if_chain",
+   1
+  ],
+  [
+   "math_random",
+   1
+  ],
+  [
+   "random_move",
+   1
+  ],
+  [
+   "continue_statement",
+   1
+  ],
+  [
+   "labeled_break",
+   1
+  ],
+  [
+   "infinite_loop",
+   1
+  ],
+  [
+   "loop_guard",
+   1
+  ],
+  [
+   "definite_assignment",
+   1
+  ],
+  [
+   "printing_array_reference",
+   1
+  ],
+  [
+   "array_exchange",
+   1
+  ],
+  [
+   "lookup_table",
+   1
+  ],
+  [
+   "token_vs_line_input",
+   1
+  ],
+  [
+   "interactive_input",
+   1
+  ],
+  [
+   "filter",
+   1
+  ],
+  [
+   "drawing_shapes",
+   1
+  ],
+  [
+   "mouse_interaction",
+   1
+  ],
+  [
+   "standard_audio",
+   1
+  ],
+  [
+   "two_models",
+   1
+  ],
+  [
+   "markov_chain",
+   1
+  ],
+  [
+   "named_constants",
+   1
+  ],
+  [
+   "chained_assignment",
+   1
+  ],
+  [
+   "program_layout",
+   1
+  ],
+  [
+   "multidimensional_array",
+   1
+  ],
+  [
+   "row_major_order",
+   1
+  ],
+  [
+   "loop_scope",
+   1
+  ]
+ ],
+ "shown_counts": [
+  [
+   "assignment",
+   6
+  ],
+  [
+   "variable",
+   6
+  ],
+  [
+   "println",
+   5
+  ],
+  [
+   "print",
+   4
+  ],
+  [
+   "length_field",
+   4
+  ],
+  [
+   "indexing",
+   4
+  ],
+  [
+   "remainder_operator",
+   4
+  ],
+  [
+   "double",
+   4
+  ],
+  [
+   "explicit_cast",
+   4
+  ],
+  [
+   "accumulator_pattern",
+   4
+  ],
+  [
+   "if_statement",
+   4
+  ],
+  [
+   "standard_output",
+   3
+  ],
+  [
+   "comparison_operators",
+   3
+  ],
+  [
+   "nested_loops",
+   3
+  ],
+  [
+   "if_else_statement",
+   3
+  ],
+  [
+   "switch_statement",
+   3
+  ],
+  [
+   "variable_swap",
+   3
+  ],
+  [
+   "int",
+   3
+  ],
+  [
+   "block",
+   3
+  ],
+  [
+   "arithmetic_operators",
+   3
+  ],
+  [
+   "counter_pattern",
+   3
+  ],
+  [
+   "command_line_args",
+   3
+  ],
+  [
+   "compile_time_error",
+   3
+  ],
+  [
+   "expression",
+   3
+  ],
+  [
+   "loop_variable",
+   2
+  ],
+  [
+   "increment_operators",
+   2
+  ],
+  [
+   "formatted_output",
+   2
+  ],
+  [
+   "while_loop",
+   2
+  ],
+  [
+   "array_bounds",
+   2
+  ],
+  [
+   "for_loop",
+   2
+  ],
+  [
+   "array_copy",
+   2
+  ],
+  [
+   "loop_control",
+   2
+  ],
+  [
+   "conditional_operator",
+   2
+  ],
+  [
+   "logical_operators",
+   2
+  ],
+  [
+   "declaration",
+   2
+  ],
+  [
+   "running_extreme",
+   2
+  ],
+  [
+   "break_statement",
+   2
+  ],
+  [
+   "method_call",
+   2
+  ],
+  [
+   "string_type",
+   2
+  ],
+  [
+   "statement",
+   2
+  ],
+  [
+   "standard_input",
+   2
+  ],
+  [
+   "type_conversion",
+   2
+  ],
+  [
+   "integer_division",
+   2
+  ],
+  [
+   "dangling_pages",
+   2
+  ],
+  [
+   "frequency_counting",
+   2
+  ],
+  [
+   "markov_chain",
+   2
+  ],
+  [
+   "array_creation",
+   2
+  ],
+  [
+   "array_traversal",
+   2
+  ],
+  [
+   "program_text",
+   2
+  ],
+  [
+   "run_time_error",
+   2
+  ],
+  [
+   "string_literal",
+   2
+  ],
+  [
+   "token_vs_line_input",
+   2
+  ],
+  [
+   "boolean_expression",
+   2
+  ],
+  [
+   "do_while_loop",
+   1
+  ],
+  [
+   "off_by_one_error",
+   1
+  ],
+  [
+   "char",
+   1
+  ],
+  [
+   "string_concatenation",
+   1
+  ],
+  [
+   "math_library",
+   1
+  ],
+  [
+   "compound_assignment",
+   1
+  ],
+  [
+   "stream_model",
+   1
+  ],
+  [
+   "sentinel_loop",
+   1
+  ],
+  [
+   "redirection",
+   1
+  ],
+  [
+   "piping",
+   1
+  ],
+  [
+   "normalization",
+   1
+  ],
+  [
+   "transition_matrix",
+   1
+  ],
+  [
+   "simulation_loop",
+   1
+  ],
+  [
+   "input_graph",
+   1
+  ],
+  [
+   "comment",
+   1
+  ],
+  [
+   "run",
+   1
+  ],
+  [
+   "compile",
+   1
+  ],
+  [
+   "incremental_development",
+   1
+  ],
+  [
+   "main_method",
+   1
+  ],
+  [
+   "args_length",
+   1
+  ],
+  [
+   "primitive_type",
+   1
+  ],
+  [
+   "escape_sequences",
+   1
+  ],
+  [
+   "char_arithmetic",
+   1
+  ],
+  [
+   "integer_constants",
+   1
+  ],
+  [
+   "scientific_notation",
+   1
+  ],
+  [
+   "division_by_zero",
+   1
+  ],
+  [
+   "exclusive_or",
+   1
+  ],
+  [
+   "long_type",
+   1
+  ],
+  [
+   "math_round",
+   1
+  ],
+  [
+   "empty_statement",
+   1
+  ],
+  [
+   "nested_conditionals",
+   1
+  ],
+  [
+   "math_random",
+   1
+  ],
+  [
+   "continue_statement",
+   1
+  ],
+  [
+   "infinite_loop",
+   1
+  ],
+  [
+   "definite_assignment",
+   1
+  ],
+  [
+   "array_default_values",
+   1
+  ],
+  [
+   "printing_array_reference",
+   1
+  ],
+  [
+   "array_exchange",
+   1
+  ],
+  [
+   "lookup_table",
+   1
+  ],
+  [
+   "boolean_flag_array",
+   1
+  ],
+  [
+   "interactive_input",
+   1
+  ],
+  [
+   "filter",
+   1
+  ],
+  [
+   "animation",
+   1
+  ],
+  [
+   "standard_audio",
+   1
+  ],
+  [
+   "de_morgan",
+   1
+  ],
+  [
+   "drawing_shapes",
+   1
+  ],
+  [
+   "standard_drawing",
+   1
+  ],
+  [
+   "coordinate_scaling",
+   1
+  ],
+  [
+   "named_constants",
+   1
+  ],
+  [
+   "operator_precedence",
+   1
+  ],
+  [
+   "program_layout",
+   1
+  ],
+  [
+   "class_declaration",
+   1
+  ],
+  [
+   "ragged_array",
+   1
+  ]
+ ],
+ "linked_pairs": [
+  [
+   "arithmetic_operators",
+   "expression",
+   30
+  ],
+  [
+   "assignment",
+   "variable",
+   28
+  ],
+  [
+   "int",
+   "primitive_type",
+   17
+  ],
+  [
+   "expression",
+   "variable",
+   16
+  ],
+  [
+   "double",
+   "primitive_type",
+   11
+  ],
+  [
+   "empty_statement",
+   "statement",
+   10
+  ],
+  [
+   "for_loop",
+   "loop_control",
+   10
+  ],
+  [
+   "increment_operators",
+   "loop_control",
+   9
+  ],
+  [
+   "double",
+   "int",
+   9
+  ],
+  [
+   "println",
+   "statement",
+   8
+  ],
+  [
+   "assignment",
+   "increment_operators",
+   7
+  ],
+  [
+   "block",
+   "statement",
+   7
+  ],
+  [
+   "print",
+   "println",
+   6
+  ],
+  [
+   "print",
+   "statement",
+   6
+  ],
+  [
+   "println",
+   "string_literal",
+   6
+  ],
+  [
+   "arithmetic_operators",
+   "integer_division",
+   6
+  ],
+  [
+   "print",
+   "string_literal",
+   5
+  ],
+  [
+   "assignment",
+   "comparison_operators",
+   5
+  ],
+  [
+   "if_statement",
+   "while_loop",
+   5
+  ],
+  [
+   "if_else_statement",
+   "if_statement",
+   5
+  ],
+  [
+   "compound_assignment",
+   "increment_operators",
+   5
+  ],
+  [
+   "formatted_output",
+   "standard_output",
+   4
+  ],
+  [
+   "logical_operators",
+   "short_circuit",
+   4
+  ],
+  [
+   "expression",
+   "method_call",
+   4
+  ],
+  [
+   "assignment",
+   "variable_swap",
+   4
+  ],
+  [
+   "array_traversal",
+   "for_loop",
+   4
+  ],
+  [
+   "compile",
+   "program_text",
+   4
+  ],
+  [
+   "compile",
+   "run",
+   4
+  ],
+  [
+   "assignment",
+   "declaration",
+   3
+  ],
+  [
+   "string_concatenation",
+   "string_conversion",
+   3
+  ],
+  [
+   "assignment",
+   "compound_assignment",
+   3
+  ],
+  [
+   "loop_control",
+   "loop_variable",
+   3
+  ],
+  [
+   "explicit_cast",
+   "type_conversion",
+   3
+  ],
+  [
+   "primitive_type",
+   "type_conversion",
+   3
+  ],
+  [
+   "dangling_pages",
+   "transition_matrix",
+   3
+  ],
+  [
+   "input_graph",
+   "transition_matrix",
+   3
+  ],
+  [
+   "formatted_output",
+   "println",
+   2
+  ],
+  [
+   "array_bounds",
+   "indexing",
+   2
+  ],
+  [
+   "comparison_operators",
+   "expression",
+   2
+  ],
+  [
+   "boolean",
+   "logical_operators",
+   2
+  ]
+ ],
+ "concepts_per_answer": 7.02,
+ "rows": [
+  {
+   "id": "S001",
+   "text": "println adds a newline after the text and print does not.",
+   "label": "L1",
+   "label_why": "States the print/println rule but does not apply it to give this output.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     4.68
+    ],
+    [
+     "standard_output",
+     3.74
+    ],
+    [
+     "print",
+     3.4
+    ],
+    [
+     "formatted_output",
+     1.55
+    ],
+    [
+     "statement",
+     1.45
+    ],
+    [
+     "string_literal",
+     1.33
+    ],
+    [
+     "method_call",
+     1.3
+    ],
+    [
+     "logical_error",
+     1.15
+    ]
+   ],
+   "extra": [],
+   "top_linked": "println",
+   "run_facts": [],
+   "judge_concepts": {
+    "println": "L1",
+    "standard_output": "L1",
+    "print": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "println",
+   "judge_why": "The student correctly states the general rule that println ends the line and print does not, but never applies it to the three calls to work out the exact output.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S002",
+   "text": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "label": "L1",
+   "label_why": "Correct output with no justification; a bare result is not levelled above L1.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     1.33
+    ],
+    [
+     "method_call",
+     1.1
+    ],
+    [
+     "statement",
+     1.02
+    ],
+    [
+     "empty_statement",
+     1.0
+    ],
+    [
+     "standard_output",
+     1.0
+    ],
+    [
+     "break_statement",
+     1.0
+    ],
+    [
+     "string_literal",
+     1.0
+    ]
+   ],
+   "extra": [
+    "print"
+   ],
+   "top_linked": "println",
+   "run_facts": [],
+   "judge_concepts": {
+    "println": "L1",
+    "print": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "println",
+   "judge_why": "The student gives the correct output, with the line break after the println text, but does not explain how they got it, so it counts as a bare correct result (L1).",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S004",
+   "text": "It prints A, goes to the odd part and prints the letters there.",
+   "label": "L1",
+   "label_why": "Describes the route (A, then the odd branch) without the values that decide which letters print.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "print",
+     2.17
+    ],
+    [
+     "assignment",
+     1.24
+    ],
+    [
+     "standard_output",
+     1.11
+    ],
+    [
+     "arithmetic_operators",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "string_literal",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ],
+    [
+     "empty_statement",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "print",
+   "run_facts": [],
+   "judge_concepts": {
+    "print": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "print",
+   "judge_why": "The answer gets the first output (A) and the odd branch right, but it never works out which letters that branch prints (E, then G), so it covers only one part of the output and gives no final result.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S005",
+   "text": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "label": "L4",
+   "label_why": "Correctly predicts what a changed program (a while loop) would print and when it would differ, by reasoning about the first test.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "while_loop",
+     4.83
+    ],
+    [
+     "comparison_operators",
+     2.27
+    ],
+    [
+     "if_statement",
+     1.61
+    ],
+    [
+     "do_while_loop",
+     1.35
+    ],
+    [
+     "loop_control",
+     1.34
+    ],
+    [
+     "increment_operators",
+     1.3
+    ],
+    [
+     "empty_statement",
+     1.28
+    ],
+    [
+     "assignment",
+     1.25
+    ]
+   ],
+   "extra": [],
+   "top_linked": "while_loop",
+   "run_facts": [],
+   "judge_concepts": {
+    "comparison_operators": "L2",
+    "do_while_loop": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "do_while_loop",
+   "judge_why": "The student predicts what happens if the do-while becomes a while loop: the output stays the same because 81 >= 70 is true at the start, and the two loops would differ only when i starts below 70. This correctly reasons about changed code and a class of inputs. However, it never gives the actual output for i = 61, which is \"61 \".",
+   "max_level": "L4",
+   "gold": []
+  },
+  {
+   "id": "S007",
+   "text": "3 2 1 / 2 1 / 1\" (no empty line at the end), \"because the loop stops at 1.",
+   "label": "L0",
+   "label_why": "Misses the empty line and justifies it with a wrong rule (\"the loop stops at 1\"), although the outer loop also runs for i = 0.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "integer_division",
+     2.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "string_literal",
+     2.0
+    ],
+    [
+     "int",
+     1.44
+    ],
+    [
+     "loop_variable",
+     1.44
+    ],
+    [
+     "nested_loops",
+     1.22
+    ],
+    [
+     "block",
+     1.21
+    ]
+   ],
+   "extra": [],
+   "top_linked": "integer_division",
+   "run_facts": [],
+   "judge_concepts": {
+    "loop_variable": "L2",
+    "nested_loops": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "nested_loops",
+   "judge_why": "The student gets the values in every printed row right, but the prediction is wrong in two places: it leaves out the empty line printed on the last outer pass (i = 0), because the student says the loop 'stops at 1', and it drops the space after each number.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S008",
+   "text": "num1 is 9 and num2 starts at 12. At i = 9 num2 drops to 11; at i = 11 it drops to 10. So it prints 8, 10, 12, 13,",
+   "label": "L2",
+   "label_why": "Traces num1, num2 and i value by value in order and reaches the correct output.",
+   "final": "L2",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     2.12
+    ],
+    [
+     "increment_operators",
+     1.5
+    ],
+    [
+     "formatted_output",
+     1.33
+    ],
+    [
+     "standard_output",
+     1.3
+    ],
+    [
+     "arithmetic_operators",
+     1.14
+    ],
+    [
+     "print",
+     1.1
+    ],
+    [
+     "loop_control",
+     1.0
+    ]
+   ],
+   "extra": [
+    "while_loop"
+   ],
+   "top_linked": "assignment",
+   "run_facts": [
+    "confirmed by the run: i = 9",
+    "confirmed by the run: i = 11",
+    "confirmed by the run: prints 8 10 12 13",
+    "confirmed by the run: num1 = 9 (final)"
+   ],
+   "judge_concepts": {
+    "assignment": "L2",
+    "increment_operators": "L2",
+    "formatted_output": "L2",
+    "while_loop": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "while_loop",
+   "judge_why": "The student follows the do-while loop with the real values: num1 = 9, num2 = 12, num2 drops at i = 9 and at i = 11, and the output is 8, 10, 12, 13. All of this matches the run, but it is a value-by-value trace that never says what the loop is for, and part (b), the for-loop rewrite, is not answered.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S009",
+   "text": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "label": "L4",
+   "label_why": "Writes correct new code and justifies the index from the last-index rule (length - 1).",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     4.0
+    ],
+    [
+     "length_field",
+     3.57
+    ],
+    [
+     "expression",
+     3.18
+    ],
+    [
+     "arithmetic_operators",
+     3.0
+    ],
+    [
+     "indexing",
+     2.37
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "primitive_type",
+     1.0
+    ]
+   ],
+   "extra": [
+    "array_bounds"
+   ],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "length_field": "L3",
+    "indexing": "L2",
+    "array_bounds": "L1"
+   },
+   "judge_answer": "L3",
+   "judge_main": "length_field",
+   "judge_why": "The student uses sensorReadings.length - 2 so the code works for any array size instead of a hard-coded index, and gives a reason: the last index is length - 1. That is the purpose of the length field, so L3.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S010",
+   "text": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+   "label": "L0",
+   "label_why": "New code uses i <= data2.length, a wrong bound rule that reads past the end (and copy is never created).",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "int",
+     4.21
+    ],
+    [
+     "length_field",
+     3.88
+    ],
+    [
+     "for_loop",
+     3.6
+    ],
+    [
+     "increment_operators",
+     3.35
+    ],
+    [
+     "array_copy",
+     3.1
+    ],
+    [
+     "off_by_one_error",
+     3.02
+    ],
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "loop_control",
+     2.98
+    ]
+   ],
+   "extra": [],
+   "top_linked": "int",
+   "run_facts": [],
+   "judge_concepts": {
+    "length_field": "L0",
+    "for_loop": "L2",
+    "array_copy": "L2",
+    "off_by_one_error": "L0",
+    "loop_control": "L0"
+   },
+   "judge_answer": "L2",
+   "judge_main": "array_copy",
+   "judge_why": "The student copies the array one element at a time in a loop, which is the right approach, but the code has two faults: i <= data2.length goes one index too far and throws ArrayIndexOutOfBoundsException, and copy is never created with new int[data2.length].",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S012",
+   "text": "Is count++ the same as count += 1?",
+   "label": "none",
+   "label_why": "A question that makes no claim.",
+   "final": "none",
+   "match": true,
+   "set_by": "no-claim check",
+   "gates": [
+    "no_claim"
+   ],
+   "linked": [],
+   "extra": [],
+   "top_linked": null,
+   "run_facts": [],
+   "judge_concepts": {},
+   "judge_answer": null,
+   "judge_main": null,
+   "judge_why": null,
+   "max_level": "none",
+   "gold": []
+  },
+  {
+   "id": "S013",
+   "text": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "label": "L4",
+   "label_why": "Writes correct new code: the conditional-operator form is equivalent to the if-else.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "statement",
+     2.61
+    ],
+    [
+     "assignment",
+     2.49
+    ],
+    [
+     "comparison_operators",
+     2.38
+    ],
+    [
+     "if_else_statement",
+     2.17
+    ],
+    [
+     "expression",
+     1.61
+    ],
+    [
+     "if_statement",
+     1.58
+    ],
+    [
+     "array_aliasing",
+     1.29
+    ]
+   ],
+   "extra": [
+    "conditional_operator"
+   ],
+   "top_linked": "statement",
+   "run_facts": [
+    "the student's code runs; it changes no variable"
+   ],
+   "judge_concepts": {
+    "conditional_operator": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "conditional_operator",
+   "judge_why": "The rewrite correctly turns the whole if-else into its expression form: the single assignment `outputValue = ...` is taken out of both branches, the condition becomes the first operand, the then-value becomes the second and the else-value the third, so the conditional operator is related to the if-else it replaces.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S014",
+   "text": "p && q is true only when both are true; p || q is false only when both are false.",
+   "label": "L1",
+   "label_why": "States the && and || rules correctly; there is no code or value to apply them to.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "logical_operators",
+     5.86
+    ],
+    [
+     "short_circuit",
+     4.74
+    ],
+    [
+     "primitive_type",
+     2.0
+    ],
+    [
+     "control_flow",
+     1.66
+    ],
+    [
+     "boolean",
+     1.43
+    ],
+    [
+     "variable",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "logical_operators",
+   "run_facts": [],
+   "judge_concepts": {
+    "logical_operators": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "logical_operators",
+   "judge_why": "The answer correctly gives the truth-table rule for && and || (true only when both are true; false only when both are false), but it only states the rule and does not explain or work through the four value combinations.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S015",
+   "text": "char SingleLetter = 'Q';",
+   "label": "L0",
+   "label_why": "The char declaration is right, but the name SingleLetter breaks the lowerCamelCase rule the task asks for, so the new code is not correct.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "char",
+     5.78
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "primitive_type",
+     2.0
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "variable",
+     1.0
+    ]
+   ],
+   "extra": [
+    "declaration"
+   ],
+   "top_linked": "char",
+   "run_facts": [],
+   "judge_concepts": {
+    "char": "L2",
+    "declaration": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "declaration",
+   "judge_why": "The student wrote a full, compilable declaration with the right type and initializer for this task, but the name is SingleLetter instead of singleLetter, which breaks lowerCamelCase. That makes this a correct application of the rule with one slip (L2 with an error), not a misconception.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S016",
+   "text": "num4 = 30.3, because 9 % 5 means 9 minus 5, which is 4.",
+   "label": "L0",
+   "label_why": "Right number for a wrong rule: % is read as subtraction, which works only by chance for 9 and 5.",
+   "final": "L0",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "arithmetic_operators",
+     4.28
+    ],
+    [
+     "double",
+     4.04
+    ],
+    [
+     "remainder_operator",
+     3.64
+    ],
+    [
+     "assignment",
+     3.0
+    ],
+    [
+     "expression",
+     3.0
+    ],
+    [
+     "method_call",
+     2.0
+    ],
+    [
+     "variable",
+     2.0
+    ],
+    [
+     "standard_output",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "arithmetic_operators",
+   "run_facts": [
+    "confirmed by the run: num4 = 30.3"
+   ],
+   "judge_concepts": {
+    "remainder_operator": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "remainder_operator",
+   "judge_why": "The value 30.3 is right only by coincidence: the student says 9 % 5 means 9 minus 5, a rule that contradicts Java, where % gives the remainder. That rule gives 4 here only because 9 / 5 has quotient 1. The answer also leaves out the first output line, \"Result is \".",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S017",
+   "text": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "label": "L1",
+   "label_why": "Traces two of the four outer passes and stops with \"and so on\", so not every part (i = 1, i = 0 and the empty line) is covered.",
+   "final": "L1",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     2.48
+    ],
+    [
+     "increment_operators",
+     2.35
+    ],
+    [
+     "for_loop",
+     1.69
+    ],
+    [
+     "loop_control",
+     1.52
+    ],
+    [
+     "print",
+     1.49
+    ],
+    [
+     "variable",
+     1.17
+    ],
+    [
+     "int",
+     1.09
+    ]
+   ],
+   "extra": [
+    "nested_loops"
+   ],
+   "top_linked": "assignment",
+   "run_facts": [
+    "confirmed by the run: i = 3; i = 2"
+   ],
+   "judge_concepts": {
+    "nested_loops": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "nested_loops",
+   "judge_why": "The answer gives correct output for two outer passes (i = 3 and i = 2) and then says \"and so on\", but it never covers i = 1 or i = 0 (the empty line), the trailing spaces, or the println, and it gives no explanation, so it is a correct but partial and unexplained result rather than a full trace.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S020",
+   "text": "best = first; for each element: if smaller than best → best = element; print best",
+   "label": "L3",
+   "label_why": "Gives the running-minimum plan as one integrated structure in pseudocode; it is not Java code, so not L4.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "print",
+     2.37
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "array_aliasing",
+     2.0
+    ],
+    [
+     "enhanced_for",
+     2.0
+    ],
+    [
+     "primitive_type",
+     2.0
+    ],
+    [
+     "double",
+     2.0
+    ],
+    [
+     "running_extreme",
+     1.52
+    ],
+    [
+     "indexing",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "print",
+   "run_facts": [],
+   "judge_concepts": {
+    "running_extreme": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "running_extreme",
+   "judge_why": "The student writes a correct pseudocode plan for finding the minimum in one pass (start from the first element, replace best whenever a smaller element appears, print it after the loop), which solves the task as a whole; it is a familiar pattern, so it counts as the running-extreme plan used for the minimum (L3), not transfer to a new problem (L4).",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S021",
+   "text": "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G, so overall I think the answer would be AEG, which makes sense because…",
+   "label": "L2",
+   "label_why": "A long but rule-correct line-by-line trace with the values that decide each branch; no purpose is stated.",
+   "final": "L4",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_else_statement",
+     4.0
+    ],
+    [
+     "remainder_operator",
+     2.7
+    ],
+    [
+     "arithmetic_operators",
+     2.33
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "print",
+     2.0
+    ],
+    [
+     "assignment",
+     1.41
+    ],
+    [
+     "standard_output",
+     1.36
+    ],
+    [
+     "if_statement",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "if_else_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "if_else_statement": "L2",
+    "remainder_operator": "L2",
+    "print": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "if_else_statement",
+   "judge_why": "The student follows the code in order with x = 17. They work out each condition, pick the right branch of both the outer and inner if-else, and keep going after the inner if-else, which gives AEG. The sentence giving a purpose is cut off, so the answer never says what the code is for.",
+   "max_level": "L4",
+   "gold": []
+  },
+  {
+   "id": "S022",
+   "text": "It keeps jumping up by 3 and quits after the pass where it hits a multiple of 5.",
+   "label": "L3",
+   "label_why": "States what the loop does as a whole (steps of 3, stops after the first multiple of 5), deduced from the code.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "while_loop",
+     1.34
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "if_statement",
+     1.0
+    ],
+    [
+     "block",
+     1.0
+    ],
+    [
+     "variable",
+     1.0
+    ],
+    [
+     "standard_output",
+     1.0
+    ],
+    [
+     "assignment",
+     1.0
+    ]
+   ],
+   "extra": [
+    "loop_control"
+   ],
+   "top_linked": "while_loop",
+   "run_facts": [],
+   "judge_concepts": {
+    "while_loop": "L3",
+    "loop_control": "L1"
+   },
+   "judge_answer": "L3",
+   "judge_main": "while_loop",
+   "judge_why": "In one sentence the student correctly ties the multiple-of-5 check inside the body to when the loop ends: after that pass finishes, not partway through it. They don't list the output (1 4 7 10), but their stopping explanation is relational and taken from the code.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S023",
+   "text": "the swich no have break so it go down all the case and result become 50",
+   "label": "L3",
+   "label_why": "Relates the missing breaks to the fall-through that leaves result at 50; correct despite the English.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "array_aliasing",
+     2.0
+    ],
+    [
+     "break_statement",
+     1.46
+    ],
+    [
+     "block",
+     1.0
+    ],
+    [
+     "conditional_operator",
+     1.0
+    ]
+   ],
+   "extra": [
+    "switch_statement"
+   ],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {
+    "switch_statement": "L2",
+    "break_statement": "L1"
+   },
+   "judge_answer": "L2",
+   "judge_main": "switch_statement",
+   "judge_why": "The student reaches the correct value of 50 for value = 2 by applying Java's fall-through rule: with no break, execution runs on to default. They justify the result but don't trace which cases run or say what the code is for.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S026",
+   "text": "a becomes b and b becomes a.",
+   "label": "L1",
+   "label_why": "A bare statement of the outcome with no reason (and it does not mention t), so not levelled above L1.",
+   "final": "none",
+   "match": false,
+   "set_by": "per-concept fusion",
+   "gates": [
+    "content"
+   ],
+   "linked": [
+    [
+     "assignment",
+     2.63
+    ],
+    [
+     "array_aliasing",
+     1.87
+    ],
+    [
+     "variable",
+     1.75
+    ],
+    [
+     "variable_swap",
+     1.41
+    ],
+    [
+     "primitive_type",
+     1.28
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "int",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {},
+   "judge_answer": null,
+   "judge_main": null,
+   "judge_why": null,
+   "max_level": "none",
+   "gold": []
+  },
+  {
+   "id": "S028",
+   "text": "remainder modulus widening double concatenation println newline",
+   "label": "L1",
+   "label_why": "Only names concepts as keywords; nothing is applied to this code.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     5.0
+    ],
+    [
+     "println",
+     3.75
+    ],
+    [
+     "remainder_operator",
+     3.62
+    ],
+    [
+     "string_concatenation",
+     3.39
+    ],
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "arithmetic_operators",
+     3.0
+    ],
+    [
+     "standard_output",
+     2.53
+    ],
+    [
+     "string_conversion",
+     2.1
+    ]
+   ],
+   "extra": [],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "double": "L1",
+    "println": "L1",
+    "remainder_operator": "L1",
+    "string_concatenation": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "remainder_operator",
+   "judge_why": "The answer is only a list of keywords (remainder, modulus, widening, double, concatenation, println, newline). It names the right parts but never applies them to 9, 5 or 26.3, never gives the output, and never explains how num4 = 30.3 is computed.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S034",
+   "text": "Why does Java have both char and String?",
+   "label": "none",
+   "label_why": "A question that makes no claim.",
+   "final": "none",
+   "match": true,
+   "set_by": "no-claim check",
+   "gates": [
+    "no_claim"
+   ],
+   "linked": [],
+   "extra": [],
+   "top_linked": null,
+   "run_facts": [],
+   "judge_concepts": {},
+   "judge_answer": null,
+   "judge_main": null,
+   "judge_why": null,
+   "max_level": "none",
+   "gold": []
+  },
+  {
+   "id": "S036",
+   "text": "double min = data[0]; for (double v : data) min = Math.min(min, v); System.out.println(min);",
+   "label": "L4",
+   "label_why": "Writes correct new code (for-each with Math.min) that solves the task.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     4.37
+    ],
+    [
+     "double",
+     4.02
+    ],
+    [
+     "running_extreme",
+     3.1
+    ],
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "standard_output",
+     2.7
+    ],
+    [
+     "math_library",
+     2.7
+    ],
+    [
+     "method_call",
+     2.62
+    ],
+    [
+     "empty_statement",
+     2.27
+    ]
+   ],
+   "extra": [],
+   "top_linked": "println",
+   "run_facts": [],
+   "judge_concepts": {
+    "running_extreme": "L3",
+    "math_library": "L2"
+   },
+   "judge_answer": "L3",
+   "judge_main": "running_extreme",
+   "judge_why": "The code correctly combines a start value of data[0], a single for-each pass and Math.min into a running-minimum plan, then prints the result; it adapts the familiar running-extreme plan, which counts as L3, not L4.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S037",
+   "text": "in swap: num1 = 42 num2 = 7, then in main: num1 = 7 num2 = 42. Java passes copies of the values, so main's variables do not change.",
+   "label": "L3",
+   "label_why": "Gives both outputs and relates them to the rule that Java passes copies of the int values.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "variable",
+     2.92
+    ],
+    [
+     "assignment",
+     2.83
+    ],
+    [
+     "variable_swap",
+     2.5
+    ],
+    [
+     "arithmetic_operators",
+     1.65
+    ],
+    [
+     "primitive_type",
+     1.63
+    ],
+    [
+     "method_call",
+     1.62
+    ],
+    [
+     "expression",
+     1.33
+    ],
+    [
+     "standard_output",
+     1.32
+    ]
+   ],
+   "extra": [],
+   "top_linked": "variable",
+   "run_facts": [],
+   "judge_concepts": {
+    "variable": "L2",
+    "variable_swap": "L1",
+    "method_call": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "method_call",
+   "judge_why": "The student gives both output lines correctly and explains them with the pass-by-value rule applied to this call, but does not trace the swap or relate parameter passing to another construct.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S038",
+   "text": "finalAdjust(-1) gives 5, so reCalculate returns 2 and num2 = 27.",
+   "label": "L2",
+   "label_why": "A rule-correct chain of calls with one slip: finalAdjust(-1) takes the false branch and is -10, not 5 (so num2 is 20).",
+   "final": "L2",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     2.15
+    ],
+    [
+     "increment_operators",
+     1.24
+    ],
+    [
+     "string_concatenation",
+     1.03
+    ],
+    [
+     "string_conversion",
+     1.0
+    ],
+    [
+     "array_aliasing",
+     1.0
+    ]
+   ],
+   "extra": [
+    "int",
+    "compound_assignment",
+    "conditional_operator"
+   ],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {
+    "assignment": "L2",
+    "int": "L2",
+    "compound_assignment": "L2",
+    "conditional_operator": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "conditional_operator",
+   "judge_why": "The student traces the calls in order with values (-1, then finalAdjust, then /2, then 25+...). But they pick the true branch for -1 >= 0, which is a slip in an otherwise rule-correct trace: finalAdjust(-1) is really -10, reCalculate returns -5, and num2 = 20. They also leave out num1 = -11 and never state the call order.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S039",
+   "text": "for (...) { if (arr[i] == key) return i; else return -1; }",
+   "label": "L0",
+   "label_why": "The new code returns -1 after the first non-matching element, so it does not search the array (and it finds the first match, not the last).",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_else_statement",
+     3.67
+    ],
+    [
+     "indexing",
+     3.64
+    ],
+    [
+     "expression",
+     3.04
+    ],
+    [
+     "arithmetic_operators",
+     3.0
+    ],
+    [
+     "if_statement",
+     2.65
+    ],
+    [
+     "array_declaration",
+     2.34
+    ],
+    [
+     "loop_control",
+     2.29
+    ]
+   ],
+   "extra": [
+    "block"
+   ],
+   "top_linked": "if_else_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "indexing": "L1",
+    "block": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "block",
+   "judge_why": "The student's code puts `else return -1;` inside the loop body as if it ran once after the loop. In Java it runs on the first pass where the element does not match, so the method gives up after checking only arr[0]. Even when it does match, it returns the first index that matches, not the last.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S041",
+   "text": "JAVA, because toUpperCase changes name.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: toUpperCase returns a new String and does not change name, so java is printed.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     2.59
+    ],
+    [
+     "identifier",
+     1.36
+    ],
+    [
+     "variable",
+     1.26
+    ],
+    [
+     "standard_output",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "string_literal",
+     1.0
+    ]
+   ],
+   "extra": [
+    "string_type",
+    "method_call"
+   ],
+   "top_linked": "println",
+   "run_facts": [],
+   "judge_concepts": {
+    "string_type": "L0",
+    "method_call": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "string_type",
+   "judge_why": "The student predicts JAVA because they believe name.toUpperCase() changes name. In Java a String is immutable: toUpperCase returns a new String, the code throws it away, and name stays \"java\", so the program prints java.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S042",
+   "text": "public static double calculateMPG(double miles, double gallons) { double mpg = miles / gallons; }",
+   "label": "L0",
+   "label_why": "The new method has no return statement, so it does not compile; new code must be correct.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "block",
+     2.0
+    ]
+   ],
+   "extra": [
+    "double",
+    "arithmetic_operators",
+    "variable",
+    "assignment"
+   ],
+   "top_linked": "primitive_type",
+   "run_facts": [],
+   "judge_concepts": {
+    "double": "L2",
+    "arithmetic_operators": "L3",
+    "variable": "L2",
+    "assignment": "L2"
+   },
+   "judge_answer": "L3",
+   "judge_main": "arithmetic_operators",
+   "judge_why": "The student turns the MPG formula into Java code correctly with a double division, double mpg = miles / gallons. However, the method never returns mpg, so it fails to compile with a 'missing return statement' error and does not do what was asked. New code must be correct to reach L4, so this is an L3 answer with an error.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S043",
+   "text": "i is fine because it is only the loop index. c should be passCount, since it counts the passing scores. It still prints 3.",
+   "label": "L3",
+   "label_why": "Relates each name to its role (loop index vs counter) and states that names do not change the output.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "indexing",
+     2.21
+    ],
+    [
+     "for_loop",
+     1.61
+    ],
+    [
+     "loop_control",
+     1.47
+    ],
+    [
+     "loop_variable",
+     1.47
+    ],
+    [
+     "increment_operators",
+     1.38
+    ],
+    [
+     "array_traversal",
+     1.38
+    ],
+    [
+     "counter_pattern",
+     1.29
+    ],
+    [
+     "variable",
+     1.21
+    ]
+   ],
+   "extra": [],
+   "top_linked": "indexing",
+   "run_facts": [
+    "confirmed by the run: prints 3"
+   ],
+   "judge_concepts": {
+    "loop_variable": "L1",
+    "counter_pattern": "L3",
+    "variable": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "variable",
+   "judge_why": "The student renames only c, giving a name based on what the code makes it hold ('it counts the passing scores'), and keeps i as the loop index, so they link each name to its role; 'It still prints 3' is correct but is not explained by the rule that names do not affect values, so it stays at L3.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S047",
+   "text": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+   "label": "L4",
+   "label_why": "Correctly predicts a change (%.3f) and that the stored value is conserved; it does not give the output that was asked for.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "formatted_output",
+     5.56
+    ],
+    [
+     "double",
+     3.17
+    ],
+    [
+     "arithmetic_operators",
+     1.27
+    ],
+    [
+     "standard_output",
+     1.22
+    ],
+    [
+     "assignment",
+     1.2
+    ],
+    [
+     "string_literal",
+     1.15
+    ],
+    [
+     "variable",
+     1.1
+    ],
+    [
+     "remainder_operator",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "formatted_output",
+   "run_facts": [],
+   "judge_concepts": {
+    "formatted_output": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "formatted_output",
+   "judge_why": "The student doesn't trace the given %6.2f call. Instead they correctly predict what a precision change to %.3f would print (3.142, no padding) and say what stays the same: the stored value of price is unchanged and only the printed digits differ.",
+   "max_level": "L4",
+   "gold": []
+  },
+  {
+   "id": "S048",
+   "text": "(c) It prints 8 2 and skips abc.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: readInt does not skip abc, it fails at run time.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     1.48
+    ],
+    [
+     "string_conversion",
+     1.3
+    ],
+    [
+     "string_concatenation",
+     1.27
+    ],
+    [
+     "logical_operators",
+     1.07
+    ],
+    [
+     "print",
+     1.04
+    ],
+    [
+     "standard_output",
+     1.04
+    ],
+    [
+     "block",
+     1.03
+    ]
+   ],
+   "extra": [
+    "statement"
+   ],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {
+    "statement": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "statement",
+   "judge_why": "The student claims the program prints 8 2 by skipping abc, but StdIn.readInt() on the token abc throws an InputMismatchException; the loop stops abruptly, so the println is never reached and the student's rule that bad input is quietly ignored contradicts Java.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S049",
+   "text": "I read two numbers in each pass and with 5 3 8 it crashes at the end. Why?",
+   "label": "none",
+   "label_why": "A question about the student's own code that makes no claim about this code.",
+   "final": "none",
+   "match": true,
+   "set_by": "no-claim check",
+   "gates": [
+    "no_claim"
+   ],
+   "linked": [],
+   "extra": [],
+   "top_linked": null,
+   "run_facts": [],
+   "judge_concepts": {},
+   "judge_answer": null,
+   "judge_main": null,
+   "judge_why": null,
+   "max_level": "none",
+   "gold": []
+  },
+  {
+   "id": "S050",
+   "text": "StdIn is a variable that holds all the numbers, like an array.",
+   "label": "L0",
+   "label_why": "Wrong model of standard input: StdIn is a stream read in order, not a variable holding all values.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "standard_input",
+     3.84
+    ],
+    [
+     "variable",
+     2.18
+    ],
+    [
+     "read_loop_idiom",
+     1.96
+    ],
+    [
+     "end_of_input",
+     1.49
+    ],
+    [
+     "accumulator_pattern",
+     1.18
+    ],
+    [
+     "assignment",
+     1.16
+    ],
+    [
+     "standard_output",
+     1.14
+    ],
+    [
+     "while_loop",
+     1.06
+    ]
+   ],
+   "extra": [
+    "stream_model"
+   ],
+   "top_linked": "standard_input",
+   "run_facts": [],
+   "judge_concepts": {
+    "standard_input": "L0",
+    "variable": "L0",
+    "stream_model": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "standard_input",
+   "judge_why": "The student does not answer (a), (b) or (c); they only say StdIn is a variable that stores all the numbers like an array, which is wrong because StdIn is a library whose reads take each token from a stream once.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S051",
+   "text": "I removed if (v >= 0) because rain values are always fine.",
+   "label": "L0",
+   "label_why": "Drops the filter on an assumption about the data; the task requires negative values to be excluded.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "comparison_operators",
+     2.0
+    ],
+    [
+     "if_statement",
+     2.0
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "empty_statement",
+     1.0
+    ],
+    [
+     "while_loop",
+     1.0
+    ],
+    [
+     "standard_input",
+     1.0
+    ],
+    [
+     "variable",
+     1.0
+    ],
+    [
+     "block",
+     1.0
+    ]
+   ],
+   "extra": [
+    "sentinel_loop"
+   ],
+   "top_linked": "comparison_operators",
+   "run_facts": [],
+   "judge_concepts": {
+    "sentinel_loop": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "sentinel_loop",
+   "judge_why": "The student does not trace the code or say what it prints. Instead they delete the v >= 0 filter on the everyday assumption that rain values are always fine, even though the given input contains -2, so negative values would be added to sum and count and the average would be wrong.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S052",
+   "text": "1: nothing, the numbers go into data.txt. 2: the average. 3: an average of 5 new numbers, no file. args is empty.",
+   "label": "L3",
+   "label_why": "Relates redirection and piping to standard input and output for all three commands, including that args is empty.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "command_line_args",
+     3.2
+    ],
+    [
+     "redirection",
+     2.71
+    ],
+    [
+     "piping",
+     2.31
+    ],
+    [
+     "arithmetic_operators",
+     2.12
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "remainder_operator",
+     2.0
+    ],
+    [
+     "run",
+     2.0
+    ],
+    [
+     "args_length",
+     1.5
+    ]
+   ],
+   "extra": [],
+   "top_linked": "command_line_args",
+   "run_facts": [],
+   "judge_concepts": {
+    "command_line_args": "L1",
+    "redirection": "L2",
+    "piping": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "redirection",
+   "judge_why": "The answer gives the right terminal result for each of the three commands, with a short reason for each (output goes to data.txt, no file is made), and correctly says args is empty, but it never connects the parts into one structure.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S054",
+   "text": "Do I need to change my program to read from a file?",
+   "label": "none",
+   "label_why": "A question that makes no claim.",
+   "final": "none",
+   "match": true,
+   "set_by": "no-claim check",
+   "gates": [
+    "no_claim"
+   ],
+   "linked": [],
+   "extra": [],
+   "top_linked": null,
+   "run_facts": [],
+   "judge_concepts": {},
+   "judge_answer": null,
+   "judge_main": null,
+   "judge_why": null,
+   "max_level": "none",
+   "gold": []
+  },
+  {
+   "id": "S057",
+   "text": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+   "label": "L3",
+   "label_why": "Locates the integer division, fixes it with a cast and checks that the row then sums to 1.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "int",
+     4.78
+    ],
+    [
+     "explicit_cast",
+     4.01
+    ],
+    [
+     "type_conversion",
+     3.4
+    ],
+    [
+     "double",
+     3.34
+    ],
+    [
+     "integer_division",
+     2.92
+    ],
+    [
+     "expression",
+     2.31
+    ],
+    [
+     "arithmetic_operators",
+     2.26
+    ],
+    [
+     "primitive_type",
+     2.2
+    ]
+   ],
+   "extra": [
+    "normalization"
+   ],
+   "top_linked": "int",
+   "run_facts": [],
+   "judge_concepts": {
+    "int": "L3",
+    "explicit_cast": "L2",
+    "type_conversion": "L2",
+    "double": "L3",
+    "integer_division": "L3",
+    "normalization": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "normalization",
+   "judge_why": "The student says p ends up all zeros because int / int is integer division, so it is not a probability row, and fixes it with a cast to double that gives 0, 0, 0.4, 0.4, 0.2, which sums to 1; finding and fixing one given failing case is L3.",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S060",
+   "text": "An all-zero row is fine; it just means the page has no links.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: every row of the transition matrix must sum to 1.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "dangling_pages",
+     1.54
+    ],
+    [
+     "input_graph",
+     1.31
+    ],
+    [
+     "primitive_type",
+     1.0
+    ],
+    [
+     "indexing",
+     1.0
+    ],
+    [
+     "block",
+     1.0
+    ],
+    [
+     "array_creation",
+     1.0
+    ]
+   ],
+   "extra": [
+    "transition_matrix"
+   ],
+   "top_linked": "arithmetic_operators",
+   "run_facts": [],
+   "judge_concepts": {
+    "dangling_pages": "L0",
+    "transition_matrix": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "transition_matrix",
+   "judge_why": "The student says an all-zero row is an acceptable probability row, which is the documented misconception RowsNeedNotSumToOne. They also miss that the zeros come from integer division (0/5, 2/5 and 1/5 are all 0 in int arithmetic), since this page has outDegree 5 and is not a page without links.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S061",
+   "text": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1. (b) the sums only reach 0.9, so next stays -1 because the row does not add to 1.",
+   "label": "L3",
+   "label_why": "Traces both cases and relates the stuck case in (b) to the row not summing to 1.",
+   "final": "L2",
+   "match": false,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     3.18
+    ],
+    [
+     "arithmetic_operators",
+     2.35
+    ],
+    [
+     "accumulator_pattern",
+     2.25
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "compound_assignment",
+     1.71
+    ],
+    [
+     "int",
+     1.34
+    ],
+    [
+     "increment_operators",
+     1.15
+    ]
+   ],
+   "extra": [],
+   "top_linked": "double",
+   "run_facts": [
+    "confirmed by the run: sum = 0.1",
+    "confirmed by the run: next = 1",
+    "confirmed by the run: next = -1"
+   ],
+   "judge_concepts": {
+    "accumulator_pattern": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "accumulator_pattern",
+   "judge_why": "For the changed row the student does more than re-trace: they say why next stays -1. The running sum ends at 0.9, which is below r = 0.95, so r < sum never holds, and that happens because the row does not add up to 1.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S065",
+   "text": "Only estimates; 100 moves is far too few and the zeros mean nothing. In the long run the start page does not matter.",
+   "label": "L4",
+   "label_why": "Reasons beyond the given run: 100 moves only estimate the ranks, and the long-run ranks do not depend on the start page.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "long_type",
+     3.0
+    ],
+    [
+     "run",
+     2.0
+    ],
+    [
+     "primitive_type",
+     2.0
+    ],
+    [
+     "power_method",
+     1.0
+    ],
+    [
+     "double",
+     1.0
+    ],
+    [
+     "conditional_operator",
+     1.0
+    ]
+   ],
+   "extra": [
+    "frequency_counting",
+    "simulation_loop"
+   ],
+   "top_linked": "long_type",
+   "run_facts": [],
+   "judge_concepts": {
+    "frequency_counting": "L1",
+    "simulation_loop": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "simulation_loop",
+   "judge_why": "The student correctly says the 100-move output is only a rough estimate, not the true ranks, and predicts that starting at page 3 would not change the long-run ranks. That is a correct prediction about a change to the given run, which is L4.",
+   "max_level": "L4",
+   "gold": []
+  },
+  {
+   "id": "S068",
+   "text": "They are estimates. But starting at page 3 would change the ranks.",
+   "label": "L0",
+   "label_why": "The second claim applies a wrong rule (the start page changes the long-run ranks), although \"estimates\" is right.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "frequency_counting",
+     1.71
+    ],
+    [
+     "power_method",
+     1.51
+    ],
+    [
+     "run",
+     1.0
+    ],
+    [
+     "double",
+     1.0
+    ],
+    [
+     "conditional_operator",
+     1.0
+    ]
+   ],
+   "extra": [
+    "markov_chain"
+   ],
+   "top_linked": "frequency_counting",
+   "run_facts": [],
+   "judge_concepts": {
+    "frequency_counting": "L1",
+    "markov_chain": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "markov_chain",
+   "judge_why": "The student is right that the printed values are only estimates, but says that starting at page 3 would change the ranks. That is the StartPageMatters misconception: the random-surfer chain mixes, so its long-run probabilities are the same from every starting page.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S069",
+   "text": "(a) No, 0 1 is only a link from 0 to 1. (b) No, it is where you are after one move; you keep multiplying until it stops changing.",
+   "label": "L3",
+   "label_why": "Both parts correct with reasons: links are ordered, and one multiplication is one move that must be repeated.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     1.48
+    ],
+    [
+     "expression",
+     1.38
+    ],
+    [
+     "arithmetic_operators",
+     1.3
+    ],
+    [
+     "input_graph",
+     1.0
+    ],
+    [
+     "array_initializer",
+     1.0
+    ],
+    [
+     "block",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {
+    "input_graph": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "input_graph",
+   "judge_why": "The student applies the ordered-pair rule to the line in tiny.txt and correctly says one multiplication gives the distribution after one move, not the page rank, but does not go on to state the purpose of the whole program.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S073",
+   "text": "Turn 1: \"result is 20.\"\nProbe: \"If value is 1, what is result?\"\nTurn 2: \"10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.\"",
+   "label": "L2",
+   "label_why": "After a wrong first answer, the student retraces the fall-through value by value and corrects it to 50.",
+   "final": "L0",
+   "match": false,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "conditional_operator",
+     3.24
+    ],
+    [
+     "assignment",
+     2.07
+    ],
+    [
+     "statement",
+     2.01
+    ],
+    [
+     "array_aliasing",
+     2.0
+    ],
+    [
+     "string_literal",
+     2.0
+    ],
+    [
+     "block",
+     1.0
+    ]
+   ],
+   "extra": [
+    "switch_statement"
+   ],
+   "top_linked": "conditional_operator",
+   "run_facts": [
+    "stated result = 20 (final); the code gives result = 50"
+   ],
+   "judge_concepts": {
+    "switch_statement": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "switch_statement",
+   "judge_why": "The student first applied the no-fall-through rule and said 20, then traced value 1 through 10, 20, 40, 50, saw that execution falls through, and correctly concluded that for value 2 the result is also 50.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S076",
+   "text": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "label": "L0",
+   "label_why": "Uses data2.length(), a wrong rule (length is a field); the new code does not compile.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "array_creation",
+     4.7
+    ],
+    [
+     "int",
+     4.21
+    ],
+    [
+     "for_loop",
+     3.6
+    ],
+    [
+     "increment_operators",
+     3.35
+    ],
+    [
+     "primitive_type",
+     3.17
+    ],
+    [
+     "array_copy",
+     3.1
+    ],
+    [
+     "loop_control",
+     2.98
+    ],
+    [
+     "array_traversal",
+     2.93
+    ]
+   ],
+   "extra": [
+    "length_field"
+   ],
+   "top_linked": "array_creation",
+   "run_facts": [],
+   "judge_concepts": {
+    "array_creation": "L1",
+    "array_copy": "L2",
+    "array_traversal": "L2",
+    "length_field": "L0"
+   },
+   "judge_answer": "L2",
+   "judge_main": "array_copy",
+   "judge_why": "The answer makes a new array and copies data2 into it one element at a time, which is the right plan; but it writes data2.length(), which is wrong because length is a field, not a method, so the code does not compile. That makes this an L2 answer with an error.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S080",
+   "text": "Two compile errors first: the class must be in Greeting.java and the ; is missing. After that it compiles, but args[1] crashes at run time because Ann is args[0]. The comment never runs.",
+   "label": "L3",
+   "label_why": "Relates compile-time and run-time errors in the right order and notes the comment never runs.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "command_line_args",
+     4.28
+    ],
+    [
+     "compile",
+     4.02
+    ],
+    [
+     "program_text",
+     3.57
+    ],
+    [
+     "run",
+     3.43
+    ],
+    [
+     "comment",
+     3.36
+    ],
+    [
+     "compile_time_error",
+     3.06
+    ],
+    [
+     "run_time_error",
+     2.23
+    ],
+    [
+     "indexing",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "command_line_args",
+   "run_facts": [],
+   "judge_concepts": {
+    "command_line_args": "L2",
+    "program_text": "L3",
+    "comment": "L2",
+    "compile_time_error": "L3",
+    "run_time_error": "L3",
+    "indexing": "L2"
+   },
+   "judge_answer": "L3",
+   "judge_main": "compile_time_error",
+   "judge_why": "The answer finds both compile-time errors in the given code, says they must be fixed before the program can run, and then names the run-time crash at args[1]; this ties compile-time and run-time errors together for this one program, which is L3, but it doesn't say which compile error javac reports first (it would report the missing ; before the file-name error).",
+   "max_level": "L3",
+   "gold": []
+  },
+  {
+   "id": "S084",
+   "text": "Only start, because done is inside the if and 3 is not > 5.",
+   "label": "L0",
+   "label_why": "Reads the indentation as a block: without braces only the first println belongs to the if, so done is printed.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     3.76
+    ],
+    [
+     "class_declaration",
+     2.0
+    ],
+    [
+     "main_method",
+     1.59
+    ],
+    [
+     "block",
+     1.25
+    ],
+    [
+     "statement",
+     1.24
+    ],
+    [
+     "run",
+     1.11
+    ],
+    [
+     "variable",
+     1.0
+    ],
+    [
+     "int",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "if_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "if_statement": "L1",
+    "block": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "block",
+   "judge_why": "The student puts the indented println(\"done\") inside the braceless if, but in Java only the first statement after the if header is its body; indentation does not matter, so `java Order 3` prints start and then done. The answer also skips `java Order five`, where Integer.parseInt throws NumberFormatException before anything is printed.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S088",
+   "text": "There is a Big.class file now, but nothing is printed because the program has not run yet.",
+   "label": "L2",
+   "label_why": "Correctly applies the compile/run rule to this situation: the class file exists, nothing has run yet.",
+   "final": "L2",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "program_text",
+     2.75
+    ],
+    [
+     "run",
+     2.39
+    ],
+    [
+     "reading_error_messages",
+     1.0
+    ]
+   ],
+   "extra": [
+    "compile"
+   ],
+   "top_linked": "program_text",
+   "run_facts": [],
+   "judge_concepts": {
+    "run": "L1",
+    "compile": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "compile",
+   "judge_why": "The answer applies the compile rule to this one javac step. It says the step made Big.class and that compiling prints no program output because the program has not run. It does not explain that java Big later loads that Big.class, so it does not reach the relational level.",
+   "max_level": "L2",
+   "gold": [
+    "compile",
+    "run"
+   ]
+  },
+  {
+   "id": "S089",
+   "text": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "label": "L3",
+   "label_why": "Relates small compile-and-test steps to finding each error next to the code just written.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "compile",
+     3.68
+    ],
+    [
+     "incremental_development",
+     2.29
+    ],
+    [
+     "reading_error_messages",
+     2.06
+    ],
+    [
+     "program_text",
+     2.04
+    ],
+    [
+     "testing",
+     1.4
+    ],
+    [
+     "run",
+     1.04
+    ]
+   ],
+   "extra": [],
+   "top_linked": "compile",
+   "run_facts": [],
+   "judge_concepts": {
+    "incremental_development": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "incremental_development",
+   "judge_why": "The answer explains why small steps help, and the reason comes from the situation: if you compile after every few lines, any error is in the code you just wrote, so it is easy to find.",
+   "max_level": "L3",
+   "gold": [
+    "incremental_development"
+   ]
+  },
+  {
+   "id": "S091",
+   "text": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+   "label": "L3",
+   "label_why": "Locates the error in the given failing line and names it (unclosed string literal).",
+   "final": "L4",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "string_literal",
+     5.38
+    ],
+    [
+     "statement",
+     2.86
+    ],
+    [
+     "println",
+     2.54
+    ],
+    [
+     "standard_output",
+     2.52
+    ],
+    [
+     "print",
+     2.23
+    ],
+    [
+     "method_call",
+     2.0
+    ],
+    [
+     "empty_statement",
+     2.0
+    ],
+    [
+     "string_type",
+     1.92
+    ]
+   ],
+   "extra": [
+    "compile_time_error"
+   ],
+   "top_linked": "string_literal",
+   "run_facts": [],
+   "judge_concepts": {
+    "string_literal": "L3",
+    "compile_time_error": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "string_literal",
+   "judge_why": "The student finds the one mistake in the classmate's line (the missing closing quote), names the rule it breaks and correctly predicts the compile-time error 'unclosed string literal'. This locates the mistake for one given failing case, which is L3; the student does not state the general class of trigger needed for L4.",
+   "max_level": "L4",
+   "gold": [
+    "compile_time_error",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "S092",
+   "text": "main() without String[] args is fine because the program uses no arguments.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: java needs main(String[] args) as the entry point.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "main_method",
+     4.35
+    ],
+    [
+     "command_line_args",
+     3.04
+    ],
+    [
+     "array_declaration",
+     2.0
+    ],
+    [
+     "standard_output",
+     1.12
+    ],
+    [
+     "print",
+     1.06
+    ],
+    [
+     "println",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ],
+    [
+     "comment",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "main_method",
+   "run_facts": [],
+   "judge_concepts": {
+    "main_method": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "main_method",
+   "judge_why": "The student says public static void main() is a fine entry point because the program uses no arguments. That is the MainWithoutStringArgs wrong rule: Java needs public static void main(String[] args) to launch, and without it java Hello reports that no main method was found.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S093",
+   "text": "Use (a + b) / 2.0: parentheses for the order and 2.0 so the division is not integer division.",
+   "label": "L3",
+   "label_why": "Locates both causes (order and integer division) and fixes the given failing case.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     4.16
+    ],
+    [
+     "integer_division",
+     3.44
+    ],
+    [
+     "expression",
+     2.83
+    ],
+    [
+     "int",
+     2.79
+    ],
+    [
+     "arithmetic_operators",
+     2.69
+    ],
+    [
+     "explicit_cast",
+     1.17
+    ],
+    [
+     "primitive_type",
+     1.17
+    ],
+    [
+     "method_call",
+     1.07
+    ]
+   ],
+   "extra": [],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "double": "L3",
+    "integer_division": "L3",
+    "expression": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "integer_division",
+   "judge_why": "The student finds both faults in the given code (b / 2 is done first, and it is int division because both operands are ints) and fixes them with (a + b) / 2.0 for a reason; fixing one given failing case is L3.",
+   "max_level": "L3",
+   "gold": [
+    "integer_division",
+    "operator_precedence"
+   ]
+  },
+  {
+   "id": "S094",
+   "text": "It crashes when it runs, because args is empty and args[0] is out of bounds.",
+   "label": "L4",
+   "label_why": "States the input class (no argument) under which the program fails and why (args is empty).",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "command_line_args",
+     4.24
+    ],
+    [
+     "run",
+     3.19
+    ],
+    [
+     "array_bounds",
+     2.38
+    ],
+    [
+     "indexing",
+     2.0
+    ],
+    [
+     "class_declaration",
+     2.0
+    ],
+    [
+     "run_time_error",
+     1.93
+    ],
+    [
+     "parsing",
+     1.37
+    ],
+    [
+     "block",
+     1.25
+    ]
+   ],
+   "extra": [
+    "args_length"
+   ],
+   "top_linked": "command_line_args",
+   "run_facts": [],
+   "judge_concepts": {
+    "command_line_args": "L3",
+    "array_bounds": "L2",
+    "run_time_error": "L2",
+    "args_length": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "command_line_args",
+   "judge_why": "The student links the missing argument (args is empty) to args[0] being out of bounds, which explains why this run fails. That relates the command-line arguments to args' length and is correct.",
+   "max_level": "L4",
+   "gold": [
+    "array_bounds",
+    "command_line_args"
+   ]
+  },
+  {
+   "id": "S095",
+   "text": "String; it is a class. The other four are primitive.",
+   "label": "L1",
+   "label_why": "States a correct definition (String is a class) without applying it to the code.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "primitive_type",
+     4.14
+    ],
+    [
+     "string_type",
+     3.35
+    ],
+    [
+     "primitive_vs_reference",
+     3.19
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "variable",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "primitive_type",
+   "run_facts": [],
+   "judge_concepts": {
+    "primitive_type": "L1",
+    "string_type": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "primitive_type",
+   "judge_why": "The student gives the correct answer (String) and supports it with one correct rule: String is a class, so it is not a primitive type. The answer does not trace any code or relate it to anything else.",
+   "max_level": "L1",
+   "gold": [
+    "primitive_type",
+    "primitive_vs_reference",
+    "string_type"
+   ]
+  },
+  {
+   "id": "S097",
+   "text": "67, a tab, C; then A12; then 662.",
+   "label": "L1",
+   "label_why": "Correct three lines with no justification.",
+   "final": "L1",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "escape_sequences",
+     1.12
+    ],
+    [
+     "char_arithmetic",
+     1.1
+    ],
+    [
+     "explicit_cast",
+     1.01
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "variable",
+     1.0
+    ]
+   ],
+   "extra": [
+    "arithmetic_operators"
+   ],
+   "top_linked": "escape_sequences",
+   "run_facts": [
+    "confirmed by the run: prints 67 C",
+    "confirmed by the run: prints A12",
+    "confirmed by the run: prints 662"
+   ],
+   "judge_concepts": {
+    "escape_sequences": "L1",
+    "char_arithmetic": "L1",
+    "explicit_cast": "L1",
+    "arithmetic_operators": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "char_arithmetic",
+   "judge_why": "All three printed lines are right, but the student gives no reasons, so this is a bare correct result and stays at L1.",
+   "max_level": "L1",
+   "gold": [
+    "char_arithmetic",
+    "escape_sequences"
+   ]
+  },
+  {
+   "id": "S098",
+   "text": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "label": "L3",
+   "label_why": "Relates Math.abs of MIN_VALUE to the int range: the positive value does not fit, so it wraps.",
+   "final": "L4",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "int",
+     4.5
+    ],
+    [
+     "primitive_type",
+     3.49
+    ],
+    [
+     "int_literal_limit",
+     3.0
+    ],
+    [
+     "arithmetic_operators",
+     2.38
+    ],
+    [
+     "expression",
+     2.11
+    ],
+    [
+     "variable",
+     2.08
+    ],
+    [
+     "running_extreme",
+     2.0
+    ]
+   ],
+   "extra": [
+    "integer_constants"
+   ],
+   "top_linked": "int",
+   "run_facts": [
+    "confirmed by the run: Math.abs(Integer.MIN_VALUE) = -2147483648"
+   ],
+   "judge_concepts": {
+    "int": "L2",
+    "integer_constants": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "integer_constants",
+   "judge_why": "The student gives the correct result of Math.abs(Integer.MIN_VALUE) and backs it with the int range rule applied to this one value, but does not explain how overflow works or reason beyond this case.",
+   "max_level": "L4",
+   "gold": [
+    "int",
+    "overflow"
+   ]
+  },
+  {
+   "id": "S099",
+   "text": "6.02e23 is 6.02 times e to the power 23.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: e means times ten to the power, not Euler's number.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "scientific_notation",
+     4.73
+    ],
+    [
+     "double",
+     3.16
+    ],
+    [
+     "int",
+     1.0
+    ],
+    [
+     "arithmetic_operators",
+     1.0
+    ],
+    [
+     "integer_division",
+     1.0
+    ],
+    [
+     "floating_point_precision",
+     1.0
+    ],
+    [
+     "primitive_type",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "scientific_notation",
+   "run_facts": [],
+   "judge_concepts": {
+    "scientific_notation": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "scientific_notation",
+   "judge_why": "The student reads e in 6.02e23 as Euler's number (6.02 × e^23). That is the documented ExponentIsPower misconception: in a Java literal, e means times ten to the power.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S100",
+   "text": "Dividing by zero gives an error.",
+   "label": "L0",
+   "label_why": "States division by zero as always an error, which contradicts Java for 1.0 / 0 (Infinity), the difference the question asks for.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "division_by_zero",
+     3.45
+    ],
+    [
+     "integer_division",
+     2.17
+    ],
+    [
+     "int",
+     1.75
+    ],
+    [
+     "floating_point_precision",
+     1.53
+    ],
+    [
+     "double",
+     1.46
+    ],
+    [
+     "expression",
+     1.4
+    ],
+    [
+     "arithmetic_operators",
+     1.28
+    ],
+    [
+     "assignment",
+     1.18
+    ]
+   ],
+   "extra": [],
+   "top_linked": "division_by_zero",
+   "run_facts": [],
+   "judge_concepts": {
+    "division_by_zero": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "division_by_zero",
+   "judge_why": "The answer gives one blanket rule, 'dividing by zero gives an error', which matches the ZeroDivisionAlwaysCrashes misconception: it makes no distinction between 5 / z, which throws, and 1.0 / 0, which prints Infinity in the run output.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S101",
+   "text": "It gives true when the two sides are different.",
+   "label": "L1",
+   "label_why": "States the exclusive-or rule correctly without applying it to the code.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "exclusive_or",
+     4.0
+    ],
+    [
+     "array_aliasing",
+     1.12
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "logical_operators",
+     1.0
+    ],
+    [
+     "boolean",
+     1.0
+    ],
+    [
+     "short_circuit",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ],
+    [
+     "de_morgan",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "exclusive_or",
+   "run_facts": [],
+   "judge_concepts": {
+    "exclusive_or": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "exclusive_or",
+   "judge_why": "The student correctly states the rule that boolean ^ is true when the two operands differ, but does not apply it to this code's values (n > 5 is false, n < 10 is true, so c is true).",
+   "max_level": "L1",
+   "gold": [
+    "exclusive_or"
+   ]
+  },
+  {
+   "id": "S103",
+   "text": "It does not compile, since round gives a long.",
+   "label": "L4",
+   "label_why": "Correctly predicts the effect of a changed line: Math.round(double) returns a long, so it does not compile.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "long_type",
+     4.86
+    ],
+    [
+     "math_round",
+     3.99
+    ],
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "explicit_cast",
+     2.82
+    ],
+    [
+     "math_library",
+     2.7
+    ],
+    [
+     "compile_time_error",
+     2.51
+    ],
+    [
+     "int",
+     2.19
+    ],
+    [
+     "double",
+     2.17
+    ]
+   ],
+   "extra": [],
+   "top_linked": "long_type",
+   "run_facts": [],
+   "judge_concepts": {
+    "long_type": "L4",
+    "math_round": "L4",
+    "compile_time_error": "L1"
+   },
+   "judge_answer": "L4",
+   "judge_main": "math_round",
+   "judge_why": "The line asked about is not in the given code, which has long k. The student correctly says the changed line int k2 = Math.round(2.5); will not compile and gives the right reason: Math.round(double) returns a long, which cannot go into an int without a cast.",
+   "max_level": "L4",
+   "gold": [
+    "long_type",
+    "math_round"
+   ]
+  },
+  {
+   "id": "S104",
+   "text": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+   "label": "L2",
+   "label_why": "Applies the widening and cast rules to the two lines in question, with a reason for each.",
+   "final": "L2",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     5.44
+    ],
+    [
+     "int",
+     3.52
+    ],
+    [
+     "type_conversion",
+     2.87
+    ],
+    [
+     "explicit_cast",
+     2.81
+    ],
+    [
+     "primitive_type",
+     2.18
+    ],
+    [
+     "assignment",
+     2.04
+    ],
+    [
+     "arithmetic_operators",
+     1.78
+    ],
+    [
+     "expression",
+     1.77
+    ]
+   ],
+   "extra": [],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "type_conversion": "L2",
+    "explicit_cast": "L1"
+   },
+   "judge_answer": "L2",
+   "judge_main": "type_conversion",
+   "judge_why": "The student correctly says which two lines convert automatically (d = i) and which needs a cast ((int) 9.99), with a short range-based reason, but does not combine the conversions into one explanation or deal with the other conversion lines.",
+   "max_level": "L2",
+   "gold": [
+    "explicit_cast",
+    "type_conversion"
+   ]
+  },
+  {
+   "id": "S106",
+   "text": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+   "label": "L2",
+   "label_why": "Traces the statements in order with the value that decides the if, and gives the output.",
+   "final": "L2",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     3.36
+    ],
+    [
+     "testing",
+     1.82
+    ],
+    [
+     "empty_statement",
+     1.24
+    ],
+    [
+     "block",
+     1.0
+    ]
+   ],
+   "extra": [
+    "comparison_operators",
+    "variable",
+    "statement",
+    "standard_output"
+   ],
+   "top_linked": "if_statement",
+   "run_facts": [
+    "confirmed by the run: score = 42"
+   ],
+   "judge_concepts": {
+    "if_statement": "L2",
+    "comparison_operators": "L1",
+    "variable": "L2",
+    "statement": "L2",
+    "standard_output": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "if_statement",
+   "judge_why": "The student goes through every statement in order with the value: score gets 42, the condition is false so the body is skipped, and execution moves on to print done. This matches the run output, but it does not state what the code is for, so it is L2, not L3.",
+   "max_level": "L2",
+   "gold": [
+    "if_statement"
+   ]
+  },
+  {
+   "id": "S107",
+   "text": "positive is not printed, because x > 0 is false.",
+   "label": "L0",
+   "label_why": "Misses that the ; ends the if, so the println always runs and positive is printed.",
+   "final": "L0",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     2.11
+    ],
+    [
+     "assignment",
+     1.44
+    ],
+    [
+     "statement",
+     1.33
+    ],
+    [
+     "primitive_type",
+     1.04
+    ],
+    [
+     "int",
+     1.01
+    ],
+    [
+     "println",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ]
+   ],
+   "extra": [
+    "empty_statement",
+    "comparison_operators"
+   ],
+   "top_linked": "if_statement",
+   "run_facts": [
+    "stated prints 0; the code prints positive negative checked"
+   ],
+   "judge_concepts": {
+    "if_statement": "L0",
+    "empty_statement": "L0",
+    "comparison_operators": "L2"
+   },
+   "judge_answer": "L0",
+   "judge_main": "empty_statement",
+   "judge_why": "The student reads `if (x > 0);` as if it still controls the next println, so they say positive is not printed. In Java the lone `;` is the whole body of the if, so the println always runs and positive is printed.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S108",
+   "text": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+   "label": "L2",
+   "label_why": "Traces x, y and w value by value in order, correctly.",
+   "final": "L2",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "increment_operators",
+     2.43
+    ],
+    [
+     "assignment",
+     1.75
+    ],
+    [
+     "variable",
+     1.41
+    ],
+    [
+     "compound_assignment",
+     1.27
+    ],
+    [
+     "accumulator_pattern",
+     1.0
+    ],
+    [
+     "array_aliasing",
+     1.0
+    ],
+    [
+     "loop_control",
+     1.0
+    ],
+    [
+     "for_loop",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "increment_operators",
+   "run_facts": [
+    "confirmed by the run: y = 5 (final); x = 6; w = 7 (final); x = 7 (final)"
+   ],
+   "judge_concepts": {
+    "increment_operators": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "increment_operators",
+   "judge_why": "The student goes through x++ and ++x in order with the values. They correctly show that y gets the old value 5, x becomes 6, and then ++x makes x 7 and gives that new value to w. This applies the rule step by step without stating the code's purpose.",
+   "max_level": "L2",
+   "gold": [
+    "increment_operators"
+   ]
+  },
+  {
+   "id": "S109",
+   "text": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+   "label": "L4",
+   "label_why": "Correctly predicts the output for a new input (t = 5) by the dangling-else rule.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_else_statement",
+     3.75
+    ],
+    [
+     "nested_conditionals",
+     2.55
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "if_statement",
+     1.93
+    ],
+    [
+     "else_if_chain",
+     1.44
+    ],
+    [
+     "standard_output",
+     1.22
+    ],
+    [
+     "empty_statement",
+     1.12
+    ],
+    [
+     "statement",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "if_else_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "if_else_statement": "L3",
+    "nested_conditionals": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "nested_conditionals",
+   "judge_why": "The answer is correct: for t = 5 nothing is printed. The student explains this by relating the nesting to the dangling-else rule: the outer if fails, and the else belongs to the inner if, so the else is skipped too. The student does not trace the else-if chain, but the main reasoning about the nested ifs is correct.",
+   "max_level": "L4",
+   "gold": [
+    "dangling_else",
+    "nested_conditionals"
+   ]
+  },
+  {
+   "id": "S110",
+   "text": "sum builds a total, count counts.",
+   "label": "L1",
+   "label_why": "Names the two roles without relating them to the code's values or purpose.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "accumulator_pattern",
+     4.79
+    ],
+    [
+     "counter_pattern",
+     3.5
+    ],
+    [
+     "variable",
+     2.0
+    ],
+    [
+     "standard_output",
+     1.42
+    ],
+    [
+     "string_concatenation",
+     1.19
+    ],
+    [
+     "array_traversal",
+     1.11
+    ],
+    [
+     "for_loop",
+     1.08
+    ],
+    [
+     "compound_assignment",
+     1.01
+    ]
+   ],
+   "extra": [],
+   "top_linked": "accumulator_pattern",
+   "run_facts": [],
+   "judge_concepts": {
+    "accumulator_pattern": "L1",
+    "counter_pattern": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "accumulator_pattern",
+   "judge_why": "The answer correctly names sum as the accumulator (it builds a total) and count as the counter, but it does not apply this to the code's lines or values and does not contrast the two updates.",
+   "max_level": "L1",
+   "gold": [
+    "accumulator_pattern",
+    "counter_pattern"
+   ]
+  },
+  {
+   "id": "S111",
+   "text": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "label": "L3",
+   "label_why": "Locates the cause in the given failing test (the cast binds first) and gives the fix.",
+   "final": "L4",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "math_random",
+     5.43
+    ],
+    [
+     "random_move",
+     5.23
+    ],
+    [
+     "explicit_cast",
+     4.93
+    ],
+    [
+     "type_conversion",
+     4.66
+    ],
+    [
+     "math_library",
+     3.56
+    ],
+    [
+     "primitive_type",
+     3.0
+    ],
+    [
+     "int",
+     3.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "math_random",
+   "run_facts": [],
+   "judge_concepts": {
+    "math_random": "L3",
+    "explicit_cast": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "explicit_cast",
+   "judge_why": "The student finds the cause of this one failing case: the cast binds to Math.random() before the multiplication, so the value is 0 and the die is always 1. They then fix it by moving the cast after the multiplication, and locating and fixing one given failing case is L3.",
+   "max_level": "L4",
+   "gold": [
+    "explicit_cast",
+    "math_random",
+    "operator_precedence"
+   ]
+  },
+  {
+   "id": "S112",
+   "text": "continue jumps to the next i for the even numbers, break stops the loop completely at 5.",
+   "label": "L3",
+   "label_why": "Relates continue and break to the passes they affect in this loop.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "break_statement",
+     4.63
+    ],
+    [
+     "continue_statement",
+     4.44
+    ],
+    [
+     "labeled_break",
+     2.51
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "if_statement",
+     2.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ]
+   ],
+   "extra": [
+    "remainder_operator"
+   ],
+   "top_linked": "break_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "break_statement": "L2",
+    "continue_statement": "L2",
+    "remainder_operator": "L1"
+   },
+   "judge_answer": "L2",
+   "judge_main": "continue_statement",
+   "judge_why": "The answer correctly applies continue (the even values of i) and break (i == 5) to this loop's values, but it describes each separately and never relates them to each other.",
+   "max_level": "L3",
+   "gold": [
+    "break_statement",
+    "continue_statement"
+   ]
+  },
+  {
+   "id": "S113",
+   "text": "A loop that never stops because its condition stays true.",
+   "label": "L1",
+   "label_why": "States the definition of an infinite loop without applying it to this code.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "loop_control",
+     5.72
+    ],
+    [
+     "infinite_loop",
+     5.4
+    ],
+    [
+     "while_loop",
+     3.18
+    ],
+    [
+     "loop_guard",
+     2.13
+    ],
+    [
+     "block",
+     1.58
+    ],
+    [
+     "control_flow",
+     1.47
+    ],
+    [
+     "for_loop",
+     1.47
+    ],
+    [
+     "if_statement",
+     1.36
+    ]
+   ],
+   "extra": [],
+   "top_linked": "loop_control",
+   "run_facts": [],
+   "judge_concepts": {
+    "infinite_loop": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "infinite_loop",
+   "judge_why": "The student gives a correct general definition of an infinite loop (its condition stays true, so it never stops) but does not apply it to this code, for example by noting that i += 0.5 leaves the int i at 0.",
+   "max_level": "L1",
+   "gold": [
+    "infinite_loop"
+   ]
+  },
+  {
+   "id": "S114",
+   "text": "new fills the array with 0s, but a local variable has no value until you give it one.",
+   "label": "L3",
+   "label_why": "Relates array default values to local variables that have none.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "variable",
+     4.29
+    ],
+    [
+     "array_creation",
+     3.38
+    ],
+    [
+     "declaration",
+     3.29
+    ],
+    [
+     "primitive_type",
+     2.72
+    ],
+    [
+     "statement",
+     2.62
+    ],
+    [
+     "array_declaration",
+     2.53
+    ],
+    [
+     "assignment",
+     2.43
+    ],
+    [
+     "definite_assignment",
+     2.29
+    ]
+   ],
+   "extra": [
+    "array_default_values"
+   ],
+   "top_linked": "variable",
+   "run_facts": [],
+   "judge_concepts": {
+    "array_creation": "L3",
+    "definite_assignment": "L3",
+    "array_default_values": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "array_default_values",
+   "judge_why": "The answer correctly explains why a[0] prints: new gives array elements a default 0, while a local variable has no value until it is assigned. This is the parallel relation between array default values and definite assignment.",
+   "max_level": "L3",
+   "gold": [
+    "array_default_values",
+    "definite_assignment"
+   ]
+  },
+  {
+   "id": "S115",
+   "text": "Something like [I@ and a hex code, not the numbers.",
+   "label": "L1",
+   "label_why": "Correct description of what is printed, with no reason.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "printing_array_reference",
+     2.78
+    ],
+    [
+     "indexing",
+     2.12
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "standard_output",
+     2.0
+    ],
+    [
+     "string_concatenation",
+     2.0
+    ],
+    [
+     "string_literal",
+     2.0
+    ],
+    [
+     "method_call",
+     2.0
+    ],
+    [
+     "println",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "printing_array_reference",
+   "run_facts": [],
+   "judge_concepts": {
+    "printing_array_reference": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "printing_array_reference",
+   "judge_why": "The student gives the correct form of the output (\"[I@\" plus a hex code, not the elements) but doesn't trace how println turns the reference into text, so this is one correct aspect stated without being applied step by step.",
+   "max_level": "L1",
+   "gold": [
+    "printing_array_reference"
+   ]
+  },
+  {
+   "id": "S116",
+   "text": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "label": "L4",
+   "label_why": "Writes correct new code that changes the array elements.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "indexing",
+     4.09
+    ],
+    [
+     "array_traversal",
+     4.01
+    ],
+    [
+     "length_field",
+     3.88
+    ],
+    [
+     "increment_operators",
+     3.84
+    ],
+    [
+     "array_exchange",
+     3.36
+    ],
+    [
+     "int",
+     3.21
+    ],
+    [
+     "loop_control",
+     2.98
+    ]
+   ],
+   "extra": [
+    "for_loop"
+   ],
+   "top_linked": "indexing",
+   "run_facts": [
+    "the student's code runs; after it: a = [5, 4, 3, 2, 1] -> [50, 40, 30, 20, 10]; output '5 / 4 / 3 / 2 / 1'"
+   ],
+   "judge_concepts": {
+    "indexing": "L3",
+    "array_traversal": "L3",
+    "for_loop": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "array_traversal",
+   "judge_why": "The question's code uses a for-each loop that assigns only to the copy x, so the array never changes and the output stays 5 4 3 2 1. The student wrote a correct index traversal that writes each a[i] back, which fixes this one given failing case, and fixing one given case is L3 even though the student gives no explanation.",
+   "max_level": "L3",
+   "gold": [
+    "array_traversal"
+   ]
+  },
+  {
+   "id": "S117",
+   "text": "Otherwise a[i] is overwritten before it is saved.",
+   "label": "L3",
+   "label_why": "Relates t to the swap: without it a[i] is overwritten before it is saved.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "indexing",
+     4.36
+    ],
+    [
+     "assignment",
+     2.66
+    ],
+    [
+     "variable_swap",
+     2.66
+    ],
+    [
+     "expression",
+     2.01
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "comment",
+     2.0
+    ],
+    [
+     "variable",
+     1.59
+    ]
+   ],
+   "extra": [
+    "array_exchange"
+   ],
+   "top_linked": "indexing",
+   "run_facts": [],
+   "judge_concepts": {
+    "assignment": "L3",
+    "variable_swap": "L3",
+    "array_exchange": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "array_exchange",
+   "judge_why": "The answer explains why the temporary is needed: the assignment a[i] = a[r] overwrites a[i], so its old value must be saved first. This ties the order of assignments to the exchange, but it does not go on to describe the broken swap or the class of inputs where it fails.",
+   "max_level": "L3",
+   "gold": [
+    "variable_swap"
+   ]
+  },
+  {
+   "id": "S118",
+   "text": "It is a table to look up a month name from its number.",
+   "label": "L1",
+   "label_why": "Names the element (a lookup table) without applying it to the code's values.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "lookup_table",
+     4.69
+    ],
+    [
+     "variable",
+     2.04
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "array_declaration",
+     2.0
+    ],
+    [
+     "indexing",
+     2.0
+    ],
+    [
+     "array_aliasing",
+     2.0
+    ],
+    [
+     "array_initializer",
+     2.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "lookup_table",
+   "run_facts": [],
+   "judge_concepts": {
+    "lookup_table": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "lookup_table",
+   "judge_why": "In one correct sentence the student says what the months array is for: a table that turns a month number into its name. This matches what months[m - 1] does, printing Mar for m = 3.",
+   "max_level": "L3",
+   "gold": [
+    "lookup_table"
+   ]
+  },
+  {
+   "id": "S119",
+   "text": "It marks whether k is not prime; everything starts as false.",
+   "label": "L1",
+   "label_why": "States what composite[k] means and its default, without applying it to the sieve.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     2.0
+    ],
+    [
+     "comparison_operators",
+     2.0
+    ],
+    [
+     "loop_control",
+     2.0
+    ],
+    [
+     "empty_statement",
+     2.0
+    ],
+    [
+     "variable",
+     2.0
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "expression",
+     2.0
+    ]
+   ],
+   "extra": [
+    "boolean_flag_array"
+   ],
+   "top_linked": "if_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "boolean_flag_array": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "boolean_flag_array",
+   "judge_why": "Both facts are right: composite[k] flags that k is not prime, and every flag starts as false. But they are two separate statements that the answer never applies to this code's values or connects to how the sieve works.",
+   "max_level": "L1",
+   "gold": [
+    "boolean_flag_array"
+   ]
+  },
+  {
+   "id": "S120",
+   "text": "No, b times a is 3 4 / 1 2, so the order matters.",
+   "label": "L4",
+   "label_why": "Computes the changed product b × a and concludes correctly that the order matters.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "integer_division",
+     2.32
+    ],
+    [
+     "arithmetic_operators",
+     2.07
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "variable",
+     1.31
+    ],
+    [
+     "array_aliasing",
+     1.11
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "primitive_type",
+     1.0
+    ],
+    [
+     "int",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "integer_division",
+   "run_facts": [],
+   "judge_concepts": {
+    "arithmetic_operators": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "arithmetic_operators",
+   "judge_why": "The student correctly works out the swapped product b×a as {{3,4},{1,2}}, which differs from c = {{2,1},{4,3}}, and concludes that order matters; this is a value result for changed code without reasoning about what is conserved, so it is L2, not L4.",
+   "max_level": "L4",
+   "gold": [
+    "matrix_operations"
+   ]
+  },
+  {
+   "id": "S121",
+   "text": "42, an empty string, and \"Ann Lee\".",
+   "label": "L1",
+   "label_why": "Correct values with no justification.",
+   "final": "L1",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "string_type",
+     3.0
+    ],
+    [
+     "string_literal",
+     2.13
+    ],
+    [
+     "primitive_type",
+     2.0
+    ],
+    [
+     "variable",
+     2.0
+    ],
+    [
+     "empty_statement",
+     2.0
+    ],
+    [
+     "standard_input",
+     2.0
+    ],
+    [
+     "int",
+     2.0
+    ]
+   ],
+   "extra": [
+    "token_vs_line_input"
+   ],
+   "top_linked": "string_type",
+   "run_facts": [
+    "confirmed by the run: age = 42 (final); rest = \"\" (final); name = \"Ann Lee\" (final)"
+   ],
+   "judge_concepts": {
+    "token_vs_line_input": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "token_vs_line_input",
+   "judge_why": "The student gives the right three values (42, \"\", \"Ann Lee\") but doesn't explain why readLine returns an empty string after readInt, so this is a bare correct result, which is L1.",
+   "max_level": "L1",
+   "gold": [
+    "standard_input",
+    "token_vs_line_input"
+   ]
+  },
+  {
+   "id": "S122",
+   "text": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "label": "L3",
+   "label_why": "Relates readInt and readLine: readInt leaves the end of the line, which readLine returns.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "token_vs_line_input",
+     4.6
+    ],
+    [
+     "standard_input",
+     3.69
+    ],
+    [
+     "statement",
+     2.0
+    ],
+    [
+     "variable",
+     2.0
+    ],
+    [
+     "empty_statement",
+     2.0
+    ],
+    [
+     "assignment",
+     2.0
+    ],
+    [
+     "string_type",
+     2.0
+    ],
+    [
+     "int",
+     1.09
+    ]
+   ],
+   "extra": [],
+   "top_linked": "token_vs_line_input",
+   "run_facts": [],
+   "judge_concepts": {
+    "token_vs_line_input": "L3",
+    "standard_input": "L2"
+   },
+   "judge_answer": "L3",
+   "judge_main": "token_vs_line_input",
+   "judge_why": "The student says readInt consumes 42 and leaves the Enter, so the next readLine only finishes that same line. That is a correct causal link between the token read and the line read through their shared input position, and it explains why rest is empty without tracing the code value by value.",
+   "max_level": "L3",
+   "gold": [
+    "token_vs_line_input"
+   ]
+  },
+  {
+   "id": "S123",
+   "text": "No, the user decides each time, while it is running.",
+   "label": "L4",
+   "label_why": "Reasons correctly about a program that is not the given code: interactive input decides the rounds while it runs.",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "interactive_input",
+     4.09
+    ],
+    [
+     "variable",
+     1.05
+    ],
+    [
+     "run",
+     1.02
+    ],
+    [
+     "while_loop",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "standard_input",
+     1.0
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "counter_pattern",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "interactive_input",
+   "run_facts": [],
+   "judge_concepts": {
+    "interactive_input": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "interactive_input",
+   "judge_why": "The answer says the number of rounds can't be known ahead of time because the user decides while the program runs. That ties each reply to whether the loop goes on, which is the correct right-rule against InputFixedBeforeRun, linked to the loop's control flow.",
+   "max_level": "L3",
+   "gold": [
+    "interactive_input"
+   ]
+  },
+  {
+   "id": "S124",
+   "text": "It reads from standard input and writes to standard output.",
+   "label": "L1",
+   "label_why": "States the definition of a filter.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "standard_output",
+     3.88
+    ],
+    [
+     "standard_input",
+     3.4
+    ],
+    [
+     "filter",
+     1.82
+    ],
+    [
+     "piping",
+     1.77
+    ],
+    [
+     "redirection",
+     1.47
+    ],
+    [
+     "end_of_input",
+     1.4
+    ],
+    [
+     "variable",
+     1.13
+    ],
+    [
+     "statement",
+     1.07
+    ]
+   ],
+   "extra": [],
+   "top_linked": "standard_output",
+   "run_facts": [],
+   "judge_concepts": {
+    "filter": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "filter",
+   "judge_why": "The student gives the general definition of a filter (it reads standard input and writes standard output) but never applies it to this code: nothing about the non-negative test, the read loop or the pipeline is mentioned.",
+   "max_level": "L1",
+   "gold": [
+    "filter"
+   ]
+  },
+  {
+   "id": "S125",
+   "text": "The circles are never erased, so you get a trail.",
+   "label": "L4",
+   "label_why": "Correctly predicts the effect of removing clear(): earlier circles stay, leaving a trail.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "drawing_shapes",
+     3.0
+    ],
+    [
+     "coordinate_scaling",
+     2.0
+    ],
+    [
+     "standard_drawing",
+     2.0
+    ],
+    [
+     "for_loop",
+     2.0
+    ],
+    [
+     "mouse_interaction",
+     2.0
+    ],
+    [
+     "loop_control",
+     2.0
+    ],
+    [
+     "statement",
+     2.0
+    ]
+   ],
+   "extra": [
+    "animation"
+   ],
+   "top_linked": "drawing_shapes",
+   "run_facts": [],
+   "judge_concepts": {
+    "animation": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "animation",
+   "judge_why": "The question asks about code that has been changed: StdDraw.clear() is removed. The student gives the reason (circles are no longer erased) and correctly predicts the effect (a trail builds up), which is the change-prediction way of animation at L4.",
+   "max_level": "L4",
+   "gold": [
+    "animation"
+   ]
+  },
+  {
+   "id": "S126",
+   "text": "You need System.exit(0) at the end of main.",
+   "label": "L3",
+   "label_why": "Locates the fix for the given failing case (System.exit(0) at the end of main).",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "standard_audio",
+     4.17
+    ],
+    [
+     "for_loop",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ],
+    [
+     "variable",
+     1.0
+    ],
+    [
+     "loop_control",
+     1.0
+    ],
+    [
+     "empty_statement",
+     1.0
+    ],
+    [
+     "loop_variable",
+     1.0
+    ],
+    [
+     "array_declaration",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "standard_audio",
+   "run_facts": [],
+   "judge_concepts": {
+    "standard_audio": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "standard_audio",
+   "judge_why": "The student gives the right fix for this one hanging program (end main with System.exit(0)) but does not explain why the terminal hangs or name the general class of programs that hang, so by the boundary rule this is L3, not L4.",
+   "max_level": "L3",
+   "gold": [
+    "standard_audio"
+   ]
+  },
+  {
+   "id": "S127",
+   "text": "Page 2, it links nowhere.",
+   "label": "L1",
+   "label_why": "Names the dangling page with the defining fact.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "input_graph",
+     2.5
+    ],
+    [
+     "comment",
+     2.0
+    ],
+    [
+     "dangling_pages",
+     1.54
+    ],
+    [
+     "transition_matrix",
+     1.0
+    ],
+    [
+     "indexing",
+     1.0
+    ],
+    [
+     "arithmetic_operators",
+     1.0
+    ],
+    [
+     "two_dimensional_array",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "input_graph",
+   "run_facts": [],
+   "judge_concepts": {
+    "dangling_pages": "L2"
+   },
+   "judge_answer": "L2",
+   "judge_main": "dangling_pages",
+   "judge_why": "The student uses the graph's values to pick out the correct page (page 2) and gives a short reason (it has no outgoing links), so this is the dangling-page definition applied to this code. That is L2, not just stating the rule (L1).",
+   "max_level": "L2",
+   "gold": [
+    "dangling_pages"
+   ]
+  },
+  {
+   "id": "S129",
+   "text": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "label": "L4",
+   "label_why": "Correctly predicts the effect of removing teleportation: the surfer is trapped and other pages get rank 0.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "input_graph",
+     2.04
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "comment",
+     2.0
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "two_models",
+     1.42
+    ],
+    [
+     "markov_chain",
+     1.32
+    ],
+    [
+     "transition_matrix",
+     1.25
+    ],
+    [
+     "dangling_pages",
+     1.17
+    ]
+   ],
+   "extra": [],
+   "top_linked": "input_graph",
+   "run_facts": [],
+   "judge_concepts": {
+    "markov_chain": "L4"
+   },
+   "judge_answer": "L4",
+   "judge_main": "markov_chain",
+   "judge_why": "The student reasons about code that has been changed (the random jump removed). They say correctly that a closed group of pages traps the surfer and that every other page gets rank 0, which means the chain no longer mixes.",
+   "max_level": "L4",
+   "gold": [
+    "teleportation"
+   ]
+  },
+  {
+   "id": "S132",
+   "text": "a and b are 5 and total is 11.5; after the last line total is still 11.5, because it already has a value.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: an assignment replaces the old value, so total becomes about 12.42.",
+   "final": "L0",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     3.0
+    ],
+    [
+     "accumulator_pattern",
+     2.6
+    ],
+    [
+     "variable",
+     1.32
+    ],
+    [
+     "arithmetic_operators",
+     1.24
+    ],
+    [
+     "array_aliasing",
+     1.12
+    ],
+    [
+     "int",
+     1.02
+    ],
+    [
+     "expression",
+     1.0
+    ]
+   ],
+   "extra": [
+    "assignment"
+   ],
+   "top_linked": "double",
+   "run_facts": [
+    "confirmed by the run: total = 11.5",
+    "stated total = 11.5 (final); the code gives total = 12.42"
+   ],
+   "judge_concepts": {
+    "variable": "L0",
+    "assignment": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "variable",
+   "judge_why": "The student traces a, b and the first total correctly, but then says the last assignment leaves total at 11.5 'because it already has a value'; this is the static-variable rule, which contradicts Java (total becomes 12.42).",
+   "max_level": "L0",
+   "gold": [
+    "assignment"
+   ]
+  },
+  {
+   "id": "S133",
+   "text": "int c; declares c, so c is 0.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: a local variable has no default value, so c cannot be read.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "declaration",
+     3.87
+    ],
+    [
+     "int",
+     3.47
+    ],
+    [
+     "variable",
+     3.17
+    ],
+    [
+     "primitive_type",
+     2.27
+    ],
+    [
+     "assignment",
+     1.57
+    ],
+    [
+     "named_constants",
+     1.44
+    ],
+    [
+     "expression",
+     1.22
+    ],
+    [
+     "chained_assignment",
+     1.15
+    ]
+   ],
+   "extra": [],
+   "top_linked": "declaration",
+   "run_facts": [],
+   "judge_concepts": {
+    "declaration": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "declaration",
+   "judge_why": "The student says that declaring the local variable c gives it the value 0, but in Java a local variable has no value until it is assigned, so c + 1 does not compile.",
+   "max_level": "L0",
+   "gold": [
+    "declaration",
+    "definite_assignment"
+   ]
+  },
+  {
+   "id": "S134",
+   "text": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+   "label": "L0",
+   "label_why": "Switches rules within one trace: b = t is read as \"b equals a\", not as storing t's old value.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "assignment",
+     3.13
+    ],
+    [
+     "array_aliasing",
+     2.54
+    ],
+    [
+     "variable_swap",
+     1.5
+    ],
+    [
+     "variable",
+     1.48
+    ],
+    [
+     "array_copy",
+     1.3
+    ],
+    [
+     "primitive_type",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "int",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "assignment",
+   "run_facts": [],
+   "judge_concepts": {
+    "assignment": "L0",
+    "variable_swap": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "variable_swap",
+   "judge_why": "The student says t holds the variable a itself rather than the value a had when t = a ran, so they conclude both variables end up as b and miss that the three lines swap a and b.",
+   "max_level": "L0",
+   "gold": [
+    "assignment",
+    "variable_swap"
+   ]
+  },
+  {
+   "id": "S135",
+   "text": "You could write b as !(5 < n < 10).",
+   "label": "L0",
+   "label_why": "Uses a maths-style chained comparison, which is not valid Java.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "de_morgan",
+     3.06
+    ],
+    [
+     "variable",
+     1.46
+    ],
+    [
+     "logical_operators",
+     1.2
+    ],
+    [
+     "short_circuit",
+     1.13
+    ],
+    [
+     "string_concatenation",
+     1.02
+    ],
+    [
+     "assignment",
+     1.0
+    ],
+    [
+     "arithmetic_operators",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ]
+   ],
+   "extra": [
+    "boolean_expression"
+   ],
+   "top_linked": "de_morgan",
+   "run_facts": [],
+   "judge_concepts": {
+    "de_morgan": "L0",
+    "boolean_expression": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "de_morgan",
+   "judge_why": "The student rewrites b as the maths-style range !(5 < n < 10), which does not compile in Java, and keeps the !( ) instead of applying De Morgan, so the answer uses a rule that goes against Java.",
+   "max_level": "L0",
+   "gold": [
+    "de_morgan"
+   ]
+  },
+  {
+   "id": "S136",
+   "text": "isDone = (i % 5 == 0); would do the same as the if.",
+   "label": "L1",
+   "label_why": "The claim happens to be right for this loop, but no reason is given (in general a flag must stay set once found).",
+   "final": "L3",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     3.52
+    ],
+    [
+     "assignment",
+     2.28
+    ],
+    [
+     "remainder_operator",
+     2.04
+    ],
+    [
+     "arithmetic_operators",
+     2.02
+    ],
+    [
+     "expression",
+     2.0
+    ],
+    [
+     "int",
+     1.44
+    ],
+    [
+     "short_circuit",
+     1.31
+    ],
+    [
+     "variable",
+     1.26
+    ]
+   ],
+   "extra": [
+    "boolean_expression"
+   ],
+   "top_linked": "if_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "boolean_expression": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "boolean_expression",
+   "judge_why": "The answer skips the output and the stop condition the question asks for. It only claims, with no reason given, that storing the condition directly in isDone would do the same as the if. That claim is correct for this code but is a familiar rewrite with no stated reasoning, so it is graded as a relation within the given code (L3), not L4.",
+   "max_level": "L3",
+   "gold": [
+    "assignment",
+    "if_statement"
+   ]
+  },
+  {
+   "id": "S137",
+   "text": "System.out.println(\"x is 5\"); sets x to 5.",
+   "label": "L0",
+   "label_why": "Everyday reading: printing text does not assign a value to x.",
+   "final": "L0",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     4.26
+    ],
+    [
+     "method_call",
+     3.02
+    ],
+    [
+     "standard_output",
+     2.94
+    ],
+    [
+     "string_literal",
+     2.0
+    ],
+    [
+     "print",
+     1.62
+    ],
+    [
+     "empty_statement",
+     1.38
+    ],
+    [
+     "statement",
+     1.21
+    ],
+    [
+     "string_conversion",
+     1.05
+    ]
+   ],
+   "extra": [],
+   "top_linked": "println",
+   "run_facts": [
+    "stated x = 5 (final); the code has no variable x, so nothing sets it"
+   ],
+   "judge_concepts": {
+    "println": "L0",
+    "standard_output": "L0",
+    "string_literal": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "standard_output",
+   "judge_why": "The student treats printed text as if it acted on the program: they say println(\"x is 5\") sets x to 5. That is the documented everyday misreading of output, and it ignores the actual print/println output of the given code.",
+   "max_level": "L0",
+   "gold": [
+    "assignment",
+    "println"
+   ]
+  },
+  {
+   "id": "S138",
+   "text": "Add v to sum first, then check if it was negative and subtract it again.",
+   "label": "L0",
+   "label_why": "Checks the value after using it; count would still include -2, so the average changes.",
+   "final": "L1",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "accumulator_pattern",
+     2.21
+    ],
+    [
+     "increment_operators",
+     1.16
+    ],
+    [
+     "compound_assignment",
+     1.15
+    ],
+    [
+     "standard_output",
+     1.08
+    ],
+    [
+     "int",
+     1.04
+    ],
+    [
+     "empty_statement",
+     1.01
+    ],
+    [
+     "while_loop",
+     1.0
+    ]
+   ],
+   "extra": [
+    "if_statement"
+   ],
+   "top_linked": "accumulator_pattern",
+   "run_facts": [],
+   "judge_concepts": {
+    "accumulator_pattern": "L1",
+    "if_statement": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "accumulator_pattern",
+   "judge_why": "The answer does not say what is printed for either input; instead it proposes adding v to sum and then subtracting it back if v is negative, which correctly describes one part of the accumulator update but is not applied to the values, does not mention count or the sentinel, and does not reach the output 5.0 or the empty output when the first value is 99999.",
+   "max_level": "L1",
+   "gold": [
+    "accumulator_pattern"
+   ]
+  },
+  {
+   "id": "S139",
+   "text": "The square uses 0.5 as the centre, but the point uses pixels, so both are in the middle.",
+   "label": "L0",
+   "label_why": "Uses two scales at once: StdDraw uses the unit square for every command.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     2.0
+    ],
+    [
+     "standard_drawing",
+     1.73
+    ],
+    [
+     "coordinate_scaling",
+     1.52
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "empty_statement",
+     1.0
+    ]
+   ],
+   "extra": [
+    "drawing_shapes"
+   ],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "drawing_shapes": "L1",
+    "standard_drawing": "L0",
+    "coordinate_scaling": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "standard_drawing",
+   "judge_why": "The student claims point(256, 256) is in the middle because it 'uses pixels'. That is the documented PixelCoordinates misconception: in the default unit square, (256, 256) is far outside the visible canvas.",
+   "max_level": "L0",
+   "gold": [
+    "coordinate_scaling",
+    "standard_drawing"
+   ]
+  },
+  {
+   "id": "S140",
+   "text": "Writing 3.14159 in the formula is just as clear as a name.",
+   "label": "L0",
+   "label_why": "Applies a wrong style rule: an unnamed 3.14159 hides its meaning.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "double",
+     3.4
+    ],
+    [
+     "arithmetic_operators",
+     1.23
+    ],
+    [
+     "variable",
+     1.15
+    ],
+    [
+     "assignment",
+     1.09
+    ],
+    [
+     "long_type",
+     1.08
+    ],
+    [
+     "int",
+     1.0
+    ],
+    [
+     "expression",
+     1.0
+    ]
+   ],
+   "extra": [
+    "named_constants"
+   ],
+   "top_linked": "double",
+   "run_facts": [],
+   "judge_concepts": {
+    "named_constants": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "named_constants",
+   "judge_why": "The answer says a literal 3.14159 in the formula is as clear as a name, which is the MagicNumbers wrong rule, and it never considers the loop's 0 and 1, which are not magic numbers.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S141",
+   "text": "Braces are pointless, I never write them.",
+   "label": "L0",
+   "label_why": "Applies a wrong style rule; leaving braces out is legal but invites errors.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "if_statement",
+     1.11
+    ],
+    [
+     "block",
+     1.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "increment_operators",
+     1.0
+    ],
+    [
+     "counter_pattern",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "if_statement",
+   "run_facts": [],
+   "judge_concepts": {
+    "block": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "block",
+   "judge_why": "The answer calls braces pointless and says the student never writes them, which matches the MissingBraces misconception; it contradicts the rule that only braces group several statements into one body.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S142",
+   "text": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+   "label": "L0",
+   "label_why": "Contradicts Java: precedence is fixed, Java never guesses the order.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "expression",
+     3.02
+    ],
+    [
+     "primitive_type",
+     1.58
+    ],
+    [
+     "arithmetic_operators",
+     1.55
+    ],
+    [
+     "statement",
+     1.42
+    ],
+    [
+     "variable",
+     1.17
+    ],
+    [
+     "int",
+     1.14
+    ],
+    [
+     "if_else_statement",
+     1.04
+    ],
+    [
+     "assignment",
+     1.0
+    ]
+   ],
+   "extra": [
+    "operator_precedence"
+   ],
+   "top_linked": "expression",
+   "run_facts": [],
+   "judge_concepts": {
+    "expression": "L0",
+    "operator_precedence": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "operator_precedence",
+   "judge_why": "The student says Java 'guesses the order' without parentheses, but Java has fixed precedence rules: * binds tighter than +, so the code compiles and r = 1 + (2 * 3) = 7. The student's rule contradicts Java, and the answer never gives r.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S143",
+   "text": "Indentation does not matter, I indent however I like.",
+   "label": "L0",
+   "label_why": "Treats indentation as unimportant for readers, and gives no output; misleading indentation is the problem here.",
+   "final": "L1",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "program_layout",
+     3.24
+    ],
+    [
+     "if_statement",
+     2.0
+    ],
+    [
+     "statement",
+     1.0
+    ],
+    [
+     "empty_statement",
+     1.0
+    ],
+    [
+     "println",
+     1.0
+    ],
+    [
+     "standard_output",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ],
+    [
+     "assignment",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "program_layout",
+   "run_facts": [],
+   "judge_concepts": {
+    "program_layout": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "program_layout",
+   "judge_why": "The student states one correct rule (the compiler ignores indentation) but does not apply it to this code: they don't say that only the first println belongs to the braceless if, and they don't predict the output for score = 50.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S145",
+   "text": "I can rename the file to Greeting.java and keep public class hello.",
+   "label": "L0",
+   "label_why": "Applies a wrong rule: a public class must be in a file with its name.",
+   "final": "L0",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "class_declaration",
+     5.18
+    ],
+    [
+     "program_text",
+     3.16
+    ],
+    [
+     "compile",
+     1.5
+    ],
+    [
+     "run",
+     1.15
+    ],
+    [
+     "main_method",
+     1.0
+    ],
+    [
+     "println",
+     1.0
+    ],
+    [
+     "method_call",
+     1.0
+    ],
+    [
+     "standard_output",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "class_declaration",
+   "run_facts": [],
+   "judge_concepts": {
+    "class_declaration": "L0",
+    "program_text": "L0"
+   },
+   "judge_answer": "L0",
+   "judge_main": "program_text",
+   "judge_why": "The student says the file can be renamed to Greeting.java while keeping public class hello, so they treat the file name and the public class name as independent, which contradicts Java's rule that public class hello must be saved in hello.java.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S149",
+   "text": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "label": "L4",
+   "label_why": "States the class of inputs (rows of different lengths) for which a[0].length fails.",
+   "final": "L4",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "two_dimensional_array",
+     6.24
+    ],
+    [
+     "length_field",
+     4.68
+    ],
+    [
+     "indexing",
+     3.68
+    ],
+    [
+     "arithmetic_operators",
+     3.0
+    ],
+    [
+     "expression",
+     3.0
+    ],
+    [
+     "multidimensional_array",
+     1.53
+    ],
+    [
+     "row_major_order",
+     1.4
+    ]
+   ],
+   "extra": [
+    "ragged_array"
+   ],
+   "top_linked": "two_dimensional_array",
+   "run_facts": [],
+   "judge_concepts": {
+    "length_field": "L1",
+    "ragged_array": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "ragged_array",
+   "judge_why": "The student correctly says that a general printing method must bound each row by a[i].length rather than a[0].length, but never says why (that rows can have different lengths) and gives no loop or trace, so this is one correct rule stated without being applied.",
+   "max_level": "L4",
+   "gold": []
+  },
+  {
+   "id": "S150",
+   "text": "System.out.println(count + 1) shows one more, but count + 1 on its own line does not change count.",
+   "label": "L3",
+   "label_why": "Relates the same expression used as a value and as a statement.",
+   "final": "L2",
+   "match": false,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "println",
+     4.06
+    ],
+    [
+     "standard_output",
+     3.04
+    ],
+    [
+     "counter_pattern",
+     2.71
+    ],
+    [
+     "expression",
+     2.62
+    ],
+    [
+     "method_call",
+     2.48
+    ],
+    [
+     "int",
+     2.44
+    ],
+    [
+     "arithmetic_operators",
+     2.0
+    ],
+    [
+     "primitive_type",
+     2.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "println",
+   "run_facts": [],
+   "judge_concepts": {
+    "println": "L2",
+    "counter_pattern": "L1",
+    "expression": "L2"
+   },
+   "judge_answer": "L1",
+   "judge_main": "counter_pattern",
+   "judge_why": "The answer gives none of the three requested statements (count = count + 1; count += 1; count++;) and offers only one correct point: printing or evaluating count + 1 does not change count.",
+   "max_level": "L2",
+   "gold": []
+  },
+  {
+   "id": "S156",
+   "text": "When i is 3 it prints 1 2 3.",
+   "label": "L1",
+   "label_why": "Covers one pass (i = 3) with its values; the other rows and the purpose are missing.",
+   "final": "L1",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "nested_loops",
+     1.48
+    ],
+    [
+     "assignment",
+     1.25
+    ],
+    [
+     "formatted_output",
+     1.21
+    ],
+    [
+     "increment_operators",
+     1.13
+    ],
+    [
+     "print",
+     1.0
+    ],
+    [
+     "println",
+     1.0
+    ],
+    [
+     "standard_output",
+     1.0
+    ],
+    [
+     "variable",
+     1.0
+    ]
+   ],
+   "extra": [],
+   "top_linked": "nested_loops",
+   "run_facts": [],
+   "judge_concepts": {
+    "nested_loops": "L1"
+   },
+   "judge_answer": "L1",
+   "judge_main": "nested_loops",
+   "judge_why": "The answer correctly gives one row (the last outer pass, i = 3) but not the full output, and it does not explain how the two loops work together across all passes.",
+   "max_level": "L1",
+   "gold": []
+  },
+  {
+   "id": "S164",
+   "text": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "label": "L0",
+   "label_why": "Uses elif, which Java does not have; the new code does not compile.",
+   "final": "L0",
+   "match": true,
+   "set_by": "code run (L0)",
+   "gates": [],
+   "linked": [
+    [
+     "if_else_statement",
+     4.64
+    ],
+    [
+     "if_statement",
+     3.89
+    ],
+    [
+     "logical_operators",
+     3.67
+    ],
+    [
+     "statement",
+     3.0
+    ],
+    [
+     "assignment",
+     2.64
+    ],
+    [
+     "short_circuit",
+     2.58
+    ],
+    [
+     "array_aliasing",
+     2.03
+    ]
+   ],
+   "extra": [
+    "switch_statement"
+   ],
+   "top_linked": "if_else_statement",
+   "run_facts": [
+    "stated result = 5 (final); the code gives result = 30",
+    "confirmed by the run: result = 30 (final)",
+    "stated result = -10 (final); the code gives result = 30"
+   ],
+   "judge_concepts": {
+    "if_else_statement": "L3",
+    "logical_operators": "L3",
+    "switch_statement": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "switch_statement",
+   "judge_why": "The student turns the switch into an equivalent else-if chain, deduced from the code: case 1 becomes the first test, the case 2 to case 3 fall-through becomes one || condition, and default becomes the final else; the branch logic is correct, but 'elif' is Python, not Java, so the code would not compile.",
+   "max_level": "L0",
+   "gold": []
+  },
+  {
+   "id": "S169",
+   "text": "B C A D E: sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop.",
+   "label": "L3",
+   "label_why": "Orders the lines and relates each one to its role in the accumulator plan.",
+   "final": "L3",
+   "match": true,
+   "set_by": "LLM judge (overall)",
+   "gates": [],
+   "linked": [
+    [
+     "accumulator_pattern",
+     3.89
+    ],
+    [
+     "loop_scope",
+     2.96
+    ],
+    [
+     "for_loop",
+     2.28
+    ],
+    [
+     "compound_assignment",
+     1.67
+    ],
+    [
+     "loop_variable",
+     1.63
+    ],
+    [
+     "loop_control",
+     1.55
+    ],
+    [
+     "increment_operators",
+     1.5
+    ],
+    [
+     "block",
+     1.47
+    ]
+   ],
+   "extra": [],
+   "top_linked": "accumulator_pattern",
+   "run_facts": [],
+   "judge_concepts": {
+    "accumulator_pattern": "L3"
+   },
+   "judge_answer": "L3",
+   "judge_main": "accumulator_pattern",
+   "judge_why": "The order B C A D E is correct, and the student explains it by tying each accumulator statement to where it sits around the loop: start at 0 before it, add on every pass, print once after it. That relates the accumulator to the loop body, which is the relational (L3) way, not a line-by-line trace.",
+   "max_level": "L3",
+   "gold": []
+  }
+ ]
+}

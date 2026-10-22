@@ -1,0 +1,34 @@
+{
+ "answer_level": "L3",
+ "main_concept": "standard_input",
+ "why": "The answer links the two streams in one correct sentence: the program takes its data from standard input and sends its results to standard output, which is what makes it a filter, but it does not mention that it keeps only the non-negative values.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "standard_input@L3#5",
+   "quote": "It reads from standard input and writes to standard output.",
+   "correct": true,
+   "why": "It relates the StdIn input stream to the StdOut output stream through the parallel edge, which describes the filter structure, though the selection step is left out."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "standard_output@L1#1",
+   "quote": "writes to standard output",
+   "correct": true,
+   "why": "It correctly names standard output as where the program writes, but says nothing more about how output works."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no printf and the answer says nothing about formatting."
+  }
+ ]
+}

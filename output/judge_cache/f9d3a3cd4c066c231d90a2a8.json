@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "running_extreme",
+ "why": "The student wrote correct new code for an unseen problem: it starts a running minimum at data[0], updates it with Math.min in one pass, and prints the result, which is the transfer_to_a_new_program way at L4.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "It starts from the first element, which no other value can wrongly beat, and keeps the smaller value in a single pass, so it correctly finds the minimum of a non-empty array."
+  },
+  {
+   "concept": "println",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "System.out.println(min);",
+   "correct": true,
+   "why": "It uses println correctly in new code to print the result on its own line."
+  },
+  {
+   "concept": "double",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "double min = data[0]; for (double v : data)",
+   "correct": true,
+   "why": "It uses double correctly for the minimum variable and the loop variable, matching the type of the double array."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about integer overflow."
+  }
+ ]
+}

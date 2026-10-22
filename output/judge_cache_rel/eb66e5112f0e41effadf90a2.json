@@ -1,0 +1,115 @@
+{
+ "answer_level": "L3",
+ "main_concept": "accumulator_pattern",
+ "why": "The order B C A D E is correct, and the student explains it by tying each accumulator statement to where it sits around the loop: start at 0 before it, add on every pass, print once after it. That relates the accumulator to the loop body, which is the relational (L3) way, not a line-by-line trace.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "accumulator_pattern@L3#1",
+   "quote": "sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop",
+   "correct": true,
+   "why": "Correctly says the update goes inside the body so it runs once per pass, while the setup to 0 goes before the loop and the print goes after it."
+  },
+  {
+   "concept": "loop_scope",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about where variables can be used."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not explain how the for header works."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only says 'added to' and does not explain how += works."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the start value, the condition or the update."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i++."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about braces or blocks; it only puts lines in order."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss errors."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_variable -prerequisite-> loop_control",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "for_loop -prerequisite-> loop_scope",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "increment_operators -parallel-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

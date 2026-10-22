@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "break_statement",
+ "why": "The answer applies each jump statement correctly to this loop's values (even i are skipped, the loop ends at i = 5), but gives two separate effects rather than one combined account of how break and continue relate.",
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "break_statement@L2#1",
+   "quote": "break stops the loop completely at 5",
+   "correct": true,
+   "why": "It correctly applies break's exit rule to the actual value i = 5, where the loop ends and 5 is not added."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "continue_statement@L2#1",
+   "quote": "continue jumps to the next i for the even numbers",
+   "correct": true,
+   "why": "It correctly applies continue to the even values: the rest of the pass is skipped and the loop moves on to the next i."
+  },
+  {
+   "concept": "labeled_break",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the labeled loop."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the nested loops."
+  }
+ ]
+}

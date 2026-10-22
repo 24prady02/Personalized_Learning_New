@@ -1,0 +1,86 @@
+{
+ "answer_level": "L2",
+ "main_concept": "switch_statement",
+ "why": "The student first applied the no-fall-through rule and said 20, then traced value 1 through 10, 20, 40, 50, saw that execution falls through, and correctly concluded that for value 2 the result is also 50.",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not used in the code or the answer."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student traces values of result but never reasons about assignment itself."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "switch_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "switch_statement@L2#1",
+   "quote": "10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.",
+   "correct": true,
+   "why": "The trace runs from the matching label through every later case to default, giving the correct final value of 50; this replaces the earlier no-fall-through answer of 20."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

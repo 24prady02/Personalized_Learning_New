@@ -1,0 +1,110 @@
+{
+ "answer_level": "L1",
+ "main_concept": "program_layout",
+ "why": "The student states one correct rule (the compiler ignores indentation) but does not apply it to this code: they don't say that only the first println belongs to the braceless if, and they don't predict the output for score = 50.",
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "program_layout@L1#2",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "It is true that Java treats whitespace as equivalent. But the student misses that the misleading indentation of the second println is a readability problem, and gives no output; 'however I like' only breaks a style convention, so it is not a language misconception."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the if or its condition works."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements or the order they run in."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept is not involved and not mentioned."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no output and says nothing about println."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not predict any output."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention method calls."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no assignment in the code or in the answer."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not say what belongs to the if body, or that braces decide it."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "block -prerequisite-> program_layout",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

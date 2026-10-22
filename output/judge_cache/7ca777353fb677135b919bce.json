@@ -1,0 +1,34 @@
+{
+ "answer_level": "L2",
+ "main_concept": "switch_statement",
+ "why": "The answer gets the right result, 50, by applying the fall-through rule to this code: there is no break, so execution carries on to default. It does not trace the steps from case 2 (20, then 40, then 50) and does not state a purpose, so it is an L2 output prediction justified by the rule.",
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "switch_statement@L2#2",
+   "quote": "the swich no have break so it go down all the case and result become 50",
+   "correct": true,
+   "why": "It predicts the correct final value, 50, and justifies it by fall-through to default, though it says 'all the case' when execution really starts at case 2."
+  },
+  {
+   "concept": "break_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "break_statement@L1#2",
+   "quote": "no have break so it go down",
+   "correct": true,
+   "why": "It states one correct rule, that a missing break lets execution continue into later cases, but this code has no break for that rule to be traced through."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "none",
+   "way": "none",
+   "way_id": "none",
+   "quote": "",
+   "correct": true,
+   "why": "Neither the code nor the answer involves a variable swap."
+  }
+ ]
+}

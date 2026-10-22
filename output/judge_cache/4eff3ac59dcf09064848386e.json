@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student wrote correct, complete code for the familiar minimum task: it starts from data[0], makes one pass keeping the smaller value with Math.min, and prints the result after the loop. That is the running-extreme plan adapted to the minimum, which the boundary for reproducing a familiar program puts at L3, not L4.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "The code builds a working most-wanted holder for the minimum in one pass, and starting at data[0] avoids the start-value pitfall. It is a familiar variant, so L3, not L4."
+  },
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "println@L2#3",
+   "quote": "System.out.println(min);",
+   "correct": true,
+   "why": "println is used correctly once, after the loop, to print the final minimum on its own line."
+  },
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "double@L2#3",
+   "quote": "double min = data[0];",
+   "correct": true,
+   "why": "The double variable is declared and assigned correctly from the double array, and its type matches the elements."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about integer overflow."
+  }
+ ]
+}

@@ -1,0 +1,100 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_statement",
+ "why": "The student goes through every statement in order with the value: score gets 42, the condition is false so the body is skipped, and execution moves on to print done. This matches the run output, but it does not state what the code is for, so it is L2, not L3.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "the if test is false so pass is skipped, then done is printed",
+   "correct": true,
+   "why": "Evaluates the condition once, skips the body because it is false, and continues with the next statement."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about testing."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer does not mention one."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "the if test is false",
+   "correct": true,
+   "why": "Gives the correct boolean result but does not apply 42 >= 50 explicitly, so it is a bare result (L1). The way id points to the closest way, an L2 one, because no L1 way fits a bare result."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "score gets 42",
+   "correct": true,
+   "why": "Correctly says the declaration stores 42 in score."
+  },
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "statement@L2#1",
+   "quote": "score gets 42, ... then done is printed",
+   "correct": true,
+   "why": "Lists the statements running one after another in the correct order."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about braces or blocks."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "standard_output@L2#2",
+   "quote": "then done is printed",
+   "correct": true,
+   "why": "Correctly says done is the only output, and justifies it by the skipped body."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no for loop."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

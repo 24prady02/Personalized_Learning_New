@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "assignment",
+ "why": "The student says readInt() skips the non-integer token \"abc\", but in Java readInt() throws an InputMismatchException on \"abc\", so the program crashes before println runs and nothing is printed; the answer rests on a wrong rule.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "It prints 8 2",
+   "correct": false,
+   "why": "8 and 2 match the values sum and count hold before the crash (5 + 3 and 2 reads), but this is a bare result with no reasoning, and it is never printed because readInt throws first."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "8 2",
+   "correct": false,
+   "why": "The format sum + \" \" + count is shown correctly, but only as a bare result, and println is never reached."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "8 2",
+   "correct": false,
+   "why": "It shows the ints turned into text without any justification, and the line is not actually printed."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer and the code do not use char arithmetic."
+  }
+ ]
+}

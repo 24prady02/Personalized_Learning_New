@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "exclusive_or",
+ "why": "The student gives the correct rule for ^ on booleans (true when the two operands differ) but doesn't apply it to this code's values, such as (n > 5) false and (n < 10) true giving true.",
+ "concepts": [
+  {
+   "concept": "exclusive_or",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "exclusive_or@L1#2",
+   "quote": "It gives true when the two sides are different.",
+   "correct": true,
+   "why": "Correct rule for boolean ^, stated without applying it to the code's values."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not relate ^ to &&, || or !."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "de_morgan",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

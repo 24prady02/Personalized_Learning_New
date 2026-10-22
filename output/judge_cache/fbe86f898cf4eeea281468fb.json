@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "arithmetic_operators",
+ "why": "The answer uses a known wrong rule (an all-zero row is an acceptable row for a page with no links) and misreads the code. Here outDegree is 5, so the row is zero only because of integer division, and the answer never notices this or fixes it.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "The answer misses that int / truncates: 0/5, 2/5 and 1/5 are all 0, so p is all zeros. That is not a valid probability row, and the fix is (double) counts[j] / outDegree."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the type or value of the expression counts[j] / outDegree."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "it just means the page has no links",
+   "correct": false,
+   "why": "This is the documented wrong rule that a page with no links can have an all-zero row. This page also has 5 outlinks, so it is not dangling."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "Every row must sum to 1, so an all-zero row is never a valid probability row."
+  }
+ ]
+}

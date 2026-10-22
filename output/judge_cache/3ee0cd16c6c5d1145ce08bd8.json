@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "remainder_operator",
+ "why": "The student traces the code in order with the actual values: 17 % 2 leaves 1, so the else branch runs, and 17 % 5 is 2, so E prints. This correctly gives AEG, matching the run output, but the student never says what the code is for.",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "remainder_operator@L2#1",
+   "quote": "17 is not even because 17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2, so it prints E",
+   "correct": true,
+   "why": "Both remainders are worked out correctly from 17 and used in order to choose the branches."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "arithmetic_operators@L2#2",
+   "quote": "17 divided by 2 leaves 1 ... 17 % 5, which is 2",
+   "correct": true,
+   "why": "The student gets the correct int values of the % expressions for x = 17, but does not relate % to other operators."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment, and the answer makes no claim about it."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "standard_output@L2#1",
+   "quote": "the first thing it does is print A ... prints E, and then after that inner if-else it prints G, so overall I think the answer would be AEG",
+   "correct": true,
+   "why": "The student follows each print call in the order it runs and joins the letters on one line as AEG."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is divided by zero, and the answer makes no claim about it."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_exchange",
+ "why": "The answer explains why t is needed by linking it to how assignment works: a[i] = a[r] would overwrite a[i] before its value was saved, so the old value would be lost. That reason comes from the code itself, which makes it relational (L3).",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how indices work."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "assignment@L3#3",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It gives the reason the exchange needs a temporary: each assignment overwrites its target."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "variable_swap@L3#1",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It shows the swap order matters because an assignment destroys the old value."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_exchange@L3#2",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It connects the temporary to the ordered assignments that overwrite a[i], which matches the assignment -> array_exchange edge."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Variables are only involved indirectly."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about i++."
+  }
+ ]
+}

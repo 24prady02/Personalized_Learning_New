@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "program_layout",
+ "why": "The answer states one rule that is correct as far as it goes: the compiler ignores indentation. It never applies that rule to this code, gives no output for score = 50, and doesn't see that the indentation here suggests the wrong structure.",
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "program_layout@L1#2",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "It states that whitespace has no effect on behaviour, but doesn't apply this to the code or predict that only \"great\" is printed. 'However I like' is poor style, not a language misconception."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about which statements belong to the braceless if."
+  }
+ ]
+}

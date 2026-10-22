@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "declaration",
+ "why": "The answer says the local variable c gets the default value 0. In Java, a local variable has no value until it is assigned, so reading c in c + 1 is a compile error ('variable c might not have been initialized').",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "declaration@L0#5",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "This matches the wrong rule that local variables get a default value. Here the code would not compile because c is read before it is assigned."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how int works."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The claim is about what the declaration does, and that is levelled under declaration."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "named_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention named constants."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not reason about the expression c + 1."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention chained assignment."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double."
+  }
+ ]
+}

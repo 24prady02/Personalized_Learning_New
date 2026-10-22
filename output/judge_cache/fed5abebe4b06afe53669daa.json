@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "class_declaration",
+ "why": "The answer correctly names the class declaration, says it is the outer container and gives the right file name, Hello.java, but never explains why the file must be called that (that a public class's name must match its file name), so it is a correct naming plus an unexplained result.",
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "class_declaration@L1#1",
+   "quote": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+   "correct": true,
+   "why": "It correctly names the class declaration and calls it the container, but gives Hello.java without the rule that links the class name to the file name, so it does not reach the L3 relation way."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about main."
+  }
+ ]
+}

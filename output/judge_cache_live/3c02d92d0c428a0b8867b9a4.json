@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "token_vs_line_input",
+ "why": "The answer gives the correct values (42, \"\", \"Ann Lee\"), but it does not explain them, and a bare correct result is L1.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "token_vs_line_input@L1#2",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "The empty string for rest is correct, but the answer never says that readInt stops before the line break, so it is a bare result with no reasoning."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the String type."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about string literals."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives values but says nothing about how variables work."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention empty statements."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about how StdIn reads values."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the int type."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no string conversion."
+  }
+ ]
+}

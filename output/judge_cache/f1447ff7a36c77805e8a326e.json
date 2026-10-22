@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "math_round",
+ "why": "The student applies one correct rule to the statement asked about: Math.round(2.5) takes a double and returns a long, and a long cannot be stored in an int without a cast, so the line does not compile. The answer does not go on to describe the whole class of such errors or how to fix it.",
+ "concepts": [
+  {
+   "concept": "math_round",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "math_round@L2#2",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "It correctly says that Math.round on the double 2.5 returns a long, and uses that to predict a compile error for this one statement."
+  },
+  {
+   "concept": "long_type",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "long_type@L2#3",
+   "quote": "round gives a long",
+   "correct": true,
+   "why": "It applies the rule that a long cannot be stored in an int without a cast to the single step asked about."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not say anything about primitive types in general or about narrowing conversion."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention a cast or that adding (int) would fix the line."
+  }
+ ]
+}

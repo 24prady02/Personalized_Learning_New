@@ -1,0 +1,95 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student writes a correct pseudocode plan for finding the minimum in one pass (start from the first element, replace best whenever a smaller element appears, print it after the loop), which solves the task as a whole; it is a familiar pattern, so it counts as the running-extreme plan used for the minimum (L3), not transfer to a new problem (L4).",
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "print best",
+   "correct": true,
+   "why": "Print is only mentioned as the last step; no claim about how it works."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "best = element",
+   "correct": true,
+   "why": "Assignment is used inside the plan, but the answer says nothing about assignment itself."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "for each element",
+   "correct": true,
+   "why": "Pseudocode loop wording only; no claim about Java's for-each."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "best = first; for each element: if smaller than best → best = element; print best",
+   "correct": true,
+   "why": "Correct one-pass plan that keeps the smallest value seen so far, starts from the first element and reads it after the loop."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No indexing claim."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

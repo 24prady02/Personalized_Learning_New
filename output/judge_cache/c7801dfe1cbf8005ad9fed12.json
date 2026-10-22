@@ -1,0 +1,61 @@
+{
+ "answer_level": "L2",
+ "main_concept": "primitive_type",
+ "why": "The student gives both output lines correctly and backs up main's line with the copy rule for int arguments (\"Java passes copies of the values\"). That rule is applied to this code's values without tracing the swap body or linking the parts through a graph edge, so the answer is L2.",
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "primitive_type@L2#3",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "Applies the rule that a primitive value is copied and not shared to this call, which correctly explains why main still prints 7 and 42."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "then in main: num1 = 7 num2 = 42 ... main's variables do not change",
+   "correct": true,
+   "why": "Correctly says that main's num1 and num2 keep their values because the assignments inside swap change only swap's own variables."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "variable_swap@L1#1",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "Gives the correct swapped result inside swap but does not trace the three temp assignments, so it is a bare correct result."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the individual assignments work."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no arithmetic and the answer makes no claim about it."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code reads no input and the answer makes no claim about it."
+  }
+ ]
+}

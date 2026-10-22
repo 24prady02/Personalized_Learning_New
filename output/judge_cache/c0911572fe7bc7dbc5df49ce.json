@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "for_loop",
+ "why": "Because `else return -1` sits inside the loop, the method returns on the first pass, so it checks only arr[0] and never looks for the last occurrence. This treats the loop as a single check, which is the ForIsConditional misconception.",
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "for_loop@L0#2",
+   "quote": "for (...) { if (arr[i] == key) return i; else return -1; }",
+   "correct": false,
+   "why": "Both branches return, so the body runs at most once and the loop never reaches the later elements."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "if_else_statement@L1#1",
+   "quote": "if (arr[i] == key) return i; else return -1;",
+   "correct": false,
+   "why": "The two-way choice is written correctly, but it is used wrongly: the 'not found' result is decided after a single comparison."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "indexing@L1#1",
+   "quote": "arr[i] == key ... return i",
+   "correct": true,
+   "why": "It correctly uses arr[i] for the element and returns i as the position, but goes no further."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "expression@L1#1",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "A correct comparison expression, but there is no reasoning about how it is evaluated."
+  }
+ ]
+}

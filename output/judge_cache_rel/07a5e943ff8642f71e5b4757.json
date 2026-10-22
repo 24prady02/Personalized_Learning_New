@@ -1,0 +1,120 @@
+{
+ "answer_level": "L3",
+ "main_concept": "string_literal",
+ "why": "The student finds the one mistake in the classmate's line (the missing closing quote), names the rule it breaks and correctly predicts the compile-time error 'unclosed string literal'. This locates the mistake for one given failing case, which is L3; the student does not state the general class of trigger needed for L4.",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L3",
+   "way": "diagnose_an_error (limited to one given case by the boundary)",
+   "way_id": "string_literal@L4#2",
+   "quote": "the string has no closing quote, so Java says unclosed string literal",
+   "correct": true,
+   "why": "The answer correctly applies the closing-quote rule to the given faulty line and predicts the error, but only for this one case and not as a class of inputs, so it is L3."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about println."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about output."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about print."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about empty statements."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the String type."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L3",
+   "way": "diagnose_an_error (limited to one given case by the boundary)",
+   "way_id": "compile_time_error@L4#4",
+   "quote": "It will not compile: the string has no closing quote, so Java says unclosed string literal.",
+   "correct": true,
+   "why": "The answer correctly states that the missing quote stops compilation and gives the matching message, but only for the given case, so it is L3."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "print -parallel-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

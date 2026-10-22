@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "transition_matrix",
+ "why": "The answer uses the wrong rule that a row can be all zeros. Every probability row must sum to 1. The answer also blames missing links, but outDegree is 5. The real cause is int division: counts[j] / outDegree is 0 for 0, 2 and 1 divided by 5.",
+ "concepts": [
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "transition_matrix@L0#4",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "Accepts a row that sums to 0 as a valid probability row, which is the RowsNeedNotSumToOne misconception."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "dangling_pages@L0#2",
+   "quote": "it just means the page has no links",
+   "correct": false,
+   "why": "Says a page with no links can have an all-zero row, when it needs 1/N in every column. Here the page is not even dangling, since outDegree is 5."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Makes no claim about the expression counts[j] / outDegree or its int type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Does not mention the int division that cuts 2/5 and 1/5 down to 0."
+  }
+ ]
+}

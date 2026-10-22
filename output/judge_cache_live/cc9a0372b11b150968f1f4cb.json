@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_default_values",
+ "why": "The student explains the difference correctly: an array element can be read because `new` gives it a default value of 0, while a plain local variable has no value until it is assigned. This links the two rules, as the definite_assignment–array_default_values parallel edge describes.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no separate claim about variables in general."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_creation@L3#3",
+   "quote": "new fills the array with 0s",
+   "correct": true,
+   "why": "Says correctly that creating the array with new is what puts the default 0 in every slot."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Declaration syntax and scope are not discussed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about primitive types themselves."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about statements."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about the array declaration."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Mentions giving a value only as part of the definite-assignment contrast."
+  },
+  {
+   "concept": "definite_assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "definite_assignment@L3#2",
+   "quote": "a local variable has no value until you give it one",
+   "correct": true,
+   "why": "Contrasts an unassigned local variable with array elements that get default values, which is the parallel relation."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_default_values@L3#3",
+   "quote": "new fills the array with 0s, but a local variable has no value until you give it one",
+   "correct": true,
+   "why": "Explains that a[0] can be read because new gives it a default, unlike a local variable, which answers the question correctly."
+  }
+ ]
+}

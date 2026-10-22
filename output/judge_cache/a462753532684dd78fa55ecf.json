@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "char",
+ "why": "The student wrote one correct char declaration, with 'Q' as a one-character literal in single quotes, but gave no reasoning, and the name SingleLetter breaks the lowerCamelCase convention the task asked for, so it counts as one correct aspect (L1).",
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "char@L1#2",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": true,
+   "why": "Picking char for one letter and writing 'Q' in single quotes follows the char literal rule, but this is a short, familiar declaration with no justification, so it is L1, not L2 or L4. The capitalised name is a style slip, not a misconception about char."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about String."
+  }
+ ]
+}

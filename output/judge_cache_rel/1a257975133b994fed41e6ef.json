@@ -1,0 +1,96 @@
+{
+ "answer_level": "L1",
+ "main_concept": "transition_matrix",
+ "why": "The student gives the correct row 1 values (0.48, 0.03, 0.48), but only as a bare result with no working, so the answer is L1.",
+ "concepts": [
+  {
+   "concept": "transition_matrix",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "transition_matrix@L1#2",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "Page 1 links out to pages 0 and 2, so each of those gets .90*1/2 + .10/3 ≈ 0.483 and page 1 gets .10/3 ≈ 0.033. The values are right, but a bare result with no justification is L1."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about the double type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student shows no operator reasoning."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about indexing."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about 2-D arrays."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student does not evaluate any expression step by step."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about comments."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about type conversion."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "two_dimensional_array -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> two_dimensional_array",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

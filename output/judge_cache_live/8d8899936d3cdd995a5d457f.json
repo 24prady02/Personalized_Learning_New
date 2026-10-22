@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable_swap",
+ "why": "The student traces the first two lines correctly but then reads b = t as 'b equals a', as if t still followed a's current value, so they conclude both variables end up as b and never see the swap.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "assignment@L0#2",
+   "quote": "Then b = t means b equals a",
+   "correct": false,
+   "why": "This treats t = a as a lasting link to a, but t keeps the value a had when it was assigned, so b gets the original a."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention arrays."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "variable_swap@L0#1",
+   "quote": "so both are b",
+   "correct": false,
+   "why": "The student does not see that t keeps the old a, so they miss that the three lines swap a and b and decide both end up equal."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No separate claim about variables beyond the assignment error."
+  },
+  {
+   "concept": "array_copy",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention copying an array."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how statements run in order."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention int."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no chained assignment."
+  }
+ ]
+}

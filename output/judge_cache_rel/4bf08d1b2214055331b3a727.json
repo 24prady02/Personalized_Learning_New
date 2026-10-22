@@ -1,0 +1,120 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_default_values",
+ "why": "The answer correctly explains why a[0] prints: new gives array elements a default 0, while a local variable has no value until it is assigned. This is the parallel relation between array default values and definite assignment.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about variables beyond the definite-assignment contrast."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_creation@L3#3",
+   "quote": "new fills the array with 0s",
+   "correct": true,
+   "why": "It ties creation with new to putting default values in the slots."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about declaration as such."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the array declaration."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Assignment is only implied through definite assignment."
+  },
+  {
+   "concept": "definite_assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "definite_assignment@L3#2",
+   "quote": "but a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It contrasts the unassigned local variable with the array element that already has a default, which is the parallel edge."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_default_values@L3#3",
+   "quote": "new fills the array with 0s, but a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It explains that a[0] can be read because of its default value, unlike a local variable that was never assigned."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_declaration -prerequisite-> array_creation",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_creation -prerequisite-> array_default_values",
+   "stated": true,
+   "quote": "new fills the array with 0s"
+  },
+  {
+   "edge": "declaration -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "declaration -prerequisite-> definite_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "definite_assignment -parallel-> array_default_values",
+   "stated": true,
+   "quote": "new fills the array with 0s, but a local variable has no value until you give it one"
+  }
+ ]
+}

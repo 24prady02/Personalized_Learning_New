@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "string_type",
+ "why": "All three values are correct (age = 42, rest = \"\", name = \"Ann Lee\"), but the answer gives no reason, such as readInt leaving the end of the line for the first readLine, so a bare correct result is L1.",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "an empty string, and \"Ann Lee\"",
+   "correct": true,
+   "why": "It correctly says rest is the empty String and name is \"Ann Lee\", but it does not trace how the input is read."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "\"Ann Lee\"",
+   "correct": true,
+   "why": "The quotes only show the value; the answer makes no claim about string literals."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "line_by_line_trace",
+   "quote": "42, an empty string, and \"Ann Lee\".",
+   "correct": true,
+   "why": "It does not reason about the three statements running in order or what each one does."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The code does no string conversion and the answer makes no claim about it."
+  }
+ ]
+}

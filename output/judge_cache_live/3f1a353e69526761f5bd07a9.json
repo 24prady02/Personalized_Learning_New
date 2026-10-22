@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student wrote correct code that starts the running minimum at data[0] and updates it on every pass with Math.min, which applies the running-extreme plan to the minimum; because this is a familiar variant of the max plan rather than an unseen problem, it is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "The code finds the minimum in one pass, keeping the smallest value seen so far. It safely starts from an actual element, so the result is correct."
+  },
+  {
+   "concept": "math_library",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "math_library@L2#3",
+   "quote": "min = Math.min(min, v)",
+   "correct": true,
+   "why": "The code uses Math.min correctly as a function whose returned value is stored back into min."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about method calls."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "println is only used to print the result, with no reasoning about it."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double beyond declaring the variable."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not address this concept."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not reason about standard output."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code contains no empty statement."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not address this concept."
+  }
+ ]
+}

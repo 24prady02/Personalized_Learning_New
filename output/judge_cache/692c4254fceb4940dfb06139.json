@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "primitive_type",
+ "why": "The answer correctly names String as the type that isn't primitive and gives one reason (it is a class), but it never applies the idea to the code's lines or values or relates it to anything else.",
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "The other four are primitive.",
+   "correct": true,
+   "why": "It correctly sorts int, double, boolean and char as primitive types, but only names them."
+  },
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "String; it is a class.",
+   "correct": true,
+   "why": "It correctly says String is a non-primitive class type, but only names it."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "it is a class",
+   "correct": true,
+   "why": "It never says that a primitive variable holds its value while a reference variable holds an address."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "String; it is a class.",
+   "correct": true,
+   "why": "It says nothing about data types as sets of values and operations."
+  }
+ ]
+}

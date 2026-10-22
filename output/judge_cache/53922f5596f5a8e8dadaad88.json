@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "math_round",
+ "why": "The line int k2 = Math.round(2.5); is not in the given code, and the student correctly says it will not compile because Math.round returns a long, which is reasoning about changed code using the rule.",
+ "concepts": [
+  {
+   "concept": "math_round",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "It finds the compile-time error in storing Math.round's long result in an int and gives the rule that causes it."
+  },
+  {
+   "concept": "long_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "round gives a long",
+   "correct": true,
+   "why": "It correctly says a long cannot be stored in an int, so the changed line is a compile-time error."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types or narrowing in general."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention a cast or how to fix the line."
+  }
+ ]
+}

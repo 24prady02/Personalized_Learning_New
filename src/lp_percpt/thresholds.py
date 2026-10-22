@@ -17,6 +17,8 @@ MIS_FLOOR = 0.50
 KEEP_SCORE = 1.0
 RELATIVE_KEEP = 0.5
 MAX_CONCEPTS = 3
+MAX_CONCEPTS_V2 = 5      # LP_LINK_V2=1: the judge filters the wider set
+MAX_CONCEPTS_PICK = 8    # LP_LINK_PICK=1: shortlist the judge chooses from
 
 # Gate G4 Attribution: a clause also counts for a linked concept whose topic
 # similarity is within this margin of the best one (and at least BAND_LO)

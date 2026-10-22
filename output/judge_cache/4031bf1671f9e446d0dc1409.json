@@ -1,0 +1,61 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The copy plan is right: it makes a new int array the same size as data2 and copies each element in order. But it writes data2.length() twice, and Java arrays have a length field, not a length() method, so the code does not compile. That makes it L2 with an error rather than correct new code.",
+ "concepts": [
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "It uses the right copy plan for data2 (new array first, then copy index by index), but data2.length() is a compile error."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "array_creation@L2#3",
+   "quote": "int[] copy = new int[data2.length()]",
+   "correct": false,
+   "why": "Using new int[...] to make a separate array is right, but the size should be data2.length, not data2.length()."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "int@L1#1",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "It uses int correctly for the index and the element type, but says nothing more about int."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "for_loop@L2#1",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The loop has the standard start, test and update for visiting every index 0..n-1, but the test calls length() on an array, which does not compile."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "increment_operators@L1#1",
+   "quote": "i++",
+   "correct": true,
+   "why": "i++ is used correctly as the loop update, with no further reasoning about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "primitive_type@L1#1",
+   "quote": "int[] copy",
+   "correct": true,
+   "why": "It uses the primitive int correctly as the element type, and nothing more."
+  }
+ ]
+}

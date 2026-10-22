@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_output",
+ "why": "The student reads the printed text as if it ran as code, saying println(\"x is 5\") sets x to 5. Java does not work that way, and the answer never gives this code's output.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about println ending the line or how it differs from print."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how a method is called."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_output@L0#1",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "It treats the output text as an action on the program. Printing only writes characters and changes no variable, and this code has no x."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how text in quotes is read."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions print."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not come up in the answer."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the order in which statements run."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not come up in the answer."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not come up in the answer."
+  }
+ ]
+}

@@ -1,0 +1,125 @@
+{
+ "answer_level": "L2",
+ "main_concept": "type_conversion",
+ "why": "The student correctly says which two lines convert automatically (d = i) and which needs a cast ((int) 9.99), with a short range-based reason, but does not combine the conversions into one explanation or deal with the other conversion lines.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Mentioned only as part of the conversion rule, with no separate claim about double."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No separate claim about int."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "type_conversion@L2#1",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+   "correct": true,
+   "why": "Applies widening (automatic) and narrowing (needs a cast) correctly to two named lines of this code, with a justification."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "explicit_cast@L1#2",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "Correctly says a narrowing cast is required, but does not give the value it produces (9) or how truncation works."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about primitive types beyond the conversion itself."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about assignment."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about expressions."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about data types."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> type_conversion",
+   "stated": true,
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)"
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "data_type -prerequisite-> primitive_type",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "type_conversion -prerequisite-> explicit_cast",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

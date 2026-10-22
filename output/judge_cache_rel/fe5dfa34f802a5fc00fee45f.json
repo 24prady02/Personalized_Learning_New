@@ -1,0 +1,110 @@
+{
+ "answer_level": "L2",
+ "main_concept": "continue_statement",
+ "why": "The answer correctly applies continue (the even values of i) and break (i == 5) to this loop's values, but it describes each separately and never relates them to each other.",
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "break_statement@L2#1",
+   "quote": "break stops the loop completely at 5",
+   "correct": true,
+   "why": "It applies break to the value i = 5 and correctly says the whole loop ends, which fits the output 1,3, sum=4."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "continue_statement@L2#1",
+   "quote": "continue jumps to the next i for the even numbers",
+   "correct": true,
+   "why": "It applies continue to the even values of i and correctly says control moves on to the next i."
+  },
+  {
+   "concept": "labeled_break",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is only about the first loop."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "for the even numbers",
+   "correct": true,
+   "why": "It reads i % 2 == 0 correctly as 'even' but gives no further reasoning about the operator."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is only about the first loop."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "break_statement -prerequisite-> labeled_break",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "nested_loops -prerequisite-> labeled_break",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "break_statement -parallel-> continue_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

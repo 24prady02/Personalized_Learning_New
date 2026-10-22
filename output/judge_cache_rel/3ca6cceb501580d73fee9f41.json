@@ -1,0 +1,110 @@
+{
+ "answer_level": "L2",
+ "main_concept": "conditional_operator",
+ "why": "The student traces the calls in order with values (-1, then finalAdjust, then /2, then 25+...). But they pick the true branch for -1 >= 0, which is a slip in an otherwise rule-correct trace: finalAdjust(-1) is really -10, reCalculate returns -5, and num2 = 20. They also leave out num1 = -11 and never state the call order.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "reCalculate returns 2 and num2 = 27",
+   "correct": true,
+   "why": "Storing 25 + 2 into s and returning it as total is the right way to apply assignment; the wrong value comes from the earlier slip."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not used in the code or the answer."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "int@L2#2",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2",
+   "correct": true,
+   "why": "5 / 2 is correctly truncated to 2 by int division."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about building the output strings."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "compound_assignment@L2#3",
+   "quote": "finalAdjust(-1)",
+   "correct": true,
+   "why": "v += 10 with v = -11 is correctly taken as -1."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "conditional_operator@L2#1",
+   "quote": "finalAdjust(-1) gives 5",
+   "correct": false,
+   "why": "For -1, the condition -1 >= 0 is false, so the result is v - 9 = -10, not -1 + 6 = 5. This is a slip in the trace."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not in the code."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not in the code."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "string_concatenation -prerequisite-> string_conversion",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "increment_operators -parallel-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "string_literal",
+ "why": "The student finds and explains the one given failing case: the missing closing quote breaks the rule that a String literal is enclosed in double quotes, so the code gives a compile error ('unclosed string literal'); locating and fixing one given failing case is L3, not a diagnosis of a whole class of errors (L4).",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L3",
+   "way": "relation_to_neighbour (diagnosis of one given failing case)",
+   "way_id": "string_literal@L4#2",
+   "quote": "the string has no closing quote, so Java says unclosed string literal",
+   "correct": true,
+   "why": "It applies the closing-quote rule to the classmate's one line and says why compilation fails, but it does not generalise to a trigger class, so by the boundary it is L3."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about println's behaviour."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss output."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention print."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss method calls."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the String type."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L3",
+   "way": "diagnose one given failing case",
+   "way_id": "compile_time_error@L4#4",
+   "quote": "It will not compile ... Java says unclosed string literal",
+   "correct": true,
+   "why": "It correctly names this one compile-time error and the compiler's message, but only for the given case, so it is L3."
+  }
+ ]
+}

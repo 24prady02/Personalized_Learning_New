@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_default_values",
+ "why": "The answer correctly explains the contrast: `new` gives every array element a default of 0, so a[0] can be read, while a local variable has no value until it is assigned. This links array default values to the definite-assignment rule for local variables, as the parallel graph edge does.",
+ "concepts": [
+  {
+   "concept": "array_default_values",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_default_values@L3#3",
+   "quote": "new fills the array with 0s, but a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It sets array element defaults against unassigned local variables, which is the definite_assignment parallel edge."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_creation@L3#3",
+   "quote": "new fills the array with 0s",
+   "correct": true,
+   "why": "It says that creating the array with new is what puts a default value in every slot."
+  },
+  {
+   "concept": "declaration",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "declaration@L1#2",
+   "quote": "a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It states the rule that a declared local has no value until assigned, but does not apply it to the code or mention the compile error."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "variable@L1#2",
+   "quote": "a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It states one correct rule, that a variable must be assigned before it is read, without applying it further."
+  }
+ ]
+}

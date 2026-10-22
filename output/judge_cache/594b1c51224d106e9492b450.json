@@ -1,0 +1,25 @@
+{
+ "answer_level": "L0",
+ "main_concept": "double",
+ "why": "The answer covers only one literal, 3.14159, and wrongly says the bare number is as clear as a name; it never explains why 3.14159 should be a named constant such as Math.PI, or why 0 and 1 in the loop are acceptable, so it does not answer whether every number here is a magic number.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "double@L0#1",
+   "quote": "Writing 3.14159 in the formula is just as clear as a name.",
+   "correct": false,
+   "why": "It judges the double literal by everyday readability and says nothing correct or specific to programming about it, such as that it is an approximate value of pi that should be named, for example Math.PI. No way fits well; double@L0#1 is closest, but it is about treating decimals as exact."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about long, and the code does not use long."
+  }
+ ]
+}

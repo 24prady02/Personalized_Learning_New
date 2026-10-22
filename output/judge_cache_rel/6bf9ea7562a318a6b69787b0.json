@@ -1,0 +1,120 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_output",
+ "why": "The student treats printed text as if it acted on the program: they say println(\"x is 5\") sets x to 5. That is the documented everyday misreading of output, and it ignores the actual print/println output of the given code.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "println@L0#1",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "In Java, println only writes the text and then ends the line; it never assigns a variable, and the given code has no x."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about calling methods in general."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_output@L0#1",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "This matches the folk reading exactly: printing \"X is 1\"-style text is taken to set X."
+  },
+  {
+   "concept": "string_literal",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "string_literal@L0#1",
+   "quote": "println(\"x is 5\") sets x to 5",
+   "correct": false,
+   "why": "The student reads the quoted text as code instead of as literal characters to be printed."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention print."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statement order or sequence."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "print -parallel-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

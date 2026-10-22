@@ -1,0 +1,34 @@
+{
+ "answer_level": "L3",
+ "main_concept": "string_literal",
+ "why": "The student finds the cause of this one given faulty line (the string has no closing quote), says it is a compile-time error and names the correct compiler message, but does not generalise to the wider class of errors, so it is L3 rather than L4 (the boundary for locating one given failing case).",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L3",
+   "way": "diagnose_an_error (boundary: one given failing case → L3)",
+   "way_id": "string_literal@L4#2",
+   "quote": "the string has no closing quote, so Java says unclosed string literal",
+   "correct": true,
+   "why": "It correctly links the missing closing quote to the broken rule and the error, but only for this one case and not for a trigger class."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L3",
+   "way": "diagnose_an_error (boundary: one given failing case → L3)",
+   "way_id": "compile_time_error@L4#4",
+   "quote": "It will not compile ... Java says unclosed string literal",
+   "correct": true,
+   "why": "It correctly says the error is caught at compile time and names the matching message, but only for this given line."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements or the order they run in."
+  }
+ ]
+}

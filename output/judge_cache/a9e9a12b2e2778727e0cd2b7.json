@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "char_arithmetic",
+ "why": "All three printed lines are correct, but the student only lists them and never explains why, so this is a bare correct result: L1.",
+ "concepts": [
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "char_arithmetic@L1#1",
+   "quote": "67, a tab, C; ... then 662.",
+   "correct": true,
+   "why": "It gives 67 and 662 correctly but never says that 'A' is promoted to its int code 65."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "escape_sequences@L1#1",
+   "quote": "67, a tab, C",
+   "correct": true,
+   "why": "It correctly reads \\t as one tab character but does not explain it or apply the rule further."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "explicit_cast@L1#1",
+   "quote": "C",
+   "correct": true,
+   "why": "It gives the correct char C but never says that (char)(c + 2) turns the code 67 into a letter."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code does not use command-line arguments and the answer makes no claim about them."
+  }
+ ]
+}

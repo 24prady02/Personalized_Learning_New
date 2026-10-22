@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "type_conversion",
+ "why": "The answer applies the widening rule and the narrowing-cast rule to two specific lines of the code (d = i and the 9.99 to int line), giving a reason for one of them; it does not cover the other conversions (q, r, p, t) and does not link the two rules into one principle based on range or information loss, so it is a correct L2 answer that is incomplete.",
+ "concepts": [
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "type_conversion@L2#1",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It correctly marks the int-to-double assignment as automatic and the double-to-int line as needing a cast, line by line, but leaves out the other conversion lines."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "because double is bigger",
+   "correct": true,
+   "why": "It describes double as the wider type, which is one correct point, but goes no further."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "int@L1#1",
+   "quote": "going from 9.99 to int",
+   "correct": true,
+   "why": "It names int as the target of the narrowing conversion and says nothing else about int."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "explicit_cast@L1#2",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It states correctly that a narrowing conversion needs a cast, but does not give the resulting value 9 or deal with the casts on q and r."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about data types in general."
+  }
+ ]
+}

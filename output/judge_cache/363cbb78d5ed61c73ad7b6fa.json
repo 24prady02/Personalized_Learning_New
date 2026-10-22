@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The answer explains why the inner loop bound must be a[i].length: rows can have different lengths, so a[i].length works for any 2-D array, while a[0].length only works for a regular one such as a 3 × 3 board.",
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "correct": true,
+   "why": "It correctly uses the length field so the code adapts to each row's real size instead of a fixed size."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "It implies each row is a separate array that may have its own length, which is the ragged-array relation."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "a[i].length",
+   "correct": true,
+   "why": "It names a[i] as a row but does not apply the indexing rules to the elements."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arrays with three or more dimensions."
+  }
+ ]
+}

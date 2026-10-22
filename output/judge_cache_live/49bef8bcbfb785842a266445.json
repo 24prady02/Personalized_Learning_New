@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The student finds the cause in the classmate's code and fixes it: the cast is applied before the multiplication, so the value is 0, the die is always 1, and the test for 6 is never true. Finding and fixing the mistake for one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_random@L3#2",
+   "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "It links Math.random()'s [0, 1) result to where the cast goes: casting first always gives 0, so the cast must cover the whole product."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "explicit_cast@L3#2",
+   "quote": "The cast happens first, so (int) Math.random() is 0 ... Cast after multiplying.",
+   "correct": true,
+   "why": "It correctly says the cast applies to Math.random() alone, which gives 0, and fixes the error by putting the cast around the product."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept beyond the cast."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Multiplying is only mentioned as part of the cast fix."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

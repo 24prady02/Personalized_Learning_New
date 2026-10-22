@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "printing_array_reference",
+ "why": "The answer correctly says the output is [I@ plus a hex code rather than the numbers, but it never explains why: println(a) turns the array's reference into text. That is one correct point with no reasoning about the code, so it is L1.",
+ "concepts": [
+  {
+   "concept": "printing_array_reference",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "printing_array_reference@L1#1",
+   "quote": "Something like [I@ and a hex code, not the numbers.",
+   "correct": true,
+   "why": "It correctly names the output as the reference's text form and not the elements, but it does not trace how the reference becomes text."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about indexing."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about literals."
+  }
+ ]
+}

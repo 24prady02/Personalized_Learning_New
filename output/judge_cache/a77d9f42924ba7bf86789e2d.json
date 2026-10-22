@@ -1,0 +1,43 @@
+{
+ "answer_level": "L4",
+ "main_concept": "input_graph",
+ "why": "The answer reasons about code that is not given (the 90-10 rule without the 10% jump) and correctly predicts that a closed group of pages traps the surfer, so every page outside it ends with rank 0.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "input_graph@L4#1",
+   "quote": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "correct": true,
+   "why": "It predicts correctly how the link structure (a group with no links out) decides the ranks once the code is changed to remove the random jump, and it gives being trapped as the reason."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not evaluate or discuss the p[i][j] expression."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about visit counters or estimating ranks from freq[i]/T."
+  }
+ ]
+}

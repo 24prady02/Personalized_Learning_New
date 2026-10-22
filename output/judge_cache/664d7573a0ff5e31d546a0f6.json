@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "conditional_operator",
+ "why": "The student follows the chain finalAdjust → reCalculate → update with values and applies the rules correctly, but makes one slip on the condition: -1 >= 0 is false, so finalAdjust(-1) is -10, which gives reCalculate -5 and num2 = 20. The answer also leaves out num1 = -11.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "so reCalculate returns 2 and num2 = 27",
+   "correct": false,
+   "why": "The student stores the evaluated right sides in the right order (v = -1, then 2, then s = 25 + 2), but the result is wrong because the earlier slip carries through."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about ++ or --."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "int@L2#2",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2",
+   "correct": true,
+   "why": "The student truncates 5 / 2 to 2, which is correct int division."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the printed text is built."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention v += 10 as such; it only uses its result, -1."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "conditional_operator@L2#1",
+   "quote": "finalAdjust(-1) gives 5",
+   "correct": false,
+   "why": "The student evaluates the condition and takes one branch, but picks the true branch (v + 6) even though -1 >= 0 is false. This is a single slip in an otherwise rule-correct trace."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about converting values to String."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no arrays."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use Integer constants."
+  }
+ ]
+}

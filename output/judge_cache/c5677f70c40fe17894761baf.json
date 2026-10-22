@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "remainder_operator",
+ "why": "The answer only lists the names of the relevant elements (remainder, widening, concatenation, println newline). It gives no output, does not apply 9 % 5 = 4 or 4 + 26.3 = 30.3, and has no justification, so it is L1 (naming the elements).",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It names widening to double but does not apply it to 4 + 26.3."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It names println with a newline but does not predict the two output lines."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names the remainder operator but never computes 9 % 5 = 4."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_concatenation@L1#1",
+   "quote": "concatenation",
+   "correct": true,
+   "why": "It names concatenation but does not apply it to \"num4 = \" + 30.3."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types in general."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no separate claim about arithmetic operators beyond the remainder."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The only output claim is the word println, which is levelled under println."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about converting the double to a String."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Division by zero does not come up in this code or in the answer."
+  }
+ ]
+}

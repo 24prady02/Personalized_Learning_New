@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_else_statement",
+ "why": "The student goes through every part of the code in order. They test 17 for evenness, skip the then branch, take the else branch, use 17 % 5 = 2 to choose E, and then print G, giving the correct output AEG. They do not say what the code is for as a whole.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_else_statement@L2#1",
+   "quote": "17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part",
+   "correct": true,
+   "why": "The student tests each condition once, runs only the branch that applies, and continues after the inner if-else."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "remainder_operator@L2#1",
+   "quote": "17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2",
+   "correct": true,
+   "why": "The student works out both remainders correctly for this code's values."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators beyond the remainder."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions as such."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "print@L2#1",
+   "quote": "the first thing it does is print A ... prints E, and then after that inner if-else it prints G, so overall I think the answer would be AEG",
+   "correct": true,
+   "why": "The student puts the printed letters one after another in the order they run."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment and the answer does not mention one."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the output stream beyond what is covered under print."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "A, which always happens no matter what x is, and then it checks whether x is even",
+   "correct": true,
+   "why": "The student evaluates each condition once and carries on after it, which is the correct rule."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Division by zero is not involved in this code."
+  }
+ ]
+}

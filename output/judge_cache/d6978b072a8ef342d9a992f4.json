@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The answer has every step of the copy in the right order: a new array of the same length, then a loop that copies each element by index. But it uses data2.length() twice, and length() is a String method. For an array, length is a field, so this code does not compile. That makes it a multistructural answer with an error, not correct new code at L4.",
+ "concepts": [
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The plan is right (new array first, then copy element by element), but data2.length() does not compile on an array."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "new int[data2.length()]",
+   "correct": false,
+   "why": "It creates a new int array sized from data2, but the length is written as a method call instead of the field data2.length."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The header correctly visits every index from 0 to n-1, but the bound data2.length() is not valid for an array."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "It only declares an int index variable and does nothing else with int arithmetic."
+  }
+ ]
+}

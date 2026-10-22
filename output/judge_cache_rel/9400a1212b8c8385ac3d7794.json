@@ -1,0 +1,115 @@
+{
+ "answer_level": "L0",
+ "main_concept": "named_constants",
+ "why": "The answer says a literal 3.14159 in the formula is as clear as a name, which is the MagicNumbers wrong rule, and it never considers the loop's 0 and 1, which are not magic numbers.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "named_constants",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "named_constants@L0#1",
+   "quote": "Writing 3.14159 in the formula is just as clear as a name.",
+   "correct": false,
+   "why": "This matches the MagicNumbers misconception: a fixed value like pi should get a final UPPER_CASE name such as PI (or use Math.PI) for readability and one-place change."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the operators."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "long is not involved."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Math.round is not involved."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -prerequisite-> long_type",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

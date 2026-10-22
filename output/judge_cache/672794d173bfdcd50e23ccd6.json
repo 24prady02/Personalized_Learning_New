@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The answer uses the right plan for this task, copying element by element in a loop, but it never creates the copy array with new and its bound i <= data2.length goes one index too far, so the code throws ArrayIndexOutOfBoundsException and is not a correct copy.",
+ "concepts": [
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "copy[i] = data2[i];",
+   "correct": false,
+   "why": "It copies one element per index into a separate array, but leaves out copy = new int[data2.length] and its loop bound runs past the end."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "It treats length as the last valid index, but the last element is data2[data2.length-1], so data2[data2.length] is out of bounds."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "for (int i = 0; i <= data2.length; i++)",
+   "correct": false,
+   "why": "The header is a valid counted loop, but the <= test makes one pass too many over the indices."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "int is only used to declare the loop index, so the answer makes no claim about int itself."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "two_dimensional_array",
+ "why": "The student links the bound to each row's own length. They see that a[0].length is enough only for a square board, and that a general 2-D array needs a[i].length because its rows can have different lengths (a ragged array). This relational point comes from how Java 2-D arrays work, but the student writes no full method.",
+ "concepts": [
+  {
+   "concept": "two_dimensional_array",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "two_dimensional_array@L3#3",
+   "quote": "For a 3 × 3 board I would use a[0].length, but for any 2-D array I need a[i].length.",
+   "correct": true,
+   "why": "Each row is its own array, so rows can differ in length (ragged). The column bound must therefore be read from each row."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "The student uses the length field so the loop bound follows the real size of each row, not a fixed width."
+  },
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "indexing@L3#4",
+   "quote": "a[i].length",
+   "correct": true,
+   "why": "Treating a[i] as row i, a 1-D array with its own length, shows the student knows the first index picks the row."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arrays with three or more dimensions."
+  }
+ ]
+}

@@ -1,0 +1,96 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The student uses sensorReadings.length - 2 so the code works for any array size instead of a hard-coded index, and gives a reason: the last index is length - 1. That is the purpose of the length field, so L3.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "correct": true,
+   "why": "It uses the length field instead of a fixed number and works out the next-to-last position from the last index, length - 1."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss expressions as such."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The subtraction is used but not explained."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "indexing@L2#3",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9",
+   "correct": true,
+   "why": "It correctly writes the value into one element by using a computed index in square brackets."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The assignment is written correctly but not explained."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "array_bounds@L1#1",
+   "quote": "the last index is length - 1",
+   "correct": true,
+   "why": "It states the correct upper bound of the legal index range."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> array_bounds",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

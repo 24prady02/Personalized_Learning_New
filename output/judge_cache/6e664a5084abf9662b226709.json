@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The student finds and fixes the bug in this one failing case: the cast applies to Math.random() before the multiply, so the die is always 1 and never 6, which is why the result is 0.0. Fixing one given failing case is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "explicit_cast@L3#2",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Correctly links when the cast happens to the range of Math.random(): casting first gives 0, so the cast has to cover the whole product."
+  },
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_random@L3#2",
+   "quote": "(int) Math.random() is 0 and the die is always 1",
+   "correct": true,
+   "why": "Uses the fact that Math.random() returns a value in [0,1) to explain why casting first always gives 0, then fixes the code by casting after multiplying."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the random move."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about shuffling."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer correctly says sum is the accumulator and count is the counter, but gives no reason from the code: it doesn't mention sum += v[i], that count++ runs only when v[i] == 8, or what values they reach.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "accumulator_pattern@L1#1",
+   "quote": "sum builds a total",
+   "correct": true,
+   "why": "It correctly names sum as the running total but doesn't connect this to sum += v[i] or trace its values."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "counter_pattern@L1#1",
+   "quote": "count counts",
+   "correct": true,
+   "why": "It correctly names count as the counter but doesn't say it adds 1 only when v[i] == 8, and gives no values."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables in general."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the output."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about string concatenation."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the traversal."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention +=."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about names or naming conventions."
+  }
+ ]
+}

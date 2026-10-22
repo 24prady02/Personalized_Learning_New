@@ -1,0 +1,110 @@
+{
+ "answer_level": "L0",
+ "main_concept": "transition_matrix",
+ "why": "The student says an all-zero row is an acceptable probability row, which is the documented misconception RowsNeedNotSumToOne. They also miss that the zeros come from integer division (0/5, 2/5 and 1/5 are all 0 in int arithmetic), since this page has outDegree 5 and is not a page without links.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student says nothing about the / operator or integer division. They put the zeros down to missing links."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about how counts[j] / outDegree is evaluated or what type it has."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "dangling_pages@L0#2",
+   "quote": "An all-zero row is fine; it just means the page has no links.",
+   "correct": false,
+   "why": "Says a page with no links can have an all-zero row. In fact every row must sum to 1, and a page with no links gets 1/N in every entry."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about the input format or how the tallies are read."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about int versus double types."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about array indexing."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about the loop body or blocks."
+  },
+  {
+   "concept": "array_creation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim about creating p or its default values."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "transition_matrix@L0#4",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "Accepts a row that sums to 0 as a valid probability row. A row must be a probability distribution that sums to 1."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_creation -prerequisite-> indexing",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "input_graph -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "transition_matrix -prerequisite-> dangling_pages",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

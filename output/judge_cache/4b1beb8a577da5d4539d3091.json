@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "string_literal",
+ "why": "The answer gives the correct final values (42, \"\" and \"Ann Lee\") but does not explain them, for example why readLine returns the empty rest of the first line after readInt, so it is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_literal@L1#1",
+   "quote": "an empty string, and \"Ann Lee\"",
+   "correct": true,
+   "why": "It correctly writes the String values as text in double quotes, including the empty string, but does not apply any rule to the code's lines."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer have no + with a String operand, so the answer makes no claim about string conversion."
+  }
+ ]
+}

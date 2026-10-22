@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "command_line_args",
+ "why": "The answer correctly links the empty args array to the index args[0] being out of bounds, which explains the run-time crash for this case; it does not generalise to a class of inputs or to changed code.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Links having no typed arguments to there being no valid index 0 in args."
+  },
+  {
+   "concept": "run",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "Correctly places the failure at run time, while java Twice executes."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "args[0] is out of bounds",
+   "correct": true,
+   "why": "Index 0 is not in the range 0..length-1 when the length is 0, so the access throws ArrayIndexOutOfBoundsException."
+  },
+  {
+   "concept": "args_length",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Matches the rule that with no arguments even args[0] is out of bounds."
+  }
+ ]
+}

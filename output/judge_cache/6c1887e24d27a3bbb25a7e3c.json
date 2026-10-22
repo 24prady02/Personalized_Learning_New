@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "double",
+ "why": "The student fixes this one failing case correctly: (a + b) / 2.0 gives 11 / 2.0 = 5.5. They link the parentheses to the order of operations and the double operand to avoiding integer division. Fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Links an operand's type to which division runs: a double divisor makes the int sum widen, so the fraction is kept."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Sees that the average needs double division and puts the double inside the division itself, which avoids the LaterDoubleLiteralFixesDivision misconception."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "expression@L3#3",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Parentheses override precedence so the sum is computed before the division, unlike a + b / 2."
+  },
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "int@L3#1",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Implies that int divided by double promotes the int and gives a double result."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "arithmetic_operators@L1#2",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Refers to the operator-order rule only in passing and does not apply it to the values."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about run-time errors."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "accumulator_pattern",
+ "why": "The order B C A D E is correct, and the student explains it by tying each part of the accumulator to where it sits around the loop: set to 0 before it, added to in every pass inside the body, and printed once after it.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "accumulator_pattern@L3#1",
+   "quote": "sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop",
+   "correct": true,
+   "why": "The student links each accumulator step to its place in the loop: setup before, update in the body each pass, use after."
+  },
+  {
+   "concept": "loop_scope",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about scope or where a variable can be used."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The for-loop mechanics are not discussed."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "\"Added to\" refers to the accumulator's role, not to how += works."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no reasoning about the start value, the condition or the update."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ is not mentioned."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Braces and blocks are not discussed."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No error is diagnosed."
+  }
+ ]
+}

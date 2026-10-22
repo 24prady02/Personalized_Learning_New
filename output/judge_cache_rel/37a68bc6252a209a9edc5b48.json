@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "while_loop",
+ "why": "In one sentence the student correctly ties the multiple-of-5 check inside the body to when the loop ends: after that pass finishes, not partway through it. They don't list the output (1 4 7 10), but their stopping explanation is relational and taken from the code.",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#6",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "Correctly says the body sets the stop flag and the pass completes before the loop ends (at i=10, the loop stops after printing 10)."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_control@L1#1",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "Correctly names the update step but doesn't apply it to the values."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The multiple-of-5 test is mentioned only as part of the loop's stopping rule."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student gives no output."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed separately."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -parallel-> while_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> off_by_one_error",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

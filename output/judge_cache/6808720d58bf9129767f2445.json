@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "program_text",
+ "why": "The student says the file can be renamed to Greeting.java while it still holds public class hello, but Java requires a public class to be in a file with the same name, so this is the 'class name and file name are independent' misconception.",
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "class_declaration@L0#2",
+   "quote": "I can rename the file to Greeting.java and keep public class hello.",
+   "correct": false,
+   "why": "This treats the public class name as separate from the file name, but public class hello must be in hello.java."
+  },
+  {
+   "concept": "program_text",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "program_text@L0#2",
+   "quote": "rename the file to Greeting.java and keep public class hello",
+   "correct": false,
+   "why": "This uses the wrong rule that the source file can have any name, but javac rejects a public class hello saved in Greeting.java."
+  },
+  {
+   "concept": "compile",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about compiling."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about running the program."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention main."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention println."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention method calls."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention output."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention compile errors; it only implies, wrongly, that there would be none."
+  }
+ ]
+}

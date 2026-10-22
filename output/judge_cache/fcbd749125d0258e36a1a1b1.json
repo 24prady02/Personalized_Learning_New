@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The question asks for three statements that store count + 1 back into count, but the answer gives none. It only makes one correct point: printing count + 1 does not change the variable. That is a single aspect with no assignment applied, so it is L1.",
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "counter_pattern@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It notes that count only changes when a value is stored back into it. It never writes count = count + 1, count += 1 or count++."
+  },
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "println@L2#3",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "It correctly says this one call prints the value one higher than count and leaves count unchanged."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "standard_output@L2#3",
+   "quote": "shows one more, but ... does not change count",
+   "correct": true,
+   "why": "It correctly says output only shows a value and does not change any variable."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "statement@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": false,
+   "why": "In Java, count + 1; is not a valid expression statement, so it gives a compile error ('not a statement'). It does not run and leave count unchanged."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "data_type",
+ "why": "The answer gives the correct definition of a data type (a set of values plus its operations) but does not apply it to the types or lines in this code, so it is L1.",
+ "concepts": [
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "data_type@L1#1",
+   "quote": "A set of values plus the operations you can do on them.",
+   "correct": true,
+   "why": "It defines a data type correctly but does not apply the definition to int, double or any line of the code."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention double."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention an accumulator."
+  },
+  {
+   "concept": "chained_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention chained assignment."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no array and the answer does not mention one."
+  }
+ ]
+}

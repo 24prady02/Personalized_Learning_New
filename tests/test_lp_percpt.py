@@ -16,7 +16,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.lp_percpt.evidence import (MET, NOT_MET, UNCERTAIN, ConceptEvidence, Item,  # noqa: E402
-                                    content_gate, help_seeking)
+                                    content_gate, help_seeking, no_claim)
 from src.lp_percpt.knowledge import get_knowledge  # noqa: E402
 from src.lp_percpt.ladder import walk  # noqa: E402
 from src.lp_percpt.student_graph import StudentGraph  # noqa: E402
@@ -92,6 +92,21 @@ def test_content_gate():                                     # G1
 def test_help_seeking_gate():                                # G2
     assert help_seeking("just tell me the answer")
     assert not help_seeking("the answer is 3 because both operands are int and the result is truncated")
+
+
+@pytest.mark.parametrize("text", [
+    "Why does my loop never end?", "Is count++ the same as count += 1?", "What does % do?",
+    "How do I make my array bigger after I create it?", "I tried it and it crashed. Why?", "Is javac wrong?"])
+def test_no_claim_gate_questions(text):                      # G2b
+    assert no_claim(text)
+
+
+@pytest.mark.parametrize("text", [
+    "It prints 5, right?", "3 2 1?", "x becomes 6 and y stays 2, correct?", "idk, 10?", "Is it 7?",
+    "Is the output 12?", "Does it print 'abc'?", "So it prints 3 then 4?", "i = 3 so it prints 3?",
+    "The output is 12. Is that right?", "It prints 5 because i starts at 0. Is that right?"])
+def test_no_claim_gate_tentative_answers_are_claims(text):    # G2b
+    assert not no_claim(text)
 
 
 # ── Step 10 stability gates and Step 12 rules ──────────────────────────────

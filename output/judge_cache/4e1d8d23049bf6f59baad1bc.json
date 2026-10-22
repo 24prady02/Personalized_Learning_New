@@ -1,0 +1,34 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_operators",
+ "why": "The answer correctly states the truth-table rules for && and || but gives no explanation and does not work through the four combinations of p and q, so it states the rule without applying it.",
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "logical_operators@L1#2",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "These are the correct definitions of && and ||, given as rules without applying them value by value."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about which operands get evaluated."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the boolean type beyond using the words true and false."
+  }
+ ]
+}

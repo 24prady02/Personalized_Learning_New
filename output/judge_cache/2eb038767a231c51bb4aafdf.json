@@ -1,0 +1,79 @@
+{
+ "answer_level": "L3",
+ "main_concept": "switch_statement",
+ "why": "The student links the missing break statements to fall-through and uses that to get the correct final result, 50: matching case 2 falls into case 3 (20), then case 4 (40), then default (50).",
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "switch_statement@L3#2",
+   "quote": "the swich no have break so it go down all the case and result become 50",
+   "correct": true,
+   "why": "Relates the lack of break to fall-through through the later cases to default, which gives result 50. That is correct, though it skips naming the entry at case 2."
+  },
+  {
+   "concept": "break_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "break_statement@L3#4",
+   "quote": "no have break so it go down all the case",
+   "correct": true,
+   "why": "Correctly states that without break, execution in a switch falls through into the next cases."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student does not reason about how assignment works."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  }
+ ]
+}

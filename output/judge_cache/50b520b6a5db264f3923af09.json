@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "filter",
+ "why": "The student states the general definition of a filter (it reads standard input and writes standard output), which is correct, but does not apply it to this code's test (v >= 0) or the pipeline, so it is L1.",
+ "concepts": [
+  {
+   "concept": "filter",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "filter@L1#2",
+   "quote": "It reads from standard input and writes to standard output.",
+   "correct": true,
+   "why": "Correct general definition of a filter, not tied to this code's lines or values."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Only mentioned as part of the filter definition; no claim about standard output itself."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Only mentioned as part of the filter definition; no claim about standard input itself."
+  },
+  {
+   "concept": "piping",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "redirection",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

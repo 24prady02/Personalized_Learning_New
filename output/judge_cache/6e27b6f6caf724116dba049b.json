@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "while_loop",
+ "why": "The answer links the update (+3) and the isDone flag to the loop test in one correct sentence: the loop finishes the pass where i is a multiple of 5 and then stops at the next test. It does not trace the output values, so it is L3 rather than L2 or L4.",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#1",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "Correct: when i is 10 the flag is set, that pass still finishes, and the next test is false, so the loop stops after 1 4 7 10."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_control@L1#1",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "It correctly names the update step but does not cover the start value or the i < 100 bound."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the order in which statements run."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the loop running one pass too many or too few."
+  }
+ ]
+}

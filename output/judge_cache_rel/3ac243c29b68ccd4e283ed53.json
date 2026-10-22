@@ -1,0 +1,110 @@
+{
+ "answer_level": "L2",
+ "main_concept": "while_loop",
+ "why": "The student follows the do-while loop with the real values: num1 = 9, num2 = 12, num2 drops at i = 9 and at i = 11, and the output is 8, 10, 12, 13. All of this matches the run, but it is a value-by-value trace that never says what the loop is for, and part (b), the for-loop rewrite, is not answered.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "num1 is 9 and num2 starts at 12.",
+   "correct": true,
+   "why": "The student works out the declarations num1 = num + 1 and num2 = num1 + 3 with the current values and gets the right stored values."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "increment_operators@L2#1",
+   "quote": "At i = 9 num2 drops to 11; at i = 11 it drops to 10.",
+   "correct": true,
+   "why": "The student applies num2-- one step at a time, each time the else branch runs, with the right values."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "formatted_output@L2#2",
+   "quote": "So it prints 8, 10, 12, 13,",
+   "correct": true,
+   "why": "The predicted text matches the \"%d, \" format, follows from the trace, and agrees with the run."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about standard output."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only states the results of the additions and does not reason about the operators."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no print call, and the answer says nothing about print."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the start value of i, its update or the i < 14 test, and the for-loop rewrite is missing."
+  },
+  {
+   "concept": "while_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "while_loop@L2#1",
+   "quote": "At i = 9 num2 drops to 11; at i = 11 it drops to 10. So it prints 8, 10, 12, 13,",
+   "correct": true,
+   "why": "The student traces the passes in order with the changing values and gets the right output, but does not state what the loop does as a whole."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This code does no number conversion."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_output -prerequisite-> formatted_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "while_loop -prerequisite-> number_conversion",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

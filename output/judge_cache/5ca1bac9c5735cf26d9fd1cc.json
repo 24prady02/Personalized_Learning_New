@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "redirection",
+ "why": "The student correctly gives what each of the three commands shows in the terminal and says args is empty, but only predicts results command by command without explaining the mechanism or how the commands relate.",
+ "concepts": [
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "Correctly predicts that > file shows nothing in the terminal and fills the file, and that Average < data.txt prints the average."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "Correctly predicts that only Average's output appears and no file is made, but does not relate the pipe to the > then < pair."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "This is a correct bare result with no reason given, for example that redirected or piped input never reaches args."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the read loop."
+  }
+ ]
+}

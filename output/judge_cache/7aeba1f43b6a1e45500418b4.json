@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "if_statement",
+ "why": "The student doesn't give the output or say when the loop stops. Instead they correctly claim that a changed program, which assigns the boolean straight to isDone instead of using the if, behaves the same, so this is reasoning about code that isn't given.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if.",
+   "correct": true,
+   "why": "This is correct new code: isDone is always false while the loop is running, so assigning the test result directly gives the same output, 1 4 7 10, and stops at the same point as the if."
+  },
+  {
+   "concept": "assignment",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "It correctly stores the value of a boolean expression in isDone, and this new statement replaces the if."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer reuses i % 5 but says nothing about what it works out to."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop's && condition."
+  }
+ ]
+}

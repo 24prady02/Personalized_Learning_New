@@ -1,0 +1,31 @@
+{
+ "answer_level": "L1",
+ "main_concept": "standard_input",
+ "why": "The answer gives one correct general feature of a filter (it reads standard input and writes standard output) but does not apply it to this code: it never mentions the if (v >= 0) test or the pipeline values (4 -1 7 -3 0 2 becoming 4 7 0 2) that show the filtering.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It reads from standard input",
+   "correct": true,
+   "why": "It correctly says the program reads standard input, but not how the isEmpty/readInt loop takes each value from the piped stream."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "writes to standard output",
+   "correct": true,
+   "why": "It correctly says the program writes standard output, but not that only the non-negative values are printed or that > clean.txt sends them to the file."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer do not use printf or formatted output."
+  }
+ ]
+}

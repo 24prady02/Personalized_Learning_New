@@ -1,0 +1,105 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The student's code puts `else return -1;` inside the loop body as if it ran once after the loop. In Java it runs on the first pass where the element does not match, so the method gives up after checking only arr[0]. Even when it does match, it returns the first index that matches, not the last.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The if-else itself is written legally. The error is where it is placed in the loop, not the if-else rule."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "indexing@L1#1",
+   "quote": "if (arr[i] == key)",
+   "correct": true,
+   "why": "It uses arr[i] correctly to read the element at position i, but does not reason any further about indexing."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "block@L0#5",
+   "quote": "for (...) { if (arr[i] == key) return i; else return -1; }",
+   "correct": false,
+   "why": "It treats `return -1`, which is inside the loop braces, as if it ran once after the loop. In Java every statement in the braces is part of the body and runs on every pass."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not use arithmetic operators."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no separate claim about a plain if statement."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not declare an array."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The loop header is left out as (...), and the answer does not reason about how the loop is controlled."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The header is left out, and the answer does not reason about how the loop runs. The flaw is in the body (covered under block)."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -prerequisite-> if_else_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

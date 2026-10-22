@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "if_else_statement",
+ "why": "The student turned the switch into an else-if chain whose structure is correct: case 1 maps to the first test, the fall-through of case 2 into case 3 becomes value == 2 || value == 3, and default becomes the final else. But 'elif' is Python and not Java (Java needs 'else if'), so this is a relational answer with an error.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#4",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "The answer relates the switch to an else-if chain whose final else catches the remaining cases, but 'elif' is not Java syntax and should be 'else if'."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "if (value == 1) result = 30;",
+   "correct": true,
+   "why": "Each case label becomes a correct boolean test in parentheses that guards one assignment."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "logical_operators@L2#1",
+   "quote": "(value == 2 || value == 3)",
+   "correct": true,
+   "why": "It uses an inclusive || correctly to express the cases that fall through together."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "result = -10",
+   "correct": true,
+   "why": "Each branch keeps the switch's assignment unchanged and correct."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about short-circuit evaluation."
+  },
+  {
+   "concept": "side_effect_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There are no side-effecting expressions in the code or the answer."
+  }
+ ]
+}

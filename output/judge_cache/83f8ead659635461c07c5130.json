@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "empty_statement",
+ "why": "The student treats the println after 'if (x > 0);' as the if's body, but the ';' is an empty statement that is the whole body, so the answer uses a wrong rule and says positive is not printed when the run shows it is.",
+ "concepts": [
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "empty_statement@L0#1",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The student reads the ';' as just ending the line and misses that it forms the then-branch, which is the SemicolonAfterIfHeader error, so the println always runs."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_statement@L0#1",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The student reads the if as the English 'if x is positive, do the next line' and picks the wrong body, so the predicted output contradicts how Java runs it."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "With x = -3, x > 0 does give false, so this one comparison is right."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  }
+ ]
+}

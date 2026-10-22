@@ -1,0 +1,100 @@
+{
+ "answer_level": "L1",
+ "main_concept": "class_declaration",
+ "why": "The student correctly names the part as the class declaration, a container, and gives the right file, Hello.java, but never explains that the file name must match the class name, so the file answer is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "class_declaration@L1#1",
+   "quote": "That is the class declaration; it holds everything",
+   "correct": true,
+   "why": "Correctly names the element as the outer container of the program, without applying any rule further."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "program_text",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "program_text@L1#1",
+   "quote": "must be saved as Hello.java",
+   "correct": true,
+   "why": "Gives the correct source file name but not the matching rule behind it."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "main is not mentioned."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "program_text -prerequisite-> class_declaration",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "class_declaration -prerequisite-> main_method",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

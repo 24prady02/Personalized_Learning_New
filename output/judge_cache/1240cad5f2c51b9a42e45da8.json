@@ -1,0 +1,23 @@
+{
+ "answer_level": "L2",
+ "main_concept": "char",
+ "why": "The student picked the right type and wrote a valid char literal for Q, but named the variable SingleLetter instead of singleLetter, which is the name the question asks for and the Java camelCase convention; one slip in otherwise rule-correct code is L2 with an error, so it cannot reach L4.",
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": false,
+   "why": "The char type and the single-quoted 'Q' are correct and compile, but the name breaks camelCase and does not match the required singleLetter."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about String; using single quotes rather than double quotes is about char."
+  }
+ ]
+}

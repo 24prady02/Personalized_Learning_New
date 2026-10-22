@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "string_literal",
+ "why": "The student gives the output line by line for the iterations that print numbers, but the answer is a multistructural error: it leaves out the trailing space that \"%d \" prints after each number, and it says there is no final empty line because 'the loop stops at 1', when in fact the outer loop also runs for i = 0 and println() prints an empty line.",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "3 2 1 / 2 1 / 1\" (no empty line at the end), \"because the loop stops at 1.",
+   "correct": false,
+   "why": "It predicts each printed line, but it drops the space after each number from \"%d \" and misses the empty line that println() prints when i = 0."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how expressions are evaluated."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "This code has no convergence test, and the answer does not mention one."
+  }
+ ]
+}

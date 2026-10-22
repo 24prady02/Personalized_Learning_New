@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "integer_division",
+ "why": "The student finds both bugs in this one failing case, precedence and int division, and fixes them correctly with (a + b) / 2.0, giving a reason for each change. Fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "They see that an average needs a double divide and that two int operands would truncate, so they fix it inside the division itself. This is a correct fix for the given case."
+  },
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "They link the operand's type to how / behaves: the double 2.0 promotes the int sum, so 11/2.0 keeps the fraction and gives 5.5."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "expression@L3#3",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "They use parentheses to override precedence so the sum is worked out before the division."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about run-time errors."
+  }
+ ]
+}

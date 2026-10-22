@@ -1,0 +1,61 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The answer writes the right plan, copying data2 into copy one element at a time in a for loop. It has two mistakes: the bound i <= data2.length goes one index too far and throws ArrayIndexOutOfBoundsException at i == data2.length, and copy is never created with new int[data2.length]. New code must be correct to reach L4, so this is L2 with an error.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "int@L1#1",
+   "quote": "int i = 0",
+   "correct": true,
+   "why": "int is used correctly as the type of the loop index, but no int rule is reasoned about."
+  },
+  {
+   "concept": "length_field",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "length_field@L2#1",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "data2.length is correctly written as a field with no parentheses, but using <= instead of < reaches index data2.length, one past the last valid index data2.length-1. That counts as a slip in the bound, not a stated wrong rule."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "for_loop@L2#1",
+   "quote": "for (int i = 0; i <= data2.length; i++)",
+   "correct": false,
+   "why": "The init, test and update are well formed, but the test gives one pass too many (a wrong iteration count), so the last pass reads outside the array."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "increment_operators@L2#3",
+   "quote": "i++",
+   "correct": true,
+   "why": "i++ is used correctly as the update that adds 1 to the index after each pass."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "copy[i] = data2[i];",
+   "correct": false,
+   "why": "It copies element by element, which is right, but it never creates the new array copy and it runs past the end of data2, so the code fails."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "none",
+   "way_id": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer avoids copy = data2 but says nothing about aliasing."
+  }
+ ]
+}

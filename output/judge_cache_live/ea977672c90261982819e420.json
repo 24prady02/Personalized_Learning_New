@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "named_constants",
+ "why": "The answer says writing 3.14159 directly in the formula is as clear as giving it a name, which is the MagicNumbers misconception, so it is prestructural for named constants.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the double type."
+  },
+  {
+   "concept": "named_constants",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "named_constants@L0#1",
+   "quote": "Writing 3.14159 in the formula is just as clear as a name.",
+   "correct": false,
+   "why": "It holds the MagicNumbers wrong rule: it denies that a final, UPPER_CASE name such as PI makes the formula clearer than the bare literal."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about operators."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about long."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about Math.round."
+  }
+ ]
+}

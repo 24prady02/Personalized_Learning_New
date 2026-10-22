@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "dangling_pages",
+ "why": "The answer correctly names page 2 as the dangling page and gives one reason (it has no outgoing links), but it does not trace how the code builds that page's row or how the formula breaks.",
+ "concepts": [
+  {
+   "concept": "dangling_pages",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "dangling_pages@L1#1",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "It points out the page with no outgoing links (outDegree 0) but does not apply the 1/N row rule or the division by zero to the code."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the input format or the link pairs."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the 90-10 random leap."
+  }
+ ]
+}

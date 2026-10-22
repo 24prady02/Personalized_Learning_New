@@ -1,0 +1,70 @@
+{
+ "answer_level": "L2",
+ "main_concept": "declaration",
+ "why": "The student wrote a declaration that compiles and has the right type and initial value (char, 'Q'), but the name SingleLetter is not the requested singleLetter and breaks Java's lowerCamelCase convention, so this is L2 with an error rather than a misconception.",
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "char@L1#1",
+   "quote": "char SingleLetter = 'Q'",
+   "correct": true,
+   "why": "The student correctly picks char for one letter and writes the literal in single quotes, but gives no further reasoning about char."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements beyond ending the line with a semicolon."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types as such."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The value is set by an initializer inside the declaration, and there is no separate claim about assignment."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The naming mistake is counted under declaration, and the answer makes no other claim about variables."
+  },
+  {
+   "concept": "declaration",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "declaration@L2#3",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": false,
+   "why": "The type name = value; form is correct for this value, but the identifier SingleLetter is not singleLetter: it breaks the lowerCamelCase convention, and because Java is case-sensitive it is a different name."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use String."
+  }
+ ]
+}

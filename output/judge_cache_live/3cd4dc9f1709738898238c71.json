@@ -1,0 +1,70 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_operators",
+ "why": "The answer correctly states the truth-table rule for && and || on p and q, but it does not work through the value combinations or explain why the rule holds.",
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "logical_operators@L1#2",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "It is a correct statement of the && and || rules, but it gives no case-by-case application or explanation."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about evaluation order."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "control_flow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The reasoning is about the operators, not the boolean type itself."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

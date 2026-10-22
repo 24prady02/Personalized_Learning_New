@@ -1,0 +1,52 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_type",
+ "why": "The answer says toUpperCase changes name in place, which goes against the Java rule that Strings are immutable and toUpperCase returns a new String that is thrown away here. So it predicts JAVA, but the program prints java.",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "string_type@L0#1",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "Thinks a String method changes the existing String, but Strings are immutable and toUpperCase returns a new String."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "method_call@L0#1",
+   "quote": "JAVA, because toUpperCase changes name",
+   "correct": false,
+   "why": "Thinks a value-returning call used on its own changes its target, when the result has to be stored or used."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Says nothing about println beyond guessing what is printed."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Makes no claim about identifiers."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Makes no claim about the program text."
+  }
+ ]
+}

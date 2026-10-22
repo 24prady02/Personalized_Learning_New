@@ -1,0 +1,43 @@
+{
+ "answer_level": "L4",
+ "main_concept": "assignment",
+ "why": "For a writing task with no given code, the student wrote a correct plan for finding the minimum: start with the first value, replace best whenever an element is smaller, then print best. Correct new code built around assignment updates is L4 transfer.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L4",
+   "way": "transfer_to_a_new_program",
+   "way_id": "assignment@L4#3",
+   "quote": "best = first; for each element: if smaller than best → best = element",
+   "correct": true,
+   "why": "The answer correctly uses assignment to set and then update a running minimum in a new program, so best ends up holding the smallest value."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "print@L1#1",
+   "quote": "print best",
+   "correct": true,
+   "why": "The answer only names an output step for the result, without any detail of how print behaves."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the double type or any primitive type."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about input or output streams."
+  }
+ ]
+}

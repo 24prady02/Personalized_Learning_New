@@ -1,0 +1,125 @@
+{
+ "answer_level": "L3",
+ "main_concept": "compile_time_error",
+ "why": "The answer finds both compile-time errors in the given code, says they must be fixed before the program can run, and then names the run-time crash at args[1]; this ties compile-time and run-time errors together for this one program, which is L3, but it doesn't say which compile error javac reports first (it would report the missing ; before the file-name error).",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "command_line_args@L2#2",
+   "quote": "args[1] crashes at run time because Ann is args[0]",
+   "correct": true,
+   "why": "Applies the rule to this command line: Ann, the only argument, is args[0]."
+  },
+  {
+   "concept": "compile",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how compiling works beyond naming the compile errors."
+  },
+  {
+   "concept": "program_text",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "program_text@L3#1",
+   "quote": "the class must be in Greeting.java",
+   "correct": true,
+   "why": "Correctly says the public class name sets the file name, so saving it as Hello.java makes javac reject it."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Running is mentioned only as the place where the crash happens, which is covered under run_time_error."
+  },
+  {
+   "concept": "comment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "comment@L2#1",
+   "quote": "The comment never runs.",
+   "correct": true,
+   "why": "Correctly says the // line in this code takes no part in execution."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "compile_time_error@L3#3",
+   "quote": "Two compile errors first ... After that it compiles, but args[1] crashes at run time",
+   "correct": true,
+   "why": "Says the compile errors come before running, and that code that compiles can still crash."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "run_time_error@L3#1",
+   "quote": "After that it compiles, but args[1] crashes at run time",
+   "correct": true,
+   "why": "Places the ArrayIndexOutOfBounds crash at run time, only after compiling succeeds."
+  },
+  {
+   "concept": "indexing",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "indexing@L2#2",
+   "quote": "args[1] crashes ... because Ann is args[0]",
+   "correct": true,
+   "why": "Applies zero-based indexing to this array: index 1 does not exist when there is only one element."
+  },
+  {
+   "concept": "args_length",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions how many arguments there are or args.length."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "compile -prerequisite-> run",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "program_text -prerequisite-> comment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "compile -prerequisite-> compile_time_error",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "run -prerequisite-> run_time_error",
+   "stated": true,
+   "quote": "After that it compiles, but args[1] crashes at run time"
+  },
+  {
+   "edge": "command_line_args -prerequisite-> args_length",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "compile_time_error -parallel-> run_time_error",
+   "stated": true,
+   "quote": "Two compile errors first ... After that it compiles, but args[1] crashes at run time"
+  },
+  {
+   "edge": "program_text -prerequisite-> compile",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
@@ -133,6 +134,23 @@ def main() -> None:
     # its scenarios comes up, then reused from the cache
     tracer = get_tracer()
 
+    def student_edges(relations, assessed, text):
+        # LP_JUDGE_RELATIONS=1: a graph edge is the student's own when the judge says the answer
+        # states it, both ends are stored concepts, and the quote is found in the answer
+        norm = lambda t: " ".join(re.findall(r"\w+", (t or "").lower()))
+        stored = {c["concept"] for c in assessed if "judge_no_level" not in (c.get("gates") or [])}
+        out = []
+        for rel in relations or []:
+            m = re.match(r"\s*(\w+)\s*-(\w+)->\s*(\w+)", str(rel.get("edge", "")))
+            if not m:
+                continue
+            a, typ, b = m.groups()
+            quoted = bool(norm(rel.get("quote"))) and norm(rel.get("quote")) in norm(text)
+            out.append({"source": a, "type": typ, "target": b, "quote": rel.get("quote", ""),
+                        "stated": bool(rel.get("stated")), "quote_found": quoted,
+                        "student_edge": bool(rel.get("stated")) and quoted and a in stored and b in stored})
+        return out
+
     results = []
     for i, s in enumerate(scenarios, 1):
         q = questions.get(s["question"], {})
@@ -150,17 +168,38 @@ def main() -> None:
         assessed = [c for c in concepts if c["assessed"]]
         top = assessed[0] if assessed else None
         trace = tracer.trace(q.get("code", ""), hint=shown_text(q)) if tracer.available and q.get("code") else None
+        max_level = ("L0" if any(c.get("wrong_rule") for c in assessed)
+                     else max((c["prompt_level"] for c in assessed), default=None))
+        jd = r.get("judge") or {}
+        # rubric judge: its one level for the answer as a whole, unless the code run
+        # proves a wrong trace or a reproduced misconception (L0) or the prompt makes no claim
+        run_l0 = any(c.get("level_source") == "run" and c["prompt_level"] == "L0" for c in assessed)
+        if r["prompt_gates"] and set(r["prompt_gates"]) & {"no_claim", "help_seeking"}:
+            final = None
+        elif os.environ.get("LP_FINAL") == "max_level" and max_level:
+            # LP_FINAL=max_level: the highest level among the stored concepts (L0 if one holds a wrong rule)
+            final = max_level
+        elif run_l0:
+            final = "L0"
+        elif jd.get("answer_level") in ("L0", "L1", "L2", "L3", "L4"):
+            final = jd["answer_level"]
+        elif jd.get("answer_level") == "none":
+            final = None
+        else:
+            final = max_level
         results.append({**s, "question_text": q.get("question", ""), "code": q.get("code", ""),
                         "item_format": q.get("format", ""), "prompt_gates": r["prompt_gates"],
-                        "judge_unavailable": (r.get("judge") or {}).get("unavailable"),
+                        "judge_unavailable": jd.get("unavailable"),
+                        "judge_answer": {k: jd.get(k) for k in ("answer_level", "main_concept", "why", "concepts", "relations")},
+                        "final_level": final,
                         "run_output": trace.run.output if trace else None,
                         "concepts": concepts,
                         "top_concept": top["concept"] if top else None,
                         "top_level": top["prompt_level"] if top else None,
                         # an answer holding a rule that contradicts Java is L0 (the graph's L0 edge
                         # logic), when the code run or the judge found it
-                        "max_level": ("L0" if any(c.get("wrong_rule") for c in assessed)
-                                      else max((c["prompt_level"] for c in assessed), default=None)),
+                        "max_level": max_level,
+                        "student_edges": student_edges(jd.get("relations"), assessed, s["text"]),
                         "map": f"maps/{s['student']}.html"})
         print(f"[{i}/{len(scenarios)}] {s['id']} {s['question']}: "
               + (", ".join(f"{c['concept']}={c['prompt_level']}" for c in concepts) or "(" + ",".join(r["prompt_gates"]) + ")"), flush=True)

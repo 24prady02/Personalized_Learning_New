@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "dangling_pages",
+ "why": "The answer correctly picks out page 2 as the dangling page and gives the defining fact (it has no outgoing links), but it does not trace the code's rows or relate this to the matrix formula.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the input format."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Comments are not discussed."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "dangling_pages@L1#1",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "It correctly names page 2 as the page with no outgoing links, which is the definition of a dangling page."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about the matrix."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about indexing."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about the arithmetic operators."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about 2-D arrays."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about expressions."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about the random leap."
+  }
+ ]
+}

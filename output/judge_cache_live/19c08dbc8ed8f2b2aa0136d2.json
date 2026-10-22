@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "ragged_array",
+ "why": "The student correctly states that the inner loop must be bounded by a[i].length, not a[0].length, but does not explain why (rows can differ in length) and does not apply the rule to the method's loops.",
+ "concepts": [
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how a 2-D array is built beyond the row-length bound."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The field is only used here as part of the ragged-row rule and is not reasoned about on its own."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about indexing."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "multidimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "row_major_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about loop order or printing row by row."
+  },
+  {
+   "concept": "ragged_array",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "ragged_array@L1#2",
+   "quote": "for any 2-D array I need a[i].length",
+   "correct": true,
+   "why": "It states the correct rule that each row is processed up to its own length, without naming ragged rows or the failure class, and without applying the rule in code."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

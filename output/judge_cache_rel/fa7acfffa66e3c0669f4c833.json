@@ -1,0 +1,110 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The answer gives none of the three requested statements (count = count + 1; count += 1; count++;) and offers only one correct point: printing or evaluating count + 1 does not change count.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "println@L2#3",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "Correctly says the call prints the value of count + 1 without changing any variable."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output stream itself."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "counter_pattern@L1#1",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It touches only one part of the update (that count must be changed for real) and writes no increment statement."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "expression@L2#3",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "Correctly applies the rule that evaluating an expression with no assignment changes no variable; it misses that a bare count + 1; does not even compile ('not a statement')."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how method calls work."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about + beyond 'one more'."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no rule about statements."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "expression -prerequisite-> method_call",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

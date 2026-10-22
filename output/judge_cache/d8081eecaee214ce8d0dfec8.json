@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "variable",
+ "why": "The student links each identifier to the role its variable plays in the code (i is only the loop index, c counts the passing scores), keeps i, renames only c to a name that says what it holds, and correctly says the output stays 3. This matches the naming-convention relation for variables.",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how a[i] accesses an element."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the for loop runs."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the loop's start, test or update."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "loop_variable@L3#3",
+   "quote": "i is fine because it is only the loop index.",
+   "correct": true,
+   "why": "It correctly names i's stepper or index role and uses that role to justify the short name."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss ++."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the traversal."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "counter_pattern@L3#4",
+   "quote": "c should be passCount, since it counts the passing scores.",
+   "correct": true,
+   "why": "It works out from the code that c counts the passes where the score is at least 60."
+  },
+  {
+   "concept": "variable",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "variable@L3#5",
+   "quote": "c should be passCount, since it counts the passing scores. It still prints 3.",
+   "correct": true,
+   "why": "It links the name to what the variable holds, uses lowerCamelCase, and sees that renaming does not change the value (confirmed output 3)."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no invariant argument."
+  }
+ ]
+}

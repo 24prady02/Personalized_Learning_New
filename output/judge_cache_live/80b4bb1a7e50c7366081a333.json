@@ -1,0 +1,79 @@
+{
+ "answer_level": "L1",
+ "main_concept": "transition_matrix",
+ "why": "The values are correct: page 1 has 2 out-links, so the entries are .90·1/2 + .10/3 ≈ 0.483, then .10/3 ≈ 0.033, then ≈ 0.483. But the answer gives only the numbers, with no working or rule, so it is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the double type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No operator evaluation is shown."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "transition_matrix@L1#2",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The row 1 probabilities are correct, but there is no justification, so this is L1."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about indexing."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about 2-D arrays."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No expression evaluation is shown."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about comments."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about type conversion."
+  }
+ ]
+}

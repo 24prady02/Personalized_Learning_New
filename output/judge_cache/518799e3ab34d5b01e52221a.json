@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "while_loop",
+ "why": "In one correct sentence the answer links the if that sets isDone to the loop condition. It says the loop finishes the pass where i is a multiple of 5 (i = 10) and then stops at the next test, which matches the run output 1 4 7 10, though it never lists the printed values.",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "It correctly says the whole pass runs and the loop ends at the next condition test once the flag is set, which links the if/flag to the while condition."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "It describes only the update step (i = i + 3) and does not cover the start value or the i < 100 test."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the order of statements or what print does."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about bounds or counting passes."
+  }
+ ]
+}

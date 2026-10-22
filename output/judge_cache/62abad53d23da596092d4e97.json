@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer does not say what is printed for either input (5.0 for part (a), and nothing for part (b), because count stays 0). It only gives a different way to build the sum while leaving out negative values, which touches one part of the accumulator update and never applies it to the given values.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "accumulator_pattern@L1#2",
+   "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+   "correct": true,
+   "why": "Adding v and then taking it back out when it is negative gives the same sum, so the rule agrees with Java. But it covers only the sum update, ignores count, and is never traced with the input values, so it is one aspect without the whole code."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about count++."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about how += works beyond the general sum idea."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not say what is printed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about int arithmetic or the division."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The negative check is part of the student's own new strategy, not reasoning about the code's if statements."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop or the 99999 sentinel."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about reading the input."
+  }
+ ]
+}

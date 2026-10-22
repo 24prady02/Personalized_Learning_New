@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The student wrote correct code that uses the running-extreme plan for the minimum. It starts at data[0], updates with Math.min in one pass over the array and prints the result after the loop. This is a familiar variant of the running-maximum program, so it is L3 rather than L4.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v); System.out.println(min);",
+   "correct": true,
+   "why": "It finds the smallest value in one pass with one holder variable that starts at an actual data value, so the start value is safe. It is a slight variation of the familiar max plan."
+  },
+  {
+   "concept": "math_library",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "math_library@L2#1",
+   "quote": "min = Math.min(min, v)",
+   "correct": true,
+   "why": "Math.min is called with the class prefix and two double arguments, and its returned value is stored back in min."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only prints the result and makes no claim about println."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about standard output."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The method call is already covered under math_library, with no separate reasoning about calls."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has no empty statement."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Overflow does not apply to this answer."
+  }
+ ]
+}

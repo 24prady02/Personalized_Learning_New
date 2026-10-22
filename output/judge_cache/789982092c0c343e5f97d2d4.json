@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "sentinel_loop",
+ "why": "The answer doesn't predict any output. Instead it drops the v >= 0 filter because it treats the input as real-world rainfall that can't be negative, yet the input includes -2, so the change would alter the result.",
+ "concepts": [
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "Without the guard, -2 is added to the total and the output becomes 8/3 ≈ 2.67 instead of 5.0, so the answer relies on what rain means in real life and not on what the code does."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "I removed if (v >= 0)",
+   "correct": false,
+   "why": "It treats the if as unnecessary, but here the if is what keeps negative values out of sum and count."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how v >= 0 or v != 99999 is evaluated."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statement execution or order."
+  }
+ ]
+}

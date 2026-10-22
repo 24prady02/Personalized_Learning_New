@@ -1,0 +1,92 @@
+{
+ "answer_level": "L2",
+ "main_concept": "declaration",
+ "why": "The student wrote a full, compilable declaration with the right type and initializer for this task, but the name is SingleLetter instead of singleLetter, which breaks lowerCamelCase. That makes this a correct application of the rule with one slip (L2 with an error), not a misconception.",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "declaration@L2#3",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": false,
+   "why": "The type, name and initializer are in the right form and the line compiles, but the identifier should be singleLetter, not SingleLetter."
+  },
+  {
+   "concept": "char",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "char@L2#3",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": true,
+   "why": "The student correctly chose char for a single letter and wrote it as the one-character literal 'Q' in single quotes."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements as such."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Primitive types in general are not discussed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The only assignment is the initializer inside the declaration, so assignment is not addressed separately."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The naming slip is counted under declaration, and there is no separate reasoning about variables."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "String is not used or mentioned."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "declaration -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> char",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "char -parallel-> string_type",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

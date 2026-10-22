@@ -1,0 +1,31 @@
+{
+ "answer_level": "L0",
+ "main_concept": "double",
+ "why": "The first values in the trace are right, but the student uses a rule that goes against Java: a variable that already has a value keeps it when you assign to it again. So total stays 11.5, when the last line actually changes it to 12.42.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "after the last line total is still 11.5, because it already has a value.",
+   "correct": false,
+   "why": "Assigning to a double variable replaces what it holds: total + total * TAX stores 12.42."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "total is still 11.5, because it already has a value",
+   "correct": false,
+   "why": "total = total + ... reads total, works out the new amount and stores it back, so the value changes."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "total is 11.5",
+   "correct": true,
+   "why": "The result of a * 2 + 1.5 is right, but there is no reasoning showing that the int a * 2 gets widened to double."
+  }
+ ]
+}

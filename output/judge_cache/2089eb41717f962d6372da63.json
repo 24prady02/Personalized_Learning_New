@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "coordinate_scaling",
+ "why": "The student uses the documented wrong rule that StdDraw.point(256, 256) is measured in pixels and lands in the middle of the default window, but the default scale is the unit square, so (256, 256) is far outside the canvas and only the square is visible.",
+ "concepts": [
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "The default coordinates are the unit square, not pixels, so (256, 256) is off the canvas."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "This is the documented wrong rule that point(256, 256) draws in the middle of the default window, when in fact nothing visible is drawn."
+  },
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly names one part of the square call (the centre) but does not give its size (side 0.5, from 0.25 to 0.75)."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about double values or arithmetic."
+  }
+ ]
+}

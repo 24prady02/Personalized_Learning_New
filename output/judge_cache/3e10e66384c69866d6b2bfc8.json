@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "dangling_pages",
+ "why": "The answer correctly names page 2 as the dangling page and backs it with the defining property (no outgoing links), but it only identifies the element and doesn't trace the row computation or say how the code handles that page.",
+ "concepts": [
+  {
+   "concept": "dangling_pages",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "Page 2 has no outgoing links (outDegree 0), so it is the dangling page."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the list-of-links format or how it is read."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the .10/N leap term."
+  }
+ ]
+}

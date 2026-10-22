@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_statement",
+ "why": "The student goes through every part of the code in order with the actual values: score is 42, the test is false so the body is skipped, then execution carries on and prints done. That matches the run output and is a correct line-by-line trace, but it never states what the code is for.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "the if test is false so pass is skipped, then done is printed",
+   "correct": true,
+   "why": "The student evaluates the condition once, skips the body because it is false, and continues with the next statement."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about testing."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer doesn't mention one."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says the test is false but never evaluates 42 >= 50 explicitly."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "score gets 42",
+   "correct": true,
+   "why": "The student correctly states the value the declaration gives score."
+  },
+  {
+   "concept": "statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "statement@L2#1",
+   "quote": "score gets 42, ... then done is printed",
+   "correct": true,
+   "why": "The student runs the statements one at a time, top to bottom."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't discuss braces or blocks."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "standard_output@L2#2",
+   "quote": "pass is skipped, then done is printed",
+   "correct": true,
+   "why": "The student correctly predicts the output (done only) and justifies it from the control flow."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no for loop."
+  }
+ ]
+}

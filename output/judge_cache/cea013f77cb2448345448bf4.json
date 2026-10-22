@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "if_else_statement",
+ "why": "The answer turns the switch into one else-if chain: case 1 becomes the first test, the fall-through cases 2 and 3 are joined with ||, and default becomes the final else, but it writes the Python keyword 'elif' instead of Java's 'else if', so it does not compile and is a relational answer with an error. The run facts only check value 1, so they do not show the chain's logic is wrong.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#4",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "It builds a correct else-if chain whose final else catches the default case, but 'elif' is not Java and must be 'else if'."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "if_statement@L1#2",
+   "quote": "if (value == 1) result = 30;",
+   "correct": true,
+   "why": "The first test is a correctly written Java if with a boolean condition and a single-statement body, but the answer does not trace or explain it."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "logical_operators@L3#1",
+   "quote": "value == 2 || value == 3",
+   "correct": true,
+   "why": "It joins two comparisons with || into one boolean condition, which matches the fall-through of case 2 into case 3."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about which operand of || gets evaluated."
+  }
+ ]
+}

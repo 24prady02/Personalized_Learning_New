@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "dangling_pages",
+ "why": "The student uses the given links to pick out page 2 and gives the reason that it has no outgoing links (outDegree 0), which correctly applies the definition to this code's three pages.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about the input format."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "dangling_pages@L2#2",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "It gives the correct page and justifies it with this code's links (page 2 has outDegree 0), so it is more than a bare result."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the matrix."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about indexing."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about operators."
+  },
+  {
+   "concept": "two_dimensional_array",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about 2-D arrays."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the random leap."
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer predicts no output for any of the three inputs and relies on a wrong model: it treats StdIn as a variable that stores all the numbers like an array, when it is really a library that reads from a stream and uses each value up as it reads it.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "StdIn is a variable that holds all the numbers",
+   "correct": false,
+   "why": "StdIn is a library of static methods, and each readInt() call takes the next token from the stream and uses it up."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "a variable that holds all the numbers, like an array",
+   "correct": false,
+   "why": "This is the documented wrong rule that one variable can hold more than one value."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "StdIn is a variable that holds all the numbers, like an array.",
+   "correct": false,
+   "why": "The answer says nothing about the isEmpty() test, the loop or what is printed for 5 3 8, empty input or 5 3 abc."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "It treats input as stored data that stays in place, but a stream is read in order and each value is gone once it is read."
+  }
+ ]
+}

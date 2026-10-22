@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "remainder_operator",
+ "why": "The answer is a list of keywords (remainder, modulus, widening, double, concatenation, println, newline). It names the right elements but never works out 9 % 5 = 4 or 4 + 26.3 = 30.3, and never gives the exact output.",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names the % operator correctly but does not apply it to 9 % 5 to get 4."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It names widening to double, but does not show that the int 4 becomes 4.0 and is added to 26.3 to give 30.3."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It says println adds a newline, but does not predict the two output lines."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about division by zero, and the code never divides by zero."
+  }
+ ]
+}

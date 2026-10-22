@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "type_conversion",
+ "why": "The answer correctly picks out two lines and gives the rule (automatic widening to the larger type, and a cast for double to int), but it skips the other conversion lines (q, r, p, t) and never applies the rule to the values, so it is not a full trace.",
+ "concepts": [
+  {
+   "concept": "type_conversion",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "type_conversion@L1#2",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int).",
+   "correct": true,
+   "why": "It states the right rule (widening is automatic, narrowing needs a cast) for two lines only, not for every line that converts."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "because double is bigger",
+   "correct": true,
+   "why": "Says one correct thing about double: it is the larger-range type."
+  },
+  {
+   "concept": "int",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "int@L1#1",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "Says correctly that a double becomes an int only with an (int) cast, but does not mention truncation or the int values."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about data types in general."
+  }
+ ]
+}

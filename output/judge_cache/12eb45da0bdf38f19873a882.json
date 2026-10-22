@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "compile",
+ "why": "The answer correctly says that a successful javac leaves a Big.class file and prints nothing because the program has not been run yet; this is the compile result, not a relational explanation of how javac and java link together.",
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "There is a Big.class file now, but nothing is printed",
+   "correct": true,
+   "why": "A successful compile creates Big.class and produces no program output, which is exactly the compile result."
+  },
+  {
+   "concept": "run",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "because the program has not run yet",
+   "correct": true,
+   "why": "It notes that running is a separate step that has not happened, but does not explain that java Big runs the Big.class that javac made."
+  },
+  {
+   "concept": "program_text",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "There is a Big.class file now, but nothing is printed because the program has not run yet",
+   "correct": true,
+   "why": "It matches the rule that the program text's result is Big.class and output appears only when the program is run."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the class declaration or the class name."
+  }
+ ]
+}

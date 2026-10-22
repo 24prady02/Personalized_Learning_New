@@ -1,0 +1,105 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_type",
+ "why": "The student predicts JAVA because they believe name.toUpperCase() changes name. In Java a String is immutable: toUpperCase returns a new String, the code throws it away, and name stays \"java\", so the program prints java.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about println itself."
+  },
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "string_type@L0#1",
+   "quote": "JAVA, because toUpperCase changes name.",
+   "correct": false,
+   "why": "It treats the String as changeable in place, but Java Strings are immutable and toUpperCase returns a new String."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "method_call@L0#1",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "It assumes a call that returns a value changes the object it is called on, when the result must be stored or used."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about naming."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The error comes from how the String method works, not from a separate claim about variables."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about the output stream."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the literal."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the program text."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "identifier -prerequisite-> variable",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L2",
+ "main_concept": "integer_constants",
+ "why": "The answer gives the correct result, -2147483648, and backs it with a rule applied to this one value: +2147483648 is outside the int range. That is a justified prediction for a single step, but it does not explain the wrap-around or relate it to anything else, so it is L2, not L3.",
+ "concepts": [
+  {
+   "concept": "integer_constants",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "integer_constants@L2#2",
+   "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "correct": true,
+   "why": "It correctly predicts that Math.abs(Integer.MIN_VALUE) is -2147483648 and justifies this with int's range, avoiding the misconception that abs is always non-negative."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "int@L2#2",
+   "quote": "+2147483648 does not fit in an int",
+   "correct": true,
+   "why": "It applies int's fixed range to this value to explain the int result."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types in general."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about int literals in source code."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer reasons about no arithmetic operator."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention long."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The student's copy plan is right: make a new int array the same length as data2, then loop over every index and copy data2[i] into copy[i]. But it is bare code with no reasoning about aliasing or purpose, so it applies the copy rule (L2) rather than relating it to other constructs. It also writes data2.length() as a method call, which does not compile, and that misconception is marked under length_field.",
+ "concepts": [
+  {
+   "concept": "array_creation",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "array_creation@L2#3",
+   "quote": "int[] copy = new int[data2.length()]",
+   "correct": false,
+   "why": "It correctly uses new to make a separate int array sized from data2, but the size expression wrongly uses length()."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int itself."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The loop is only used as part of the copy and the answer says nothing about it as a concept."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ is the usual update and the answer makes no claim about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": true,
+   "why": "It creates the second array first and then copies each element in order, which gives a separate array, not an alias."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about loop control beyond the standard header."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "array_traversal@L2#3",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "The traversal has the right structure (0 up to i < length, copying one element per pass), but the bound is written with length()."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "length_field@L0#2",
+   "quote": "data2.length()",
+   "correct": false,
+   "why": "It treats an array's length as a method call, but it is the field data2.length with no parentheses."
+  }
+ ]
+}

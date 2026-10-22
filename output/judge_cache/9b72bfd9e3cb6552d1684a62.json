@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "int",
+ "why": "The answer gives the correct value, -2147483648, and backs it with the int range rule: +2147483648 does not fit in an int, so the result stays wrapped. That applies the rule to this one expression, but it does not go on to relate fixed range to silent wrap-around in general.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "int@L2#3",
+   "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "correct": true,
+   "why": "It works out the single asked expression correctly and justifies it with the int range: a result outside the range is stored wrapped."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types in general."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a run-time result, not about whether a literal is legal."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention long."
+  }
+ ]
+}

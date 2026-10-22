@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "conditional_operator",
+ "why": "The rewrite correctly turns the whole if-else into its expression form: the single assignment `outputValue = ...` is taken out of both branches, the condition becomes the first operand, the then-value becomes the second and the else-value the third, so the conditional operator is related to the if-else it replaces.",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "conditional_operator@L3#1",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "It correctly writes `if (c) v = a; else v = b;` as `v = c ? a : b;`, with a boolean condition and the operands in the right order."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements as such."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The assignment is used correctly, but it is part of the conditional-operator rewrite, not something the student reasons about separately."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The comparison is copied unchanged as the condition, with no reasoning about it."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The if-else is assessed through the relation edge under conditional_operator, not as a separate claim."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about expressions."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a plain if."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this answer."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this answer."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "expression -prerequisite-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -prerequisite-> if_else_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_else_statement -prerequisite-> conditional_operator",
+   "stated": true,
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;"
+  },
+  {
+   "edge": "assignment -parallel-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

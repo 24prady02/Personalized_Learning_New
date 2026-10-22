@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable",
+ "why": "The answer traces a, b and the first value of total correctly, but it says total keeps 11.5 after `total = total + total * TAX;` 'because it already has a value'. That is the static-variable misconception: a new assignment replaces the old value, so total becomes 12.42.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how double works."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no loop or accumulator here."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#5",
+   "quote": "after the last line total is still 11.5, because it already has a value",
+   "correct": false,
+   "why": "The answer says a variable keeps its first value after a new assignment, but the assignment changes total to 12.42."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer states 11.5 as a bare result and does not explain the arithmetic."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The wrong reasoning is already graded under variable as the static-value misconception."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There are no arrays in this code."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not evaluate any expression with reasoning."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention widening."
+  }
+ ]
+}

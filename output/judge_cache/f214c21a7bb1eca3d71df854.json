@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "compile",
+ "why": "The answer correctly gives the result of a successful javac Big.java: a Big.class file exists and nothing has been printed. It says this is because the program has not run yet, but it never explains the link to java Big that would lift it to L3.",
+ "concepts": [
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the source text itself."
+  },
+  {
+   "concept": "run",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "run@L1#1",
+   "quote": "nothing is printed because the program has not run yet",
+   "correct": true,
+   "why": "It correctly says compiling did not run the program, but it does not say that java Big is needed to run it or apply that rule."
+  },
+  {
+   "concept": "compile",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "compile@L2#2",
+   "quote": "There is a Big.class file now, but nothing is printed",
+   "correct": true,
+   "why": "It applies the compile result to this case: Big.class is produced and there is no program output."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the 37 error messages."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the class declaration."
+  }
+ ]
+}

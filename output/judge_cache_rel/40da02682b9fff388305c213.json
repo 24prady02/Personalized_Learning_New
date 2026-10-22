@@ -1,0 +1,115 @@
+{
+ "answer_level": "L0",
+ "main_concept": "operator_precedence",
+ "why": "The student says Java 'guesses the order' without parentheses, but Java has fixed precedence rules: * binds tighter than +, so the code compiles and r = 1 + (2 * 3) = 7. The student's rule contradicts Java, and the answer never gives r.",
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "expression@L0#1",
+   "quote": "Every expression must be fully in parentheses",
+   "correct": false,
+   "why": "The claim that every expression must be fully in parentheses is wrong: a + b * c is a valid expression with a fixed value."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student never discusses + or * themselves."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "operator_precedence@L0#1",
+   "quote": "otherwise Java guesses the order",
+   "correct": false,
+   "why": "Java does not guess the order: precedence decides the grouping deterministically, so a + b * c is a + (b * c) = 7."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "expression -prerequisite-> operator_precedence",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

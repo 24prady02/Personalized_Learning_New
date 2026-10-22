@@ -1,0 +1,125 @@
+{
+ "answer_level": "L0",
+ "main_concept": "division_by_zero",
+ "why": "The answer gives one blanket rule, 'dividing by zero gives an error', which matches the ZeroDivisionAlwaysCrashes misconception: it makes no distinction between 5 / z, which throws, and 1.0 / 0, which prints Infinity in the run output.",
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "division_by_zero@L0#2",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "It treats every division by zero as an error, but the run output shows 1.0 / 0 gives Infinity. Only int division by zero, as in 5 / z, throws an ArithmeticException."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about integer division in particular."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the int type."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention precision."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss the operators."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept is not relevant to the answer."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> integer_division",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "integer_division -prerequisite-> normalization",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "double -prerequisite-> floating_point_precision",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> division_by_zero",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "double -prerequisite-> division_by_zero",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L0",
+ "main_concept": "statement",
+ "why": "For the input 5 3 abc, StdIn.readInt() throws an exception when it reaches \"abc\", so println never runs and nothing is printed; the student thinks the program quietly skips the bad token and prints 8 2, which is the wrong rule that the computer does what the programmer meant instead of what the statements do.",
+ "concepts": [
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "statement@L0#2",
+   "quote": "It prints 8 2 and skips abc.",
+   "correct": false,
+   "why": "readInt() stops with an exception on \"abc\", so the println statement is never reached; the program does not skip the token on its own."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how sum += x or count++ store values; 8 2 is only a final total."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about turning the ints into a String."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about joining sum + \" \" + count; it only gives an output, and that output is wrong."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the ! in the loop condition."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This code does no arithmetic on chars."
+  }
+ ]
+}

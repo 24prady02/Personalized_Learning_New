@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "accumulator_pattern",
+ "why": "The student gives the correct order B C A D E and explains it by where each accumulator step sits relative to the loop: start at 0 before it, add once per pass inside the body, and print once after it.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop",
+   "correct": true,
+   "why": "It ties the initialisation, update and output of sum to their positions before, inside and after the loop, which gives the purpose of the order."
+  },
+  {
+   "concept": "loop_scope",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about where variables can be used or how long they exist."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "be added to in every pass",
+   "correct": true,
+   "why": "It only notes that the loop body runs on every pass and does not trace the header or the passes."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss logic errors."
+  }
+ ]
+}

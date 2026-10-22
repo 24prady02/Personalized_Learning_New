@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "arithmetic_operators",
+ "why": "The student correctly works out all four values of b×a (3 4 / 1 2) for the swapped code and contrasts them with c, which is L2 on the changed code. They do not explain why swapping the order changes the sums of products, so the answer does not reach L4.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "arithmetic_operators@L2#2",
+   "quote": "b times a is 3 4 / 1 2, so the order matters",
+   "correct": true,
+   "why": "b×a really is {{3,4},{1,2}}, while a×b gives c = {{2,1},{4,3}}; the student predicts the swapped result value by value without tracing the steps."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no division and the answer says nothing about it."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how variables store or update values."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about names."
+  }
+ ]
+}

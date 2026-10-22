@@ -1,0 +1,87 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_drawing",
+ "why": "The student claims point(256, 256) is in the middle because it 'uses pixels'. That is the documented PixelCoordinates misconception: in the default unit square, (256, 256) is far outside the visible canvas.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "drawing_shapes@L1#1",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "Correctly says the square is centred on (0.5, 0.5) but does not apply the half-side 0.25 to give the size."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "standard_drawing@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "Matches the PixelCoordinates wrong rule. Default coordinates are the unit square, so (256, 256) cannot be seen."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "coordinate_scaling@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "Treats the default scale as pixels for point() even though no setXscale or setYscale call is made, which is the PixelCoordinates misconception."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the empty statement."
+  },
+  {
+   "concept": "math_round",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about Math.round."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_drawing -prerequisite-> coordinate_scaling",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_drawing -prerequisite-> drawing_shapes",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

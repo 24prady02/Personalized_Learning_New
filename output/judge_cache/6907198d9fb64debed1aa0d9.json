@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_exchange",
+ "why": "The answer explains why t is needed by linking the exchange to how assignment works: each assignment overwrites its target, so the old a[i] has to be saved in t before a[i] = a[r] runs. This is a correct reason drawn from the given code, not a line-by-line trace and not a prediction about different code.",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how indices work."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "assignment@L3#3",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It uses the rule that an assignment overwrites its target to explain why the exchange needs a temporary."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "variable_swap@L3#1",
+   "quote": "a[i] is overwritten before it is saved",
+   "correct": true,
+   "why": "It links the role of t to the fact that each assignment overwrites the old value of its left variable."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_exchange@L3#2",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It explains the temporary in the exchange through the overwriting effect of the ordered assignment steps, matching the assignment-to-array_exchange prerequisite edge."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about variables."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about increment operators."
+  }
+ ]
+}

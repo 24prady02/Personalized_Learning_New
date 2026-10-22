@@ -1,0 +1,25 @@
+{
+ "answer_level": "L4",
+ "main_concept": "while_loop",
+ "why": "The answer compares the do-while with a while loop and correctly says which starting values make them behave differently: they match when i starts at 70 or above and differ only when i starts below 70. That reasoning goes beyond the given code, although it never actually gives the output for 61 (which would be \"61 \" from the one pass the do-while always makes).",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "while_loop@L4#1",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "correct": true,
+   "why": "It correctly says that a while loop whose condition is false at the start runs zero times, so it differs from the do-while exactly when i starts below 70."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "boolean_expression@L2#2",
+   "quote": "81 >= 70 is true at the start",
+   "correct": true,
+   "why": "It correctly evaluates the loop condition with the starting value of i, but it only uses the condition in this one place."
+  }
+ ]
+}

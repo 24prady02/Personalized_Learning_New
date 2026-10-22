@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "variable",
+ "why": "The student works out from the code what c is for (it counts the passing scores) and picks a name that says so, leaves the loop index i alone, and says the output stays 3, which the run confirms. That ties the naming convention to what each variable does, so it is relational.",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about indexing."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the for loop runs."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the loop's start, test or update."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_variable@L1#1",
+   "quote": "i is fine because it is only the loop index",
+   "correct": true,
+   "why": "It correctly says i is the loop index but does not go further."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about ++."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about traversing the array."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "counter_pattern@L3#4",
+   "quote": "c should be passCount, since it counts the passing scores",
+   "correct": true,
+   "why": "It states c's counting role, worked out from the guarded c++."
+  },
+  {
+   "concept": "variable",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "variable@L3#5",
+   "quote": "c should be passCount, since it counts the passing scores. It still prints 3.",
+   "correct": true,
+   "why": "It links the name to what the variable holds and notes that renaming leaves the value unchanged."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does no invariant reasoning."
+  }
+ ]
+}

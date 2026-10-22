@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "operator_precedence",
+ "why": "The answer uses a rule that is false in Java: it says expressions must be fully parenthesized or 'Java guesses'. In fact Java's fixed precedence rules make the code valid, with r = 1 + (2 * 3) = 7, and the answer never gives r.",
+ "concepts": [
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+   "correct": false,
+   "why": "Java never guesses: * binds before + by its precedence rules, so the code is valid without parentheses and r is 7."
+  },
+  {
+   "concept": "expression",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Every expression must be fully in parentheses",
+   "correct": false,
+   "why": "Parentheses are optional in Java expressions; they only override the default grouping."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about what + or * compute."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int or any other type."
+  }
+ ]
+}

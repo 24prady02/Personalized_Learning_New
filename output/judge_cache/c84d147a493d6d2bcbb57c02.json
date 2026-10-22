@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer does not say what is printed for either input; it only suggests another way to update sum, which covers one part of the code without applying it to the values.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "accumulator_pattern@L1#1",
+   "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+   "correct": true,
+   "why": "Adding v and then taking it back out when it is negative leaves sum the same as the given code, but this only describes how sum is updated and does not trace it to 5.0 or deal with count."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions count++."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "compound_assignment@L1#1",
+   "quote": "Add v to sum ... subtract it again",
+   "correct": true,
+   "why": "It describes += and -= updating sum in place, but does not apply this to any values."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the 99999 stop value, the reads, or what happens when 99999 comes first (count stays 0 and nothing is printed)."
+  }
+ ]
+}

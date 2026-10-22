@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student gives the correct output with the line break in the right place (only after the println text), but doesn't explain how they got it, and a bare correct result with no justification is L1.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The only line break is after the println argument, which is right, but the student gives no rule or trace to back it up."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the method calls are made or what they return."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The output follows the order of the three statements, but the student doesn't explain that they run in sequence."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The output text is joined correctly, but the student doesn't explain how each call adds to the end of the output."
+  }
+ ]
+}

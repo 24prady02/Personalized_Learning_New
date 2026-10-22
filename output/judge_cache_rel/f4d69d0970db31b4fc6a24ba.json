@@ -1,0 +1,105 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The student puts the indented println(\"done\") inside the braceless if, but in Java only the first statement after the if header is its body; indentation does not matter, so `java Order 3` prints start and then done. The answer also skips `java Order five`, where Integer.parseInt throws NumberFormatException before anything is printed.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "if_statement@L1#2",
+   "quote": "3 is not > 5",
+   "correct": true,
+   "why": "The condition is judged correctly as false for 3. That is one correct aspect, but the student gets the body of the if wrong and never covers the rest of the run."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about the class."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about main."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "block@L0#4",
+   "quote": "done is inside the if",
+   "correct": false,
+   "why": "This is the misconception that a statement after the if's single unbraced statement belongs to its branch. Without braces, the if body is only the println(\"big\") line."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about how statements are sequenced."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student does not answer the run with 'five' and does not describe how a run works."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about a variable."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int or parsing."
+  },
+  {
+   "concept": "array_default_values",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "class_declaration -prerequisite-> main_method",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "main_method -prerequisite-> statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> block",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

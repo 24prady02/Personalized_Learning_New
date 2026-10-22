@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "division_by_zero",
+ "why": "The answer gives a blanket rule that any division by zero is an error. That is the documented wrong rule, and it does not match the code's own 1.0 / 0, which printed Infinity.",
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "Only int division by zero (5 / z) throws ArithmeticException. 1.0 / 0 gives Infinity, so 'dividing by zero gives an error' is wrong as a general rule and misses the difference the question asks about."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the int quotient or about how int division works."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never mentions the int type of z or of the division."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "Normalization does not appear in the code or in the answer."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_literal",
+ "why": "The answer leaves out the final empty line, and its only reason, \"the loop stops at 1\", is wrong for the outer loop: i >= 0 runs one more time at i = 0, the inner loop prints nothing, and println() still prints an empty line, so the answer's one rule contradicts Java.",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "string_literal@L0#1",
+   "quote": "3 2 1 / 2 1 / 1\" (no empty line at the end)",
+   "correct": false,
+   "why": "The answer tidies the output like ordinary text: it shows no trailing space from \"%d \" after each number and no empty line from the last println(), when the question asks for exact spacing."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how an expression is evaluated."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about i-- or j-- or any other arithmetic."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no floating-point convergence test."
+  }
+ ]
+}

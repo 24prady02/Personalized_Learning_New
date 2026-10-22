@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "nested_loops",
+ "why": "The student gets the three printed rows right and gives a reason, but misses the last outer pass (i = 0): the inner loop runs zero times there and println still prints an empty line, so their claim of no empty line at the end is wrong.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the \"%d \" format string or its trailing space."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "loop_variable@L2#2",
+   "quote": "because the loop stops at 1",
+   "correct": false,
+   "why": "The student treats the loops as stopping at 1, but the outer test i >= 0 also lets i = 0 run, which prints an empty line."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "nested_loops@L2#2",
+   "quote": "3 2 1 / 2 1 / 1\" (no empty line at the end)",
+   "correct": false,
+   "why": "The student predicts each row of the inner loop correctly but leaves out the fourth outer pass, where the inner loop does nothing and println still ends the line."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use this concept."
+  }
+ ]
+}

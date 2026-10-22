@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "token_vs_line_input",
+ "why": "The answer is correct. It traces the two calls in order: readInt stops after 42 and leaves the newline, so the next readLine only reads the rest of that same line. That shows why rest is empty, but it doesn't go on to the general rule that both calls share one input position.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "token_vs_line_input@L2#1",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "It applies the token-read and line-read rules to both calls in order, which correctly explains why rest is \"\"."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The claim is covered under token vs line input; nothing separate is said here."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about statements."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about variables."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this answer."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about assignment."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about the String type."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about int."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't talk about interactive input."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "command_line_args",
+ "why": "The answer explains the crash for this exact run by linking the missing argument (args is empty) to args[0] being an illegal index, which relates the concepts to each other inside the given code; it does not generalise to a class of inputs.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "command_line_args@L3#3",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Links typing no arguments (length 0) to args[0] not being a valid index."
+  },
+  {
+   "concept": "run",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "run@L2#2",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "Correctly predicts that the run ends in a run-time failure and gives a reason, but does not relate running to the error concept in general."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "array_bounds@L2#2",
+   "quote": "args[0] is out of bounds",
+   "correct": true,
+   "why": "Applies the bounds rule to this access (index 0 on an empty array) to predict that the program stops."
+  },
+  {
+   "concept": "args_length",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "args_length@L3#1",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Matches the rule that with no arguments even args[0] is out of bounds."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The answer correctly states the print/println rule but never applies it to this code: it gives no output and does not show where the line break falls.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "println@L1#2",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "The println rule is correct, but it is not applied to the three statements to give the output."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "standard_output@L1#2",
+   "quote": "println adds a newline after the text and print does not.",
+   "correct": true,
+   "why": "It states the output rule only and does not trace the stream or predict the output."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "print@L1#2",
+   "quote": "print does not",
+   "correct": true,
+   "why": "It correctly says print writes no line terminator, but does not apply this to the first and last print calls."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about logic errors."
+  }
+ ]
+}

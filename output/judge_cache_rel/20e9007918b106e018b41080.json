@@ -1,0 +1,125 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_exchange",
+ "why": "The answer explains why the temporary is needed: the assignment a[i] = a[r] overwrites a[i], so its old value must be saved first. This ties the order of assignments to the exchange, but it does not go on to describe the broken swap or the class of inputs where it fails.",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer mentions a[i] but says nothing about how indexing works."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "assignment@L3#3",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It links the fact that an assignment overwrites its target to the need for a temporary in the exchange."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "variable_swap@L3#1",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It says the swap needs t because each assignment overwrites the old value of its left side."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_exchange@L3#2",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It treats the exchange as ordered assignments and explains that t saves a[i] before a[i] = a[r] destroys it."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed apart from the swap."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> array_exchange",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> array_exchange",
+   "stated": true,
+   "quote": "Otherwise a[i] is overwritten before it is saved."
+  },
+  {
+   "edge": "assignment -prerequisite-> variable_swap",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

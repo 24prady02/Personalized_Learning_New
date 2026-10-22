@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer correctly gives the output of one outer pass (i = 3) but leaves out the other rows and gives no reason, so it covers only one part of what the question asks.",
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "nested_loops@L1#1",
+   "quote": "When i is 3 it prints 1 2 3.",
+   "correct": true,
+   "why": "It correctly describes only the last outer pass, without the full exact output or the line breaks, and gives no justification."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not explain the printf format."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i++ or j++."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention print."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the line breaks made by println."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the output stream."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no char arithmetic."
+  }
+ ]
+}

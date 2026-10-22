@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_output",
+ "why": "The student reads println's text literally, as if it acted on the program and set a variable x to 5. That is the documented everyday misreading of output, and it does not address the given code's output at all.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student says nothing about println's line-ending behaviour."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim is made about how a method call works."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_output@L0#1",
+   "quote": "System.out.println(\"x is 5\"); sets x to 5.",
+   "correct": false,
+   "why": "The student treats the printed text as if it acted on the program, but output only writes characters and changes no variable."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim is made about string literals as such."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "print is not discussed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept is not relevant to the answer."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim is made about how statements run in order."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept is not relevant to the answer."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept is not relevant to the answer."
+  }
+ ]
+}

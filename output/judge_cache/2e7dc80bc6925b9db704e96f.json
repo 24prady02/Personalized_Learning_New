@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "command_line_args",
+ "why": "The student links the empty args array to the read of args[0] going out of bounds, so the program crashes. That is a correct reason that stays within the given code, but it names no exception class and gives no wider trigger class.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "command_line_args@L3#3",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Links typing no arguments (empty args) to args[0] being an invalid index."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about how a run works beyond 'when it runs'."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "array_bounds@L2#2",
+   "quote": "args[0] is out of bounds",
+   "correct": true,
+   "why": "Applies the bounds rule to this access and predicts that the program stops."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing separate about indexing."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "run_time_error@L1#2",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "Says the program crashes at run time but gives no exception or output detail."
+  },
+  {
+   "concept": "parsing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "args_length",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "args_length@L3#1",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Matches the rule that with no arguments even args[0] is out of bounds."
+  }
+ ]
+}

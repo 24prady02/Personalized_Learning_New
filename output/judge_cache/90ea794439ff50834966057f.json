@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "standard_audio",
+ "why": "The student finds the cause of this one hang (no System.exit(0) at the end of a StdAudio program) and gives the fix for this case, but doesn't explain the rule behind it or the general class of programs it affects, so it is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L3",
+   "way": "diagnose_an_error (locate-and-fix for the given failing case)",
+   "way_id": "standard_audio@L4#2",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "This is the correct fix for the AudioProgramHangs error, but it only fixes this one program, which the boundary of this way puts at L3."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

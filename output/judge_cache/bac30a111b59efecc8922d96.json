@@ -1,0 +1,25 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The answer correctly says the printed values are only estimates because 100 moves is far too few, and it predicts that starting at page 3 would not change the long-run ranks because the start page has no effect over time.",
+ "concepts": [
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "simulation_loop@L4#1",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing. In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It predicts that changing the start page keeps the long-run limit, and it links the small number of moves to low accuracy, so the trailing zeros mean nothing."
+  },
+  {
+   "concept": "power_method",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "power_method@L1#2",
+   "quote": "In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It states the limit theorem (the same ranks from any start) without applying it to a vector-matrix iteration."
+  }
+ ]
+}

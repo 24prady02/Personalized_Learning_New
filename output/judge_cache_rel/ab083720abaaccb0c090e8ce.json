@@ -1,0 +1,115 @@
+{
+ "answer_level": "L1",
+ "main_concept": "primitive_type",
+ "why": "The student gives the correct answer (String) and supports it with one correct rule: String is a class, so it is not a primitive type. The answer does not trace any code or relate it to anything else.",
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "primitive_type@L1#1",
+   "quote": "String; it is a class. The other four are primitive.",
+   "correct": true,
+   "why": "Correctly picks out which of the listed types are primitive and which is not."
+  },
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_type@L1#1",
+   "quote": "String; it is a class.",
+   "correct": true,
+   "why": "Correctly names String as a non-primitive class type."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about what a variable stores (a value or a reference)."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Does not use the idea of a type as a set of values plus operations."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "data_type -prerequisite-> primitive_type",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> primitive_vs_reference",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

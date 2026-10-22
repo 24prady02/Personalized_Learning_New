@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The student finds the cause of this one failing case: the cast applies only to Math.random(), which gives 0, so the die is always 1 and never 6. They also give the fix (cast after multiplying), which is locate-and-fix for a given failing case and so L3.",
+ "concepts": [
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_random@L3#2",
+   "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Correctly explains that the cast has to wrap the whole product, because casting Math.random() first always gives 0."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "explicit_cast@L3#2",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Links when the cast is applied to the Math.random() scaling and correctly fixes this one given bug."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about the operators themselves."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about this concept."
+  }
+ ]
+}

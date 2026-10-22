@@ -1,0 +1,120 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_traversal",
+ "why": "The question's code uses a for-each loop that assigns only to the copy x, so the array never changes and the output stays 5 4 3 2 1. The student wrote a correct index traversal that writes each a[i] back, which fixes this one given failing case, and fixing one given case is L3 even though the student gives no explanation.",
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_traversal@L3#1",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "The loop variable is used as the index, so each pass writes a different element; the run gives [50, 40, 30, 20, 10]."
+  },
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "indexing@L3#2",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "Each element is read and written through the loop index, which is what makes the change stick in the array."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "for_loop@L3#3",
+   "quote": "for (int i = 0; i < a.length; i++)",
+   "correct": true,
+   "why": "The standard for header gives i each valid index 0..length-1 exactly once."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "a.length is used correctly, but the student says nothing about it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only uses i++ and says nothing about it."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is not about the swap."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int arithmetic."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The loop control is written correctly, but the student does not discuss it."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student avoids the for-each loop but never says why."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> array_traversal",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "array_traversal -prerequisite-> enhanced_for",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "for_loop -prerequisite-> array_traversal",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "indexing -prerequisite-> array_exchange",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

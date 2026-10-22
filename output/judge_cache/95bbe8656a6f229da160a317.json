@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "statement",
+ "why": "The answer is wrong. StdIn.readInt() does not skip a token that is not a number: on \"abc\" it throws an InputMismatchException, so the program crashes and prints nothing. The student assumes the program quietly skips bad input, a step the code never contains, and that rule contradicts Java.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no reasoning about converting sum or count to text."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The format \"8 2\" is stated without any reasoning about +."
+  },
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "statement@L0#2",
+   "quote": "It prints 8 2 and skips abc.",
+   "correct": false,
+   "why": "The student expects the computer to add a skip-bad-input step that was never written. In fact readInt throws on \"abc\", so println is never reached."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not discuss the ! in the loop condition."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about print."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The prediction is wrong because of how input is read, not because of any rule about output."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the loop body as a block."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "char arithmetic does not apply to this code."
+  }
+ ]
+}

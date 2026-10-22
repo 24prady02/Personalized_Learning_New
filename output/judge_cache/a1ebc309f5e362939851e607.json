@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "boolean_flag_array",
+ "why": "The answer correctly says what composite[k] stands for (k is not prime) and that new boolean[] starts every slot at false, but it gives these as two separate facts and does not apply them to the loops or say why the sieve depends on the false start.",
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "boolean_flag_array@L1#1",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "It names the flag's meaning and the default false start correctly (slightly loose, since 0 and 1 also stay false), but these are two separate correct facts, not applied to the code or related to each other."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about print."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no break and the answer makes no claim about it."
+  }
+ ]
+}

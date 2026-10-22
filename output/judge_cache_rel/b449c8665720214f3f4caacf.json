@@ -1,0 +1,110 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable",
+ "why": "The student traces a, b and the first total correctly, but then says the last assignment leaves total at 11.5 'because it already has a value'; this is the static-variable rule, which contradicts Java (total becomes 12.42).",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about double as a type."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "There is no loop or accumulator reasoning."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#5",
+   "quote": "after the last line total is still 11.5, because it already has a value.",
+   "correct": false,
+   "why": "The student believes a variable keeps its first value after a new assignment, which is the static model."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The 11.5 is given as a bare result, with no reasoning about the operators."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "assignment@L0#1",
+   "quote": "total is still 11.5, because it already has a value",
+   "correct": false,
+   "why": "The student treats = as a lasting value that a later assignment cannot replace, but Java stores the new value 12.42."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "There are no arrays in the code."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no evaluation reasoning for the expressions."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention any conversion."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "answer_level": "L2",
+ "main_concept": "input_graph",
+ "why": "Both parts are answered correctly by applying the rules to the given values: the pair 0 1 means only a link from page 0 to page 1, and one multiplication gives the distribution after one move, not the converged page rank, so the answer stays at L2 without stating a whole-program purpose or going beyond the given code.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about arithmetic operators."
+  },
+  {
+   "concept": "input_graph",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "input_graph@L2#3",
+   "quote": "No, 0 1 is only a link from 0 to 1.",
+   "correct": true,
+   "why": "It correctly applies the ordered-pair rule to the one given pair, meaning a link from page 0 to page 1 only and not back, which avoids the LinksAreSymmetric misconception."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about the rank initializer."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about blocks."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Part (b) is about power-method iteration, not the random-surfer simulation loop."
+  }
+ ]
+}

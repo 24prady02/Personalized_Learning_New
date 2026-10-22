@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_default_values",
+ "why": "The answer correctly explains the contrast with a reason: `new` fills every array slot with a default 0, so a[0] can be read, while a local variable has no value until it is assigned. This matches the parallel edge between definite assignment and array default values.",
+ "concepts": [
+  {
+   "concept": "array_default_values",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_default_values@L3#3",
+   "quote": "new fills the array with 0s, but a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It relates array default values to the rule that a local variable has no value until assigned, which is the parallel edge from definite assignment."
+  },
+  {
+   "concept": "array_creation",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_creation@L3#3",
+   "quote": "new fills the array with 0s",
+   "correct": true,
+   "why": "It links creating the array with new to the default value in every slot."
+  },
+  {
+   "concept": "declaration",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "declaration@L3#3",
+   "quote": "a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It says that `int x;` with no initializer leaves the local unassigned, which is why it cannot be printed."
+  },
+  {
+   "concept": "variable",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "variable@L1#2",
+   "quote": "a local variable has no value until you give it one",
+   "correct": true,
+   "why": "It states the assign-before-read rule without applying it to this code's values."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  }
+ ]
+}

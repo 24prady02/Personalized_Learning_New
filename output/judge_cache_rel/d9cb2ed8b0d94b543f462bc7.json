@@ -1,0 +1,105 @@
+{
+ "answer_level": "L0",
+ "main_concept": "sentinel_loop",
+ "why": "The student does not trace the code or say what it prints. Instead they delete the v >= 0 filter on the everyday assumption that rain values are always fine, even though the given input contains -2, so negative values would be added to sum and count and the average would be wrong.",
+ "concepts": [
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student says nothing about how v >= 0 is evaluated."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "I removed if (v >= 0)",
+   "correct": false,
+   "why": "The if is only mentioned as something deleted; no rule about the if statement is stated or applied."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Assignment is not discussed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The empty statement is not discussed."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The while loop is not discussed."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Standard input is not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Variables are not discussed."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Blocks are not discussed."
+  },
+  {
+   "concept": "sentinel_loop",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "sentinel_loop@L0#1",
+   "quote": "I removed if (v >= 0) because rain values are always fine.",
+   "correct": false,
+   "why": "The student uses an everyday idea about rain data instead of the code's filtering rule. Without the filter, -2 would be added (sum 8, count 3, about 2.67 instead of 5.0); this is the NegativeNotFiltered error."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -parallel-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -parallel-> while_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

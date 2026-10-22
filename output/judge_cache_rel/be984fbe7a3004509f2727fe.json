@@ -1,0 +1,115 @@
+{
+ "answer_level": "L1",
+ "main_concept": "infinite_loop",
+ "why": "The student gives a correct general definition of an infinite loop (its condition stays true, so it never stops) but does not apply it to this code, for example by noting that i += 0.5 leaves the int i at 0.",
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about the init, test or update scheme."
+  },
+  {
+   "concept": "infinite_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "infinite_loop@L1#1",
+   "quote": "A loop that never stops because its condition stays true.",
+   "correct": true,
+   "why": "A correct definition of the element, with no tracing of the given code."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim specific to the while statement."
+  },
+  {
+   "concept": "loop_guard",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "control_flow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "control_flow -prerequisite-> if_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> infinite_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "while_loop -prerequisite-> convergence_test",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_statement -parallel-> while_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L1",
+ "main_concept": "remainder_operator",
+ "why": "The answer is only a list of keywords (remainder, widening, concatenation, println, newline). It names the concepts the code uses, but it gives no output and does not work out 9 % 5 = 4 or 4 + 26.3 = 30.3 for num4.",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names the % operator correctly but never applies it to 9 % 5."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It links println to a newline but does not trace the two output lines."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_concatenation@L1#1",
+   "quote": "concatenation",
+   "correct": true,
+   "why": "It names concatenation but does not apply it to \"num4 = \" + num4."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It makes no claim about the output stream or the exact output text."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "\"widening double\" refers to numeric promotion, not converting 30.3 to text."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it, and it does not occur in this code."
+  }
+ ]
+}

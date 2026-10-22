@@ -1,0 +1,31 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable_swap",
+ "why": "The answer goes through all three lines, but it treats t = a as making t stand for the variable a rather than storing a's value, so it wrongly concludes that both variables end up as b, which goes against Java's assignment rule.",
+ "concepts": [
+  {
+   "concept": "variable_swap",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Then b = t means b equals a, so both are b.",
+   "correct": false,
+   "why": "t holds the original value of a, so b gets a's old value and the values are swapped; they do not both become b."
+  },
+  {
+   "concept": "assignment",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "b = t means b equals a",
+   "correct": false,
+   "why": "It reads t = a as storing the expression or variable a instead of a's value at that moment, and it reads = as a lasting equality."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no arrays or references, and the answer makes no claim about array aliasing."
+  }
+ ]
+}

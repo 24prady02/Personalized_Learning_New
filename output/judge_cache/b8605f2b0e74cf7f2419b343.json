@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "string_type",
+ "why": "The answer uses a rule that contradicts Java, namely that toUpperCase changes the String in name, and so predicts JAVA when the program actually prints java.",
+ "concepts": [
+  {
+   "concept": "string_type",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "toUpperCase changes name",
+   "correct": false,
+   "why": "Strings are immutable: toUpperCase returns a new String and leaves name as \"java\"."
+  },
+  {
+   "concept": "method_call",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "JAVA, because toUpperCase changes name",
+   "correct": false,
+   "why": "A method call that returns a value does not change the object it is called on, and here the returned value is thrown away because the call stands on its own as a statement."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how println works; it only gets the wrong value of name."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the source text, the file or compiling."
+  }
+ ]
+}

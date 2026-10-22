@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "length_field",
+ "why": "The student writes correct code that uses sensorReadings.length - 2 in place of a hard-coded index, and justifies it by relating the length field to the last index (length - 1), so the answer is relational within this code.",
+ "concepts": [
+  {
+   "concept": "length_field",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "length_field@L3#3",
+   "quote": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "correct": true,
+   "why": "It uses length so the code works for any array size, with no magic number, and works out the next-to-last index from the last-element rule."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_bounds@L3#1",
+   "quote": "the last index is length - 1, so next-to-last is length - 2",
+   "correct": true,
+   "why": "It ties the index to the legal range, where the last element is at a.length-1, and works out the index one before it."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "expression@L1#1",
+   "quote": "sensorReadings.length - 2",
+   "correct": true,
+   "why": "It uses an index expression correctly but gives no reasoning about expressions themselves."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "= 7.9",
+   "correct": true,
+   "why": "It correctly assigns a double literal to an element of a double array, with no further reasoning about the type."
+  }
+ ]
+}

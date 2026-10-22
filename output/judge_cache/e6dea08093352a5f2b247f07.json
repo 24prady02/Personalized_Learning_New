@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "remainder_operator",
+ "why": "The answer gets 30.3, but only by luck: it says 9 % 5 means 9 minus 5, which is not Java's remainder rule (the remainder of 9 / 5 is 4). It also leaves out the first output line, \"Result is \".",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "remainder_operator@L0#1",
+   "quote": "9 % 5 means 9 minus 5, which is 4",
+   "correct": false,
+   "why": "It reads % as subtraction instead of the remainder of truncating division, and only gets 4 by coincidence."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "arithmetic_operators@L0#1",
+   "quote": "9 % 5 means 9 minus 5",
+   "correct": false,
+   "why": "It gives the % operator a meaning (subtraction) that goes against Java's rules."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "num4 = 30.3",
+   "correct": true,
+   "why": "The double result 30.3 is stated with no reasoning about the int being promoted to double, so it is a bare output and is not levelled."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about integer division."
+  }
+ ]
+}

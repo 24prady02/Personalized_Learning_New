@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "program_layout",
+ "why": "The answer states one correct rule, that indentation does not affect what Java runs, but never applies it to the code: it does not say that only the first println belongs to the braceless if, it gives no output for score = 50, and it misses that the indentation misleads the reader.",
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "program_layout@L1#2",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "It correctly says the compiler ignores whitespace but does not apply this to the code. 'Indent however I like' is a style breach, not a language misconception."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the if condition or its body."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer does not mention one."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer predicts no output."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about output."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not say what belongs to the if body."
+  }
+ ]
+}

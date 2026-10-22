@@ -1,0 +1,23 @@
+{
+ "answer_level": "L0",
+ "main_concept": "double",
+ "why": "The answer only looks at the double literal 3.14159 and gets it wrong: an unexplained literal like this is a classic magic number and should be a named constant such as Math.PI. It never says that the loop's 0 and 1 are normal, idiomatic values that can stay as they are.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "Writing 3.14159 in the formula is just as clear as a name.",
+   "correct": false,
+   "why": "It treats a bare double literal as self-explaining, which is an everyday judgement, and ignores that a constant such as Math.PI shows the meaning and the full precision."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about long, and the code has no long values."
+  }
+ ]
+}

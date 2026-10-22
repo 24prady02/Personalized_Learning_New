@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "The answer says correctly that nothing is printed and explains it from the code's structure: the unbraced else belongs to the inner if, so when the outer condition t > 10 fails, neither branch runs. It does not explain the else-if chain, but that chain also prints nothing for t = 5.",
+ "concepts": [
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "nested_conditionals@L3#2",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "Correctly explains the dangling else: without braces the else belongs to the inner if, so a false outer condition skips both branches."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#2",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "Correctly relates if-else to nesting: an unbraced else pairs with the innermost if."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue statement and the answer makes no claim about it."
+  }
+ ]
+}

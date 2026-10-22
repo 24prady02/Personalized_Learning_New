@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "variable",
+ "why": "The trace starts correctly, but the student says total is 'still 11.5, because it already has a value'. That is the static-variable misconception: in Java the assignment replaces the value, so the last line gives 11.5 + 11.5 × 0.08 = 12.42.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#5",
+   "quote": "after the last line total is still 11.5, because it already has a value",
+   "correct": false,
+   "why": "The student thinks a variable keeps its first value after a new assignment, but in Java each assignment replaces the old value, so total becomes 12.42."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The code has no loop or running total, so the answer says nothing about the accumulator pattern; the wrong claim about the update is levelled under variable."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "total is 11.5",
+   "correct": true,
+   "why": "The value 11.5 is correct, but it is given without any reasoning about int being widened to double, and the way's boundary says a bare output is not levelled."
+  }
+ ]
+}

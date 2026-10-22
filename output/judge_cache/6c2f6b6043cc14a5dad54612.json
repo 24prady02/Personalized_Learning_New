@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "redirection",
+ "why": "The student correctly predicts the terminal output of all three commands and gives a short reason for each, such as 'the numbers go into data.txt' and 'no file', but does not relate the three commands to one another or state the purpose of redirection.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "command_line_args@L1#1",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "This is a correct bare result with no justification. It does show the student does not think redirected input ends up in args."
+  },
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "redirection@L2#2",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "It correctly predicts that > writes the output to the file, so nothing appears in the terminal, and that < makes Average print the average of the values in the file."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "piping@L2#2",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "It correctly predicts that only Average's output appears, that it uses freshly generated numbers, and that no file is created."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  },
+  {
+   "concept": "args_length",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this concept."
+  }
+ ]
+}

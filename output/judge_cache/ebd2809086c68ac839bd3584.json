@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "dangling_pages",
+ "why": "For part (b) the student follows the running sum to 0.9 and gets next = -1. They then explain the result by linking it to the rule that every row must add to 1, which the move code depends on. This goes beyond a plain trace and relates the move to the row-sum rule.",
+ "concepts": [
+  {
+   "concept": "dangling_pages",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "dangling_pages@L3#2",
+   "quote": "next stays -1 because the row does not add to 1",
+   "correct": true,
+   "why": "The student says the move only works because rows sum to 1, and that a row summing to 0.9 leaves next unset."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "accumulator_pattern@L2#1",
+   "quote": "sum is 0.1 then 0.4; 0.35 < 0.4 so next = 1. (b) the sums only reach 0.9",
+   "correct": true,
+   "why": "The student follows the running total pass by pass, and the run confirms the values."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "arithmetic_operators@L2#1",
+   "quote": "sum is 0.1 then 0.4",
+   "correct": true,
+   "why": "The student applies each addition to the given values correctly."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the double type, its precision or its rounding."
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "answer_level": "L0",
+ "main_concept": "empty_statement",
+ "why": "The student reads `if (x > 0);` as if it still controls the next println, so they say positive is not printed. In Java the lone `;` is the whole body of the if, so the println always runs and positive is printed.",
+ "concepts": [
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "empty_statement@L0#1",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "They read the semicolon as just ending a clause, not as an empty statement that forms the whole body of the if."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_statement@L0#1",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "They take the println as the if's body, which goes against the rule if (<boolean expression>) <statement>, where the statement here is `;`."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not reason about statements in general."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how println works."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "They evaluate the comparison correctly for x = -3."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -parallel-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

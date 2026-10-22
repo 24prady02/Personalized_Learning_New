@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer gives the correct inner-loop output for just one outer pass (i = 3), but it doesn't trace the passes for i = 1 and i = 2, give the full output, or explain why the output looks that way, so it covers only one part of the code.",
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "nested_loops@L1#1",
+   "quote": "When i is 3 it prints 1 2 3.",
+   "correct": true,
+   "why": "It correctly describes what the inner loop does on one outer pass, but leaves out the other passes and the full three-line output."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about printf, the format string or the line breaks."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This code does no arithmetic on char values."
+  }
+ ]
+}

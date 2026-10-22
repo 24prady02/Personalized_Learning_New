@@ -1,0 +1,25 @@
+{
+ "answer_level": "L0",
+ "main_concept": "de_morgan",
+ "why": "The rewrite does not use De Morgan's law, still keeps the !( ), and chains the comparisons as in maths (5 < n < 10), which does not compile in Java, so every rule the answer applies conflicts with Java.",
+ "concepts": [
+  {
+   "concept": "de_morgan",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "de_morgan@L0#1",
+   "quote": "You could write b as !(5 < n < 10).",
+   "correct": false,
+   "why": "It makes no correct De Morgan claim: the negation is not moved inside, the comparisons are not flipped to n <= 5 || n >= 10, and && is not swapped for ||."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "boolean_expression@L0#1",
+   "quote": "!(5 < n < 10)",
+   "correct": false,
+   "why": "It writes a range the maths way (ChainedComparison misconception); in Java 5 < n gives a boolean, so boolean < 10 does not compile."
+  }
+ ]
+}

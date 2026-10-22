@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "running_extreme",
+ "why": "The student gives a correct running-minimum plan, step by step: start best at the first element, compare each element, replace best when the element is smaller, and print best after the loop. It covers every part in order, but it never states or explains the idea behind the plan, and it is pseudocode rather than Java.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "running_extreme@L2#1",
+   "quote": "best = first; for each element: if smaller than best → best = element; print best",
+   "correct": true,
+   "why": "It sets best before the loop, compares and updates on each pass, and reads best only after the loop, all correctly and with no stated purpose."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only writes 'print best' and makes no claim about how print works."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer uses assignment as a step in the plan but says nothing about assignment itself."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not deal with aliasing."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "'for each element' is a pseudocode loop and makes no claim about Java's for-each."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not deal with primitive types."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says 'first' but makes no claim about indexing."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not deal with streams."
+  }
+ ]
+}

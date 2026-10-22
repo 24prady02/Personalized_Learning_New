@@ -1,0 +1,120 @@
+{
+ "answer_level": "L0",
+ "main_concept": "remainder_operator",
+ "why": "The value 30.3 is right only by coincidence: the student says 9 % 5 means 9 minus 5, a rule that contradicts Java, where % gives the remainder. That rule gives 4 here only because 9 / 5 has quotient 1. The answer also leaves out the first output line, \"Result is \".",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "remainder_operator@L0#1",
+   "quote": "9 % 5 means 9 minus 5, which is 4",
+   "correct": false,
+   "why": "The student reads % as subtraction, but Java's % gives the remainder after truncating division. It matches here only because the quotient is 1."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student says nothing about the operators apart from %, which is levelled under remainder_operator."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student gives no reasoning about the double type or type promotion."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student makes no claim about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student makes no claim about how the expression is evaluated."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student makes no claim about method calls."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student makes no claim about variables."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student gives no reasoning about the output, only part of the value, and leaves out the first println line."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The student does not mention integer division."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> integer_division",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "expression -prerequisite-> method_call",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "integer_division -prerequisite-> remainder_operator",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

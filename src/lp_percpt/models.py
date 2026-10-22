@@ -11,6 +11,7 @@ runs without it and says so in each result's `degraded` list.
 """
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -74,7 +75,10 @@ def similarity(a: Sequence[str], b: Sequence[str]) -> Optional[np.ndarray]:
 
 
 def nli(pairs: List[Tuple[str, str]]) -> Optional[List[Dict[str, float]]]:
-    """For each (premise, hypothesis): {'entailment', 'contradiction', 'neutral'}."""
+    """For each (premise, hypothesis): {'entailment', 'contradiction', 'neutral'}.
+    LP_NO_NLI=1 switches NLI off (the pipeline runs as if the model were unavailable)."""
+    if os.environ.get("LP_NO_NLI") == "1":
+        return None
     loaded = _nli()
     if loaded is None:
         return None

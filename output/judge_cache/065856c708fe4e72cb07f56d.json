@@ -1,0 +1,31 @@
+{
+ "answer_level": "L4",
+ "main_concept": "string_literal",
+ "why": "The line in question is not in the given code. The answer correctly applies the closing-quote rule to it, saying it is a compile-time error and naming javac's actual message, 'unclosed string literal', which is a diagnose_an_error answer.",
+ "concepts": [
+  {
+   "concept": "string_literal",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "the string has no closing quote, so Java says unclosed string literal",
+   "correct": true,
+   "why": "It names the broken rule (a String literal needs a pair of double quotes) and the message that results, for code not in the given program."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It will not compile ... Java says unclosed string literal",
+   "correct": true,
+   "why": "It correctly says this is a compile-time error rather than a run-time one, and gives the matching javac message."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements or the order they run in."
+  }
+ ]
+}

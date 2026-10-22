@@ -1,0 +1,61 @@
+{
+ "answer_level": "L1",
+ "main_concept": "for_loop",
+ "why": "The answer gets the first two outer passes right but stops at 'and so on', so it never traces i = 1 or i = 0, the trailing space after each number, or the final empty line; one correct part without the whole trace is L1.",
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "for_loop@L1#1",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "It correctly links the outer i to the inner countdown for two passes, but leaves out the passes for i = 1 and i = 0 (the empty line)."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_control@L1#1",
+   "quote": "i = 2 prints 2 1",
+   "correct": true,
+   "why": "It implies that the inner loop counts from i down to 1, but never traces the test j > 0 or i >= 0 through to the end."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about the \"%d \" trailing space, the println line breaks or the empty last line."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Assignment is not discussed."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The decrements i-- and j-- are not discussed."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Separators and posts are not discussed, and the code has no fencepost structure."
+  }
+ ]
+}

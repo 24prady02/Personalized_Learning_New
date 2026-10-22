@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "arithmetic_operators",
+ "why": "The student gives the correct product b × a = {{3,4},{1,2}} and concludes that order matters, but shows no working and never computes c = a × b = {{2,1},{4,3}}, so this is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "b times a is 3 4 / 1 2, so the order matters",
+   "correct": true,
+   "why": "The result is correct (b swaps the rows of a, while a × b swaps the columns), but it is stated without any element-by-element trace of the * and += steps."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no division and the answer makes no claim about it."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how expressions are evaluated."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about names."
+  }
+ ]
+}

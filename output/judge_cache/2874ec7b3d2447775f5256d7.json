@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The answer finds the cause of the one given failing case: the cast binds to Math.random() before the multiplication, so the result is 0 and the die always shows 1. It then gives the fix (cast after multiplying), and locating and fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "It ties the cast's precedence to the product with Math.random() and fixes the given test by making the cast enclose the product."
+  },
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(int) Math.random() is 0 and the die is always 1",
+   "correct": true,
+   "why": "It correctly uses the fact that Math.random() is below 1, so truncating it gives 0, and explains why the scaling must happen before the cast."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention random moves over a cumulative distribution."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention shuffling."
+  }
+ ]
+}

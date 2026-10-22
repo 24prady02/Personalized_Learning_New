@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The answer never gives the three statements that store count + 1 back into count; it only states one correct point, that working out count + 1 (alone or inside println) does not change count.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "It correctly says println displays the value of its argument, but goes no further than that."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about the output stream."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "counter_pattern@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It sees that the counter only changes when a value is stored, but never writes count++, count += 1 or count = count + 1."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "expression@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It correctly states that working out an expression does not change a variable, but does not apply this to produce the requested statements."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls as such."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the int type."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This point is already covered under expression; there is no separate claim about operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about statement rules, for example that count + 1; on its own does not compile."
+  }
+ ]
+}

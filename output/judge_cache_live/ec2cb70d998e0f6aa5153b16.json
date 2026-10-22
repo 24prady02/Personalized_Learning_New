@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "The student correctly links the unbraced else to the inner if inside the failed outer if, which explains why the first statement prints nothing for t = 5; the answer of nothing at all is correct, though the student does not explain the else-if chain.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#2",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "The student correctly sees that the else is a branch of the inner if, inside the outer if's then branch, and is not a second branch of the outer if."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "nested_conditionals@L3#2",
+   "quote": "the outer if fails and the else is part of the inner if",
+   "correct": true,
+   "why": "The student applies the dangling-else rule correctly: without braces, the else belongs to the inner if, so when the outer test fails, neither hot nor cold is printed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about assignment."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This point is covered under the nested conditionals concept."
+  },
+  {
+   "concept": "else_if_chain",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student does not reason about the else-if chain."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about how output works."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the student does not mention one."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about statements in general."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no continue statement."
+  }
+ ]
+}

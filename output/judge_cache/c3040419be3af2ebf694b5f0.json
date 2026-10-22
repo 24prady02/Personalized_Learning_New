@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "method_call",
+ "why": "The student gives the correct output of both printf calls and explains it with the correct pass-by-value rule (swap gets copies, so main's num1 and num2 stay 7 and 42), but does not relate the concept to another listed construct or state the code's purpose.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about variables on their own."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The three assignments are not traced or discussed."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "variable_swap@L1#1",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "The swapped values inside swap are right, but they are a bare result with no trace through temp."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no arithmetic."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not name the int type or reason about primitive types."
+  },
+  {
+   "concept": "method_call",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "method_call@L2#2",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "It predicts both outputs and justifies them with the rule that arguments are passed as copies of their values."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Expressions are not discussed."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The output text is given, but how printf or %n works is not explained."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code reads no input."
+  }
+ ]
+}

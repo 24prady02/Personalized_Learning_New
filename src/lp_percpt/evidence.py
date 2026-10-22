@@ -224,6 +224,37 @@ def help_seeking(text: str) -> bool:
     return len(content_words(_HELP.sub("", text or ""))) < 4
 
 
+_REASON = re.compile(r"\b(because|so|since|means|therefore|thus|hence|i think|i guess|maybe|probably)\b", re.I)
+# a real question opens with a question word or an auxiliary ("Why ...?", "Is ...?", "Do I ...?");
+# "It prints 5, right?", "3 2 1?" and "idk, 10?" are tentative answers, so claims
+_QUESTION_OPEN = re.compile(r"^\s*(?:but|and|so|then|ok|okay)?[\s,]*(why|how|what|when|where|which|who|whose|is|are|was|were|"
+                            r"do|does|did|can|could|should|would|will|shall|may|must|has|have|"
+                            r"isn't|aren't|doesn't|don't|didn't|can't|won't)\b", re.I)
+# a yes/no question that proposes a value is a tentative answer ("Is it 7?", "Is the output 12?")
+_PROPOSES_VALUE = re.compile(r"^\s*(?:(?:is|was)\s+(?:it|that|this|the\s+(?:output|answer|result|value))"
+                             r"|(?:does|will|would)\s+it\s+(?:print|give|output|return|show))\b[^?]*(?:\d|\"|')", re.I)
+# a statement that only reports the student's own situation ("I changed my copy ...")
+_OWN_REPORT = re.compile(r"^\s*(?:i|my|when i|after i|if i)\b", re.I)
+
+
+def no_claim(text: str) -> bool:
+    """G2b: the prompt is a question that makes no claim (graph boundary: a student's
+    question that makes no claim is not levelled). Every question in it is a real
+    question, every statement only reports the student's own situation, and it gives
+    no reason and no hedged guess. When in doubt it is a claim, and the judge reads it."""
+    t = (text or "").strip()
+    if not t.rstrip("\"')] ").endswith("?") or _REASON.search(t):
+        return False
+    sents = [s for s in re.split(r"(?<=[.?!])\s+", t) if s.strip()]
+    for s in sents:
+        if s.rstrip("\"')] ").endswith("?"):
+            if not _QUESTION_OPEN.search(s) or _PROPOSES_VALUE.search(s):
+                return False
+        elif not _OWN_REPORT.search(s):
+            return False
+    return True
+
+
 # ── helpers ─────────────────────────────────────────────────────────────────
 def _norm(text: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", "", (text or "").lower())).strip()

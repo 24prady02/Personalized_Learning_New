@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "arithmetic_operators",
+ "why": "The student's result for b × a is correct: it is {{3,4},{1,2}}, while the code gives c = {{2,1},{4,3}}. But they give only the result, with no trace of c[i][j] += a[i][k] * b[k][j] and no reasoning about what changes when the operands swap, so this is a bare correct result (L1).",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "b times a is 3 4 / 1 2, so the order matters",
+   "correct": true,
+   "why": "The swapped product is right and correctly differs from c, but the sum-of-products is never applied step by step, and 'order matters' is concluded from one result rather than reasoned out."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how expressions are evaluated."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss references."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss += or storing values."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim specific to int."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about names."
+  }
+ ]
+}

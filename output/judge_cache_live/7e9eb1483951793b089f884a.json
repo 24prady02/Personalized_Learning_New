@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "normalization",
+ "why": "The student explains that int/int truncation turns the normalised row into all zeros, and fixes this failing case by casting one operand, which gives 0, 0, 0.4, 0.4, 0.2 and a row summing to 1. Locating and fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The int claim is about division and is levelled under integer_division."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "explicit_cast@L3#6",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The cast is placed on the numerator before the division, so it forces real division."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Covered by the cast and normalization."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not separately addressed."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "All zeros, because int / int is integer division.",
+   "correct": true,
+   "why": "Correctly says that each count below the total of 5 truncates to 0 when the division is int."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "normalization",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "normalization@L3#2",
+   "quote": "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "correct": true,
+   "why": "Relates type flow to the row being a probability distribution and fixes the given case correctly."
+  }
+ ]
+}

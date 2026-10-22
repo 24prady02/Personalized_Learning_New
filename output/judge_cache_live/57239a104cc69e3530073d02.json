@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "math_round",
+ "why": "The student correctly links Math.round's long return type to the int variable, and explains this as the reason the line does not compile. That relates the method to the assignment it is used in, but it covers only this one case, not a class of errors.",
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "long_type@L2#3",
+   "quote": "round gives a long",
+   "correct": true,
+   "why": "The student applies the rule that a long cannot be stored in an int without a cast to this single statement."
+  },
+  {
+   "concept": "math_round",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_round@L3#1",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "The answer uses Math.round's long return type to explain why assigning the result to an int fails."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types in general."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions a cast."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the Math library beyond round."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "compile_time_error@L2#2",
+   "quote": "It does not compile",
+   "correct": true,
+   "why": "The student correctly predicts a compile failure for this line and gives the type mismatch as the reason."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no explicit claim about int."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss conversion rules beyond the return type."
+  }
+ ]
+}

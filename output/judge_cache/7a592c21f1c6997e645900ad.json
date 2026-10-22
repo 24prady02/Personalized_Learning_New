@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_drawing",
+ "why": "The student says StdDraw.point(256, 256) draws in the middle because it 'uses pixels'. That is the PixelCoordinates misconception: the default scale is the unit square, so the point is far outside the window and only the square centred at (0.5, 0.5) shows.",
+ "concepts": [
+  {
+   "concept": "standard_drawing",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "standard_drawing@L0#2",
+   "quote": "the point uses pixels, so both are in the middle",
+   "correct": false,
+   "why": "This is the wrong rule that point(256, 256) is the middle of the default window. Coordinates are in the unit square, so the point cannot be seen."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "coordinate_scaling@L0#2",
+   "quote": "the point uses pixels",
+   "correct": false,
+   "why": "No scale is set, so the default unit square applies, not a 0 to 512 pixel range."
+  },
+  {
+   "concept": "drawing_shapes",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "drawing_shapes@L1#2",
+   "quote": "The square uses 0.5 as the centre",
+   "correct": true,
+   "why": "It correctly says the square is centred on (x, y) but says nothing about its size, half-side 0.25 (side 0.5)."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about double values."
+  }
+ ]
+}

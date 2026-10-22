@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "division_by_zero",
+ "why": "Part (d) asks how the int division 5 / z differs from 1.0 / 0. The answer says without qualification that dividing by zero gives an error, but the run shows 1.0 / 0 printing Infinity, so this matches the ZeroDivisionAlwaysCrashes misconception.",
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "division_by_zero@L0#2",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "It treats every division by zero as an error, but only int / and % by zero throw; 1.0 / 0 gives Infinity, as the run output shows."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing specific about int division."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the int type or why int z = 0 matters."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "Normalization does not come up in this answer."
+  }
+ ]
+}

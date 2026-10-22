@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "type_conversion",
+ "why": "The answer gives a correct reason for each conversion: int to double happens automatically because double is the larger type, and 9.99 to int needs an (int) cast, which matches the range-based rule for conversions between primitive types.",
+ "concepts": [
+  {
+   "concept": "type_conversion",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "d = i happens by itself because double is bigger; going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It ties automatic widening and the required narrowing cast to the size of each type's range, though it does not mention the other lines."
+  },
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "d = i happens by itself because double is bigger",
+   "correct": true,
+   "why": "It correctly says an int widens to double without a cast because double has the larger range."
+  },
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "going from 9.99 to int needs (int)",
+   "correct": true,
+   "why": "It correctly says a double becomes an int only through an explicit cast."
+  },
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "double is bigger",
+   "correct": true,
+   "why": "It only notes that types differ in size, without applying the rules for values and operations."
+  }
+ ]
+}

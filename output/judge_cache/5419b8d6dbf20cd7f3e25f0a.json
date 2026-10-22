@@ -1,0 +1,39 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The answer correctly says that 100 moves only give estimates, and it predicts that changing the start page leaves the long-run limit unchanged (mixing), which is reasoning about a change not in the given code.",
+ "concepts": [
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It predicts that starting at page 3 keeps the same limiting page ranks, because the long-run limit does not depend on the start page."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about long."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about running the program."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  }
+ ]
+}

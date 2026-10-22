@@ -1,0 +1,130 @@
+{
+ "answer_level": "L4",
+ "main_concept": "math_round",
+ "why": "The line asked about is not in the given code, which has long k. The student correctly says the changed line int k2 = Math.round(2.5); will not compile and gives the right reason: Math.round(double) returns a long, which cannot go into an int without a cast.",
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "way_id": "long_type@L4#3",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "Correctly says that putting a long result into an int, as in int r = Math.round(x), is a compile-time error."
+  },
+  {
+   "concept": "math_round",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "way_id": "math_round@L4#2",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "For code that is not in the given program, it says the line will not compile and states the rule behind it: Math.round(double) returns a long."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types in general."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention a cast."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Only Math.round is discussed, so the answer is about math_round rather than the Math library as a whole."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "compile_time_error@L1#1",
+   "quote": "It does not compile",
+   "correct": true,
+   "why": "It correctly identifies a compile-time error but says nothing more about how compiling works."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention int."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention double."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The narrowing rule is only implied, never stated."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "primitive_type -prerequisite-> type_conversion",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "type_conversion -prerequisite-> explicit_cast",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -prerequisite-> long_type",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "math_library -prerequisite-> math_round",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "math_round -parallel-> explicit_cast",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

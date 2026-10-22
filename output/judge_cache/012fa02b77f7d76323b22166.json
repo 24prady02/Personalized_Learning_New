@@ -1,0 +1,23 @@
+{
+ "answer_level": "L1",
+ "main_concept": "exclusive_or",
+ "why": "The student states the general XOR rule for booleans correctly but never applies it to this code's operands (n > 5 is false, n < 10 is true, so c is true).",
+ "concepts": [
+  {
+   "concept": "exclusive_or",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "It gives true when the two sides are different.",
+   "correct": true,
+   "why": "This is the correct rule for boolean ^, given without applying it to the values in the code."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "answer_level": "L3",
+ "main_concept": "arithmetic_operators",
+ "why": "The student turns the MPG formula into Java code correctly with a double division, double mpg = miles / gallons. However, the method never returns mpg, so it fails to compile with a 'missing return statement' error and does not do what was asked. New code must be correct to reach L4, so this is an L3 answer with an error.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "arithmetic_operators@L3#5",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Writes the miles-per-gallon formula as one division expression in Java."
+  },
+  {
+   "concept": "double",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "double@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Uses double parameters and stores the double quotient in a double variable, but does not explain why the types matter."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Declares a local variable and gives it the computed value."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "assignment@L2#3",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Stores the computed right-hand value in the left-hand variable, but the stored value is never returned."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions as such."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use the remainder operator."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

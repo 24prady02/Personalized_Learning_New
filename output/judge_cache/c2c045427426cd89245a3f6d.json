@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "data_type",
+ "why": "The student gives the correct definition of a data type (a set of values plus operations on them) but never applies it to the types or values in this code, so it is L1.",
+ "concepts": [
+  {
+   "concept": "data_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "A set of values plus the operations you can do on them.",
+   "correct": true,
+   "why": "This is the standard definition, but it is not applied to int or double in the given code."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention any primitive type."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  }
+ ]
+}

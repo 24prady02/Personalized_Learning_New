@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "while_loop",
+ "why": "The answer explains in one sentence how the loop ends: once i reaches a multiple of 5 (10 in this run), the current pass finishes and the loop then stops. That ties the if inside the body to the loop's ending and is correct, but it never gives the printed output 1 4 7 10.",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#1",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "It ties the body's multiple-of-5 test to the loop ending, and correctly says the loop stops after that whole pass, not in the middle of it."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_control@L1#1",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "It correctly describes only the update step (i = i + 3), without tracing the values or the i < 100 bound."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The if is used only as part of the loop-ending explanation and is not discussed separately."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No output is predicted."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no specific claim about assignment."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about off-by-one errors."
+  }
+ ]
+}

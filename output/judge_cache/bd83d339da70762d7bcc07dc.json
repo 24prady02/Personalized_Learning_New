@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "markov_chain",
+ "why": "The student predicts what happens if the code is changed so the 10% random leap is gone. They say the surfer gets trapped in a closed group of pages and the long-run rank of every other page drops to 0, which is correct reasoning about code that is not the given code.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the links are read from input."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss how any expression is evaluated."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention comments."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss any operator."
+  },
+  {
+   "concept": "two_models",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not compare simulation with the power method."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "markov_chain@L4#1",
+   "quote": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "correct": true,
+   "why": "It correctly predicts that removing the random leap breaks mixing: all the long-run probability ends up inside the closed group."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about the matrix entries or the row sums."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a closed group of pages, not about a page with no outgoing links."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention counting visits."
+  }
+ ]
+}

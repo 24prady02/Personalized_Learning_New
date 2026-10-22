@@ -1,0 +1,34 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_statement",
+ "why": "The answer traces every part of the code in order with the values: score gets 42, the condition is false so the body is skipped, and execution goes on to print done, which matches the run output.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "score gets 42, the if test is false so pass is skipped, then done is printed.",
+   "correct": true,
+   "why": "It tests the condition once with score = 42, skips the body because the test is false, and goes on to the next statement, all in order."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about testing."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no for loop, and the answer makes no claim about one."
+  }
+ ]
+}

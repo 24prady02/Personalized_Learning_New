@@ -1,0 +1,61 @@
+{
+ "answer_level": "L0",
+ "main_concept": "markov_chain",
+ "why": "The student is right that the 100-move values are only estimates, but the main claim is that starting at page 3 would change the ranks, which is the StartPageMatters misconception: the long-run ranks of the random-surfer chain are the same whatever page it starts from.",
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "Correctly says that visit fractions from a short simulation only estimate the ranks, but gives no further reasoning."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about repeated matrix multiplication."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "markov_chain@L0#2",
+   "quote": "But starting at page 3 would change the ranks.",
+   "correct": false,
+   "why": "Holds the wrong rule that the ranks depend on the start page; the chain mixes, so the long-run probabilities are the same from any start."
+  }
+ ]
+}

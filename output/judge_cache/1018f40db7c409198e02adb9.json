@@ -1,0 +1,70 @@
+{
+ "answer_level": "L2",
+ "main_concept": "declaration",
+ "why": "The declaration has every required part (char type, a name, the initializer 'Q') and is valid Java, but the name SingleLetter breaks the lowerCamelCase convention the question asks for and does not match the required name singleLetter, so it is a multistructural answer with an error.",
+ "concepts": [
+  {
+   "concept": "char",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "char@L1#2",
+   "quote": "char ... = 'Q'",
+   "correct": true,
+   "why": "char is the right type for one letter, and 'Q' is a correct single-quoted char literal."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements beyond the ending semicolon."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about primitive types in general."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The only assignment is the initializer inside the declaration."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only writes code and does not reason about variables; the naming slip is marked under declaration."
+  },
+  {
+   "concept": "declaration",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "declaration@L2#3",
+   "quote": "char SingleLetter = 'Q';",
+   "correct": false,
+   "why": "The declaration compiles, but the name starts with a capital letter, so it is not the required name singleLetter and breaks lowerCamelCase."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No String is used."
+  }
+ ]
+}

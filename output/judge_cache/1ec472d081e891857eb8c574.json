@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "transition_matrix",
+ "why": "The student says an all-zero row is acceptable, which is the documented RowsNeedNotSumToOne misconception. In fact every row must sum to 1. Here the row is all zeros only because of integer division (counts[j]/outDegree with outDegree 5 gives 0), not because the page has no links.",
+ "concepts": [
+  {
+   "concept": "transition_matrix",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "transition_matrix@L0#4",
+   "quote": "An all-zero row is fine",
+   "correct": false,
+   "why": "This uses the wrong rule that a row may be all zeros, but a probability row must sum to 1."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "dangling_pages@L0#2",
+   "quote": "it just means the page has no links",
+   "correct": false,
+   "why": "A page with no links needs 1/N in every column, not zeros. Also, this page has outDegree 5, so it is not dangling."
+  },
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the input graph."
+  }
+ ]
+}

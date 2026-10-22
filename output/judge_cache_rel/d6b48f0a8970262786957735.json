@@ -1,0 +1,130 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student correctly states the general rule that println ends the line and print does not, but never applies it to the three calls to work out the exact output.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "println@L1#2",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "Correct rule for println, but it is not applied to this code's strings or used to produce the two output lines."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "standard_output@L1#2",
+   "quote": "println adds a newline after the text and print does not.",
+   "correct": true,
+   "why": "States the print/println newline rule for the output stream without tracing the three calls."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "print@L1#2",
+   "quote": "print does not",
+   "correct": true,
+   "why": "Correctly says print writes no line terminator, but does not apply this to the two print calls."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing about the order in which the statements run."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "statement -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> print",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_literal -prerequisite-> println",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "stream_model -prerequisite-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "print -parallel-> println",
+   "stated": true,
+   "quote": "println adds a newline after the text and print does not."
+  },
+  {
+   "edge": "standard_output -prerequisite-> formatted_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "println -parallel-> formatted_output",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

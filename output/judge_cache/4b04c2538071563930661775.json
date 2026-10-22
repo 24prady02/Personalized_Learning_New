@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "compile_time_error",
+ "why": "The answer finds both compile-time errors (file name versus public class name, and the missing ;), says they come before the run, and then correctly predicts that args[1] fails at run time because the only argument, Ann, is args[0]; this ties compile-time errors to run-time errors in the given code without reasoning beyond it.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "command_line_args@L2#2",
+   "quote": "args[1] crashes at run time because Ann is args[0]",
+   "correct": true,
+   "why": "It applies zero-based indexing to this run's one argument and correctly predicts the failure (ArrayIndexOutOfBoundsException)."
+  },
+  {
+   "concept": "compile",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "compile@L3#1",
+   "quote": "Two compile errors first ... After that it compiles, but args[1] crashes at run time",
+   "correct": true,
+   "why": "It correctly relates compiling to running: the program has to compile successfully before it can run and crash."
+  },
+  {
+   "concept": "program_text",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "program_text@L3#1",
+   "quote": "the class must be in Greeting.java",
+   "correct": true,
+   "why": "It correctly says that public class Greeting cannot be saved as Hello.java and must be in Greeting.java."
+  },
+  {
+   "concept": "run",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "run@L3#2",
+   "quote": "args[1] crashes at run time",
+   "correct": true,
+   "why": "It places the exception during execution, after compiling has succeeded, which is correct."
+  },
+  {
+   "concept": "comment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "comment@L2#1",
+   "quote": "The comment never runs.",
+   "correct": true,
+   "why": "It correctly skips the commented-out line when tracing what runs."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "compile_time_error@L3#3",
+   "quote": "Two compile errors first ... After that it compiles, but args[1] crashes at run time",
+   "correct": true,
+   "why": "It correctly separates the compile-time errors javac reports from the run-time error that appears only once the code compiles, though it does not say that javac reports the ';' expected parse error before the file-name error."
+  }
+ ]
+}

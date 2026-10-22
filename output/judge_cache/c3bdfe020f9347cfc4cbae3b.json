@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "char_arithmetic",
+ "why": "All three printed lines are correct, but the answer gives no reasoning about char promotion, the cast or the order of concatenation, so it is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "67, a tab, C; then A12; then 662.",
+   "correct": true,
+   "why": "It gets 67 and 662 right but never says that 'A' is promoted to its int code 65."
+  },
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "a tab",
+   "correct": true,
+   "why": "It reads \\t correctly as one tab character but gives no further reasoning."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "C",
+   "correct": true,
+   "why": "It gets C right but does not explain that (char) turns 67 into 'C'."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer do not use command-line arguments."
+  }
+ ]
+}

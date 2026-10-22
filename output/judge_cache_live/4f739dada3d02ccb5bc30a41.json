@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "animation",
+ "why": "The answer correctly predicts what happens if clear() is removed: circles drawn in earlier frames are never erased, so they build up into a trail. That is reasoning about a change to the given code.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how shapes are drawn."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about coordinate scaling."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about the animation frame cycle, not general StdDraw rules."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the for loops."
+  },
+  {
+   "concept": "animation",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "animation@L4#1",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "It says why removing clear() changes the output: nothing erases the earlier frames, so the circles leave a trail."
+  },
+  {
+   "concept": "mouse_interaction",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about mouse polling."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about loop control."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "flowchart",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer has nothing to do with flowcharts."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "do_while_loop",
+ "why": "The student reasons about changed code: they say a plain while loop gives the same output because 81 >= 70 holds before the first pass. They also name the class of starts where the two loops differ (i below 70), which covers the asked start of 61. This is correct L4 reasoning about what stays the same, though they don't give the actual output for 61, which is \"61 \".",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#2",
+   "quote": "With a while loop the output is the same here, because 81 >= 70 is true at the start",
+   "correct": true,
+   "why": "They link while to do-while correctly: the two differ only in the first test, so a first test that passes gives the same passes."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "81 >= 70 is true at the start",
+   "correct": true,
+   "why": "They evaluate the guard correctly with this code's starting value."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the if."
+  },
+  {
+   "concept": "do_while_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "do_while_loop@L4#1",
+   "quote": "With a while loop the output is the same here ... it would only differ if i started below 70.",
+   "correct": true,
+   "why": "They predict correctly that turning the do-while into a while keeps the behaviour when the condition starts true, and changes it for any start below 70."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't discuss the init, test and update as loop control."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer doesn't mention i--."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not mentioned."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The condition is only treated as a comparison."
+  }
+ ]
+}

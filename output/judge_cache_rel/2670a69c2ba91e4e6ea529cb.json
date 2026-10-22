@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "nested_conditionals",
+ "why": "The answer is correct: for t = 5 nothing is printed. The student explains this by relating the nesting to the dangling-else rule: the outer if fails, and the else belongs to the inner if, so the else is skipped too. The student does not trace the else-if chain, but the main reasoning about the nested ifs is correct.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#2",
+   "quote": "the else is part of the inner if",
+   "correct": true,
+   "why": "Correctly says that without braces this else pairs with the innermost if."
+  },
+  {
+   "concept": "nested_conditionals",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "nested_conditionals@L3#2",
+   "quote": "Nothing at all, because the outer if fails and the else is part of the inner if.",
+   "correct": true,
+   "why": "Uses the dangling-else rule (else attaches to the inner if) together with the failed outer test to explain why nothing prints."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No separate claim about a plain if."
+  },
+  {
+   "concept": "else_if_chain",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The else-if chain is not traced or discussed."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Says nothing about how printing works."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not in the code."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "if_statement -prerequisite-> if_else_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "if_else_statement -prerequisite-> nested_conditionals",
+   "stated": true,
+   "quote": "the outer if fails and the else is part of the inner if"
+  },
+  {
+   "edge": "if_else_statement -prerequisite-> else_if_chain",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

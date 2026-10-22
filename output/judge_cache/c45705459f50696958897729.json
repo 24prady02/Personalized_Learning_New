@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The answer rejects braces altogether ('pointless, I never write them'), which is the MissingBraces misconception: braces are optional only when the body is a single statement, and leaving them out risks bugs when statements are added later, so the style judgement is wrong.",
+ "concepts": [
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "misconception (MissingBraces)",
+   "way_id": "block@L0#3",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "It turns 'braces are optional for a single statement' into 'braces are never needed', which contradicts the rule that a multi-statement body needs a braced block."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "if_statement@L1#2",
+   "quote": "Braces are pointless",
+   "correct": true,
+   "why": "It only implies one correct rule, that a single-statement if body may be written without braces, so the code is legal; it does not apply this to the code's values."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the template notation."
+  }
+ ]
+}

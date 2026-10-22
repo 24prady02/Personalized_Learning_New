@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The student gives none of the three update statements (count = count + 1; count += 1; count++;). The one correct point is that printing count + 1 or just evaluating it does not store the result back into count, so this covers one part of the increment and stops there.",
+ "concepts": [
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It sees that the increment has to store the result back into count, but it never writes a statement that does this."
+  },
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "Right: the call evaluates count + 1 and prints it, and no variable changes."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "shows one more, but ... does not change count",
+   "correct": true,
+   "why": "Right: writing to output adds text but does not change count."
+  },
+  {
+   "concept": "statement",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": false,
+   "why": "The answer treats count + 1; as a statement that runs and does nothing, but Java rejects it at compile time with 'not a statement', because a plain addition is not a valid expression statement."
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The task was to write three statements that store count + 1 back in count, but the answer gives none: it only says that printing count + 1 and writing count + 1 alone do not update count, which is one correct aspect and is not applied to the task.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "Correctly says println prints its argument's value, but this is one isolated fact, not a trace of given code."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "standard_output@L1#1",
+   "quote": "shows one more, but ... does not change count",
+   "correct": true,
+   "why": "Correctly separates writing to the output from changing a variable, stated as one fact without applying it further."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "counter_pattern@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "It implicitly knows that the counter must be explicitly updated, but it never writes any increment statement (count = count + 1; count += 1; count++;)."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "expression@L1#1",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": false,
+   "why": "It is right that evaluating count + 1 stores nothing, but a bare count + 1; is a compile-time 'not a statement' error, not a statement that runs and does nothing."
+  },
+  {
+   "concept": "method_call",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "method_call@L1#1",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "It implies the call uses the argument's value without changing count, as one isolated fact."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "statement@L1#1",
+   "quote": "count + 1 on its own line",
+   "correct": false,
+   "why": "It treats a bare expression line as a legal statement with no effect, but Java does not accept count + 1; as a statement."
+  }
+ ]
+}

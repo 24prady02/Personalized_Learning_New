@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "interactive_input",
+ "why": "The answer gives the correct result with a short reason: the user decides each round while the program runs. This states the interactive-input rule but does not apply it to any lines or values of the code, so it is L1.",
+ "concepts": [
+  {
+   "concept": "interactive_input",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "interactive_input@L1#2",
+   "quote": "No, the user decides each time, while it is running.",
+   "correct": true,
+   "why": "It correctly says that input is given while the program runs and controls whether the loop goes on, but it does not apply this to the code."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about variables."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "'While it is running' is only the setting for the input claim and makes no claim about running a program."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how a while loop works."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how StdIn reads."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about counting."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about if statements."
+  }
+ ]
+}

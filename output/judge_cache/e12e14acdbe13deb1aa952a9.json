@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "arithmetic_operators",
+ "why": "The answer gives the correct row 1 (page 1 has outDegree 2, so .90*1/2 + .10/3 ≈ 0.483 for pages 0 and 2, and .10/3 ≈ 0.033 for page 1), but it is a bare result with no working shown, so it is L1.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The values match the 90-10 formula, but the answer does not apply the rule to the values step by step, so it is a bare correct output."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about type conversion."
+  }
+ ]
+}

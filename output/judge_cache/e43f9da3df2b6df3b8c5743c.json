@@ -1,0 +1,31 @@
+{
+ "answer_level": "L1",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer gives the correct roles for both variables (sum is the accumulator, count is the counter), but it only uses the words already in their names and never points to the code that gives them those roles (sum += v[i]; count++ only when v[i] == 8).",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "sum builds a total",
+   "correct": true,
+   "why": "It correctly calls sum the running total but does not tie this to the sum += v[i] update or apply it to the values."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "count counts",
+   "correct": true,
+   "why": "It correctly names count as the counter but just repeats the variable's name and leaves out the v[i] == 8 guard and the +1 update."
+  },
+  {
+   "concept": "naming_convention",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "count counts",
+   "correct": true,
+   "why": "The answer makes no claim about naming conventions; it uses the names only to state each variable's role."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer predicts no output for any of the three inputs and treats StdIn as a variable that holds all the numbers like an array, which contradicts Java because StdIn is a library that reads from a stream and uses up each value as it reads it.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_input@L0#1",
+   "quote": "StdIn is a variable that holds all the numbers",
+   "correct": false,
+   "why": "StdIn is a library of static methods that read the next token from the input stream, not a variable that stores the input."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#3",
+   "quote": "a variable that holds all the numbers, like an array",
+   "correct": false,
+   "why": "This is the MultiValueVariable misconception, because a variable holds exactly one value at a time."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the isEmpty() test, the read in the loop body, or the sum and count updates."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "stream_model@L0#1",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "It treats input as a stored list that stays in place, but a stream is used up in order as it is read and cannot be revisited."
+  }
+ ]
+}

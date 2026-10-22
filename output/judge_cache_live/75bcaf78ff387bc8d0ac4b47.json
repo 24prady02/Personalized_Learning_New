@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "counter_pattern",
+ "why": "The student gives none of the three statements that store count + 1 in count. They only state one correct point: printing or writing count + 1 does not change count. That is a single aspect, so L1.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "println@L2#3",
+   "quote": "System.out.println(count + 1) shows one more",
+   "correct": true,
+   "why": "Correctly says the call prints the value of count + 1 and leaves count unchanged."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no separate claim about the output stream."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "counter_pattern@L1#2",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "Gives one correct point about updating the counter but does not write the statements that add 1 to count."
+  },
+  {
+   "concept": "expression",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "expression@L2#3",
+   "quote": "count + 1 on its own line does not change count",
+   "correct": true,
+   "why": "Correctly says evaluating count + 1 changes no variable when there is no assignment. A bare count + 1; also would not compile, which the student does not mention."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about method calls."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about int."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student's claim is about the expression, not about how + works."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about primitive types."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Writes no statements and makes no claim about how statements work."
+  }
+ ]
+}

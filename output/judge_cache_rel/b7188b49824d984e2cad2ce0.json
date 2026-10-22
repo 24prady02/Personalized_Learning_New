@@ -1,0 +1,87 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_operators",
+ "why": "The answer correctly gives the truth-table rule for && and || (true only when both are true; false only when both are false), but it only states the rule and does not explain or work through the four value combinations.",
+ "concepts": [
+  {
+   "concept": "logical_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "logical_operators@L1#2",
+   "quote": "p && q is true only when both are true; p || q is false only when both are false.",
+   "correct": true,
+   "why": "It correctly states the definitions of && and || but does not apply them to each value combination with any justification."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about evaluation order or skipping the right operand."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "control_flow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about control flow."
+  },
+  {
+   "concept": "boolean",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Its true/false values are only used inside the operator rule, with no claim about the boolean type itself."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention if-else."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "logical_operators -prerequisite-> short_circuit",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "boolean -prerequisite-> logical_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> boolean",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "if_else_statement",
+ "why": "The student puts `else return -1` inside the loop as if 'otherwise' meant 'if it was not found anywhere', but in Java the method returns on the first pass, so only arr[0] is checked; the answer also finds no 'last' occurrence.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "if (arr[i] == key) return i; else return -1;",
+   "correct": false,
+   "why": "Exactly one branch runs on the first pass and both branches return, so -1 is returned before any later element is checked; 'otherwise' is read in its everyday sense of 'if never found'."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "It uses arr[i] correctly to name the element at position i, but does nothing more with indexing."
+  },
+  {
+   "concept": "expression",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "arr[i] == key",
+   "correct": true,
+   "why": "It writes a valid comparison that gives a boolean (the int is promoted to double), with no further reasoning."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "for (...) { ... return -1; }",
+   "correct": false,
+   "why": "Both branches return, so the body runs at most once, yet the student expects the loop to search the whole array; the header is left out, so it does not go backwards to find the last occurrence."
+  }
+ ]
+}

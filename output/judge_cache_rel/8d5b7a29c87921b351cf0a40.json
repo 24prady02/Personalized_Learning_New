@@ -1,0 +1,125 @@
+{
+ "answer_level": "L0",
+ "main_concept": "de_morgan",
+ "why": "The student rewrites b as the maths-style range !(5 < n < 10), which does not compile in Java, and keeps the !( ) instead of applying De Morgan, so the answer uses a rule that goes against Java.",
+ "concepts": [
+  {
+   "concept": "de_morgan",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "de_morgan@L0#1",
+   "quote": "You could write b as !(5 < n < 10).",
+   "correct": false,
+   "why": "It is not a De Morgan rewrite: the negation is not moved inside, the comparisons are not flipped and && is not turned into ||. The correct form is n <= 5 || n >= 10."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how &&, || or ! work."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about short-circuit evaluation."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about string concatenation."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no general claim about expressions."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "boolean_expression@L0#1",
+   "quote": "!(5 < n < 10)",
+   "correct": false,
+   "why": "It writes the range as a chained comparison the way maths does. In Java 5 < n gives a boolean, so 5 < n < 10 does not compile (ChainedComparison)."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "logical_operators -prerequisite-> boolean_expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "logical_operators -prerequisite-> short_circuit",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "logical_operators -prerequisite-> de_morgan",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_concatenation -parallel-> arithmetic_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

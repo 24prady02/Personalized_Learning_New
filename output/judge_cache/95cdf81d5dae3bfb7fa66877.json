@@ -1,0 +1,43 @@
+{
+ "answer_level": "L2",
+ "main_concept": "variable_swap",
+ "why": "The answer gives the correct output of both calls and backs up main's line with the pass-by-value rule (copies are passed, so main's variables do not change); it applies rules to this code's values, but it does not trace the swap step by step or link to a construct listed in the graph edges, so it is L2.",
+ "concepts": [
+  {
+   "concept": "variable_swap",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "variable_swap@L2#2",
+   "quote": "in swap: num1 = 42 num2 = 7, then in main: num1 = 7 num2 = 42",
+   "correct": true,
+   "why": "It correctly predicts the swapped values inside swap and the unchanged values in main, with a justification for main."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "variable@L2#3",
+   "quote": "Java passes copies of the values, so main's variables do not change",
+   "correct": true,
+   "why": "It correctly says main's num1 and num2 keep their values because only the copies inside swap are assigned."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the assignments inside swap execute."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code reads no input, and the answer makes no claim about input."
+  }
+ ]
+}

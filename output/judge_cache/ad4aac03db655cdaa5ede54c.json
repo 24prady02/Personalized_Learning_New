@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "nested_loops",
+ "why": "The answer correctly gives the output for only one outer pass (i = 3) and does not justify it, so it does not cover the full exact output or trace every pass.",
+ "concepts": [
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "When i is 3 it prints 1 2 3.",
+   "correct": true,
+   "why": "The row for i = 3 is correct, but the rows for i = 1 and i = 2 are missing and nothing explains how the inner loop runs for each outer pass."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how printf formats its output or about the trailing spaces and newlines."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code does no char arithmetic, and the answer makes no claim about it."
+  }
+ ]
+}

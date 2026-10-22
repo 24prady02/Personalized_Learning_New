@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The plan is the right one for this copy: it makes a new int array the same size as data2 and copies every element in a loop, but it writes data2.length() twice, which is the documented ArrayHasLengthMethod misconception, so the code won't compile and this is an L2 answer with an error.",
+ "concepts": [
+  {
+   "concept": "array_creation",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "array_creation@L2#3",
+   "quote": "int[] copy = new int[data2.length()];",
+   "correct": false,
+   "why": "Using new to make a separate int array sized to the original is right, but the size expression data2.length() won't compile."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the int type itself."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The loop is only used as part of the traversal; nothing is said about for-loop rules."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ is only used as the usual loop update, with no claim about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about primitive types."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "int[] copy = new int[data2.length()]; for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "It creates the second array first and then copies each data2[i] into copy[i], which is the right plan, but the length() calls stop it from compiling."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The loop control is the standard pattern, with no reasoning given about it."
+  },
+  {
+   "concept": "array_traversal",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_traversal@L2#1",
+   "quote": "for (int i = 0; i < data2.length(); i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "Going from i = 0 while i is less than the length visits every valid index, but the bound is written with length() instead of the length field."
+  },
+  {
+   "concept": "length_field",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "length_field@L0#2",
+   "quote": "data2.length()",
+   "correct": false,
+   "why": "It calls length() on an array, but an array's size is the field data2.length, written without parentheses."
+  }
+ ]
+}

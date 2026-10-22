@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "logical_xor",
+ "why": "The answer states the correct rule for ^ on booleans (true when the two operands differ) but does not apply it to this code, where (n > 5) is false and (n < 10) is true, so c is true.",
+ "concepts": [
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no arrays and the answer says nothing about array aliasing."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment, so there is no claim to level."
+  }
+ ]
+}

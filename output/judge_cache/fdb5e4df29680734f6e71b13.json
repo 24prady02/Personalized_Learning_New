@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "double",
+ "why": "The student picks the right type and divides two doubles, so the fraction is kept, but the method has no return statement and will not compile, so the new code is not correct and cannot reach L4. What is left is one correct part of the task.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "double mpg = miles / gallons;",
+   "correct": true,
+   "why": "Using double for the result and dividing two doubles is correct, but this is one part of the task, and the method never returns mpg, which causes a 'missing return statement' compile error."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not use or mention the % operator."
+  }
+ ]
+}

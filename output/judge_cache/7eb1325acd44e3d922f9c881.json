@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "compile",
+ "why": "The answer puts the problems in the right order: two compile-time errors stop javac, and once they are fixed the program compiles and then fails at run time. Each fault is found for this one given code, and none of the reasoning goes beyond it.",
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "compile@L3#1",
+   "quote": "Two compile errors first ... After that it compiles, but args[1] crashes at run time",
+   "correct": true,
+   "why": "It correctly links compiling to running: the compile errors must be fixed before anything runs, and a run-time error can still happen after a clean compile."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "command_line_args@L3#3",
+   "quote": "args[1] crashes at run time because Ann is args[0]",
+   "correct": true,
+   "why": "Only one argument is typed, so the only valid index is 0 and args[1] throws ArrayIndexOutOfBoundsException. This finds the fault for one given case, which is L3, not L4."
+  },
+  {
+   "concept": "program_text",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "program_text@L3#1",
+   "quote": "the class must be in Greeting.java",
+   "correct": true,
+   "why": "It correctly says that public class Greeting cannot be saved in Hello.java."
+  },
+  {
+   "concept": "comment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "comment@L2#1",
+   "quote": "The comment never runs.",
+   "correct": true,
+   "why": "It correctly says the commented-out line in this code takes no part in execution."
+  }
+ ]
+}

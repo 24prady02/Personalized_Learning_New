@@ -1,0 +1,110 @@
+{
+ "answer_level": "L1",
+ "main_concept": "boolean_flag_array",
+ "why": "Both facts are right: composite[k] flags that k is not prime, and every flag starts as false. But they are two separate statements that the answer never applies to this code's values or connects to how the sieve works.",
+ "concepts": [
+  {
+   "concept": "boolean_flag_array",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "boolean_flag_array@L1#1",
+   "quote": "It marks whether k is not prime; everything starts as false.",
+   "correct": true,
+   "why": "It correctly says what the flag at index k stands for and that new boolean[] starts all false, but it does not trace the code or say that the sieve relies on the false start."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "expression -prerequisite-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -parallel-> comparison_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

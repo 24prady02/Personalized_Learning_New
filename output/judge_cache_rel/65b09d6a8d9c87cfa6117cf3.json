@@ -1,0 +1,115 @@
+{
+ "answer_level": "L4",
+ "main_concept": "accumulator_pattern",
+ "why": "For the changed row the student does more than re-trace: they say why next stays -1. The running sum ends at 0.9, which is below r = 0.95, so r < sum never holds, and that happens because the row does not add up to 1.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "accumulator_pattern@L4#1",
+   "quote": "(b) the sums only reach 0.9, so next stays -1 because the row does not add to 1.",
+   "correct": true,
+   "why": "The student predicts the result for the changed input from the accumulator's final total and links the failure to the row not summing to 1, and the run confirms next = -1."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about how double works."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Operators are not discussed."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Assignment is not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Expressions are not discussed."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The += operator itself is not discussed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "int is not discussed."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "j++ is not discussed."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student never mentions pages with no outgoing links."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "assignment -prerequisite-> increment_operators",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "increment_operators -parallel-> compound_assignment",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

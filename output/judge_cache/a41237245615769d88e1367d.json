@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "print",
+ "why": "The answer gets two pieces right: A is printed first, and 17 is odd so the else branch runs. It never works out which letters that branch prints (E, because 17 % 5 == 2, then G), so it does not trace every part of the code to reach AEG.",
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "print@L1#1",
+   "quote": "It prints A, goes to the odd part and prints the letters there.",
+   "correct": true,
+   "why": "It names one correct print (A) but leaves the rest of the output, E then G, unstated."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the output stream."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "goes to the odd part",
+   "correct": true,
+   "why": "It reads x % 2 correctly as odd for 17 but never works out x % 5."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "statement@L1#1",
+   "quote": "It prints A, goes to the odd part",
+   "correct": true,
+   "why": "It gets the order right (A first, then the branch) but does not go through each statement in that branch."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about string literals."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement and the answer does not mention one."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about char arithmetic."
+  }
+ ]
+}

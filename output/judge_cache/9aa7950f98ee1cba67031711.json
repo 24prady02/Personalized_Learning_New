@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "nested_loops",
+ "why": "The student gives the rows 3 2 1 / 2 1 / 1 correctly, one value at a time, but leaves out the last pass i = 0, where the inner loop does not run and println() still prints an empty line; the trailing spaces are also missing, so this is a multistructural answer with an error.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about integer division."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about expressions."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the \"%d \" literal or its trailing space."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about int."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "loop_variable@L2#2",
+   "quote": "because the loop stops at 1",
+   "correct": false,
+   "why": "The answer gives the loop variable's values, but i >= 0 makes the outer loop run once more with i = 0, so the claim that it stops at 1 is wrong."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "nested_loops@L2#2",
+   "quote": "3 2 1 / 2 1 / 1 (no empty line at the end)",
+   "correct": false,
+   "why": "The rows show that the inner loop runs fully on each outer pass, but the answer misses the i = 0 pass, which prints an empty line, and the trailing spaces."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about blocks."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "This concept does not apply to the code."
+  }
+ ]
+}

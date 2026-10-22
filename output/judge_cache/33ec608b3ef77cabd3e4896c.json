@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "simulation_loop",
+ "why": "Both parts are correct and backed by reasons. The answer links one vector-matrix multiplication to one surfer move and says the page rank is the limit you reach by repeating that step until the vector stops changing, which relates each step to the whole process.",
+ "concepts": [
+  {
+   "concept": "simulation_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "simulation_loop@L3#1",
+   "quote": "it is where you are after one move; you keep multiplying until it stops changing",
+   "correct": true,
+   "why": "It treats each multiplication as one move that starts from the state the last move reached, and says that repeating it until nothing changes gives the rank, not the first step."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about arithmetic operators."
+  }
+ ]
+}

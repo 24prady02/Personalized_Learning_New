@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "if_else_statement",
+ "why": "The student traces every part of the code in order with the values for x = 17: A always prints, 17 is odd so the else runs, 17 % 5 is 2 so E prints, then G. This gives AEG, which is correct, but the student never states what the code is for.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_else_statement@L2#1",
+   "quote": "17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part",
+   "correct": true,
+   "why": "The student tests the outer and inner conditions once each, runs exactly one branch of each, and then continues with G."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "remainder_operator@L2#1",
+   "quote": "17 divided by 2 leaves 1 ... it checks 17 % 5, which is 2",
+   "correct": true,
+   "why": "The student works out both remainders correctly from x's value."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer reasons about % itself, which is covered by remainder_operator, and says nothing else about arithmetic operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no separate claim about expressions."
+  },
+  {
+   "concept": "print",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "print@L2#2",
+   "quote": "so overall I think the answer would be AEG",
+   "correct": true,
+   "why": "The student puts the printed letters together in execution order, each print continuing on the same line."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about standard output beyond what is covered under print."
+  },
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "if_statement@L2#1",
+   "quote": "then after that inner if-else it prints G",
+   "correct": true,
+   "why": "After the inner conditional the student correctly continues with the next statement."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no division by zero in the code."
+  }
+ ]
+}

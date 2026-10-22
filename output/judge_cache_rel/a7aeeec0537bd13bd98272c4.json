@@ -1,0 +1,105 @@
+{
+ "answer_level": "L2",
+ "main_concept": "redirection",
+ "why": "The answer gives the right terminal result for each of the three commands, with a short reason for each (output goes to data.txt, no file is made), and correctly says args is empty, but it never connects the parts into one structure.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "command_line_args@L1#2",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "The result is correct, since Average gets no typed arguments, but no reason is given."
+  },
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "redirection@L2#2",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "It predicts that > leaves the terminal empty and fills the file, and that < makes Average print the average, and it says why."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "piping@L2#2",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "It predicts that only Average's output appears, for freshly generated numbers, and that no file is created."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about running programs as such."
+  },
+  {
+   "concept": "args_length",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "args.length is not mentioned."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "redirection -prerequisite-> piping",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "command_line_args -prerequisite-> args_length",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

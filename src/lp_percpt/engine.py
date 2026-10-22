@@ -20,8 +20,9 @@ from typing import Dict, List, Optional
 
 from . import judge as judgelib
 from . import models
-from .evidence import asks_beyond, collect, content_gate, help_seeking
-from .identify import identify, split_clauses
+from .evidence import asks_beyond, collect, content_gate, help_seeking, no_claim
+from .execution import get_tracer
+from .identify import identify, link_pick, link_v2, split_clauses
 from .knowledge import ROOT, PercptKnowledge, get_knowledge
 from .ladder import LEVELS, walk
 from .render import write_map
@@ -111,6 +112,9 @@ class LPPercptEngine:
             if help_seeking(text):
                 result["prompt_gates"].append("help_seeking")
                 return self._finish(g, result, review)
+            if no_claim(text):                                   # G2b: a question, no claim: not levelled
+                result["prompt_gates"].append("no_claim")
+                return self._finish(g, result, review)
             too_little = content_gate(text, MIN_WORDS)
 
             # Steps 2-3 — clauses, concept linking (G3 Off-topic)
@@ -138,14 +142,22 @@ class LPPercptEngine:
                 extra = judgelib.extra_concept(text, self.kg, set(linked))
                 question = (asked or (shown_text or "").replace(code or "", "")).strip()
                 facts = _run_facts(evidence)
-                if asks_beyond(asked, code):
+                run_output = None
+                if judgelib.rubric():
+                    # the rubric judge sees the run output; whether the part asks beyond the
+                    # code is left to its deciding questions (fixing a given failing case is L3)
+                    trace = get_tracer().trace(code, hint=shown_text) if code and get_tracer().available else None
+                    run_output = trace.run.output if trace and trace.run else None
+                elif asks_beyond(asked, code):
                     facts.append("THE PART ASKED GOES BEYOND THE GIVEN CODE: it asks about code, a change or an input "
                                  "that is not in the given code, so correct reasoning about it shows an L4 way.")
-                jprompt = judgelib.build_prompt(text, question, code, facts, linked + extra)
+                jprompt = judgelib.build_prompt(text, question, code, facts, linked + extra, run_output)
                 jout = judgelib.judge(jprompt)
                 judged = judgelib.levels(jout, linked + extra)
                 result["judge"] = {"concepts": linked + extra, "levels": {c: i["level"] for c, i in judged.items()},
-                                   "unavailable": jout.get("unavailable")}
+                                   "unavailable": jout.get("unavailable"),
+                                   "answer_level": jout.get("answer_level"), "main_concept": jout.get("main_concept"),
+                                   "why": jout.get("why"), "relations": jout.get("relations")}
 
             # Steps 8-10 — prompt level (highest way shown), node update
             for h in hits:
@@ -170,6 +182,10 @@ class LPPercptEngine:
                 if ev.empty:                                   # nothing shown: node untouched
                     ev.gate("no_evidence")
                     continue
+                if ((link_v2() or link_pick()) and judgelib.enabled() and not result.get("judge", {}).get("unavailable")
+                        and h.concept not in judged):          # V2: the judge is the final filter
+                    ev.gate("judge_no_level")
+                    continue
                 g.apply(ev, prompt_level)
 
             # Step 12 — inference rules
@@ -179,7 +195,13 @@ class LPPercptEngine:
             for h in hits:
                 ev = evidence[h.concept]
                 n = g.nodes.get(h.concept)
+                if "judge_no_level" in ev.gates:               # kept, but Claude gave it no level: not stored
+                    result["concepts"].append(self._report(g, h, ev, 0, n, list(ev.gates), "low"))
+                    continue
                 if ev.empty:
+                    if ev.judged:                              # no other evidence: the judge's level, reported, not stored
+                        result["concepts"].append(self._judge_report(h.concept, ev.judged, h.score))
+                        continue
                     result["concepts"].append(self._report(g, h, ev, 0, n, list(ev.gates), "low"))
                     continue
                 tier = 2
@@ -203,19 +225,23 @@ class LPPercptEngine:
                 item = judged.get(cid)
                 if item is None or cid not in self.kg.concepts:
                     continue
-                c = self.kg.concepts[cid]
-                lv = item["level"]
-                result["concepts"].append({
-                    "concept": cid, "label": c.label, "chapter": c.chapter, "link_score": 0.0,
-                    "link_confidence": 0.0, "prompt_level": lv, "assessed": True, "level": None,
-                    "level_name": None, "provisional": True, "uncertain_toward": None,
-                    "stop_reason": "judge only",
-                    "prompt_reason": f"judge: {lv} {item.get('way', '')}: {item.get('why', '')}",
-                    "confidence": "low", "gates": ["judge_only"], "checks": {}, "held": [], "refuted": [],
-                    "evidence": [], "descriptor": None, "follow_up": None, "level_source": "judge",
-                    "wrong_rule": lv == "L0", "judge": item})
+                result["concepts"].append(self._judge_report(cid, item))
 
             return self._finish(g, result, review)
+
+    def _judge_report(self, cid: str, item: Dict, link_score: float = 0.0) -> Dict:
+        """A concept only the judge graded: reported with the judge's level, not stored."""
+        c = self.kg.concepts[cid]
+        lv = item["level"]
+        return {
+            "concept": cid, "label": c.label, "chapter": c.chapter, "link_score": link_score,
+            "link_confidence": 0.0, "prompt_level": lv, "assessed": True, "level": None,
+            "level_name": None, "provisional": True, "uncertain_toward": None,
+            "stop_reason": "judge only",
+            "prompt_reason": f"judge: {lv} {item.get('way', '')}: {item.get('why', '')}",
+            "confidence": "low", "gates": ["judge_only"], "checks": {}, "held": [], "refuted": [],
+            "evidence": [], "descriptor": None, "follow_up": None, "level_source": "judge",
+            "wrong_rule": lv == "L0", "judge": item}
 
     def _finish(self, g: StudentGraph, result: Dict, review: List[Dict]) -> Dict:
         """Step 13 — save the graph, redraw the map, log for link review."""
@@ -260,7 +286,7 @@ class LPPercptEngine:
 
 
 # ── Step 7b helpers: the judge's input and the fusion ───────────────────────
-_WEAK = ("nli", "relation cue", "similarity fact")
+_WEAK = ("nli", "relation cue", "similarity")     # "similarity" covers "similarity fact" and the L1 default
 
 
 def _run_facts(evidence) -> List[str]:
@@ -315,6 +341,12 @@ def _fuse(ev, level: int, item: Optional[Dict]) -> int:
     if ev.source == "run" and level == 0:
         ev.wrong_rule = True
         return 0
+    if ev.source == "run" and level == 2 and jl == 1:
+        # the run confirms the values, the judge finds no justification: a bare
+        # correct result is L1 (graph: "a correct output is not levelled above L1 on its own")
+        ev.source = "judge"
+        ev.reason = f"L1 {item.get('way', '')} (judge): {item.get('why', '')}"
+        return 1
     if jl == 0:
         ev.wrong_rule = True
         ev.source = "judge"

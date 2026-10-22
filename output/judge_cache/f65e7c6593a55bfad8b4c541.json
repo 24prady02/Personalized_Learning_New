@@ -1,0 +1,34 @@
+{
+ "answer_level": "L4",
+ "main_concept": "formatted_output",
+ "why": "The answer doesn't trace the given output. Instead it correctly predicts what changing the specifier to %.3f would do and says what stays the same (the stored value), which is reasoning beyond the given code.",
+ "concepts": [
+  {
+   "concept": "formatted_output",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "formatted_output@L4#1",
+   "quote": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+   "correct": true,
+   "why": "With %.3f the value 3.14159 rounds to 3.142, and with no width there is no padding. The student correctly says precision changes only the printed digits, not the stored value."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "price itself is still 3.14159",
+   "correct": true,
+   "why": "The answer says nothing about the double type itself. Its only claim is that printing does not change the variable, and that is a formatted-output rule."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about binary approximation or rounding error in stored doubles."
+  }
+ ]
+}

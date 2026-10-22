@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "while_loop",
+ "why": "In one correct sentence, worked out from the code, the answer says when the loop ends: the multiple-of-5 test sets the flag, the rest of that pass still runs, and the next condition check ends the loop. It does not trace the printed values.",
+ "concepts": [
+  {
+   "concept": "while_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "while_loop@L3#1",
+   "quote": "quits after the pass where it hits a multiple of 5",
+   "correct": true,
+   "why": "It links the flag set in the body to the condition checked before the next pass: the pass at 10 finishes, then !isDone is false and the loop exits."
+  },
+  {
+   "concept": "loop_control",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "loop_control@L1#1",
+   "quote": "It keeps jumping up by 3",
+   "correct": true,
+   "why": "It names the +3 update correctly but does not use it to work out the values 1, 4, 7, 10 or the number of passes."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The if is only implied, with no claim of its own."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not give the output."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about this."
+  }
+ ]
+}

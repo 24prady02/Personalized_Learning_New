@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "remainder_operator",
+ "why": "The student got 30.3 by treating 9 % 5 as subtraction (9 minus 5), which is not the Java remainder rule; it gives 4 here only by coincidence, and the answer also leaves out the first output line \"Result is \".",
+ "concepts": [
+  {
+   "concept": "remainder_operator",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "9 % 5 means 9 minus 5, which is 4",
+   "correct": false,
+   "why": "In Java, % gives the remainder after division, not the difference; 9 % 5 is 4 because 9 = 1*5 + 4, not because 9 - 5 = 4."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "9 % 5 means 9 minus 5",
+   "correct": false,
+   "why": "It treats the % operator as if it were -, which goes against Java's operator rules."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "num4 = 30.3",
+   "correct": true,
+   "why": "The double result 30.3 is correct, but the student never explains that the int is promoted to double before the addition."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about integer division."
+  }
+ ]
+}

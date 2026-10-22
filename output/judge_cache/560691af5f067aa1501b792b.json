@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "empty_statement",
+ "why": "The student reads the semicolon after if (x > 0) in its everyday sense, as just ending the line, so they think the println is the if's body. In Java that ; is an empty statement and is the whole then branch, so \"positive\" is always printed, as the run output shows.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The mistake is about what makes up the if's body, which belongs to the empty statement, not about how an if works."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "empty_statement@L0#1",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "This is the SemicolonAfterIfHeader error: the student ignores that the ; ends the if, so the println always runs."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements in general."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention primitive types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention int."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how println behaves."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention method calls."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "comparison_operators@L1#2",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "The comparison is evaluated correctly for x = -3, but this is one isolated correct fact, not the whole fragment asked about."
+  }
+ ]
+}

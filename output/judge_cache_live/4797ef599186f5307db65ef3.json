@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "switch_statement",
+ "why": "The student turns the whole switch into an equivalent else-if chain, and correctly joins the fall-through labels case 2 and case 3 with ||; this links switch to the if-else chain, but 'elif' is not Java syntax, so it is a relational answer with an error.",
+ "concepts": [
+  {
+   "concept": "if_else_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "if_else_statement@L3#4",
+   "quote": "if (value == 1) result = 30; elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "The chain structure is right and the final else catches the default case, but Java needs 'else if', not 'elif'."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the plain if on its own."
+  },
+  {
+   "concept": "logical_operators",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "logical_operators@L3#1",
+   "quote": "value == 2 || value == 3",
+   "correct": true,
+   "why": "Uses || to join two comparisons into one condition that covers the grouped case labels."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The assignments are copied from the code without any reasoning about them."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about evaluation order."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  },
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "switch_statement@L3#1",
+   "quote": "elif (value == 2 || value == 3) result = -10; else result = 5;",
+   "correct": false,
+   "why": "It matches each case to an == test on value, merges the fall-through labels and maps default to else, but the code would not compile because of 'elif'."
+  },
+  {
+   "concept": "side_effect_order",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  }
+ ]
+}

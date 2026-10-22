@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "scientific_notation",
+ "why": "The student reads e in 6.02e23 as Euler's number, which is the documented misconception ExponentIsPower; in Java the literal means 6.02 x 10^23.",
+ "concepts": [
+  {
+   "concept": "scientific_notation",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "scientific_notation@L0#2",
+   "quote": "6.02e23 is 6.02 times e to the power 23.",
+   "correct": false,
+   "why": "In a Java literal, e means times ten to the power, so 6.02e23 is 6.02 x 10^23, not 6.02 x e^23."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the double type."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about arithmetic operators."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about integer division."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about floating-point precision."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about primitive types."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about method calls."
+  },
+  {
+   "concept": "literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about the literal's form or type, only its wrong value."
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "markov_chain",
+ "why": "The student is right that the printed values are estimates, but the second half of the question asks whether the start page matters, and the answer says starting at page 3 would change the ranks. That is the StartPageMatters misconception, so the answer is L0 overall.",
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "It correctly says that visit fractions from 100 moves only estimate the ranks, but gives no reason and does not apply this to the values."
+  },
+  {
+   "concept": "power_method",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "power_method@L0#2",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "It holds the wrong rule that the ranks depend on the start page, but they converge to the same vector from any start."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "markov_chain@L0#2",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "It contradicts the basic limit theorem, which says the random-surfer chain's long-run probabilities are the same whatever page it starts from."
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "operator_precedence",
+ "why": "The student says Java 'guesses' the order of operations when there are no parentheses, which goes against Java's fixed precedence rule (* binds before +, so r = 1 + 6 = 7); the student also never gives r and wrongly agrees the code is wrong.",
+ "concepts": [
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer's claim is about grouping order, which is covered under operator_precedence."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about what + or * do."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "if_else_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "There is no if-else in the code."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "operator_precedence@L0#1",
+   "quote": "Every expression must be fully in parentheses, otherwise Java guesses the order.",
+   "correct": false,
+   "why": "Java does not guess: its precedence rules always group a + b * c as a + (b * c), so parentheses are not required and r is 7."
+  }
+ ]
+}

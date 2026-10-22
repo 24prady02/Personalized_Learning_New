@@ -1,0 +1,130 @@
+{
+ "answer_level": "L3",
+ "main_concept": "normalization",
+ "why": "The student says p ends up all zeros because int / int is integer division, so it is not a probability row, and fixes it with a cast to double that gives 0, 0, 0.4, 0.4, 0.2, which sums to 1; finding and fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "normalization",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "normalization@L3#2",
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+   "correct": true,
+   "why": "The student ties the row's sum to the operand types: two ints truncate to 0, and a double operand gives a valid distribution."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "All zeros, because int / int is integer division.",
+   "correct": true,
+   "why": "The student sees that each count / total truncates to 0 here because every count is less than outDegree, so normalising must divide as doubles."
+  },
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "int@L3#1",
+   "quote": "int / int is integer division. Cast: (double) counts[j] / outDegree gives ... 0.4",
+   "correct": true,
+   "why": "The student contrasts int / int, which truncates, with a double operand that promotes the division and keeps the fraction."
+  },
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The answer shows that type flow decides the division: with one double operand the fraction is kept."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "explicit_cast@L2#2",
+   "quote": "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The cast is placed correctly on the operand, before the division, and the values it predicts are right."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "type_conversion@L2#2",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The answer correctly predicts the values after the conversion, with nothing more general said about conversion."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Apart from the integer division point, the answer says nothing about the operators."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types as such."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> integer_division",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> type_conversion",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "integer_division -prerequisite-> normalization",
+   "stated": true,
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1."
+  },
+  {
+   "edge": "int -parallel-> double",
+   "stated": true,
+   "quote": "int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2"
+  },
+  {
+   "edge": "type_conversion -prerequisite-> explicit_cast",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

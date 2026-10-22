@@ -1,0 +1,4 @@
+{
+ "concepts": [],
+ "unparsed": "```json\n{\"answer_level\":\"L0\",\"main_concept\":\"declaration\",\"why\":\"The answer says the declaration 'int c;' gives the local variable c the value 0. In Java a local variable has no value until it is assigned, so 'c + 1' does not compile.\"},\n\"concepts\":[\n{\"concept\":\"declaration\",\"level\":\"L0\",\"way\":\"misconception\",\"way_id\":\"declaration@L0#5\",\"quote\":\"int c; declares c, so c is 0.\",\"correct\":false,\"why\":\"This is the wrong rule that local variables get a default value, but Java rejects reading c before"
+}

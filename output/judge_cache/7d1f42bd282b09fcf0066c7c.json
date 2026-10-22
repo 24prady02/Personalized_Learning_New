@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "loop_variable",
+ "why": "The student works out each variable's role from the code: i is the loop index, so a short name is fine, and c counts the passing scores, so it should be passCount. This links the names to what the code does. The claim that the output stays at 3 is correct (the run printed 3) but has no reason given, so it adds nothing beyond L3.",
+ "concepts": [
+  {
+   "concept": "loop_variable",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "i is fine because it is only the loop index. c should be passCount, since it counts the passing scores.",
+   "correct": true,
+   "why": "Correctly sees i as a stepper or index, which keeps its short conventional name, and c as a counter that needs a name saying what it counts."
+  },
+  {
+   "concept": "indexing",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "it is only the loop index",
+   "correct": true,
+   "why": "Only names i as the index, without applying the indexing rules to the values."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about how the for statement works."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about the init, test or update."
+  }
+ ]
+}

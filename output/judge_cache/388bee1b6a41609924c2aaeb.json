@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "if_statement",
+ "why": "The student says the indented println(\"done\") is inside the braceless if, but in Java only the next single statement is the body, so the answer rests on a wrong rule. The correct output for java Order 3 is \"start\" then \"done\". The answer says nothing about java Order five, which throws a NumberFormatException at parseInt before anything is printed.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "if_statement@L0#1",
+   "quote": "Only start, because done is inside the if and 3 is not > 5",
+   "correct": false,
+   "why": "The student reads the indentation as if it set the scope, but without braces the body of an if is only one statement, so done prints anyway."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the class declaration."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about main or how it runs."
+  }
+ ]
+}

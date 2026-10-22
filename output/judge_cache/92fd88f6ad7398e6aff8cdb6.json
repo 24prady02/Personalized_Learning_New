@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "arithmetic_operators",
+ "why": "The student's value for b × a ({{3,4},{1,2}}) is correct, and so is the conclusion that it differs from c = a × b ({{2,1},{4,3}}), but the student shows no working and never gives c's value, so this counts as a bare correct result (L1) rather than a trace (L2) or a reasoned prediction about the change (L4).",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "No, b times a is 3 4 / 1 2, so the order matters.",
+   "correct": true,
+   "why": "The b × a result is right, but the student doesn't show how the sum of products a[i][k] * b[k][j] produces it."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how c[i][j] += a[i][k] * b[k][j] is evaluated."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code and the answer contain no division."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about names."
+  }
+ ]
+}

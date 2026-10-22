@@ -1,0 +1,120 @@
+{
+ "answer_level": "L0",
+ "main_concept": "standard_input",
+ "why": "The student does not answer (a), (b) or (c); they only say StdIn is a variable that stores all the numbers like an array, which is wrong because StdIn is a library whose reads take each token from a stream once.",
+ "concepts": [
+  {
+   "concept": "standard_input",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "standard_input@L0#1",
+   "quote": "StdIn is a variable that holds all the numbers, like an array.",
+   "correct": false,
+   "why": "StdIn is a booksite library of static read methods, not a variable or a stored collection of the input values."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "variable@L0#3",
+   "quote": "a variable that holds all the numbers",
+   "correct": false,
+   "why": "This is the MultiValueVariable misconception: a variable holds exactly one value at a time."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the loop, its isEmpty() test or what it prints."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention end of input or empty input."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention sum or count."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention assignment."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention output."
+  },
+  {
+   "concept": "while_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the while loop."
+  },
+  {
+   "concept": "stream_model",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "stream_model@L0#1",
+   "quote": "holds all the numbers, like an array",
+   "correct": false,
+   "why": "It treats input as a stored list that stays in place, but a stream is used up one value at a time as it is read."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "stream_model -prerequisite-> standard_input",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "stream_model -prerequisite-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -prerequisite-> read_loop_idiom",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -parallel-> standard_output",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "read_loop_idiom -prerequisite-> end_of_input",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

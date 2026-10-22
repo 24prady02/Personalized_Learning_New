@@ -1,0 +1,115 @@
+{
+ "answer_level": "L4",
+ "main_concept": "markov_chain",
+ "why": "The student reasons about code that has been changed (the random jump removed). They say correctly that a closed group of pages traps the surfer and that every other page gets rank 0, which means the chain no longer mixes.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about how the input format is read or what it means."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "two_models",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not compare simulation with the power method."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "way_id": "markov_chain@L4#4",
+   "quote": "The surfer gets trapped in that group and the other pages get rank 0.",
+   "correct": true,
+   "why": "Without the random leap, a group of pages that only link to each other is a spider trap. The answer gives the right result: the surfer gets stuck there and the long-run probabilities pile up inside the group."
+  },
+  {
+   "concept": "transition_matrix",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the matrix rows or the formula."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a closed group of pages, not about a single page with no outgoing links."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "input_graph -prerequisite-> transition_matrix",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "frequency_counting -prerequisite-> two_models",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "transition_matrix -prerequisite-> markov_chain",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "transition_matrix -prerequisite-> dangling_pages",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

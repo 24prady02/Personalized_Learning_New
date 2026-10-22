@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "array_copy",
+ "why": "The student copies the array one element at a time instead of assigning the reference, which is the right approach. The code still has two errors: it never creates the copy array, and the bound i <= data2.length goes one index past the end and throws ArrayIndexOutOfBoundsException. Because the new code is not correct, it cannot be L4.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int itself."
+  },
+  {
+   "concept": "length_field",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "data2.length is written correctly, but the answer's reasoning is not about the length field; the bound error is levelled under off_by_one_error."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The for loop is only a vehicle for the copy, and the answer makes no separate claim about it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "i++ appears only as the standard update, with no claim about it."
+  },
+  {
+   "concept": "array_copy",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "array_copy@L2#1",
+   "quote": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+   "correct": false,
+   "why": "It copies element by element into copy[i] in order, but it never creates copy with new and it runs past the last index."
+  },
+  {
+   "concept": "off_by_one_error",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "off_by_one_error@L0#2",
+   "quote": "i <= data2.length",
+   "correct": false,
+   "why": "This uses <= where < is needed (the OffByOneBound misconception), so the last pass reads data2[data2.length] and throws an exception."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The bound error is already levelled under off_by_one_error."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about aliasing."
+  }
+ ]
+}

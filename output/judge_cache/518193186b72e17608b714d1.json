@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "normalization",
+ "why": "The student finds why this code's row is all zeros (int / int truncates), fixes this one failing case with a correctly placed cast, and checks that the fixed row is a probability row summing to 1, which is fixing one given failing case (L3).",
+ "concepts": [
+  {
+   "concept": "normalization",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+   "correct": true,
+   "why": "Links the operand types to whether the division truncates, and fixes the given row so it becomes a valid distribution."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "All zeros, because int / int is integer division.",
+   "correct": true,
+   "why": "Applies int division to these values: 0/5, 2/5 and 1/5 are all 0."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "The cast is on the numerator before dividing, so the division is done in double, which correctly fixes the given case."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "Uses the cast so that outDegree is promoted to double and the fraction is kept."
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "answer_level": "L3",
+ "main_concept": "switch_statement",
+ "why": "The student gets the right final value, 50, and explains it correctly: because there is no break, execution falls through the cases until default.",
+ "concepts": [
+  {
+   "concept": "switch_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "switch_statement@L3#2",
+   "quote": "the swich no have break so it go down all the case and result become 50",
+   "correct": true,
+   "why": "Linking the missing break to fall-through correctly explains why value 2 ends with result 50 (matches case 2, then runs case 3, case 4 and default)."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about how the assignments overwrite result."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements in general."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  },
+  {
+   "concept": "break_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "break_statement@L3#4",
+   "quote": "no have break so it go down all the case",
+   "correct": true,
+   "why": "Correctly says that without break, execution falls through into the next cases of the switch."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about blocks."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this code."
+  }
+ ]
+}

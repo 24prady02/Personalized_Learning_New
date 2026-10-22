@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "variable",
+ "why": "The answer gives both output lines correctly and explains them by relating parameter passing to main's variables: the method gets copies of the values, so swapping inside swap does not change main's num1 and num2.",
+ "concepts": [
+  {
+   "concept": "variable",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Java passes copies of the values, so main's variables do not change.",
+   "correct": true,
+   "why": "It correctly relates the method parameters to main's separate variables through pass-by-value."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "in swap: num1 = 42 num2 = 7",
+   "correct": true,
+   "why": "The swapped values are correct, but the answer does not trace the three assignments."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the assignments run."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code reads no input."
+  }
+ ]
+}

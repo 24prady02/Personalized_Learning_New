@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student states the correct rule (println adds a newline and print does not) but never applies it to the three statements, so the exact output is not given.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "println@L1#2",
+   "quote": "println adds a newline after the text",
+   "correct": true,
+   "why": "The rule for println is correct and puts the newline after the text, but it is not applied to this code's strings or line breaks."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "standard_output@L1#2",
+   "quote": "println adds a newline after the text and print does not",
+   "correct": true,
+   "why": "It states how print and println write output but does not predict the output of these three calls."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "print@L1#2",
+   "quote": "print does not",
+   "correct": true,
+   "why": "It correctly says print writes no line terminator, but only as a general rule that is not applied to the code."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ]
+}

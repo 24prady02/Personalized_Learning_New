@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "loop_variable",
+ "why": "The student identifies each variable's role from the code: i is just the loop index (a stepper), so a short name is fine, and c counts the passing scores, so it should be renamed passCount. They also correctly say the output is still 3, but they give no reason why renaming keeps the behaviour, so the answer does not reach L4.",
+ "concepts": [
+  {
+   "concept": "loop_variable",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "loop_variable@L3#3",
+   "quote": "i is fine because it is only the loop index",
+   "correct": true,
+   "why": "It names i's role as the stepper/index of the loop, which is why the short name i is acceptable."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "increment_operators@L3#5",
+   "quote": "c should be passCount, since it counts the passing scores",
+   "correct": true,
+   "why": "It reads c++ under the if as a counter of scores >= 60 and names the variable after that role."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about scores[i]."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about how the for statement runs."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the loop's start, condition or update."
+  },
+  {
+   "concept": "loop_invariant_reasoning",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does no invariant reasoning."
+  }
+ ]
+}

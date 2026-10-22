@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "increment_operators",
+ "why": "The answer goes through y = x++ and w = ++x in order, uses the right old-value and new-value rules, and gets y=5, w=7, x=7, which the run confirms; it does not state what the code is for.",
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "increment_operators@L2#1",
+   "quote": "y is 5, then x is 6, then ++x makes it 7, so w is 7 and x is 7.",
+   "correct": true,
+   "why": "It applies post-increment (y gets the old value 5, then x becomes 6) and pre-increment (x becomes 7 and w gets 7) to each line in order."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "assignment@L2#1",
+   "quote": "y is 5 ... so w is 7",
+   "correct": true,
+   "why": "Each assignment stores the value its right side had at that moment, and the trace follows this line by line."
+  },
+  {
+   "concept": "variable",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "variable@L2#2",
+   "quote": "then x is 6, then ++x makes it 7 ... x is 7",
+   "correct": true,
+   "why": "It tracks x's current value as x changes and gives its final value, 7."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about z += 0.5."
+  },
+  {
+   "concept": "operator_precedence",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about operator precedence."
+  }
+ ]
+}

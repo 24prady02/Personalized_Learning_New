@@ -1,0 +1,100 @@
+{
+ "answer_level": "L3",
+ "main_concept": "running_extreme",
+ "why": "The code correctly combines a start value of data[0], a single for-each pass and Math.min into a running-minimum plan, then prints the result; it adapts the familiar running-extreme plan, which counts as L3, not L4.",
+ "concepts": [
+  {
+   "concept": "running_extreme",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "running_extreme@L3#3",
+   "quote": "double min = data[0]; for (double v : data) min = Math.min(min, v);",
+   "correct": true,
+   "why": "A correct one-pass minimum starting from a real element, so no data value can be beaten wrongly by the start value."
+  },
+  {
+   "concept": "math_library",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "math_library@L2#1",
+   "quote": "min = Math.min(min, v)",
+   "correct": true,
+   "why": "Calls Math.min correctly and uses its returned double in the assignment."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only uses println and states nothing about it."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer only declares the type and makes no claim about it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive types."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about standard output."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no explicit claim about method calls."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no empty statement in the answer."
+  },
+  {
+   "concept": "overflow",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not concern overflow."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "method_call -prerequisite-> math_library",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

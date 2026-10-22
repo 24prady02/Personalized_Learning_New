@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "array_traversal",
+ "why": "The student wrote a correct index-based loop, a[i] = a[i] * 10, which repairs the given for-each loop that never changed the array. This is the familiar canonical traversal with no reasoning beyond the given code, so it is L3 rather than L4.",
+ "concepts": [
+  {
+   "concept": "array_traversal",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "array_traversal@L3#1",
+   "quote": "for (int i = 0; i < a.length; i++) a[i] = a[i] * 10;",
+   "correct": true,
+   "why": "The loop variable is used as the index, so each pass writes a different element; the run gives [50, 40, 30, 20, 10]."
+  },
+  {
+   "concept": "indexing",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "indexing@L3#2",
+   "quote": "a[i] = a[i] * 10",
+   "correct": true,
+   "why": "The same expression a[i] reads and writes a different element on each pass of the loop."
+  },
+  {
+   "concept": "for_loop",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "for_loop@L3#3",
+   "quote": "for (int i = 0; i < a.length; i++)",
+   "correct": true,
+   "why": "The for header gives i each valid index 0..length-1 once, the standard way to process every element."
+  },
+  {
+   "concept": "length_field",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "length_field@L1#2",
+   "quote": "i < a.length",
+   "correct": true,
+   "why": "a.length is used correctly as a field without parentheses, but nothing more is said about it."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "increment_operators@L1#1",
+   "quote": "i++",
+   "correct": true,
+   "why": "i++ is used correctly as the loop update with no explanation."
+  },
+  {
+   "concept": "enhanced_for",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the for-each loop."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L1",
+ "main_concept": "print",
+ "why": "The answer gets the first print right (A) and correctly picks the odd branch for 17, but it never checks x % 5 == 2 and never names the letters printed there (E, then G), so it never reaches the output AEG.",
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "print@L1#1",
+   "quote": "It prints A, goes to the odd part and prints the letters there.",
+   "correct": true,
+   "why": "It correctly describes only part of the code (the first print and the odd branch) and leaves the remaining print calls untraced, with no values."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "standard_output@L1#1",
+   "quote": "prints the letters there",
+   "correct": true,
+   "why": "It says output appears but does not build the full output order A, E, G."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no assignment and the answer makes no claim about one."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no char arithmetic and the answer makes no claim about it."
+  }
+ ]
+}

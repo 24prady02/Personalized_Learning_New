@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "assignment",
+ "why": "The answer traces the chain of calls with their values (finalAdjust, then reCalculate, then num2), but it picks the wrong branch for -1 in finalAdjust, so it gets 27 instead of 20. That is a single slip in an otherwise rule-correct trace (L2 with an error), and the answer also leaves out num1 = -11 and the order of the calls.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2 and num2 = 27",
+   "correct": false,
+   "why": "The trace follows the assignments in order, but -1 >= 0 is false, so finalAdjust returns -1 - 9 = -10. reCalculate then returns -5 and num2 = 20."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "finalAdjust(-1)",
+   "correct": true,
+   "why": "It shows v += 10 changing -11 to -1 correctly."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "finalAdjust(-1) gives 5, so reCalculate returns 2",
+   "correct": true,
+   "why": "It truncates 5 / 2 to 2, which is correct int division, even though the 5 was wrong."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention Integer.MAX_VALUE or Integer.MIN_VALUE."
+  }
+ ]
+}

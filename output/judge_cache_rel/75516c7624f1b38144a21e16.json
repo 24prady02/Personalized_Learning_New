@@ -1,0 +1,105 @@
+{
+ "answer_level": "L1",
+ "main_concept": "char_arithmetic",
+ "why": "All three printed lines are right, but the student gives no reasons, so this is a bare correct result and stays at L1.",
+ "concepts": [
+  {
+   "concept": "escape_sequences",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "escape_sequences@L1#1",
+   "quote": "67, a tab, C",
+   "correct": true,
+   "why": "The student reads \\t as one tab character, but says nothing about the escape rule itself."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "char_arithmetic@L1#1",
+   "quote": "67 ... then 662",
+   "correct": true,
+   "why": "The values 67 and 662 are right, but there is no reasoning about char codes or promotion to int."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "explicit_cast@L1#1",
+   "quote": "C",
+   "correct": true,
+   "why": "The cast result C is right, but the cast is not explained."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "arithmetic_operators@L1#1",
+   "quote": "then A12; then 662.",
+   "correct": true,
+   "why": "The results of + are right, but nothing is said about addition versus concatenation or left-to-right grouping."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

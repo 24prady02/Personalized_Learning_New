@@ -1,0 +1,52 @@
+{
+ "answer_level": "L2",
+ "main_concept": "compile",
+ "why": "The answer correctly says what one successful javac step does: it creates Big.class and prints no program output because the program has not been run yet. It never links this to java Big loading that class, and it never explains the compile/run dependency, so it stays at L2.",
+ "concepts": [
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the source text itself."
+  },
+  {
+   "concept": "run",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "run@L1#1",
+   "quote": "nothing is printed because the program has not run yet",
+   "correct": true,
+   "why": "It correctly separates running from compiling but does not say how a run happens (java Big) or what it would do."
+  },
+  {
+   "concept": "compile",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "compile@L2#3",
+   "quote": "There is a Big.class file now, but nothing is printed",
+   "correct": true,
+   "why": "It correctly gives the result of the single compile step: Big.class is created and no program output is printed. It does not go on to relate this to java Big."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the 37 error messages."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the class declaration."
+  }
+ ]
+}

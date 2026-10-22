@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "command_line_args",
+ "why": "The student links the missing argument (args is empty) to args[0] being out of bounds, which explains why this run fails. That relates the command-line arguments to args' length and is correct.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "command_line_args@L3#3",
+   "quote": "because args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Says that typing no argument leaves args empty, so index 0 is not valid."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer gives no reasoning about how the program is launched or run."
+  },
+  {
+   "concept": "array_bounds",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "array_bounds@L2#2",
+   "quote": "args[0] is out of bounds",
+   "correct": true,
+   "why": "Applies the bounds rule to this array access to predict the failure."
+  },
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No separate claim about how indexing works."
+  },
+  {
+   "concept": "class_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "run_time_error@L2#2",
+   "quote": "It crashes when it runs",
+   "correct": true,
+   "why": "Correctly predicts a run-time crash for this run and gives the reason."
+  },
+  {
+   "concept": "parsing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Integer.parseInt is not discussed."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "args_length",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "args_length@L3#1",
+   "quote": "args is empty and args[0] is out of bounds",
+   "correct": true,
+   "why": "Matches the rule that with no arguments even args[0] is out of bounds."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "indexing -prerequisite-> array_bounds",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "command_line_args -prerequisite-> parsing",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "run -prerequisite-> run_time_error",
+   "stated": true,
+   "quote": "It crashes when it runs"
+  },
+  {
+   "edge": "command_line_args -prerequisite-> args_length",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

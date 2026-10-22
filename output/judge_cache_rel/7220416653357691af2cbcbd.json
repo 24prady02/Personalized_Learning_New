@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "boolean_expression",
+ "why": "The answer skips the output and the stop condition the question asks for. It only claims, with no reason given, that storing the condition directly in isDone would do the same as the if. That claim is correct for this code but is a familiar rewrite with no stated reasoning, so it is graded as a relation within the given code (L3), not L4.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "would do the same as the if",
+   "correct": true,
+   "why": "It points to the if but says nothing about how the if works."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "isDone = (i % 5 == 0);",
+   "correct": true,
+   "why": "Assignment is used but not explained."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "short_circuit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "boolean_expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "boolean_expression@L3#3",
+   "quote": "isDone = (i % 5 == 0); would do the same as the if.",
+   "correct": true,
+   "why": "It links the if's condition to storing that boolean directly. This is right here: the loop ends as soon as isDone becomes true, so the assignment never sets it back to false. The student gives no reason, though."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "boolean_expression -prerequisite-> if_statement",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

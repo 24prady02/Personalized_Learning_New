@@ -1,0 +1,39 @@
+{
+ "answer_level": "L0",
+ "main_concept": "declaration",
+ "why": "The student uses the documented wrong rule that a local variable gets a default value of 0 when it is declared. In Java, reading an unassigned local c is a compile error ('variable c might not have been initialized'), so the answer is wrong and prestructural.",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "A declaration without an initializer leaves a local variable unassigned. It does not set it to 0."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "int c;",
+   "correct": true,
+   "why": "The answer makes no claim about int arithmetic or int's range."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception",
+   "quote": "so c is 0",
+   "correct": false,
+   "why": "A local variable must be assigned before it is read, so println(c + 1) does not compile."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about double."
+  }
+ ]
+}

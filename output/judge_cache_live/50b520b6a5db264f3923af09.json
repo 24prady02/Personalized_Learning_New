@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "filter",
+ "why": "The answer correctly gives the general definition of a filter (it reads standard input and writes standard output) but does not apply it to this code's read-test-print loop or its values.",
+ "concepts": [
+  {
+   "concept": "filter",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "filter@L1#2",
+   "quote": "It reads from standard input and writes to standard output.",
+   "correct": true,
+   "why": "This is the correct rule for a filter, but it is not applied to this code's loop, its v >= 0 test or the input 4 -1 7 -3 0 2."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Standard output is named only as part of the filter definition, with no claim about this code's output."
+  },
+  {
+   "concept": "standard_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Standard input is named only as part of the filter definition, with no claim about this code's reads."
+  },
+  {
+   "concept": "piping",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the pipe."
+  },
+  {
+   "concept": "redirection",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention > clean.txt."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention isEmpty()."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about v."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no printf and the answer makes no claim about formatted output."
+  }
+ ]
+}

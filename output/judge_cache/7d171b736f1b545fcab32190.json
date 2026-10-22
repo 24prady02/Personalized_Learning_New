@@ -1,0 +1,34 @@
+{
+ "answer_level": "L0",
+ "main_concept": "accumulator_pattern",
+ "why": "The answer gets a, b and the first value of total right, but its reason for the last line breaks a Java rule: it says total stays 11.5 'because it already has a value', when total = total + total * TAX replaces it with 11.5 + 11.5*0.08 = 12.42. That is a wrong rule, not a slip in an otherwise correct trace.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "accumulator_pattern@L0#1",
+   "quote": "after the last line total is still 11.5, because it already has a value.",
+   "correct": false,
+   "why": "It treats total as a fixed amount that cannot change, but an update reads the current value, combines it and stores the result back, so total becomes 12.42."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction (bare result)",
+   "way_id": "double@L1#1",
+   "quote": "total is 11.5",
+   "correct": true,
+   "why": "The double result 11.5 for a * 2 + 1.5 is correct, but it comes with no reasoning, so it is a bare correct result."
+  },
+  {
+   "concept": "widening_conversion",
+   "level": "L1",
+   "way": "output_prediction (bare result)",
+   "way_id": "widening_conversion@L1#2",
+   "quote": "total is 11.5",
+   "correct": true,
+   "why": "Getting 11.5 means the int 10 became a double, but the answer never explains this widening, so it is a bare correct result."
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "power_method",
+ "why": "The answer correctly calls the output estimates, but its main claim is that starting at page 3 would change the ranks, which is the StartPageMatters misconception: the long-run probabilities of the random-surfer chain do not depend on the starting page.",
+ "concepts": [
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "They are estimates.",
+   "correct": true,
+   "why": "It correctly says a short simulation only estimates the ranks, but gives no reason and does not apply this to the 100-move values."
+  },
+  {
+   "concept": "power_method",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "power_method@L0#2",
+   "quote": "But starting at page 3 would change the ranks.",
+   "correct": false,
+   "why": "The ranks converge to the same vector from any start, so saying the start page changes them contradicts the right rule."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about running the program."
+  },
+  {
+   "concept": "markov_chain",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "markov_chain@L0#2",
+   "quote": "starting at page 3 would change the ranks",
+   "correct": false,
+   "why": "For the random-surfer chain the long-run probabilities are the same for every starting page, so this claim is wrong."
+  }
+ ]
+}

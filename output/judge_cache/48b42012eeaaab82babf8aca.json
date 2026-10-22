@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "arithmetic_operators",
+ "why": "The values are correct: page 1 has two outgoing links, so p[1][0] = p[1][2] = .90*1/2 + .10/3 ≈ 0.483 and p[1][1] = .10/3 ≈ 0.033. But the answer gives only a bare result with no working, so it is L1.",
+ "concepts": [
+  {
+   "concept": "arithmetic_operators",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The values match the 90-10 formula, but there is no trace of how they were worked out."
+  },
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "About 0.48, 0.03, 0.48.",
+   "correct": true,
+   "why": "The approximate real values are right, but it is a bare result with no reasoning about double arithmetic."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about comments."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about type conversion or int/double division."
+  }
+ ]
+}

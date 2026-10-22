@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "integer_constants",
+ "why": "The answer gives the right result, -2147483648, and explains it by linking Math.abs on Integer.MIN_VALUE to int's fixed 32-bit range (+2147483648 doesn't fit, so it wraps), which is a reasoned relation between concepts rather than a bare output.",
+ "concepts": [
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "int@L3#4",
+   "quote": "because +2147483648 does not fit in an int",
+   "correct": true,
+   "why": "Explains the result through int's fixed range causing a silent wrap."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Talks about a result value, not literals."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_constants@L3#1",
+   "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "correct": true,
+   "why": "Treats MIN_VALUE as the range boundary: its negation is out of range, so abs stays negative, which rejects the AbsAlwaysNonNegative misconception."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

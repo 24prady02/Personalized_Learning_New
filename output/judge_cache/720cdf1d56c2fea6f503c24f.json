@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "main_method",
+ "why": "The answer says public static void main() works as an entry point because the program uses no arguments, but Java requires the header public static void main(String[] args), so java Hello cannot launch the class without it.",
+ "concepts": [
+  {
+   "concept": "main_method",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "main_method@L0#1",
+   "quote": "main() without String[] args is fine because the program uses no arguments.",
+   "correct": false,
+   "why": "This is the MainWithoutStringArgs wrong rule: java needs the main(String[] args) header to start the program, whether or not the program reads any arguments."
+  },
+  {
+   "concept": "command_line_args",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer mentions arguments only to excuse leaving out the parameter, and makes no claim about how args works."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "print",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "comment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "No claim."
+  }
+ ]
+}

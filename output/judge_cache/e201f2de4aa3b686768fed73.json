@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "for_loop",
+ "why": "The answer correctly gives the inner-loop output for i = 3 and i = 2, but then says \"and so on\" instead of tracing i = 1 and i = 0, so it misses the trailing spaces and the empty line printed when i = 0.",
+ "concepts": [
+  {
+   "concept": "for_loop",
+   "level": "L1",
+   "way": "output_prediction",
+   "quote": "i = 3 prints 3 2 1, i = 2 prints 2 1, and so on.",
+   "correct": true,
+   "why": "The output for the first two outer passes is right, but the answer does not cover every pass or the println line breaks, including the empty line at i = 0."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the i-- or j-- updates."
+  },
+  {
+   "concept": "fencepost_loop",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about separators or the trailing space."
+  }
+ ]
+}

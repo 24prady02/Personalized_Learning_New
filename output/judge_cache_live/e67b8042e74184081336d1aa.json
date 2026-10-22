@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "integer_division",
+ "why": "The student locates and fixes the one given failing case, linking the two causes (precedence and int division) to parentheses and a double literal. Fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Relates the type of an operand to the kind of division: a double operand keeps the fraction."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Correctly fixes the given failing case by putting a double into the division itself."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "expression@L3#3",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Correctly says parentheses override precedence so the sum is computed before dividing."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about int itself."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Covered by the expression and integer division judgements; no separate claim."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No cast is mentioned."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about primitive types in general."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about the println call."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

@@ -1,0 +1,115 @@
+{
+ "answer_level": "L1",
+ "main_concept": "remainder_operator",
+ "why": "The answer is only a list of keywords (remainder, modulus, widening, double, concatenation, println, newline). It names the right parts but never applies them to 9, 5 or 26.3, never gives the output, and never explains how num4 = 30.3 is computed.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "double@L1#1",
+   "quote": "widening double",
+   "correct": true,
+   "why": "It correctly names widening to double but does not apply it to 4 + 26.3."
+  },
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "println newline",
+   "correct": true,
+   "why": "It links println with a newline but does not trace the two output lines."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "remainder_operator@L1#1",
+   "quote": "remainder modulus",
+   "correct": true,
+   "why": "It names % as the remainder but never works out 9 % 5 = 4."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_concatenation@L1#1",
+   "quote": "concatenation",
+   "correct": true,
+   "why": "It names concatenation but does not show \"num4 = \" + 30.3 being joined."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no separate claim about primitive types."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Apart from the remainder keyword, there is no claim about the addition or about precedence."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about the output stream beyond the println keyword."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about turning 30.3 into text."
+  },
+  {
+   "concept": "division_by_zero",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Division by zero is not involved and not mentioned."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> division_by_zero",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "double -prerequisite-> division_by_zero",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_concatenation -prerequisite-> string_conversion",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "string_concatenation -parallel-> arithmetic_operators",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "conditional_operator",
+ "why": "The student correctly rewrote the if-else statement as one assignment, `v = c ? a : b;`, which links the conditional operator to its neighbouring construct, the if-else.",
+ "concepts": [
+  {
+   "concept": "conditional_operator",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "conditional_operator@L3#1",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "The answer turns `if (c) v = a; else v = b;` into its expression form `v = c ? a : b;`, with the condition, operand order and target all kept, which matches the if_else_statement prerequisite edge."
+  },
+  {
+   "concept": "statement",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "statement@L1#1",
+   "quote": "outputValue = (inValue >= 0) ? 100 : -50;",
+   "correct": true,
+   "why": "The answer writes one correct simple statement ending in a semicolon, but says nothing more about statements."
+  },
+  {
+   "concept": "assignment",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "assignment@L1#1",
+   "quote": "outputValue = ... ? 100 : -50;",
+   "correct": true,
+   "why": "The answer correctly uses `variable = expression;` with the chosen value on the right, but does not trace or explain the assignment."
+  },
+  {
+   "concept": "filter",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about a stdin or stdout filter."
+  }
+ ]
+}

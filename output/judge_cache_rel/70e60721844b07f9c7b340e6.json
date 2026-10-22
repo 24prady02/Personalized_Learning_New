@@ -1,0 +1,125 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The student finds the cause of this one failing case: the cast binds to Math.random() before the multiplication, so the value is 0 and the die is always 1. They then fix it by moving the cast after the multiplication, and locating and fixing one given failing case is L3.",
+ "concepts": [
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_random@L3#2",
+   "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Because Math.random() returns a value in [0, 1), casting it first always gives 0, so the cast has to cover the whole product."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "explicit_cast@L3#2",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "The cast applies only to Math.random(), which truncates it to 0. This gives 0*6+1 = 1, which is never 6, so the result is always 0.0. Enclosing the product in the cast fixes it."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss it as a separate idea."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss it as a separate idea."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention it."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "primitive_type -prerequisite-> type_conversion",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "type_conversion -prerequisite-> explicit_cast",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "math_library -prerequisite-> shuffle",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "math_library -prerequisite-> math_random",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "explicit_cast -prerequisite-> math_random",
+   "stated": true,
+   "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying."
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "math_library -prerequisite-> random_move",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

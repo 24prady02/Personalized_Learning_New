@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "primitive_type",
+ "why": "The student gives the correct answer and supports it with one correct rule (String is a class, not a primitive), but does not apply it any further or relate it to other constructs.",
+ "concepts": [
+  {
+   "concept": "primitive_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "primitive_type@L1#1",
+   "quote": "String; it is a class. The other four are primitive.",
+   "correct": true,
+   "why": "It correctly says which of the listed types are primitive and which is not."
+  },
+  {
+   "concept": "string_type",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "string_type@L1#1",
+   "quote": "String; it is a class.",
+   "correct": true,
+   "why": "It correctly names String as a non-primitive class type."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It says nothing about variables holding values versus references."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "data_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "It does not discuss data types as sets of values and operations."
+  }
+ ]
+}

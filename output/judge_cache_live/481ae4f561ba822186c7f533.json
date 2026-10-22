@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "arithmetic_operators",
+ "why": "The student works out the changed product b × a correctly (3 4 / 1 2), compares it with c and concludes that the order matters. This is an output prediction for the changed code, which is L2. They do not explain a general rule for why the order changes the result, so it is not L4.",
+ "concepts": [
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no division in the code or in the answer."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "arithmetic_operators@L2#2",
+   "quote": "b times a is 3 4 / 1 2, so the order matters",
+   "correct": true,
+   "why": "The sums of products for b × a give {{3,4},{1,2}}, which is different from c = {{2,1},{4,3}}. The prediction is correct, but it is a result for the changed code, not a general rule."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about expressions."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about variables."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about array references."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about the += accumulation."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing specific about int."
+  },
+  {
+   "concept": "identifier",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about names."
+  }
+ ]
+}

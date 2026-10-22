@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "division_by_zero",
+ "why": "The answer gives one blanket rule that all division by zero is an error, but the run output shows 1.0 / 0 printing Infinity; this is the ZeroDivisionAlwaysCrashes misconception, and it misses the difference part (d) asks about.",
+ "concepts": [
+  {
+   "concept": "division_by_zero",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "division_by_zero@L0#2",
+   "quote": "Dividing by zero gives an error.",
+   "correct": false,
+   "why": "It treats every division by zero as an error, but only int division by zero (5 / z) throws; 1.0 / 0 gives Infinity and the program keeps running."
+  },
+  {
+   "concept": "integer_division",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing specific about integer division."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the int type."
+  },
+  {
+   "concept": "floating_point_precision",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about floating-point precision."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double behaviour."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer only talks about division by zero, not operators in general."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about assignment."
+  },
+  {
+   "concept": "normalization",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not apply to the answer."
+  }
+ ]
+}

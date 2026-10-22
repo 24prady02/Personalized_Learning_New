@@ -1,0 +1,34 @@
+{
+ "answer_level": "L2",
+ "main_concept": "dangling_pages",
+ "why": "The student uses the definition of a dangling page (a page with no outgoing links) on the given links, picks out page 2 correctly and backs this up by saying it links nowhere, so the answer applies the rule to this code's values.",
+ "concepts": [
+  {
+   "concept": "dangling_pages",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "dangling_pages@L2#2",
+   "quote": "Page 2, it links nowhere.",
+   "correct": true,
+   "why": "The student applies the no-outgoing-links rule to the given graph and identifies page 2 with a correct reason, which is more than a bare result or a definition alone."
+  },
+  {
+   "concept": "input_graph",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "input_graph@L1#2",
+   "quote": "it links nowhere",
+   "correct": true,
+   "why": "The answer implicitly treats the links as directed, since page 2 is the target of 1→2 but has no links of its own, but it does not trace the input pairs."
+  },
+  {
+   "concept": "teleportation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the 10% random leap."
+  }
+ ]
+}

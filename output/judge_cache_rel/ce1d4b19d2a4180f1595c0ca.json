@@ -1,0 +1,110 @@
+{
+ "answer_level": "L3",
+ "main_concept": "token_vs_line_input",
+ "why": "The student says readInt consumes 42 and leaves the Enter, so the next readLine only finishes that same line. That is a correct causal link between the token read and the line read through their shared input position, and it explains why rest is empty without tracing the code value by value.",
+ "concepts": [
+  {
+   "concept": "token_vs_line_input",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "token_vs_line_input@L3#1",
+   "quote": "readInt takes 42 but not the Enter, so readLine just finishes that line.",
+   "correct": true,
+   "why": "It correctly explains that the token read leaves the line separator, so the following readLine returns what is left of the line, which is \"\"."
+  },
+  {
+   "concept": "standard_input",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "standard_input@L2#3",
+   "quote": "readInt takes 42 but not the Enter",
+   "correct": true,
+   "why": "It correctly says what one read consumes from the stream and that the input position moves past 42 only."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about variables."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not relevant to this answer."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about assignment."
+  },
+  {
+   "concept": "string_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the String type."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the int type."
+  },
+  {
+   "concept": "interactive_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about interactive input."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> assignment",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "statement -prerequisite-> empty_statement",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -prerequisite-> interactive_input",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_input -prerequisite-> token_vs_line_input",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

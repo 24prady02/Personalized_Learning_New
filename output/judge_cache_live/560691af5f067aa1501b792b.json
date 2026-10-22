@@ -1,0 +1,88 @@
+{
+ "answer_level": "L0",
+ "main_concept": "empty_statement",
+ "why": "The student reads 'if (x > 0);' as if the println belonged to the if, but the ';' is an empty statement that is the whole then branch, so \"positive\" is always printed (the code prints positive, negative, checked). This is the SemicolonAfterIfHeader wrong rule.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "if_statement@L2#2",
+   "quote": "positive is not printed, because x > 0 is false.",
+   "correct": false,
+   "why": "The rule that a false condition skips the body is applied to this code, but to the wrong body (println instead of ';'), so the prediction is wrong."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "empty_statement@L0#1",
+   "quote": "positive is not printed",
+   "correct": false,
+   "why": "The student ignores the ';' after the header and reads it as 'if x is positive, do the next line', but that ';' is the empty then branch."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not address assignment."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no separate claim about statements."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not address primitive types."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not address int."
+  },
+  {
+   "concept": "println",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about how println behaves."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not address method calls."
+  },
+  {
+   "concept": "comparison_operators",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "comparison_operators@L2#2",
+   "quote": "x > 0 is false",
+   "correct": true,
+   "why": "With x = -3, it correctly works out that x > 0 is false."
+  }
+ ]
+}

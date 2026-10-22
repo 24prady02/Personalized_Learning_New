@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "integer_division",
+ "why": "The student finds and fixes the one failing case. They name both causes: precedence means only b is divided, and int / int truncates. Parentheses fix the grouping and 2.0 makes the division floating point, which is L3 (locating and fixing one given failing case).",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "double@L3#1",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Links a double operand to the division keeping its fraction, which matches the int-parallel-double edge."
+  },
+  {
+   "concept": "integer_division",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "integer_division@L3#2",
+   "quote": "2.0 so the division is not integer division",
+   "correct": true,
+   "why": "Fixes the given failing case by putting a double inside the division itself, the right repair for the int-division bug."
+  },
+  {
+   "concept": "expression",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "expression@L3#3",
+   "quote": "parentheses for the order",
+   "correct": true,
+   "why": "Says parentheses override precedence so the sum is formed before dividing, which fixes the grouping error."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about int itself."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Only covered through precedence and division, which are levelled under other concepts."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No cast is used or mentioned."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "run_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  }
+ ]
+}

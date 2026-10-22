@@ -1,0 +1,77 @@
+{
+ "answer_level": "L2",
+ "main_concept": "input_graph",
+ "why": "The student applies the ordered-pair rule to the line in tiny.txt and correctly says one multiplication gives the distribution after one move, not the page rank, but does not go on to state the purpose of the whole program.",
+ "concepts": [
+  {
+   "concept": "input_graph",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "input_graph@L2#3",
+   "quote": "No, 0 1 is only a link from 0 to 1.",
+   "correct": true,
+   "why": "Treats the pair 0 1 as one ordered link from page 0 to page 1, so page 1 does not link back to page 0."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss expressions."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss arithmetic operators."
+  },
+  {
+   "concept": "array_initializer",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the initializer {1, 0, 0, 0, 0}."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss blocks."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about repeating the power method, not the random-surfer simulation loop, and it does not compare the two."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

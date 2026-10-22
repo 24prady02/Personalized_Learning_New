@@ -1,0 +1,96 @@
+{
+ "answer_level": "L4",
+ "main_concept": "simulation_loop",
+ "why": "The student correctly says the 100-move output is only a rough estimate, not the true ranks, and predicts that starting at page 3 would not change the long-run ranks. That is a correct prediction about a change to the given run, which is L4.",
+ "concepts": [
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "power_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions the power method or matrix multiplication; it talks only about the simulation."
+  },
+  {
+   "concept": "frequency_counting",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "frequency_counting@L1#2",
+   "quote": "Only estimates; 100 moves is far too few and the zeros mean nothing.",
+   "correct": true,
+   "why": "It states the correct rule that visit fractions are only estimates and that printing five decimals does not make them accurate, but it does not work through any of the counts."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not discussed."
+  },
+  {
+   "concept": "simulation_loop",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "simulation_loop@L4#1",
+   "quote": "100 moves is far too few ... In the long run the start page does not matter.",
+   "correct": true,
+   "why": "It correctly predicts that changing the start page keeps the long-run limit and that more moves are needed for accurate values, which is reasoning about what stays the same under a change."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "simulation_loop -prerequisite-> frequency_counting",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "simulation_loop -parallel-> power_method",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> double",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

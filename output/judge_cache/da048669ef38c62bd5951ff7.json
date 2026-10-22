@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "print",
+ "why": "The answer gets two things right: \"A\" is printed first, and 17 is odd so the else branch runs. It never works out the inner test (17 % 5 == 2) and never says that E and then G are printed, so it does not cover every part of the code with the values.",
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It prints A, goes to the odd part and prints the letters there.",
+   "correct": true,
+   "why": "It correctly names the first print and the branch taken, but it does not trace the other print calls or give the output AEG."
+  },
+  {
+   "concept": "standard_output",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "prints the letters there",
+   "correct": true,
+   "why": "It hints that output builds up in execution order, but it never says which characters are added or in what order."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "There is no assignment in the code and the answer makes no claim about one."
+  },
+  {
+   "concept": "char_arithmetic",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "There is no char arithmetic in the code and the answer makes no claim about it."
+  }
+ ]
+}

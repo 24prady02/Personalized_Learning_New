@@ -1,0 +1,39 @@
+{
+ "answer_level": "L1",
+ "main_concept": "read_loop_idiom",
+ "why": "The answer doesn't say what is printed for either input; it only suggests a different way to build the sum, which touches one part of the code with no values, so it is L1.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Add v to sum first, then check if it was negative and subtract it again.",
+   "correct": true,
+   "why": "Adding v and then taking it away again when it is negative still gives the right sum, but the answer doesn't run this on the input, doesn't cover count, and doesn't give a result."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "The answer never mentions count++."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "",
+   "correct": true,
+   "why": "\"Add\" and \"subtract\" are only described in words, and += or -= is never applied to any values."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "line_by_line_trace",
+   "quote": "",
+   "correct": false,
+   "why": "The answer never uses the sentinel loop: it doesn't say the loop stops at 99999 and ignores the 3 after it (output 5.0), or that nothing is printed when 99999 comes first."
+  }
+ ]
+}

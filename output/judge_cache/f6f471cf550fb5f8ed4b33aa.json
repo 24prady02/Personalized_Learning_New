@@ -1,0 +1,61 @@
+{
+ "answer_level": "L3",
+ "main_concept": "explicit_cast",
+ "why": "The student finds the cause of this one failing case and fixes it: the cast binds only to Math.random(), so the expression is always 0 + 1 = 1 and never 6, giving 0.0. Locating and fixing one given failing case is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "math_random",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "math_random@L3#2",
+   "quote": "(int) Math.random() is 0 and the die is always 1. Cast after multiplying.",
+   "correct": true,
+   "why": "Links Math.random()'s range [0, 1) to the cast: casting first always gives 0, so the cast must enclose the product."
+  },
+  {
+   "concept": "random_move",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the cumulative-interval random move."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "explicit_cast@L3#2",
+   "quote": "The cast happens first, so (int) Math.random() is 0 ... Cast after multiplying.",
+   "correct": true,
+   "why": "Correctly says the cast binds tighter than *, which truncates the random double to 0, and puts the cast around the product to fix it."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "type_conversion@L2#1",
+   "quote": "The cast happens first, so (int) Math.random() is 0 and the die is always 1",
+   "correct": true,
+   "why": "Applies the rule that a cast converts only the value right after it, then follows the result through * 6 + 1 to get 1."
+  },
+  {
+   "concept": "math_library",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Makes no claim about the Math library beyond using Math.random()."
+  },
+  {
+   "concept": "shuffle",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Shuffling does not appear in the answer."
+  }
+ ]
+}

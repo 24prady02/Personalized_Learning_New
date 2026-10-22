@@ -1,0 +1,88 @@
+{
+ "answer_level": "L1",
+ "main_concept": "println",
+ "why": "The student gives the correct output, with the line break right after println's text, but does not explain it even though the question asks for an explanation; a bare correct output is L1.",
+ "concepts": [
+  {
+   "concept": "println",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "println@L1#1",
+   "quote": "Welcome to Java. This is A nice programming language\nthat I have to learn.",
+   "correct": true,
+   "why": "The line break is in the right place after the println text, but no rule is stated or applied, so this cannot be L2."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about method calls."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no reasoning about the order of statements."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no empty statement."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no claim about the output stream itself, only the predicted text."
+  },
+  {
+   "concept": "print",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "print@L1#1",
+   "quote": "Welcome to Java. This is A nice programming language",
+   "correct": true,
+   "why": "The output correctly continues the first print's text on the same line, but this is not explained."
+  },
+  {
+   "concept": "break_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no break statement."
+  },
+  {
+   "concept": "string_literal",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no reasoning about string literals."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There is no reasoning about streams."
+  }
+ ]
+}

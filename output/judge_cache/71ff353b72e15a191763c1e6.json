@@ -1,0 +1,39 @@
+{
+ "answer_level": "L2",
+ "main_concept": "increment_operators",
+ "why": "The student traces the run with the right values: num1 = 9, num2 starts at 12, num2-- runs at i = 9 and i = 11, and the output is 8, 10, 12, 13, (all confirmed by the run); this is a correct value-by-value trace that never states what the loop is for, and part (b), the for-loop rewrite, is not attempted.",
+ "concepts": [
+  {
+   "concept": "increment_operators",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "At i = 9 num2 drops to 11; at i = 11 it drops to 10.",
+   "correct": true,
+   "why": "It applies num2-- by exactly 1 at the right values of i, with i++ moving through the loop, and the run confirms it."
+  },
+  {
+   "concept": "assignment",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "num1 is 9 and num2 starts at 12.",
+   "correct": true,
+   "why": "It works out the chained initial assignments (num1 = 8 + 1, num2 = 9 + 3) correctly from the current values."
+  },
+  {
+   "concept": "formatted_output",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "So it prints 8, 10, 12, 13,",
+   "correct": true,
+   "why": "It predicts the printf text correctly, with the comma separators and no newline, and backs it up with the trace."
+  },
+  {
+   "concept": "number_conversion",
+   "level": "none",
+   "way": "none",
+   "quote": "",
+   "correct": true,
+   "why": "Number conversion is not used in this code or mentioned in the answer."
+  }
+ ]
+}

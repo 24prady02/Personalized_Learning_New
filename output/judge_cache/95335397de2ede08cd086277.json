@@ -1,0 +1,43 @@
+{
+ "answer_level": "L0",
+ "main_concept": "declaration",
+ "why": "The answer says that int c; gives c the value 0, but a local variable has no value until it is assigned. That rule is wrong in Java, so the answer is L0: println(c + 1) does not compile.",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "declaration@L0#5",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "It uses the wrong rule that a local variable gets a default value of 0; in Java, reading c before it is assigned is a compile error."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "variable@L0#1",
+   "quote": "so c is 0",
+   "correct": false,
+   "why": "It treats c as already holding a value, but a variable must be assigned before it is read, so c + 1 is rejected by the compiler."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about int's range or its arithmetic, only about the declaration, so there is nothing to mark for int."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double."
+  }
+ ]
+}

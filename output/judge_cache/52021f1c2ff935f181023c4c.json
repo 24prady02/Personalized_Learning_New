@@ -1,0 +1,43 @@
+{
+ "answer_level": "L3",
+ "main_concept": "normalization",
+ "why": "The answer says why the given code fails: int / int truncates, so every entry is 0. It fixes that one case with a cast and checks that the fixed row sums to 1, which is locate-and-fix (L3).",
+ "concepts": [
+  {
+   "concept": "normalization",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "normalization@L3#2",
+   "quote": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+   "correct": true,
+   "why": "It links the operand types to the result: two ints truncate to 0, while a double operand gives a real probability row that sums to 1."
+  },
+  {
+   "concept": "int",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "int@L3#1",
+   "quote": "int / int is integer division. Cast: (double) counts[j] / outDegree",
+   "correct": true,
+   "why": "It relates int division, which truncates, to int-with-double division, which keeps the fraction."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "way_id": "explicit_cast@L3#6",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "It puts the cast on the numerator on purpose to force real division, and it avoids the cast-after-division mistake."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "type_conversion@L2#2",
+   "quote": "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "correct": true,
+   "why": "It predicts the correct values after the conversion, but it never states the promotion rule as a relation."
+  }
+ ]
+}

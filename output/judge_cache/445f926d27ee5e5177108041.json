@@ -1,0 +1,61 @@
+{
+ "answer_level": "L0",
+ "main_concept": "block",
+ "why": "The code is legal because braces are optional around a single-statement if body, but saying braces are 'pointless' in general goes against Java's rule that only braces group statements into one body, and the student gives no reason or trace about this code.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about how the if condition or its body runs."
+  },
+  {
+   "concept": "block",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "block@L0#1",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "Without braces an if body is exactly one statement, so braces are needed for multi-statement bodies; calling them pointless ignores that only braces define a block (the MissingBraces misconception)."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about statements."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about count++."
+  },
+  {
+   "concept": "counter_pattern",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the counter."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the template form."
+  }
+ ]
+}

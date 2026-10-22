@@ -1,0 +1,61 @@
+{
+ "answer_level": "L0",
+ "main_concept": "loop_control",
+ "why": "The program prints a fourth, empty line because the outer test i >= 0 still lets the i = 0 pass run, where the inner loop does nothing and println() prints just a newline; the student says 'the loop stops at 1', which treats >= 0 as if it were > 0, so the answer applies a wrong bound rule, and that is L0.",
+ "concepts": [
+  {
+   "concept": "loop_control",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "loop_control@L0#3",
+   "quote": "(no empty line at the end), because the loop stops at 1.",
+   "correct": false,
+   "why": "The outer condition i >= 0 is still true when i is 0, so there is a pass with i = 0 that prints an empty line; the student treats >= 0 as > 0."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "L1",
+   "way": "output_prediction (bare result)",
+   "way_id": "nested_loops@L2#2",
+   "quote": "3 2 1 / 2 1 / 1",
+   "correct": false,
+   "why": "The three rows are right, but no inner/outer trace backs them up and the row from the i = 0 pass is missing, so this is only a bare, partly correct result."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "none",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no separate claim about how the loop variables change."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "none",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "none",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention the println being in the outer body."
+  },
+  {
+   "concept": "convergence_test",
+   "level": "none",
+   "way": "none",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "This concept does not appear in the code."
+  }
+ ]
+}

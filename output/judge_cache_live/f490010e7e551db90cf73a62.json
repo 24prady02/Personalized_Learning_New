@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "class_declaration",
+ "why": "The student names the class declaration, says it is the outer container that holds everything, and ties the class name Hello to the file name Hello.java. This matches the relation edge program_text -prerequisite-> class_declaration (the name after 'class' must equal the file name), so it is L3.",
+ "concepts": [
+  {
+   "concept": "class_declaration",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "class_declaration@L3#1",
+   "quote": "That is the class declaration; it holds everything and must be saved as Hello.java.",
+   "correct": true,
+   "why": "It correctly names the class declaration and links its name Hello to the required file name Hello.java."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about arrays."
+  },
+  {
+   "concept": "program_text",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "program_text@L3#1",
+   "quote": "must be saved as Hello.java",
+   "correct": true,
+   "why": "It correctly says the name after public class sets the file name."
+  },
+  {
+   "concept": "main_method",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention main."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about braces or blocks."
+  },
+  {
+   "concept": "declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about variable declarations."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about variables."
+  },
+  {
+   "concept": "method_call",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about method calls."
+  },
+  {
+   "concept": "primitive_vs_reference",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about primitive or reference types."
+  }
+ ]
+}

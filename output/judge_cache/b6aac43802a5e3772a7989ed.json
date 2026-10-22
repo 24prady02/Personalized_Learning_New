@@ -1,0 +1,52 @@
+{
+ "answer_level": "L0",
+ "main_concept": "declaration",
+ "why": "The student says the local variable c gets the value 0 just by being declared. That is the 'local variables get a default value' misconception: in Java, c has no value yet, so println(c + 1) does not compile.",
+ "concepts": [
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception",
+   "way_id": "declaration@L0#5",
+   "quote": "int c; declares c, so c is 0.",
+   "correct": false,
+   "why": "A local declared without a value stays unassigned, and reading it before an assignment is a compile error, not 0."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "everyday_reading",
+   "way_id": "variable@L0#1",
+   "quote": "so c is 0",
+   "correct": false,
+   "why": "This breaks the rule that a variable must be assigned before it is read. None of the variable L0 ways fits exactly, so the closest is used."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about int range or int arithmetic."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about primitive types themselves."
+  },
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention double."
+  }
+ ]
+}

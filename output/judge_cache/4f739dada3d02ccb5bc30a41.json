@@ -1,0 +1,88 @@
+{
+ "answer_level": "L4",
+ "main_concept": "animation",
+ "why": "The student correctly predicts what happens when clear() is removed: the frames are never erased, so the circles drawn while the mouse is pressed pile up into a trail. This reasons about a change to the code, not the code as given.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about the shape commands themselves."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Scaling is not mentioned."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The claim is about animation's clear(), which is covered under the animation concept."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the for loops."
+  },
+  {
+   "concept": "animation",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "animation@L4#1",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "It correctly predicts that removing clear() leaves a trail because earlier frames are never erased."
+  },
+  {
+   "concept": "mouse_interaction",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Mouse polling is not discussed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Loop control is not discussed."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about statements in general."
+  },
+  {
+   "concept": "flowchart",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Flowcharts are not involved."
+  }
+ ]
+}

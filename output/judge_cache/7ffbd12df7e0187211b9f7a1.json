@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "accumulator_pattern",
+ "why": "For the changed row, the student traces the running sum to its final value of 0.9 and correctly finds that the test r < sum never holds, so next stays -1; the reason given is about this one case and does not describe the class of inputs (any r of at least the row total) where the error shows, so it is L2 rather than L4.",
+ "concepts": [
+  {
+   "concept": "double",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student says nothing about how double values behave."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about the operators themselves."
+  },
+  {
+   "concept": "accumulator_pattern",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "accumulator_pattern@L2#2",
+   "quote": "the sums only reach 0.9, so next stays -1 because the row does not add to 1",
+   "correct": true,
+   "why": "The final value of the running sum (0.9) is correctly found by adding the row values, and it justifies why the break never happens for r = 0.95."
+  },
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no separate claim about assignment."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about expressions."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The += step is covered by the accumulator trace and is not discussed on its own."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about int."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about j++."
+  },
+  {
+   "concept": "dangling_pages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a row that does not sum to 1, not about a page with no outgoing links."
+  }
+ ]
+}

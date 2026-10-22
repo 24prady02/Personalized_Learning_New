@@ -1,0 +1,31 @@
+{
+ "answer_level": "L1",
+ "main_concept": "program_layout",
+ "why": "The answer states one rule, that indentation has no effect on how Java runs code, but never applies it to this code: it does not say that the indented println(\"great\") is outside the braceless if, it gives no output for score = 50, and it skips the point that the misleading indentation is itself the problem here.",
+ "concepts": [
+  {
+   "concept": "program_layout",
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "Indentation does not matter, I indent however I like.",
+   "correct": true,
+   "why": "It is right that whitespace does not change what Java does, but this is only the rule, and it misses the convention that indentation should match the real block structure."
+  },
+  {
+   "concept": "if_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the condition score > 90 or which statement is the if body."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about braces, or about only one statement belonging to a braceless if."
+  }
+ ]
+}

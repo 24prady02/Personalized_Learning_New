@@ -1,0 +1,115 @@
+{
+ "answer_level": "L4",
+ "main_concept": "animation",
+ "why": "The question asks about code that has been changed: StdDraw.clear() is removed. The student gives the reason (circles are no longer erased) and correctly predicts the effect (a trail builds up), which is the change-prediction way of animation at L4.",
+ "concepts": [
+  {
+   "concept": "drawing_shapes",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The circles are mentioned only as what gets left behind. The answer states no rule about drawing shapes."
+  },
+  {
+   "concept": "coordinate_scaling",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention coordinate scaling."
+  },
+  {
+   "concept": "standard_drawing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer reasons about animation, not about StdDraw in general."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the for loops."
+  },
+  {
+   "concept": "animation",
+   "level": "L4",
+   "way": "predict_a_change",
+   "way_id": "animation@L4#1",
+   "quote": "The circles are never erased, so you get a trail.",
+   "correct": true,
+   "why": "It applies the rule that clear() erases each frame to the code without clear(), and correctly predicts that the circles pile up into a trail."
+  },
+  {
+   "concept": "mouse_interaction",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the mouse polling."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention loop control."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about statements."
+  },
+  {
+   "concept": "flowchart",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention a flowchart."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_drawing -prerequisite-> animation",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_drawing -prerequisite-> coordinate_scaling",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "standard_drawing -prerequisite-> drawing_shapes",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "animation -prerequisite-> mouse_interaction",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

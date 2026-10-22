@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "redirection",
+ "why": "The student correctly predicts the terminal output of all three commands, with short reasons (output goes to the file, no file is made with the pipe), but does not relate the pipe to the file version or state a purpose; the args claim is a bare correct result.",
+ "concepts": [
+  {
+   "concept": "command_line_args",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "command_line_args@L1#2",
+   "quote": "args is empty.",
+   "correct": true,
+   "why": "Correct, since Average is launched with no arguments after its name, but no reason is given (for example, that redirected input is not an argument)."
+  },
+  {
+   "concept": "redirection",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "redirection@L2#2",
+   "quote": "1: nothing, the numbers go into data.txt. 2: the average.",
+   "correct": true,
+   "why": "Correctly predicts nothing in the terminal for > data.txt and the average for < data.txt, justified by the output going into the file."
+  },
+  {
+   "concept": "piping",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "piping@L2#2",
+   "quote": "3: an average of 5 new numbers, no file.",
+   "correct": true,
+   "why": "Correctly predicts that only Average's output appears and that no intermediate file is created, without relating this to the redirection pair."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "remainder_operator",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "args_length",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "read_loop_idiom",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

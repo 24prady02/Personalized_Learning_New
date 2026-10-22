@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "accumulator_pattern",
+ "why": "The order B C A D E is correct, and the student explains each line's place by how it relates to the loop: sum starts at 0 before the loop, is added to in every pass inside the body, and is printed once after the loop, which matches the edge from loop_body to accumulator_pattern.",
+ "concepts": [
+  {
+   "concept": "accumulator_pattern",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "accumulator_pattern@L3#1",
+   "quote": "sum has to start at 0 before the loop, be added to in every pass, and be printed once after the loop",
+   "correct": true,
+   "why": "The student puts the update inside the body because it must run once per pass, and keeps the start value before the loop and the print after it."
+  },
+  {
+   "concept": "loop_scope",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about where variables are visible."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not explain the for header or how the loop runs."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "'Added to' only describes what the line is for; the answer does not explain how += works."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss i."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss the start value, test or update of the loop."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention i++."
+  },
+  {
+   "concept": "block",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not talk about braces or blocks, even though the order puts A inside them."
+  },
+  {
+   "concept": "logical_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss any error."
+  }
+ ]
+}

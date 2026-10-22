@@ -1,0 +1,61 @@
+{
+ "answer_level": "L4",
+ "main_concept": "math_round",
+ "why": "The asked line changes the given 'long k' to an int target, and the student correctly predicts a compile-time error and gives the reason: Math.round(double) returns a long, which cannot be stored in an int without a cast.",
+ "concepts": [
+  {
+   "concept": "math_round",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "way_id": "math_round@L4#2",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "It correctly names the compile-time error for int n = Math.round(x) and gives the rule behind it: the long return type."
+  },
+  {
+   "concept": "long_type",
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "way_id": "long_type@L4#3",
+   "quote": "since round gives a long",
+   "correct": true,
+   "why": "Storing a long result in an int is a compile-time error, and that is the reason the student gives."
+  },
+  {
+   "concept": "explicit_cast",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about a cast or how to fix the line."
+  },
+  {
+   "concept": "math_library",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "math_library@L1#2",
+   "quote": "round gives a long",
+   "correct": true,
+   "why": "It states one API fact, that round returns long, and does not trace the other Math calls."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "L1",
+   "way": "names_the_element",
+   "way_id": "compile_time_error@L1#1",
+   "quote": "It does not compile",
+   "correct": true,
+   "why": "It correctly says the line is a compile-time error but does not explain how compilation works."
+  },
+  {
+   "concept": "type_conversion",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "type_conversion@L1#2",
+   "quote": "It does not compile, since round gives a long.",
+   "correct": true,
+   "why": "It only implies that the narrowing from long to int is refused, without stating or applying the conversion rule."
+  }
+ ]
+}

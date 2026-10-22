@@ -1,0 +1,70 @@
+{
+ "answer_level": "L3",
+ "main_concept": "incremental_development",
+ "why": "The answer explains why small steps help with a reason: if you compile after every few lines, each error sits next to the code just written, so debugging stays local. That is a relational purpose, and it stays within the given scenario.",
+ "concepts": [
+  {
+   "concept": "compile",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Compiling is mentioned only as part of the strategy. The answer makes no claim about what javac does."
+  },
+  {
+   "concept": "incremental_development",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "way_id": "incremental_development@L3#2",
+   "quote": "If you compile after every few lines, each error is next to the code you just wrote, so it is easy to find.",
+   "correct": true,
+   "why": "It links small steps to local debugging: the newest change is where to look first."
+  },
+  {
+   "concept": "reading_error_messages",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Nothing is said about reading or interpreting the error messages."
+  },
+  {
+   "concept": "program_text",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "No claim about the source file or its text."
+  },
+  {
+   "concept": "testing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Testing on inputs is not discussed."
+  },
+  {
+   "concept": "run",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Running the program is not mentioned."
+  },
+  {
+   "concept": "compile_time_error",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Errors come up only in the incremental-development reasoning, with no claim about compile-time errors themselves."
+  }
+ ]
+}

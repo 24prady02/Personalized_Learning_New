@@ -1,0 +1,88 @@
+{
+ "answer_level": "L2",
+ "main_concept": "conditional_operator",
+ "why": "The student traces the method chain in order with values (-11+10=-1, finalAdjust, /2, 25+...), but picks the wrong branch of the conditional for -1 (true value is -10, giving -5 and num2 = 20), so this is a multistructural trace with an error; the student also never states num1 = -11 or the call order explicitly.",
+ "concepts": [
+  {
+   "concept": "assignment",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about plain assignment."
+  },
+  {
+   "concept": "increment_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code has no increment operators and the answer does not discuss them."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "int@L2#2",
+   "quote": "so reCalculate returns 2",
+   "correct": true,
+   "why": "The student applies int division correctly to their value: 5 / 2 gives 2 with the fraction dropped."
+  },
+  {
+   "concept": "string_concatenation",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student only gives a value for num2 and does not reason about how the output line is built."
+  },
+  {
+   "concept": "compound_assignment",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "compound_assignment@L2#3",
+   "quote": "finalAdjust(-1)",
+   "correct": true,
+   "why": "v += 10 is applied correctly, turning -11 into -1."
+  },
+  {
+   "concept": "conditional_operator",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "way_id": "conditional_operator@L2#1",
+   "quote": "finalAdjust(-1) gives 5",
+   "correct": false,
+   "why": "-1 >= 0 is false, so the result is -1 - 9 = -10, not -1 + 6 = 5; this is a branch slip inside an otherwise ordered trace."
+  },
+  {
+   "concept": "string_conversion",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The student makes no claim about string conversion."
+  },
+  {
+   "concept": "array_aliasing",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "There are no arrays in the code."
+  },
+  {
+   "concept": "integer_constants",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The code does not use integer constants."
+  }
+ ]
+}

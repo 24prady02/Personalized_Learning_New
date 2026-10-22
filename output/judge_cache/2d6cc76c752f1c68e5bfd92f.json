@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "break_statement",
+ "why": "The answer correctly contrasts the two jump statements in the first loop: continue moves on to the next i when i is even, and break ends the whole loop when i is 5. This matches the run output 1,3, sum=4 and is the break-versus-continue relation.",
+ "concepts": [
+  {
+   "concept": "break_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "break stops the loop completely at 5",
+   "correct": true,
+   "why": "It shows break leaving the loop, set against continue, at the right value i=5."
+  },
+  {
+   "concept": "continue_statement",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "continue jumps to the next i for the even numbers",
+   "correct": true,
+   "why": "It shows continue moving on to the next pass, set against break, for the even values."
+  },
+  {
+   "concept": "labeled_break",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the labeled loop."
+  },
+  {
+   "concept": "nested_loops",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the nested loops."
+  }
+ ]
+}

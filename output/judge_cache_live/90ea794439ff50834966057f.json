@@ -1,0 +1,88 @@
+{
+ "answer_level": "L3",
+ "main_concept": "standard_audio",
+ "why": "The student finds the cause of this one hang (main has no System.exit(0) after StdAudio.play) and gives the right fix. Fixing one given failing case is L3. The student does not explain why the program stays alive or which programs it affects, so it is not L4.",
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L3",
+   "way": "diagnose_an_error",
+   "way_id": "standard_audio@L4#2",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "This is the book's fix for the AudioProgramHangs error. It is applied to this one failing case, so the way's boundary sets it at L3, not L4."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about the loop."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "Not addressed."
+  }
+ ]
+}

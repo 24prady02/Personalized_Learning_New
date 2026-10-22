@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "standard_audio",
+ "why": "The answer gives the correct fix from the book's rule, that a StdAudio program should end main() with System.exit(0), but it does not explain why the terminal hangs, so it is L1.",
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "standard_audio@L1#2",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "It states the correct rule, ending main with System.exit(0), as a bare fix but gives no reason why the program keeps running after the sound ends."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer makes no claim about end of input or StdIn.isEmpty()."
+  }
+ ]
+}

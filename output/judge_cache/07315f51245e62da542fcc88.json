@@ -1,0 +1,25 @@
+{
+ "answer_level": "L1",
+ "main_concept": "if_statement",
+ "why": "The answer only hints at one rule, that braces are optional around a single-statement if body (so the code is legal). It never applies that rule to this code or gives a reason, and calling braces 'pointless' is a style opinion that overstates the rule rather than a wrong rule about how Java runs.",
+ "concepts": [
+  {
+   "concept": "if_statement",
+   "level": "L1",
+   "way": "states_the_rule",
+   "way_id": "if_statement@L1#2",
+   "quote": "Braces are pointless, I never write them.",
+   "correct": false,
+   "why": "It is right that braces may be left out for a single statement, so the code is legal, but 'pointless' is wrong: braces are needed for bodies with more than one statement, and leaving them out risks the error of adding a line that is not in the body."
+  },
+  {
+   "concept": "syntax_template",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer makes no claim about the template notation."
+  }
+ ]
+}

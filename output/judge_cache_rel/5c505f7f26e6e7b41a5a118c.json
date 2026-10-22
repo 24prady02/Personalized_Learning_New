@@ -1,0 +1,105 @@
+{
+ "answer_level": "L3",
+ "main_concept": "standard_audio",
+ "why": "The student gives the right fix for this one hanging program (end main with System.exit(0)) but does not explain why the terminal hangs or name the general class of programs that hang, so by the boundary rule this is L3, not L4.",
+ "concepts": [
+  {
+   "concept": "standard_audio",
+   "level": "L3",
+   "way": "diagnose_an_error",
+   "way_id": "standard_audio@L4#2",
+   "quote": "You need System.exit(0) at the end of main.",
+   "correct": true,
+   "why": "This matches the AudioProgramHangs rule, but it only fixes this one case and gives no reason, so the way's boundary puts it at L3."
+  },
+  {
+   "concept": "for_loop",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the loop."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention expressions."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention variables."
+  },
+  {
+   "concept": "loop_control",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention loop control."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the empty statement."
+  },
+  {
+   "concept": "loop_variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the loop variable."
+  },
+  {
+   "concept": "array_declaration",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention the array declaration."
+  },
+  {
+   "concept": "end_of_input",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention end of input."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_variable -prerequisite-> loop_control",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "loop_control -prerequisite-> for_loop",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

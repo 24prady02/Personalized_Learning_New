@@ -1,0 +1,115 @@
+{
+ "answer_level": "L2",
+ "main_concept": "integer_constants",
+ "why": "The student gives the correct result of Math.abs(Integer.MIN_VALUE) and backs it with the int range rule applied to this one value, but does not explain how overflow works or reason beyond this case.",
+ "concepts": [
+  {
+   "concept": "integer_constants",
+   "level": "L2",
+   "way": "output_prediction",
+   "way_id": "integer_constants@L2#2",
+   "quote": "Still -2147483648, because +2147483648 does not fit in an int.",
+   "correct": true,
+   "why": "The predicted value matches the run, and the student justifies it by noting that the positive result is outside int's range."
+  },
+  {
+   "concept": "int",
+   "level": "L2",
+   "way": "one_step_execution",
+   "way_id": "int@L2#3",
+   "quote": "because +2147483648 does not fit in an int",
+   "correct": true,
+   "why": "The student applies int's fixed range to this single result, which is outside the range and so stays the wrapped value."
+  },
+  {
+   "concept": "primitive_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer says nothing about primitive types in general."
+  },
+  {
+   "concept": "int_literal_limit",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer is about a computed result, not about how literals are written."
+  },
+  {
+   "concept": "arithmetic_operators",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer discusses no operators."
+  },
+  {
+   "concept": "expression",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss expressions."
+  },
+  {
+   "concept": "variable",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not discuss variables."
+  },
+  {
+   "concept": "running_extreme",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not involve a running maximum or minimum."
+  },
+  {
+   "concept": "long_type",
+   "level": "none",
+   "way": "",
+   "way_id": "",
+   "quote": "",
+   "correct": true,
+   "why": "The answer does not mention long."
+  }
+ ],
+ "relations": [
+  {
+   "edge": "variable -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "arithmetic_operators -prerequisite-> expression",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -prerequisite-> long_type",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "int -prerequisite-> int_literal_limit",
+   "stated": false,
+   "quote": ""
+  },
+  {
+   "edge": "primitive_type -prerequisite-> int",
+   "stated": false,
+   "quote": ""
+  }
+ ]
+}

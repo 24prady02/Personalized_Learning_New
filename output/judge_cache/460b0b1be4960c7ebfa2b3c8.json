@@ -1,0 +1,39 @@
+{
+ "answer_level": "L3",
+ "main_concept": "variable_swap",
+ "why": "The answer gives the reason the temporary is needed, and it is correct: the assignment a[i] = a[r] overwrites a[i], so its old value has to be saved first. This ties the swap's order to how assignment destroys the old value.",
+ "concepts": [
+  {
+   "concept": "indexing",
+   "level": "none",
+   "way": "names_the_element",
+   "quote": "a[i]",
+   "correct": true,
+   "why": "It names a[i] only as the thing being overwritten and makes no claim about indexing."
+  },
+  {
+   "concept": "assignment",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "a[i] is overwritten before it is saved",
+   "correct": true,
+   "why": "It links the need for t to assignment overwriting its target, which loses the old value."
+  },
+  {
+   "concept": "variable_swap",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It explains that the swap's order and the temporary are needed because each assignment overwrites the old value."
+  },
+  {
+   "concept": "array_exchange",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Otherwise a[i] is overwritten before it is saved.",
+   "correct": true,
+   "why": "It treats the exchange steps as ordered assignments, where a[i] must be saved before it is overwritten."
+  }
+ ]
+}
