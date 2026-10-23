@@ -1,0 +1,187 @@
+==============================================================================
+INPUT
+  Question: What does the system print?
+  Code:     int count;  |  System.out. Println(count);
+  Answer:   It will print 0.
+  Switches: LP_FINAL=max_level, LP_JUDGE=claude, LP_JUDGE_CACHE=judge_cache_rel, LP_JUDGE_EDGES=1, LP_JUDGE_RELATIONS=1, LP_LINK_PICK=1, LP_NO_NLI=1
+------------------------------------------------------------------------------
+STEP 0  prompt gates (G1 content, G2 help-seeking, G2b no-claim)
+  help_seeking = False   no_claim = False
+  content words ['print'] = 1  +  values/code tokens ['0'] = 1  ->  2 vs MIN_WORDS 3
+  output claim: 'print 0'
+  G1 content gate fires = False  (an output claim passes whatever the count)
+  -> prompt gates: none
+------------------------------------------------------------------------------
+STEP 1  semantic matching (concept linking)
+  score = 2*codecue_in_answer(max 2) + 1*codecue_only_in_question_code(max 1) + 1*cue_in_question_asked
+        + 1*word_cue_pts(max 3) + 4*max(0, meaning_sim - 0.4) + 3*max(0, misconception_sim - 0.5)
+  kept: score >= 1.0, best first, up to 8 (LP_LINK_PICK shortlist)
+
+  print  = 0 + 0 + 1 + 1 + 4*(0.486-0.4)=0.344 + 3*(0.589-0.5)=0.267  =  2.610
+      code cues in answer - | only in question code - | word cues ['print'] | in question asked True
+      best meaning match: 'print(String s) prints the string (or "null" for a null reference); print(int) etc. print '
+      misconception match: PrintWithoutFinalNewline
+
+  standard_output  = 0 + 1 + 0 + 0 + 4*(0.584-0.4)=0.736 + 3*(0.440-0.5)=0.000  =  1.737
+      code cues in answer - | only in question code ['StdOut\\.|System\\.out\\.'] | word cues - | in question asked False
+      best meaning match: 'It changes no variables and returns nothing.'
+
+  declaration  = 0 + 1 + 0 + 0 + 4*(0.488-0.4)=0.352 + 3*(0.366-0.5)=0.000  =  1.353
+      code cues in answer - | only in question code ['\\b(int|double|boolean|char|long|String)\\s+\\w+\\s*;'] | word cues - | in question asked False
+      best meaning match: 'A declaration produces no value and no output.'
+
+  statement  = 0 + 1 + 0 + 0 + 4*(0.462-0.4)=0.248 + 3*(0.376-0.5)=0.000  =  1.247
+      code cues in answer - | only in question code [';\\s*$'] | word cues - | in question asked False
+      best meaning match: 'A statement has no value; its result is its effect: a changed variable, printed output, or'
+
+  array_creation  = 0 + 0 + 0 + 0 + 4*(0.655-0.4)=1.020 + 3*(0.368-0.5)=0.000  =  1.021
+      code cues in answer - | only in question code - | word cues - | in question asked False
+      best meaning match: 'It produces no output; printing it shows an address, not the elements.'
+
+  empty_statement  = 0 + 1 + 0 + 0 + 4*(0.377-0.4)=0.000 + 3*(0.482-0.5)=0.000  =  1.000
+      code cues in answer - | only in question code ['\\)\\s*;\\s*$'] | word cues - | in question asked False
+      best meaning match: 'An empty statement does nothing, and its execution always completes normally; any part of '
+
+  int  = 0 + 1 + 0 + 0 + 4*(0.348-0.4)=0.000 + 3*(0.293-0.5)=0.000  =  1.000
+      code cues in answer - | only in question code ['\\bint\\s+\\w+'] | word cues - | in question asked False
+      best meaning match: 'Each operation is done at once in 32-bit precision, so every intermediate result is alread'
+
+  variable  = 0 + 1 + 0 + 0 + 4*(0.336-0.4)=0.000 + 3*(0.302-0.5)=0.000  =  1.000
+      code cues in answer - | only in question code ['\\b(int|double|boolean|char|String)\\s+[a-z]\\w*\\s*(=|;)'] | word cues - | in question asked False
+      best meaning match: "A later read simply overwrites the variable's current value."
+------------------------------------------------------------------------------
+STEP 2  code run
+  compiles = False
+    Error:
+    cannot find symbol
+      symbol:   method Println(int)
+    System.out. Println(count);
+    ^-----------------^
+    Error:
+    variable count might not have been initialized
+    System.out. Println(count);
+                        ^---^
+  run output = none (no trace: the code does not compile)
+  run facts given to the judge: none
+  print                    checks {'E1': 'met', 'E2': 'uncertain', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+      [E1 met] print: System.out.print -- output with no newline  (score 0.486)
+      [E2 uncertain] System.out.print(x) is a library method call (on the PrintStream System.out) that displays x in the   (score 0.473)
+  standard_output          checks {'E1': 'met', 'E2': 'uncertain', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+      [E1 met] standard output: StdOut / System.out  (score 0.584)
+      [E2 uncertain] A null String prints as "null".  (score 0.456)
+  statement                checks {'E1': 'not_met', 'E2': 'not_met', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+  array_creation           checks {'E1': 'met', 'E2': 'not_met', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+      [E1 met] array creation: new int[n] -- allocates n slots  (score 0.655)
+  empty_statement          checks {'E1': 'not_met', 'E2': 'not_met', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+  int                      checks {'E1': 'not_met', 'E2': 'not_met', 'E3': 'not_met', 'E4': 'not_met'}  held -  refuted -
+------------------------------------------------------------------------------
+STEP 3  LLM judge (Claude)
+  prompt sent: 38101 chars (~9525 tokens); concepts offered: ['print', 'standard_output', 'declaration', 'statement', 'array_creation', 'empty_statement', 'int', 'variable', 'stream_model']
+  Claude's reply:
+    {
+      "concepts": [
+        {
+          "concept": "print",
+          "level": "L0",
+          "way": "diagnose_an_error (missed)",
+          "quote": "It will print 0.",
+          "correct": false,
+          "why": "The answer treats System.out.Println(count) as a working call. Java is case-sensitive, so Println does not exist and the code does not compile."
+        },
+        {
+          "concept": "standard_output",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "The answer says nothing about the output stream itself, only about a value."
+        },
+        {
+          "concept": "declaration",
+          "level": "L0",
+          "way": "misconception: local variables get a default value on their own",
+          "quote": "It will print 0.",
+          "correct": false,
+          "why": "It assumes int count; sets count to 0, but a local variable left without a value is unassigned."
+        },
+        {
+          "concept": "statement",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "The answer does not talk about statements or their order."
+        },
+        {
+          "concept": "array_creation",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "There are no arrays in the code or the answer."
+        },
+        {
+          "concept": "empty_statement",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "The answer does not mention empty statements."
+        },
+        {
+          "concept": "int",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "The answer gives no rule about the int type itself. The error is about initialization."
+        },
+        {
+          "concept": "variable",
+          "level": "L0",
+          "way": "misconception: local variables get a default value on their own",
+          "quote": "It will print 0.",
+          "correct": false,
+          "why": "A local variable must be assigned before it is read. Reading count here is a compile error and does not give 0."
+        },
+        {
+          "concept": "stream_model",
+          "level": "none",
+          "way": "",
+          "quote": "",
+          "correct": false,
+          "why": "The answer does not mention streams."
+        }
+      ]
+    }
+------------------------------------------------------------------------------
+STEP 4  fusion (per concept)
+  rules: run L0 -> L0 (wrong rule) | run L2 + judge L1 -> L1 | judge L0 -> L0 (wrong rule)
+         | level from a weak reader (nli / relation cue / similarity) -> judge's level | else keep
+         | Claude gave the concept no level (pick mode) -> not stored
+  print                    judge L0   -> L0  set by judge  wrong_rule=True  (not stored: ambiguity)
+      reason: L0 diagnose_an_error (missed) (judge): The answer treats System.out.Println(count) as a working call. Java is case-sensitive, so Println does not exist and the code does not compile.
+  standard_output          judge -    -> L0  set by similarity  wrong_rule=False  (not stored: judge_no_level)
+      reason: L1 way shown: L1 names_the_element; uncertain toward L2: E2 Execution in the ambiguity band
+  declaration              judge L0   -> L0  set by judge  wrong_rule=True  (not stored: judge_only)
+      reason: judge: L0 misconception: local variables get a default value on their own: It assumes int count; sets count to 0, but a local variable left without a value is unassigned.
+  statement                judge -    -> L0  set by none  wrong_rule=False  (not stored: attribution, no_evidence)
+      reason: no way shown; no L1 way shown
+  array_creation           judge -    -> L0  set by similarity  wrong_rule=False  (not stored: weak_link, judge_no_level)
+      reason: weak link: L1 only
+  empty_statement          judge -    -> L0  set by none  wrong_rule=False  (not stored: attribution, no_evidence)
+      reason: no way shown; no L1 way shown
+  int                      judge -    -> L0  set by none  wrong_rule=False  (not stored: attribution, no_evidence)
+      reason: no way shown; no L1 way shown
+  variable                 judge L0   -> L0  set by judge  wrong_rule=True  (not stored: judge_only)
+      reason: judge: L0 misconception: local variables get a default value on their own: A local variable must be assigned before it is read. Reading count here is a compile error and does not give 0.
+------------------------------------------------------------------------------
+STEP 5  relation edges (student edge = stated AND quote found in answer AND both ends stored)
+  no prerequisite/parallel edges between the shortlisted concepts
+------------------------------------------------------------------------------
+FINAL  LP_FINAL=max_level
+  stored concepts (concept, level, wrong_rule): [('print', 'L0', True), ('declaration', 'L0', True), ('variable', 'L0', True)]
+  any wrong rule = True  ->  L0
+  Claude's overall level (shown, not used by max_level): None  main concept: None
+
+  FINAL LEVEL: L0

@@ -1,0 +1,76 @@
+{
+ "concepts": [
+  {
+   "concept": "print",
+   "level": "L0",
+   "way": "diagnose_an_error (missed)",
+   "quote": "It will print 0.",
+   "correct": false,
+   "why": "The answer treats System.out.Println(count) as a working call. Java is case-sensitive, so Println does not exist and the code does not compile."
+  },
+  {
+   "concept": "standard_output",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer says nothing about the output stream itself, only about a value."
+  },
+  {
+   "concept": "declaration",
+   "level": "L0",
+   "way": "misconception: local variables get a default value on their own",
+   "quote": "It will print 0.",
+   "correct": false,
+   "why": "It assumes int count; sets count to 0, but a local variable left without a value is unassigned."
+  },
+  {
+   "concept": "statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not talk about statements or their order."
+  },
+  {
+   "concept": "array_creation",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "There are no arrays in the code or the answer."
+  },
+  {
+   "concept": "empty_statement",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention empty statements."
+  },
+  {
+   "concept": "int",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer gives no rule about the int type itself. The error is about initialization."
+  },
+  {
+   "concept": "variable",
+   "level": "L0",
+   "way": "misconception: local variables get a default value on their own",
+   "quote": "It will print 0.",
+   "correct": false,
+   "why": "A local variable must be assigned before it is read. Reading count here is a compile error and does not give 0."
+  },
+  {
+   "concept": "stream_model",
+   "level": "none",
+   "way": "",
+   "quote": "",
+   "correct": false,
+   "why": "The answer does not mention streams."
+  }
+ ]
+}

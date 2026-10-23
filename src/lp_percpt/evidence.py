@@ -79,6 +79,8 @@ _FIX = re.compile(r"^\s*(?:use|cast|add|change|replace|move|put|write|declare|in
 _ERROR_TALK = re.compile(r"\b(?:will not|won't|does not|doesn't|cannot|can't|not) compile\b|\bcompile(?:-| )time\b"
                          r"|\bcompiler\b|\bcrash(?:es|ed)?\b|\bthrows?\b|\bexception\b|\bout of bounds\b"
                          r"|\bnever (?:ends|stops|erased|returns)\b|\bdoes not come back\b|\btrapped\b", re.I)
+# a short claim about the output ("It will print 0.", "outputs -1") is a full answer to "what is printed?"
+_OUTPUT_CLAIM = re.compile(r"\b(?:prints?|printed|outputs?|displays?|shows?)\b.*?(?:-?\d+(?:\.\d+)?|\"[^\"]*\"|\btrue\b|\bfalse\b|\bnothing\b)", re.I)
 _FILLER = re.compile(r"^\s*(idk|i don'?t know|no idea|dunno|not sure|nothing|ok|okay|yes|no|hmm+|\?+)\s*[.!?]*\s*$", re.I)
 
 STOPWORDS = set("""a an the and or but if then else of to in on at by for with from as is are was were be been
@@ -212,9 +214,14 @@ class ConceptEvidence:
 # ── Prompt-level gates (Layer 1) ────────────────────────────────────────────
 def content_gate(text: str, min_words: int) -> bool:
     """G1: True when the prompt has too little content to classify. Values,
-    operators and code names count as content, so a value trace is read."""
+    operators and code names count as content, so a value trace is read. A claim
+    about the output passes however short it is."""
     t = text or ""
-    return bool(_FILLER.match(t)) or len(content_words(t)) + len(_CODE_TOKEN.findall(t)) < min_words
+    if _FILLER.match(t):
+        return True
+    if _OUTPUT_CLAIM.search(t):
+        return False
+    return len(content_words(t)) + len(_CODE_TOKEN.findall(t)) < min_words
 
 
 def help_seeking(text: str) -> bool:

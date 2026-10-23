@@ -87,6 +87,8 @@ def test_content_gate():                                     # G1
     assert content_gate("idk", 3)
     assert content_gate("loop?", 3)
     assert not content_gate("the loop condition never becomes false", 3)
+    assert not content_gate("It will print 0.", 3)                   # output claim
+    assert content_gate("print?", 3)
 
 
 def test_help_seeking_gate():                                # G2
