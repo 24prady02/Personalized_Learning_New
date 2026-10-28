@@ -1,0 +1,5 @@
+spacy>=3.7
+numpy
+pytest
+# optional NLI fallback (use_nli=True), model must be cached locally:
+# sentence-transformers
