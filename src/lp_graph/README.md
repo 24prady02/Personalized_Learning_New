@@ -47,20 +47,38 @@ byte-identical across runs and records the hash of the graph file; if the
 graph changes, `KG` rebuilds the parts in memory and logs a warning until you
 regenerate. `chapter1_kg.json` itself is never edited.
 
-## Growing the lexicon
+## Where the knowledge lives
 
-The reader understands English only through `lexicon.py` (value phrases per
-slot, negation, clause words, ambiguous verbs, decisive code patterns) and
-`cues.py` (concept aliases and code regexes).
+The code holds no topic tables. Everything the reader knows about the chapter
+and about English is in the graph file (`data/chapter1_kg.json`):
 
-1. Run `python scripts/run_lp_graph_44.py`.
-2. Open `output/lp_graph/unmatched.json`: every answer statement that fell to
-   `NOISE`, with its scenario id. The script also prints the 10 most frequent.
-3. For each recurring phrase, add it to the right list: a value phrase to
-   `PHRASES[slot][value]`, a concept name to `CUES[concept]["words"]`, a new
-   code pattern to `CUES[concept]["code"]`.
-4. Rerun `python scripts/prepare_kg_parts.py` (graph-side slots use the same
-   lexicon), then `pytest -q`, then the runner, and compare `summary.txt`.
+* each concept's `reader` field: aliases, code / command patterns, operator
+  symbols, Java types, generic / declaration flags, structural `signals`
+  (regexes or named Java analyses; decisive or not; the rule slot code with
+  that signal acts out) and the run outcome it stands for;
+* each misconception's `misread_as`: the generic code transform of its
+  misinterpreter (`replace_operator`, `flip_loop_bounds`, `remove_fallthrough`, ...);
+* the top-level `reader` section: slot families (values, opposites, phrases,
+  kinds), the English word lists and regex templates, the evidence class per
+  rule type, the level per evidence class, and named roles.
+
+`lexicon.py` loads this at import (and `KG(path)` reloads it for another graph
+file). The engine keeps only Java mechanics: parsing, compiling and running,
+the named analyses and transforms a graph can refer to. A new chapter is a new
+graph file, not new code; `test_no_topic_tables_in_code` and
+`test_engine_follows_the_graph` check this.
+
+To grow the reader:
+
+1. Run `python scripts/evaluate_lp_graph.py`; unmatched answer statements are
+   in `output/eval/<tag>/`.
+2. Add the wording to the graph: a phrase to `reader.slots.<slot>.values.<value>.phrases`,
+   a word to a concept's `reader.aliases`, a code pattern to its
+   `reader.code_patterns`, a misinterpreter to a misconception's `misread_as`.
+3. Rerun `python scripts/prepare_kg_parts.py`, then `pytest -q`, then the evaluation.
+
+`scripts/migrate_reader_layer.py` is the one-time migration that moved the
+former code tables into the graph.
 
 ## Tests
 

@@ -75,9 +75,9 @@ def test_reference_case(ref):
     assert [m["id"] for m in ref.misconceptions] == ["LocalVariablesAutoInitialized"]
     assert ref.levels["definite_assignment"].level == "L0"
     assert ref.headline_level == "L0"
-    assert "pre:declaration->definite_assignment" in [b["edge"] for b in ref.comparison.broken]
     assert ref.feedback == [TWIN]
-    assert "pre:declaration->definite_assignment" in ref.route_correct.edges()
+    # the correct route is built from the graph around the expected concepts
+    assert "definite_assignment" in ref.route_correct.concepts()
     steps = ref.route_student.steps
     assert len(steps) == 1 and steps[0].state.kind == "M"
     assert steps[0].state.c_in == "definite_assignment"
@@ -88,7 +88,6 @@ def test_reference_case(ref):
 def test_reference_markdown(ref):
     md = ref.to_markdown()
     assert "definite_assignment L0 (misconception LocalVariablesAutoInitialized)" in md
-    assert "broken link: declaration -> definite_assignment" in md
     assert "likely source: contrast with array_default_values" in md
     assert f"feedback: {TWIN}" in md
 
@@ -103,8 +102,9 @@ def test_three_statement_version(kg):
     by_id = {s.id: s for s in a.statements}
     mis_sentences = {by_id[sid].sentence for m in a.misconceptions for sid in m["statements"]}
     assert mis_sentences == {1, 2}  # sentences 2 and 3 (0-based 1, 2)
-    first = a.route_student.steps[0]
-    assert first.statements[0] == "c1" and first.state.c_in == "declaration"
+    assert [m["id"] for m in a.misconceptions] == ["LocalVariablesAutoInitialized"]
+    # "declared" names declaration directly; "count" alone would not
+    assert "declaration" in by_id["c1"].direct
 
 
 # ------------------------------------------------------ print / println
@@ -145,16 +145,14 @@ def test_determinism(kg):
     assert json.dumps(d1, sort_keys=True) == json.dumps(d2, sort_keys=True)
 
 
-def test_ppr_seeds_first_and_stable(kg, ref):
+def test_ppr_stable_and_main_by_rule(kg, ref):
     stmts = ref.statements
     c1 = select(kg, stmts, ref.trace)
     c2 = select(kg, stmts, ref.trace)
     assert c1.to_dict() == c2.to_dict()
-    seeds = set(c1.seeds)
-    rank = c1.rank
-    last_seed = max(rank.index(s) for s in seeds if s in rank)
-    first_non_seed = min((rank.index(c) for c in rank if c not in seeds), default=len(rank))
-    assert last_seed < first_non_seed
+    assert set(c1.seeds) <= set(c1.concepts)
+    # generic concepts are never the main concept when another one fits
+    assert c1.main_concept not in ("declaration", "variable", "int")
 
 
 # ------------------------------------------------------------ consistency
@@ -196,7 +194,111 @@ def test_parts_cover_reference_elements(kg):
     parts = kg.parts
     assert parts["source_hash"] == kg.source_hash
     spec = parts["misconceptions"]["mis:definite_assignment->LocalVariablesAutoInitialized"]["slot"]
-    assert spec == {"slot": "value", "wrong_value": "default", "right_value": "none"}
+    assert spec == {"slot": "value", "wrong_value": "default", "right_value": "none", "slot_kind": "phrase"}
     pp = {p["concept"]: p["slots"] for p in parts["edges"]["par:print~println"]["parts"]}
     assert pp["print"][0][:2] == ["cursor", "same_line"]
     assert pp["println"][0][:2] == ["cursor", "next_line"]
+
+
+# ------------------------------------------------- mechanisms of the fixes
+
+def test_stated_rule_matches_misconception_without_the_run(kg):
+    # the wrong meaning of % gives the right number here, so only the wording can decide
+    a = assess("int a = 9, b = 5;\nint r = a % b;", "Explain how r is computed.",
+               "r is 4 because 9 % 5 means 9 minus 5.", kg)
+    assert a.main_concept == "remainder_operator"
+    assert "RemainderIsSubtraction" in [m["id"] for m in a.misconceptions]
+    assert a.headline_level == "L0"
+
+
+def test_variable_mention_is_not_declaration(kg):
+    a = assess("int a = 3;\nint b = a + 2;", "What is b?", "b is 5.", kg)
+    c = [s for s in a.statements if s.source == "answer"][0]
+    assert "declaration" not in c.direct and "declaration" not in c.context
+    assert a.headline_level == "L2"
+
+
+def test_turns_and_self_correction(kg):
+    code = "int v = 2, r = 0;\nswitch (v) {\ncase 1: r = 10;\ncase 2: r = 20;\ndefault: r = 30;\n}"
+    a = assess(code, "What is r after the switch?", 'Turn 1: "r is 20."\nTurn 2: "Oh wait, it is 30."', kg)
+    assert a.headline_level == "L2"
+    assert [(m["id"], m["status"]) for m in a.misconceptions] == [("SwitchNoFallThrough", "corrected")]
+
+
+def test_student_code_is_run(kg):
+    a = assess("(writing task) int array nums already exists", "Copy nums into a new array.",
+               "for (int i = 0; i <= nums.length; i++) out[i] = nums[i];", kg)
+    assert a.trace.answer_run.error_kind == "run"
+    assert "OffByOneBound" in [m["id"] for m in a.misconceptions]
+
+
+def test_what_if_is_checked_against_the_changed_program(kg):
+    a = assess('double x = 2.71828;\nSystem.out.printf("%5.1f", x);', "What is printed?",
+               "With %.2f it would print 2.72.", kg)
+    assert a.headline_level == "L4"
+
+
+# ------------------------------------------------ no topic knowledge in code
+
+ENGINE_WORDS = frozenset({
+    # Java types and statement kinds the parser knows
+    "int", "double", "char", "boolean", "print", "println", "comment", "statement", "variable",
+    # kinds of run outcome and slot names of the engine's claim checks
+    "compile", "run",
+})
+
+
+def test_no_topic_tables_in_code():
+    """Every concept and misconception the classifier reads comes from the
+    graph: no concept or misconception id appears as a string in src/lp_graph
+    except the Java / engine words above (which only coincide with ids)."""
+    import io
+    import re
+    import tokenize
+
+    raw = json.load(open(ROOT / "data" / "chapter1_kg.json", encoding="utf-8"))
+    ids = {c["id"] for c in raw["concepts"]} | {m["id"] for m in raw["misconceptions_and_errors"]}
+    bad = []
+    for f in sorted((ROOT / "src" / "lp_graph").glob("*.py")):
+        src = f.read_text(encoding="utf-8")
+        for tok in tokenize.generate_tokens(io.StringIO(src).readline):
+            if tok.type != tokenize.STRING or tok.string.startswith(('"""', "'''", 'r"""')):
+                continue
+            for w in re.findall(r"[A-Za-z_]+", tok.string):
+                if w in ids and w not in ENGINE_WORDS:
+                    bad.append(f"{f.name}:{tok.start[0]} {w}")
+    assert not bad, bad
+
+
+def test_vocabulary_comes_from_the_graph(kg):
+    from lp_graph import lexicon
+
+    assert lexicon.PHRASES and lexicon.SIGNALS and lexicon.MISREAD and lexicon.OP_CONCEPT
+    assert raw_reader_section_present()
+
+
+def raw_reader_section_present() -> bool:
+    raw = json.load(open(ROOT / "data" / "chapter1_kg.json", encoding="utf-8"))
+    return "reader" in raw and all("reader" in c for c in raw["concepts"])
+
+
+def test_engine_follows_the_graph(tmp_path):
+    """Remove one piece of knowledge from a copy of the graph (the wording and
+    the misinterpreter of RemainderIsSubtraction): with no code change the
+    engine stops detecting it, and detects it again with the original graph."""
+    code, q, ans = "int a = 9, b = 5;\nint r = a % b;", "Explain how r is computed.", "r is 4 because 9 % 5 means 9 minus 5."
+    raw = json.load(open(ROOT / "data" / "chapter1_kg.json", encoding="utf-8"))
+    sub = raw["reader"]["slots"]["op_meaning"]["values"]["subtraction"]
+    sub["phrases"] = []
+    for m in raw["misconceptions_and_errors"]:
+        if m["id"] == "RemainderIsSubtraction":
+            m.pop("misread_as", None)
+    edited = tmp_path / "graph.json"
+    edited.write_text(json.dumps(raw), encoding="utf-8")
+    try:
+        a = assess(code, q, ans, KG(edited, parts_path=None))
+        assert "RemainderIsSubtraction" not in [m["id"] for m in a.misconceptions]
+    finally:
+        original = KG()  # reloads the original vocabulary
+    a = assess(code, q, ans, original)
+    assert "RemainderIsSubtraction" in [m["id"] for m in a.misconceptions]

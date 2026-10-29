@@ -23,6 +23,7 @@ data/kg_parts.json           derived reader data (scripts/prepare_kg_parts.py)
 src/lp_graph/                the classifier
 scripts/prepare_kg_parts.py  regenerate data/kg_parts.json
 scripts/run_lp_graph_44.py   evaluate on the labelled scenarios -> output/lp_graph/
+scripts/evaluate_lp_graph.py regression (data/scenarios_20_expected.json) + held-out (data/heldout_365.json)
 tests/test_lp_graph.py       pytest -q
 ```
 
@@ -32,4 +33,5 @@ tests/test_lp_graph.py       pytest -q
 python scripts/prepare_kg_parts.py       # deterministic; prints coverage
 pytest -q
 python scripts/run_lp_graph_44.py        # needs the labelled scenarios (see the script docstring)
+python scripts/evaluate_lp_graph.py      # 20-scenario regression + 345 held-out answers -> output/eval/<tag>/
 ```

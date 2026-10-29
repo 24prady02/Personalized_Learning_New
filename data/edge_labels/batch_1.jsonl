@@ -1,0 +1,43 @@
+{"id": "S059", "labels": {"W6": ["E", "2 / 5 is 0.4 in Java, like on a calculator."], "C7": ["C", "2 / 5 is 0.4 in Java, like on a calculator."]}}
+{"id": "S060", "labels": {}}
+{"id": "S061", "labels": {}}
+{"id": "S062", "labels": {}}
+{"id": "S063", "labels": {"C15": ["E", "0.35 < 0.6 yes"]}}
+{"id": "S064", "labels": {}}
+{"id": "S065", "labels": {"W0": ["C", "Only estimates; 100 moves is far too few"], "C1": ["E", "Only estimates; 100 moves is far too few"], "W2": ["C", "In the long run the start page does not matter."], "C3": ["E", "In the long run the start page does not matter."]}}
+{"id": "S066", "labels": {}}
+{"id": "S067", "labels": {"W4": ["E", "They are accurate to 5 decimals, it says 0.31000."], "C5": ["C", "They are accurate to 5 decimals, it says 0.31000."]}}
+{"id": "S069", "labels": {}}
+{"id": "S070", "labels": {}}
+{"id": "S071", "labels": {}}
+{"id": "S072", "labels": {}}
+{"id": "S074", "labels": {}}
+{"id": "S075", "labels": {}}
+{"id": "S076", "labels": {}}
+{"id": "S077", "labels": {}}
+{"id": "S078", "labels": {"C9": ["E", "char singleLetter = 81;"], "C5": ["E", "char singleLetter = 81;"]}}
+{"id": "S079", "labels": {"C7": ["E", "length - 1, so next-to-last is sensorReadings[sensorReadings.length - 2] = 7.9;"]}}
+{"id": "S081", "labels": {"W14": ["E", "The missing ; is fine, the line break ends the statement."], "C15": ["C", "The missing ; is fine, the line break ends the statement."], "W2": ["E", "the line break ends the statement"], "C3": ["C", "the line break ends the statement"]}}
+{"id": "S082", "labels": {}}
+{"id": "S083", "labels": {}}
+{"id": "S084", "labels": {}}
+{"id": "S085", "labels": {}}
+{"id": "S086", "labels": {}}
+{"id": "S087", "labels": {}}
+{"id": "S088", "labels": {"C5": ["E", "nothing is printed because the program has not run yet"], "W4": ["C", "nothing is printed because the program has not run yet"]}}
+{"id": "S089", "labels": {}}
+{"id": "S090", "labels": {"C1": ["E", "must be saved as Hello.java"], "W0": ["C", "must be saved as Hello.java"]}}
+{"id": "S091", "labels": {"C1": ["E", "the string has no closing quote"], "W0": ["C", "the string has no closing quote"]}}
+{"id": "S092", "labels": {}}
+{"id": "S093", "labels": {"C5": ["E", "2.0 so the division is not integer division"], "C7": ["E", "(a + b) / 2.0"]}}
+{"id": "S094", "labels": {"C4": ["E", "args is empty and args[0] is out of bounds"], "W3": ["C", "args is empty and args[0] is out of bounds"], "R1": ["E", "args[0] is out of bounds"], "R2": ["E", "It crashes when it runs"]}}
+{"id": "S095", "labels": {"C1": ["E", "String; it is a class. The other four are primitive."], "W0": ["C", "String; it is a class. The other four are primitive."]}}
+{"id": "S096", "labels": {}}
+{"id": "S097", "labels": {}}
+{"id": "S098", "labels": {"C1": ["E", "+2147483648 does not fit in an int"], "W0": ["C", "+2147483648 does not fit in an int"]}}
+{"id": "S099", "labels": {}}
+{"id": "S100", "labels": {"W0": ["E", "Dividing by zero gives an error."], "C1": ["C", "Dividing by zero gives an error."]}}
+{"id": "S101", "labels": {}}
+{"id": "S102", "labels": {"W4": ["E", "Changing && to & changes nothing."], "C5": ["C", "Changing && to & changes nothing."]}}
+{"id": "S103", "labels": {"C2": ["E", "since round gives a long"], "W1": ["C", "since round gives a long"]}}
+{"id": "S104", "labels": {}}

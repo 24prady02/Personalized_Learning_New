@@ -27,7 +27,6 @@ from functools import lru_cache
 
 from . import lexicon
 
-_PUNCT_BREAK = re.compile(r"[.;:!?,]")
 
 
 @dataclass(frozen=True)
@@ -57,9 +56,26 @@ class Slot:
     subject: str | None = None
     implied: bool = False
     span: tuple[int, int] = field(default=(0, 0), compare=False)
+    hypothetical: bool = False
+    extra: tuple[tuple[str, str], ...] = field(default=(), compare=False)
 
     def key(self) -> tuple:
-        return (self.name, self.value, self.negated, self.subject or "", self.implied)
+        return (self.name, self.value, self.negated, self.subject or "", self.implied,
+                self.hypothetical)
+
+    def get(self, k: str, default: str = "") -> str:
+        return dict(self.extra).get(k, default)
+
+    @property
+    def kind(self) -> str:
+        """rule | output | value | expr | other (see lexicon.RULE_SLOTS)."""
+        if self.name in lexicon.RULE_SLOTS:
+            return "rule"
+        if self.name in ("output", "printed"):
+            return "output"
+        if self.name in ("value", "expr"):
+            return self.name
+        return "other"
 
     def as_list(self) -> list:
         return [self.name, self.value, self.negated, self.subject, self.implied]
@@ -181,8 +197,18 @@ def edit_distance(a: str, b: str) -> int:
     return prev[-1]
 
 
-def _subject(mentions: list[Mention], start: int, end: int) -> str | None:
-    """Subject of a slot at [start, end): nearest mention before, else after."""
+
+
+def _subject(mentions: list[Mention], start: int, end: int, text: str = "") -> str | None:
+    """Subject of a slot at [start, end): the first mention of its sub-clause
+    (approximately the grammatical subject), else the nearest mention before,
+    else the nearest after."""
+    if text:
+        cuts = [m.end() for m in lexicon.rx("subclause").finditer(text, 0, start)]
+        lo = cuts[-1] if cuts else 0
+        first = [m for m in mentions if lo <= m.start and m.end <= start and m.subject]
+        if first:
+            return min(first, key=lambda m: (m.start, m.end)).subject
     before = [m for m in mentions if m.end <= start and m.subject]
     if before:
         return max(before, key=lambda m: (m.end, -m.start)).subject
@@ -195,7 +221,7 @@ def _subject(mentions: list[Mention], start: int, end: int) -> str | None:
 def _negated_before(text: str, start: int) -> bool:
     """True if a negation word sits in the 4 words before ``start`` (same clause)."""
     window = text[max(0, start - 40):start]
-    seg = _PUNCT_BREAK.split(window)[-1]
+    seg = lexicon.rx("punct_break").split(window)[-1]
     words = seg.split()[-4:]
     for w in reversed(words):
         if w in lexicon.NEGATION_BREAKERS:
@@ -207,36 +233,28 @@ def _negated_before(text: str, start: int) -> bool:
 
 # -------------------------------------------------------------------- slots
 
-_VAL = (r"(-?\d+(?:\.\d+)?|\"[^\"]*\"|'[^']*'|true|false|null|nothing|"
-        + "|".join(sorted(lexicon.NUMBER_WORDS, key=lambda s: (-len(s), s))) + r")")
-_END = r"(?!\w)(?!\.\d)"  # a value may end a sentence: "it prints 0."
-_OUTPUT_RES = [
-    re.compile(r"\b(?:prints?|printed|printing|outputs?|outputted|displays?|displayed|shows?)"
-               r"(?: out)?(?: the)?(?: (?:value|number|text|string|word))?(?: of)?(?: is)? " + _VAL + _END),
-    re.compile(r"\b(?:the )?(?:output|result|answer|printout)(?: of the program| of the code)?"
-               r" (?:is|will be|would be|should be|=) " + _VAL + _END),
-]
-_VALUE_RE = re.compile(
-    r"\b([a-z][a-z0-9]*|it)\s+(?:is|=|==|equals|becomes|will be|would be|holds|stores|contains|"
-    r"has the value(?: of)?|has a value of|is equal to|is set to|gets|is now|starts at|starts as)"
-    r"\s+(?:the value |a value of |equal to )?" + _VAL + _END)
-_RUNS_RE = re.compile(r"\b(?:runs|loops|repeats|executes|iterates|goes)\s+(?:around\s+)?"
-                      r"(\d+|" + "|".join(sorted(lexicon.NUMBER_WORDS, key=len, reverse=True)) + r")\s+times\b")
-_NOT_A_VARIABLE = frozenset({
-    "output", "result", "answer", "printout", "there", "this", "that", "what",
-    "which", "who", "line", "value", "number", "program", "code", "loop",
-})
+def _seq_value(raw: str) -> str:
+    """Canonical printed sequence: '/' and '|' separate lines, quotes removed."""
+    out = []
+    for ln in re.split(r"\s*[/|]\s*", raw.strip()):
+        toks = [number(x) for x in re.findall(r"\"[^\"]*\"|'[^']*'|[^\s,]+", ln.strip(" ,"))]
+        out.append(" ".join(toks))
+    return "\n".join(out)
 
 
 def extract_slots(
     text_norm: str,
     mentions: list[Mention] | None = None,
     resolve_pronoun: str | None = None,
+    raw: str | None = None,
+    prev_vars: tuple[str, ...] = (),
 ) -> list[Slot]:
     """All slots in one normalised text, sorted by position then key.
 
     ``mentions`` (from ``find_mentions``) give each slot its subject;
-    ``resolve_pronoun`` is the variable "it" stands for (statements.py).
+    ``resolve_pronoun`` is the variable "it" stands for (statements.py);
+    ``raw`` is the original text (printed words in capitals are read from it);
+    ``prev_vars`` are the variables of the previous clause ("both are b").
     """
     mentions = mentions or []
     found: list[Slot] = []
@@ -244,33 +262,85 @@ def extract_slots(
     for m in rx.finditer(text_norm):
         s, e, ph = m.start(), m.end(), m.group(0)
         neg = ph not in absolute and _negated_before(text_norm, s)
-        subj = _subject(mentions, s, e)
+        subj = _subject(mentions, s, e, text_norm)
         for slot, value in emits[ph]:
             v = lexicon.OPPOSITE.get(value, value) if neg else value
             found.append(Slot(slot, v, neg and v == value, subj, False, (s, e)))
-    for rx in _OUTPUT_RES:
-        for m in rx.finditer(text_norm):
-            neg = _negated_before(text_norm, m.start())
-            val = number(m.group(1))
-            if val == "nothing":
-                val = ""
-            found.append(Slot("output", val, neg, _subject(mentions, m.start(), m.start(1)),
-                              False, (m.start(), m.end())))
-    for m in _VALUE_RE.finditer(text_norm):
+    found += _elliptic_negation(text_norm, mentions, found)
+    src = re.sub(r"\s+", " ", (raw if raw is not None else text_norm)
+                 .replace("“", '"').replace("”", '"')).strip()
+    taken: list[tuple[int, int]] = []
+    for name, rgx in (("output", lexicon.rx("whole")), ("printed", lexicon.rx("prints"))):
+        for m in rgx.finditer(src):
+            if any(a <= m.start(1) < b for a, b in taken):
+                continue
+            body = m.group(1)
+            if re.fullmatch(r"[A-Za-z]+", body) and (raw is None or not body.isupper()):
+                continue  # a plain word, not printed text
+            taken.append((m.start(1), m.end(1)))
+            neg = _negated_before(src.lower(), m.start())
+            found.append(Slot(name, _seq_value(body), neg, None, False, (m.start(), m.end())))
+    for m in lexicon.rx("prints_nothing").finditer(text_norm):
+        found.append(Slot("output", "", _negated_before(text_norm, m.start()), None, False,
+                          (m.start(), m.end())))
+    known = {x.var for x in mentions if x.var}
+    # text inside quotes is printed text, never a claim about a variable
+    unquoted = re.sub(r"\"[^\"]*\"", lambda q: " " * len(q.group(0)), text_norm)
+    for m in lexicon.rx("value").finditer(unquoted):
         who = m.group(1)
-        if who in _NOT_A_VARIABLE:
+        if who in lexicon.NOT_A_VARIABLE and who not in known:
             continue
         var = resolve_pronoun if who == "it" else who
-        known = {x.var for x in mentions if x.var}
         if var is None or (known and var not in known and who != "it"):
             continue
-        neg = _negated_before(text_norm, m.start(2)) or " not " in m.group(0)
-        found.append(Slot("value", number(m.group(2)), neg, f"var:{var}", False, (m.start(), m.end())))
-    for m in _RUNS_RE.finditer(text_norm):
+        # without known variables (graph text) only code-like names count: x, n1
+        if not known and who != "it" and not re.fullmatch(r"[a-z]\d*", who):
+            continue
+        neg = _negated_before(text_norm, m.start(3)) or " not " in m.group(0)
+        found.append(Slot("value", number(m.group(3)), neg, f"var:{var}", False,
+                          (m.start(), m.end()), extra=(("verb", m.group(2)),)))
+    for m in lexicon.rx("var_value").finditer(unquoted):
+        who, verb, other = m.group(1), m.group(2), m.group(3)
+        var = resolve_pronoun if who == "it" else who
+        if not var or var not in known | {resolve_pronoun} or other not in known or other == var:
+            continue
+        found.append(Slot("value", f"var:{other}", " not " in m.group(0), f"var:{var}", False,
+                          (m.start(), m.end()), extra=(("verb", verb),)))
+    for m in lexicon.rx("both").finditer(text_norm):
+        val = m.group(1)
+        for v in sorted(set(prev_vars)):
+            value = f"var:{val}" if val in known or val in prev_vars else number(val)
+            if value != f"var:{v}":
+                found.append(Slot("value", value, False, f"var:{v}", False, (m.start(), m.end()),
+                                  extra=(("verb", "are"),)))
+    for m in lexicon.rx("first_index").finditer(src.lower()):
+        idx = m.group(1) or m.group(2)
+        found.append(Slot("first_index", idx, _negated_before(src.lower(), m.start()), None, False,
+                          (m.start(), m.end())))
+    for m in lexicon.rx("expr").finditer(src.lower()):
+        a, op, b, v = m.group(1), m.group(2), m.group(3), m.group(4)
+        found.append(Slot("expr", v, False, f"expr:{a} {op} {b}", False, (m.start(), m.end()),
+                          extra=(("expr", f"{a} {op} {b}"),)))
+    for m in lexicon.rx("runs").finditer(text_norm):
         found.append(Slot("runs", number(m.group(1)), _negated_before(text_norm, m.start()),
-                          _subject(mentions, m.start(), m.end()), False, (m.start(), m.end())))
+                          _subject(mentions, m.start(), m.end(), text_norm), False, (m.start(), m.end())))
     found = _dedupe(found)
     return sorted(found, key=lambda s: (s.span, s.key()))
+
+
+def _elliptic_negation(text: str, mentions: list[Mention], found: list[Slot]) -> list[Slot]:
+    """"X does V and Y does not": Y gets X's binary slots, flipped."""
+    out: list[Slot] = []
+    for m in lexicon.rx("ellipsis").finditer(text):
+        who = [x for x in mentions if x.start >= m.start(1) and x.end <= m.end(1) and x.subject]
+        if not who:
+            continue
+        subj = who[0].subject
+        for s in found:
+            if s.span[1] <= m.start() and s.subject != subj and s.value in lexicon.OPPOSITE:
+                out.append(Slot(s.name, lexicon.OPPOSITE[s.value], False, subj, False,
+                                (m.start(), m.end())))
+    return out
 
 
 def _dedupe(slots: list[Slot]) -> list[Slot]:
@@ -290,7 +360,7 @@ def implied_slots(slots: list[Slot]) -> list[Slot]:
     names = {s.name for s in slots if not s.implied}
     out: list[Slot] = []
     for s in slots:
-        if s.name == "output" and not s.negated and s.value != "":
+        if s.name in ("output", "printed") and not s.negated and s.value != "" and not s.hypothetical:
             if "compile" not in names:
                 out.append(Slot("compile", "compiles", False, s.subject, True, s.span))
             if "crash" not in names:
@@ -334,3 +404,10 @@ def slot_agrees(s: Slot, name: str, value: str) -> bool | None:
         return None
     same = values_agree(name, s.value, value)
     return (not same) if s.negated else same
+
+
+@lexicon.on_load
+def _reset() -> None:
+    """A new vocabulary invalidates the compiled phrase table."""
+    _phrase_table.cache_clear()
+    alternation.cache_clear()

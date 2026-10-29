@@ -44,7 +44,12 @@ def main() -> int:
     print(f"relation edges with >=1 slot        : {cov['edges_with_slot']}/{cov['relation_edges']}")
     print(f"relation edges tagged and slotted   : {cov['edges_tagged_and_slotted']}/{cov['relation_edges']}")
     print(f"parts tagged                        : {cov['parts_tagged']}/{cov['parts']}")
-    print(f"misconception pairs with a slot     : {cov['misconceptions_with_slot']}/{cov['misconception_edges']}")
+    n_mis = cov["misconception_edges"]
+    print(f"misconception pairs with a slot     : {cov['misconceptions_with_slot']}/{n_mis}"
+          f" ({100 * cov['misconceptions_with_slot'] / max(n_mis, 1):.0f}%)")
+    print(f"  of which a rule/phrase slot       : {cov['misconceptions_with_rule_slot']}/{n_mis}")
+    print(f"misconception pairs, contrast terms only: {cov['misconceptions_with_contrast_only']}/{n_mis}")
+    print(f"tagged edges by type                : {cov['edges_tagged_by_type']}")
     print(f"way rules with >=1 slot             : {cov['ways_with_slot']}/{cov['ways']}")
     return 0
 

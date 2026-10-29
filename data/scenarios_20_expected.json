@@ -1,0 +1,29 @@
+{
+  "note": "Regression test: the 20 scenarios (+ the S000 reference case). Inputs come from data/heldout_365.json (original code, question and answer); these ids are excluded from the held-out score. Each field is a set of accepted values; main [] = any, misconception [] = none expected.",
+  "extra_inputs": {
+    "S000": {"code": "int count;\nSystem.out.println(count);", "question": "What does the system print?", "answer": "It will print 0."}
+  },
+  "expected": {
+    "S000": {"main": ["definite_assignment"], "level": ["L0"], "misconception": ["LocalVariablesAutoInitialized"]},
+    "S001": {"main": ["println", "print"], "level": ["L1", "L2"], "misconception": []},
+    "S005": {"main": ["do_while_loop"], "level": ["L3", "L4"], "misconception": []},
+    "S007": {"main": ["nested_loops", "for_loop"], "level": ["L0"], "misconception": ["EmptyInnerLoopSkipsRest", "OffByOneBound", "WRONG_UNLISTED"]},
+    "S008": {"main": ["do_while_loop"], "level": ["L2"], "misconception": []},
+    "S009": {"main": ["indexing"], "level": ["L2"], "misconception": []},
+    "S010": {"main": ["array_copy", "off_by_one_error", "array_bounds"], "level": ["L0"], "misconception": ["OffByOneBound"]},
+    "S012": {"main": [], "level": ["none", "L1", "needs_review"], "misconception": []},
+    "S015": {"main": ["naming_convention"], "level": ["L0"], "misconception": ["NameNotCamelCase"]},
+    "S016": {"main": ["remainder_operator"], "level": ["L0"], "misconception": ["RemainderIsSubtraction"]},
+    "S021": {"main": ["nested_conditionals", "if_else_statement"], "level": ["L2"], "misconception": []},
+    "S023": {"main": ["switch_statement"], "level": ["L2"], "misconception": []},
+    "S026": {"main": ["variable_swap"], "level": ["L1", "L2"], "misconception": []},
+    "S047": {"main": ["formatted_output"], "level": ["L2", "L3", "L4"], "misconception": []},
+    "S052": {"main": ["redirection", "piping"], "level": ["L2", "L3", "L4"], "misconception": []},
+    "S057": {"main": ["integer_division"], "level": ["L3", "L4"], "misconception": []},
+    "S068": {"main": ["two_models", "markov_chain"], "level": ["L0"], "misconception": ["StartPageMatters"]},
+    "S073": {"main": ["switch_statement"], "level": ["L2"], "misconception": [], "corrected": ["SwitchNoFallThrough"]},
+    "S080": {"main": ["compile", "run", "compile_time_error"], "level": ["L2", "L3"], "misconception": []},
+    "S134": {"main": ["variable_swap", "assignment"], "level": ["L0"], "misconception": ["VariablesHoldExpressions"]},
+    "S137": {"main": ["println"], "level": ["L0"], "misconception": ["PrintedTextIsExecuted"]}
+  }
+}

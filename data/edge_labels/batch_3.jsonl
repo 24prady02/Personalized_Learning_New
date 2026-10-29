@@ -1,0 +1,43 @@
+{"id": "S152", "labels": {}}
+{"id": "S153", "labels": {"C13": ["E", "println puts the break after the longest string"]}}
+{"id": "S154", "labels": {}}
+{"id": "S155", "labels": {}}
+{"id": "S156", "labels": {}}
+{"id": "S157", "labels": {}}
+{"id": "S158", "labels": {"V6": ["E", "2 | 2 | 1"], "V7": ["E", "2 | 1 | 1"]}}
+{"id": "S159", "labels": {"C1": ["E", "6 | 16"], "C11": ["E", "10 | 10"], "W0": ["C", "2 | 18"]}}
+{"id": "S160", "labels": {"C5": ["E", "10 % 5 is 0"], "C17": ["E", "it stops after 10, because 10 % 5 is 0 so isDone becomes true before the next test"]}}
+{"id": "S161", "labels": {"C1": ["C", "a = b moves the value out of b's box into a's, so b is empty"]}}
+{"id": "S162", "labels": {"V6": ["E", "pour a into it, pour b into a, then pour the spare cup into b"], "C3": ["E", "t is like a spare cup"]}}
+{"id": "S163", "labels": {"V27": ["E", "sensorReadings[len(sensorReadings) - 2] = 7.9;"]}}
+{"id": "S164", "labels": {"C11": ["E", "value == 2 || value == 3"], "C5": ["E", "if (value == 1) result = 30;"], "V26": ["E", "elif (value == 2 || value == 3) result = -10; else result = 5;"]}}
+{"id": "S165", "labels": {}}
+{"id": "S166", "labels": {}}
+{"id": "S167", "labels": {}}
+{"id": "S168", "labels": {}}
+{"id": "S169", "labels": {"V17": ["E", "be printed once after the loop"]}}
+{"id": "S170", "labels": {}}
+{"id": "S171", "labels": {"C11": ["E", "a.length / 2"], "V25": ["E", "a.length / 2, because each swap puts two elements in place"]}}
+{"id": "S172", "labels": {"C7": ["E", "a.length, so every element gets swapped"], "V25": ["E", "a.length, so every element gets swapped"]}}
+{"id": "S173", "labels": {"C1": ["E", "a.length - 1, the last index"], "C7": ["E", "a.length - 1, the last index"]}}
+{"id": "S174", "labels": {"C5": ["E", "a.length / 2, because it is faster"]}}
+{"id": "S175", "labels": {}}
+{"id": "S176", "labels": {"C11": ["E", "7 / 2 is int division, so 3"], "C13": ["E", "storing it in a double makes 3.0"]}}
+{"id": "S177", "labels": {}}
+{"id": "S178", "labels": {"W11": ["E", "because r is a double, so the division is done in double"], "C12": ["C", "because r is a double, so the division is done in double"]}}
+{"id": "S179", "labels": {"C14": ["E", "a / b is an int"], "C6": ["E", "a / b is an int, so it prints 3"], "W13": ["C", "a / b is an int"]}}
+{"id": "S180", "labels": {}}
+{"id": "S181", "labels": {"W9": ["E", "Not C because r is a double"], "C10": ["C", "Not C because r is a double"]}}
+{"id": "S182", "labels": {}}
+{"id": "S183", "labels": {}}
+{"id": "S184", "labels": {}}
+{"id": "S185", "labels": {}}
+{"id": "S186", "labels": {}}
+{"id": "S187", "labels": {"V4": ["E", "every pass reads one new number and adds it"]}}
+{"id": "S188", "labels": {}}
+{"id": "S189", "labels": {}}
+{"id": "S190", "labels": {}}
+{"id": "S191", "labels": {}}
+{"id": "S192", "labels": {}}
+{"id": "S193", "labels": {}}
+{"id": "S194", "labels": {}}

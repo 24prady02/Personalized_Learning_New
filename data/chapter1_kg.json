@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9 (coverage audit; six node types; ways are has_level edge logic)",
+ "version": "3.9.5-reader1 (v3.9.5 + reader layer: every topic table of the classifier moved from code into the graph)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -3463,7 +3463,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.program_text"
+   "previous_id": "program_structure.program_text",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "compile",
@@ -3933,7 +3944,27 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.compile"
+   "previous_id": "program_structure.compile",
+   "reader": {
+    "aliases": [
+     "compile",
+     "compiles",
+     "compiler",
+     "compiling",
+     "javac"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [
+     "^javac\\b"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "outcome": "compiling"
+   }
   },
   {
    "id": "run",
@@ -4416,7 +4447,26 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.run"
+   "previous_id": "program_structure.run",
+   "reader": {
+    "aliases": [
+     "execute",
+     "executes",
+     "execution",
+     "java command"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [
+     "^java\\b"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "outcome": "running"
+   }
   },
   {
    "id": "class_declaration",
@@ -4851,7 +4901,28 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.class_declaration"
+   "previous_id": "program_structure.class_declaration",
+   "reader": {
+    "aliases": [
+     "class"
+    ],
+    "code_patterns": [
+     "^\\s*(?:public\\s+)?class\\s+\\w+"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "file_name_mismatch",
+      "compiler_message": "should be declared in a file named",
+      "decisive": true
+     }
+    ]
+   }
   },
   {
    "id": "main_method",
@@ -5239,7 +5310,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.main_method"
+   "previous_id": "program_structure.main_method",
+   "reader": {
+    "aliases": [
+     "main method",
+     "main function"
+    ],
+    "code_patterns": [
+     "static\\s+void\\s+main\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "statement",
@@ -5843,7 +5930,22 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.statement"
+   "previous_id": "program_structure.statement",
+   "reader": {
+    "aliases": [
+     "statement",
+     "statements",
+     "semicolon"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "block",
@@ -6383,7 +6485,24 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.block"
+   "previous_id": "program_structure.block",
+   "reader": {
+    "aliases": [
+     "block",
+     "curly braces",
+     "braces"
+    ],
+    "code_patterns": [
+     "\\{"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "comment",
@@ -6780,6 +6899,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "comment",
+     "comments"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "outcome": "comment"
    }
   },
   {
@@ -7230,7 +7364,25 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.print"
+   "previous_id": "program_structure.print",
+   "reader": {
+    "aliases": [
+     "print",
+     "system.out.print"
+    ],
+    "code_patterns": [
+     "System\\.out\\.print\\s*\\(",
+     "StdOut\\.print\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "yields_to": "println"
+   }
   },
   {
    "id": "println",
@@ -7272,7 +7424,8 @@
     "IdentifierCaseInsensitive",
     "ParenthesesOnlyIfArgument",
     "PrintEqualsPrintln",
-    "PrintNewLineFirst"
+    "PrintNewLineFirst",
+    "PrintedTextIsExecuted"
    ],
    "errors": [
     "PrintWithoutFinalNewline"
@@ -7774,7 +7927,26 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.println"
+   "previous_id": "program_structure.println",
+   "reader": {
+    "aliases": [
+     "println",
+     "print line",
+     "system.out.println",
+     "printline"
+    ],
+    "code_patterns": [
+     "System\\.out\\.println\\s*\\(",
+     "StdOut\\.println\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "string_literal",
@@ -7812,7 +7984,9 @@
      "role": "supplementary"
     }
    ],
-   "misconceptions": [],
+   "misconceptions": [
+    "PrintedTextIsExecuted"
+   ],
    "errors": [
     "SingleQuotedString",
     "StringLiteralSpansLines",
@@ -8225,7 +8399,25 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "program_structure.string_literal"
+   "previous_id": "program_structure.string_literal",
+   "reader": {
+    "aliases": [
+     "string literal",
+     "quotes",
+     "quotation marks",
+     "in quotes"
+    ],
+    "code_patterns": [
+     "\\\"(?:\\\\.|[^\\\"\\\\])*\\\""
+    ],
+    "code_text": "raw",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "program_layout",
@@ -8622,7 +8814,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "other textbooks (Sedgewick & Wayne use indentation in 1.3 but give no layout rule)"
+   "origin": "other textbooks (Sedgewick & Wayne use indentation in 1.3 but give no layout rule)",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "compile_time_error",
@@ -9278,6 +9481,33 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "compile error",
+     "compile errors",
+     "compile time error",
+     "compile-time error",
+     "compiler error",
+     "compiler errors",
+     "syntax error",
+     "syntax errors"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "missing_semicolon",
+      "compiler_message": "';' expected",
+      "decisive": true
+     }
+    ],
+    "outcome": "compile_error"
    }
   },
   {
@@ -9849,6 +10079,25 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "runtime error",
+     "run time error",
+     "run-time error",
+     "exception",
+     "crash",
+     "crashes"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "outcome": "run_error"
    }
   },
   {
@@ -10303,6 +10552,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "logic error",
+     "logical error",
+     "wrong output",
+     "bug"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -10784,7 +11049,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "command_line_args",
@@ -11290,7 +11566,26 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.command_line_args"
+   "previous_id": "input_output.command_line_args",
+   "reader": {
+    "aliases": [
+     "command line argument",
+     "command line arguments",
+     "args"
+    ],
+    "code_patterns": [
+     "\\bargs\\s*\\["
+    ],
+    "code_text": "masked",
+    "command_patterns": [
+     "^java\\s+\\w+\\s+\\S"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "data_type",
@@ -11684,6 +11979,20 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "data type",
+     "data types"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -12202,7 +12511,22 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.primitive_type"
+   "previous_id": "types_expressions.primitive_type",
+   "reader": {
+    "aliases": [
+     "primitive",
+     "primitive type",
+     "primitives"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "literal",
@@ -12738,7 +13062,21 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.literal"
+   "previous_id": "types_expressions.literal",
+   "reader": {
+    "aliases": [
+     "literal",
+     "literals"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "identifier",
@@ -13196,6 +13534,21 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "identifier",
+     "name of the variable",
+     "variable name"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -14031,7 +14384,25 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.variable"
+   "previous_id": "types_expressions.variable",
+   "reader": {
+    "aliases": [
+     "variable",
+     "variables",
+     "local variable",
+     "local variables"
+    ],
+    "code_patterns": [
+     "^\\s*(?:final\\s+)?(?:int|double|boolean|char|long|String|float|short|byte)(?:\\[\\])*\\s+[A-Za-z_]\\w*"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "naming_convention",
@@ -14407,6 +14778,33 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "naming convention",
+     "java convention",
+     "camel case",
+     "camelcase",
+     "lowercamelcase"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "bad_name",
+      "analysis": "identifier_style",
+      "decisive": true,
+      "states": [
+       "name_style",
+       "upper_first"
+      ]
+     }
+    ]
    }
   },
   {
@@ -14937,6 +15335,29 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "declared",
+     "declare",
+     "declares",
+     "declaring",
+     "declaration",
+     "declarations",
+     "declared as",
+     "creates a variable",
+     "creates the variable"
+    ],
+    "code_patterns": [
+     "^\\s*(?:final\\s+)?(?:int|double|boolean|char|long|String|float|short|byte)(?:\\[\\])*\\s+[A-Za-z_]\\w*\\s*(?:[=;,\\[])"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
    }
   },
   {
@@ -14998,7 +15419,8 @@
     "AssignmentIsEquation",
     "AssignmentExchangesValues",
     "AssignmentEmptiesSource",
-    "VariableKeepsOldValue"
+    "VariableKeepsOldValue",
+    "PrintedTextIsExecuted"
    ],
    "errors": [
     "RedeclareToReassign",
@@ -15789,7 +16211,30 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.assignment"
+   "previous_id": "types_expressions.assignment",
+   "reader": {
+    "aliases": [
+     "assigned",
+     "assign",
+     "assigns",
+     "assignment",
+     "set to",
+     "is set",
+     "stored in",
+     "store",
+     "stores"
+    ],
+    "code_patterns": [
+     "(?<![=!<>+\\-*/%&|^])=(?!=)"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "expression",
@@ -16388,7 +16833,21 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.expression"
+   "previous_id": "types_expressions.expression",
+   "reader": {
+    "aliases": [
+     "expression",
+     "expressions"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "operator_precedence",
@@ -16900,7 +17359,21 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.operator_precedence"
+   "previous_id": "types_expressions.operator_precedence",
+   "reader": {
+    "aliases": [
+     "precedence",
+     "order of operations"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "definite_assignment",
@@ -17232,6 +17705,36 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "definite assignment",
+     "definitely assigned",
+     "initialized",
+     "initialised",
+     "initialize",
+     "initialise",
+     "initialization",
+     "uninitialized",
+     "uninitialised",
+     "not initialized",
+     "might not have been initialized",
+     "assigned before"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "uninitialized_read",
+      "analysis": "uninitialized_read",
+      "decisive": true
+     }
+    ]
    }
   },
   {
@@ -17555,6 +18058,31 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "swap",
+     "swaps",
+     "swapped",
+     "exchange",
+     "exchanges",
+     "swaps the values"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "swap",
+      "scope": "program",
+      "decisive": true,
+      "regex": "(?:\\b\\w+\\s+)?(?P<t>\\b\\w+)\\s*=\\s*(?P<var>\\w+)\\s*;\\s*(?P=var)\\s*=\\s*(?P<b>\\w+)\\s*;\\s*(?P=b)\\s*=\\s*(?P=t)\\s*;"
+     }
+    ]
    }
   },
   {
@@ -17717,7 +18245,22 @@
      "note": "Not in SW-1e or Think Java, and JLS §15.26 (assignment operators) could not be fetched."
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [
+     "chained assignment"
+    ],
+    "code_patterns": [
+     "\\w+\\s*=\\s*\\w+\\s*=(?!=)"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "named_constants",
@@ -18047,7 +18590,23 @@
      "note": null
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [
+     "constant",
+     "final"
+    ],
+    "code_patterns": [
+     "\\bfinal\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "char",
@@ -18463,7 +19022,27 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.char"
+   "previous_id": "types_expressions.char",
+   "reader": {
+    "aliases": [
+     "char",
+     "character",
+     "chars"
+    ],
+    "code_patterns": [
+     "\\bchar\\b",
+     "'(?:\\\\.|[^'\\\\])'"
+    ],
+    "code_text": "raw",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "char"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "string_type",
@@ -19022,7 +19601,25 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.string_type"
+   "previous_id": "types_expressions.string_type",
+   "reader": {
+    "aliases": [
+     "string",
+     "strings"
+    ],
+    "code_patterns": [
+     "\\bString\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "String"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "string_concatenation",
@@ -19476,7 +20073,26 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.string_concatenation"
+   "previous_id": "types_expressions.string_concatenation",
+   "reader": {
+    "aliases": [
+     "concatenation",
+     "concatenate",
+     "concatenates",
+     "joins",
+     "glue"
+    ],
+    "code_patterns": [
+     "\\\"(?:\\\\.|[^\\\"\\\\])*\\\"\\s*\\+|\\+\\s*\\\"(?:\\\\.|[^\\\"\\\\])*\\\""
+    ],
+    "code_text": "raw",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "escape_sequences",
@@ -19781,6 +20397,24 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "escape sequence",
+     "backslash",
+     "\\n",
+     "\\t"
+    ],
+    "code_patterns": [
+     "\\\\[ntb\\\"'\\\\]"
+    ],
+    "code_text": "raw",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -20123,6 +20757,21 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "char arithmetic",
+     "unicode",
+     "ascii"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -20661,7 +21310,27 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.int"
+   "previous_id": "types_expressions.int",
+   "reader": {
+    "aliases": [
+     "int",
+     "integer",
+     "integers",
+     "ints"
+    ],
+    "code_patterns": [
+     "\\bint\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "int"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "arithmetic_operators",
@@ -20701,7 +21370,8 @@
    ],
    "misconceptions": [
     "CaretIsPower",
-    "ArithmeticOnNumericStrings"
+    "ArithmeticOnNumericStrings",
+    "RemainderIsSubtraction"
    ],
    "errors": [],
    "book_status": "taught in SW-1e",
@@ -21104,7 +21774,31 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.arithmetic_operators"
+   "previous_id": "types_expressions.arithmetic_operators",
+   "reader": {
+    "aliases": [
+     "arithmetic",
+     "plus",
+     "minus",
+     "multiplied",
+     "multiply",
+     "subtracts"
+    ],
+    "code_patterns": [
+     "[A-Za-z_0-9)\\]]\\s*[+\\-*/%]\\s*[A-Za-z_0-9(]"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [
+     "*",
+     "+",
+     "-"
+    ],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "integer_division",
@@ -21647,7 +22341,33 @@
      "note": null
     }
    },
-   "previous_id": "types_expressions.integer_division"
+   "previous_id": "types_expressions.integer_division",
+   "reader": {
+    "aliases": [
+     "integer division",
+     "int division",
+     "divided",
+     "division",
+     "divide",
+     "divides"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [
+     "/"
+    ],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "int_division",
+      "analysis": "int_division",
+      "decisive": true
+     }
+    ]
+   }
   },
   {
    "id": "overflow",
@@ -22007,6 +22727,23 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "overflow",
+     "overflows",
+     "wraps around"
+    ],
+    "code_patterns": [
+     "Integer\\.MAX_VALUE|Integer\\.MIN_VALUE"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -22351,6 +23088,23 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "long"
+    ],
+    "code_patterns": [
+     "\\blong\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "long"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
    }
   },
   {
@@ -22409,7 +23163,8 @@
    ],
    "misconceptions": [
     "RemainderIsQuotient",
-    "NegativeRemainderSign"
+    "NegativeRemainderSign",
+    "RemainderIsSubtraction"
    ],
    "errors": [],
    "book_status": "taught in SW-1e",
@@ -22758,6 +23513,33 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "remainder",
+     "modulo",
+     "mod",
+     "modulus"
+    ],
+    "code_patterns": [
+     "[A-Za-z_0-9)\\]]\\s*%\\s*[A-Za-z_0-9(]"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [
+     "%"
+    ],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "remainder_expr",
+      "scope": "statement",
+      "decisive": true,
+      "regex": "(?<![=!<>+\\-*/%])=(?!=)[^;]*[\\w)\\]]\\s*%\\s*[\\w(]"
+     }
+    ]
    }
   },
   {
@@ -23109,6 +23891,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -23409,7 +24202,23 @@
      "source_status": "verified"
     }
    },
-   "origin": "book exercises (Long.MAX_VALUE in 1.3 Web Ex. 82) and other textbooks"
+   "origin": "book exercises (Long.MAX_VALUE in 1.3 Web Ex. 82) and other textbooks",
+   "reader": {
+    "aliases": [
+     "max_value",
+     "min_value"
+    ],
+    "code_patterns": [
+     "Integer\\.(?:MAX|MIN)_VALUE"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "double",
@@ -23913,7 +24722,29 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "types_expressions.double"
+   "previous_id": "types_expressions.double",
+   "reader": {
+    "aliases": [
+     "double",
+     "doubles",
+     "floating point",
+     "decimal"
+    ],
+    "code_patterns": [
+     "\\bdouble\\b",
+     "\\b\\d+\\.\\d*\\b|\\b\\d*\\.\\d+\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "double",
+     "float"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "floating_point_precision",
@@ -24257,6 +25088,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "precision",
+     "rounding error",
+     "0.30000000000000004"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -24655,6 +25501,25 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "division by zero",
+     "divide by zero",
+     "divided by zero",
+     "by zero"
+    ],
+    "code_patterns": [
+     "/\\s*0(?![.\\d])",
+     "%\\s*0(?![.\\d])"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -24981,6 +25846,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "scientific notation",
+     "e notation"
+    ],
+    "code_patterns": [
+     "\\d[eE][+\\-]?\\d"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -25396,7 +26277,27 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "types_expressions.boolean"
+   "previous_id": "types_expressions.boolean",
+   "reader": {
+    "aliases": [
+     "boolean",
+     "booleans",
+     "true or false"
+    ],
+    "code_patterns": [
+     "\\bboolean\\b",
+     "\\btrue\\b|\\bfalse\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [
+     "boolean"
+    ],
+    "generic": true,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "boolean_expression",
@@ -25929,7 +26830,22 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "conditionals.boolean_expression"
+   "previous_id": "conditionals.boolean_expression",
+   "reader": {
+    "aliases": [
+     "boolean expression",
+     "condition",
+     "conditions"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "logical_operators",
@@ -26424,7 +27340,26 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "conditionals.logical_operators"
+   "previous_id": "conditionals.logical_operators",
+   "reader": {
+    "aliases": [
+     "and operator",
+     "or operator",
+     "logical",
+     "&&",
+     "||"
+    ],
+    "code_patterns": [
+     "&&|\\|\\||!(?!=)"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "short_circuit",
@@ -26767,7 +27702,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "conditionals.short_circuit"
+   "previous_id": "conditionals.short_circuit",
+   "reader": {
+    "aliases": [
+     "short circuit",
+     "short-circuit"
+    ],
+    "code_patterns": [
+     "&&|\\|\\|"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "exclusive_or",
@@ -27022,6 +27973,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -27322,6 +28284,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -27928,7 +28901,34 @@
    "previous_id": [
     "types_expressions.comparison_operators",
     "conditionals.relational_operators"
-   ]
+   ],
+   "reader": {
+    "aliases": [
+     "comparison",
+     "compares",
+     "less than",
+     "greater than",
+     "equal to",
+     "=="
+    ],
+    "code_patterns": [
+     "[<>]=?|==|!="
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [
+     "!=",
+     "<",
+     "<=",
+     "==",
+     ">",
+     ">="
+    ],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "method_call",
@@ -28449,6 +29449,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "method call",
+     "calls a method"
+    ],
+    "code_patterns": [
+     "\\b(?!out\\b)[a-z]\\w*\\.[a-z]\\w*\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -28920,6 +29936,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "math library",
+     "math."
+    ],
+    "code_patterns": [
+     "\\bMath\\.\\w+"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -29299,6 +30331,23 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "math.random",
+     "random number",
+     "random"
+    ],
+    "code_patterns": [
+     "Math\\.random\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -29614,6 +30663,24 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "math.round",
+     "round",
+     "rounds",
+     "rounding"
+    ],
+    "code_patterns": [
+     "Math\\.round\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -29889,6 +30956,24 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "sine",
+     "cosine",
+     "math.sin",
+     "math.cos"
+    ],
+    "code_patterns": [
+     "Math\\.(?:sin|cos|tan|atan2?|asin|acos)\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -30366,7 +31451,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "types_expressions.type_conversion"
+   "previous_id": "types_expressions.type_conversion",
+   "reader": {
+    "aliases": [
+     "type conversion",
+     "converted",
+     "converts",
+     "conversion"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "explicit_cast",
@@ -30892,6 +31993,24 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "cast",
+     "casting",
+     "casts",
+     "type cast"
+    ],
+    "code_patterns": [
+     "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -31268,7 +32387,27 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.parsing"
+   "previous_id": "input_output.parsing",
+   "reader": {
+    "aliases": [
+     "parseint",
+     "parsedouble",
+     "parse",
+     "parses"
+    ],
+    "code_patterns": [
+     "Integer\\.parseInt\\s*\\(",
+     "Double\\.parseDouble\\s*\\(",
+     "Boolean\\.parseBoolean\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "widening_conversion",
@@ -31598,6 +32737,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "widening",
+     "promotion",
+     "promoted"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -31901,6 +33055,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -32585,6 +33750,17 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -33576,7 +34752,23 @@
      "note": null
     }
    },
-   "previous_id": "conditionals.if_statement"
+   "previous_id": "conditionals.if_statement",
+   "reader": {
+    "aliases": [
+     "if statement",
+     "if condition"
+    ],
+    "code_patterns": [
+     "^\\s*if\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "if_else_statement",
@@ -34116,7 +35308,24 @@
      "note": null
     }
    },
-   "previous_id": "conditionals.if_else_statement"
+   "previous_id": "conditionals.if_else_statement",
+   "reader": {
+    "aliases": [
+     "else",
+     "if else",
+     "else branch"
+    ],
+    "code_patterns": [
+     "^\\s*}?\\s*else\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "empty_statement",
@@ -34477,6 +35686,17 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -35475,7 +36695,23 @@
      "note": null
     }
    },
-   "previous_id": "loops.while_loop"
+   "previous_id": "loops.while_loop",
+   "reader": {
+    "aliases": [
+     "while loop",
+     "while condition"
+    ],
+    "code_patterns": [
+     "^\\s*while\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "loop_body",
@@ -36144,7 +37380,22 @@
      "note": null
     }
    },
-   "previous_id": "loops.loop_body"
+   "previous_id": "loops.loop_body",
+   "reader": {
+    "aliases": [
+     "loop body",
+     "body of the loop",
+     "inside the loop"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "loop_control",
@@ -36888,7 +38139,18 @@
      "note": null
     }
    },
-   "previous_id": "loops.loop_control"
+   "previous_id": "loops.loop_control",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "for_loop",
@@ -37927,7 +39189,23 @@
      "note": null
     }
    },
-   "previous_id": "loops.for_loop"
+   "previous_id": "loops.for_loop",
+   "reader": {
+    "aliases": [
+     "for loop",
+     "for loops"
+    ],
+    "code_patterns": [
+     "^\\s*for\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "loop_variable",
@@ -38433,7 +39711,21 @@
      "note": null
     }
    },
-   "previous_id": "loops.loop_variable"
+   "previous_id": "loops.loop_variable",
+   "reader": {
+    "aliases": [
+     "loop variable",
+     "index variable"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "increment_operators",
@@ -38965,7 +40257,26 @@
      "note": null
     }
    },
-   "previous_id": "loops.increment_operators"
+   "previous_id": "loops.increment_operators",
+   "reader": {
+    "aliases": [
+     "increment",
+     "increments",
+     "decrement",
+     "plus plus",
+     "++"
+    ],
+    "code_patterns": [
+     "\\+\\+|--"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "loop_scope",
@@ -39465,7 +40776,18 @@
      "note": null
     }
    },
-   "previous_id": "loops.loop_scope"
+   "previous_id": "loops.loop_scope",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "compound_assignment",
@@ -39892,6 +41214,23 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "compound assignment",
+     "+=",
+     "plus equals"
+    ],
+    "code_patterns": [
+     "[+\\-*/%]="
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -40277,6 +41616,19 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "side effect"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -40778,7 +42130,27 @@
      "note": null
     }
    },
-   "previous_id": "conditionals.nested_conditionals"
+   "previous_id": "conditionals.nested_conditionals",
+   "reader": {
+    "aliases": [
+     "nested if"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "nested_if",
+      "scope": "program",
+      "decisive": true,
+      "regex": "(?:\\bif\\s*\\([^)]*\\)|\\belse)\\s*\\{(?:[^{}]|\\{[^{}]*\\})*?(?P<at>\\bif\\s*\\()"
+     }
+    ]
+   }
   },
   {
    "id": "nested_loops",
@@ -41358,7 +42730,30 @@
      "note": null
     }
    },
-   "previous_id": "loops.nested_loops"
+   "previous_id": "loops.nested_loops",
+   "reader": {
+    "aliases": [
+     "nested loop",
+     "nested loops",
+     "inner loop",
+     "outer loop"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "nested_for",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:for|while)\\s*\\([^)]*\\)\\s*\\{(?:[^{}]|\\{[^{}]*\\})*?(?P<at>\\bfor\\s*\\()"
+     }
+    ]
+   }
   },
   {
    "id": "else_if_chain",
@@ -41768,6 +43163,21 @@
      "source_status": "verified",
      "note": null
     }
+   },
+   "reader": {
+    "aliases": [
+     "else if"
+    ],
+    "code_patterns": [
+     "\\belse\\s+if\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -42069,7 +43479,18 @@
      "note": null
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "accumulator_pattern",
@@ -42529,7 +43950,22 @@
      "note": null
     }
    },
-   "previous_id": "loops.accumulator_pattern"
+   "previous_id": "loops.accumulator_pattern",
+   "reader": {
+    "aliases": [
+     "accumulator",
+     "running sum",
+     "running total"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "counter_pattern",
@@ -42943,7 +44379,21 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "loops.counter_pattern"
+   "previous_id": "loops.counter_pattern",
+   "reader": {
+    "aliases": [
+     "counter",
+     "counter variable"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "convergence_test",
@@ -43319,6 +44769,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -43726,6 +45187,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -43897,7 +45369,18 @@
      "source_status": "derived"
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "flag_search_loop",
@@ -44254,7 +45737,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1"
+   "origin": "other textbooks: not taught in Sedgewick & Wayne Ch. 1",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "break_statement",
@@ -44802,6 +46296,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "break"
+    ],
+    "code_patterns": [
+     "^\\s*break\\s*;"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -45214,6 +46723,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "continue"
+    ],
+    "code_patterns": [
+     "^\\s*continue\\s*;"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -45641,6 +47165,30 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "switch",
+     "switch statement"
+    ],
+    "code_patterns": [
+     "^\\s*switch\\s*\\(",
+     "^\\s*case\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "switch_fallthrough",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bcase\\b[^:]*:\\s*(?:(?!\\bbreak\\b)[^;{}:])+;\\s*(?P<at>case\\b|default\\b)"
+     }
+    ]
    }
   },
   {
@@ -45985,6 +47533,29 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "do while",
+     "do-while"
+    ],
+    "code_patterns": [
+     "^\\s*do\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "do_while",
+      "scope": "program",
+      "decisive": true,
+      "regex": "(?P<at>\\bdo)\\s*\\{"
+     }
+    ]
    }
   },
   {
@@ -46319,6 +47890,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "ternary",
+     "conditional operator"
+    ],
+    "code_patterns": [
+     "\\?[^:]*:"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -46692,6 +48279,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "labeled break",
+     "labelled break"
+    ],
+    "code_patterns": [
+     "^\\s*break\\s+\\w+\\s*;"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -47187,6 +48790,27 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "infinite loop",
+     "forever",
+     "never stops",
+     "never ends",
+     "endless"
+    ],
+    "code_patterns": [
+     "while\\s*\\(\\s*true\\s*\\)",
+     "for\\s*\\(\\s*;\\s*;\\s*\\)"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [],
+    "outcome": "timeout"
    }
   },
   {
@@ -47614,7 +49238,22 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_declaration"
+   "previous_id": "arrays.array_declaration",
+   "reader": {
+    "aliases": [
+     "array declaration"
+    ],
+    "code_patterns": [
+     "(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\[\\]\\s*\\w+"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": true,
+    "signals": []
+   }
   },
   {
    "id": "array_creation",
@@ -48295,7 +49934,24 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_creation"
+   "previous_id": "arrays.array_creation",
+   "reader": {
+    "aliases": [
+     "new array",
+     "creates an array",
+     "array creation"
+    ],
+    "code_patterns": [
+     "\\bnew\\s+(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\["
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "array_default_values",
@@ -48703,7 +50359,26 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_default_values"
+   "previous_id": "arrays.array_default_values",
+   "reader": {
+    "aliases": [
+     "array default",
+     "array defaults",
+     "array element",
+     "array elements",
+     "default value",
+     "default values",
+     "defaults to zero"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "indexing",
@@ -49349,7 +51024,31 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.indexing"
+   "previous_id": "arrays.indexing",
+   "reader": {
+    "aliases": [
+     "index",
+     "indices",
+     "indexing"
+    ],
+    "code_patterns": [
+     "\\w\\s*\\[[^\\]]+\\]"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "index_from_length",
+      "scope": "statement",
+      "decisive": true,
+      "regex": "(\\w+)\\s*\\[\\s*\\1\\s*\\.\\s*length\\s*-\\s*\\d+\\s*\\]"
+     }
+    ]
+   }
   },
   {
    "id": "length_field",
@@ -49763,7 +51462,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.length_field"
+   "previous_id": "arrays.length_field",
+   "reader": {
+    "aliases": [
+     "length",
+     ".length"
+    ],
+    "code_patterns": [
+     "\\.length\\b(?!\\s*\\()"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "args_length",
@@ -50066,6 +51781,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "args.length"
+    ],
+    "code_patterns": [
+     "\\bargs\\.length\\b"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -50471,7 +52201,22 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_bounds"
+   "previous_id": "arrays.array_bounds",
+   "reader": {
+    "aliases": [
+     "out of bounds",
+     "bounds",
+     "arrayindexoutofboundsexception"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "array_aliasing",
@@ -50875,7 +52620,22 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_aliasing"
+   "previous_id": "arrays.array_aliasing",
+   "reader": {
+    "aliases": [
+     "alias",
+     "aliasing",
+     "same array"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "printing_array_reference",
@@ -51171,6 +52931,27 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "memory address",
+     "hash code",
+     "address"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "array_printed",
+      "analysis": "array_printed",
+      "decisive": true
+     }
+    ]
    }
   },
   {
@@ -51571,7 +53352,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_initializer"
+   "previous_id": "arrays.array_initializer",
+   "reader": {
+    "aliases": [
+     "array initializer",
+     "curly braces"
+    ],
+    "code_patterns": [
+     "=\\s*\\{"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "array_traversal",
@@ -52121,7 +53918,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.array_traversal"
+   "previous_id": "arrays.array_traversal",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "enhanced_for",
@@ -52511,7 +54319,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.enhanced_for"
+   "previous_id": "arrays.enhanced_for",
+   "reader": {
+    "aliases": [
+     "for each",
+     "enhanced for"
+    ],
+    "code_patterns": [
+     "^\\s*for\\s*\\([^;]*:[^;]*\\)"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "array_reversal",
@@ -52870,6 +54694,17 @@
      "note": "The alternatives are derived.",
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -53271,6 +55106,17 @@
      "note": "The contrast with copying is derived.",
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -53645,6 +55491,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -53940,6 +55797,17 @@
      "note": "The with-replacement alternative is derived.",
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -54254,6 +56122,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -54636,6 +56515,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -55217,7 +57107,27 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "arrays.two_dimensional_array"
+   "previous_id": "arrays.two_dimensional_array",
+   "reader": {
+    "aliases": [
+     "2d array",
+     "two dimensional",
+     "matrix",
+     "row",
+     "column"
+    ],
+    "code_patterns": [
+     "\\[\\s*\\]\\s*\\[\\s*\\]",
+     "\\w\\s*\\[[^\\]]+\\]\\s*\\[[^\\]]+\\]"
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "ragged_array",
@@ -55532,6 +57442,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -55960,6 +57881,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -56292,6 +58224,17 @@
      "note": "The memory caution is derived.",
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -56633,7 +58576,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.stream_model"
+   "previous_id": "input_output.stream_model",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "standard_output",
@@ -57083,7 +59037,27 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.standard_output"
+   "previous_id": "input_output.standard_output",
+   "reader": {
+    "aliases": [
+     "standard output",
+     "stdout",
+     "console",
+     "the screen",
+     "terminal"
+    ],
+    "code_patterns": [
+     "System\\.out\\.",
+     "StdOut\\."
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": true,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "formatted_output",
@@ -57537,6 +59511,33 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "printf",
+     "format",
+     "formatted",
+     "format specifier"
+    ],
+    "code_patterns": [
+     "\\.printf\\s*\\(",
+     "String\\.format\\s*\\("
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "printf_width",
+      "scope": "statement",
+      "text": "raw",
+      "decisive": true,
+      "regex": "printf\\s*\\(\\s*\\\"[^\\\"]*(?:%-?\\d+(?:\\.\\d+)?[dfse]|%\\.\\d+f)"
+     }
+    ]
    }
   },
   {
@@ -58134,7 +60135,29 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.standard_input"
+   "previous_id": "input_output.standard_input",
+   "reader": {
+    "aliases": [
+     "standard input",
+     "stdin",
+     "input stream",
+     "reads input"
+    ],
+    "code_patterns": [
+     "StdIn\\.",
+     "new\\s+Scanner\\s*\\(",
+     "System\\.in"
+    ],
+    "code_text": "masked",
+    "command_patterns": [
+     "\\s<\\s*\\S+"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "read_loop_idiom",
@@ -58519,7 +60542,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.read_loop_idiom"
+   "previous_id": "input_output.read_loop_idiom",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "input_format",
@@ -58822,6 +60856,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -59115,6 +61160,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -59417,6 +61473,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -59703,6 +61770,17 @@
      "note": "derived: applicability not stated in the sources",
      "source_status": "derived"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -60014,6 +62092,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -60326,7 +62415,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "other textbooks (Scanner); StdIn has the same readInt/readLine distinction"
+   "origin": "other textbooks (Scanner); StdIn has the same readInt/readLine distinction",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "input_validation",
@@ -60595,7 +62695,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "other textbooks (section title only; text not yet read)"
+   "origin": "other textbooks (section title only; text not yet read)",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "redirection",
@@ -60938,7 +63049,29 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.redirection"
+   "previous_id": "input_output.redirection",
+   "reader": {
+    "aliases": [
+     "redirect",
+     "redirects",
+     "redirected",
+     "into the file",
+     "from the file",
+     "into a file",
+     "from a file"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [
+     "\\s>\\s*\\S+",
+     "\\s<\\s*\\S+"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "piping",
@@ -61234,7 +63367,24 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.piping"
+   "previous_id": "input_output.piping",
+   "reader": {
+    "aliases": [
+     "pipe",
+     "piped",
+     "pipes"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [
+     "\\|\\s*java\\b"
+    ],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "filter",
@@ -61494,6 +63644,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -61913,7 +64074,24 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "input_output.standard_drawing"
+   "previous_id": "input_output.standard_drawing",
+   "reader": {
+    "aliases": [
+     "stddraw",
+     "standard drawing",
+     "draws"
+    ],
+    "code_patterns": [
+     "StdDraw\\."
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "animation",
@@ -62246,6 +64424,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -62535,6 +64724,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -62878,6 +65078,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -63157,6 +65368,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -63280,6 +65502,17 @@
      "note": "derived: StdDraw mouse methods are not in SW-1e, Think Java or the fetched web text",
      "source_status": "derived"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -63652,6 +65885,22 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "stdaudio",
+     "standard audio"
+    ],
+    "code_patterns": [
+     "StdAudio\\."
+    ],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -64076,7 +66325,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.input_graph"
+   "previous_id": "random_web_surfer.input_graph",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "transition_matrix",
@@ -64690,7 +66950,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.transition_matrix"
+   "previous_id": "random_web_surfer.transition_matrix",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "normalization",
@@ -65160,7 +67431,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.normalization"
+   "previous_id": "random_web_surfer.normalization",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "dangling_pages",
@@ -65548,6 +67830,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -65921,6 +68214,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -66402,7 +68706,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.random_move"
+   "previous_id": "random_web_surfer.random_move",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "simulation_loop",
@@ -66969,7 +69284,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.simulation_loop"
+   "previous_id": "random_web_surfer.simulation_loop",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "frequency_counting",
@@ -67385,7 +69711,18 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.frequency_counting"
+   "previous_id": "random_web_surfer.frequency_counting",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "markov_chain",
@@ -67779,6 +70116,26 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "markov chain",
+     "random surfer",
+     "page rank",
+     "page ranks",
+     "pagerank",
+     "starting page",
+     "long run",
+     "long-run"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -68292,6 +70649,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -68710,7 +71078,23 @@
      "source_status": "verified"
     }
    },
-   "previous_id": "random_web_surfer.two_models"
+   "previous_id": "random_web_surfer.two_models",
+   "reader": {
+    "aliases": [
+     "estimates",
+     "estimate",
+     "simulation versus",
+     "mixing"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "convergence_rate",
@@ -69073,6 +71457,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -69371,6 +71766,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -69648,6 +72054,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "trace",
+     "tracing",
+     "step by step"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -69934,6 +72355,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -70248,6 +72680,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -70533,6 +72976,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -70877,6 +73331,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -71181,6 +73646,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -71497,6 +73973,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -71736,6 +74223,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -72016,6 +74514,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "reference",
+     "references",
+     "array variable"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -72252,6 +74765,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -72576,6 +75100,17 @@
      "note": "Default-preference statement is derived.",
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -72996,6 +75531,21 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [
+     "loop condition",
+     "guard",
+     "loop test"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -73287,6 +75837,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -73569,6 +76130,17 @@
      "note": null,
      "source_status": "verified"
     }
+   },
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
    }
   },
   {
@@ -73903,7 +76475,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Testing / test-case design: Think Java, Eck, Horstmann, Goldman et al. 2008 (DT), CS2023 SDF"
+   "origin": "v3.9 external coverage audit: Testing / test-case design: Think Java, Eck, Horstmann, Goldman et al. 2008 (DT), CS2023 SDF",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "debugging",
@@ -74228,7 +76811,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Debugging: Think Java, Eck, MIT 6.092, Goldman et al. 2008 (DEH), CS2023 SDF"
+   "origin": "v3.9 external coverage audit: Debugging: Think Java, Eck, MIT 6.092, Goldman et al. 2008 (DEH), CS2023 SDF",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "incremental_development",
@@ -74505,7 +77099,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Incremental development: Think Java 4.9, Liang"
+   "origin": "v3.9 external coverage audit: Incremental development: Think Java 4.9, Liang",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "algorithm_pseudocode",
@@ -74820,7 +77425,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Algorithm, pseudocode, stepwise refinement: Eck, Deitel, Horstmann, Liang, AP CSA"
+   "origin": "v3.9 external coverage audit: Algorithm, pseudocode, stepwise refinement: Eck, Deitel, Horstmann, Liang, AP CSA",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   },
   {
    "id": "off_by_one_error",
@@ -75130,7 +77746,33 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Off-by-one errors: Goldman et al. 2008 (AR1), Liang, Eck"
+   "origin": "v3.9 external coverage audit: Off-by-one errors: Goldman et al. 2008 (AR1), Liang, Eck",
+   "reader": {
+    "aliases": [
+     "off by one",
+     "one too many",
+     "one too few"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "loop_past_end",
+      "scope": "statement",
+      "decisive": true,
+      "regex": "\\bfor\\s*\\([^;]*;\\s*\\w+\\s*<=\\s*(?P<var>\\w+)\\s*\\.\\s*length\\b",
+      "states": [
+       "loop_bound",
+       "same_bound"
+      ]
+     }
+    ]
+   }
   },
   {
    "id": "array_copy",
@@ -75451,7 +78093,29 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Copying arrays: Think Java 7.4, Eck 7.2, Liang 7"
+   "origin": "v3.9 external coverage audit: Copying arrays: Think Java 7.4, Eck 7.2, Liang 7",
+   "reader": {
+    "aliases": [
+     "copy of the array",
+     "exact copy",
+     "copies the array"
+    ],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": [
+     {
+      "name": "copy_loop",
+      "scope": "statement",
+      "decisive": true,
+      "regex": "\\b(?P<var>\\w+)\\s*\\[\\s*(\\w+)\\s*\\]\\s*=\\s*(?!(?P=var)\\b)(\\w+)\\s*\\[\\s*\\2\\s*\\]\\s*;?\\s*$"
+     }
+    ]
+   }
   },
   {
    "id": "primitive_vs_reference",
@@ -75798,7 +78462,18 @@
      "source_status": "verified"
     }
    },
-   "origin": "v3.9 external coverage audit: Primitive vs reference variables, memory diagrams: Think Java 9.1, Goldman et al. 2008 (PVR, MMR), MIT 6.092"
+   "origin": "v3.9 external coverage audit: Primitive vs reference variables, memory diagrams: Think Java 9.1, Goldman et al. 2008 (PVR, MMR), MIT 6.092",
+   "reader": {
+    "aliases": [],
+    "code_patterns": [],
+    "code_text": "masked",
+    "command_patterns": [],
+    "operator_symbols": [],
+    "java_types": [],
+    "generic": false,
+    "shown_by_declaration": false,
+    "signals": []
+   }
   }
  ],
  "learning_levels": [
@@ -93600,6 +96275,11 @@
    "concepts": [
     "explicit_cast",
     "integer_division"
+   ],
+   "misread_as": [
+    {
+     "transform": "real_division"
+    }
    ]
   },
   {
@@ -95592,6 +98272,11 @@
    "type": "misconception",
    "concepts": [
     "nested_loops"
+   ],
+   "misread_as": [
+    {
+     "transform": "skip_after_empty_inner_loop"
+    }
    ]
   },
   {
@@ -97732,6 +100417,11 @@
    "concepts": [
     "integer_division",
     "int"
+   ],
+   "misread_as": [
+    {
+     "transform": "real_division"
+    }
    ]
   },
   {
@@ -97794,6 +100484,11 @@
    "type": "misconception",
    "concepts": [
     "normalization"
+   ],
+   "misread_as": [
+    {
+     "transform": "real_division"
+    }
    ]
   },
   {
@@ -98195,6 +100890,11 @@
     "definite_assignment",
     "variable",
     "declaration"
+   ],
+   "misread_as": [
+    {
+     "transform": "auto_initialize"
+    }
    ]
   },
   {
@@ -100956,6 +103656,11 @@
     "array_reversal",
     "array_bounds",
     "off_by_one_error"
+   ],
+   "misread_as": [
+    {
+     "transform": "flip_loop_bounds"
+    }
    ]
   },
   {
@@ -101637,6 +104342,15 @@
    "concepts": [
     "println",
     "standard_output"
+   ],
+   "misread_as": [
+    {
+     "transform": "replace_text",
+     "args": {
+      "find": "System\\.out\\.print\\s*\\(",
+      "replace": "System.out.println("
+     }
+    }
    ]
   },
   {
@@ -102248,6 +104962,15 @@
    "type": "misconception",
    "concepts": [
     "remainder_operator"
+   ],
+   "misread_as": [
+    {
+     "transform": "replace_operator",
+     "args": {
+      "old": "%",
+      "new": "/"
+     }
+    }
    ]
   },
   {
@@ -103797,6 +106520,11 @@
    "type": "misconception",
    "concepts": [
     "switch_statement"
+   ],
+   "misread_as": [
+    {
+     "transform": "remove_fallthrough"
+    }
    ]
   },
   {
@@ -104354,6 +107082,11 @@
     "assignment",
     "variable",
     "expression"
+   ],
+   "misread_as": [
+    {
+     "transform": "reads_follow_source"
+    }
    ]
   },
   {
@@ -104921,6 +107654,93 @@
    "type": "misconception",
    "concepts": [
     "division_by_zero"
+   ]
+  },
+  {
+   "id": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "RemainderIsSubtraction",
+   "wrong_belief": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "correct_rule": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "violates_rule": {
+    "source": "SW-1e",
+    "concept": "remainder_operator",
+    "rule_ids": [
+     "remainder_operator.B1"
+    ]
+   },
+   "provenance": "scenario",
+   "literature_sources": [],
+   "note": "Added from scenario S016 (wrong belief stated by a student).",
+   "book_verdict": "book_states_rule",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 31,
+     "page": 21,
+     "section": "1.2",
+     "quote": "the value of a % b is the remainder that you get when you divide a by b.",
+     "match": "exact",
+     "support": "states_correct_rule"
+    }
+   ],
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "Student answer S016."
+   },
+   "type": "misconception",
+   "concepts": [
+    "remainder_operator"
+   ],
+   "misread_as": [
+    {
+     "transform": "replace_operator",
+     "args": {
+      "old": "%",
+      "new": "-"
+     }
+    }
+   ]
+  },
+  {
+   "id": "PrintedTextIsExecuted",
+   "kind": "misconception",
+   "label": "PrintedTextIsExecuted",
+   "wrong_belief": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
+   "correct_rule": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x.",
+   "violates_rule": {
+    "source": "SW-1e",
+    "concept": "println",
+    "rule_ids": [
+     "string_literal.B1",
+     "println.B1"
+    ]
+   },
+   "provenance": "scenario",
+   "literature_sources": [],
+   "note": "Added from scenario S137 (wrong belief stated by a student).",
+   "book_verdict": "book_states_rule",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 21,
+     "section": "1.1",
+     "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
+     "match": "exact",
+     "support": "states_correct_rule"
+    }
+   ],
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "Student answer S137."
+   },
+   "type": "misconception",
+   "concepts": [
+    "println",
+    "string_literal",
+    "assignment"
    ]
   }
  ],
@@ -284363,15 +287183,98 @@
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
     }
    ]
+  },
+  {
+   "source": "remainder_operator",
+   "target": "RemainderIsSubtraction",
+   "type": "misconception",
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "violates_rule": [
+    "remainder_operator.B1"
+   ],
+   "role": "primary",
+   "provenance": "scenario",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "observed in a student answer (scenario S016); a candidate until a second coder or more student data confirms it"
+  },
+  {
+   "source": "arithmetic_operators",
+   "target": "RemainderIsSubtraction",
+   "type": "misconception",
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "violates_rule": [
+    "remainder_operator.B1"
+   ],
+   "role": "context",
+   "provenance": "scenario",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "observed in a student answer (scenario S016); a candidate until a second coder or more student data confirms it"
+  },
+  {
+   "source": "println",
+   "target": "PrintedTextIsExecuted",
+   "type": "misconception",
+   "logic": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
+   "twin_logic": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x.",
+   "violates_rule": [
+    "string_literal.B1",
+    "println.B1"
+   ],
+   "role": "primary",
+   "provenance": "scenario",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "observed in a student answer (scenario S137); a candidate until a second coder or more student data confirms it"
+  },
+  {
+   "source": "string_literal",
+   "target": "PrintedTextIsExecuted",
+   "type": "misconception",
+   "logic": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
+   "twin_logic": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x.",
+   "violates_rule": [
+    "string_literal.B1",
+    "println.B1"
+   ],
+   "role": "context",
+   "provenance": "scenario",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "observed in a student answer (scenario S137); a candidate until a second coder or more student data confirms it"
+  },
+  {
+   "source": "assignment",
+   "target": "PrintedTextIsExecuted",
+   "type": "misconception",
+   "logic": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
+   "twin_logic": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x.",
+   "violates_rule": [
+    "string_literal.B1",
+    "println.B1"
+   ],
+   "role": "context",
+   "provenance": "scenario",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "observed in a student answer (scenario S137); a candidate until a second coder or more student data confirms it"
   }
  ],
  "counts": {
   "concepts": 173,
-  "misconception_nodes": 253,
+  "misconception_nodes": 255,
   "error_nodes": 41,
   "prerequisite": 207,
   "parallel": 34,
-  "misconception": 471,
+  "misconception": 476,
   "error": 93,
   "has_level": 865,
   "learning_level_nodes": 865,
@@ -284450,5 +287353,1338 @@
   "Chen2020": "B. Chen, S. Azad, R. Haldar, M. West and C. Zilles, \"A Validated Scoring Rubric for Explain-in-Plain-English Questions\", SIGCSE 2020. https://zilles.cs.illinois.edu/papers/EiPE_rubric_sigcse_2020.pdf",
   "VrachnosJimoyiannis2017": "E. Vrachnos and A. Jimoyiannis, SOLO and secondary students' difficulties with arrays, Themes in Science & Technology Education 10(1), 2017. https://files.eric.ed.gov/fulltext/EJ1164709.pdf",
   "Caceffo2019ITiCSE": "R. Caceffo, P. Frank-Bolton, R. Souza, R. Azevedo, \"Identifying and Validating Java Misconceptions Toward a CS1 Concept Inventory\", ITiCSE 2019, 23-29. doi:10.1145/3304221.3319771"
+ },
+ "reader": {
+  "about": "Everything the reader knows about this chapter and about English. The engine (src/lp_graph) has no topic tables; it reads this section and the reader fields of concepts and misconceptions.",
+  "slots": {
+   "array_ref": {
+    "kind": "phrase",
+    "values": {
+     "same_array": {
+      "phrases": [
+       "same array",
+       "second name",
+       "alias",
+       "aliases",
+       "points to the same",
+       "refer to the same",
+       "refers to the same",
+       "same reference"
+      ],
+      "opposite": "copy"
+     },
+     "copy": {
+      "phrases": [
+       "new array",
+       "separate array",
+       "independent copy",
+       "second array",
+       "copy of the array",
+       "copies the elements"
+      ],
+      "opposite": "same_array"
+     }
+    }
+   },
+   "case_end": {
+    "kind": "rule",
+    "values": {
+     "falls_through": {
+      "phrases": [
+       "fall through",
+       "falls through",
+       "falling through",
+       "go down all the case",
+       "goes down all the case",
+       "go down all the cases",
+       "goes down all the cases",
+       "runs all the cases below",
+       "keeps going to the next case",
+       "into the following cases",
+       "continues into the next case",
+       "falls into the next case"
+      ],
+      "opposite": "stops"
+     },
+     "stops": {
+      "phrases": [
+       "the switch ends",
+       "switch ends",
+       "stops at that case",
+       "only that case",
+       "only the matching case",
+       "jumps out of the switch"
+      ],
+      "opposite": "falls_through"
+     }
+    }
+   },
+   "compile": {
+    "kind": "outcome",
+    "values": {
+     "compile_error": {
+      "phrases": [
+       "will not compile",
+       "does not compile",
+       "would not compile",
+       "cannot compile",
+       "can not compile",
+       "not compile",
+       "compile error",
+       "compiler error",
+       "compile time error",
+       "compile errors",
+       "compiler errors",
+       "compile time errors",
+       "syntax errors",
+       "compilation error",
+       "compilation errors",
+       "error",
+       "compiler complains",
+       "not initialized",
+       "not been initialized",
+       "uninitialized",
+       "not initialised",
+       "uninitialised",
+       "might not have been initialized",
+       "compiler rejects",
+       "rejects",
+       "fails to compile",
+       "syntax error",
+       "will not run",
+       "does not run",
+       "can not run",
+       "cannot run"
+      ],
+      "opposite": "compiles"
+     },
+     "compiles": {
+      "phrases": [
+       "compiles",
+       "compiles fine",
+       "compiles correctly",
+       "compiles successfully",
+       "no error",
+       "no errors",
+       "is valid",
+       "is legal",
+       "runs fine",
+       "works fine"
+      ],
+      "opposite": "compile_error"
+     }
+    }
+   },
+   "crash": {
+    "kind": "outcome",
+    "values": {
+     "run_error": {
+      "phrases": [
+       "run time error",
+       "runtime error",
+       "exception",
+       "crashes",
+       "crash",
+       "throws",
+       "stops the program",
+       "terminates with",
+       "arithmeticexception",
+       "arrayindexoutofboundsexception",
+       "out of bounds",
+       "divide by zero error"
+      ],
+      "opposite": "no_error"
+     },
+     "no_error": {
+      "phrases": [
+       "does not crash",
+       "no exception",
+       "will not crash"
+      ],
+      "opposite": "run_error"
+     }
+    }
+   },
+   "cursor": {
+    "kind": "phrase",
+    "values": {
+     "next_line": {
+      "phrases": [
+       "new line",
+       "next line",
+       "line break",
+       "moves down",
+       "goes down",
+       "enter",
+       "fresh line",
+       "\\n",
+       "newline",
+       "ends the line",
+       "terminates the line",
+       "own line",
+       "separate line",
+       "separate lines",
+       "different line",
+       "different lines",
+       "beginning of the next line",
+       "start of the next line",
+       "two lines",
+       "line separator"
+      ],
+      "opposite": "same_line"
+     },
+     "same_line": {
+      "phrases": [
+       "same line",
+       "stays on the line",
+       "stays on the same line",
+       "on the line",
+       "one line",
+       "single line",
+       "next to each other",
+       "side by side",
+       "no newline",
+       "without a newline",
+       "no new line",
+       "does not end the line",
+       "leaves the cursor",
+       "right after",
+       "continues the line"
+      ],
+      "opposite": "next_line"
+     }
+    }
+   },
+   "division": {
+    "kind": "phrase",
+    "values": {
+     "drops_fraction": {
+      "phrases": [
+       "drops the fractional part",
+       "drops the fraction",
+       "discards the fractional part",
+       "fractional part is discarded",
+       "drops the decimal",
+       "throws away the decimal",
+       "cuts off the decimal",
+       "integer division",
+       "whole number result",
+       "rounds down",
+       "truncates the decimal",
+       "chops off the decimal",
+       "drops the remainder"
+      ],
+      "opposite": "keeps_fraction"
+     },
+     "keeps_fraction": {
+      "phrases": [
+       "keeps the fractional part",
+       "keeps the fraction",
+       "keeps the decimal",
+       "decimal result",
+       "gives a decimal",
+       "floating point division",
+       "exact division"
+      ],
+      "opposite": "drops_fraction"
+     }
+    }
+   },
+   "error_time": {
+    "kind": "outcome",
+    "values": {
+     "compile": {
+      "phrases": [
+       "compile error",
+       "compile time error",
+       "compile time",
+       "found by javac",
+       "before the program runs",
+       "compiler error",
+       "at compile time",
+       "compilation error"
+      ],
+      "opposite": "run"
+     },
+     "run": {
+      "phrases": [
+       "run time error",
+       "runtime error",
+       "while it runs",
+       "at run time",
+       "at runtime",
+       "while the program runs",
+       "during execution"
+      ],
+      "opposite": "compile"
+     }
+    }
+   },
+   "estimate": {
+    "kind": "rule",
+    "values": {
+     "estimate": {
+      "phrases": [
+       "estimates",
+       "estimate",
+       "approximate",
+       "approximately",
+       "roughly",
+       "an approximation"
+      ],
+      "opposite": "exact"
+     },
+     "exact": {
+      "phrases": [
+       "exact ranks",
+       "the real ranks",
+       "exactly the page ranks",
+       "the exact values"
+      ],
+      "opposite": "estimate"
+     }
+    }
+   },
+   "expr": {
+    "kind": "example",
+    "values": {}
+   },
+   "holds": {
+    "kind": "phrase",
+    "values": {
+     "integer": {
+      "phrases": [
+       "holds an integer",
+       "holds a whole number",
+       "whole number",
+       "whole numbers",
+       "an integer"
+      ]
+     },
+     "fraction": {
+      "phrases": [
+       "number with a fractional part",
+       "decimal number",
+       "real number",
+       "decimal numbers",
+       "real numbers",
+       "floating point number"
+      ]
+     },
+     "boolean": {
+      "phrases": [
+       "true or false",
+       "true and false",
+       "only true or false"
+      ]
+     },
+     "character": {
+      "phrases": [
+       "one character",
+       "a single character",
+       "single character",
+       "character code"
+      ]
+     },
+     "text": {
+      "phrases": [
+       "sequence of characters",
+       "a string of characters"
+      ]
+     }
+    }
+   },
+   "inner_loop": {
+    "kind": "rule",
+    "values": {
+     "skips_rest": {
+      "phrases": [
+       "rest of that outer pass is skipped",
+       "skips the rest of the outer",
+       "skips the outer",
+       "outer pass is skipped"
+      ],
+      "opposite": "continues"
+     },
+     "continues": {
+      "phrases": [
+       "statements after it in the outer body still run",
+       "just ends",
+       "still run",
+       "still runs"
+      ],
+      "opposite": "skips_rest"
+     }
+    }
+   },
+   "loop_bound": {
+    "kind": "rule",
+    "values": {
+     "includes_end": {
+      "phrases": [
+       "up to and including",
+       "one too many",
+       "reaches i = n",
+       "runs n + 1 times",
+       "includes the end",
+       "goes one past"
+      ]
+     },
+     "excludes_end": {
+      "phrases": [
+       "up to but not including",
+       "goes up to n - 1",
+       "runs n times",
+       "stops before the end"
+      ]
+     },
+     "same_bound": {
+      "phrases": [
+       "mean the same",
+       "are interchangeable",
+       "give the same number",
+       "same number of moves",
+       "does not matter"
+      ]
+     }
+    }
+   },
+   "loop_exit": {
+    "kind": "phrase",
+    "values": {
+     "whole_loop": {
+      "phrases": [
+       "ends the whole loop",
+       "exits the loop",
+       "leaves the loop",
+       "stops the loop",
+       "ends the loop",
+       "breaks out",
+       "jumps out",
+       "out of the loop"
+      ],
+      "opposite": "current_pass"
+     },
+     "current_pass": {
+      "phrases": [
+       "ends only the current pass",
+       "skips to the next iteration",
+       "next iteration",
+       "skips the rest",
+       "current pass",
+       "current iteration",
+       "goes back to the top"
+      ],
+      "opposite": "whole_loop"
+     }
+    }
+   },
+   "name_style": {
+    "kind": "rule",
+    "values": {
+     "lower_camel": {
+      "phrases": [
+       "lowercamelcase",
+       "lower camel case",
+       "starts with a lowercase letter",
+       "camelcase",
+       "camel case"
+      ],
+      "opposite": "upper_first"
+     },
+     "upper_first": {
+      "phrases": [
+       "starts with a capital",
+       "capitalized",
+       "capital letter",
+       "uppercase first letter"
+      ],
+      "opposite": "lower_camel"
+     }
+    }
+   },
+   "op": {
+    "kind": "phrase",
+    "values": {
+     "stores": {
+      "phrases": [
+       "stores the value",
+       "stores",
+       "puts the value",
+       "assigns"
+      ]
+     },
+     "compares": {
+      "phrases": [
+       "tests whether",
+       "compares",
+       "checks if",
+       "checks whether",
+       "tests if",
+       "test for equality",
+       "are equal"
+      ]
+     }
+    }
+   },
+   "op_meaning": {
+    "kind": "rule",
+    "values": {
+     "subtraction": {
+      "phrases": [
+       "means minus",
+       "minus",
+       "subtract",
+       "subtracts",
+       "subtracting",
+       "take away",
+       "takes away",
+       "subtracts b from a"
+      ]
+     },
+     "remainder": {
+      "phrases": [
+       "remainder",
+       "what is left",
+       "leftover",
+       "left over",
+       "remainder after integer division",
+       "gives the remainder"
+      ]
+     },
+     "quotient": {
+      "phrases": [
+       "how many times",
+       "quotient",
+       "the quotient",
+       "number of times it fits"
+      ]
+     },
+     "percent": {
+      "phrases": [
+       "percent",
+       "percentage",
+       "per cent"
+      ]
+     }
+    }
+   },
+   "output": {
+    "kind": "example",
+    "values": {}
+   },
+   "plus": {
+    "kind": "phrase",
+    "values": {
+     "concat": {
+      "phrases": [
+       "concatenates",
+       "concatenation",
+       "joins",
+       "sticks together",
+       "glues",
+       "appends the text",
+       "joined together"
+      ],
+      "opposite": "add"
+     },
+     "add": {
+      "phrases": [
+       "adds them as numbers",
+       "numeric addition",
+       "arithmetic addition"
+      ],
+      "opposite": "concat"
+     }
+    }
+   },
+   "print_effect": {
+    "kind": "rule",
+    "values": {
+     "assigns": {
+      "phrases": [
+       "sets x to",
+       "sets it to",
+       "sets the variable",
+       "assigns the value",
+       "makes x",
+       "puts 5 in x",
+       "is run as code",
+       "runs the text",
+       "changes the variable",
+       "changes x"
+      ],
+      "opposite": "prints_literally"
+     },
+     "prints_literally": {
+      "phrases": [
+       "just prints",
+       "prints the text",
+       "only displays",
+       "printed literally",
+       "displays them",
+       "changes no variable",
+       "only prints"
+      ],
+      "opposite": "assigns"
+     }
+    }
+   },
+   "printed": {
+    "kind": "phrase",
+    "values": {
+     "reference": {
+      "phrases": [
+       "memory address",
+       "hash code",
+       "hashcode",
+       "address of the array",
+       "weird string",
+       "reference value"
+      ],
+      "opposite": "contents"
+     },
+     "contents": {
+      "phrases": [
+       "prints the contents",
+       "prints the elements",
+       "prints the values",
+       "prints each element",
+       "prints all the elements"
+      ],
+      "opposite": "reference"
+     }
+    }
+   },
+   "repeats": {
+    "kind": "phrase",
+    "values": {
+     "once": {
+      "phrases": [
+       "at most once",
+       "tests its condition once",
+       "only once",
+       "runs once"
+      ],
+      "opposite": "repeatedly"
+     },
+     "repeatedly": {
+      "phrases": [
+       "again after every pass",
+       "repeats",
+       "repeatedly",
+       "keeps going",
+       "over and over",
+       "each pass",
+       "every pass"
+      ],
+      "opposite": "once"
+     }
+    }
+   },
+   "rounding": {
+    "kind": "phrase",
+    "values": {
+     "truncate": {
+      "phrases": [
+       "truncates toward zero",
+       "truncates",
+       "chops off",
+       "cuts off"
+      ]
+     },
+     "nearest": {
+      "phrases": [
+       "rounds to the nearest",
+       "nearest integer",
+       "rounds"
+      ]
+     }
+    }
+   },
+   "runs": {
+    "kind": "example",
+    "values": {
+     "endless": {
+      "phrases": [
+       "forever",
+       "infinite loop",
+       "never stops",
+       "never ends",
+       "endless",
+       "infinitely",
+       "does not stop",
+       "does not end",
+       "goes on forever",
+       "runs forever"
+      ]
+     }
+    }
+   },
+   "start_dependence": {
+    "kind": "rule",
+    "values": {
+     "depends_on_start": {
+      "phrases": [
+       "would change the ranks",
+       "would change them",
+       "change the ranks",
+       "depend on which page",
+       "depends on which page",
+       "depends on where it starts",
+       "depend on the start",
+       "depends on the start",
+       "different start gives different",
+       "starting page matters"
+      ],
+      "opposite": "independent_of_start"
+     },
+     "independent_of_start": {
+      "phrases": [
+       "do not depend on the starting page",
+       "does not depend on the start",
+       "same no matter where",
+       "no matter where it starts",
+       "independent of the start",
+       "would not change the ranks",
+       "would not change them"
+      ],
+      "opposite": "depends_on_start"
+     }
+    }
+   },
+   "trailing_empty_line": {
+    "kind": "phrase",
+    "values": {
+     "absent": {
+      "phrases": [
+       "no empty line at the end",
+       "no blank line at the end",
+       "no empty line",
+       "no blank line",
+       "without an empty line"
+      ],
+      "opposite": "present"
+     },
+     "present": {
+      "phrases": [
+       "an empty line at the end",
+       "a blank line at the end",
+       "empty line at the end",
+       "blank line at the end",
+       "ends with an empty line"
+      ],
+      "opposite": "absent"
+     }
+    }
+   },
+   "value": {
+    "kind": "example",
+    "values": {
+     "none": {
+      "phrases": [
+       "no value",
+       "has no value",
+       "no defined value",
+       "undefined",
+       "not assigned",
+       "unassigned",
+       "has nothing",
+       "no initial value",
+       "empty",
+       "not defined",
+       "nothing stored",
+       "is not set"
+      ]
+     },
+     "default": {
+      "phrases": [
+       "default value",
+       "default values",
+       "by default",
+       "automatically",
+       "on their own",
+       "on its own",
+       "auto initialized",
+       "auto initialised",
+       "initialized automatically",
+       "set automatically",
+       "starts at zero",
+       "starts at 0",
+       "starts as 0",
+       "starts as zero",
+       "default of 0",
+       "defaults to"
+      ],
+      "opposite": "none"
+     },
+     "garbage": {
+      "phrases": [
+       "garbage",
+       "random value",
+       "junk value",
+       "leftover value"
+      ]
+     }
+    }
+   },
+   "var_holds": {
+    "kind": "rule",
+    "values": {
+     "expression": {
+      "phrases": [
+       "stores the expression",
+       "holds the expression",
+       "always equal to",
+       "changes too",
+       "changes as well",
+       "is linked to",
+       "follows the other variable"
+      ],
+      "opposite": "value"
+     },
+     "value": {
+      "phrases": [
+       "keeps the old value",
+       "stores the value that",
+       "holds the old value",
+       "copy of the value",
+       "later changes to",
+       "do not change"
+      ]
+     }
+    }
+   }
+  },
+  "rule_values": [
+   "default",
+   "endless",
+   "garbage",
+   "none"
+  ],
+  "language": {
+   "number_words": {
+    "zero": "0",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+    "thirteen": "13",
+    "fourteen": "14",
+    "fifteen": "15",
+    "sixteen": "16",
+    "seventeen": "17",
+    "eighteen": "18",
+    "nineteen": "19",
+    "twenty": "20",
+    "thirty": "30",
+    "forty": "40",
+    "fifty": "50",
+    "hundred": "100"
+   },
+   "negation": [
+    "not",
+    "no",
+    "never",
+    "cannot",
+    "nothing",
+    "without",
+    "neither",
+    "nor"
+   ],
+   "negation_breakers": [
+    "but",
+    "only",
+    "so",
+    "because",
+    "and",
+    "then"
+   ],
+   "link_words": [
+    "because",
+    "so",
+    "therefore",
+    "thus",
+    "since",
+    "but",
+    "whereas",
+    "while",
+    "then",
+    "if",
+    "when",
+    "unless",
+    "although",
+    "however",
+    "instead",
+    "hence"
+   ],
+   "clause_split": [
+    "so",
+    "because",
+    "but",
+    "then",
+    "whereas",
+    "which",
+    "and then",
+    "no wait",
+    "oh wait",
+    "actually"
+   ],
+   "contractions": {
+    "won't": "will not",
+    "can't": "cannot",
+    "n't": " not",
+    "it's": "it is",
+    "that's": "that is",
+    "there's": "there is",
+    "'s": " is",
+    "'ll": " will",
+    "'d": " would",
+    "'re": " are"
+   },
+   "ambiguous_aliases": {
+    "print": [
+     "print",
+     "println",
+     "formatted_output"
+    ],
+    "prints": [
+     "print",
+     "println",
+     "formatted_output"
+    ],
+    "printed": [
+     "print",
+     "println",
+     "formatted_output"
+    ],
+    "printing": [
+     "print",
+     "println",
+     "formatted_output"
+    ],
+    "output": [
+     "println",
+     "print",
+     "formatted_output"
+    ],
+    "outputs": [
+     "println",
+     "print",
+     "formatted_output"
+    ],
+    "display": [
+     "println",
+     "print",
+     "formatted_output"
+    ],
+    "displays": [
+     "println",
+     "print",
+     "formatted_output"
+    ],
+    "shows": [
+     "println",
+     "print",
+     "formatted_output"
+    ]
+   },
+   "stop_aliases": [
+    "animation",
+    "api",
+    "assignment",
+    "block",
+    "comment",
+    "compile",
+    "data structure",
+    "debugging",
+    "declaration",
+    "expression",
+    "filter",
+    "flowchart",
+    "identifier",
+    "indexing",
+    "literal",
+    "normalization",
+    "parsing",
+    "piping",
+    "program state",
+    "redirection",
+    "run",
+    "shuffle",
+    "statement",
+    "teleportation",
+    "testing",
+    "variable"
+   ],
+   "hypothetical_words": [
+    "if",
+    "would",
+    "instead",
+    "change",
+    "changed",
+    "replace",
+    "replaced",
+    "fix",
+    "fixed",
+    "otherwise",
+    "could",
+    "were"
+   ],
+   "hypothetical_clause": [
+    "\\bwould\\b.*\\b(?:if|when|with|instead|otherwise)\\b",
+    "\\b(?:if|when|with)\\b.*\\bwould\\b",
+    "\\bwould change\\b",
+    "\\bif\\b.*\\b(?:started|were|was|had|changed|used)\\b",
+    "\\bfor [a-z]\\w* = -?\\d",
+    "\\bran it with\\b",
+    "\\bwith (?:input|the input)\\b",
+    "^with\\b",
+    "\\bonce (?:that is|it is|they are) fixed\\b",
+    "\\botherwise\\b",
+    "\\binstead\\b",
+    "^cast\\b",
+    "\\((?:double|float|int|long)\\)"
+   ],
+   "correction": [
+    "oh wait",
+    "wait",
+    "actually",
+    "no,",
+    "sorry",
+    "i mean"
+   ],
+   "question_types": [
+    [
+     "output",
+     [
+      "what is printed",
+      "what is the output",
+      "exact output",
+      "what does it print",
+      "what does the system print",
+      "what is printed",
+      "what appears",
+      "output",
+      "printed",
+      "print"
+     ]
+    ],
+    [
+     "value",
+     [
+      "what is result",
+      "what does",
+      "hold",
+      "value of",
+      "what is the value",
+      "contain",
+      "after the switch",
+      "after the loop"
+     ]
+    ],
+    [
+     "fix",
+     [
+      "fix",
+      "wrong",
+      "error",
+      "bug",
+      "correct the",
+      "mistake",
+      "goes wrong"
+     ]
+    ],
+    [
+     "why",
+     [
+      "why"
+     ]
+    ],
+    [
+     "explain",
+     [
+      "explain",
+      "describe",
+      "difference",
+      "what happens",
+      "how does",
+      "how is",
+      "plain english",
+      "what do"
+     ]
+    ]
+   ],
+   "pronouns": [
+    "it",
+    "its",
+    "this",
+    "that",
+    "the variable",
+    "this variable"
+   ],
+   "value_verbs": [
+    "is",
+    "=",
+    "==",
+    "equals",
+    "becomes",
+    "become",
+    "will be",
+    "would be",
+    "holds",
+    "stores",
+    "contains",
+    "has the value of",
+    "has the value",
+    "has a value of",
+    "is equal to",
+    "is set to",
+    "gets",
+    "is now",
+    "starts at",
+    "starts as",
+    "goes to",
+    "ends up as",
+    "ends up at",
+    "ends up",
+    "ends as",
+    "turns to",
+    "turns into",
+    "is still",
+    "stays",
+    "are"
+   ],
+   "change_verbs": [
+    "become",
+    "becomes",
+    "gets",
+    "goes to",
+    "turns into",
+    "turns to"
+   ],
+   "output_nouns": [
+    "display",
+    "displays",
+    "output",
+    "outputs",
+    "shows"
+   ],
+   "not_a_variable": [
+    "answer",
+    "code",
+    "line",
+    "loop",
+    "number",
+    "output",
+    "printout",
+    "program",
+    "result",
+    "that",
+    "there",
+    "this",
+    "value",
+    "what",
+    "which",
+    "who"
+   ],
+   "patterns": {
+    "punct_break": "[.;:!?,]",
+    "subclause": "[,;:]|\\s(?:and|but|while|whereas|so|because)\\s",
+    "val": "(-?\\d+(?:\\.\\d+)?|\\\"[^\\\"]*\\\"|'[^']*'|true|false|null|nothing|{NUMBER_WORDS})",
+    "end": "(?!\\w)(?!\\.\\d)",
+    "tok": "(?:-?\\d+(?:\\.\\d+)?|\\\"[^\\\"]*\\\"|'[^']*'|[A-Z]{1,12}|true|false|null)",
+    "seq": "{TOK}(?:(?:\\s*[,/|]\\s*|\\s+){TOK})*,?",
+    "num": "(-?\\d+(?:\\.\\d+)?)",
+    "ops": "(%|/|\\*|\\+|-|>=|<=|==|!=|>|<)",
+    "prints": "(?i:\\b(?:prints?|printed|printing|outputs|outputted|displays?|displayed|shows?)(?: out)?(?: the)?(?: (?:value|number|text|string|word))?(?: of)?(?: is)?) ({SEQ}){END}",
+    "whole": "(?i:\\b(?:(?:the )?(?:output|printout)(?: of the program| of the code)?|overall(?:,)?(?: i think)?(?: the (?:answer|output))?|the answer|you get|it shows)(?: (?:is|will be|would be|should be|=))?) ({SEQ}){END}",
+    "prints_nothing": "\\b(?:prints?|printed|outputs?|displays?) nothing\\b",
+    "expr": "{NUM}\\s*{OPS}\\s*{NUM}(?:\\s*,?\\s*(?:which\\s+)?(?:is|=|==|equals|gives|leaves|evaluates to)\\s+|\\s+means\\s+[^.;]*?,?\\s*which is\\s+)(true|false|-?\\d+(?:\\.\\d+)?){END}",
+    "value": "\\b([a-z][a-z0-9]*|it)\\s+({VALUE_VERBS})\\s+(?:the value |a value of |equal to |still )?{VAL}{END}",
+    "var_value": "\\b([a-z][a-z0-9]*|it)\\s+({VALUE_VERBS})\\s+(?:equal to |the same as |still )?([a-z][a-z0-9]*)(?=\\s*(?:$|[.,;:!?)]|\\s(?:and|so|but|then|too|because|now)\\b))",
+    "first_index": "\\bfirst (?:[a-z\\-]+ ){0,3}(?:is|=|is at|is in|is stored in) (?:[a-z_]\\w*)\\[(\\d+)\\]|\\b[a-z_]\\w*\\[(\\d+)\\] (?:is|holds|gives) the first\\b",
+    "both": "\\b(?:both|they)\\s+(?:are|become|end up)\\s+(?:both\\s+)?([a-z][a-z0-9]*|-?\\d+)(?=\\s*(?:$|[.,;:!?]))",
+    "runs": "\\b(?:runs|loops|repeats|executes|iterates|goes)\\s+(?:around\\s+)?(\\d+|{NUMBER_WORDS})\\s+times\\b",
+    "ellipsis": "\\s(?:and|but|while|whereas)\\s+(?:the\\s+)?([a-z][a-z.]*)\\s+(?:does|do|is|will|did|would)\\s+not\\b(?=\\s*(?:$|[.,;]))",
+    "turn": "(?im)^\\s*(?:turn\\s*(\\d+)\\s*:|(probe|hint|follow[- ]up(?: question)?)\\s*:)",
+    "answer_parts": "(?:^|\\s)\\(([a-h])\\)\\s",
+    "change_loop_kind": "\\b(?:with|using|as|if it (?:were|was|used)) an? (while|for) loop\\b",
+    "change_start": "\\bif ([a-z_]\\w*) (?:started|starts|start) (?:at|from|with) (-?\\d+)",
+    "change_start_bound": "\\bif ([a-z_]\\w*) (?:started|starts|start) (below|above|under|over) (-?\\d+)",
+    "change_for_value": "\\bfor ([a-z_]\\w*) = (-?\\d+)",
+    "change_format": "\\bwith (%-?\\d*\\.?\\d*[fd])\\b",
+    "change_repair": "\\bafter that\\b|\\bonce (?:that is|it is|they are) fixed\\b",
+    "change_cast": "\\((double|float|int|long)\\)\\s*([A-Za-z_][\\w\\[\\].]*\\s*[/*+\\-%]\\s*[A-Za-z_][\\w\\[\\].]*)",
+    "after_fix": "\\bafter that\\b",
+    "all_same": "^(?:it is |they are |it holds |it has )?(?:all|only) (zeros|zeroes|0s|zero|0|ones|1s)\\b",
+    "list_values": "\\b(?:gives|give|is|are|holds|becomes|would be)\\s+((?:-?\\d+(?:\\.\\d+)?\\s*,\\s*)+-?\\d+(?:\\.\\d+)?)",
+    "mid_trace": "\\b(?:at|when|while|after|on the|in the) (?:[a-z]\\w* (?:=|is|equals) -?\\d+|(?:first|second|third|next|last) (?:pass|iteration|time))",
+    "bare_sequence": "^[\\s\\\"'“”(]*((?:-?\\d+(?:\\.\\d+)?|[A-Z]{1,12})(?:(?:\\s*[,/|]\\s*|\\s+)(?:-?\\d+(?:\\.\\d+)?|[A-Z]{1,12}))*,?)[\\s\\\"'“”).]*(?:\\(|$)",
+    "asked_name": "\\bnamed\\s+([A-Za-z_]\\w*)",
+    "given_value": "\\b{VAR}\\s*(?:=|is|equals)\\s*-?\\d",
+    "same_result": "\\b(?:is|are|stays?|would be|will be) (?:the )?same\\b|\\bno difference\\b",
+    "differ": "\\b(?:differ|differs|different|change|changes)\\b",
+    "writing_task": "\\(\\s*writing task\\s*\\)",
+    "already_exists": "\\b(int|double|char|boolean|String|long)\\s+(array|variable)?\\s*([A-Za-z_]\\w*)\\s+already exists",
+    "question_value": "\\b(?:when|if|with|where)?\\s*([A-Za-z_]\\w*)\\s*(?:=|is|equals)\\s*(-?\\d+(?:\\.\\d+)?)",
+    "saved_as": "saved as\\s+(\\w+)\\.java",
+    "run_as": "run as:?\\s+java\\s+(\\w+)((?:[ \\t]+[^\\s,;]+)*)",
+    "reads_input": "StdIn\\.|System\\.in|new\\s+Scanner",
+    "multiple_choice_or_multipart": "(?:^|\\s)\\(([a-h])\\)\\s",
+    "edge_logic_split": ";|\\s+(?=(?:while|whereas|but)\\s)|(?<=[.!?])\\s+(?=[A-Z0-9(\\\"'])",
+    "edge_logic_split_word": "^(?:while|whereas|but)\\s+"
+   },
+   "flags": {
+    "turn": "im",
+    "change_loop_kind": "i",
+    "change_start": "i",
+    "change_start_bound": "i",
+    "change_for_value": "i",
+    "change_format": "i",
+    "change_repair": "i",
+    "writing_task": "i",
+    "already_exists": "i",
+    "saved_as": "i",
+    "run_as": "i"
+   },
+   "stopwords": [
+    "a",
+    "about",
+    "after",
+    "all",
+    "also",
+    "an",
+    "and",
+    "another",
+    "any",
+    "are",
+    "as",
+    "at",
+    "be",
+    "been",
+    "before",
+    "being",
+    "both",
+    "by",
+    "can",
+    "did",
+    "do",
+    "does",
+    "down",
+    "each",
+    "either",
+    "every",
+    "first",
+    "for",
+    "from",
+    "had",
+    "has",
+    "have",
+    "he",
+    "her",
+    "here",
+    "his",
+    "i",
+    "if",
+    "in",
+    "into",
+    "is",
+    "it",
+    "its",
+    "just",
+    "last",
+    "many",
+    "me",
+    "more",
+    "most",
+    "much",
+    "my",
+    "next",
+    "of",
+    "on",
+    "one",
+    "only",
+    "or",
+    "other",
+    "our",
+    "out",
+    "over",
+    "same",
+    "second",
+    "she",
+    "so",
+    "some",
+    "such",
+    "than",
+    "that",
+    "the",
+    "their",
+    "them",
+    "then",
+    "there",
+    "these",
+    "they",
+    "this",
+    "those",
+    "through",
+    "to",
+    "two",
+    "up",
+    "us",
+    "very",
+    "we",
+    "what",
+    "when",
+    "which",
+    "while",
+    "who",
+    "will",
+    "with",
+    "would",
+    "you",
+    "your"
+   ],
+   "suffixes": [
+    "ing",
+    "ed",
+    "s"
+   ]
+  },
+  "evidence_classes": {
+   "N": "statement",
+   "S": "statement",
+   "LT": "run",
+   "OP": "run",
+   "OS": "run",
+   "R": "relation",
+   "P": "relation",
+   "C": "hypothetical",
+   "X": "hypothetical",
+   "D": "diagnosis",
+   "E": "wrong",
+   "M": "wrong",
+   "T": "wrong"
+  },
+  "level_of_class": {
+   "named": "L1",
+   "rule": "L1",
+   "run": "L2",
+   "relation": "L3",
+   "diagnosis": "L4",
+   "hypothetical": "L4"
+  },
+  "roles": {
+   "command_arguments": "command_line_args",
+   "declared_name": "variable"
+  }
  }
 }

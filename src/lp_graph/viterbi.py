@@ -16,15 +16,23 @@ Emission
 Move costs (integers, no weights)
     stay on the same concept / misconception 0; concept -> edge -> next
     concept along a matched edge 0; jump between concepts not linked by a
-    matched edge = hop distance; NOISE 1. An edge a segment contradicts is
-    blocked for it (the pipeline reports it as a broken link).
+    matched edge = hop distance, capped at 3, and 1 between concepts the
+    same code statement uses (the code links them); NOISE 1; +1 for a state
+    on a generic concept (declaration, variable, int ...) the segment does
+    not name. An edge a segment contradicts is blocked for it (the pipeline
+    reports it as a broken link).
 
 Start
     an anchor concept (code / question seed) costs 0; any other candidate
     costs its hop distance to the nearest anchor.
 
-Ties are broken by (cost, jumps, evidence weakness, -edges walked, steps,
-state ids), so the result is deterministic. The best and second-best
+Ties are broken by (cost, evidence weakness, jumps, -edges walked, steps,
+state ids): run-confirmed or rule evidence beats an edge match, which beats
+merely naming a concept. The result is deterministic.
+
+The *correct* route is not decoded from the code lines: ``graph_route``
+builds it from the graph (the expected concepts joined by their shortest
+stateable paths), so the comparison is like with like. The best and second-best
 routes are returned. If the best route costs more than 1 per statement
 (a list-like answer), a best connected subgraph over the matched elements
 is computed as well.
@@ -36,6 +44,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Sequence
 
+from . import lexicon
 from .reader import ENTERS, Reader, Reading, Segment
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -46,6 +55,11 @@ if TYPE_CHECKING:  # pragma: no cover
 MAX_SEGMENT = 3
 NOISE_COST = 1
 K_BEST = 2
+JUMP_CAP = 3
+GENERIC_COST = 1
+WORDING_COST = 1   # a reading from wording alone (TF-IDF) costs more than code evidence
+TEXT_ONLY = "text-only"
+MATCH_GRAPH = "GRAPH"
 
 
 @dataclass(frozen=True)
@@ -137,7 +151,7 @@ class _Entry:
     last: str | None
 
     def key(self) -> tuple:
-        return (self.cost, self.jumps, self.weak, -self.edges, len(self.path),
+        return (self.cost, self.weak, self.jumps, -self.edges, len(self.path),
                 tuple(s.state.id for s in self.path))
 
 
@@ -161,7 +175,9 @@ class ESViterbi:
     """ES-Viterbi over one statement sequence."""
 
     def __init__(self, kg: "KG", cands: "Candidates", reader: Reader,
-                 anchors: Sequence[str], fault: dict[str, tuple[str, ...]] | None = None) -> None:
+                 anchors: Sequence[str], fault: dict[str, tuple[str, ...]] | None = None,
+                 co_use: set[frozenset[str]] | None = None,
+                 blocked: set[tuple[str, str]] | None = None) -> None:
         self.kg = kg
         self.cands = cands
         self.reader = reader
@@ -170,6 +186,8 @@ class ESViterbi:
         self.mis_by_state = {f"M:{m.concept}:{m.mis}": m for m in cands.mis_edges}
         self.edge_by_id = {e.id: e for e in cands.relation_edges}
         self.fault = fault or {}
+        self.co_use = co_use or set()
+        self.blocked = blocked or set()   # (edge id, statement id) the statement breaks
 
     # ---------------------------------------------------------- emission
     def emission(self, seg: Segment, s: State) -> Reading | None:
@@ -179,16 +197,79 @@ class ESViterbi:
             fault = tuple(sorted({c for sid in seg.ids for c in self.fault.get(sid, ())}))
             r = self.reader.read_concept(seg, s.c_in, fault)
         elif s.kind == "E":
+            if any((s.edge, sid) in self.blocked for sid in seg.ids):
+                return None
             r = self.reader.read_edge(seg, self.edge_by_id[s.edge])
         else:
-            r = self.reader.read_mis(seg, self.mis_by_state[s.id])
+            m = self.mis_by_state[s.id]
+            r = self.reader.read_mis(seg, m)
+            if r.label not in ENTERS:
+                r = self._wording_mis(seg, m)
+        if s.kind == "N" and r.label not in ENTERS:
+            r = self._wording_way(seg, s.c_in)
         return r if r.label in ENTERS else None
 
+    def _wording_mis(self, seg: Segment, m) -> Reading:
+        """The segment expresses the wrong side of the misconception edge's logic
+        (TF-IDF anchors), where the code cannot decide. Weaker than code evidence."""
+        if seg.source != "answer" or not (m.wrong and m.right) or m.concept not in seg.concepts \
+                or any(st.hypothetical for st in seg.statements) or self.reader._code_decides(seg, m.mis):
+            return Reading("NO")
+        import os
+
+        meaning = self.reader.meaning()
+        if meaning is not None:
+            side, score = meaning.side(seg.text, m.wrong, m.right, self.reader.variables())
+        elif os.environ.get("LP_GRAPH_NATLOGIC", "0") == "1":
+            from . import natlogic
+
+            nl = natlogic.side(self.reader.logic, seg.text, m.wrong, m.right, self.reader.variables())
+            side, score = ("a" if nl == "wrong" else "b" if nl == "right" else None),                 self.reader.logic.score(seg.text, m.wrong, self.reader.variables())
+        else:
+            side, score = self.reader.logic.side(seg.text, m.wrong, m.right, self.reader.variables())
+        if side == "a":
+            return Reading("MATCH-WRONG", evidence=f"wording expresses the wrong belief ({score:.2f}): {m.wrong}",
+                           confidence=round(score, 3), cls=TEXT_ONLY)
+        return Reading("NO")
+
+    def _wording_way(self, seg: Segment, concept: str) -> Reading:
+        """The segment states the edge logic of one of the concept's L1 ways
+        (TF-IDF anchors). Weaker than code evidence."""
+        if seg.source != "answer" or concept not in seg.concepts:
+            return Reading("NO")
+        meaning = self.reader.meaning()
+        if meaning is not None:
+            # every level's ways, by meaning; the closest way gives the level
+            scored = []
+            for lv in ("L1", "L2", "L3", "L4"):
+                texts = [w.text for w in self.kg.ways(concept, lv) if w.text]
+                if texts:
+                    scored.append((meaning.states(seg.text, texts, self.reader.variables()), lv))
+            if scored:
+                sim, lv = max(scored)
+                if sim >= meaning.sent_min:
+                    return Reading("MATCH", evidence=f"wording states an {lv} way (meaning {sim:.2f})",
+                                   confidence=round(sim, 3), cls=TEXT_ONLY)
+            return Reading("NO")
+        best = 0.0
+        for w in self.kg.ways(concept, "L1"):
+            if w.text:
+                best = max(best, self.reader.logic.score(seg.text, w.text, self.reader.variables()))
+        if best >= self.reader.logic.match:
+            return Reading("MATCH", evidence=f"wording states an L1 way ({best:.2f})",
+                           confidence=round(best, 3), cls=TEXT_ONLY)
+        return Reading("NO")
+
     def _weak(self, s: State, r: Reading) -> int:
-        """Tie-break only: stronger evidence and the main concept first."""
+        """Tie-break: run / rule evidence before an edge match before naming,
+        and the main concept first."""
         if s.kind == "N":
-            strong = [w for w in r.ways if w[2] != "names_the_element"]
-            return (1 if strong else 2) + (0 if s.c_in == self.cands.main_concept else 1)
+            rank = {"hypothetical": 0, "diagnosis": 0, "run": 0, "rule": 1, "relation": 1}.get(r.cls, 3)
+            return rank + (0 if s.c_in == self.cands.main_concept else 1)
+        if s.kind == "E":
+            # an edge whose logic the segment states is the strongest reading of
+            # that segment: the route walks it (with ties, more edges walked win)
+            return 0 if r.evidence.startswith("states the edge logic") else 2
         return s.weak
 
     # -------------------------------------------------------- transition
@@ -202,10 +283,12 @@ class ESViterbi:
         if s.kind == "NOISE":
             return "noise", NOISE_COST, 0
         if first or last is None:
-            return "start", self._start_cost(s.c_in), 0
+            return "start", min(self._start_cost(s.c_in), JUMP_CAP), 0
         if last == s.c_in:
             return ("edge" if s.kind == "E" else "stay"), 0, 0
-        return "jump", self.kg.hop_distance(last, s.c_in), 1
+        if frozenset((last, s.c_in)) in self.co_use:
+            return "jump", 1, 1
+        return "jump", min(self.kg.hop_distance(last, s.c_in), JUMP_CAP), 1
 
     # --------------------------------------------------------------- run
     def run(self, statements: Sequence["Statement"]) -> tuple[Route, Route | None]:
@@ -229,9 +312,14 @@ class ESViterbi:
                     if r is None:
                         continue
                     weak = self._weak(s, r)
+                    extra = GENERIC_COST if (s.kind == "N" and s.c_in in lexicon.GENERIC
+                                             and s.c_in not in seg.direct) else 0
+                    if r.cls == TEXT_ONLY:
+                        extra += WORDING_COST
                     for pkey in sorted(prev, key=lambda k: (k[0], k[1] or "")):
                         for ent in prev[pkey]:
                             move, mc, dj = self._move(ent.last, s, t0 == 0 or ent.last is None)
+                            mc += extra
                             step = Step(s, seg.ids, move, mc, r,
                                         ent.last if move == "jump" else None)
                             last = ent.last if s.kind == "NOISE" else s.c_out
@@ -304,3 +392,48 @@ def _edge_between(kg: "KG", a: str, b: str) -> str | None:
         if e.other(a) == b:
             return eid
     return None
+
+
+# ------------------------------------------------------- the correct route
+
+def graph_route(kg: "KG", expected: Sequence[str], order: Sequence[str] = ()) -> Route:
+    """The correct route built from the graph: the expected concepts (in code
+    order, then by id) joined by their shortest stateable paths (at most
+    JUMP_CAP edges), plus every contrast edge between two expected concepts.
+    A concept with no such path stands alone."""
+    cs = [c for c in dict.fromkeys(list(order) + sorted(expected)) if c in kg.hop]
+    steps: list[Step] = []
+    seen_edges: set[str] = set()
+    placed: list[str] = []
+    for c in cs:
+        best = None
+        for p in placed:
+            path = _shortest_path(kg, p, c)
+            if not path or len(path) - 1 > JUMP_CAP:
+                continue
+            eids = [_edge_between(kg, a, b) for a, b in zip(path, path[1:])]
+            if all(e and kg.relation_edges[e].stateable for e in eids):
+                if best is None or len(path) < len(best):
+                    best = path
+        if best:
+            for a, b in zip(best, best[1:]):
+                eid = _edge_between(kg, a, b)
+                if eid in seen_edges:
+                    continue
+                seen_edges.add(eid)
+                e = kg.relation_edges[eid]
+                rev = e.kind == "prerequisite" and e.src != a
+                sid = f"E:{eid}:" + ("back" if rev else "fwd")
+                steps.append(Step(State(sid, "E", a, b, eid, reversed=rev), ("graph",), "edge", 0,
+                                  Reading(MATCH_GRAPH)))
+        else:
+            steps.append(Step(State(f"N:{c}", "N", c, c), ("graph",), "start", 0, Reading(MATCH_GRAPH)))
+        placed.append(c)
+    exp = set(cs)
+    for eid in sorted(kg.relation_edges):
+        e = kg.relation_edges[eid]
+        if e.kind == "parallel" and e.src in exp and e.dst in exp and eid not in seen_edges:
+            seen_edges.add(eid)
+            steps.append(Step(State(f"E:{eid}:fwd", "E", e.src, e.dst, eid), ("graph",), "edge", 0,
+                              Reading(MATCH_GRAPH)))
+    return Route(steps, 0, 0, len(steps))

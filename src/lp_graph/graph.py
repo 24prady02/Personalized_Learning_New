@@ -106,6 +106,7 @@ class KG:
         self.path = Path(path)
         self.parts_path = Path(parts_path) if parts_path else None
         self.knowledge: PercptKnowledge = load_knowledge(self.path)
+        lexicon.load(self.knowledge.raw)  # the reader's vocabulary comes from this graph
         self.version = self.knowledge.version
         self.source_hash = file_hash(self.path)
         self.concepts: list[str] = sorted(self.knowledge.concepts)

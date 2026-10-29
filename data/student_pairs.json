@@ -1,0 +1,488 @@
+[
+{
+"premise": "Without break, statements in switch blocks fall through into the following cases.",
+"hypothesis": "50",
+"label": 1,
+"concept": "switch_statement",
+"kind": "student_right",
+"answer": "S006",
+"split": "train"
+},
+{
+"premise": "After the matching case runs, the switch ends even without break.",
+"hypothesis": "50",
+"label": 0,
+"concept": "switch_statement",
+"kind": "student_contra",
+"answer": "S006",
+"split": "train"
+},
+{
+"premise": "% returns the remainder, so 17 % 5 is 2.",
+"hypothesis": "The first println prints 'Result is ' and ends the line; the second prints 'num4 = 30.3'.",
+"label": 1,
+"concept": "remainder_operator",
+"kind": "student_right",
+"answer": "S029",
+"split": "train"
+},
+{
+"premise": "17 % 5 is 3 (the quotient).",
+"hypothesis": "The first println prints 'Result is ' and ends the line; the second prints 'num4 = 30.3'.",
+"label": 0,
+"concept": "remainder_operator",
+"kind": "student_contra",
+"answer": "S029",
+"split": "train"
+},
+{
+"premise": "Without break, statements in switch blocks fall through into the following cases.",
+"hypothesis": "so result ends as 50.",
+"label": 1,
+"concept": "switch_statement",
+"kind": "student_right",
+"answer": "S030",
+"split": "train"
+},
+{
+"premise": "After the matching case runs, the switch ends even without break.",
+"hypothesis": "so result ends as 50.",
+"label": 0,
+"concept": "switch_statement",
+"kind": "student_contra",
+"answer": "S030",
+"split": "train"
+},
+{
+"premise": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+"hypothesis": "It still prints 3.",
+"label": 1,
+"concept": "array_bounds",
+"kind": "student_right",
+"answer": "S043",
+"split": "train"
+},
+{
+"premise": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+"hypothesis": "It still prints 3.",
+"label": 0,
+"concept": "array_bounds",
+"kind": "student_contra",
+"answer": "S043",
+"split": "train"
+},
+{
+"premise": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+"hypothesis": "It still prints 3.",
+"label": 0,
+"concept": "loop_control",
+"kind": "student_contra",
+"answer": "S043",
+"split": "train"
+},
+{
+"premise": "for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1.",
+"hypothesis": "It still prints 3.",
+"label": 1,
+"concept": "simulation_loop",
+"kind": "student_right",
+"answer": "S043",
+"split": "train"
+},
+{
+"premise": "t < T and t <= T give the same number of moves.",
+"hypothesis": "It still prints 3.",
+"label": 0,
+"concept": "simulation_loop",
+"kind": "student_contra",
+"answer": "S043",
+"split": "train"
+},
+{
+"premise": "10 / 3 evaluates to 3.333....",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 1,
+"concept": "int",
+"kind": "student_wrong",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "Dividing two ints gives an int: the fractional part is discarded.",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 0,
+"concept": "int",
+"kind": "student_contra",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "(double) (3 / 5) is 0.6.",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 1,
+"concept": "integer_division",
+"kind": "student_wrong",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 0,
+"concept": "integer_division",
+"kind": "student_contra",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "counts[i][j] / degree[i] gives the correct probability because the result is stored in a double.",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 1,
+"concept": "normalization",
+"kind": "student_wrong",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T.",
+"hypothesis": "p is 0, 0, 0.4, 0.4, 0.2",
+"label": 0,
+"concept": "normalization",
+"kind": "student_contra",
+"answer": "S058",
+"split": "train"
+},
+{
+"premise": "Without break, statements in switch blocks fall through into the following cases.",
+"hypothesis": "result is 50",
+"label": 1,
+"concept": "switch_statement",
+"kind": "student_right",
+"answer": "S152",
+"split": "train"
+},
+{
+"premise": "After the matching case runs, the switch ends even without break.",
+"hypothesis": "result is 50",
+"label": 0,
+"concept": "switch_statement",
+"kind": "student_contra",
+"answer": "S152",
+"split": "train"
+},
+{
+"premise": "% returns the remainder, so 17 % 5 is 2.",
+"hypothesis": "It prints 1 4 7 10",
+"label": 1,
+"concept": "remainder_operator",
+"kind": "student_right",
+"answer": "S154",
+"split": "eval"
+},
+{
+"premise": "17 % 5 is 3 (the quotient).",
+"hypothesis": "It prints 1 4 7 10",
+"label": 0,
+"concept": "remainder_operator",
+"kind": "student_contra",
+"answer": "S154",
+"split": "eval"
+},
+{
+"premise": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+"hypothesis": "It prints 1 4 7 10 13…",
+"label": 1,
+"concept": "arithmetic_operators",
+"kind": "student_wrong",
+"answer": "S160",
+"split": "eval"
+},
+{
+"premise": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+"hypothesis": "It prints 1 4 7 10 13…",
+"label": 0,
+"concept": "arithmetic_operators",
+"kind": "student_contra",
+"answer": "S160",
+"split": "eval"
+},
+{
+"premise": "% returns the remainder, so 17 % 5 is 2.",
+"hypothesis": "num4 is 30.3, or 27.3, or 31.3, depending on how % works.",
+"label": 1,
+"concept": "remainder_operator",
+"kind": "student_right",
+"answer": "S165",
+"split": "train"
+},
+{
+"premise": "17 % 5 is 3 (the quotient).",
+"hypothesis": "num4 is 30.3, or 27.3, or 31.3, depending on how % works.",
+"label": 0,
+"concept": "remainder_operator",
+"kind": "student_contra",
+"answer": "S165",
+"split": "train"
+},
+{
+"premise": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+"hypothesis": "i = 2: prints 1 2, new line.",
+"label": 1,
+"concept": "array_traversal",
+"kind": "student_right",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+"hypothesis": "i = 2: prints 1 2, new line.",
+"label": 0,
+"concept": "array_traversal",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+"hypothesis": "i = 2: prints 1 2, new line.",
+"label": 0,
+"concept": "loop_control",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1.",
+"hypothesis": "i = 2: prints 1 2, new line.",
+"label": 1,
+"concept": "simulation_loop",
+"kind": "student_right",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "t < T and t <= T give the same number of moves.",
+"hypothesis": "i = 2: prints 1 2, new line.",
+"label": 0,
+"concept": "simulation_loop",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+"hypothesis": "i = 3: prints 1 2 3, new line.",
+"label": 1,
+"concept": "array_traversal",
+"kind": "student_right",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+"hypothesis": "i = 3: prints 1 2 3, new line.",
+"label": 0,
+"concept": "array_traversal",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+"hypothesis": "i = 3: prints 1 2 3, new line.",
+"label": 0,
+"concept": "loop_control",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1.",
+"hypothesis": "i = 3: prints 1 2 3, new line.",
+"label": 1,
+"concept": "simulation_loop",
+"kind": "student_right",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "t < T and t <= T give the same number of moves.",
+"hypothesis": "i = 3: prints 1 2 3, new line.",
+"label": 0,
+"concept": "simulation_loop",
+"kind": "student_contra",
+"answer": "S278",
+"split": "train"
+},
+{
+"premise": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+"hypothesis": "1\n1 2\n1 2 3",
+"label": 1,
+"concept": "array_traversal",
+"kind": "student_right",
+"answer": "S281",
+"split": "train"
+},
+{
+"premise": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+"hypothesis": "1\n1 2\n1 2 3",
+"label": 0,
+"concept": "array_traversal",
+"kind": "student_contra",
+"answer": "S281",
+"split": "train"
+},
+{
+"premise": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+"hypothesis": "1\n1 2\n1 2 3",
+"label": 0,
+"concept": "loop_control",
+"kind": "student_contra",
+"answer": "S281",
+"split": "train"
+},
+{
+"premise": "for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1.",
+"hypothesis": "1\n1 2\n1 2 3",
+"label": 1,
+"concept": "simulation_loop",
+"kind": "student_right",
+"answer": "S281",
+"split": "train"
+},
+{
+"premise": "t < T and t <= T give the same number of moves.",
+"hypothesis": "1\n1 2\n1 2 3",
+"label": 0,
+"concept": "simulation_loop",
+"kind": "student_contra",
+"answer": "S281",
+"split": "train"
+},
+{
+"premise": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+"hypothesis": "i | j | printed\n1 | 1 | 1\n2 | 1,2 | 1 2\n3 | 1,2,3 | 1 2 3",
+"label": 1,
+"concept": "array_traversal",
+"kind": "student_right",
+"answer": "S282",
+"split": "train"
+},
+{
+"premise": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+"hypothesis": "i | j | printed\n1 | 1 | 1\n2 | 1,2 | 1 2\n3 | 1,2,3 | 1 2 3",
+"label": 0,
+"concept": "array_traversal",
+"kind": "student_contra",
+"answer": "S282",
+"split": "train"
+},
+{
+"premise": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+"hypothesis": "i | j | printed\n1 | 1 | 1\n2 | 1,2 | 1 2\n3 | 1,2,3 | 1 2 3",
+"label": 0,
+"concept": "loop_control",
+"kind": "student_contra",
+"answer": "S282",
+"split": "train"
+},
+{
+"premise": "for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1.",
+"hypothesis": "i | j | printed\n1 | 1 | 1\n2 | 1,2 | 1 2\n3 | 1,2,3 | 1 2 3",
+"label": 1,
+"concept": "simulation_loop",
+"kind": "student_right",
+"answer": "S282",
+"split": "train"
+},
+{
+"premise": "t < T and t <= T give the same number of moves.",
+"hypothesis": "i | j | printed\n1 | 1 | 1\n2 | 1,2 | 1 2\n3 | 1,2,3 | 1 2 3",
+"label": 0,
+"concept": "simulation_loop",
+"kind": "student_contra",
+"answer": "S282",
+"split": "train"
+},
+{
+"premise": "A local variable has no value until it is assigned, and using it before then does not compile.",
+"hypothesis": "Nothing is printed: it does not compile",
+"label": 1,
+"concept": "declaration",
+"kind": "student_right",
+"answer": "S357",
+"split": "eval"
+},
+{
+"premise": "local variables get a default value on their own",
+"hypothesis": "Nothing is printed: it does not compile",
+"label": 0,
+"concept": "declaration",
+"kind": "student_contra",
+"answer": "S357",
+"split": "eval"
+},
+{
+"premise": "int x; inside main starts at 0, so x can be used before anything is assigned to it.",
+"hypothesis": "Nothing is printed: it does not compile",
+"label": 0,
+"concept": "variable",
+"kind": "student_contra",
+"answer": "S357",
+"split": "eval"
+},
+{
+"premise": "local variables get a default value on their own",
+"hypothesis": "3",
+"label": 1,
+"concept": "declaration",
+"kind": "student_wrong",
+"answer": "S358",
+"split": "eval"
+},
+{
+"premise": "A local variable has no value until it is assigned, and using it before then does not compile.",
+"hypothesis": "3",
+"label": 0,
+"concept": "declaration",
+"kind": "student_contra",
+"answer": "S358",
+"split": "eval"
+},
+{
+"premise": "int x; inside main starts at 0, so x can be used before anything is assigned to it.",
+"hypothesis": "3",
+"label": 1,
+"concept": "variable",
+"kind": "student_wrong",
+"answer": "S358",
+"split": "eval"
+},
+{
+"premise": "local variables get a default value on their own",
+"hypothesis": "then it prints 3.",
+"label": 1,
+"concept": "declaration",
+"kind": "student_wrong",
+"answer": "S360",
+"split": "eval"
+},
+{
+"premise": "A local variable has no value until it is assigned, and using it before then does not compile.",
+"hypothesis": "then it prints 3.",
+"label": 0,
+"concept": "declaration",
+"kind": "student_contra",
+"answer": "S360",
+"split": "eval"
+},
+{
+"premise": "int x; inside main starts at 0, so x can be used before anything is assigned to it.",
+"hypothesis": "then it prints 3.",
+"label": 1,
+"concept": "variable",
+"kind": "student_wrong",
+"answer": "S360",
+"split": "eval"
+}
+]
