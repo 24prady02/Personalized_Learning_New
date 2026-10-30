@@ -1,0 +1,1359 @@
+{
+ "program_text": {
+  "must_tag": [
+   "public class Hello {\n}"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "compile": {
+  "must_tag": [
+   "% javac Hello.java"
+  ],
+  "must_not_tag": [
+   "% java Hello"
+  ]
+ },
+ "run": {
+  "must_tag": [
+   "% java Hello"
+  ],
+  "must_not_tag": [
+   "% javac Hello.java"
+  ]
+ },
+ "class_declaration": {
+  "must_tag": [
+   "public class Hello {\n}"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "main_method": {
+  "must_tag": [
+   "public static void main(String[] args) {\n}"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "statement": {
+  "must_tag": [
+   "int x = 1;"
+  ],
+  "must_not_tag": [
+   "x"
+  ]
+ },
+ "block": {
+  "must_tag": [
+   "if (x) { y = 1; }"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "comment": {
+  "must_tag": [
+   "// hello",
+   "/* hello */"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "print": {
+  "must_tag": [
+   "System.out.print(\"a\");"
+  ],
+  "must_not_tag": [
+   "System.out.println(\"a\");"
+  ]
+ },
+ "println": {
+  "must_tag": [
+   "System.out.println(\"a\");"
+  ],
+  "must_not_tag": [
+   "System.out.print(\"a\");"
+  ]
+ },
+ "string_literal": {
+  "must_tag": [
+   "System.out.println(\"hi\");"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "program_layout": {
+  "must_tag": [
+   "int x = 1; int y = 2;"
+  ],
+  "must_not_tag": [
+   "int x = 1;\nint y = 2;",
+   "if (x) y = 1; else y = 2;",
+   "switch (x) { case 1: y = 1; break; }"
+  ]
+ },
+ "compile_time_error": {
+  "must_tag": [
+   "int x = 1\nint y = 2;",
+   "System.out.println(\"Hi, \" + args[1])"
+  ],
+  "must_not_tag": [
+   "int x = 1;\nint y = 2;",
+   "int x = a +\n  b;"
+  ]
+ },
+ "run_time_error": {
+  "must_tag": [
+   "int x = 10 / 0;",
+   "int n = Integer.parseInt(args[0]);"
+  ],
+  "must_not_tag": [
+   "int x = 10 / 2;"
+  ]
+ },
+ "logical_error": {
+  "must_tag": [
+   "if (x > 0);\ny = 1;"
+  ],
+  "must_not_tag": [
+   "if (x > 0) y = 1;",
+   "do { i++; } while (i < 5);"
+  ]
+ },
+ "reading_error_messages": {
+  "must_tag": [
+   "Hello.java:3: error: ';' expected"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "command_line_args": {
+  "must_tag": [
+   "int n = Integer.parseInt(args[0]);",
+   "% java RandomSeq 5"
+  ],
+  "must_not_tag": [
+   "int n = 5;",
+   "% java Average < data.txt"
+  ]
+ },
+ "data_type": {
+  "must_tag": [
+   "int x = 1;"
+  ],
+  "must_not_tag": [
+   "x = y + 1;"
+  ]
+ },
+ "primitive_type": {
+  "must_tag": [
+   "double d = 1.5;"
+  ],
+  "must_not_tag": [
+   "String s = \"a\";"
+  ]
+ },
+ "literal": {
+  "must_tag": [
+   "int x = 42;"
+  ],
+  "must_not_tag": [
+   "x = y;"
+  ]
+ },
+ "identifier": {
+  "must_tag": [
+   "int x;"
+  ],
+  "must_not_tag": [
+   "42;"
+  ]
+ },
+ "variable": {
+  "must_tag": [
+   "int count = 0;"
+  ],
+  "must_not_tag": [
+   "count = 1;"
+  ]
+ },
+ "naming_convention": {
+  "must_tag": [
+   "char SingleLetter = 'Q';"
+  ],
+  "must_not_tag": [
+   "char singleLetter = 'Q';",
+   "final int MAX_SIZE = 10;"
+  ]
+ },
+ "declaration": {
+  "must_tag": [
+   "double x;"
+  ],
+  "must_not_tag": [
+   "x = 1;"
+  ]
+ },
+ "assignment": {
+  "must_tag": [
+   "x = 1;"
+  ],
+  "must_not_tag": [
+   "if (x == 1) y++;"
+  ]
+ },
+ "expression": {
+  "must_tag": [
+   "int z = x + y;"
+  ],
+  "must_not_tag": [
+   "foo();"
+  ]
+ },
+ "operator_precedence": {
+  "must_tag": [
+   "int z = a + b * c;"
+  ],
+  "must_not_tag": [
+   "int z = a + b;"
+  ]
+ },
+ "definite_assignment": {
+  "must_tag": [
+   "int x;\nSystem.out.println(x);"
+  ],
+  "must_not_tag": [
+   "int x;\nx = 3;\nSystem.out.println(x);"
+  ]
+ },
+ "variable_swap": {
+  "must_tag": [
+   "int t = a;\na = b;\nb = t;"
+  ],
+  "must_not_tag": [
+   "a = b;\nb = a;"
+  ]
+ },
+ "chained_assignment": {
+  "must_tag": [
+   "a = b = 0;"
+  ],
+  "must_not_tag": [
+   "a = 0;\nb = 0;"
+  ]
+ },
+ "named_constants": {
+  "must_tag": [
+   "final int MAX_SIZE = 10;"
+  ],
+  "must_not_tag": [
+   "int maxSize = 10;"
+  ]
+ },
+ "char": {
+  "must_tag": [
+   "char c = 'a';"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "string_type": {
+  "must_tag": [
+   "String s = \"a\";"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "string_concatenation": {
+  "must_tag": [
+   "System.out.println(\"a\" + x);"
+  ],
+  "must_not_tag": [
+   "System.out.println(\"a\");"
+  ]
+ },
+ "escape_sequences": {
+  "must_tag": [
+   "System.out.println(\"a\\nb\");"
+  ],
+  "must_not_tag": [
+   "System.out.println(\"ab\");"
+  ]
+ },
+ "char_arithmetic": {
+  "must_tag": [
+   "char d = (char) (c + 1);"
+  ],
+  "must_not_tag": [
+   "char c = 'a';"
+  ]
+ },
+ "int": {
+  "must_tag": [
+   "int x = 1;"
+  ],
+  "must_not_tag": [
+   "double d = 1.0;"
+  ]
+ },
+ "arithmetic_operators": {
+  "must_tag": [
+   "int z = x + y;"
+  ],
+  "must_not_tag": [
+   "int x = 1;",
+   "% java RandomSeq 5 > data.txt\n% java Average < data.txt"
+  ]
+ },
+ "integer_division": {
+  "must_tag": [
+   "int a = 7, b = 2; int c = a / b;",
+   "int a = 7; int b = 2; double c = a / b;",
+   "int x = 9 / 2;",
+   "int[] counts = {0,2}; int d = 5; double[] p = new double[2]; p[0] = counts[0] / d;"
+  ],
+  "must_not_tag": [
+   "double c = 7.0 / 2;",
+   "int a = 7; double c = (double) a / 2;"
+  ]
+ },
+ "overflow": {
+  "must_tag": [
+   "int big = Integer.MAX_VALUE + 1;"
+  ],
+  "must_not_tag": [
+   "int x = 1;",
+   "int m = Integer.MAX_VALUE;"
+  ]
+ },
+ "long_type": {
+  "must_tag": [
+   "long n = 10L;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "remainder_operator": {
+  "must_tag": [
+   "int r = a % b;"
+  ],
+  "must_not_tag": [
+   "int r = a / b;",
+   "% java RandomSeq 5 > data.txt\n% java Average < data.txt"
+  ]
+ },
+ "int_literal_limit": {
+  "must_tag": [
+   "int x = 2147483648;"
+  ],
+  "must_not_tag": [
+   "int x = 2147483647;"
+  ]
+ },
+ "integer_constants": {
+  "must_tag": [
+   "int m = Integer.MAX_VALUE;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "double": {
+  "must_tag": [
+   "double d = 1.5;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "floating_point_precision": {
+  "must_tag": [
+   "double d = 0.1 + 0.2;"
+  ],
+  "must_not_tag": [
+   "double d = x + y;"
+  ]
+ },
+ "division_by_zero": {
+  "must_tag": [
+   "int x = 10 / 0;"
+  ],
+  "must_not_tag": [
+   "int x = 10 / 2;"
+  ]
+ },
+ "scientific_notation": {
+  "must_tag": [
+   "double d = 1e10;"
+  ],
+  "must_not_tag": [
+   "double d = 1.5;"
+  ]
+ },
+ "boolean": {
+  "must_tag": [
+   "boolean b = true;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "boolean_expression": {
+  "must_tag": [
+   "if (x > 0) y = 1;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "logical_operators": {
+  "must_tag": [
+   "if (a && b) y = 1;"
+  ],
+  "must_not_tag": [
+   "if (a) y = 1;"
+  ]
+ },
+ "short_circuit": {
+  "must_tag": [
+   "if (i < a.length && a[i] > 0) y = 1;"
+  ],
+  "must_not_tag": [
+   "if (!a) y = 1;"
+  ]
+ },
+ "exclusive_or": {
+  "must_tag": [
+   "boolean c = a ^ b;"
+  ],
+  "must_not_tag": [
+   "boolean c = a && b;"
+  ]
+ },
+ "de_morgan": {
+  "must_tag": [
+   "if (!(a && b)) y = 1;"
+  ],
+  "must_not_tag": [
+   "if (!a) y = 1;"
+  ]
+ },
+ "comparison_operators": {
+  "must_tag": [
+   "if (x < 10) y = 1;",
+   "while (i < a.length) i++;"
+  ],
+  "must_not_tag": [
+   "int x = 1;",
+   "% java RandomSeq 5 > data.txt\n% java Average < data.txt"
+  ]
+ },
+ "method_call": {
+  "must_tag": [
+   "int r = sqrt(x);",
+   "int v = in.readInt();"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "math_library": {
+  "must_tag": [
+   "double r = Math.sqrt(2);"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "math_random": {
+  "must_tag": [
+   "double r = Math.random();"
+  ],
+  "must_not_tag": [
+   "double r = Math.sqrt(2);"
+  ]
+ },
+ "math_round": {
+  "must_tag": [
+   "long r = Math.round(x);"
+  ],
+  "must_not_tag": [
+   "double r = Math.sqrt(2);"
+  ]
+ },
+ "trig_functions": {
+  "must_tag": [
+   "double y = Math.sin(x);"
+  ],
+  "must_not_tag": [
+   "double r = Math.sqrt(2);"
+  ]
+ },
+ "type_conversion": {
+  "must_tag": [
+   "int n = (int) d;"
+  ],
+  "must_not_tag": [
+   "int x = 1;",
+   "double d = 0.1 + 0.2;"
+  ]
+ },
+ "explicit_cast": {
+  "must_tag": [
+   "int n = (int) d;"
+  ],
+  "must_not_tag": [
+   "int n = d;"
+  ]
+ },
+ "parsing": {
+  "must_tag": [
+   "int n = Integer.parseInt(s);"
+  ],
+  "must_not_tag": [
+   "int n = 5;"
+  ]
+ },
+ "widening_conversion": {
+  "must_tag": [
+   "double d = 5;"
+  ],
+  "must_not_tag": [
+   "double d = 5.0;",
+   "double d = 0.1 + 0.2;"
+  ]
+ },
+ "string_conversion": {
+  "must_tag": [
+   "String s = \"\" + x;"
+  ],
+  "must_not_tag": [
+   "String s = \"a\";"
+  ]
+ },
+ "control_flow": {
+  "must_tag": [
+   "if (x) y = 1;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "if_statement": {
+  "must_tag": [
+   "if (x > 0) y = 1;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "if_else_statement": {
+  "must_tag": [
+   "if (x) y = 1; else y = 2;"
+  ],
+  "must_not_tag": [
+   "if (x) y = 1;"
+  ]
+ },
+ "empty_statement": {
+  "must_tag": [
+   "if (x > 0);\ny = 1;"
+  ],
+  "must_not_tag": [
+   "if (x > 0) y = 1;",
+   "do { i++; } while (i < 5);"
+  ]
+ },
+ "while_loop": {
+  "must_tag": [
+   "while (i < 5) i++;",
+   "while (!StdIn.isEmpty()) {\n  sum += StdIn.readInt();\n}"
+  ],
+  "must_not_tag": [
+   "do { i++; } while (i < 5);",
+   "do {\n  i++;\n}\nwhile (i < 5);"
+  ]
+ },
+ "loop_body": {
+  "must_tag": [
+   "while (i < 5) i++;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "loop_control": {
+  "must_tag": [
+   "for (int i = 0; i < 3; i++) s += i;"
+  ],
+  "must_not_tag": [
+   "System.out.println(\"for (int i = 0; i < 3; i++)\");"
+  ]
+ },
+ "for_loop": {
+  "must_tag": [
+   "for (int i = 0; i < 3; i++) s += i;"
+  ],
+  "must_not_tag": [
+   "System.out.println(\"for (int i = 0; i < 3; i++)\");"
+  ]
+ },
+ "loop_variable": {
+  "must_tag": [
+   "for (int i = 0; i < 3; i++) s += i;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "increment_operators": {
+  "must_tag": [
+   "i++;"
+  ],
+  "must_not_tag": [
+   "i = i + 1;"
+  ]
+ },
+ "loop_scope": {
+  "must_tag": [
+   "for (int i = 0; i < 3; i++) s += i;"
+  ],
+  "must_not_tag": [
+   "for (i = 0; i < 3; i++) s += i;"
+  ]
+ },
+ "compound_assignment": {
+  "must_tag": [
+   "x += 2;"
+  ],
+  "must_not_tag": [
+   "x = x + 2;"
+  ]
+ },
+ "side_effect_order": {
+  "must_tag": [
+   "i = i++;"
+  ],
+  "must_not_tag": [
+   "i++;"
+  ]
+ },
+ "nested_conditionals": {
+  "must_tag": [
+   "if (a) {\n  if (b) y = 1;\n}"
+  ],
+  "must_not_tag": [
+   "if (a) y = 1;"
+  ]
+ },
+ "nested_loops": {
+  "must_tag": [
+   "for (int i = 0; i < 3; i++) {\n  for (int j = 0; j < 3; j++) s++;\n}"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < 3; i++) s++;"
+  ]
+ },
+ "else_if_chain": {
+  "must_tag": [
+   "if (a) y = 1; else if (b) y = 2;"
+  ],
+  "must_not_tag": [
+   "if (a) y = 1; else y = 2;"
+  ]
+ },
+ "dangling_else": {
+  "must_tag": [
+   "if (a) if (b) x = 1; else x = 2;"
+  ],
+  "must_not_tag": [
+   "if (a) { if (b) x = 1; } else x = 2;"
+  ]
+ },
+ "accumulator_pattern": {
+  "must_tag": [
+   "sum += a[i];"
+  ],
+  "must_not_tag": [
+   "count += 1;"
+  ]
+ },
+ "counter_pattern": {
+  "must_tag": [
+   "if (a[i] > 0) count++;"
+  ],
+  "must_not_tag": [
+   "sum += a[i];"
+  ]
+ },
+ "convergence_test": {
+  "must_tag": [
+   "while (Math.abs(t - c / t) > eps * t) t = (c / t + t) / 2.0;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "monte_carlo_simulation": {
+  "must_tag": [
+   "if (Math.random() < p) heads++;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "fencepost_loop": {
+  "must_tag": [
+   "System.out.print(a[0]); for (int i = 1; i < n; i++) System.out.print(\", \" + a[i]);"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < n; i++) System.out.print(a[i]);"
+  ]
+ },
+ "flag_search_loop": {
+  "must_tag": [
+   "boolean found = false;\nfor (int i = 0; i < n; i++) if (a[i] == k) found = true;"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < n; i++) if (a[i] == k) found = true;"
+  ]
+ },
+ "break_statement": {
+  "must_tag": [
+   "if (x) break;"
+  ],
+  "must_not_tag": [
+   "if (x) continue;"
+  ]
+ },
+ "continue_statement": {
+  "must_tag": [
+   "if (x) continue;"
+  ],
+  "must_not_tag": [
+   "if (x) break;"
+  ]
+ },
+ "switch_statement": {
+  "must_tag": [
+   "switch (x) { case 1: y = 1; break; }"
+  ],
+  "must_not_tag": [
+   "if (x == 1) y = 1;"
+  ]
+ },
+ "do_while_loop": {
+  "must_tag": [
+   "do { i++; } while (i < 5);"
+  ],
+  "must_not_tag": [
+   "while (i < 5) i++;"
+  ]
+ },
+ "conditional_operator": {
+  "must_tag": [
+   "int m = a > b ? a : b;"
+  ],
+  "must_not_tag": [
+   "int m = a;"
+  ]
+ },
+ "labeled_break": {
+  "must_tag": [
+   "outer: for (int i = 0; i < n; i++) { break outer; }"
+  ],
+  "must_not_tag": [
+   "break;"
+  ]
+ },
+ "infinite_loop": {
+  "must_tag": [
+   "while (true) { x++; }"
+  ],
+  "must_not_tag": [
+   "while (x < 5) x++;"
+  ]
+ },
+ "array_declaration": {
+  "must_tag": [
+   "int[] a = new int[10];"
+  ],
+  "must_not_tag": [
+   "int a = 10;"
+  ]
+ },
+ "array_creation": {
+  "must_tag": [
+   "int[] a = new int[10];"
+  ],
+  "must_not_tag": [
+   "int[] a;"
+  ]
+ },
+ "array_default_values": {
+  "must_tag": [
+   "double[] a = new double[10];"
+  ],
+  "must_not_tag": [
+   "int[] a = {1, 2};"
+  ]
+ },
+ "indexing": {
+  "must_tag": [
+   "x = a[i];"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "length_field": {
+  "must_tag": [
+   "int n = a.length;"
+  ],
+  "must_not_tag": [
+   "int n = s.length();"
+  ]
+ },
+ "args_length": {
+  "must_tag": [
+   "if (args.length > 0) x = 1;"
+  ],
+  "must_not_tag": [
+   "int n = a.length;"
+  ]
+ },
+ "array_bounds": {
+  "must_tag": [
+   "for (int i = 0; i < a.length; i++) s += a[i];"
+  ],
+  "must_not_tag": [
+   "int x = a[0];"
+  ]
+ },
+ "array_aliasing": {
+  "must_tag": [
+   "int[] b = a;"
+  ],
+  "must_not_tag": [
+   "int[] b = new int[3];"
+  ]
+ },
+ "printing_array_reference": {
+  "must_tag": [
+   "int[] a = new int[3]; System.out.println(a);"
+  ],
+  "must_not_tag": [
+   "int[] a = new int[3]; System.out.println(a[0]);"
+  ]
+ },
+ "array_initializer": {
+  "must_tag": [
+   "int[] a = {1, 2, 3};"
+  ],
+  "must_not_tag": [
+   "int[] a = new int[3];"
+  ]
+ },
+ "array_traversal": {
+  "must_tag": [
+   "for (int i = 0; i < a.length; i++) s += a[i];"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < 3; i++) s++;"
+  ]
+ },
+ "enhanced_for": {
+  "must_tag": [
+   "for (int v : a) s += v;"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < 3; i++) s++;"
+  ]
+ },
+ "array_reversal": {
+  "must_tag": [
+   "b[i] = a[a.length - 1 - i];"
+  ],
+  "must_not_tag": [
+   "b[i] = a[i];"
+  ]
+ },
+ "array_exchange": {
+  "must_tag": [
+   "int t = a[i]; a[i] = a[j]; a[j] = t;"
+  ],
+  "must_not_tag": [
+   "int t = a[i];"
+  ]
+ },
+ "shuffle": {
+  "must_tag": [
+   "int r = i + (int) (Math.random() * (n - i));"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "sampling_without_replacement": {
+  "must_tag": [
+   "int[] perm = new int[n];"
+  ],
+  "must_not_tag": [
+   "int[] a = new int[n];"
+  ]
+ },
+ "lookup_table": {
+  "must_tag": [
+   "String[] names = {\"a\", \"b\"};"
+  ],
+  "must_not_tag": [
+   "int[] a = {1, 2};"
+  ]
+ },
+ "boolean_flag_array": {
+  "must_tag": [
+   "boolean[] seen = new boolean[n];"
+  ],
+  "must_not_tag": [
+   "int[] a = new int[n];"
+  ]
+ },
+ "two_dimensional_array": {
+  "must_tag": [
+   "int[][] g = new int[3][3];"
+  ],
+  "must_not_tag": [
+   "int[] a = new int[3];"
+  ]
+ },
+ "ragged_array": {
+  "must_tag": [
+   "int[][] g = new int[3][];"
+  ],
+  "must_not_tag": [
+   "int[][] g = new int[3][3];"
+  ]
+ },
+ "matrix_operations": {
+  "must_tag": [
+   "c[i][j] += a[i][k] * b[k][j];"
+  ],
+  "must_not_tag": [
+   "c[i][j] = 0;"
+  ]
+ },
+ "multidimensional_array": {
+  "must_tag": [
+   "int[][][] g = new int[2][2][2];"
+  ],
+  "must_not_tag": [
+   "int[][] g = new int[2][2];"
+  ]
+ },
+ "stream_model": {
+  "must_tag": [
+   "int x = StdIn.readInt();"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "standard_output": {
+  "must_tag": [
+   "System.out.println(\"a\");"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "formatted_output": {
+  "must_tag": [
+   "System.out.printf(\"%5.2f\", x);"
+  ],
+  "must_not_tag": [
+   "System.out.println(x);"
+  ]
+ },
+ "standard_input": {
+  "must_tag": [
+   "int x = StdIn.readInt();",
+   "% java Average < data.txt"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "read_loop_idiom": {
+  "must_tag": [
+   "while (!StdIn.isEmpty()) { int x = StdIn.readInt(); }"
+  ],
+  "must_not_tag": [
+   "while (i < 5) i++;"
+  ]
+ },
+ "input_format": {
+  "must_tag": [
+   "int x = StdIn.readInt();"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "interactive_input": {
+  "must_tag": [
+   "while (!StdIn.isEmpty()) { int x = StdIn.readInt(); if (x > 0) c++; }"
+  ],
+  "must_not_tag": [
+   "int x = StdIn.readInt();"
+  ]
+ },
+ "end_of_input": {
+  "must_tag": [
+   "while (!StdIn.isEmpty()) sum += StdIn.readInt();"
+  ],
+  "must_not_tag": [
+   "int x = StdIn.readInt();"
+  ]
+ },
+ "sentinel_loop": {
+  "must_tag": [
+   "while (x != -1) x = StdIn.readInt();"
+  ],
+  "must_not_tag": [
+   "while (i < 5) i++;"
+  ]
+ },
+ "running_extreme": {
+  "must_tag": [
+   "if (a[i] > max) max = a[i];"
+  ],
+  "must_not_tag": [
+   "sum += a[i];"
+  ]
+ },
+ "token_vs_line_input": {
+  "must_tag": [
+   "String line = StdIn.readLine();"
+  ],
+  "must_not_tag": [
+   "int x = StdIn.readInt();"
+  ]
+ },
+ "input_validation": {
+  "must_tag": [
+   "if (!StdIn.isEmpty()) x = StdIn.readInt();"
+  ],
+  "must_not_tag": [
+   "int x = StdIn.readInt();"
+  ]
+ },
+ "redirection": {
+  "must_tag": [
+   "% java Average < data.txt",
+   "% java RandomSeq 5 > data.txt"
+  ],
+  "must_not_tag": [
+   "% java Average"
+  ]
+ },
+ "piping": {
+  "must_tag": [
+   "% java RandomSeq 5 | java Average"
+  ],
+  "must_not_tag": [
+   "% java Average < data.txt"
+  ]
+ },
+ "filter": {
+  "must_tag": [
+   "% java Filter < in.txt > out.txt"
+  ],
+  "must_not_tag": [
+   "% java Average"
+  ]
+ },
+ "standard_drawing": {
+  "must_tag": [
+   "StdDraw.point(x, y);"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "animation": {
+  "must_tag": [
+   "StdDraw.show();"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "coordinate_scaling": {
+  "must_tag": [
+   "StdDraw.setXscale(0, n);"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "function_plotting": {
+  "must_tag": [
+   "StdDraw.point(x[i], Math.sin(x[i]));"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "drawing_shapes": {
+  "must_tag": [
+   "StdDraw.circle(x, y, r);"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "mouse_interaction": {
+  "must_tag": [
+   "if (StdDraw.mousePressed()) x = 1;"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "standard_audio": {
+  "must_tag": [
+   "StdAudio.play(a);"
+  ],
+  "must_not_tag": [
+   "StdDraw.point(x, y);"
+  ]
+ },
+ "input_graph": {
+  "must_tag": [
+   "counts[i][j]++;"
+  ],
+  "must_not_tag": [
+   "counts[i]++;"
+  ]
+ },
+ "transition_matrix": {
+  "must_tag": [
+   "p[i][j] = 1.0 / n;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "normalization": {
+  "must_tag": [
+   "int[] counts = {0,2}; int d = 5; double[] p = new double[2]; p[0] = counts[0] / d;"
+  ],
+  "must_not_tag": [
+   "p[0] = 1.0;"
+  ]
+ },
+ "dangling_pages": {
+  "must_tag": [
+   "if (outDegree[i] == 0) x = 1;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "teleportation": {
+  "must_tag": [
+   "p[i][j] = 0.90 * counts[i][j] / outDegree[i] + 0.10 / n;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "random_move": {
+  "must_tag": [
+   "if (r < sum) { page = j; break; }"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "simulation_loop": {
+  "must_tag": [
+   "for (int t = 0; t < trials; t++) x++;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "frequency_counting": {
+  "must_tag": [
+   "freq[page]++;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "markov_chain": {
+  "must_tag": [
+   "page = j;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "power_method": {
+  "must_tag": [
+   "newRank[j] += rank[i] * p[i][j];"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "two_models": {
+  "must_tag": [
+   "RandomSurfer r;\nMarkov m;"
+  ],
+  "must_not_tag": [
+   "RandomSurfer r;"
+  ]
+ },
+ "convergence_rate": {
+  "must_tag": [
+   "double[] newRanks = new double[n];\nranks = newRanks;"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "black_box_model": {
+  "must_tag": [
+   "% java RandomSeq 5"
+  ],
+  "must_not_tag": [
+   "% javac RandomSeq.java",
+   "% java Average < data.txt"
+  ]
+ },
+ "api": {
+  "must_tag": [
+   "double r = Math.sqrt(2);"
+  ],
+  "must_not_tag": [
+   "int x = 1;"
+  ]
+ },
+ "syntax_template": {
+  "must_tag": [
+   "while (<boolean expression>) <statement>"
+  ],
+  "must_not_tag": [
+   "while (x < 5) x++;"
+  ]
+ },
+ "loop_invariant_reasoning": {
+  "must_tag": [
+   "// invariant: sum == a[0] + ... + a[i-1]"
+  ],
+  "must_not_tag": [
+   "// add the next element"
+  ]
+ },
+ "number_conversion": {
+  "must_tag": [
+   "n = n / 2;"
+  ],
+  "must_not_tag": [
+   "n = n / 3;"
+  ]
+ },
+ "loop_performance": {
+  "must_tag": [
+   "for (int i = 1; i * i <= n; i++) c++;"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < n; i++) c++;"
+  ]
+ },
+ "data_structure": {
+  "must_tag": [
+   "int[] a = new int[3];"
+  ],
+  "must_not_tag": [
+   "int a = 3;"
+  ]
+ },
+ "array_reference": {
+  "must_tag": [
+   "int[] b = a;"
+  ],
+  "must_not_tag": [
+   "int[] b = new int[3];"
+  ]
+ },
+ "space_time_tradeoff": {
+  "must_tag": [
+   "f[i] = f[i - 1] + f[i - 2];"
+  ],
+  "must_not_tag": [
+   "f[i] = i;"
+  ]
+ },
+ "row_major_order": {
+  "must_tag": [
+   "for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) g[i][j] = 0;"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < n; i++) a[i] = 0;"
+  ]
+ },
+ "loop_guard": {
+  "must_tag": [
+   "while (i < a.length && a[i] != k) i++;"
+  ],
+  "must_not_tag": [
+   "while (i < n) i++;"
+  ]
+ },
+ "data_driven_code": {
+  "must_tag": [
+   "% java Average < data.txt"
+  ],
+  "must_not_tag": [
+   "% java Average"
+  ]
+ },
+ "off_by_one_error": {
+  "must_tag": [
+   "for (int i = 0; i <= a.length; i++) s += a[i];"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < a.length; i++) s += a[i];"
+  ]
+ },
+ "array_copy": {
+  "must_tag": [
+   "for (int i = 0; i < a.length; i++) b[i] = a[i];",
+   "System.arraycopy(a, 0, b, 0, n);"
+  ],
+  "must_not_tag": [
+   "for (int i = 0; i < a.length; i++) a[i] = a[i] * 2;"
+  ]
+ },
+ "primitive_vs_reference": {
+  "must_tag": [
+   "int[] b = a;"
+  ],
+  "must_not_tag": [
+   "int b = a;"
+  ]
+ }
+}

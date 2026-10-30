@@ -1,0 +1,1279 @@
+{
+ "source": "Chapter1_student_scenarios_set.xlsx (code, question, answer); gold key gold_19 (KG v3.9.5); S000 is the reference case",
+ "note": "21 entries: S000 is the reference case; S001..S137 are the 20 gold scenarios. gold.levels / gold.edges / gold.held / gold.correct hold the student-reasoning labels. The subgraph stage reads only `code`.",
+ "scenarios": [
+  {
+   "id": "S000",
+   "code": "int count;\nSystem.out.println(count);",
+   "question": "What does the system print?",
+   "answer": "It will print 0.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "definite_assignment"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "definite_assignment": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": "It will print 0."
+     }
+    },
+    "edges": [],
+    "held": [
+     "LocalVariablesAutoInitialized"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "definite_assignment",
+     "misconception": "LocalVariablesAutoInitialized"
+    }
+   },
+   "reference_case": true
+  },
+  {
+   "id": "S001",
+   "code": "System.out.print(\"Welcome to Java. This is \");\nSystem.out.println(\"A nice programming language \");\nSystem.out.print(\"that I have to learn.\");",
+   "question": "What is the exact output, including line breaks? Explain how you got it.",
+   "answer": "println adds a newline after the text and print does not.",
+   "reference_level": "L1",
+   "gold": {
+    "label": "partially_correct",
+    "main": [
+     "println",
+     "print"
+    ],
+    "overall_level": {
+     "level": "L1",
+     "accept": [
+      "L1",
+      "L3"
+     ]
+    },
+    "levels": {
+     "println": {
+      "level": "L1",
+      "accept": [
+       "L1",
+       "L3"
+      ],
+      "way": "L1[1] states_the_rule",
+      "rule": "println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string.",
+      "student_evidence": "println adds a newline after the text"
+     },
+     "print": {
+      "level": "L1",
+      "accept": [
+       "L1",
+       "L3"
+      ],
+      "way": "L1[1] states_the_rule",
+      "rule": "print(String s) prints the string (or \"null\" for a null reference); print(int) etc. print the value's string form; no line terminator is written.",
+      "student_evidence": "print does not"
+     }
+    },
+    "edges": [
+     {
+      "id": "par:print~println",
+      "status": "confirmed",
+      "logic": "print leaves the cursor on the same line after printing; println moves the cursor to the next line after printing.",
+      "student_evidence": "println adds a newline after the text and print does not"
+     }
+    ],
+    "held": [],
+    "correct": [
+     "PrintEqualsPrintln"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S005",
+   "code": "int i = 81;\ndo {\n  if (i % 2 == 1 && i != 73) {\n    System.out.printf(\"%d \", i);\n  }\n  i--;\n} while (i >= 70);",
+   "question": "What is the output? Explain. (b) What if i started at 61?",
+   "answer": "With a while loop the output is the same here, because 81 >= 70 is true at the start; it would only differ if i started below 70.",
+   "reference_level": "L4",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "do_while_loop",
+     "while_loop"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L3",
+      "L4"
+     ]
+    },
+    "levels": {
+     "do_while_loop": {
+      "level": "L4",
+      "accept": [
+       "L3",
+       "L4"
+      ],
+      "way": "L4[0] predict_a_change",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "while_loop": {
+      "level": "L3",
+      "accept": [
+       "L1",
+       "L3"
+      ],
+      "way": "via pre:while_loop->do_while_loop",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:while_loop->do_while_loop",
+      "status": "confirmed",
+      "logic": "do { body } while (c); is a while loop whose test is moved to the bottom.",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "DoWhileTestsFirst"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S007",
+   "code": "for (int i = 3; i >= 0; i--) {\n  for (int j = i; j > 0; j--) {\n    System.out.printf(\"%d \", j);\n  }\n  System.out.println();\n}",
+   "question": "Give the exact output, including spacing and empty lines. Explain.",
+   "answer": "3 2 1 / 2 1 / 1\" (no empty line at the end), \"because the loop stops at 1.",
+   "reference_level": "L1",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "nested_loops",
+     "loop_control",
+     "for_loop"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "nested_loops": {
+      "level": "L0",
+      "accept": [
+       "L0",
+       "L2"
+      ],
+      "way": "L0[6] misconception",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "loop_control": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[2] misconception",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:for_loop->nested_loops",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:loop_control->for_loop",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "OffByOneBound"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "loop_control",
+     "misconception": "OffByOneBound"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S008",
+   "code": "int num = 8, num1 = num + 1, num2 = num1 + 3;\nint i = num;\ndo {\n  if (i != num1 && i != num2) {\n    System.out.printf(\"%d, \", i);\n  } else {\n    num2--;\n  }\n  i++;\n} while (i < 14);",
+   "question": "What is the output? Trace i, num1 and num2. (b) Rewrite it with a for loop.",
+   "answer": "num1 is 9 and num2 starts at 12. At i = 9 num2 drops to 11; at i = 11 it drops to 10. So it prints 8, 10, 12, 13,",
+   "reference_level": "L2",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "do_while_loop",
+     "if_else_statement"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "do_while_loop": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "if_else_statement": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "logical_operators": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "formatted_output": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [],
+    "held": [],
+    "correct": [],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S009",
+   "code": "(writing task) double array sensorReadings already exists",
+   "question": "Assign 7.9 to the next-to-last position without hard-coding the index.",
+   "answer": "sensorReadings[sensorReadings.length - 2] = 7.9; — the last index is length - 1, so next-to-last is length - 2.",
+   "reference_level": "L3",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "length_field",
+     "indexing"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2",
+      "L3"
+     ]
+    },
+    "levels": {
+     "length_field": {
+      "level": "L2",
+      "accept": [
+       "L2",
+       "L3"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "indexing": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "array_bounds": {
+      "level": "L1",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:indexing->array_bounds",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:array_creation->length_field",
+      "status": "context",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "ArrayRangeInclusive"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S010",
+   "code": "(writing task) int array data2 already exists",
+   "question": "Make an exact copy of data2 (no System.arraycopy).",
+   "answer": "for (int i = 0; i <= data2.length; i++) copy[i] = data2[i];",
+   "reference_level": "L2",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "array_copy",
+     "array_traversal",
+     "off_by_one_error",
+     "array_bounds"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "array_copy": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "array_traversal": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "off_by_one_error": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:array_traversal->array_copy",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:for_loop->array_traversal",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:indexing->array_bounds",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:indexing->off_by_one_error",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "OffByOneBound"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "array_traversal",
+     "misconception": "OffByOneBound"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S012",
+   "code": "(writing task) int variable count already exists",
+   "question": "Show three different statements that add 1 to count and store the result in count.",
+   "answer": "Is count++ the same as count += 1?",
+   "reference_level": "none",
+   "gold": {
+    "label": "student_asks",
+    "main": [],
+    "overall_level": {
+     "level": "none",
+     "accept": [
+      "none",
+      "L1",
+      "needs_review"
+     ]
+    },
+    "levels": {
+     "increment_operators": {
+      "level": "none",
+      "accept": [
+       "none",
+       "L1"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": "Is count++"
+     },
+     "compound_assignment": {
+      "level": "none",
+      "accept": [
+       "none",
+       "L1"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": "the same as count += 1?"
+     }
+    },
+    "edges": [],
+    "held": [],
+    "correct": [],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S015",
+   "code": "(writing task)",
+   "question": "Declare a variable named singleLetter that holds one letter, with initial value Q, following Java convention.",
+   "answer": "char SingleLetter = 'Q';",
+   "reference_level": "L2",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "naming_convention"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "naming_convention": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "char": {
+      "level": "L1",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:variable->naming_convention",
+      "status": "context",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "NameNotCamelCase"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "naming_convention",
+     "misconception": "NameNotCamelCase"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S016",
+   "code": "int num1 = 9, num2 = 5;\ndouble num3 = 26.3;\ndouble num4 = (num1 % num2) + num3;\nSystem.out.println(\"Result is \");\nSystem.out.println(\"num4 = \" + num4);",
+   "question": "What is the exact output? Explain how num4 is computed.",
+   "answer": "num4 = 30.3, because 9 % 5 means 9 minus 5, which is 4.",
+   "reference_level": "L0",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "remainder_operator",
+     "arithmetic_operators"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "remainder_operator": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:integer_division->remainder_operator",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "RemainderIsSubtraction"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "remainder_operator",
+     "misconception": "RemainderIsSubtraction"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S021",
+   "code": "System.out.print(\"A\");\nif (x % 2 == 0) {\n  System.out.print(\"B\");\n  if (x % 5 == 2) { System.out.print(\"C\"); } else { System.out.print(\"D\"); }\n} else {\n  if (x % 5 == 2) { System.out.print(\"E\"); } else { System.out.print(\"F\"); }\n  System.out.print(\"G\");\n}",
+   "question": "What is printed when x = 17? Explain.",
+   "answer": "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even because 17 divided by 2 leaves 1, so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2, so it prints E, and then after that inner if-else it prints G, so overall I think the answer would be AEG, which makes sense because…",
+   "reference_level": "L2",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "nested_conditionals",
+     "if_else_statement"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "nested_conditionals": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "if_else_statement": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "remainder_operator": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:if_else_statement->nested_conditionals",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S023",
+   "code": "switch (value) {\ncase 1: result = 10;\ncase 2:\ncase 3: result = 20;\ncase 4: result = 40;\ndefault: result = 50;\n}",
+   "question": "If value is 2, what is result after the switch? Explain.",
+   "answer": "the swich no have break so it go down all the case and result become 50",
+   "reference_level": "L3",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "switch_statement",
+     "break_statement"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "switch_statement": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "break_statement": {
+      "level": "L1",
+      "accept": [
+       "L1"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:break_statement->switch_statement",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "SwitchNoFallThrough"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S026",
+   "code": "int t = a;\na = b;\nb = t;",
+   "question": "Explain in plain English what these three lines do.",
+   "answer": "a becomes b and b becomes a.",
+   "reference_level": "L1",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "variable_swap",
+     "assignment"
+    ],
+    "overall_level": {
+     "level": "L3",
+     "accept": [
+      "L1",
+      "L3"
+     ]
+    },
+    "levels": {
+     "variable_swap": {
+      "level": "L3",
+      "accept": [
+       "L1",
+       "L3"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:assignment->variable_swap",
+      "status": "context",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "SwapWithoutTemp",
+     "AssignmentExchangesValues"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S047",
+   "code": "double price = 3.14159;\nSystem.out.printf(\"%6.2f\", price);\nSystem.out.printf(\"|%d items%n\", 4);",
+   "question": "What is printed, exactly (count the spaces)? Explain each format specifier.",
+   "answer": "With %.3f it would print 3.142 and no spaces. price itself is still 3.14159; only the printed digits change.",
+   "reference_level": "L4",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "formatted_output"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L4"
+     ]
+    },
+    "levels": {
+     "formatted_output": {
+      "level": "L4",
+      "accept": [
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:standard_output->formatted_output",
+      "status": "context",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "FieldWidthIsIntegerDigits"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S052",
+   "code": "% java RandomSeq 5 > data.txt\n% java Average < data.txt\n% java RandomSeq 5 | java Average\n(RandomSeq N prints N random numbers; Average reads numbers from standard input and prints their average)",
+   "question": "What appears in the terminal after each command? What does args[] contain when Average runs?",
+   "answer": "1: nothing, the numbers go into data.txt. 2: the average. 3: an average of 5 new numbers, no file. args is empty.",
+   "reference_level": "L2",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "redirection",
+     "piping",
+     "standard_input"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "redirection": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "piping": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "command_line_args": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:standard_output->redirection",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:standard_input->redirection",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:redirection->piping",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "par:standard_input~command_line_args",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "RedirectionIsArgument"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S057",
+   "code": "int[] counts = {0, 0, 2, 2, 1};\nint outDegree = 5;\ndouble[] p = new double[5];\nfor (int j = 0; j < 5; j++) {\n  p[j] = counts[j] / outDegree;\n}",
+   "question": "What does p hold after the loop? Is it a probability row? Fix it if needed.",
+   "answer": "All zeros, because int / int is integer division. Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1.",
+   "reference_level": "L3",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "integer_division",
+     "normalization"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L4"
+     ]
+    },
+    "levels": {
+     "integer_division": {
+      "level": "L4",
+      "accept": [
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "normalization": {
+      "level": "L3",
+      "accept": [
+       "L2",
+       "L3"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:integer_division->normalization",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "IntegerDivisionGivesFraction",
+     "CastAfterIntDivision",
+     "IntegerProbability"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S068",
+   "code": "RandomSurfer was run for 100 moves starting at page 0 and printed:\n0.31000 0.25000 0.14000 0.24000 0.06000",
+   "question": "Are these the page ranks? Would starting at page 3 change them?",
+   "answer": "They are estimates. But starting at page 3 would change the ranks.",
+   "reference_level": "L0",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "two_models",
+     "markov_chain",
+     "power_method"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "two_models": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "frequency_counting": {
+      "level": "L3",
+      "accept": [
+       "L1",
+       "L3"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:frequency_counting->two_models",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:markov_chain->power_method",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "StartPageMatters"
+    ],
+    "correct": [
+     "FewTrialsAreExact"
+    ],
+    "root_cause": {
+     "concept": "markov_chain",
+     "misconception": "StartPageMatters"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S073",
+   "code": "switch (value) {\ncase 1: result = 10;\ncase 2:\ncase 3: result = 20;\ncase 4: result = 40;\ndefault: result = 50;\n}",
+   "question": "If value is 2, what is result after the switch? Explain.",
+   "answer": "Turn 1: \"result is 20.\"\nProbe: \"If value is 1, what is result?\"\nTurn 2: \"10. Oh wait, then 20, 40, 50… so for 2 it is 50 too.\"",
+   "reference_level": "L2",
+   "gold": {
+    "label": "correct_after_self_correction",
+    "main": [
+     "switch_statement"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "switch_statement": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:break_statement->switch_statement",
+      "status": "context",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "SwitchNoFallThrough"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S080",
+   "code": "// saved as Hello.java, run as:  java Greeting Ann\npublic class Greeting {\n  public static void main(String[] args) {\n    System.out.println(\"Hi, \" + args[1])\n    // System.out.println(\"Bye\");\n  }\n}",
+   "question": "What goes wrong, and in what order will the student meet each problem? Which line(s) never run?",
+   "answer": "Two compile errors first: the class must be in Greeting.java and the ; is missing. After that it compiles, but args[1] crashes at run time because Ann is args[0]. The comment never runs.",
+   "reference_level": "L3",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "compile_time_error",
+     "run_time_error",
+     "class_declaration"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L3",
+      "L4"
+     ]
+    },
+    "levels": {
+     "compile_time_error": {
+      "level": "L4",
+      "accept": [
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "class_declaration": {
+      "level": "L4",
+      "accept": [
+       "L2",
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "run_time_error": {
+      "level": "L4",
+      "accept": [
+       "L3",
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "command_line_args": {
+      "level": "L4",
+      "accept": [
+       "L2",
+       "L4"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "comment": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:program_text->class_declaration",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:compile->compile_time_error",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:compile->run",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:run->run_time_error",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "par:compile_time_error~run_time_error",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     },
+     {
+      "id": "pre:program_text->comment",
+      "status": "confirmed",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [],
+    "correct": [
+     "ClassNameMatchesFile",
+     "StatementNeedsNoTerminator",
+     "FirstArgIsArgsOne"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S134",
+   "code": "int t = a;\na = b;\nb = t;",
+   "question": "Explain in plain English what these three lines do.",
+   "answer": "After t = a and a = b, a is b. Then b = t means b equals a, so both are b.",
+   "reference_level": "L0",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "variable_swap",
+     "assignment"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "variable_swap": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     },
+     "assignment": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:assignment->variable_swap",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "VariablesHoldExpressions"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "assignment",
+     "misconception": "VariablesHoldExpressions"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "S137",
+   "code": "System.out.print(\"Welcome to Java. This is \");\nSystem.out.println(\"A nice programming language \");\nSystem.out.print(\"that I have to learn.\");",
+   "question": "What is the exact output, including line breaks? Explain how you got it.",
+   "answer": "System.out.println(\"x is 5\"); sets x to 5.",
+   "reference_level": "L0",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "println",
+     "string_literal"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "println": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": ""
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:string_literal->println",
+      "status": "broken",
+      "logic": "",
+      "student_evidence": ""
+     }
+    ],
+    "held": [
+     "PrintedTextIsExecuted"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "println",
+     "misconception": "PrintedTextIsExecuted"
+    }
+   },
+   "reference_case": false
+  }
+ ]
+}

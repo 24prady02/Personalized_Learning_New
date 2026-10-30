@@ -1,0 +1,1064 @@
+{
+ "scenario": "S015",
+ "concepts": [
+  {
+   "id": "identifier",
+   "why": "code",
+   "hits": [
+    {
+     "channel": "pattern",
+     "name": "\\b[A-Za-z_]\\w*\\b",
+     "decisive": false,
+     "match": "writing",
+     "line": 1
+    }
+   ],
+   "generic": true
+  }
+ ],
+ "concept_edges": [],
+ "misconceptions": [
+  {
+   "id": "IdentifierCaseInsensitive",
+   "kind": "misconception",
+   "wrong_belief": "System.out.Println and System.out.println name the same method.",
+   "correct_rule": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "id": "MisspelledIdentifier",
+   "kind": "error",
+   "wrong_belief": "Writes Sytem.out.prinln or a misspelled variable name.",
+   "correct_rule": "Every name must be spelled exactly, including capitalization."
+  },
+  {
+   "id": "NoReservedWords",
+   "kind": "misconception",
+   "wrong_belief": "keywords may be reused as identifiers",
+   "correct_rule": "Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "id": "UndeclaredOrRenamedVariable",
+   "kind": "error",
+   "wrong_belief": "Uses a variable that was never declared, or under a different name (studentTotal vs total).",
+   "correct_rule": "Every variable must be declared, and used with exactly the declared name."
+  }
+ ],
+ "mis_edges": [
+  {
+   "id": "err:identifier->MisspelledIdentifier",
+   "type": "error",
+   "source": "identifier",
+   "target": "MisspelledIdentifier",
+   "role": "primary",
+   "logic": "Writes Sytem.out.prinln or a misspelled variable name.",
+   "twin_logic": "Every name must be spelled exactly, including capitalization."
+  },
+  {
+   "id": "err:identifier->UndeclaredOrRenamedVariable",
+   "type": "error",
+   "source": "identifier",
+   "target": "UndeclaredOrRenamedVariable",
+   "role": "primary",
+   "logic": "Uses a variable that was never declared, or under a different name (studentTotal vs total).",
+   "twin_logic": "Every variable must be declared, and used with exactly the declared name."
+  },
+  {
+   "id": "mis:identifier->IdentifierCaseInsensitive",
+   "type": "misconception",
+   "source": "identifier",
+   "target": "IdentifierCaseInsensitive",
+   "role": "primary",
+   "logic": "System.out.Println and System.out.println name the same method.",
+   "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "id": "mis:identifier->NoReservedWords",
+   "type": "misconception",
+   "source": "identifier",
+   "target": "NoReservedWords",
+   "role": "primary",
+   "logic": "A keyword such as int or class can be used as a variable name.",
+   "twin_logic": "Keywords are reserved by Java and cannot be used as variable names."
+  }
+ ],
+ "levels": [
+  {
+   "id": "identifier@L0",
+   "concept": "identifier",
+   "level": "L0",
+   "name": "Prestructural / sensorimotor",
+   "criterion": "L0 for identifier: the answer holds a rule that contradicts Java.",
+   "deciding_question": "Does every rule the answer applies to identifier agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
+  },
+  {
+   "id": "identifier@L1",
+   "concept": "identifier",
+   "level": "L1",
+   "name": "Unistructural / atom x text surface",
+   "criterion": "L1 for identifier: the answer states one correct rule without applying it.",
+   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
+  },
+  {
+   "id": "identifier@L2",
+   "concept": "identifier",
+   "level": "L2",
+   "name": "Multistructural / block x execution / preoperational",
+   "criterion": "L2 for identifier: the answer applies these rules to every part of the code, in order.",
+   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
+  },
+  {
+   "id": "identifier@L3",
+   "concept": "identifier",
+   "level": "L3",
+   "name": "Relational / relations x function (concrete operational begins)",
+   "criterion": "L3 for identifier: the answer relates the parts by these rules.",
+   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
+  },
+  {
+   "id": "identifier@L4",
+   "concept": "identifier",
+   "level": "L4",
+   "name": "Extended abstract (concrete-operational reversibility and conservation)",
+   "criterion": "L4 for identifier: the answer reasons beyond the given code by these rules.",
+   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
+  }
+ ],
+ "level_edges": [
+  {
+   "id": "lvl:identifier->identifier@L0",
+   "type": "has_level",
+   "source": "identifier",
+   "target": "identifier@L0",
+   "level": "L0",
+   "logic": "identifier -> L0 (Prestructural): the answer holds a rule that contradicts Java (4 ways).",
+   "ways": [
+    {
+     "way": "everyday_reading",
+     "rule_type": "E",
+     "rule_type_name": "folk-meaning rule",
+     "edge_logic": "In English, Total, total and TOTAL are the same word, and names may contain spaces or hyphens (max-value). Java identifiers are case-sensitive and may use only letters, digits, _ and $, so total and Total are different names and max-value is a subtraction.",
+     "exact_rule": "In English, Total, total and TOTAL are the same word, and names may contain spaces or hyphens (max-value). Java identifiers are case-sensitive and may use only letters, digits, _ and $, so total and Total are different names and max-value is a subtraction.",
+     "boundary": "Any correct, programming-specific statement about identifier makes the answer L1 or higher.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Pea1986",
+      "Lister2006",
+      "Jimoyiannis2011",
+      "Chen2020",
+      "EckertKautz2026"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names.",
+     "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "page": 15,
+       "section": "1.2",
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "IdentifierCaseInsensitive"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 26,
+       "quote": "which means that uppercase and lowercase are not the same.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names.",
+     "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "page": 15,
+       "section": "1.2",
+       "quote": "You cannot use certain reserved words-such as public, static, int, double, and so forth-to name variables.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "NoReservedWords"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
+     "literature_content": [
+      {
+       "kind": "error",
+       "paper": "AltadmriBrown2015",
+       "pdf_page": 2,
+       "quote": "H: Using keywords as method or variable names. For example: int new;",
+       "code": "int new;",
+       "note": "Mistake H: 1,097 instances, 22 s."
+      }
+     ],
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "ProgMiscon-Java",
+       "quote": "Every sequence of letters and digits starting with a letter can be used as an identifier",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "You cannot use certain reserved words-such as public, static, int, double, and so forth-to name variables.",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "AltadmriBrown2015",
+       "pdf_page": 2,
+       "quote": "H: Using keywords as method or variable names. For example: int new;",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "inconsistent_trace",
+     "rule_type": "T",
+     "rule_type_name": "uneven-application rule",
+     "edge_logic": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")",
+     "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")",
+     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "page": 15,
+       "section": "1.2",
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "linked_misconception": [
+      "IdentifierCaseInsensitive"
+     ],
+     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 40,
+       "quote": "Variable names are case-sensitive, so firstName is not the same as firstname or FirstName.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:identifier->identifier@L1",
+   "type": "has_level",
+   "source": "identifier",
+   "target": "identifier@L1",
+   "level": "L1",
+   "logic": "identifier -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
+   "ways": [
+    {
+     "way": "names_the_element",
+     "rule_type": "N",
+     "rule_type_name": "identity rule",
+     "edge_logic": "Identifier: a name for a variable, method or class, made of letters, digits, _ and $ and not starting with a digit.",
+     "exact_rule": "Identifier: a name for a variable, method or class, made of letters, digits, _ and $ and not starting with a digit.",
+     "boundary": "Covering every part of the code in order is L2.",
+     "correctness": "correct",
+     "filled_from": "concept description",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Jimoyiannis2011",
+      "TeagueLister2014"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    },
+    {
+     "way": "states_the_rule",
+     "rule_type": "S",
+     "rule_type_name": "declarative rule",
+     "edge_logic": "An identifier is a sequence of letters, digits, _ and $ whose first character is not a digit. Identifiers are case-sensitive, and reserved words such as int, public or class cannot be used.",
+     "exact_rule": "An identifier is a sequence of letters, digits, _ and $ whose first character is not a digit. Identifiers are case-sensitive, and reserved words such as int, public or class cannot be used.",
+     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Pea1986"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "You cannot use certain reserved words-such as public, static, int, double, and so forth-to name variables.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:identifier->identifier@L2",
+   "type": "has_level",
+   "source": "identifier",
+   "target": "identifier@L2",
+   "level": "L2",
+   "logic": "identifier -> L2 (Multistructural): the answer applies the rules of identifier to every part of the code, in order (3 ways).",
+   "ways": [
+    {
+     "way": "line_by_line_trace",
+     "rule_type": "LT",
+     "rule_type_name": "operational sequencing rule",
+     "edge_logic": "When an identifier appears, the compiler looks it up by exact spelling among the declarations in scope (an error if none matches). At run time a variable's name is replaced by that variable's current value.",
+     "exact_rule": "When an identifier appears, the compiler looks it up by exact spelling among the declarations in scope (an error if none matches). At run time a variable's name is replaced by that variable's current value.",
+     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Smith2025",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "TeagueLister2014",
+      "Chen2020"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 44,
+       "quote": "When the program runs, each variable is replaced by its current value, and then the operators are applied.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 45,
+       "quote": "cannot resolve symbol symbol : variable p",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "output_prediction",
+     "rule_type": "OP",
+     "rule_type_name": "evaluation / result rule",
+     "edge_logic": "An identifier used as an expression yields the current value of the variable it names, with that variable's declared type. abc, Ab$, abc123 and a_b are legal names; Ab*, 1abc and a+b are not.",
+     "exact_rule": "An identifier used as an expression yields the current value of the variable it names, with that variable's declared type. abc, Ab$, abc123 and a_b are legal names; Ab*, 1abc and a+b are not.",
+     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Lister2004",
+      "TeagueLister2014",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "The sequences of characters abc, Ab$, abc123, and a_b are all legal Java identifiers, but Ab*, 1abc, and a+b are not.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "one_step_execution",
+     "rule_type": "OS",
+     "rule_type_name": "state-transition rule",
+     "edge_logic": "A name does nothing at run time. Only an assignment (or ++ or op=) with the name on its left changes the variable it names.",
+     "exact_rule": "A name does nothing at run time. Only an assignment (or ++ or op=) with the name on its left changes the variable it names.",
+     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 41,
+       "quote": "When you make an assignment to a variable, you update its value.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:identifier->identifier@L3",
+   "type": "has_level",
+   "source": "identifier",
+   "target": "identifier@L3",
+   "level": "L3",
+   "logic": "identifier -> L3 (Relational): the answer relates the parts (3 ways).",
+   "ways": [
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "Each variable is named by one identifier, which must be unique within its scope: declaring a second local with the same name in that scope is a compile error.",
+     "exact_rule": "Each variable is named by one identifier, which must be unique within its scope: declaring a second local with the same name in that scope is a compile error.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "page": 15,
+       "section": "1.2",
+       "quote": "We use identifiers to name variables (and many other things) in Java.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "variable"
+     ],
+     "edge": "identifier -prerequisite-> variable",
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch6",
+       "quote": "It is a compile-time error if the name of a local variable v is used to declare a new variable within the scope of v",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "A declaration binds the identifier to a type. Every later use must repeat exactly that spelling, or the compiler cannot resolve it.",
+     "exact_rule": "A declaration binds the identifier to a type. Every later use must repeat exactly that spelling, or the compiler cannot resolve it.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "page": 15,
+       "section": "1.2",
+       "quote": "The first line is a declaration that declares the names of three variables to be the identifiers a, b, and c and their type to be int.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "declaration"
+     ],
+     "edge": "identifier -prerequisite-> declaration",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 26,
+       "quote": "A declaration statement associates a variable name with a type at compile time.",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "QianLehman2017",
+       "pdf_page": 4,
+       "quote": "The irresolvable symbol error usually results from failing to declare a variable before using it.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "purpose_of_the_whole",
+     "rule_type": "P",
+     "rule_type_name": "plan / role rule",
+     "edge_logic": "Identifiers let code refer to values and code by name. Descriptive names make each variable's role readable to people, though names have no effect on what the program computes.",
+     "exact_rule": "Identifiers let code refer to values and code by name. Descriptive names make each variable's role readable to people, though names have no effect on what the program computes.",
+     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
+     "correctness": "correct or error",
+     "filled_from": "book program",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Fowler2021",
+      "Smith2025",
+      "TeagueLister2014",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 40,
+       "quote": "In general, you should use names that indicate what the variables mean",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "QianLehman2017",
+       "pdf_page": 5,
+       "quote": "although variable names are arbitrary",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:identifier->identifier@L4",
+   "type": "has_level",
+   "source": "identifier",
+   "target": "identifier@L4",
+   "level": "L4",
+   "logic": "identifier -> L4 (Extended abstract): the answer reasons beyond the given code (6 ways).",
+   "ways": [
+    {
+     "way": "predict_a_change",
+     "rule_type": "C",
+     "rule_type_name": "conservation rule",
+     "edge_logic": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'.",
+     "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'.",
+     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
+     "correctness": "correct",
+     "filled_from": "book rule / misconception node",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2011",
+      "Lister2004",
+      "VrachnosJimoyiannis2017"
+     ],
+     "linked_misconception": [
+      "IdentifierCaseInsensitive"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "QianLehman2017",
+       "pdf_page": 10,
+       "quote": "For example, a \"cannot find symbol\" error message in Java may not effectively help a novice understand and fix the error",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: Identifiers are case-sensitive and must match a declaration exactly; a name that matches nothing in scope cannot be resolved. Kind: compile-time. Trigger class: Any use whose spelling or capitalization differs from the declaration or library name (Sytem, prinln, Println, studentTotl): compiler reports 'cannot find symbol'.",
+     "exact_rule": "rule broken: Identifiers are case-sensitive and must match a declaration exactly; a name that matches nothing in scope cannot be resolved. Kind: compile-time. Trigger class: Any use whose spelling or capitalization differs from the declaration or library name (Sytem, prinln, Println, studentTotl): compiler reports 'cannot find symbol'.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "error node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 21,
+       "page": 11,
+       "section": "1.1",
+       "quote": "Such errors are called syntax errors and are usually caught by the compiler.",
+       "match": "exact",
+       "support": "warns_against"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "linked_error": [
+      "MisspelledIdentifier"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "Identifiers are case-sensitive, so Ab, ab, and AB are all different names.",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "QianLehman2017",
+       "pdf_page": 10,
+       "quote": "For example, a \"cannot find symbol\" error message in Java may not effectively help a novice understand and fix the error",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "compile-time",
+     "trigger_class": "Any use whose spelling or capitalization differs from the declaration or library name (Sytem, prinln, Println, studentTotl): compiler reports 'cannot find symbol'.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "transfer_to_a_new_program",
+     "rule_type": "X",
+     "rule_type_name": "applicability rule",
+     "edge_logic": "Every variable, method and class needs an identifier. Pick descriptive lowerCamelCase names, and use single letters only for short-lived loop indices or standard maths symbols. A name never stands in for a value; only literals and expressions do that.",
+     "exact_rule": "Every variable, method and class needs an identifier. Pick descriptive lowerCamelCase names, and use single letters only for short-lived loop indices or standard maths symbols. A name never stands in for a value; only literals and expressions do that.",
+     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 15,
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit."
+      }
+     ],
+     "framework": [
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Lister2011",
+      "PradhanNewar2024",
+      "Lister2004"
+     ],
+     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 40,
+       "quote": "Variable names usually begin with a lowercase letter, in contrast to class names (like Hello) that start with a capital letter.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 40,
+       "quote": "In general, you should use names that indicate what the variables mean",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under another name, or is used outside the block where it was declared: 'cannot find symbol' (one missing declaration can produce several errors).",
+     "exact_rule": "rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under another name, or is used outside the block where it was declared: 'cannot find symbol' (one missing declaration can produce several errors).",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [
+      "UndeclaredOrRenamedVariable"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 45,
+       "quote": "The compiler complains, as shown below for a program IntOpsBad",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "QianLehman2017",
+       "pdf_page": 4,
+       "quote": "The irresolvable symbol error usually results from failing to declare a variable before using it.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 66,
+       "quote": "Generally the scope of a variable is comprised of the statements that follow the declaration in the same block as the declaration.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "compile-time",
+     "trigger_class": "Use of a name that was never declared, was declared under another name, or is used outside the block where it was declared: 'cannot find symbol' (one missing declaration can produce several errors).",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: Reserved words cannot be used as identifiers. Kind: compile-time. Trigger class: Naming a variable new, class, int, public and so on: '<identifier> expected' or 'not a statement'.",
+     "exact_rule": "rule broken: Reserved words cannot be used as identifiers. Kind: compile-time. Trigger class: Naming a variable new, class, int, public and so on: '<identifier> expected' or 'not a statement'.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "paper",
+       "paper": "AltadmriBrown2015",
+       "pdf_page": 2,
+       "quote": "H: Using keywords as method or variable names. For example: int new;",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "You cannot use certain reserved words-such as public, static, int, double, and so forth-to name variables.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "compile-time",
+     "trigger_class": "Naming a variable new, class, int, public and so on: '<identifier> expected' or 'not a statement'.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: An identifier may not start with a digit or contain spaces or operator symbols. Kind: compile-time. Trigger class: Names like 2ndValue, max value or max-value: syntax errors, or max - value parsed as a subtraction.",
+     "exact_rule": "rule broken: An identifier may not start with a digit or contain spaces or operator symbols. Kind: compile-time. Trigger class: Names like 2ndValue, max value or max-value: syntax errors, or max - value parsed as a subtraction.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 25,
+       "quote": "An identifier is a sequence of letters, digits, _, and $, the first of which is not a digit.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "compile-time",
+     "trigger_class": "Names like 2ndValue, max value or max-value: syntax errors, or max - value parsed as a subtraction.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    }
+   ]
+  }
+ ],
+ "level_mis_links": [
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
+  }
+ ],
+ "counts": {
+  "tagged": 1,
+  "concepts": 1,
+  "concept_edges": 0,
+  "misconceptions": 4,
+  "mis_edges": 4,
+  "levels": 5,
+  "level_edges": 5,
+  "level_mis_links": 4
+ },
+ "warnings": []
+}
