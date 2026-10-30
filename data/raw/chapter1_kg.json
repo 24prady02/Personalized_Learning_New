@@ -4923,9 +4923,18 @@
       "name": "file_name_mismatch",
       "compiler_message": "should be declared in a file named",
       "decisive": true
+     },
+     {
+      "name": "file_name_mismatch_regex",
+      "scope": "program",
+      "decisive": true,
+      "text": "raw",
+      "regex": "\\b(?P<f>[A-Z]\\w*)\\.java\\b[\\s\\S]{0,400}?\\bclass\\s+(?!(?P=f)\\b)[A-Z]\\w*",
+      "note": "a file name Name.java is mentioned (comment or prompt) and the class declared is not Name; regex stand-in for the javac message"
      }
     ],
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -31617,7 +31626,15 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
+    "signals": [
+     {
+      "name": "int_into_double",
+      "scope": "program",
+      "decisive": false,
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
+     }
+    ],
     "patterns_added_in": "3.9.5-reader2",
     "patterns_fixed_in": "3.9.5-reader4"
    }
@@ -32910,7 +32927,15 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
+    "signals": [
+     {
+      "name": "int_into_double",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
+     }
+    ],
     "patterns_added_in": "3.9.5-reader2",
     "patterns_fixed_in": "3.9.5-reader4"
    }
@@ -289291,7 +289316,9 @@
    "while_loop P: '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\(' -> '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\((?![^)\\\\n]*\\\\)\\\\s*;)'  [do-while tail excluded]",
    "definite_assignment uninitialized_read_regex: '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S])*?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))' -> '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S]){0,2000}?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))'  [bounded gap]",
    "standard_output C: added '\\s>\\s*\\S+'  [output redirection shows standard output, as standard_input already has '\\s<\\s*\\S+']",
-   "loop_variable P: added do-while form '\\\\bdo\\\\s*\\\\{[\\\\s\\\\S]{0,800}?\\\\b(\\\\w+)\\\\s*(?:\\\\+\\\\+|--|[+\\\\-]=)[^}]*\\\\}\\\\s*while\\\\s*\\\\(\\\\s*\\\\1\\\\b'  [the variable updated in the body and tested in the trailing while]"
+   "loop_variable P: added do-while form '\\\\bdo\\\\s*\\\\{[\\\\s\\\\S]{0,800}?\\\\b(\\\\w+)\\\\s*(?:\\\\+\\\\+|--|[+\\\\-]=)[^}]*\\\\}\\\\s*while\\\\s*\\\\(\\\\s*\\\\1\\\\b'  [the variable updated in the body and tested in the trailing while]",
+   "widening_conversion, type_conversion: added signal int_into_double  [int value flows into a double target without a cast, e.g. (num1 % num2) + num3 or p[j] = counts[j] / outDegree]",
+   "class_declaration: added signal file_name_mismatch_regex (raw text)  [Name.java mentioned, class is not Name]"
   ]
  }
 }

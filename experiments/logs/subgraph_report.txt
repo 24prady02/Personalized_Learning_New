@@ -7,17 +7,17 @@ S009  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  
 S010  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
 S012  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: compound_assignment, increment_operators
 S015  tagged   1  nodes   1 (1 generic)  edges   0  mis   4  levels   5  links   4  xfail missed: char, naming_convention, variable
-S016  tagged  18  nodes  18 (13 generic)  edges  16  mis  88  levels  90  links 102  xfail missed: integer_division
+S016  tagged  20  nodes  20 (13 generic)  edges  18  mis  93  levels 100  links 111  xfail missed: integer_division
 S021  tagged  16  nodes  16 (7 generic)  edges  11  mis 105  levels  80  links 112  ok    missed: -
 S023  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
 S026  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
 S047  tagged  13  nodes  13 (12 generic)  edges  10  mis  74  levels  65  links  82  ok    missed: -
 S052  tagged  12  nodes  12 (5 generic)  edges   7  mis  38  levels  60  links  48  ok    missed: -
-S057  tagged  31  nodes  31 (12 generic)  edges  31  mis 202  levels 155  links 229  ok    missed: -
+S057  tagged  33  nodes  33 (12 generic)  edges  33  mis 207  levels 165  links 238  ok    missed: -
 S068  tagged   6  nodes   6 (3 generic)  edges   1  mis  16  levels  30  links  26  xfail missed: power_method, two_models
 S073  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
 S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  xfail missed: compile
 S134  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
 S137  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
-fully covered: 10 / 20   (mean concepts per subgraph: 13.2; S000 is the reference case, not counted)
+fully covered: 10 / 20   (mean concepts per subgraph: 13.4; S000 is the reference case, not counted)
 non-generic concepts firing in >= 12 scenarios: none

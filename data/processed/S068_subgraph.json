@@ -6261,6 +6261,62 @@
  ],
  "level_mis_links": [
   {
+   "level_node": "frequency_counting@L0",
+   "misconception": "FewTrialsAreExact",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A short simulation gives the exact page ranks. Right rule: freq[i]/T is only an estimate: about 10^n moves for n-digit precision and many more for accuracy."
+  },
+  {
+   "level_node": "frequency_counting@L0",
+   "misconception": "ManyDigitsMeanAccurate",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A result printed with many decimal places must be accurate to those places. Right rule: Printing %8.5f does not make the estimate accurate to 5 places; ensuring accuracy is often the hardest part."
+  },
+  {
+   "level_node": "frequency_counting@L0",
+   "misconception": "FewTrialsAreExact",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies LT (increment after each move, divide by T after the loop) unevenly: e.g. incrementing the page before the move on some passes, or dividing inside the loop. (here mixing in: \"A short simulation gives the exact page ranks\")"
+  },
+  {
+   "level_node": "frequency_counting@L4",
+   "misconception": "FewTrialsAreExact",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Invariant: the counts sum to T, so the fractions sum to 1; dividing before casting ((double)(freq[i] / T)) or counting outside the loop breaks it."
+  },
+  {
+   "level_node": "markov_chain@L0",
+   "misconception": "StartPageMatters",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The page ranks depend on which page the surfer starts from. Right rule: For the random-surfer chain the long-run probabilities are the same for all starting pages (basic limit theorem); that is why RandomSurfer can start at page 0."
+  },
+  {
+   "level_node": "markov_chain@L0",
+   "misconception": "StartPageMatters",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies LT (each step uses the row of the current state) unevenly: e.g. on some steps using the starting page's row instead of the current page's row. (here mixing in: \"The page ranks depend on which page the surfer starts from\")"
+  },
+  {
+   "level_node": "markov_chain@L4",
+   "misconception": "StartPageMatters",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing the start state keeps the limiting distribution (if the chain mixes); removing the random leap can break mixing; squaring the matrix gives two-step probabilities."
+  },
+  {
    "level_node": "literal@L0",
    "misconception": "LargeIntegerLong",
    "way": "misconception",
@@ -6309,60 +6365,36 @@
    "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
   },
   {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
   {
-   "level_node": "double@L0",
-   "misconception": "WholeNumberLiteralIsInt",
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
   },
   {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
    "way": "inconsistent_trace",
    "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
   },
   {
-   "level_node": "double@L4",
-   "misconception": "FloatingPointIsExact",
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
-  },
-  {
-   "level_node": "markov_chain@L0",
-   "misconception": "StartPageMatters",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The page ranks depend on which page the surfer starts from. Right rule: For the random-surfer chain the long-run probabilities are the same for all starting pages (basic limit theorem); that is why RandomSurfer can start at page 0."
-  },
-  {
-   "level_node": "markov_chain@L0",
-   "misconception": "StartPageMatters",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies LT (each step uses the row of the current state) unevenly: e.g. on some steps using the starting page's row instead of the current page's row. (here mixing in: \"The page ranks depend on which page the surfer starts from\")"
-  },
-  {
-   "level_node": "markov_chain@L4",
-   "misconception": "StartPageMatters",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing the start state keeps the limiting distribution (if the chain mixes); removing the random leap can break mixing; squaring the matrix gives two-step probabilities."
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   },
   {
    "level_node": "simulation_loop@L0",
@@ -6405,68 +6437,36 @@
    "exact_rule": "Changing the start page keeps the limit (mixing); increasing T keeps the estimates but makes them more accurate (about 10x moves per extra digit); changing < to <= or the division by T breaks the normalisation."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
+   "level_node": "double@L0",
+   "misconception": "WholeNumberLiteralIsInt",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
    "way": "inconsistent_trace",
    "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
   },
   {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "double@L4",
+   "misconception": "FloatingPointIsExact",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "frequency_counting@L0",
-   "misconception": "FewTrialsAreExact",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A short simulation gives the exact page ranks. Right rule: freq[i]/T is only an estimate: about 10^n moves for n-digit precision and many more for accuracy."
-  },
-  {
-   "level_node": "frequency_counting@L0",
-   "misconception": "ManyDigitsMeanAccurate",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A result printed with many decimal places must be accurate to those places. Right rule: Printing %8.5f does not make the estimate accurate to 5 places; ensuring accuracy is often the hardest part."
-  },
-  {
-   "level_node": "frequency_counting@L0",
-   "misconception": "FewTrialsAreExact",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies LT (increment after each move, divide by T after the loop) unevenly: e.g. incrementing the page before the move on some passes, or dividing inside the loop. (here mixing in: \"A short simulation gives the exact page ranks\")"
-  },
-  {
-   "level_node": "frequency_counting@L4",
-   "misconception": "FewTrialsAreExact",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Invariant: the counts sum to T, so the fractions sum to 1; dividing before casting ((double)(freq[i] / T)) or counting outside the loop breaks it."
+   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
   }
  ],
  "counts": {

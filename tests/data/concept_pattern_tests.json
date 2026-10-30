@@ -25,7 +25,8 @@
  },
  "class_declaration": {
   "must_tag": [
-   "public class Hello {\n}"
+   "public class Hello {\n}",
+   "// saved as Hello.java\npublic class Greeting {\n}"
   ],
   "must_not_tag": [
    "int x = 1;"
@@ -501,11 +502,13 @@
  },
  "type_conversion": {
   "must_tag": [
-   "int n = (int) d;"
+   "int n = (int) d;",
+   "int a = 7; double b = 2.5; double c = a + b;"
   ],
   "must_not_tag": [
    "int x = 1;",
-   "double d = 0.1 + 0.2;"
+   "double d = 0.1 + 0.2;",
+   "int a = 7; int b = 2; int c = a + b;"
   ]
  },
  "explicit_cast": {
@@ -526,11 +529,15 @@
  },
  "widening_conversion": {
   "must_tag": [
-   "double d = 5;"
+   "double d = 5;",
+   "int a = 7; double b = 2.5; double c = a + b;",
+   "int[] counts = {1, 2}; int d = 5; double[] p = new double[2]; p[0] = counts[0] / d;"
   ],
   "must_not_tag": [
    "double d = 5.0;",
-   "double d = 0.1 + 0.2;"
+   "double d = 0.1 + 0.2;",
+   "int a = 7; int b = 2; int c = a + b;",
+   "int a = 7; double c = (double) a / 2;"
   ]
  },
  "string_conversion": {
