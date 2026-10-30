@@ -1,0 +1,6 @@
+knowledge graph 3.9.5-reader4 (reader3 + pattern fixes and recall additions 2026-10-30, listed in reader.pattern_fixes_reader4)
+concepts 173  code-visible 166  generic 21
+regex patterns 311  regex signals 48  operator symbols 0  java types 7
+compile errors 0
+pattern tests: 372 snippets over 166 concepts, failures 0
+missing tests for code-visible concepts: none

@@ -9,8 +9,10 @@ from pathlib import Path
 
 import pytest
 
-from lp_graph.subgraph import command_segments, extract_subgraph, mask_java, reader_blocks, split_statements, subgraph_from_code, tag_code
-from lp_graph.subgraph.report import NOT_IN_CODE, gold_concepts, load_gold
+from model import extract_subgraph, subgraph_from_code, tag_code
+from preprocessing import command_segments, mask_java, split_statements
+from utils import NOT_IN_CODE, gold_concepts, reader_blocks
+from utils import load_scenarios as load_gold
 
 ROOT = Path(__file__).resolve().parents[1]
 KG = json.loads((ROOT / "data/raw/chapter1_kg.json").read_text(encoding="utf-8"))

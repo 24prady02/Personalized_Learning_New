@@ -1,0 +1,18 @@
+{
+  "experiment": "stage1_subgraph_from_code",
+  "kg": "data/raw/chapter1_kg.json",
+  "scenarios": "data/raw/scenarios_20.json",
+  "hops": 0,
+  "keep_generic": false,
+  "inputs_read": ["scenario code"],
+  "inputs_not_read": ["question", "student answer", "concept aliases", "gold labels (checking only)"],
+  "outputs": {
+    "processed": "data/processed/<sid>_subgraph.json",
+    "report": "experiments/logs/subgraph_report.txt",
+    "pattern_bank": "experiments/pattern_bank.json",
+    "figures": "results/figures/<sid>.png",
+    "summary": "results/tables/summary.csv",
+    "listing": "results/results.md",
+    "metrics": "results/metrics.json"
+  }
+}

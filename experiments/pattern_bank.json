@@ -1,0 +1,2258 @@
+{
+ "kg_version": "3.9.5-reader4 (reader3 + pattern fixes and recall additions 2026-10-30, listed in reader.pattern_fixes_reader4)",
+ "concepts": {
+  "accumulator_pattern": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "algorithm_pseudocode": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "animation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "api": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "args_length": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "arithmetic_operators": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_aliasing": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_bounds": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_copy": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_creation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_declaration": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_default_values": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_exchange": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_initializer": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_reference": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_reversal": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "array_traversal": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 5,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "assignment": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "black_box_model": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "block": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "boolean": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 1,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "boolean_expression": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "boolean_flag_array": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "break_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "chained_assignment": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "char": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 1,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "char_arithmetic": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "class_declaration": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": [
+    "file_name_mismatch"
+   ]
+  },
+  "command_line_args": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "comment": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "comparison_operators": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "compile": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "compile_time_error": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 4,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": [
+    "missing_semicolon"
+   ]
+  },
+  "compound_assignment": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "conditional_operator": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "continue_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "control_flow": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "convergence_rate": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "convergence_test": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "coordinate_scaling": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "counter_pattern": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "dangling_else": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "dangling_pages": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "data_driven_code": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "data_structure": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "data_type": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "de_morgan": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "debugging": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "declaration": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "definite_assignment": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "division_by_zero": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "do_while_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "double": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 2,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "drawing_shapes": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "else_if_chain": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "empty_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "end_of_input": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "enhanced_for": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "escape_sequences": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "exclusive_or": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "explicit_cast": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "expression": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "fencepost_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "filter": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "flag_search_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "floating_point_precision": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 5,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "flowchart": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "for_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "formatted_output": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "frequency_counting": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 6,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "function_plotting": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "identifier": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "if_else_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "if_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "increment_operators": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "incremental_development": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "indexing": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "infinite_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "input_format": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "input_graph": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "input_validation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "int": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 1,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "int_literal_limit": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "integer_constants": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "integer_division": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 6,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "interactive_input": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "labeled_break": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "length_field": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "literal": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "logical_error": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "logical_operators": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "long_type": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 1,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "lookup_table": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_body": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_control": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_guard": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_invariant_reasoning": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_performance": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_scope": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "loop_variable": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "main_method": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "markov_chain": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "math_library": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "math_random": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "math_round": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "matrix_operations": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "method_call": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "monte_carlo_simulation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "mouse_interaction": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "multidimensional_array": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "named_constants": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "naming_convention": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "nested_conditionals": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "nested_loops": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 2,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "normalization": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "number_conversion": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 6,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "off_by_one_error": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 3,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "operator_precedence": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 6,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "overflow": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "parsing": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "piping": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "power_method": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "primitive_type": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "primitive_vs_reference": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "print": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 5,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "printing_array_reference": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "println": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "program_layout": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "program_state": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "program_text": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "program_trace": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "ragged_array": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "random_move": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "read_loop_idiom": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "reading_error_messages": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "redirection": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 2
+   },
+   "skipped_signals": []
+  },
+  "remainder_operator": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "row_major_order": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "run": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "run_time_error": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 9,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "running_extreme": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "sampling_without_replacement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "scientific_notation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "sentinel_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "short_circuit": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "shuffle": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "side_effect_order": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 5,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "simulation_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "space_time_tradeoff": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "standard_audio": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "standard_drawing": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "standard_input": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "standard_output": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 1
+   },
+   "skipped_signals": []
+  },
+  "statement": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "stream_model": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "string_concatenation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "string_conversion": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 4,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "string_literal": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "string_type": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 1,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "switch_statement": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "syntax_template": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "raw",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "teleportation": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "testing": {
+   "code_visible": false,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "token_vs_line_input": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "transition_matrix": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 2,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "trig_functions": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "two_dimensional_array": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "two_models": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "type_conversion": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 5,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "variable": {
+   "code_visible": true,
+   "generic": true,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "variable_swap": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 0,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "while_loop": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 1,
+    "signals": 0,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  },
+  "widening_conversion": {
+   "code_visible": true,
+   "generic": false,
+   "code_text": "masked",
+   "channels": {
+    "code_patterns": 3,
+    "signals": 1,
+    "operator_symbols": 0,
+    "java_types": 0,
+    "command_patterns": 0
+   },
+   "skipped_signals": []
+  }
+ }
+}

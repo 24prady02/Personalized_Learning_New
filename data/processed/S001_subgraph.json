@@ -4733,6 +4733,38 @@
  ],
  "level_mis_links": [
   {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
+  },
+  {
+   "level_node": "print@L4",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
+  },
+  {
    "level_node": "println@L0",
    "misconception": "PrintEqualsPrintln",
    "way": "misconception",
@@ -4779,38 +4811,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
-  },
-  {
-   "level_node": "print@L4",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
   },
   {
    "level_node": "statement@L0",

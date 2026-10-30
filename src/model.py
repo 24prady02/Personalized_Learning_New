@@ -1,11 +1,106 @@
-"""Take the subgraph around the tagged concepts out of the knowledge graph."""
+"""The model: a rule-based matcher plus a subgraph extractor over the knowledge graph.
+
+Part 1, tagging (``tag_concept``, ``tag_code``): run the regex channels stored on every concept node of the KG
+(``code_patterns``, ``signals``, ``operator_symbols``, ``java_types``, ``command_patterns``) over the preprocessed
+code. Only the code is read; ``aliases`` (for the student's words) are never used.
+
+Part 2, extraction (``extract_subgraph``, ``subgraph_from_code``): the concept nodes are the tagged concepts
+(minus bare generic ones), then the KG's prerequisite / parallel edges between them, their misconception / error
+nodes and edges, their level nodes L0..L4 with the has_level edges, and the level <-> misconception links.
+
+There are no learned parameters: the "model" is the pattern bank stored in the KG.
+"""
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from typing import Any
 
-from .tagger import Hit, reader_blocks, tag_code
+from preprocessing import Prepared
+from utils import Hit, line_of, reader_blocks, rx
 
+
+# ------------------------------------------------------------------ part 1: tagging
+
+def _hit(channel: str, name: str, decisive: bool, m: re.Match[str], code: str, base: int = 0) -> Hit:
+    return {
+        "channel": channel,
+        "name": name,
+        "decisive": bool(decisive),
+        "match": m.group(0),
+        "line": line_of(code, base + m.start()),
+    }
+
+
+def tag_concept(code: str, rd: dict[str, Any], prepared: "Prepared | None" = None) -> list[Hit]:
+    """Run every regex channel of one reader block against the code."""
+    if rd.get("code_visible") is False:
+        return []
+    prep = prepared or Prepared(code)
+    t = code if rd.get("code_text") == "raw" else prep.masked
+    hits: list[Hit] = []
+
+    for p in rd.get("code_patterns") or []:
+        m = rx(p, re.M).search(t)
+        if m:
+            hits.append(_hit("pattern", p, False, m, code))
+
+    for s in rd.get("signals") or []:
+        if "regex" not in s:
+            continue
+        sources = s.get("sources")
+        if sources and "code" not in sources:
+            continue
+        raw = s.get("text") == "raw"
+        tt = code if raw else t
+        name = s.get("name", "")
+        decisive = bool(s.get("decisive"))
+        if s.get("scope") == "statement":
+            r = rx(s["regex"], re.M)
+            for start, piece in prep.statements(raw or rd.get("code_text") == "raw"):
+                m = r.search(piece)
+                if m:
+                    hits.append(_hit("signal", name, decisive, m, code, start))
+                    break
+        else:
+            m = rx(s["regex"], re.M | re.S).search(tt)
+            if m:
+                hits.append(_hit("signal", name, decisive, m, code))
+
+    for o in rd.get("operator_symbols") or []:
+        pos = t.find(o)
+        if pos >= 0:
+            hits.append({"channel": "operator", "name": o, "decisive": False, "match": o, "line": line_of(code, pos)})
+
+    for ty in rd.get("java_types") or []:
+        m = rx(r"\b" + re.escape(ty) + r"\b").search(t)
+        if m:
+            hits.append(_hit("type", ty, False, m, code))
+
+    cmd_patterns = rd.get("command_patterns") or []
+    if cmd_patterns:
+        for start, seg in prep.commands:
+            for p in cmd_patterns:
+                m = rx(p).search(seg)
+                if m:
+                    hits.append(_hit("command", p, False, m, code, start))
+
+    return hits
+
+
+def tag_code(code: str, reader: dict[str, dict[str, Any]]) -> dict[str, list[Hit]]:
+    """``reader`` maps concept id -> reader block. Returns concept id -> hits
+    for every concept with at least one hit."""
+    tags: dict[str, list[Hit]] = {}
+    prep = Prepared(code)
+    for cid, rd in reader.items():
+        hits = tag_concept(code, rd, prep)
+        if hits:
+            tags[cid] = hits
+    return tags
+
+
+# ------------------------------------------------------------------ part 2: extraction
 
 class _Index:
     """Edges of the KG indexed by source and target, built once per KG object."""
@@ -126,9 +221,9 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
             levels[e["target"]] = {"id": e["target"], "concept": rec.get("concept", cid), "level": rec.get("level", e.get("level")),
                                    "name": rec.get("name"), "criterion": rec.get("criterion"), "deciding_question": rec.get("deciding_question")}
 
-    # 5. level <-> misconception links (live inside the ways)
+    # 5. level <-> misconception links (live inside the ways); edges visited in id order so the output is deterministic
     level_mis_links: list[dict[str, Any]] = []
-    for le in level_edges:
+    for le in sorted(level_edges, key=lambda e: e["id"]):
         for i, way in enumerate(le["ways"]):
             for m in way.get("linked_misconception") or []:
                 level_mis_links.append({"level_node": le["target"], "misconception": m, "way": way.get("way"),

@@ -7910,52 +7910,52 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "standard_input@L0",
-   "misconception": "StdInRereads",
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes its value, so the second call returns the next value."
+   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
   },
   {
-   "level_node": "standard_input@L0",
-   "misconception": "RereadIntoVariableInvalid",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Reading a second input value into a variable that already holds one is an error, so the program cannot run. Right rule: A later read assigns a new value, which overwrites the old one. y = StdIn.readInt(); y = StdIn.readInt(); is legal, and y keeps the second value."
-  },
-  {
-   "level_node": "standard_input@L0",
-   "misconception": "StdInRereads",
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
    "way": "inconsistent_trace",
-   "way_index": 3,
+   "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT (each call blocks, then consumes exactly one token, in order). An uneven trace gives a variable a value that was already consumed, skips a token on some reads, or merges two READs into one. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")"
+   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
   },
   {
-   "level_node": "standard_input@L0",
-   "misconception": "NextLineAfterNextInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A line read after a number read returns the next line typed. Right rule: readInt() stops right after the number and leaves the rest of that line, including the line separator. A following readLine() returns that rest (often \"\"), not the next line."
-  },
-  {
-   "level_node": "standard_input@L0",
-   "misconception": "InputReadOnceBeforeLoop",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Reading a value once before the loop is enough; the loop will process each new input value. Right rule: A loop must call a read inside its body on every pass. A single read before the loop gives one value, which is processed over and over."
-  },
-  {
-   "level_node": "standard_input@L4",
-   "misconception": "StdInRereads",
+   "level_node": "command_line_args@L4",
+   "misconception": "ArgsAreNumbers",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Changing the input data changes the results without recompiling. Swapping two reads swaps the values the two variables get. Changing readInt to readDouble accepts more inputs; the reverse breaks on tokens like 12.2."
+   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
+  },
+  {
+   "level_node": "piping@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A redirected (piped) stream shows up in args[]. Right rule: With `A | B`, B's standard input is A's output stream. It is not an argument, and B just reads standard input as if someone were typing it."
+  },
+  {
+   "level_node": "piping@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (A's writes are added to the end of the shared stream and B's reads take from its front, interleaved by the OS). An uneven trace runs A to completion into a file first, or sends B's output back into A. (here mixing in: \"a redirected file shows up in args[]\")"
+  },
+  {
+   "level_node": "piping@L4",
+   "misconception": "RedirectionIsArgument",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Replacing `A | B` with `A > f; B < f` keeps the result. Changing A's output format (e.g. adding a label) breaks B's typed reads."
   },
   {
    "level_node": "redirection@L0",
@@ -8006,28 +8006,52 @@
    "exact_rule": "Running again with the same arguments reproduces the same output (for programs without randomness or input); changing the arguments changes the output without recompiling; editing the source changes nothing until recompiled."
   },
   {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
+   "level_node": "standard_input@L0",
+   "misconception": "StdInRereads",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+   "exact_rule": "wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes its value, so the second call returns the next value."
   },
   {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
-   "way": "inconsistent_trace",
+   "level_node": "standard_input@L0",
+   "misconception": "RereadIntoVariableInvalid",
+   "way": "misconception",
    "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Reading a second input value into a variable that already holds one is an error, so the program cannot run. Right rule: A later read assigns a new value, which overwrites the old one. y = StdIn.readInt(); y = StdIn.readInt(); is legal, and y keeps the second value."
   },
   {
-   "level_node": "command_line_args@L4",
-   "misconception": "ArgsAreNumbers",
+   "level_node": "standard_input@L0",
+   "misconception": "StdInRereads",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each call blocks, then consumes exactly one token, in order). An uneven trace gives a variable a value that was already consumed, skips a token on some reads, or merges two READs into one. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")"
+  },
+  {
+   "level_node": "standard_input@L0",
+   "misconception": "NextLineAfterNextInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A line read after a number read returns the next line typed. Right rule: readInt() stops right after the number and leaves the rest of that line, including the line separator. A following readLine() returns that rest (often \"\"), not the next line."
+  },
+  {
+   "level_node": "standard_input@L0",
+   "misconception": "InputReadOnceBeforeLoop",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Reading a value once before the loop is enough; the loop will process each new input value. Right rule: A loop must call a read inside its body on every pass. A single read before the loop gives one value, which is processed over and over."
+  },
+  {
+   "level_node": "standard_input@L4",
+   "misconception": "StdInRereads",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
+   "exact_rule": "Changing the input data changes the results without recompiling. Swapping two reads swaps the values the two variables get. Changing readInt to readDouble accepts more inputs; the reverse breaks on tokens like 12.2."
   },
   {
    "level_node": "standard_output@L0",
@@ -8068,30 +8092,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "piping@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A redirected (piped) stream shows up in args[]. Right rule: With `A | B`, B's standard input is A's output stream. It is not an argument, and B just reads standard input as if someone were typing it."
-  },
-  {
-   "level_node": "piping@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (A's writes are added to the end of the shared stream and B's reads take from its front, interleaved by the OS). An uneven trace runs A to completion into a file first, or sends B's output back into A. (here mixing in: \"a redirected file shows up in args[]\")"
-  },
-  {
-   "level_node": "piping@L4",
-   "misconception": "RedirectionIsArgument",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Replacing `A | B` with `A > f; B < f` keeps the result. Changing A's output format (e.g. adding a label) breaks B's typed reads."
   }
  ],
  "components": [

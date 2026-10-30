@@ -1,8 +1,17 @@
-"""Masking and statement splitting for Java source text.
+"""Preprocessing of a scenario's Java code before any pattern is matched.
+
+1. ``mask_java``: blank the inside of string / char literals and the text of comments (same length, newlines kept).
+2. ``split_statements``: cut the text at ``;`` ``{`` ``}`` at parenthesis depth 0 (a ``for (…; …; …)`` header stays whole).
+3. ``command_segments``: the ``javac …`` / ``java …`` shell segments in the text.
+4. ``Prepared``: all of the above computed once per program and shared by every concept's patterns.
 
 Standard library only.
 """
 from __future__ import annotations
+
+import re
+
+_COMMAND_RE = re.compile(r"(?:^|[%$:;]\s*|\s)((?:javac|java)\s+[^;%\n]*)")
 
 
 def mask_java(code: str) -> str:
@@ -79,3 +88,35 @@ def split_statements(text: str) -> list[str]:
     if tail.strip():
         pieces.append(tail)
     return pieces
+
+
+def command_segments(text: str) -> list[str]:
+    """Every shell command segment ``javac …`` / ``java …`` in the text."""
+    return [m.group(1).strip() for m in _COMMAND_RE.finditer(text)]
+
+
+class Prepared:
+    """The code, its masked form, the statement splits and the command segments, computed once."""
+
+    def __init__(self, code: str):
+        self.code = code
+        self.masked = mask_java(code)
+        self._splits: dict[bool, list[tuple[int, str]]] = {}
+        self.commands: list[tuple[int, str]] = []
+        base = 0
+        for seg in command_segments(code):
+            start = max(code.find(seg, base), 0)
+            self.commands.append((start, seg))
+            base = start + len(seg)
+
+    def statements(self, raw: bool) -> list[tuple[int, str]]:
+        """(offset, piece) pairs for the raw or masked text; offsets are identical in both."""
+        if raw not in self._splits:
+            text = self.code if raw else self.masked
+            out, base = [], 0
+            for piece in split_statements(text):
+                start = text.find(piece, base)
+                out.append((start, piece))
+                base = start + len(piece)
+            self._splits[raw] = out
+        return self._splits[raw]

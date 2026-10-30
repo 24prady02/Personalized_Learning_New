@@ -32,45 +32,63 @@ pip install -r requirements.txt     # pytest; matplotlib and networkx only for t
 ## Layout
 
 ```
-README.md
-requirements.txt
+README.md                                    this file
+requirements.txt                             pytest; matplotlib, networkx (figures); jupyter only for the notebook
 pytest.ini                                   testpaths = tests, pythonpath = src
 data/
   raw/chapter1_kg.json                       knowledge graph v3.9.5-reader4 (173 concepts, 1896 edges, 296 misconception/error records, 865 level nodes)
   raw/scenarios_20.json                      S000 reference case + the 10 scenarios whose gold concepts the code alone shows
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
-  processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of the report CLI)
+  processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
+src/
+  preprocessing.py                           mask_java, split_statements, command_segments, Prepared
+  model.py                                   tag_code (pattern channels of every concept) + extract_subgraph / subgraph_from_code
+  train.py                                   builds and checks the pattern bank (no learned parameters; see below)
+  evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
+  utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
+notebooks/
+  explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
+experiments/
+  config.json                                default paths and extractor settings (hops 0, keep_generic false)
+  pattern_bank.json                          the compiled pattern bank summary written by train.py (the model "checkpoint")
+  logs/train_log.txt                         pattern compile + pattern-test check
+  logs/subgraph_report.txt                   one line per scenario over scenarios_20.json, "fully covered: 10 / 10"
+  logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
 results/
   results.md                                 summary table, then per scenario: code, figure, concept nodes, edges with logic, misconception nodes, level counts
   figures/<sid>.png                          node visualization of each subgraph
   tables/summary.csv                         one row per scenario (counts, concept ids, edges traced, misconception node ids)
-src/lp_graph/subgraph/
-  mask.py                                    mask_java, split_statements
-  tagger.py                                  tag_code: runs the pattern channels of every concept over the code
-  extract.py                                 extract_subgraph, subgraph_from_code: takes the subgraph out of the KG
-  report.py                                  python -m lp_graph.subgraph.report   (coverage report + processed JSON)
-  results.py                                 python -m lp_graph.subgraph.results  (figures, summary.csv, results.md)
-experiments/logs/
-  subgraph_report.txt                        report over scenarios_20.json
-  subgraph_report_not_from_code.txt          report over scenarios_not_from_code.json
+  metrics.json                               coverage and size metrics
+paper/
+  main.tex, references.bib, main.pdf         mid-term progress report (ACM format)
+  figures/                                   figures used by the paper
+slides/
+  Pradhyumn_Nair_midterm_slides.pptx         mid-term presentation
 tests/
   test_subgraph.py                           pytest -q  (208 tests)
   data/concept_pattern_tests.json            must_tag / must_not_tag snippets for all 166 code-visible concepts
-notebooks/, slides/                          empty
 ```
 
 ## Commands
 
 ```bash
-pytest -q
-PYTHONPATH=src python -m lp_graph.subgraph.report --kg data/raw/chapter1_kg.json --gold data/raw/scenarios_20.json --json data/processed
-PYTHONPATH=src python -m lp_graph.subgraph.results        # results/figures, results/tables/summary.csv, results/results.md
+pytest -q                      # 208 tests
+python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
+python src/evaluate.py         # data/processed, experiments/logs/subgraph_report.txt, results/ (figures, summary.csv, results.md, metrics.json)
+python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
+jupyter notebook notebooks/explore_subgraph.ipynb
 ```
 
-Report flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged concepts);
-`--keep-generic` switches the generic-node rule below off. The results script takes `--kg`, `--gold`, `--out`.
+`evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
+concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /
+networkx. Defaults come from `experiments/config.json`.
 
-## How the matcher works (`tagger.py`)
+`train.py` is the training step of a model that has no learned parameters: the parameters are the regexes
+stored in the KG. It compiles every pattern of every channel, runs the must_tag / must_not_tag snippets of
+all 166 code-visible concepts, and saves the pattern-bank summary and a log. It exits non-zero on any compile
+error or failed snippet.
+
+## How the matcher works (`model.py`, part 1)
 
 1. `mask_java` blanks the contents of string and char literals and of comments, keeping every length and
    newline, so a `%` or `;` inside `"..."` cannot match a pattern. Line numbers of hits stay correct.
@@ -91,7 +109,7 @@ Report flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are
    Concepts with `code_visible: false` (7 of the 173) never tag. `aliases` are never used.
    The program is masked and split once and shared by all 166 pattern sets.
 
-## How the subgraph is taken out (`extract.py`)
+## How the subgraph is taken out (`model.py`, part 2)
 
 1. **Tagged concepts, minus bare generic ones.** The KG marks 21 concepts `generic` (statement, identifier,
    literal, int, assignment, variable, …); they fire on almost any Java line. A generic concept stays a node
@@ -123,12 +141,13 @@ warnings
 
 ## Results
 
-`results.py` draws each subgraph: concept nodes (dark blue, generic ones light blue) laid out per connected
+`evaluate.py` draws each subgraph: concept nodes (dark blue, generic ones light blue) laid out per connected
 piece, prerequisite arrows and dashed parallel edges, the five level squares under each concept, misconception
 (red) and error (orange) nodes around each concept, and a side panel listing the misconception and error nodes
 per concept. `results/results.md` opens with the summary table (counts, the edges traced, the misconception
 node ids) and then lists each scenario with its code, figure, concept nodes, edges with logic, misconception
-nodes and level counts. `results/tables/summary.csv` holds the same per-scenario data.
+nodes and level counts. `results/tables/summary.csv` holds the same per-scenario data. The order of every list in the outputs is
+fixed (sorted ids), so two runs produce identical files.
 
 Current run over `scenarios_20.json`:
 
@@ -148,8 +167,9 @@ Current run over `scenarios_20.json`:
 
 ## Coverage report and dataset split
 
-`report.py` prints one line per scenario (tagged concepts, node / edge / misconception / level counts, pieces,
-and the gold concepts not found) and ends with `fully covered: N / 10`. On `scenarios_20.json` every gold
+`evaluate.py` also prints one line per scenario (tagged concepts, node / edge / misconception / level counts,
+pieces, and the gold concepts not found) and ends with `fully covered: N / 10`; `results/metrics.json` holds
+the same as numbers (mean gold-concept recall, share of gold among the nodes, mean sizes, subgraphs in one piece). On `scenarios_20.json` every gold
 concept of all ten scenarios is found from the code: 10 / 10. The extra nodes relative to gold are
 non-generic constructs really present in the code (the loop around S057's division, for instance); only the
 question and answer, read in a later stage, can say which of them a scenario is about.

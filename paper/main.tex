@@ -1,0 +1,517 @@
+\documentclass[sigconf,nonacm]{acmart}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{xurl}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\setlength{\emergencystretch}{2em}
+\begin{document}
+
+\title{Traversing a Learning-Progression Knowledge Graph to Diagnose Novice Code-Comprehension Reasoning}
+\subtitle{Mid-Term Progress Report}
+
+\author{Pradhyumn Nair}
+\affiliation{%
+  \institution{Department of Computer Science, Georgia Southern University}
+  \city{Statesboro}
+  \state{GA}
+  \country{USA}}
+\email{pn02774@georgiasouthern.edu}
+
+\begin{abstract}
+A correct answer to a code-tracing question is weak evidence of correct reasoning, and a wrong answer
+rarely says which piece of understanding is missing. We study whether a knowledge graph that encodes
+a learning progression can make that diagnosis explicit and traceable. The graph covers Chapter~1 of an
+introductory Java textbook: 173 concepts joined by 241 prerequisite and parallel edges that each carry a
+written \emph{edge logic}, 296 literature-sourced misconceptions and errors attached through 569 edges
+that pair the wrong rule with its correct twin, and five level nodes (L0--L4) per concept whose 3{,}079
+``ways'' state what a student at that level says. Our pipeline has two stages. Stage~1, implemented and
+tested, reads only the program text, matches recognition patterns stored on the concept nodes, and
+extracts the subgraph of concepts, edges, misconceptions and levels relevant to the item. Stage~2, now
+in design, adapts Think-on-Graph: a language model traverses that subgraph with beam search, pruning
+edges against the student's clauses, and learning-progression rules turn the matched edges into a level
+per concept and a root cause. On 10 edge-case scenarios and one reference case, Stage~1 extracted a subgraph
+for every item: 2 to 26 concepts (9.6 on average) with their relation edges, misconceptions and L0--L4 levels,
+cutting the misconception edges a reasoner must consider from 569 to 63 on average. All 208 tests of the
+extractor pass.
+\end{abstract}
+
+\keywords{knowledge graph, learning progression, code comprehension, misconceptions, Think-on-Graph,
+large language models, computing education}
+
+\maketitle
+
+\section{Introduction}
+Reading a program is a different skill from writing one, and it develops in stages
+\cite{lister2004multinational,lister2006forest}. Novices hold specific, repeatable wrong ideas about what
+the machine does: that a loop condition is watched continuously, that a variable holds an expression rather
+than a value, that a local variable starts at zero \cite{pea1986bugs,duboulay1986difficulties,sorva2013notional}.
+These gaps matter because a wrong mental model can still produce a right answer. On an open online course,
+about one third of students could not explain their own working code \cite{lehtinen2021explain}, and in a
+first-year Java course only 17\% of students held a sound model of reference assignment \cite{ma2007viability}.
+
+Grading the output of a tracing question therefore measures the wrong thing. An instructor, or an automated
+tutor choosing the next exercise, needs to know \emph{which} piece of understanding is missing and \emph{how
+far along} the learner is. Computing education has scales of depth (SOLO \cite{biggs1982solo}, the Block
+Model \cite{schulte2008block}) and large catalogues of misconceptions \cite{qian2017misconceptions,chiodini2021progmiscon},
+and science education has \emph{learning progressions}: ordered, validated descriptions of how reasoning about
+one idea develops \cite{krajcik2023progressions,wilson2009measuring}. Our scoping review of 240 studies
+\cite{nair2026scoping} found that these three ingredients (code-comprehension assessment, validated ordered
+scales, and language-model scoring) have each been paired, but not yet joined.
+
+Large language models (LLMs) can now read free-text explanations and grade them at scale
+\cite{fowler2021autograding,zhang2025solo,prather2023robots}, but their verdicts are hard to trace to a rule, and LLM judges show known biases \cite{zheng2023judging}.
+Recent work on reasoning over knowledge graphs offers a remedy: Think-on-Graph lets an LLM explore a graph
+step by step and answer from the paths it found \cite{sun2024tog}, and Reasoning on Graphs restricts the model to
+paths that really exist in the graph \cite{luo2024rog}.
+
+This project joins the two lines. We built a knowledge graph that encodes a learning progression for
+Chapter~1 of Sedgewick and Wayne's \emph{Introduction to Programming in Java} \cite{sedgewick2017java}, with the
+reasoning written on every edge, and we are building a pipeline that traverses it to diagnose a student's
+explanation. The contributions reported at mid-term are:
+\begin{itemize}
+\item a learning-progression knowledge graph (KG) whose edges carry their logic, whose misconceptions carry a
+correct twin, and whose level nodes carry the ways a student at each level reasons (Section~\ref{sec:data});
+\item a tested, data-driven extractor that reads only program text and returns the relevant subgraph, with every
+recognition pattern stored on the concept nodes rather than in code (Section~\ref{sec:stage1});
+\item a design for adapting Think-on-Graph traversal and learning-progression rules to diagnosis, and preliminary
+evidence on 10 scenarios (Sections~\ref{sec:stage2}--\ref{sec:results}).
+\end{itemize}
+
+\section{Research Questions}
+\label{sec:rq}
+\begin{description}
+\item[RQ1] \emph{Subgraph recovery.} To what extent can the concepts, edges, misconceptions and level nodes
+relevant to a code-comprehension item be recovered from the program text alone, using recognition patterns
+stored on the KG's concept nodes? \emph{Measures:} size and connectedness of each subgraph, reduction of the
+search space, and the extractor's test results.
+\item[RQ2] \emph{Traversal.} How accurately does a Think-on-Graph traversal of the extracted subgraph align
+each clause of a student's explanation with the edge or misconception it uses? \emph{Measures:} following
+Hwang et al.\ \cite{hwang2025principal}, each edge and misconception of the subgraph is labelled \emph{correct},
+\emph{incorrect} or \emph{not applied}, and we report knowledge precision, knowledge recall and F1 against expert
+labels; exact-match accuracy of the held misconception and the root cause, as Hits@1 in ToG \cite{sun2024tog}.
+\item[RQ3] \emph{Learning-progression logic.} How well do the level rules stored in the graph place a student
+on L0--L4 for each concept, compared with expert labels? \emph{Measures:} exact-match accuracy of the level,
+agreement with the acceptable set of levels, and weighted Cohen's $\kappa$.
+\item[RQ4] \emph{Value of the graph.} Does grounding an LLM in the traversal improve diagnostic accuracy and
+run-to-run consistency over the same LLM without the graph? \emph{Measures:} differences in the RQ2--RQ3 measures,
+agreement across five reruns, and LLM calls per answer.
+\end{description}
+RQ1 is answered with preliminary results in this report; RQ2--RQ4 define the remaining work.
+
+\section{Literature Review}
+\label{sec:lit}
+We organise prior work around the three ingredients our system combines, and the method that joins them.
+
+\subsection{What novices get wrong, and how it is catalogued}
+Early work identified language-independent ``bugs'' in novice thinking \cite{pea1986bugs} and the separate
+difficulties novices face at once: the notional machine, notation, standard structures and pragmatics
+\cite{duboulay1986difficulties}. Sorva's notional machines explain many of them \cite{sorva2013notional}, and Qian and
+Lehman's review \cite{qian2017misconceptions} organises them into syntactic, conceptual and strategic
+knowledge. Misconceptions have since been identified through formal interviews with students, which revealed four themes
+\cite{kaczmarczyk2010identifying},
+validated for Java toward a concept inventory \cite{caceffo2019java}, and curated into ProgMiscon, an online
+inventory of 198 misconceptions \cite{chiodini2021progmiscon}. Learning-curve analysis separates the errors
+practice fixes from those that persist \cite{rivers2016learning}. \emph{Gap:} these catalogues are flat lists.
+They record that a misconception exists, but not which prerequisite relation it breaks or which level of
+understanding it implies, which is what a diagnosis needs.
+
+\subsection{Scales of depth for code comprehension}
+The SOLO taxonomy grades an answer by how far its parts are tied together \cite{biggs1982solo}, and was
+applied to novice code-reading responses \cite{lister2006forest}, building on a multinational tracing study \cite{lister2004multinational}.
+The Block Model grades the reading itself, by the size of the program unit and the depth from text to purpose
+\cite{schulte2008block}. Both order responses, not learners, and both depend on human raters whose agreement
+must be checked. Knowledge tracing models a learner's mastery over time, from Bayesian knowledge tracing
+\cite{corbett1994knowledge} to deep knowledge tracing \cite{piech2015deep}, but models correctness on items,
+not the reasoning behind an answer. \emph{Gap:} no scale for code comprehension has been built from, and tested
+against, the specific wrong ideas students hold.
+
+\subsection{Learning progressions}
+Science education describes how reasoning about one idea develops as a learning progression: ordered levels
+drawn from real student answers \cite{krajcik2023progressions}. Wilson's construct-modeling approach ties each
+level to assessment items \cite{wilson2009measuring}; Alonzo and Steedle built and tested a force-and-motion
+progression with ordered multiple-choice items whose options map to levels \cite{alonzo2009force}; and Jin
+et al.\ set out the evidence a progression's validity requires \cite{jin2019validation}. Automated scoring against
+a progression is now feasible: machine scores can be compared directly with researchers' interpretations
+\cite{jin2025automated}. \emph{Gap:} computing education has no validated progression for code comprehension,
+and existing progressions are documents for human raters, not machine-readable structures that a system can
+traverse.
+
+\subsection{Language models for grading and tutoring}
+Since 2022, LLMs have entered computing education as generators of material, explainers and tutors
+\cite{prather2023robots}. CodeHelp showed guarded LLM help at course scale \cite{liffiton2023codehelp}, automatic
+grading of ``explain in plain English'' answers reached accuracy close to trained teaching assistants
+\cite{fowler2021autograding}, and LLMs now classify student programming answers onto SOLO levels
+\cite{zhang2025solo}. Using LLMs as judges has known weaknesses: position, verbosity and self-enhancement biases, and weak grading of math and reasoning \cite{zheng2023judging}. \emph{Gap:} these systems apply a
+general-purpose scale through a prompt. None constrains the model to a validated, ordered structure of the
+domain, and none returns the specific prerequisite that failed.
+
+\subsection{Reasoning over knowledge graphs with language models}
+Graph-based methods let an LLM reason over explicit structure rather than from memory. Think-on-Graph (ToG)
+treats the LLM as an agent that runs beam search on a knowledge graph. At each depth it lists the relations at
+the current entities, prunes them, follows the kept ones, and asks itself whether the paths found so far
+suffice \cite{sun2024tog}. It is training-free and set new best results on six of nine benchmarks with GPT-4.
+Reasoning on Graphs (RoG) instead plans relation paths, retrieves only the paths that exist in the graph, and
+reasons over them, which makes answers faithful and interpretable \cite{luo2024rog}. PathRAG shows that giving
+the LLM key relational paths as ordered text, rather than a flat list of nodes and edges, improves answer
+quality \cite{chen2026pathrag}. Principal-knowledge grounding checks reasoning against a set of required
+knowledge units and labels each correct, incorrect or not applied \cite{hwang2025principal}, but its units are a
+flat list without relations. \emph{Gap:} these methods answer factual questions over encyclopedic graphs. None
+has been applied to diagnosing a student's reasoning, where the graph encodes prerequisites, misconceptions
+and levels, and where the output is a level and a root cause, not an entity.
+
+\subsection{Positioning}
+Our work sits at the intersection the review identified \cite{nair2026scoping}. We make the learning progression
+machine-readable as a knowledge graph, and use graph traversal, in the spirit of ToG and RoG, to tie an LLM's
+reading of a student explanation to explicit edges, misconceptions and levels.
+
+\section{Methodology}
+\label{sec:method}
+Figure~\ref{fig:pipeline} shows the pipeline. Stage~1 is implemented; Stage~2 is being built.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/fig_pipeline.pdf}
+  \caption{Pipeline. Stage~1 (implemented) reads only the code and extracts the relevant subgraph using
+  patterns stored on the concept nodes. Stage~2 (planned) adapts Think-on-Graph to traverse that subgraph against
+  the student's answer and applies the learning-progression rules.}
+  \label{fig:pipeline}
+\end{figure*}
+
+\subsection{Dataset}
+\label{sec:data}
+\paragraph{Knowledge graph.} The KG (v3.9.5-reader4, JSON; also exported as a spreadsheet) covers Chapter~1 of
+\cite{sedgewick2017java}: 6 sections, 36 topics and 173 concepts. Table~\ref{tab:kg} summarises it, and
+Figure~\ref{fig:schema} shows its schema. Each prerequisite or parallel edge carries an \emph{edge logic}, a sentence
+stating why the relation holds; for example, \code{loop\_control}$\to$\code{for\_loop}: ``The for header is exactly the
+three control slots, and the body runs after the test and before the update on each pass.'' Each misconception
+edge carries the wrong rule (\code{logic}) and the correct rule (\code{twin\_logic}). 294 of the 296 misconception and
+error nodes cite literature, and their provenance is published work (167), the textbook (92), derived (28), a rule
+dictionary (7) or the scenarios (2). Every concept has five level nodes, L0--L4, aligned with SOLO-style depth: L0 holds
+a rule that contradicts Java; L1 names the construct or states its rule; L2 makes a correct prediction or trace;
+L3 relates the concept to a neighbour; L4 diagnoses an error or predicts the effect of a change. Each level node is
+reached by a \code{has\_level} edge listing its \emph{ways}, 3{,}079 in total; 736 of them link a specific misconception,
+so a held misconception maps directly to a level. Each concept also has a \emph{reader} block with recognition
+patterns; 166 concepts are visible in code (359 regular expressions), 7 are not (for example \code{testing} and
+\code{flowchart}), and 21 are marked generic (for example \code{statement}).
+
+\begin{table}[t]
+\caption{The learning-progression knowledge graph (v3.9.5-reader4).}
+\label{tab:kg}
+\small
+\begin{tabular}{@{}p{0.68\columnwidth}r@{}}
+\toprule
+Element & Count \\
+\midrule
+Sections / topics / concepts & 6 / 36 / 173 \\
+Prerequisite / parallel edges (with edge logic) & 207 / 34 \\
+Misconceptions / errors & 255 / 41 \\
+Misconception and error edges (wrong + twin rule) & 569 \\
+Level nodes (L0--L4 per concept) & 865 \\
+Level ways / ways linked to a misconception & 3{,}079 / 736 \\
+Concepts with code patterns / regexes & 166 / 359 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/fig_schema.pdf}
+  \caption{KG schema. A held misconception reaches a level through the way that names it.}
+  \label{fig:schema}
+\end{figure}
+
+\paragraph{Scenarios.} We use the scenario file in the repository's \code{data/raw} folder: 10
+edge-case scenarios (S001, S007, S008, S021, S026, S047, S052, S057, S134, S137) and one reference case (S000), drawn
+from a Chapter~1 scenario set; each has code, a question and a student answer. They were chosen as hard cases:
+self-corrections, correct answers by coincidence, non-native English. Stage~1 reads only the code; the question and
+answer are inputs to Stage~2.
+
+
+\paragraph{Preprocessing.} String and character literals and comments are blanked to spaces, keeping the
+length so positions and line numbers stay valid. The code is split into statements on semicolons and braces only at parenthesis depth zero, so a \code{for} header stays whole. Shell-command fragments
+(\code{java X < file}) are extracted for the I/O concepts. The student answer is split into clauses at link words
+stored in the KG (\emph{because}, \emph{so}, \emph{but}, \emph{oh wait}, \ldots); this step belongs to Stage~2.
+
+\subsection{Stage 1: subgraph extraction (implemented)}
+\label{sec:stage1}
+The extractor is data-driven. It loops over the concept nodes and runs each node's own patterns against the
+code: regular expressions over the whole program, structural signals over the program or over each statement,
+operator symbols, Java type names, and command patterns. A concept is tagged only when one of its own patterns
+matches, and the code contains no concept identifiers. Generic concepts are kept only when a prerequisite or
+parallel edge ties them to a specific tagged concept, or a decisive signal of theirs fired. The subgraph is then
+read from the KG: every relation edge with both ends among the concepts, every misconception and error edge
+from them, every \code{has\_level} edge with its ways, and the level--misconception links inside the ways.
+Figure~\ref{fig:s007} shows the result for scenario S007.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/fig_s007_crop.png}\\[2pt]
+  \includegraphics[width=0.5\textwidth]{figures/fig_s007_legend.png}
+  \caption{Stage~1 subgraph for S007 (nested loops; the student says ``the loop stops at 1''), produced by the
+  repository's results script: 17 concept nodes, 14 relation edges, 141 misconception and error edges, 85 level nodes,
+  in three disconnected pieces. Dark nodes were found by their own code patterns; light nodes are generic concepts kept
+  because an edge ties them to a specific one.}
+  \label{fig:s007}
+\end{figure*}
+
+\paragraph{Stage 1 on S007, step by step.} The S007 code is a \code{for} loop over \code{i} from 3 down to 0, with an
+inner \code{for} loop that prints \code{j} with \code{printf} and a \code{println} after each outer pass.
+Table~\ref{tab:s007tags} lists what tagged each specific concept. Every tag comes from a pattern stored on that concept's
+own node. Two are structural signals rather than plain patterns: \code{loop\_control} is tagged by its \code{for\_header}
+signal, which needs the whole header \code{(int i = 3; i >= 0; i--)}, and \code{nested\_loops} by its \code{nested\_for}
+signal, which finds a second \code{for} inside the first loop's braces. Five generic concepts are kept because an edge
+ties each to a specific one (for example \code{string\_literal}$\to$\code{println}). The KG then supplies 14 relation
+edges among the 17 concepts, including \code{loop\_control}$\to$\code{for\_loop} and \code{for\_loop}$\to$\code{nested\_loops},
+and the concepts fall into three pieces: the loop concepts, the output concepts, and \code{loop\_body} on its own.
+
+\begin{table}[t]
+\caption{What tagged each specific concept in S007 (line of the code where the match starts).}
+\label{tab:s007tags}
+\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+Concept & Tagged by & Line \\
+\midrule
+\code{for\_loop} & pattern \code{for (} & 1 \\
+\code{loop\_control} & signal \code{for\_header} & 1 \\
+\code{nested\_loops} & signal \code{nested\_for} & 1 \\
+\code{loop\_variable}, \code{loop\_scope} & patterns on the \code{for} header & 1 \\
+\code{loop\_body}, \code{control\_flow} & pattern \code{for (} / \code{if (} \ldots & 1 \\
+\code{boolean\_expression} & pattern for a \code{for} test & 1 \\
+\code{comparison\_operators} & pattern \code{>=}, \code{>} & 1 \\
+\code{increment\_operators} & pattern \code{--} & 1 \\
+\code{formatted\_output} & pattern \code{.printf(} & 3 \\
+\code{println} & pattern \code{System.out.println(} & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Stage 2: Think-on-Graph traversal and learning-progression logic (design)}
+\label{sec:stage2}
+We adapt ToG \cite{sun2024tog} from question answering to diagnosis, keeping its three phases.
+\emph{Initialization:} the main concepts of the item are the topic entities. \emph{Exploration:} at each depth,
+relation search lists the edges at the frontier within the subgraph (relation edges with their logic, misconception
+edges with wrong and twin rules, and level ways), and relation pruning asks the LLM which of them the current
+clause uses, keeping the top $N$; entity exploration follows the kept edges. \emph{Reasoning:} the LLM is asked
+whether the paths found are sufficient to judge the clause; if not, exploration continues to depth $D_{\max}$.
+Following ToG, $N=D_{\max}=3$, which bounds the cost at $2ND+D+1=22$ LLM calls per clause. Paths are given to
+the LLM as ordered text, node, edge logic, node, as PathRAG recommends \cite{chen2026pathrag}, and the LLM sees
+only edges that exist, as in RoG \cite{luo2024rog}. Figure~\ref{fig:tog} sketches the intended traversal for S007.
+
+The learning-progression logic then turns matched edges into levels, using only rules stored in the KG.
+(i)~A clause closer to a misconception's wrong rule than to its twin, and confirmed by a fact from the code (for S007,
+the last pass is $i=0$), holds that misconception; the level is the L0 way that links it. (ii)~A relation edge whose
+logic the clause states correctly is confirmed and supports L3 for its ends; an edge whose end holds a misconception
+is broken. (iii)~Otherwise the level is the highest whose ways the clause matches, using the KG's evidence classes
+(named and rule: L1, run: L2, relation: L3, diagnosis and hypothetical: L4). (iv)~The root cause is found by walking
+up prerequisite edges from the main concept to the first broken edge.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.62\columnwidth]{figures/fig_tog_s007.pdf}
+  \caption{Intended Think-on-Graph traversal for clause c2 of S007 (design illustration, not a result).}
+  \label{fig:tog}
+\end{figure}
+
+\paragraph{Worked example (design).} In S007 the student writes ``3 2 1 / 2 1 / 1 (no empty line at the end),
+because the loop stops at 1.'' The clause splitter yields c1 (the output claim) and c2 (the reason, after
+\emph{because}). Starting from \code{nested\_loops}, the traversal for c1 keeps \code{for\_loop}$\to$\code{nested\_loops},
+whose logic (``the inner for runs its complete set of passes for every single pass of the outer for'') matches the
+three rows; that edge is confirmed. For c2 it continues to \code{loop\_control}$\to$\code{for\_loop} and then to the
+misconception edge \code{loop\_control}$\to$OffByOneBound, where the clause is closer to the wrong rule than to the twin.
+The fact read from the loop header (test \code{i >= 0}, so the last pass is $i=0$) confirms that the student is wrong. The
+rules then give \code{loop\_control} L0 through its linked way, mark \code{loop\_control}$\to$\code{for\_loop} broken, give
+\code{nested\_loops} L0 because its output claim is contradicted, and name \code{loop\_control} as the root cause. This is the
+diagnosis the implementation will be tested against.
+
+\subsection{Training procedure}
+Stage~1 needs no training: the patterns are written into the KG and tested. Stage~2 follows ToG in being
+training-free: the LLM is used through prompts with a few worked examples, temperature~0 for the reasoning step,
+and no fine-tuning. If prompting proves unreliable on near-identical wrong and twin rules, we will fine-tune a small
+open model on pairs generated from the KG itself (wrong rule, twin rule, edge logic and level ways as labelled
+statements), as RoG builds its training data from graph paths \cite{luo2024rog}; the 10 scenarios will be held
+out for testing only. Hyperparameters are fixed in advance: $N=3$, $D_{\max}=3$, at most 800 characters between a
+declaration and its use in bounded patterns. Stage~1 runs on a laptop CPU; Stage~2 calls a hosted LLM through its API.
+
+\subsection{Evaluation}
+Stage~1 is evaluated by its test suite and by the subgraphs it produces (RQ1). The test suite checks 372 snippets,
+showing that each of the 166 code-visible concepts is tagged when it should be and not when it should not, plus core-rule
+tests that patterns come only from the nodes. Stage~2 will be evaluated in two conditions: on the Stage~1 subgraph,
+and on a subgraph built from expert-chosen concepts, which separates traversal errors from extraction errors. The
+baselines are (B1) the same LLM given the code, answer and level definitions but no graph; (B2) a RoG-style single call
+given the subgraph paths without iterative traversal; and (B3) a lexical TF-IDF judge in place of the LLM. Ablations
+remove the prerequisite edges, the twin rules or the level ways. Consistency is measured over five reruns.
+
+\paragraph{Output of a diagnosis.} For each student answer the system returns the overall level, a level per concept,
+the misconceptions held, the root-cause concept, and for each verdict the evidence path in the KG (for S007:
+\code{loop\_control}$\to$OffByOneBound$\to$\code{loop\_control@L0}). An answer is correct under exact match only if the
+predicted level, misconception or root cause equals the expert label.
+
+\paragraph{Result metric.} Hwang et al.\ assess a model's reasoning against the knowledge units a question requires,
+labelling each unit \emph{correct}, \emph{incorrect} or \emph{not applied}, and report knowledge precision (of the units
+used, the share used correctly), knowledge recall (of the units required, the share used correctly) and their F1
+\cite{hwang2025principal}. We adopt this metric with the edges and misconceptions of the subgraph as the knowledge units:
+a confirmed edge is \emph{correct}, a broken edge or a held misconception is \emph{incorrect}, and an edge the student
+never uses is \emph{not applied}. For S007, \code{for\_loop}$\to$\code{nested\_loops} is correct and
+\code{loop\_control}$\to$\code{for\_loop} is incorrect through OffByOneBound. Precision, recall and F1 are computed
+between the system's labels and the expert's labels for each scenario.
+
+\paragraph{Validating an LLM judge.} Expert labels are the reference. Where an LLM labels units at scale, we follow
+Zheng et al., who validate an LLM judge by its agreement with human judgments and document its position, verbosity and
+self-enhancement biases \cite{zheng2023judging}. We report the LLM judge's agreement with the expert labels (percent
+agreement and Cohen's $\kappa$) on the 10 scenarios before using its labels, shuffle the order in which edges are
+presented, use temperature~0, and use a different model family for judging than for reasoning.
+
+\section{Results and Findings So Far}
+\label{sec:results}
+\paragraph{Stage~1 extracts a subgraph for every scenario.} Table~\ref{tab:rq1} and Table~\ref{tab:perscenario} report
+RQ1. For all 10 scenarios and the reference case, the extractor found concept nodes from the code and read their
+relation edges, misconceptions and level nodes out of the KG. Subgraphs range from 2 to 26 concepts (9.6 on average,
+Figure~\ref{fig:coverage}). The repository's report prints ``fully covered: 10 / 10'', and all 208 tests pass in 2.3
+seconds.
+
+\begin{table}[t]
+\caption{RQ1: Stage~1 subgraphs over the 10 scenarios (S000 reference case excluded).}
+\label{tab:rq1}
+\small
+\begin{tabular}{@{}p{0.50\columnwidth}ccc@{}}
+\toprule
+Per subgraph & Mean & Min & Max \\
+\midrule
+Concept nodes & 9.6 & 2 & 26 \\
+Generic concepts kept & 2.5 & 1 & 5 \\
+Relation edges & 8.2 & 1 & 22 \\
+Misconception and error edges & 63.0 & 7 & 167 \\
+Level nodes & 48.0 & 10 & 130 \\
+Level--misconception links & 69.0 & 11 & 193 \\
+Disconnected pieces & 2.0 & 1 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/fig_coverage.pdf}
+  \caption{Concept nodes in each Stage~1 subgraph: found by their own pattern (dark) and generic concepts kept because an
+  edge ties them to a specific one (light).}
+  \label{fig:coverage}
+\end{figure}
+
+\paragraph{The graph narrows the search.} A subgraph holds 63 of the KG's 569 misconception and error edges on average
+(Figure~\ref{fig:searchspace}), about 11\% of the graph, so a reasoner works with a small, relevant set rather than the
+whole catalogue. Scenarios with short code (S026, S047, S134) give subgraphs of two concepts; longer code with loops,
+arrays and output (S007, S008, S057) gives 17 to 26 concepts.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/fig_searchspace.pdf}
+  \caption{Misconception and error edges in each subgraph, against the 569 in the whole KG.}
+  \label{fig:searchspace}
+\end{figure}
+
+\paragraph{Larger subgraphs split into pieces.} Five of the ten subgraphs have more than one connected piece (up to four),
+because the KG has no edge between some constructs, for example between output formatting and loop control in S007. A
+traversal therefore needs more than one starting point.
+
+\paragraph{The learning-progression links are in the subgraph.} Every subgraph carries its concepts' level nodes and the
+links from level ways to misconceptions (69 per subgraph on average), so the rules that turn a matched misconception into
+a level are available to Stage~2 without another lookup. For example, S007's subgraph contains the misconception edge
+\code{loop\_control}$\to$OffByOneBound and the way that links it to \code{loop\_control@L0}.
+
+\begin{table*}[t]
+\caption{Stage~1 per scenario: concept nodes (generic kept), relation edges, misconception and error edges,
+misconception nodes, level nodes, level--misconception links and disconnected pieces.}
+\label{tab:perscenario}
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+ID & Concepts (generic) & Relation edges & Mis.\ edges & Mis.\ nodes & Level nodes & Links & Pieces \\
+\midrule
+S000 (ref.) & 4 (2) & 2 & 18 & 17 & 20 & 20 & 2 \\
+S001 & 4 (2) & 5 & 18 & 15 & 20 & 16 & 1 \\
+S007 & 17 (5) & 14 & 141 & 104 & 85 & 145 & 3 \\
+S008 & 19 (4) & 16 & 141 & 108 & 95 & 161 & 4 \\
+S021 & 12 (3) & 10 & 87 & 69 & 60 & 91 & 2 \\
+S026 & 2 (1) & 1 & 17 & 15 & 10 & 17 & 1 \\
+S047 & 2 (1) & 1 & 7 & 6 & 10 & 11 & 1 \\
+S052 & 8 (1) & 7 & 17 & 16 & 40 & 23 & 2 \\
+S057 & 26 (5) & 22 & 167 & 120 & 130 & 193 & 4 \\
+S134 & 2 (1) & 1 & 17 & 15 & 10 & 17 & 1 \\
+S137 & 4 (2) & 5 & 18 & 15 & 20 & 16 & 1 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Limitations.} The scenarios are 10 hand-picked edge cases and one reference case, not a random sample, so the
+results show feasibility, not accuracy. They were kept because their code shows the concepts the items are about; items
+whose concepts appear only in the student's answer are left to Stage~2. The KG covers one chapter of one textbook, and the
+reasoning stage is not built yet, so RQ2--RQ4 have no results.
+
+\section{Discussion: What Stage~1 Implies for the Traversal}
+\label{sec:discussion}
+The preliminary results shape the traversal design in four ways.
+
+\paragraph{Start from the question, not from the whole subgraph.} ToG starts from topic entities named in the question
+\cite{sun2024tog}. A subgraph holds every construct in the code, up to 26 concepts. The traversal will start from the
+item's main concepts and treat the rest of the subgraph as reachable context.
+
+\paragraph{Allow several starting points.} Subgraphs with more than one piece (Table~\ref{tab:perscenario}) cannot be
+covered by a walk from one entity. Following ToG, the beam will hold up to $N$ paths from different starting entities,
+so that an output claim about formatting and a reason about the loop bound are explored in parallel.
+
+\paragraph{Add the student's words as a second entry point.} A student can name a concept the code does not show,
+for example a construct they compare with the one in the code. Before traversal, concepts named in the answer will be added through the aliases
+stored on the concept nodes, which the extractor deliberately ignores. This keeps Stage~1 code-only and testable while
+giving the traversal the concepts it needs.
+
+\paragraph{Cost.} With the ToG bound of 22 LLM calls per clause and the two to three clauses of a typical answer, a
+scenario costs at most about 66 calls, against one call for an LLM without the graph. RQ4 asks whether the gain in
+accuracy and consistency justifies that cost; a RoG-style single call over the extracted paths (B2) is the cheaper
+alternative we will compare against.
+
+\section{Remaining Work and Timeline}
+\label{sec:plan}
+Table~\ref{tab:timeline} gives the plan to the end of the semester.
+
+\begin{table}[t]
+\caption{Week-by-week plan (Fall 2026).}
+\label{tab:timeline}
+\small
+\begin{tabular}{p{0.16\columnwidth}p{0.74\columnwidth}}
+\toprule
+Week & Milestone \\
+\midrule
+Nov 2--8 & Clause segmentation; ToG prompts; S007 end to end. \\
+Nov 9--15 & ToG traversal over Stage~1 and expert-chosen subgraphs; logging of paths and LLM calls. \\
+Nov 16--22 & Learning-progression rules and root cause; RQ2 and RQ3 metrics; baseline B1 (LLM without graph). \\
+Nov 23--29 & Baselines B2 (RoG-style) and B3 (lexical); ablations; five reruns for consistency (RQ4). \\
+Nov 30--Dec 6 & Second annotator ($\kappa$); error analysis; answer-side concept retrieval. \\
+Dec 7--13 & Final paper, slides and repository release. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Risks and contingencies.} \emph{LLM access or cost:} the traversal is model-agnostic; if API access is
+limited we run an open model locally and report the lexical judge (B3) as a floor. \emph{Small dataset:} we report
+per-scenario results and bootstrap confidence intervals, and frame the study as a case study; collecting further
+student answers is planned beyond this semester. \emph{Label validity:} a second annotator labels the 10 scenarios
+and we report agreement. \emph{Non-determinism:} temperature~0 and five reruns per scenario. \emph{Concepts outside the
+code:} retrieve concepts from the question and answer through the aliases stored in the KG before traversal.
+
+\begin{acks}
+I thank my advisor, Dr.\ Vijayalakshmi Ramasamy, for guidance. Generative AI disclosure: Claude (Anthropic) was used to
+help draft and edit this report, generate figures from the measured results, and assist with code and pattern
+development in the repository; all results were produced by running the repository's code, and all content was
+reviewed by the author.
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}

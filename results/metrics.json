@@ -1,0 +1,66 @@
+{
+ "scenarios": 10,
+ "fully_covered": 10,
+ "gold_concept_recall_mean": 1.0,
+ "gold_share_of_nodes_mean": 0.534,
+ "mean_concept_nodes": 9.6,
+ "mean_concept_edges": 8.2,
+ "subgraphs_in_one_piece": 5,
+ "per_scenario": {
+  "S000": {
+   "nodes": 4,
+   "missed": [],
+   "pieces": 2
+  },
+  "S001": {
+   "nodes": 4,
+   "missed": [],
+   "pieces": 1
+  },
+  "S007": {
+   "nodes": 17,
+   "missed": [],
+   "pieces": 3
+  },
+  "S008": {
+   "nodes": 19,
+   "missed": [],
+   "pieces": 4
+  },
+  "S021": {
+   "nodes": 12,
+   "missed": [],
+   "pieces": 2
+  },
+  "S026": {
+   "nodes": 2,
+   "missed": [],
+   "pieces": 1
+  },
+  "S047": {
+   "nodes": 2,
+   "missed": [],
+   "pieces": 1
+  },
+  "S052": {
+   "nodes": 8,
+   "missed": [],
+   "pieces": 2
+  },
+  "S057": {
+   "nodes": 26,
+   "missed": [],
+   "pieces": 4
+  },
+  "S134": {
+   "nodes": 2,
+   "missed": [],
+   "pieces": 1
+  },
+  "S137": {
+   "nodes": 4,
+   "missed": [],
+   "pieces": 1
+  }
+ }
+}
