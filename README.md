@@ -20,7 +20,7 @@ pip install -r requirements.txt     # pytest only; the code uses the standard li
 README.md
 requirements.txt
 data/
-  raw/chapter1_kg.json          knowledge graph v3.9.5-reader4-ext (189 concepts, reader layer with code patterns)
+  raw/chapter1_kg.json          knowledge graph v3.9.5-reader4 (173 concepts, reader layer with code patterns)
   raw/scenarios_20.json         S000 reference case + the 20 student scenarios (code, question, answer, gold labels)
   processed/<sid>_subgraph.json one extracted subgraph per scenario (output of the report CLI)
 src/lp_graph/subgraph/
@@ -28,13 +28,12 @@ src/lp_graph/subgraph/
   tagger.py                     tag_code, command_segments
   extract.py                    extract_subgraph, subgraph_from_code
   report.py                     python -m lp_graph.subgraph.report
-src/lp_graph/kg_extend.py       adds the 16 beyond-chapter-1 concepts to the KG (idempotent)
 notebooks/                      exploration (empty)
 experiments/logs/               subgraph_report.txt
 slides/                         (empty)
 tests/
   test_subgraph.py              pytest -q
-  data/concept_pattern_tests.json  must_tag / must_not_tag snippets for all 182 code-visible concepts
+  data/concept_pattern_tests.json  must_tag / must_not_tag snippets for all 166 code-visible concepts
 ```
 
 ## Commands
@@ -77,24 +76,26 @@ type (`String s = a + b`), an index of unknown value (`a[n]`), or unbalanced par
 The audit added 77 general patterns and signals to the KG (see the next section); none changed the 20 scenarios'
 node sets.
 
-## Concepts added for constructs beyond chapter 1 (v3.9.5-reader4-ext)
+## Concepts the knowledge graph does not have
 
-Student code can contain constructs the chapter-1 book text never introduces. `src/lp_graph/kg_extend.py` adds
-sixteen concepts for them, each with rules of all thirteen types, five level nodes and `has_level` edges with
-ways, prerequisite edges with logic, misconception and error nodes and edges, links to existing misconceptions
-that fit, a topic, and reader patterns. Every rule is marked author-added and unverified (there is no book quote),
-and the additions are listed in `kg["reader"]["concepts_added_reader4"]`.
+Constructs that chapter-1 student code can contain and that no concept node covers, so no regex can produce a
+node for them. The graph is kept at its 173 concepts on purpose; an extension with sixteen concepts for these
+constructs was built and then withdrawn (git history, commit 898436e) and can be restored if wanted.
 
-| Topic | Concepts |
-|---|---|
-| 1.2.b Characters and strings | string_methods, string_comparison, character_methods |
-| ext.a Methods | method_definition, return_statement, parameters_and_arguments, recursion |
-| ext.b Program structure | import_statement |
-| ext.c Objects and references | null_reference, string_builder, exception_handling, wrapper_types, collections |
-| ext.d Operators and literals | unary_operators, bitwise_operators, numeric_literals_radix |
-
-The KG now has 189 concepts (182 code-visible), 945 level nodes, 250 prerequisite and 36 parallel edges,
-293 misconception and 56 error nodes. Re-running the module is a no-op once the concepts exist.
+| Construct | Example | Nearest existing concept |
+|---|---|---|
+| String methods and string comparison | `s.length()`, `s.charAt(0)`, `s.equals(t)`, `s == t` | api (lists the calls), string_type |
+| Method definition, return, parameters, recursion | `static int sq(int x) { return x * x; }` | main_method, method_call (calls only) |
+| import / package | `import java.util.Scanner;` | none |
+| null and object references | `String s = null;` | primitive_vs_reference, array_reference (arrays only) |
+| Unary operators | `-x`, `+x` | arithmetic_operators (binary only), logical_operators (`!`) |
+| Bitwise and shift operators | `a & b`, `x << 1` | exclusive_or (`^` only) |
+| Hex, octal, binary and underscore literals | `0x1F`, `0b101`, `1_000_000` | number_conversion (toBinaryString only) |
+| Character methods | `Character.isDigit(c)`, `Character.toUpperCase(c)` | char, api |
+| StringBuilder | `new StringBuilder()` | none |
+| Exceptions | `try { } catch (Exception e) { }`, `throw` | run_time_error (effects only) |
+| Wrapper types and autoboxing | `Integer n = 5;` | integer_constants, parsing |
+| Collections | `ArrayList<Integer>` | none (later chapter) |
 
 ## Pattern fixes made in the KG (v3.9.5-reader4)
 

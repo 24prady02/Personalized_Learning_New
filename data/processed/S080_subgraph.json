@@ -26611,44 +26611,100 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusStringifiesExpression",
+   "level_node": "comment@L0",
+   "misconception": "CommentIsExecuted",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: + with a String turns the whole other side into a string first. Right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
+   "exact_rule": "wrong rule: A comment line is run like a statement. Right rule: The compiler ignores comments: everything from // to the end of the line and everything between /* and */."
   },
   {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusLeftToRight",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
-  },
-  {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusStringifiesExpression",
+   "level_node": "comment@L0",
+   "misconception": "CommentIsExecuted",
    "way": "inconsistent_trace",
-   "way_index": 3,
+   "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")"
+   "exact_rule": "Applies the skip rule unevenly: skips one comment while tracing but 'executes' another (e.g. a commented-out println), or forgets that // ends at the line break. (here mixing in: \"A comment line is run like a statement\")"
   },
   {
-   "level_node": "string_concatenation@L0",
-   "misconception": "ArithmeticPlusPrecedes",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
-  },
-  {
-   "level_node": "string_concatenation@L4",
-   "misconception": "StringPlusStringifiesExpression",
+   "level_node": "comment@L4",
+   "misconception": "CommentIsExecuted",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Parenthesizing numeric parts changes the result (\"sum \" + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs."
+   "exact_rule": "Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "DeclarationCreatesArray",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: The declaration only names the array variable; until new (or an initializer) creates the array, a[i] gives the compile-time error 'variable a might not have been initialized'."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ArrayElementsUntyped",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array can hold elements of any type. Right rule: Every element of an array has the declared element type: an int[] holds only int values, a String[] only String references."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ArrayBracketCountIsLength",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The number of brackets in an array type is the array's length. Right rule: Each bracket pair adds one dimension (int[] is 1-D, int[][] is 2-D); the length is not part of the type and is fixed only when the array is created."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "DeclarationCreatesArray",
+   "way": "inconsistent_trace",
+   "way_index": 4,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: \"int[] a; already makes an array that can be indexed\")"
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ElementNameIsWholeArray",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The name a (written a[] in the book) denotes the whole array; a[i] denotes the single element at index i."
+  },
+  {
+   "level_node": "array_declaration@L4",
+   "misconception": "DeclarationCreatesArray",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time."
+  },
+  {
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
+  },
+  {
+   "level_node": "command_line_args@L4",
+   "misconception": "ArgsAreNumbers",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
   },
   {
    "level_node": "class_declaration@L0",
@@ -26673,6 +26729,110 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Renaming the class requires renaming the file (and the java command) to keep it compiling and runnable; moving main outside the class braces breaks compilation."
+  },
+  {
+   "level_node": "string_conversion@L0",
+   "misconception": "StringPlusLeftToRight",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "level_node": "string_conversion@L0",
+   "misconception": "StringPlusLeftToRight",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")"
+  },
+  {
+   "level_node": "string_conversion@L4",
+   "misconception": "StringPlusLeftToRight",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding parentheses around the numeric part changes \"bc23\" into \"bc5\"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "array_bounds@L0",
+   "misconception": "OutOfBoundsElementsAreNull",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An out-of-bounds read returns null (or 0). Right rule: Reading or writing any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException and returns no value."
+  },
+  {
+   "level_node": "array_bounds@L0",
+   "misconception": "OutOfBoundsElementsAreNull",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: the bounds check runs at every access, at run time. Inconsistent application: the trace accepts an index of a.length on the last pass (or -1 on the first) but rejects it elsewhere, or reads 'some value' there. (here mixing in: \"an out-of-bounds read returns null (it throws)\")"
+  },
+  {
+   "level_node": "array_bounds@L0",
+   "misconception": "OffByOneBound",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n, which is out of bounds for an array of length n."
+  },
+  {
+   "level_node": "array_bounds@L4",
+   "misconception": "OutOfBoundsElementsAreNull",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: a loop bounded by i < a.length stays within bounds when the array size changes. Changing < to <= adds one pass that throws, and starting at 1 or ending at a.length-1 silently skips an element."
   },
   {
    "level_node": "println@L0",
@@ -26721,30 +26881,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
-  },
-  {
-   "level_node": "comment@L0",
-   "misconception": "CommentIsExecuted",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A comment line is run like a statement. Right rule: The compiler ignores comments: everything from // to the end of the line and everything between /* and */."
-  },
-  {
-   "level_node": "comment@L0",
-   "misconception": "CommentIsExecuted",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the skip rule unevenly: skips one comment while tracing but 'executes' another (e.g. a commented-out println), or forgets that // ends at the line break. (here mixing in: \"A comment line is run like a statement\")"
-  },
-  {
-   "level_node": "comment@L4",
-   "misconception": "CommentIsExecuted",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding, removing or editing a comment keeps behaviour unchanged, as long as the delimiters stay intact; deleting a closing */ or turning a statement into a comment changes the program."
   },
   {
    "level_node": "indexing@L0",
@@ -26827,318 +26963,6 @@
    "exact_rule": "Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. Changing what is stored never changes the positions."
   },
   {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
-  },
-  {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
-  },
-  {
-   "level_node": "command_line_args@L4",
-   "misconception": "ArgsAreNumbers",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
-  },
-  {
-   "level_node": "array_bounds@L0",
-   "misconception": "OutOfBoundsElementsAreNull",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An out-of-bounds read returns null (or 0). Right rule: Reading or writing any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException and returns no value."
-  },
-  {
-   "level_node": "array_bounds@L0",
-   "misconception": "OutOfBoundsElementsAreNull",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: the bounds check runs at every access, at run time. Inconsistent application: the trace accepts an index of a.length on the last pass (or -1 on the first) but rejects it elsewhere, or reads 'some value' there. (here mixing in: \"an out-of-bounds read returns null (it throws)\")"
-  },
-  {
-   "level_node": "array_bounds@L0",
-   "misconception": "OffByOneBound",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n, which is out of bounds for an array of length n."
-  },
-  {
-   "level_node": "array_bounds@L4",
-   "misconception": "OutOfBoundsElementsAreNull",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: a loop bounded by i < a.length stays within bounds when the array size changes. Changing < to <= adds one pass that throws, and starting at 1 or ending at a.length-1 silently skips an element."
-  },
-  {
-   "level_node": "compile_time_error@L0",
-   "misconception": "CompilesMeansWorks",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Code that compiles is code that works. Right rule: Compiling only checks the language rules; code that compiles can still have run-time and logic errors."
-  },
-  {
-   "level_node": "compile_time_error@L0",
-   "misconception": "ErrorLineIsFaultLine",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The line number in a javac error is always the line that has the mistake. Right rule: The compiler reports where it noticed the problem, which can be after the real fault (omitting HelloWorld's second left brace gives errors on later lines)."
-  },
-  {
-   "level_node": "compile_time_error@L0",
-   "misconception": "CompilesMeansWorks",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the 'javac checks before running' rule unevenly: predicts output for a program that would not compile, or expects a compile error from a fault (such as division by zero) that only shows at run time. (here mixing in: \"Code that compiles is code that works\")"
-  },
-  {
-   "level_node": "compile_time_error@L0",
-   "misconception": "CompilerSuggestionIsFix",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Doing exactly what the compiler message suggests will fix the error. Right rule: An error message is evidence that something is wrong, but its suggested remedy may be wrong; find the actual cause."
-  },
-  {
-   "level_node": "compile_time_error@L4",
-   "misconception": "CompilesMeansWorks",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Fixing the first error and recompiling can remove many messages at once; a single missing brace or semicolon can cause several messages."
-  },
-  {
-   "level_node": "string_conversion@L0",
-   "misconception": "StringPlusLeftToRight",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
-  },
-  {
-   "level_node": "string_conversion@L0",
-   "misconception": "StringPlusLeftToRight",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")"
-  },
-  {
-   "level_node": "string_conversion@L4",
-   "misconception": "StringPlusLeftToRight",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding parentheses around the numeric part changes \"bc23\" into \"bc5\"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "DeclarationCreatesArray",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: The declaration only names the array variable; until new (or an initializer) creates the array, a[i] gives the compile-time error 'variable a might not have been initialized'."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "ArrayElementsUntyped",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array can hold elements of any type. Right rule: Every element of an array has the declared element type: an int[] holds only int values, a String[] only String references."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "ArrayBracketCountIsLength",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The number of brackets in an array type is the array's length. Right rule: Each bracket pair adds one dimension (int[] is 1-D, int[][] is 2-D); the length is not part of the type and is fixed only when the array is created."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "DeclarationCreatesArray",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: \"int[] a; already makes an array that can be indexed\")"
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "ElementNameIsWholeArray",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The name a (written a[] in the book) denotes the whole array; a[i] denotes the single element at index i."
-  },
-  {
-   "level_node": "array_declaration@L4",
-   "misconception": "DeclarationCreatesArray",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "run@L0",
-   "misconception": "CompileRunsProgram",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Compiling also executes the program. Right rule: The program runs only when java Name is typed; javac only translates it."
-  },
-  {
-   "level_node": "run@L0",
-   "misconception": "CompileRunsProgram",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the run rule (LT: main's statements execute in order, one by one, each once) unevenly: e.g. executes the print statements in written order on one trace but skips one or reorders them on another. (here mixing in: \"compiling also executes the program\")"
-  },
-  {
-   "level_node": "run@L4",
-   "misconception": "CompileRunsProgram",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Running again with the same arguments reproduces the same output (for programs without randomness or input); changing the arguments changes the output without recompiling; editing the source changes nothing until recompiled."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterIfInBranch",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LoopBodyStatementOutsideLoop",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterLoopInBody",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
-  },
-  {
-   "level_node": "block@L4",
-   "misconception": "LocalVarOutsideScope",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
-  },
-  {
    "level_node": "run_time_error@L0",
    "misconception": "CompilesMeansWorks",
    "way": "misconception",
@@ -27209,6 +27033,86 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
+  },
+  {
+   "level_node": "compile_time_error@L0",
+   "misconception": "CompilesMeansWorks",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Code that compiles is code that works. Right rule: Compiling only checks the language rules; code that compiles can still have run-time and logic errors."
+  },
+  {
+   "level_node": "compile_time_error@L0",
+   "misconception": "ErrorLineIsFaultLine",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The line number in a javac error is always the line that has the mistake. Right rule: The compiler reports where it noticed the problem, which can be after the real fault (omitting HelloWorld's second left brace gives errors on later lines)."
+  },
+  {
+   "level_node": "compile_time_error@L0",
+   "misconception": "CompilesMeansWorks",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the 'javac checks before running' rule unevenly: predicts output for a program that would not compile, or expects a compile error from a fault (such as division by zero) that only shows at run time. (here mixing in: \"Code that compiles is code that works\")"
+  },
+  {
+   "level_node": "compile_time_error@L0",
+   "misconception": "CompilerSuggestionIsFix",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Doing exactly what the compiler message suggests will fix the error. Right rule: An error message is evidence that something is wrong, but its suggested remedy may be wrong; find the actual cause."
+  },
+  {
+   "level_node": "compile_time_error@L4",
+   "misconception": "CompilesMeansWorks",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Fixing the first error and recompiling can remove many messages at once; a single missing brace or semicolon can cause several messages."
+  },
+  {
+   "level_node": "string_concatenation@L0",
+   "misconception": "StringPlusStringifiesExpression",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: + with a String turns the whole other side into a string first. Right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
+  },
+  {
+   "level_node": "string_concatenation@L0",
+   "misconception": "StringPlusLeftToRight",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "level_node": "string_concatenation@L0",
+   "misconception": "StringPlusStringifiesExpression",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")"
+  },
+  {
+   "level_node": "string_concatenation@L0",
+   "misconception": "ArithmeticPlusPrecedes",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "level_node": "string_concatenation@L4",
+   "misconception": "StringPlusStringifiesExpression",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Parenthesizing numeric parts changes the result (\"sum \" + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs."
   },
   {
    "level_node": "variable@L0",
@@ -27371,54 +27275,6 @@
    "exact_rule": "Renaming the class without renaming the file (or vice versa) breaks compilation; changing whitespace between tokens or editing comments keeps the behaviour unchanged; changing any character inside quotes changes the output."
   },
   {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
-  },
-  {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
-  },
-  {
    "level_node": "string_type@L0",
    "misconception": "StringLiteralNoObject",
    "way": "misconception",
@@ -27481,6 +27337,150 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing \"5\" to 5 turns concatenation into addition."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LocalVarOutsideScope",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LocalVarOutsideScope",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "StatementAfterIfInBranch",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LoopBodyStatementOutsideLoop",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "StatementAfterLoopInBody",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "level_node": "block@L4",
+   "misconception": "LocalVarOutsideScope",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
+  },
+  {
+   "level_node": "run@L0",
+   "misconception": "CompileRunsProgram",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Compiling also executes the program. Right rule: The program runs only when java Name is typed; javac only translates it."
+  },
+  {
+   "level_node": "run@L0",
+   "misconception": "CompileRunsProgram",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the run rule (LT: main's statements execute in order, one by one, each once) unevenly: e.g. executes the print statements in written order on one trace but skips one or reorders them on another. (here mixing in: \"compiling also executes the program\")"
+  },
+  {
+   "level_node": "run@L4",
+   "misconception": "CompileRunsProgram",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Running again with the same arguments reproduces the same output (for programs without randomness or input); changing the arguments changes the output without recompiling; editing the source changes nothing until recompiled."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   }
  ],
  "counts": {

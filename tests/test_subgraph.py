@@ -50,7 +50,7 @@ def test_command_segments():
 def test_every_code_visible_concept_has_pattern_tests():
     visible = {c["id"] for c in KG["concepts"] if (c.get("reader") or {}).get("code_visible") is not False}
     assert visible == set(PATTERN_TESTS)
-    assert len(visible) == 182
+    assert len(visible) == 166
 
 
 @pytest.mark.parametrize("cid", sorted(PATTERN_TESTS))
