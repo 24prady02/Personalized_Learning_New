@@ -1,23 +1,23 @@
-S000  tagged  10  nodes  11  edges   7  mis  50  levels  55  links  57  ref   missed: -
-S001  tagged   7  nodes   7  edges   5  mis  29  levels  35  links  31  ok    missed: -
-S005  tagged  27  nodes  31  edges  36  mis 211  levels 155  links 236  ok    missed: -
-S007  tagged  25  nodes  28  edges  33  mis 208  levels 140  links 221  ok    missed: -
-S008  tagged  27  nodes  30  edges  35  mis 208  levels 150  links 231  ok    missed: -
-S009  tagged   4  nodes   4  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_creation, indexing, length_field
-S010  tagged   4  nodes   4  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
-S012  tagged   4  nodes   4  edges   2  mis  10  levels  20  links  16  xfail missed: compound_assignment, increment_operators
-S015  tagged   1  nodes   1  edges   0  mis   4  levels   5  links   4  xfail missed: char, naming_convention, variable
-S016  tagged  18  nodes  20  edges  19  mis 103  levels 100  links 118  ok    missed: -
-S021  tagged  16  nodes  19  edges  17  mis 117  levels  95  links 130  ok    missed: -
-S023  tagged   8  nodes   9  edges   3  mis  59  levels  45  links  65  ok    missed: -
-S026  tagged  10  nodes  10  edges   8  mis  61  levels  50  links  69  ok    missed: -
-S047  tagged  13  nodes  13  edges  10  mis  74  levels  65  links  82  ok    missed: -
-S052  tagged  11  nodes  15  edges  12  mis  43  levels  75  links  55  ok    missed: -
-S057  tagged  31  nodes  35  edges  42  mis 230  levels 175  links 259  ok    missed: -
-S068  tagged   6  nodes   9  edges   5  mis  41  levels  45  links  47  xfail missed: power_method, two_models
-S073  tagged   8  nodes   9  edges   3  mis  59  levels  45  links  65  ok    missed: -
-S080  tagged  24  nodes  27  edges  22  mis 120  levels 135  links 128  ok    missed: -
-S134  tagged  10  nodes  10  edges   8  mis  61  levels  50  links  69  ok    missed: -
-S137  tagged   7  nodes   7  edges   5  mis  29  levels  35  links  31  ok    missed: -
-fully covered: 15 / 20   (mean concepts per subgraph: 14.6; S000 is the reference case, not counted)
+S000  tagged  10  nodes  10 (8 generic)  edges   6  mis  46  levels  50  links  57  ref   missed: -
+S001  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
+S005  tagged  27  nodes  27 (13 generic)  edges  24  mis 177  levels 135  links 198  xfail missed: while_loop
+S007  tagged  25  nodes  25 (13 generic)  edges  24  mis 183  levels 125  links 194  ok    missed: -
+S008  tagged  27  nodes  27 (13 generic)  edges  25  mis 180  levels 135  links 201  ok    missed: -
+S009  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_creation, indexing, length_field
+S010  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
+S012  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: compound_assignment, increment_operators
+S015  tagged   1  nodes   1 (1 generic)  edges   0  mis   4  levels   5  links   4  xfail missed: char, naming_convention, variable
+S016  tagged  18  nodes  18 (13 generic)  edges  16  mis  88  levels  90  links 102  xfail missed: integer_division
+S021  tagged  16  nodes  16 (7 generic)  edges  11  mis 105  levels  80  links 112  ok    missed: -
+S023  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
+S026  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
+S047  tagged  13  nodes  13 (12 generic)  edges  10  mis  74  levels  65  links  82  ok    missed: -
+S052  tagged  12  nodes  12 (5 generic)  edges   7  mis  38  levels  60  links  48  ok    missed: -
+S057  tagged  31  nodes  31 (12 generic)  edges  31  mis 202  levels 155  links 229  ok    missed: -
+S068  tagged   6  nodes   6 (3 generic)  edges   1  mis  16  levels  30  links  26  xfail missed: power_method, two_models
+S073  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
+S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  MISS  missed: compile
+S134  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
+S137  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
+fully covered: 10 / 20   (mean concepts per subgraph: 13.1; S000 is the reference case, not counted)
 non-generic concepts firing in >= 12 scenarios: none

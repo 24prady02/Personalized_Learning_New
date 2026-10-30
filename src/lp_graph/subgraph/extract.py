@@ -36,16 +36,19 @@ def _skipped_signals(rd: dict[str, Any]) -> list[str]:
     return [s.get("name", "?") for s in rd.get("signals") or [] if "regex" not in s]
 
 
-def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: str | None = None) -> dict[str, Any]:
+def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: str | None = None, hops: int = 0) -> dict[str, Any]:
+    """Concept nodes are exactly the concepts whose code patterns fired. With ``hops=1`` the source of
+    each incoming prerequisite edge of a non-generic tagged concept is added as well (one hop, never
+    from generic concepts); the default adds nothing the code did not show."""
     idx = _index(kg)
 
-    # 1. concept nodes: tagged, plus one prerequisite hop from non-generic tagged concepts
+    # 1. concept nodes: tagged; optionally one prerequisite hop from non-generic tagged concepts
     concepts: dict[str, dict[str, Any]] = {}
     for cid, hits in tags.items():
         if cid not in idx.concepts:
             continue
         concepts[cid] = {"id": cid, "why": "code", "hits": hits, "generic": bool(idx.concepts[cid].get("reader", {}).get("generic"))}
-    for cid in list(concepts):
+    for cid in (list(concepts) if hops else []):
         if concepts[cid]["generic"]:
             continue
         for e in idx.in_edges.get(cid, []):
@@ -126,7 +129,7 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
         "level_edges": sorted(level_edges, key=lambda e: e["id"]),
         "level_mis_links": level_mis_links,
         "counts": {
-            "tagged": len(tags), "concepts": len(concepts), "concept_edges": len(concept_edges),
+            "tagged": len(tags), "concepts": len(concepts), "generic": sum(1 for c in concepts.values() if c["generic"]), "from_hop": sum(1 for c in concepts.values() if c["why"] != "code"), "concept_edges": len(concept_edges),
             "misconceptions": len(misconceptions), "mis_edges": len(mis_edges), "levels": len(levels),
             "level_edges": len(level_edges), "level_mis_links": len(level_mis_links),
         },
@@ -134,6 +137,6 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
     }
 
 
-def subgraph_from_code(code: str, kg: dict[str, Any], scenario: str | None = None) -> dict[str, Any]:
+def subgraph_from_code(code: str, kg: dict[str, Any], scenario: str | None = None, hops: int = 0) -> dict[str, Any]:
     """Tag the code with the concept patterns, then take the subgraph out."""
-    return extract_subgraph(kg, tag_code(code, reader_blocks(kg)), scenario)
+    return extract_subgraph(kg, tag_code(code, reader_blocks(kg)), scenario, hops)

@@ -970,10 +970,12 @@
  },
  "standard_output": {
   "must_tag": [
-   "System.out.println(\"a\");"
+   "System.out.println(\"a\");",
+   "% java RandomSeq 5 > data.txt"
   ],
   "must_not_tag": [
-   "int x = 1;"
+   "int x = 1;",
+   "% java Average < data.txt"
   ]
  },
  "formatted_output": {

@@ -13,6 +13,10 @@ from .extract import subgraph_from_code
 
 # Concepts that the question or the student's answer brings in; they are not in the code.
 NOT_IN_CODE = {
+    "S005": {"while_loop"},            # the code is a do-while; the student compares it with a while loop
+    "S016": {"integer_division"},      # the code has % but no /; the student brings division in
+    "S023": {"break_statement"},       # the switch has no break; the student explains the missing break
+    "S073": {"break_statement"},
     "S009": {"array_bounds", "array_creation", "indexing", "length_field"},  # array_creation: endpoint of the gold context edge, also not in the code
     "S010": {"array_bounds", "array_copy", "array_traversal", "for_loop", "indexing", "off_by_one_error"},
     "S012": {"compound_assignment", "increment_operators"},
@@ -41,7 +45,7 @@ def gold_concepts(sc: dict) -> set[str]:
     return need
 
 
-def run(kg_path: Path, gold_path: Path, out_dir: Path | None = None, kg=None) -> dict:
+def run(kg_path: Path, gold_path: Path, out_dir: Path | None = None, kg=None, hops: int = 0) -> dict:
     kg = kg or json.loads(kg_path.read_text(encoding="utf-8"))
     generic = {c["id"] for c in kg["concepts"] if (c.get("reader") or {}).get("generic")}
     scenarios = load_gold(gold_path)
@@ -53,7 +57,7 @@ def run(kg_path: Path, gold_path: Path, out_dir: Path | None = None, kg=None) ->
     for sc in scenarios:
         sid = sc["id"]
         is_ref = bool(sc.get("reference_case"))
-        sg = subgraph_from_code(sc["code"], kg, sid)
+        sg = subgraph_from_code(sc["code"], kg, sid, hops)
         got = {c["id"] for c in sg["concepts"]}
         tagged = {c["id"] for c in sg["concepts"] if c["why"] == "code"}
         if not is_ref:
@@ -67,7 +71,7 @@ def run(kg_path: Path, gold_path: Path, out_dir: Path | None = None, kg=None) ->
             covered += 1
         c = sg["counts"]
         tag = "ref" if is_ref else ("ok" if not missed else ("xfail" if not unexpected else "MISS"))
-        lines.append(f"{sid:5} tagged {c['tagged']:3}  nodes {c['concepts']:3}  edges {c['concept_edges']:3}  mis {c['mis_edges']:3}  "
+        lines.append(f"{sid:5} tagged {c['tagged']:3}  nodes {c['concepts']:3} ({c['generic']} generic)  edges {c['concept_edges']:3}  mis {c['mis_edges']:3}  "
                      f"levels {c['levels']:3}  links {c['level_mis_links']:3}  {tag:5} missed: {', '.join(missed) or '-'}")
         results[sid] = {"subgraph": sg, "missed": missed, "unexpected_miss": unexpected}
         if out_dir:
@@ -85,8 +89,9 @@ def main(argv=None):
     ap.add_argument("--kg", default="data/raw/chapter1_kg.json")
     ap.add_argument("--gold", default="data/raw/scenarios_20.json")
     ap.add_argument("--json", dest="out_dir", default=None)
+    ap.add_argument("--hops", type=int, default=0, help="0 (default): nodes are exactly the tagged concepts; 1: add one prerequisite hop")
     a = ap.parse_args(argv)
-    r = run(Path(a.kg), Path(a.gold), Path(a.out_dir) if a.out_dir else None)
+    r = run(Path(a.kg), Path(a.gold), Path(a.out_dir) if a.out_dir else None, hops=a.hops)
     print("\n".join(r["lines"]))
 
 

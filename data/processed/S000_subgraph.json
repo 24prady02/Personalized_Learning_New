@@ -135,12 +135,6 @@
    "generic": true
   },
   {
-   "id": "string_literal",
-   "why": "prerequisite_of:println",
-   "hits": [],
-   "generic": true
-  },
-  {
    "id": "variable",
    "why": "code",
    "hits": [
@@ -202,14 +196,6 @@
    "source": "statement",
    "target": "println",
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:string_literal->println",
-   "type": "prerequisite",
-   "source": "string_literal",
-   "target": "println",
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
    "grounding": "book_passage"
   }
  ],
@@ -377,12 +363,6 @@
    "correct_rule": "A later read simply overwrites the variable's current value."
   },
   {
-   "id": "SingleQuotedString",
-   "kind": "error",
-   "wrong_belief": "Writes a string literal in single quotes: 'Hello'.",
-   "correct_rule": "String literals use double quotes; single quotes are for one char."
-  },
-  {
    "id": "StatementNeedsNoTerminator",
    "kind": "error",
    "wrong_belief": "a statement runs without the ;",
@@ -399,18 +379,6 @@
    "kind": "misconception",
    "wrong_belief": "String is a primitive type like int.",
    "correct_rule": "String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
-  },
-  {
-   "id": "StringLiteralSpansLines",
-   "kind": "error",
-   "wrong_belief": "Breaks a string literal across two lines of code.",
-   "correct_rule": "String literals must not span more than one line of a program."
-  },
-  {
-   "id": "UnclosedStringLiteral",
-   "kind": "error",
-   "wrong_belief": "A string literal can be left without its closing quote.",
-   "correct_rule": "A String literal is enclosed in a pair of double quotes."
   },
   {
    "id": "UndeclaredOrRenamedVariable",
@@ -512,33 +480,6 @@
    "role": "primary",
    "logic": "A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...).",
    "twin_logic": "Each statement must end with ;, otherwise javac reports ';' expected."
-  },
-  {
-   "id": "err:string_literal->SingleQuotedString",
-   "type": "error",
-   "source": "string_literal",
-   "target": "SingleQuotedString",
-   "role": "primary",
-   "logic": "Writes a string literal in single quotes: 'Hello'.",
-   "twin_logic": "String literals use double quotes; single quotes are for one char."
-  },
-  {
-   "id": "err:string_literal->StringLiteralSpansLines",
-   "type": "error",
-   "source": "string_literal",
-   "target": "StringLiteralSpansLines",
-   "role": "primary",
-   "logic": "Breaks a string literal across two lines of code.",
-   "twin_logic": "String literals must not span more than one line of a program."
-  },
-  {
-   "id": "err:string_literal->UnclosedStringLiteral",
-   "type": "error",
-   "source": "string_literal",
-   "target": "UnclosedStringLiteral",
-   "role": "primary",
-   "logic": "A string literal can be left without its closing quote.",
-   "twin_logic": "A String literal is enclosed in a pair of double quotes."
   },
   {
    "id": "err:variable->UndeclaredOrRenamedVariable",
@@ -764,15 +705,6 @@
    "role": "context",
    "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
    "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers."
-  },
-  {
-   "id": "mis:string_literal->PrintedTextIsExecuted",
-   "type": "misconception",
-   "source": "string_literal",
-   "target": "PrintedTextIsExecuted",
-   "role": "context",
-   "logic": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
-   "twin_logic": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x."
   },
   {
    "id": "mis:variable->AnyValueInAnyVariable",
@@ -1260,46 +1192,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for statement: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "string_literal@L0",
-   "concept": "string_literal",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for string literal: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to string literal agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "string_literal@L1",
-   "concept": "string_literal",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for string literal: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "string_literal@L2",
-   "concept": "string_literal",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for string literal: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "string_literal@L3",
-   "concept": "string_literal",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for string literal: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "string_literal@L4",
-   "concept": "string_literal",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for string literal: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -10466,847 +10358,6 @@
    ]
   },
   {
-   "id": "lvl:string_literal->string_literal@L0",
-   "type": "has_level",
-   "source": "string_literal",
-   "target": "string_literal@L0",
-   "level": "L0",
-   "logic": "string literal -> L0 (Prestructural): the answer holds a rule that contradicts Java (1 way).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "Everyday reading: quotation marks are just decoration, and spacing inside them is tidied up like ordinary text; single and double quotes mean the same thing. Java rule: characters within double quotes are taken literally (every space counts), the quotes are not part of the value, and single quotes are for one char.",
-     "exact_rule": "Everyday reading: quotation marks are just decoration, and spacing inside them is tidied up like ordinary text; single and double quotes mean the same thing. Java rule: characters within double quotes are taken literally (every space counts), the quotes are not part of the value, and single quotes are for one char.",
-     "boundary": "Any correct, programming-specific statement about string literal makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "If you put any number of successive spaces within the quotes, you get that number of spaces in the output.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 118,
-       "quote": "Unlike string literals, which appear in double quotes, character literals can contain only a single character.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_literal->string_literal@L1",
-   "type": "has_level",
-   "source": "string_literal",
-   "target": "string_literal@L1",
-   "level": "L1",
-   "logic": "string literal -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "A string literal is a sequence of characters written in double quotes in the source code, e.g. \"Hello, World\"; it is a value of type String.",
-     "exact_rule": "A string literal is a sequence of characters written in double quotes in the source code, e.g. \"Hello, World\"; it is a value of type String.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 69,
-       "quote": "literal: A value that appears in source code. For example, \"Hello\" is a string literal, and 74 is an integer literal.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 29,
-       "quote": "Phrases that appear in quotation marks are called strings, because they contain a sequence of characters strung together in memory.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "A String literal is enclosed in a pair of double quotes; everything inside is taken literally, special characters such as \" and newline are written with escape sequences, and the literal must close on the same source line.",
-     "exact_rule": "A String literal is enclosed in a pair of double quotes; everything inside is taken literally, special characters such as \" and newline are written with escape sequences, and the literal must close on the same source line.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "For literals tab, newline, backslash, single quote and double quote, we use the special escape sequences",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 31,
-       "quote": "to write quotation marks inside of strings, you need to escape them with a backslash",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §3.10.5",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_literal->string_literal@L2",
-   "type": "has_level",
-   "source": "string_literal",
-   "target": "string_literal@L2",
-   "level": "L2",
-   "logic": "string literal -> L2 (Multistructural): the answer applies the rules of string literal to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "The literal is a constant: it is fixed at compile time and simply supplies its value when the expression containing it is evaluated.",
-     "exact_rule": "The literal is a constant: it is fixed at compile time and simply supplies its value when the expression containing it is evaluated.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 69,
-       "quote": "literal: A value that appears in source code. For example, \"Hello\" is a string literal, and 74 is an integer literal.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §3.10.5",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "rule_note": "Evaluation timing from JLS §3.10.5/§15.8.1, not fetched.",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: \"Hi, \" has 4 characters, and printing it shows Hi, followed by a space.",
-     "exact_rule": "Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: \"Hi, \" has 4 characters, and printing it shows Hi, followed by a space.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 25,
-       "quote": "Notice that the output does not include the quotation marks.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 31,
-       "quote": "Each \\n is an escape sequence, or two characters of source code that represent a single character.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "Evaluating a literal changes no state; it just yields the same String value every time.",
-     "exact_rule": "Evaluating a literal changes no state; it just yields the same String value every time.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 69,
-       "quote": "literal: A value that appears in source code. For example, \"Hello\" is a string literal, and 74 is an integer literal.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "rule_note": "Immutability of literals is not stated in 1.1 sources.",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_literal->string_literal@L3",
-   "type": "has_level",
-   "source": "string_literal",
-   "target": "string_literal@L3",
-   "level": "L3",
-   "logic": "string literal -> L3 (Relational): the answer relates the parts (4 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "print(\"s\") outputs exactly the characters between the quotes, without the quotes.",
-     "exact_rule": "print(\"s\") outputs exactly the characters between the quotes, without the quotes.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "page": 11,
-       "section": "1.1",
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "print"
-     ],
-     "edge": "string_literal -prerequisite-> print",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 25,
-       "quote": "Notice that the output does not include the quotation marks.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-     "exact_rule": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "page": 11,
-       "section": "1.1",
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "println"
-     ],
-     "edge": "string_literal -prerequisite-> println",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "API21-PrintStream",
-       "quote": "Prints a String and then terminates the line. This method behaves as though it invokes print(String) and then println().",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "Escape sequences (\\n, \\t, \\\", \\\\) are written inside string or char literals to stand for one character that cannot be typed directly.",
-     "exact_rule": "Escape sequences (\\n, \\t, \\\", \\\\) are written inside string or char literals to stand for one character that cannot be typed directly.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "page": 19,
-       "section": "1.2",
-       "quote": "For literals tab, newline, backslash, single quote and double quote, we use the special escape sequences",
-       "match": "interleaved"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "escape_sequences"
-     ],
-     "edge": "string_literal -prerequisite-> escape_sequences",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "For literals tab, newline, backslash, single quote and double quote, we use the special escape sequences",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 31,
-       "quote": "Each \\n is an escape sequence, or two characters of source code that represent a single character.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 31,
-       "quote": "to write quotation marks inside of strings, you need to escape them with a backslash",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed.",
-     "exact_rule": "Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed.",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_literal->string_literal@L4",
-   "type": "has_level",
-   "source": "string_literal",
-   "target": "string_literal@L4",
-   "level": "L4",
-   "logic": "string literal -> L4 (Extended abstract): the answer reasons beyond the given code (6 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Changing any character inside the quotes (including adding a space) changes the output by exactly that character; changing spaces outside the quotes changes nothing.",
-     "exact_rule": "Changing any character inside the quotes (including adding a space) changes the output by exactly that character; changing spaces outside the quotes changes nothing.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "If you put any number of successive spaces within the quotes, you get that number of spaces in the output.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "Java compilers consider all whitespace in program text to be equivalent.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A String literal is enclosed in a pair of double quotes. Kind: compile-time. Trigger class: a missing closing (or opening) quote; the compiler may get very confused and report errors elsewhere",
-     "exact_rule": "rule broken: A String literal is enclosed in a pair of double quotes. Kind: compile-time. Trigger class: a missing closing (or opening) quote; the compiler may get very confused and report errors elsewhere",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "error node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "page": 11,
-       "section": "1.1",
-       "quote": "If you accidentally omit a quotation mark, the compiler may get very confused, because it needs that mark to distinguish between characters in the string and other parts of the program.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "linked_error": [
-      "UnclosedStringLiteral"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "literature_content": [
-      {
-       "kind": "error",
-       "paper": "AltadmriBrown2015",
-       "pdf_page": 2,
-       "quote": "C: Unbalanced parentheses, curly or square brackets and quotation marks, or using these different symbols interchangeably.",
-       "code": "while (a == 0]",
-       "note": "Mistake C: most frequent (793,232) but fastest fixed (median 17 s)."
-      }
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "If you accidentally omit a quotation mark, the compiler may get very confused, because it needs that mark to distinguish between characters in the string and other parts of the program.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 351,
-       "quote": "Make sure that any strings in the code have matching quotation marks. Make sure that you use double quotes for strings, and single quotes for characters.",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "AltadmriBrown2015",
-       "pdf_page": 2,
-       "quote": "C: Unbalanced parentheses, curly or square brackets and quotation marks, or using these different symbols interchangeably.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "a missing closing (or opening) quote; the compiler may get very confused and report errors elsewhere",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: String literals use double quotes; single quotes are for one char. Kind: compile-time. Trigger class: 'Hello' (more than one character in single quotes): unclosed character literal",
-     "exact_rule": "rule broken: String literals use double quotes; single quotes are for one char. Kind: compile-time. Trigger class: 'Hello' (more than one character in single quotes): unclosed character literal",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "error node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 351,
-       "page": 329,
-       "quote": "Make sure that you use double quotes for strings, and single quotes for characters.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "linked_error": [
-      "SingleQuotedString"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 118,
-       "quote": "Unlike string literals, which appear in double quotes, character literals can contain only a single character.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 351,
-       "quote": "Make sure that any strings in the code have matching quotation marks. Make sure that you use double quotes for strings, and single quotes for characters.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "'Hello' (more than one character in single quotes): unclosed character literal",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A string literal must not span source lines. Kind: compile-time. Trigger class: a line break inside \"...\": unclosed string literal",
-     "exact_rule": "rule broken: A string literal must not span source lines. Kind: compile-time. Trigger class: a line break inside \"...\": unclosed string literal",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "error node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "linked_error": [
-      "StringLiteralSpansLines"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "If you accidentally omit a quotation mark, the compiler may get very confused, because it needs that mark to distinguish between characters in the string and other parts of the program.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §3.10.5",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "a line break inside \"...\": unclosed string literal",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Use a string literal for fixed text known when the program is written; use args, input or variables for text that varies between runs, and char literals for a single character.",
-     "exact_rule": "Use a string literal for fixed text known when the program is written; use args, input or variables for text that varies between runs, and char literals for a single character.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 11,
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed."
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "things within quotes are taken literally so that you can precisely specify what gets printed.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 19,
-       "quote": "In the meantime, you can use args[0] within your program's body to represent the string that you type on the command line when it is executed",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 118,
-       "quote": "Unlike string literals, which appear in double quotes, character literals can contain only a single character.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A double quote inside a string must be escaped. Kind: compile-time. Trigger class: \"She said \"Hi\"\" without \\\"",
-     "exact_rule": "rule broken: A double quote inside a string must be escaped. Kind: compile-time. Trigger class: \"She said \"Hi\"\" without \\\"",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 31,
-       "quote": "to write quotation marks inside of strings, you need to escape them with a backslash",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "\"She said \"Hi\"\" without \\\"",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
    "id": "lvl:variable->variable@L0",
    "type": "has_level",
    "source": "variable",
@@ -13326,214 +12377,6 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AnyValueInAnyVariable",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
-  },
-  {
-   "level_node": "data_type@L4",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same. Right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintNewLineFirst",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: println(s) prints a newline and then s. Right rule: println(s) prints s and then the line terminator."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "println@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "AnyValueInAnyVariable",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "LocalVariablesAutoInitialized",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
-  },
-  {
-   "level_node": "declaration@L4",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
-  },
-  {
    "level_node": "int@L0",
    "misconception": "IntegerDivisionGivesFraction",
    "way": "misconception",
@@ -13718,36 +12561,124 @@
    "exact_rule": "Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
+   "level_node": "data_type@L0",
+   "misconception": "AnyValueInAnyVariable",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
   },
   {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
    "way": "inconsistent_trace",
    "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
   },
   {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
+   "level_node": "data_type@L4",
+   "misconception": "AllDoublesToAvoidDivision",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
+   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "LocalVariablesAutoInitialized",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "level_node": "declaration@L4",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
   },
   {
    "level_node": "primitive_type@L0",
@@ -13780,16 +12711,138 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same. Right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintNewLineFirst",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: println(s) prints a newline and then s. Right rule: println(s) prints s and then the line terminator."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "level_node": "println@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   }
  ],
  "counts": {
   "tagged": 10,
-  "concepts": 11,
-  "concept_edges": 7,
-  "misconceptions": 39,
-  "mis_edges": 50,
-  "levels": 55,
-  "level_edges": 55,
+  "concepts": 10,
+  "generic": 8,
+  "from_hop": 0,
+  "concept_edges": 6,
+  "misconceptions": 36,
+  "mis_edges": 46,
+  "levels": 50,
+  "level_edges": 50,
   "level_mis_links": 57
  },
  "warnings": []

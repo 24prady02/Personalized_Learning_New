@@ -142,12 +142,6 @@
    "generic": true
   },
   {
-   "id": "integer_division",
-   "why": "prerequisite_of:remainder_operator",
-   "hits": [],
-   "generic": false
-  },
-  {
    "id": "literal",
    "why": "code",
    "hits": [
@@ -288,12 +282,6 @@
    "generic": true
   },
   {
-   "id": "string_type",
-   "why": "prerequisite_of:string_concatenation",
-   "hits": [],
-   "generic": true
-  },
-  {
    "id": "variable",
    "why": "code",
    "hits": [
@@ -334,14 +322,6 @@
    "grounding": "book_passage"
   },
   {
-   "id": "pre:arithmetic_operators->integer_division",
-   "type": "prerequisite",
-   "source": "arithmetic_operators",
-   "target": "integer_division",
-   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
-   "grounding": "book_passage"
-  },
-  {
    "id": "pre:data_type->primitive_type",
    "type": "prerequisite",
    "source": "data_type",
@@ -371,14 +351,6 @@
    "source": "identifier",
    "target": "variable",
    "logic": "Every variable is named by an identifier that follows the naming rules.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:integer_division->remainder_operator",
-   "type": "prerequisite",
-   "source": "integer_division",
-   "target": "remainder_operator",
-   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
    "grounding": "book_passage"
   },
   {
@@ -435,14 +407,6 @@
    "source": "string_literal",
    "target": "println",
    "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:string_type->string_concatenation",
-   "type": "prerequisite",
-   "source": "string_type",
-   "target": "string_concatenation",
-   "logic": "+ builds a new String whenever at least one of its operands is a String.",
    "grounding": "book_passage"
   },
   {
@@ -554,12 +518,6 @@
    "correct_rule": "Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
   },
   {
-   "id": "CastAfterIntDivision",
-   "kind": "misconception",
-   "wrong_belief": "(double) (3 / 5) is 0.6.",
-   "correct_rule": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
-  },
-  {
    "id": "ComputerFillsInIntent",
    "kind": "misconception",
    "wrong_belief": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
@@ -576,18 +534,6 @@
    "kind": "misconception",
    "wrong_belief": "int x; without a value sets aside no memory; the variable only exists once something is assigned.",
    "correct_rule": "A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
-  },
-  {
-   "id": "EqualityOperatorComparesObjectsValues",
-   "kind": "misconception",
-   "wrong_belief": "== compares contents (the String == bug)",
-   "correct_rule": "s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
-  },
-  {
-   "id": "EqualsComparesReferences",
-   "kind": "misconception",
-   "wrong_belief": ".equals() compares references, not contents",
-   "correct_rule": "s.equals(t) checks whether the two Strings contain the same characters."
   },
   {
    "id": "ExpressionOnLeftOfAssignment",
@@ -624,12 +570,6 @@
    "kind": "misconception",
    "wrong_belief": "a large integer literal is automatically long",
    "correct_rule": "A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "id": "LaterDoubleLiteralFixesDivision",
-   "kind": "misconception",
-   "wrong_belief": "Changing a later literal to 100.0 fixes an earlier int division.",
-   "correct_rule": "The int division happens first; the double must be in the division itself."
   },
   {
    "id": "LocalVarOutsideScope",
@@ -702,18 +642,6 @@
    "kind": "misconception",
    "wrong_belief": "keywords may be reused as identifiers",
    "correct_rule": "Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "id": "NullIsObject",
-   "kind": "misconception",
-   "wrong_belief": "null is an object",
-   "correct_rule": "null means the variable refers to no object, so calling a method on it throws an exception."
-  },
-  {
-   "id": "ObjectsMustBeNamed",
-   "kind": "misconception",
-   "wrong_belief": "you need a variable to create an object",
-   "correct_rule": "An object can be created and used directly without a variable, as in \"s\".length() or passing new int[n] as an argument."
   },
   {
    "id": "OutsideInMethodNesting",
@@ -818,22 +746,10 @@
    "correct_rule": "String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
   },
   {
-   "id": "StringLiteralNoObject",
-   "kind": "misconception",
-   "wrong_belief": "a string literal isn't a String object until the constructor is called",
-   "correct_rule": "A string literal is already a String object, so \"text\".length() works directly."
-  },
-  {
    "id": "StringLiteralSpansLines",
    "kind": "error",
    "wrong_belief": "Breaks a string literal across two lines of code.",
    "correct_rule": "String literals must not span more than one line of a program."
-  },
-  {
-   "id": "StringMethodChangesString",
-   "kind": "misconception",
-   "wrong_belief": "name.toUpperCase(); changes name.",
-   "correct_rule": "Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
   },
   {
    "id": "StringPlusLeftToRight",
@@ -846,12 +762,6 @@
    "kind": "misconception",
    "wrong_belief": "+ with a String turns the whole other side into a string first",
    "correct_rule": "The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
-  },
-  {
-   "id": "StringRelationalComparison",
-   "kind": "misconception",
-   "wrong_belief": "s < t compares two Strings alphabetically.",
-   "correct_rule": "< and > are defined only for primitive types; comparing Strings with them does not compile."
   },
   {
    "id": "SwapWithoutTemp",
@@ -1348,60 +1258,6 @@
    "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
   },
   {
-   "id": "mis:integer_division->AllDoublesToAvoidDivision",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "AllDoublesToAvoidDivision",
-   "role": "primary",
-   "logic": "Making every variable a double is the right fix for integer division.",
-   "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
-  },
-  {
-   "id": "mis:integer_division->CastAfterIntDivision",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "CastAfterIntDivision",
-   "role": "primary",
-   "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
-  },
-  {
-   "id": "mis:integer_division->IntegerDivisionGivesFraction",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "IntegerDivisionGivesFraction",
-   "role": "primary",
-   "logic": "10 / 3 evaluates to 3.333....",
-   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
-  },
-  {
-   "id": "mis:integer_division->LaterDoubleLiteralFixesDivision",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "LaterDoubleLiteralFixesDivision",
-   "role": "primary",
-   "logic": "Changing a later literal to 100.0 fixes an earlier int division.",
-   "twin_logic": "The int division happens first; the double must be in the division itself."
-  },
-  {
-   "id": "mis:integer_division->NegativeRemainderSign",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "NegativeRemainderSign",
-   "role": "context",
-   "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
-  },
-  {
-   "id": "mis:integer_division->TargetTyping",
-   "type": "misconception",
-   "source": "integer_division",
-   "target": "TargetTyping",
-   "role": "primary",
-   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
    "id": "mis:literal->LargeIntegerLong",
    "type": "misconception",
    "source": "literal",
@@ -1634,87 +1490,6 @@
    "role": "context",
    "logic": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
    "twin_logic": "Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x."
-  },
-  {
-   "id": "mis:string_type->ArithmeticOnNumericStrings",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "ArithmeticOnNumericStrings",
-   "role": "primary",
-   "logic": "\"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers.",
-   "twin_logic": "Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "id": "mis:string_type->EqualityOperatorComparesObjectsValues",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "EqualityOperatorComparesObjectsValues",
-   "role": "context",
-   "logic": "s == t is true whenever the two Strings contain the same text.",
-   "twin_logic": "s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
-  },
-  {
-   "id": "mis:string_type->EqualsComparesReferences",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "EqualsComparesReferences",
-   "role": "primary",
-   "logic": "s.equals(t) checks whether s and t are the same object.",
-   "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
-  },
-  {
-   "id": "mis:string_type->NullIsObject",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "NullIsObject",
-   "role": "context",
-   "logic": "null is an object, so a method can be called on a variable that is null.",
-   "twin_logic": "null means the variable refers to no object, so calling a method on it throws an exception."
-  },
-  {
-   "id": "mis:string_type->ObjectsMustBeNamed",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "ObjectsMustBeNamed",
-   "role": "context",
-   "logic": "An object can only be created by first storing it in a variable.",
-   "twin_logic": "An object can be created and used directly without a variable, as in \"s\".length() or passing new int[n] as an argument."
-  },
-  {
-   "id": "mis:string_type->StringIsPrimitive",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "StringIsPrimitive",
-   "role": "primary",
-   "logic": "String is a primitive type like int.",
-   "twin_logic": "String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
-  },
-  {
-   "id": "mis:string_type->StringLiteralNoObject",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "StringLiteralNoObject",
-   "role": "primary",
-   "logic": "\"text\" is not a String object until new String(...) is called.",
-   "twin_logic": "A string literal is already a String object, so \"text\".length() works directly."
-  },
-  {
-   "id": "mis:string_type->StringMethodChangesString",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "StringMethodChangesString",
-   "role": "primary",
-   "logic": "name.toUpperCase(); changes name.",
-   "twin_logic": "Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
-  },
-  {
-   "id": "mis:string_type->StringRelationalComparison",
-   "type": "misconception",
-   "source": "string_type",
-   "target": "StringRelationalComparison",
-   "role": "context",
-   "logic": "s < t compares two Strings alphabetically.",
-   "twin_logic": "< and > are defined only for primitive types; comparing Strings with them does not compile."
   },
   {
    "id": "mis:variable->AnyValueInAnyVariable",
@@ -2165,46 +1940,6 @@
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
-   "id": "integer_division@L0",
-   "concept": "integer_division",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for integer division: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to integer division agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "integer_division@L1",
-   "concept": "integer_division",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for integer division: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "integer_division@L2",
-   "concept": "integer_division",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for integer division: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "integer_division@L3",
-   "concept": "integer_division",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for integer division: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "integer_division@L4",
-   "concept": "integer_division",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for integer division: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
    "id": "literal@L0",
    "concept": "literal",
    "level": "L0",
@@ -2562,46 +2297,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for string literal: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "string_type@L0",
-   "concept": "string_type",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for string type: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to string type agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "string_type@L1",
-   "concept": "string_type",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for string type: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "string_type@L2",
-   "concept": "string_type",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for string type: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "string_type@L3",
-   "concept": "string_type",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for string type: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "string_type@L4",
-   "concept": "string_type",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for string type: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -11970,1089 +11665,6 @@
    ]
   },
   {
-   "id": "lvl:integer_division->integer_division@L0",
-   "type": "has_level",
-   "source": "integer_division",
-   "target": "integer_division@L0",
-   "level": "L0",
-   "logic": "integer division -> L0 (Prestructural): the answer holds a rule that contradicts Java (8 ways).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0).",
-     "exact_rule": "In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0).",
-     "boundary": "Any correct, programming-specific statement about integer division makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 44,
-       "quote": "This result often confuses people.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 44,
-       "quote": "By design, integer division always rounds toward zero, even in cases like this one where the next integer is close.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 49,
-       "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-     "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "page": 24,
-       "quote": "The expression on the right divides two integers, so Java does integer division, which yields the int value 0.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "TargetTyping"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "The expression on the right divides two integers, so Java does integer division, which yields the int value 0.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 52,
-       "quote": "Expressions also have types, as determined by their operators and operands.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.",
-     "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 49,
-       "page": 39,
-       "section": "1.2",
-       "quote": "Why does 10/3 give 3 and not 3.333333333?",
-       "match": "exact",
-       "support": "exercise_or_QA"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "IntegerDivisionGivesFraction"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "literature_content": [
-      {
-       "kind": "example",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
-       "code": "f = (9/5)*c + 32;  // should be 9.0/5.0",
-       "note": "Integer division: runs without message, wrong for every input."
-      },
-      {
-       "kind": "error",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 7,
-       "quote": "Integer division*",
-       "note": "Most common computation error; Ettles18: 6 min, 72%."
-      },
-      {
-       "kind": "boundary_rule",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "That error may cause incorrect output, but the student doesn't know that the 9/5 (should be 9.0/5.0) or even that code line is the problem, and thus may try many different things, spending a lot of time and leading to struggle.",
-       "note": "Silent logic errors need the student to locate the line and the rule; this is the L4 diagnosis."
-      }
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 49,
-       "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 44,
-       "quote": "The problem is that Java performs integer division when the operands are integers.",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first; the double must be in the division itself.",
-     "exact_rule": "wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first; the double must be in the division itself.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 45,
-       "page": 23,
-       "quote": "Java performs floating-point division when one or more operands are double values.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "LaterDoubleLiteralFixesDivision"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 27,
-       "quote": "When arithmetic operators have the same precedence, the order is determined by left-associativity, so that a-b-c and (a-b)-c represent the same sequence of operations.",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "but the student doesn't know that the 9/5 (should be 9.0/5.0) or even that code line is the problem",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "inconsistent_trace",
-     "rule_type": "T",
-     "rule_type_name": "uneven-application rule",
-     "edge_logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
-     "exact_rule": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
-     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "page": 24,
-       "quote": "The expression on the right divides two integers, so Java does integer division, which yields the int value 0.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "linked_misconception": [
-      "TargetTyping"
-     ],
-     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type.",
-     "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "AllDoublesToAvoidDivision"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 358,
-       "quote": "More generally, use integers for countable things and floating-point numbers for measurable things.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 49,
-       "quote": "If you write 10/3.0 or 10.0/3, Java does implicit conversion to get the same result.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-     "exact_rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "CastAfterIntDivision"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 64,
-       "quote": "The parentheses after the cast operator require the division to happen before the type cast.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "Converted to double, the value assigned to y is 0.0.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
-     "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "NegativeRemainderSign"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "The quotient a / b rounds toward 0; the remainder a % b is defined such that (a / b) * b + a % b is always equal to a.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "For example, -14/3 and 14/-3 are both -4, but -14 % 3 is -2 and 14 % -3 is 2.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:integer_division->integer_division@L1",
-   "type": "has_level",
-   "source": "integer_division",
-   "target": "integer_division@L1",
-   "level": "L1",
-   "logic": "integer division -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "Integer division: / applied to two integer operands, giving the whole-number quotient with the fractional part discarded.",
-     "exact_rule": "Integer division: / applied to two integer operands, giving the whole-number quotient with the fractional part discarded.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "literature_content": [
-      {
-       "kind": "task",
-       "paper": "Fowler2021",
-       "pdf_page": 3,
-       "quote": "In general, the questions have been designed to have relational descriptions, but some of the questions in the first couple of weeks of the semester involve just a single operator (e.g., concatenation, floor division) in order to introduce students to the tool early and ensure they know the names of operators.",
-       "note": "Task: a single-operator EiPE item whose expected answer is the operator's name - an elicitor for names_the_element."
-      }
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point.",
-     "exact_rule": "If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "The quotient a / b rounds toward 0; the remainder a % b is defined such that (a / b) * b + a % b is always equal to a.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 45,
-       "quote": "Java performs floating-point division when one or more operands are double values.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:integer_division->integer_division@L2",
-   "type": "has_level",
-   "source": "integer_division",
-   "target": "integer_division@L2",
-   "level": "L2",
-   "logic": "integer division -> L2 (Multistructural): the answer applies the rules of integer division to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "Each / is evaluated when its turn comes (precedence, then left to right), using the types of its own two operands. Promoting the result to double, by a cast or by assignment, happens only afterwards and cannot restore the lost fraction.",
-     "exact_rule": "Each / is evaluated when its turn comes (precedence, then left to right), using the types of its own two operands. Promoting the result to double, by a cast or by assignment, happens only afterwards and cannot restore the lost fraction.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "Converted to double, the value assigned to y is 0.0.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 64,
-       "quote": "The parentheses after the cast operator require the division to happen before the type cast.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0.",
-     "exact_rule": "10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 31,
-       "quote": "For example, the value of 17 / 3 is 5, and the value of 17 % 3 is 2.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 32,
-       "quote": "1234 / 99 = 12",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "For example, -14/3 and 14/-3 are both -4, but -14 % 3 is -2 and 14 % -3 is 2.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored.",
-     "exact_rule": "q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "JLS21-ch15",
-       "quote": "An integer division (§15.17.2) or integer remainder (§15.17.3) operator throws an ArithmeticException if the value of the right-hand operand expression is zero.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:integer_division->integer_division@L3",
-   "type": "has_level",
-   "source": "integer_division",
-   "target": "integer_division@L3",
-   "level": "L3",
-   "logic": "integer division -> L3 (Relational): the answer relates the parts (4 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "/ and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.",
-     "exact_rule": "/ and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 31,
-       "page": 21,
-       "section": "1.2",
-       "quote": "given two int values a and b, the value of a / b is the number of times b goes into a with the fractional part discarded, and the value of a % b is the remainder that you get when you divide a by b.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "arithmetic_operators"
-     ],
-     "edge": "arithmetic_operators -prerequisite-> integer_division",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 32,
-       "quote": "1234 = 12 * 99 + 46",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total.",
-     "exact_rule": "Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "normalization"
-     ],
-     "edge": "integer_division -prerequisite-> normalization",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "The expression on the right divides two integers, so Java does integer division, which yields the int value 0.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "Converted to double, the value assigned to y is 0.0.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "% gives the remainder of the same truncating division: (a / b) * b + a % b == a.",
-     "exact_rule": "% gives the remainder of the same truncating division: (a / b) * b + a % b == a.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "page": 38,
-       "section": "1.2",
-       "quote": "The quotient a / b rounds toward 0; the remainder a % b is defined such that (a / b) * b + a % b is always equal to a.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "remainder_operator"
-     ],
-     "edge": "integer_division -prerequisite-> remainder_operator",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "The quotient a / b rounds toward 0; the remainder a % b is defined such that (a / b) * b + a % b is always equal to a.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Quotient plans: unit conversion (76 / 12 feet), dropping a digit (n / 10), finding a midpoint ((lo + hi) / 2), and computing a bucket or row index (i / cols).",
-     "exact_rule": "Quotient plans: unit conversion (76 / 12 feet), dropping a digit (n / 10), finding a midpoint ((lo + hi) / 2), and computing a bucket or row index (i / cols).",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 65,
-       "quote": "feet = 76 / 12; inches = 76 % 12; // quotient // remainder The first line yields 6.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:integer_division->integer_division@L4",
-   "type": "has_level",
-   "source": "integer_division",
-   "target": "integer_division@L4",
-   "level": "L4",
-   "logic": "integer division -> L4 (Extended abstract): the answer reasons beyond the given code (5 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero.",
-     "exact_rule": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [
-      "TargetTyping"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 49,
-       "quote": "If you write 10/3.0 or 10.0/3, Java does implicit conversion to get the same result.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 64,
-       "quote": "The parentheses after the cast operator require the division to happen before the type cast.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 48,
-       "quote": "So in the expression minute * 100 / 60, the multiplication happens first; if the value of minute is 59, we get 5900 / 60, which yields 98.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "For example, -14/3 and 14/-3 are both -4, but -14 % 3 is -2 and 14 % -3 is 2.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Use integer division when you want the whole quotient (units, digits, indices, half a size). When a fraction is needed, make one operand a double (10.0 / 3 or (double) a / b) rather than turning every variable into a double.",
-     "exact_rule": "Use integer division when you want the whole quotient (units, digits, indices, half a size). When a fraction is needed, make one operand a double (10.0 / 3 or (double) a / b) rather than turning every variable into a double.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 21,
-       "pdf_page": 31,
-       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded"
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 358,
-       "quote": "Remember that integer division always rounds toward zero. If you want fractions, use double.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 358,
-       "quote": "More generally, use integers for countable things and floating-point numbers for measurable things.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: With two int operands, / discards the fraction. Kind: silent logic error. Trigger class: Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average.",
-     "exact_rule": "rule broken: With two int operands, / discards the fraction. Kind: silent logic error. Trigger class: Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "LogicErrorsSurvey",
-       "pdf_page": 3,
-       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 46,
-       "quote": "The expression on the right divides two integers, so Java does integer division, which yields the int value 0.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "silent logic error",
-     "trigger_class": "Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-     "exact_rule": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "JLS21-ch15",
-       "quote": "An integer division (§15.17.2) or integer remainder (§15.17.3) operator throws an ArithmeticException if the value of the right-hand operand expression is zero.",
-       "check": "web-fetched"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 50,
-       "quote": "if you accidentally divide by zero, you will get a message like this",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "run-time exception",
-     "trigger_class": "A divisor that evaluates to 0: ArithmeticException: / by zero.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: Integer division rounds toward zero, not down. Kind: silent logic error. Trigger class: Negative operands where floor was expected (-7 / 2 is -3, not -4).",
-     "exact_rule": "rule broken: Integer division rounds toward zero, not down. Kind: silent logic error. Trigger class: Negative operands where floor was expected (-7 / 2 is -3, not -4).",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "The quotient a / b rounds toward 0; the remainder a % b is defined such that (a / b) * b + a % b is always equal to a.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "silent logic error",
-     "trigger_class": "Negative operands where floor was expected (-7 / 2 is -3, not -4).",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
    "id": "lvl:literal->literal@L0",
    "type": "has_level",
    "source": "literal",
@@ -21791,1079 +20403,6 @@
    ]
   },
   {
-   "id": "lvl:string_type->string_type@L0",
-   "type": "has_level",
-   "source": "string_type",
-   "target": "string_type@L0",
-   "level": "L0",
-   "logic": "string type -> L0 (Prestructural): the answer holds a rule that contradicts Java (8 ways).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "In everyday writing, quotes only mark words, \"10\" is the number ten, and two texts are 'equal' when they read the same. In Java a String is an object reached through a reference: \"10\" is text, + concatenates, and == compares references rather than contents.",
-     "exact_rule": "In everyday writing, quotes only mark words, \"10\" is the number ten, and two texts are 'equal' when they read the same. In Java a String is an object reached through a reference: \"10\" is text, + concatenates, and == compares references rather than contents.",
-     "boundary": "Any correct, programming-specific statement about string type makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 41,
-       "quote": "A common source of confusion is that some strings look like integers, but they are not.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The problem is that the == operator checks whether the two operands refer to the same object.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: a string literal isn't a String object until the constructor is called. Right rule: A string literal is already a String object, so \"text\".length() works directly.",
-     "exact_rule": "wrong rule: a string literal isn't a String object until the constructor is called. Right rule: A string literal is already a String object, so \"text\".length() works directly.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 170,
-       "page": 148,
-       "quote": "For convenience, you don't have to use new to create strings:",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "StringLiteralNoObject"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "ProgMiscon-Java",
-       "quote": "One needs to call the String constructor to get a String object from a literal",
-       "check": "web-fetched"
-      },
-      {
-       "type": "web",
-       "site": "JLS21-ch4",
-       "quote": "String literals and text blocks are references to instances of class String.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters.",
-     "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "page": 101,
-       "quote": "The equals method returns true if the strings contain the same characters; otherwise, it returns false.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "EqualsComparesReferences"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "ProgMiscon-Java",
-       "quote": "o.equals(p) compares the references stored in the variables o and p",
-       "check": "web-fetched"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The equals method returns true if the strings contain the same characters; otherwise, it returns false.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt.",
-     "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 47,
-       "page": 25,
-       "quote": "In general, you cannot perform mathematical operations on strings, even if the strings look like numbers.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "ArithmeticOnNumericStrings"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 47,
-       "quote": "In general, you cannot perform mathematical operations on strings, even if the strings look like numbers.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 41,
-       "quote": "A common source of confusion is that some strings look like integers, but they are not.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "inconsistent_trace",
-     "rule_type": "T",
-     "rule_type_name": "uneven-application rule",
-     "edge_logic": "Points to LT (String expressions produce references to String objects, and operations build new strings). Applied unevenly, a student compares with equals in one test and == in another, or treats \"12\" as a number in one + and as text in the next. (here mixing in: \"a string literal isn't a String object until the constructor is called\")",
-     "exact_rule": "Points to LT (String expressions produce references to String objects, and operations build new strings). Applied unevenly, a student compares with equals in one test and == in another, or treats \"12\" as a number in one + and as text in the next. (here mixing in: \"a string literal isn't a String object until the constructor is called\")",
-     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 170,
-       "page": 148,
-       "quote": "For convenience, you don't have to use new to create strings:",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "linked_misconception": [
-      "StringLiteralNoObject"
-     ],
-     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The problem is that the == operator checks whether the two operands refer to the same object.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The equals method returns true if the strings contain the same characters; otherwise, it returns false.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +).",
-     "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +).",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "StringIsPrimitive"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "The String data type is not a primitive type, but Java sometimes treats it like one.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 44,
-       "quote": "Another data type that we use frequently, String, is not primitive, but Java has some built-in facilities for Strings that are like those for primitive types.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: == compares contents (the String == bug). Right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text.",
-     "exact_rule": "wrong rule: == compares contents (the String == bug). Right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "EqualityOperatorComparesObjectsValues"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "ProgMiscon-Java",
-       "quote": "o==p compares the objects referred to by variables o and p",
-       "check": "web-fetched"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "because the two operands are stored in different places in memory (even though they have the same value).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The problem is that the == operator checks whether the two operands refer to the same object.",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "AltadmriBrown2015",
-       "pdf_page": 2,
-       "quote": "B: Use of == instead of .equals to compare strings.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile.",
-     "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "linked_misconception": [
-      "StringRelationalComparison"
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 47,
-       "quote": "Those operators are defined only for primitive types.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_type->string_type@L1",
-   "type": "has_level",
-   "source": "string_type",
-   "target": "string_type@L1",
-   "level": "L1",
-   "logic": "string type -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "String: Java's built-in non-primitive (reference) type for a sequence of characters.",
-     "exact_rule": "String: Java's built-in non-primitive (reference) type for a sequence of characters.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "The String data type is not a primitive type, but Java sometimes treats it like one.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "A String literal is characters in double quotes and denotes a String object. + concatenates. Contents are compared with equals, not ==. < and > are not defined for Strings, and Strings are immutable.",
-     "exact_rule": "A String literal is characters in double quotes and denotes a String object. + concatenates. Contents are compared with equals, not ==. < and > are not defined for Strings, and Strings are immutable.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "A literal String is a sequence of characters within double quotes",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "JLS21-ch4",
-       "quote": "String literals and text blocks are references to instances of class String.",
-       "check": "web-fetched"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 47,
-       "quote": "Those operators are defined only for primitive types.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The equals method returns true if the strings contain the same characters; otherwise, it returns false.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 172,
-       "quote": "But neither these methods nor any others can change a string, because strings are immutable.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_type->string_type@L2",
-   "type": "has_level",
-   "source": "string_type",
-   "target": "string_type@L2",
-   "level": "L2",
-   "logic": "string type -> L2 (Multistructural): the answer applies the rules of string type to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "A String expression is evaluated left to right. At each + with a String operand, the other operand is converted to a String and a new String object is made. Methods such as toUpperCase return a new String and leave the original unchanged.",
-     "exact_rule": "A String expression is evaluated left to right. At each + with a String operand, the other operand is converted to a String and a new String object is made. Methods such as toUpperCase return a new String and leave the original unchanged.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "quote": "whenever we use the + operator with a String as one of its operands, Java automatically converts the other to a String",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 172,
-       "quote": "When you invoke toUpperCase on a string, you get a new String object as a result.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "\"Hi, \" + \"Bob\" is \"Hi, Bob\" and \"1234\" + \"99\" is \"123499\". s.equals(t) is true exactly when the characters match, while \"abc\" == \"ab\" + x can be false for x = \"c\".",
-     "exact_rule": "\"Hi, \" + \"Bob\" is \"Hi, Bob\" and \"1234\" + \"99\" is \"123499\". s.equals(t) is true exactly when the characters match, while \"abc\" == \"ab\" + x can be false for x = \"c\".",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "\"1234\" + \"99\" \"123499\"",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The equals method returns true if the strings contain the same characters; otherwise, it returns false.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "because the two operands are stored in different places in memory (even though they have the same value).",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "No operation changes an existing String. s = s + \"x\" makes s refer to a new String, and other variables still referring to the old one are unaffected.",
-     "exact_rule": "No operation changes an existing String. s = s + \"x\" makes s refer to a new String, and other variables still referring to the old one are unaffected.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 172,
-       "quote": "But neither these methods nor any others can change a string, because strings are immutable.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 172,
-       "quote": "If you want to change name to be uppercase, then you need to assign the return value",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_type->string_type@L3",
-   "type": "has_level",
-   "source": "string_type",
-   "target": "string_type@L3",
-   "level": "L3",
-   "logic": "string type -> L3 (Relational): the answer relates the parts (3 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "+ produces a new String whenever at least one operand is a String; the other operand is converted to text first.",
-     "exact_rule": "+ produces a new String whenever at least one operand is a String; the other operand is converted to text first.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "page": 18,
-       "section": "1.2",
-       "quote": "whenever we use the + operator with a String as one of its operands, Java automatically converts the other to a String, producing as a result the String formed from the characters of the first operand followed by the characters of the second operand.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "string_concatenation"
-     ],
-     "edge": "string_type -prerequisite-> string_concatenation",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "quote": "whenever we use the + operator with a String as one of its operands, Java automatically converts the other to a String",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "quote": "producing as a result the String formed from the characters of the first operand followed by the characters of the second operand.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "'a' is a char (one 16-bit character code, a primitive); \"a\" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while \"a\" + \"b\" is \"ab\".",
-     "exact_rule": "'a' is a char (one 16-bit character code, a primitive); \"a\" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while \"a\" + \"b\" is \"ab\".",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "page": 19,
-       "section": "1.2",
-       "quote": "Literals for char are characters enclosed in single quotes; for example, 'a' represents the letter a.",
-       "match": "interleaved"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "char"
-     ],
-     "edge": "char -parallel-> string_type",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "Literals for char are characters enclosed in single quotes; for example, 'a' represents the letter a.",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 29,
-       "quote": "A literal String is a sequence of characters within double quotes, such as \"Hello, World\".",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Strings handle all text: messages, labels, formatted output and command-line arguments (args[] are Strings and must be parsed before arithmetic).",
-     "exact_rule": "Strings handle all text: messages, labels, formatted output and command-line arguments (args[] are Strings and must be parsed before arithmetic).",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 30,
-       "quote": "our most frequent use (by far) of the concatenation operation is to put together results of computation for output with System.out.print() and System.out.println().",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "quote": "We use the Java library methods Integer.parseInt() and Double.parseDouble() for this purpose.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:string_type->string_type@L4",
-   "type": "has_level",
-   "source": "string_type",
-   "target": "string_type@L4",
-   "level": "L4",
-   "logic": "string type -> L4 (Extended abstract): the answer reasons beyond the given code (6 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing \"5\" to 5 turns concatenation into addition.",
-     "exact_rule": "Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing \"5\" to 5 turns concatenation into addition.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [
-      "StringLiteralNoObject"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 48,
-       "quote": "because the two operands are stored in different places in memory (even though they have the same value).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The following code compiles and runs, but it always displays Goodbye! regardless what the user types.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Use String for any text: names, messages, tokens and output lines. Convert to int or double with Integer.parseInt or Double.parseDouble before arithmetic. Use char for a single character whose code matters.",
-     "exact_rule": "Use String for any text: names, messages, tokens and output lines. Convert to int or double with Integer.parseInt or Double.parseDouble before arithmetic. Use char for a single character whose code matters.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 19,
-       "pdf_page": 29,
-       "quote": "A String is a sequence of characters."
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 28,
-       "quote": "We use the Java library methods Integer.parseInt() and Double.parseDouble() for this purpose.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 41,
-       "quote": "A common source of confusion is that some strings look like integers, but they are not.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: String contents are compared with equals; == compares references. Kind: silent logic error. Trigger class: Comparing a String read from input or built by + against a literal with == or !=: false even though the text matches.",
-     "exact_rule": "rule broken: String contents are compared with equals; == compares references. Kind: silent logic error. Trigger class: Comparing a String read from input or built by + against a literal with == or !=: false even though the text matches.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "AltadmriBrown2015",
-       "pdf_page": 2,
-       "quote": "B: Use of == instead of .equals to compare strings.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 123,
-       "quote": "The following code compiles and runs, but it always displays Goodbye! regardless what the user types.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "silent logic error",
-     "trigger_class": "Comparing a String read from input or built by + against a literal with == or !=: false even though the text matches.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: < and > (and - * /) are defined only for primitive types, not for Strings. Kind: compile-time. Trigger class: s < t, \"10\" - 1, \"6\" * \"2\": 'bad operand types for binary operator'.",
-     "exact_rule": "rule broken: < and > (and - * /) are defined only for primitive types, not for Strings. Kind: compile-time. Trigger class: s < t, \"10\" - 1, \"6\" * \"2\": 'bad operand types for binary operator'.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 47,
-       "quote": "Those operators are defined only for primitive types.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 47,
-       "quote": "In general, you cannot perform mathematical operations on strings, even if the strings look like numbers.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "s < t, \"10\" - 1, \"6\" * \"2\": 'bad operand types for binary operator'.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A String variable can hold only a String (or null). Kind: compile-time. Trigger class: String message = 123;: 'incompatible types: int cannot be converted to String'.",
-     "exact_rule": "rule broken: A String variable can hold only a String (or null). Kind: compile-time. Trigger class: String message = 123;: 'incompatible types: int cannot be converted to String'.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 41,
-       "quote": "For example, you cannot store a string in minute or an integer in message.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "String message = 123;: 'incompatible types: int cannot be converted to String'.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A method cannot be called through a null reference. Kind: run-time exception. Trigger class: Calling length(), equals() or charAt() on a String variable whose value is null: NullPointerException.",
-     "exact_rule": "rule broken: A method cannot be called through a null reference. Kind: run-time exception. Trigger class: Calling length(), equals() or charAt() on a String variable whose value is null: NullPointerException.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 171,
-       "quote": "If you try to use a variable that is null by invoking a method or accessing an element, Java throws a NullPointerException",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "run-time exception",
-     "trigger_class": "Calling length(), equals() or charAt() on a String variable whose value is null: NullPointerException.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
    "id": "lvl:variable->variable@L0",
    "type": "has_level",
    "source": "variable",
@@ -24883,244 +22422,44 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "string_type@L0",
-   "misconception": "StringLiteralNoObject",
+   "level_node": "string_concatenation@L0",
+   "misconception": "StringPlusStringifiesExpression",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: a string literal isn't a String object until the constructor is called. Right rule: A string literal is already a String object, so \"text\".length() works directly."
+   "exact_rule": "wrong rule: + with a String turns the whole other side into a string first. Right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
   },
   {
-   "level_node": "string_type@L0",
-   "misconception": "EqualsComparesReferences",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters."
-  },
-  {
-   "level_node": "string_type@L0",
-   "misconception": "ArithmeticOnNumericStrings",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "level_node": "string_type@L0",
-   "misconception": "StringLiteralNoObject",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (String expressions produce references to String objects, and operations build new strings). Applied unevenly, a student compares with equals in one test and == in another, or treats \"12\" as a number in one + and as text in the next. (here mixing in: \"a string literal isn't a String object until the constructor is called\")"
-  },
-  {
-   "level_node": "string_type@L0",
-   "misconception": "StringIsPrimitive",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
-  },
-  {
-   "level_node": "string_type@L0",
-   "misconception": "EqualityOperatorComparesObjectsValues",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: == compares contents (the String == bug). Right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
-  },
-  {
-   "level_node": "string_type@L0",
-   "misconception": "StringRelationalComparison",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile."
-  },
-  {
-   "level_node": "string_type@L4",
-   "misconception": "StringLiteralNoObject",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing \"5\" to 5 turns concatenation into addition."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same. Right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintNewLineFirst",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: println(s) prints a newline and then s. Right rule: println(s) prints s and then the line terminator."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "println@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "println@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentOppositeDirection",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentAddsToTarget",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentExchangesValues",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentEmptiesSource",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "inconsistent_trace",
-   "way_index": 9,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentCopiesObject",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariableKeepsOldValue",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
-  },
-  {
-   "level_node": "assignment@L4",
-   "misconception": "VariablesHoldExpressions",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
-  },
-  {
-   "level_node": "string_conversion@L0",
+   "level_node": "string_concatenation@L0",
    "misconception": "StringPlusLeftToRight",
    "way": "misconception",
-   "way_index": 1,
+   "way_index": 2,
    "rule_type": "M",
    "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
   },
   {
-   "level_node": "string_conversion@L0",
-   "misconception": "StringPlusLeftToRight",
+   "level_node": "string_concatenation@L0",
+   "misconception": "StringPlusStringifiesExpression",
    "way": "inconsistent_trace",
-   "way_index": 2,
+   "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")"
+   "exact_rule": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")"
   },
   {
-   "level_node": "string_conversion@L4",
-   "misconception": "StringPlusLeftToRight",
+   "level_node": "string_concatenation@L0",
+   "misconception": "ArithmeticPlusPrecedes",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "level_node": "string_concatenation@L4",
+   "misconception": "StringPlusStringifiesExpression",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Adding parentheses around the numeric part changes \"bc23\" into \"bc5\"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition."
+   "exact_rule": "Parenthesizing numeric parts changes the result (\"sum \" + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs."
   },
   {
    "level_node": "remainder_operator@L0",
@@ -25153,6 +22492,102 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Negating a flips the remainder's sign, so n % 2 == 1 fails for negative odd n while n % 2 != 0 still works. Changing the divisor changes the cycle length. Swapping % with / swaps the remainder for the quotient."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "TargetTyping",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "OutsideInMethodNesting",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "expression@L4",
+   "misconception": "NoAtomicExpression",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
+  },
+  {
+   "level_node": "string_conversion@L0",
+   "misconception": "StringPlusLeftToRight",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "level_node": "string_conversion@L0",
+   "misconception": "StringPlusLeftToRight",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")"
+  },
+  {
+   "level_node": "string_conversion@L4",
+   "misconception": "StringPlusLeftToRight",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding parentheses around the numeric part changes \"bc23\" into \"bc5\"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition."
   },
   {
    "level_node": "variable@L0",
@@ -25283,220 +22718,36 @@
    "exact_rule": "Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass."
   },
   {
-   "level_node": "int@L0",
-   "misconception": "IntegerDivisionGivesFraction",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
+   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
   },
   {
-   "level_node": "int@L0",
-   "misconception": "IntOverflowWidensAutomatically",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around."
-  },
-  {
-   "level_node": "int@L0",
-   "misconception": "IntegerDivisionGivesFraction",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")"
-  },
-  {
-   "level_node": "int@L4",
-   "misconception": "IntegerDivisionGivesFraction",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0)."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
+   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
   },
   {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentNotExpression",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "ArithmeticOnNumericStrings",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
   },
   {
-   "level_node": "expression@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "OutsideInMethodNesting",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "expression@L4",
-   "misconception": "NoAtomicExpression",
+   "level_node": "arithmetic_operators@L4",
+   "misconception": "CaretIsPower",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
-  },
-  {
-   "level_node": "double@L4",
-   "misconception": "FloatingPointIsExact",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
+   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
   },
   {
    "level_node": "data_type@L0",
@@ -25531,220 +22782,108 @@
    "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
   },
   {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
   {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "IntegerDivisionGivesFraction",
+   "level_node": "assignment@L0",
+   "misconception": "AssignCompares",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "LaterDoubleLiteralFixesDivision",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentNotExpression",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first; the double must be in the division itself."
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "TargetTyping",
-   "way": "inconsistent_trace",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentOppositeDirection",
+   "way": "misconception",
    "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentAddsToTarget",
    "way": "misconception",
    "way_index": 5,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "CastAfterIntDivision",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentIsEquation",
    "way": "misconception",
    "way_index": 6,
    "rule_type": "M",
-   "exact_rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "NegativeRemainderSign",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentExchangesValues",
    "way": "misconception",
    "way_index": 7,
    "rule_type": "M",
-   "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
   },
   {
-   "level_node": "integer_division@L4",
-   "misconception": "TargetTyping",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentEmptiesSource",
    "way": "misconception",
-   "way_index": 1,
+   "way_index": 8,
    "rule_type": "M",
-   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
   },
   {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
    "way": "inconsistent_trace",
-   "way_index": 2,
+   "way_index": 9,
    "rule_type": "T",
-   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
   },
   {
-   "level_node": "declaration@L0",
-   "misconception": "AnyValueInAnyVariable",
+   "level_node": "assignment@L0",
+   "misconception": "SwapWithoutTemp",
    "way": "misconception",
-   "way_index": 3,
+   "way_index": 10,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
   },
   {
-   "level_node": "declaration@L0",
-   "misconception": "LocalVariablesAutoInitialized",
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentCopiesObject",
    "way": "misconception",
-   "way_index": 4,
+   "way_index": 11,
    "rule_type": "M",
-   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
   },
   {
-   "level_node": "declaration@L4",
-   "misconception": "DeclaredVariableHasNoMemory",
+   "level_node": "assignment@L0",
+   "misconception": "VariableKeepsOldValue",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
+  },
+  {
+   "level_node": "assignment@L4",
+   "misconception": "VariablesHoldExpressions",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
-  },
-  {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusStringifiesExpression",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: + with a String turns the whole other side into a string first. Right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
-  },
-  {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusLeftToRight",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
-  },
-  {
-   "level_node": "string_concatenation@L0",
-   "misconception": "StringPlusStringifiesExpression",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")"
-  },
-  {
-   "level_node": "string_concatenation@L0",
-   "misconception": "ArithmeticPlusPrecedes",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
-  },
-  {
-   "level_node": "string_concatenation@L4",
-   "misconception": "StringPlusStringifiesExpression",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Parenthesizing numeric parts changes the result (\"sum \" + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs."
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "ArithmeticOnNumericStrings",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "level_node": "arithmetic_operators@L4",
-   "misconception": "CaretIsPower",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
+   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
   },
   {
    "level_node": "literal@L0",
@@ -25795,6 +22934,198 @@
    "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
   },
   {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "LocalVariablesAutoInitialized",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "level_node": "declaration@L4",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
+  },
+  {
+   "level_node": "int@L0",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "level_node": "int@L0",
+   "misconception": "IntOverflowWidensAutomatically",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "level_node": "int@L0",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")"
+  },
+  {
+   "level_node": "int@L4",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0)."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
+  },
+  {
+   "level_node": "double@L4",
+   "misconception": "FloatingPointIsExact",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
    "level_node": "primitive_type@L0",
    "misconception": "StringIsPrimitive",
    "way": "misconception",
@@ -25825,17 +23156,99 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same. Right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintNewLineFirst",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: println(s) prints a newline and then s. Right rule: println(s) prints s and then the line terminator."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "println@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "level_node": "println@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   }
  ],
  "counts": {
   "tagged": 18,
-  "concepts": 20,
-  "concept_edges": 19,
-  "misconceptions": 75,
-  "mis_edges": 103,
-  "levels": 100,
-  "level_edges": 100,
-  "level_mis_links": 118
+  "concepts": 18,
+  "generic": 13,
+  "from_hop": 0,
+  "concept_edges": 16,
+  "misconceptions": 66,
+  "mis_edges": 88,
+  "levels": 90,
+  "level_edges": 90,
+  "level_mis_links": 102
  },
  "warnings": []
 }

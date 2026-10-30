@@ -187,16 +187,27 @@ def test_gold_summary_and_breadth():
         fire.update(c["id"] for c in sg["concepts"] if c["why"] == "code" and c["id"] not in generic)
         if not (gold_concepts(sc) - got):
             covered += 1
-    assert covered >= 14, f"fully covered from code alone: {covered} / {len(GOLD)}"
+    expected_partial = {sid for sid in NOT_IN_CODE if any(s["id"] == sid for s in GOLD)}
+    assert covered == len(GOLD) - len(expected_partial), f"fully covered from code alone: {covered} / {len(GOLD)}"
     broad = [(c, k) for c, k in fire.items() if k >= 12]
     assert not broad, f"pattern too broad: {broad}"
     assert 10 <= sum(sizes) / len(sizes) <= 25
 
 
+def test_nodes_are_exactly_the_tagged_concepts():
+    for sc in SCENARIOS:
+        tags = set(tag_code(sc["code"], READER))
+        sg = subgraph_from_code(sc["code"], KG, sc["id"])
+        assert {c["id"] for c in sg["concepts"]} == tags
+        assert all(c["why"] == "code" for c in sg["concepts"])
+        assert sg["counts"]["from_hop"] == 0
+
+
 def test_extract_rules():
-    """One prerequisite hop, never from generic concepts; edges need both ends; ids well formed."""
-    sg = subgraph_from_code("int[] b = a;", KG)
+    """Optional prerequisite hop: one hop, never from generic concepts; edges need both ends; ids well formed."""
+    sg = subgraph_from_code("int[] b = a;", KG, hops=1)
     ids = {c["id"] for c in sg["concepts"]}
+    assert any(c["why"].startswith("prerequisite_of:") for c in sg["concepts"])
     for c in sg["concepts"]:
         if c["why"].startswith("prerequisite_of:"):
             parent = c["why"].split(":", 1)[1]

@@ -44,12 +44,6 @@
    "generic": false
   },
   {
-   "id": "compile",
-   "why": "prerequisite_of:run",
-   "hits": [],
-   "generic": false
-  },
-  {
    "id": "data_driven_code",
    "why": "code",
    "hits": [
@@ -103,12 +97,6 @@
      "line": 1
     }
    ],
-   "generic": true
-  },
-  {
-   "id": "main_method",
-   "why": "prerequisite_of:command_line_args",
-   "hits": [],
    "generic": true
   },
   {
@@ -190,8 +178,16 @@
   },
   {
    "id": "standard_output",
-   "why": "prerequisite_of:redirection",
-   "hits": [],
+   "why": "code",
+   "hits": [
+    {
+     "channel": "command",
+     "name": "\\s>\\s*\\S+",
+     "decisive": false,
+     "match": " > data.txt",
+     "line": 1
+    }
+   ],
    "generic": true
   },
   {
@@ -207,12 +203,6 @@
     }
    ],
    "generic": true
-  },
-  {
-   "id": "stream_model",
-   "why": "prerequisite_of:standard_input",
-   "hits": [],
-   "generic": false
   }
  ],
  "concept_edges": [
@@ -238,30 +228,6 @@
    "source": "command_line_args",
    "target": "black_box_model",
    "logic": "The black-box view treats the command-line argument as the input string and what the program prints as the output string.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:compile->run",
-   "type": "prerequisite",
-   "source": "compile",
-   "target": "run",
-   "logic": "java Name runs the Name.class file that javac produced, so compiling must succeed before the program can run.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:main_method->command_line_args",
-   "type": "prerequisite",
-   "source": "main_method",
-   "target": "command_line_args",
-   "logic": "The command-line arguments arrive in main's parameter args, an array of Strings.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:main_method->statement",
-   "type": "prerequisite",
-   "source": "main_method",
-   "target": "statement",
-   "logic": "Statements are written in main's body, and running the program executes main's statements in order, one by one.",
    "grounding": "book_passage"
   },
   {
@@ -294,22 +260,6 @@
    "source": "standard_output",
    "target": "redirection",
    "logic": "> file sends everything written to standard output into the file instead of the screen.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:stream_model->standard_input",
-   "type": "prerequisite",
-   "source": "stream_model",
-   "target": "standard_input",
-   "logic": "StdIn reads a stream: values arrive in order and each value is consumed once.",
-   "grounding": "book_passage"
-  },
-  {
-   "id": "pre:stream_model->standard_output",
-   "type": "prerequisite",
-   "source": "stream_model",
-   "target": "standard_output",
-   "logic": "StdOut writes a stream: each print appends its text to the end of the output.",
    "grounding": "book_passage"
   }
  ],
@@ -349,12 +299,6 @@
    "kind": "misconception",
    "wrong_belief": "compiling also executes the program",
    "correct_rule": "javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can still appear then."
-  },
-  {
-   "id": "CompilesMeansWorks",
-   "kind": "misconception",
-   "wrong_belief": "Code that compiles is code that works.",
-   "correct_rule": "Code that compiles can still have run-time and logical errors."
   },
   {
    "id": "ComputerFillsInIntent",
@@ -397,18 +341,6 @@
    "kind": "misconception",
    "wrong_belief": "a large integer literal is automatically long",
    "correct_rule": "A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "id": "MainWithoutStringArgs",
-   "kind": "error",
-   "wrong_belief": "public static void main() is an acceptable entry point.",
-   "correct_rule": "main is written public static void main(String[] args); these keywords and the args parameter are required."
-  },
-  {
-   "id": "MissingKeyword",
-   "kind": "error",
-   "wrong_belief": "Leaves out a required keyword such as static or class.",
-   "correct_rule": "public class Name and public static void main(String[] args) need their keywords, which are required; omitting or misspelling one is an error, usually caught by the compiler as a syntax error."
   },
   {
    "id": "MisspelledIdentifier",
@@ -602,24 +534,6 @@
    "twin_logic": "Every variable must be declared, and used with exactly the declared name."
   },
   {
-   "id": "err:main_method->MainWithoutStringArgs",
-   "type": "error",
-   "source": "main_method",
-   "target": "MainWithoutStringArgs",
-   "role": "primary",
-   "logic": "public static void main() is an acceptable entry point.",
-   "twin_logic": "main is written public static void main(String[] args); these keywords and the args parameter are required."
-  },
-  {
-   "id": "err:main_method->MissingKeyword",
-   "type": "error",
-   "source": "main_method",
-   "target": "MissingKeyword",
-   "role": "primary",
-   "logic": "Leaves out a required keyword such as static or class.",
-   "twin_logic": "public class Name and public static void main(String[] args) need their keywords, which are required; omitting or misspelling one is an error, usually caught by the compiler as a syntax error."
-  },
-  {
    "id": "err:run->AudioProgramHangs",
    "type": "error",
    "source": "run",
@@ -672,24 +586,6 @@
    "role": "primary",
    "logic": "If a number is typed when the program is launched, args[0] is already an int and can be used in arithmetic.",
    "twin_logic": "args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
-  },
-  {
-   "id": "mis:compile->CompileRunsProgram",
-   "type": "misconception",
-   "source": "compile",
-   "target": "CompileRunsProgram",
-   "role": "primary",
-   "logic": "If javac Name.java finishes without errors, the program already works and has run.",
-   "twin_logic": "javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can still appear then."
-  },
-  {
-   "id": "mis:compile->CompilesMeansWorks",
-   "type": "misconception",
-   "source": "compile",
-   "target": "CompilesMeansWorks",
-   "role": "primary",
-   "logic": "Code that compiles is code that works.",
-   "twin_logic": "Code that compiles can still have run-time and logical errors."
   },
   {
    "id": "mis:expression->AssignmentIsEquation",
@@ -933,15 +829,6 @@
    "role": "context",
    "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
    "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers."
-  },
-  {
-   "id": "mis:stream_model->StdInRereads",
-   "type": "misconception",
-   "source": "stream_model",
-   "target": "StdInRereads",
-   "role": "primary",
-   "logic": "Calling StdIn.readInt() twice returns the same value twice.",
-   "twin_logic": "The program consumes values when it reads them, so each call returns the next value."
   }
  ],
  "levels": [
@@ -1023,46 +910,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for command line args: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "compile@L0",
-   "concept": "compile",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for compile: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to compile agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "compile@L1",
-   "concept": "compile",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for compile: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "compile@L2",
-   "concept": "compile",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for compile: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "compile@L3",
-   "concept": "compile",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for compile: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "compile@L4",
-   "concept": "compile",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for compile: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -1223,46 +1070,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for literal: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "main_method@L0",
-   "concept": "main_method",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for main method: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to main method agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "main_method@L1",
-   "concept": "main_method",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for main method: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "main_method@L2",
-   "concept": "main_method",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for main method: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "main_method@L3",
-   "concept": "main_method",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for main method: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "main_method@L4",
-   "concept": "main_method",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for main method: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -1503,46 +1310,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for statement: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "stream_model@L0",
-   "concept": "stream_model",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for stream model: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to stream model agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "stream_model@L1",
-   "concept": "stream_model",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for stream model: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "stream_model@L2",
-   "concept": "stream_model",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for stream model: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "stream_model@L3",
-   "concept": "stream_model",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for stream model: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "stream_model@L4",
-   "concept": "stream_model",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for stream model: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   }
  ],
@@ -3141,907 +2908,6 @@
      "rule_source_status": "verified",
      "error_kind": "run-time exception",
      "trigger_class": "java Prog five or 12.2 where an int is parsed: NumberFormatException",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
-   "id": "lvl:compile->compile@L0",
-   "type": "has_level",
-   "source": "compile",
-   "target": "compile@L0",
-   "level": "L0",
-   "logic": "compile -> L0 (Prestructural): the answer holds a rule that contradicts Java (4 ways).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "Everyday meaning: to 'compile' is to gather or put together (compile a list), and 'running' a program sounds like it starts on its own. Java rule: compiling with javac only translates Name.java into bytecode in Name.class; nothing executes until java Name is typed.",
-     "exact_rule": "Everyday meaning: to 'compile' is to gather or put together (compile a list), and 'running' a program sounds like it starts on its own. Java rule: compiling with javac only translates Name.java into bytecode in Name.class; nothing executes until java Name is typed.",
-     "boundary": "Any correct, programming-specific statement about compile makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "A compiler is an application that translates a program from the Java language to a language more suitable for executing on the computer.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "Once you compile the program, you can run it.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: Compiling also executes the program. Right rule: javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can appear then.",
-     "exact_rule": "wrong rule: Compiling also executes the program. Right rule: javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can appear then.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "page": 8,
-       "section": "1.1",
-       "quote": "It is easy to blur the distinction among editing, compiling, and executing programs.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "CompileRunsProgram"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "Once you compile the program, you can run it.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Other errors, known as run-time errors, do not show up until you execute the program.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: Code that compiles is code that works. Right rule: Code that compiles can still have run-time errors and logic errors.",
-     "exact_rule": "wrong rule: Code that compiles is code that works. Right rule: Code that compiles can still have run-time errors and logic errors.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "page": 8,
-       "section": "1.1",
-       "quote": "Other errors, known as run-time errors, do not show up until you execute the program.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "CompilesMeansWorks"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Other errors, known as run-time errors, do not show up until you execute the program.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 50,
-       "quote": "If your program has a logic error, it will compile and run without generating error messages",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "inconsistent_trace",
-     "rule_type": "T",
-     "rule_type_name": "uneven-application rule",
-     "edge_logic": "Applies the compile rule (LT) unevenly: expects output after javac on one try but not another, or runs java Name after a failed compile as if the old Name.class reflected the new edits. (here mixing in: \"compiling also executes the program\")",
-     "exact_rule": "Applies the compile rule (LT) unevenly: expects output after javac on one try but not another, or runs java Name after a failed compile as if the old Name.class reflected the new edits. (here mixing in: \"compiling also executes the program\")",
-     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "page": 8,
-       "section": "1.1",
-       "quote": "It is easy to blur the distinction among editing, compiling, and executing programs.",
-       "match": "exact",
-       "support": "warns_against"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "linked_misconception": [
-      "CompileRunsProgram"
-     ],
-     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "It is easy to blur the distinction among editing, compiling, and executing programs.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 28,
-       "quote": "If there are no errors, the compiler saves the byte code in the file Hello.class.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:compile->compile@L1",
-   "type": "has_level",
-   "source": "compile",
-   "target": "compile@L1",
-   "level": "L1",
-   "logic": "compile -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "Compiling is translating the whole Java source file into a lower-level form (Java bytecode) before execution; javac is the Java compiler.",
-     "exact_rule": "Compiling is translating the whole Java source file into a lower-level form (Java bytecode) before execution; javac is the Java compiler.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "A compiler is an application that translates a program from the Java language to a language more suitable for executing on the computer.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 28,
-       "quote": "The Java compiler is a program named javac. It translates .java files into .class files that store the resulting byte code.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 35,
-       "quote": "compile: To translate a program in a high-level language into a low-level language, all at once, in preparation for later execution.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "javac Name.java takes the file Name.java as input and, if there are no compile-time errors, produces Name.class (the bytecode version) with the same name.",
-     "exact_rule": "javac Name.java takes the file Name.java as input and, if there are no compile-time errors, produces Name.class (the bytecode version) with the same name.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 28,
-       "quote": "If there are no errors, the compiler saves the byte code in the file Hello.class.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:compile->compile@L2",
-   "type": "has_level",
-   "source": "compile",
-   "target": "compile@L2",
-   "level": "L2",
-   "logic": "compile -> L2 (Multistructural): the answer applies the rules of compile to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "The compiler first reads (parses) the entire file, then translates it; it does all this before the program starts running, and only if no errors were found does it write Name.class.",
-     "exact_rule": "The compiler first reads (parses) the entire file, then translates it; it does all this before the program starts running, and only if no errors were found does it write Name.class.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 27,
-       "quote": "a compiler reads the entire program and translates it completely before the program starts running.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 28,
-       "quote": "If there are no errors, the compiler saves the byte code in the file Hello.class.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 50,
-       "quote": "Parsing is the process of reading a program before translating",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "Result of javac Name.java: either a new file Name.class and no terminal output, or a list of error messages (file:line: message, then 'N errors') and no Name.class.",
-     "exact_rule": "Result of javac Name.java: either a new file Name.class and no terminal output, or a list of error messages (file:line: message, then 'N errors') and no Name.class.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 22,
-       "quote": "Bad.java:4: ';' expected",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Some errors, known as compile-time errors, are caught when you compile the program, because they prevent the compiler from doing the translation.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "One compile changes only the file system: it creates or overwrites Name.class; it changes no program variable and prints no program output.",
-     "exact_rule": "One compile changes only the file system: it creates or overwrites Name.class; it changes no program variable and prints no program output.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 27,
-       "quote": "Once a program is compiled, you can execute it repeatedly without further translation of the source code.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:compile->compile@L3",
-   "type": "has_level",
-   "source": "compile",
-   "target": "compile@L3",
-   "level": "L3",
-   "logic": "compile -> L3 (Relational): the answer relates the parts (4 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "java Name loads the Name.class made by javac, so a successful compile must come before running, and edits take effect only after recompiling.",
-     "exact_rule": "java Name loads the Name.class made by javac, so a successful compile must come before running, and edits take effect only after recompiling.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "page": 5,
-       "section": "1.1",
-       "quote": "Once you compile the program, you can run it.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "run"
-     ],
-     "edge": "compile -prerequisite-> run",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "Once you compile the program, you can run it.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 28,
-       "quote": "To run the program, the programmer uses java to interpret the byte code.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "A compile-time error stops the translation, so no Name.class is produced and there is nothing new to run.",
-     "exact_rule": "A compile-time error stops the translation, so no Name.class is produced and there is nothing new to run.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "page": 8,
-       "section": "1.1",
-       "quote": "Some errors, known as compile-time errors, are caught when you compile the program, because they prevent the compiler from doing the translation.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "compile_time_error"
-     ],
-     "edge": "compile -prerequisite-> compile_time_error",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Some errors, known as compile-time errors, are caught when you compile the program, because they prevent the compiler from doing the translation.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 52,
-       "quote": "compile-time error: An error in the source code that makes it impossible to compile. Also called a \"syntax error\".",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "javac takes the program text Name.java as input; its file name must match the public class name.",
-     "exact_rule": "javac takes the program text Name.java as input; its file name must match the public class name.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "page": 5,
-       "section": "1.1",
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "program_text"
-     ],
-     "edge": "program_text -prerequisite-> compile",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version).",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "Each Java program must reside in a file whose name matches the one after the word class on the first line, and it also must have a .java extension.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Purpose: check the program against the language rules and turn it into a form the JVM can execute, once, so it can then be run repeatedly with different inputs.",
-     "exact_rule": "Purpose: check the program against the language rules and turn it into a form the JVM can execute, once, so it can then be run repeatedly with different inputs.",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 27,
-       "quote": "Once a program is compiled, you can execute it repeatedly without further translation of the source code.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 19,
-       "quote": "After compiling the program once, we can run it for different command-line arguments and get different printed results.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 15,
-       "quote": "A compiler is an application that translates a program from the Java language to a language more suitable for executing on the computer.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:compile->compile@L4",
-   "type": "has_level",
-   "source": "compile",
-   "target": "compile@L4",
-   "level": "L4",
-   "logic": "compile -> L4 (Extended abstract): the answer reasons beyond the given code (4 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Recompiling the same unchanged source gives the same Name.class; any edit to the source is invisible to java Name until recompiled; adding or deleting comments or whitespace changes nothing the program does.",
-     "exact_rule": "Recompiling the same unchanged source gives the same Name.class; any edit to the source is invisible to java Name until recompiled; adding or deleting comments or whitespace changes nothing the program does.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [
-      "CompileRunsProgram"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 27,
-       "quote": "Once a program is compiled, you can execute it repeatedly without further translation of the source code.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "They denote comments, which are ignored by the compiler.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "Java compilers consider all whitespace in program text to be equivalent.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Compile after every change before running, and compile often while making small changes, so each error is found close to its cause; compiling cannot find run-time or logic errors.",
-     "exact_rule": "Compile after every change before running, and compile often while making small changes, so each error is found close to its cause; compiling cannot find run-time or logic errors.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 5,
-       "pdf_page": 15,
-       "quote": "The compiler takes a file with a .java extension as input (your program) and produces a file with the same name but with a .class extension (the computer-language version)."
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 33,
-       "quote": "start with a program that does something and make small modifications, debugging them as you go, until the program does what you want.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Other errors, known as run-time errors, do not show up until you execute the program.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 50,
-       "quote": "If your program has a logic error, it will compile and run without generating error messages",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: Source must obey Java's syntax and type rules. Kind: compile-time. Trigger class: any syntax error (missing ; or brace, misspelled keyword) or type error in Name.java",
-     "exact_rule": "rule broken: Source must obey Java's syntax and type rules. Kind: compile-time. Trigger class: any syntax error (missing ; or brace, misspelled keyword) or type error in Name.java",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 18,
-       "quote": "Some errors, known as compile-time errors, are caught when you compile the program, because they prevent the compiler from doing the translation.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "Such errors are called syntax errors and are usually caught by the compiler.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 49,
-       "quote": "Compile-time errors occur when you violate the rules of the Java language.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "any syntax error (missing ; or brace, misspelled keyword) or type error in Name.java",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: javac needs the .java file name. Kind: launch error. Trigger class: typing javac Name (no .java) or the wrong file name / directory",
-     "exact_rule": "rule broken: javac needs the .java file name. Kind: launch error. Trigger class: typing javac Name (no .java) or the wrong file name / directory",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 14,
-       "quote": "Compile it by typing javac MyCode.java in a terminal window.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "rule_note": "Exact javac message is not in the sources.",
-     "error_kind": "launch error",
-     "trigger_class": "typing javac Name (no .java) or the wrong file name / directory",
      "check_correct": "Yes: the answer agrees with the rule stated for this way.",
      "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
@@ -7769,720 +6635,6 @@
      "rule_source_status": "verified",
      "error_kind": "silent logic error",
      "trigger_class": "Zero-padded numbers such as 010 or 013 (evaluate to 8 and 11).",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
-   "id": "lvl:main_method->main_method@L0",
-   "type": "has_level",
-   "source": "main_method",
-   "target": "main_method@L0",
-   "level": "L0",
-   "logic": "main method -> L0 (Prestructural): the answer holds a rule that contradicts Java (1 way).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "Everyday reading: 'main' sounds like the most important part, and 'void' like empty or invalid. Java rule: main is the entry point that java Name calls; public static void main(String[] args) must be written exactly, and void only means main returns no value.",
-     "exact_rule": "Everyday reading: 'main' sounds like the most important part, and 'void' like empty or invalid. Java rule: main is the entry point that java Name calls; public static void main(String[] args) must be written exactly, and void only means main returns no value.",
-     "boundary": "Any correct, programming-specific statement about main method makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "For the moment, we just include these keywords in the code (because they are required) but do not refer to them in the text.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:main_method->main_method@L1",
-   "type": "has_level",
-   "source": "main_method",
-   "target": "main_method@L1",
-   "level": "L1",
-   "logic": "main method -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "main is the method that is the entry point of a Java program: public static void main(String[] args) { statements }.",
-     "exact_rule": "main is the method that is the entry point of a Java program: public static void main(String[] args) { statements }.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 26,
-       "quote": "when the program runs, it starts at the first statement in main and ends when it finishes the last statement.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "The header must be public static void main(String[] args); the keywords are required; its body is a sequence of statements in braces, each followed by a semicolon.",
-     "exact_rule": "The header must be public static void main(String[] args); the keywords are required; its body is a sequence of statements in braces, each followed by a semicolon.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "For the moment, we just include these keywords in the code (because they are required) but do not refer to them in the text.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 16,
-       "quote": "The first line of a method specifies its name and other information; the rest is a sequence of statements enclosed in braces and each followed by a semicolon.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:main_method->main_method@L2",
-   "type": "has_level",
-   "source": "main_method",
-   "target": "main_method@L2",
-   "level": "L2",
-   "logic": "main method -> L2 (Multistructural): the answer applies the rules of main method to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "When the program runs, it starts at the first statement in main and ends when it finishes the last statement, executing the statements in order, one by one.",
-     "exact_rule": "When the program runs, it starts at the first statement in main and ends when it finishes the last statement, executing the statements in order, one by one.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 26,
-       "quote": "when the program runs, it starts at the first statement in main and ends when it finishes the last statement.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "in order, one by one.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "main returns no value (void); the program's observable result is whatever main's statements print.",
-     "exact_rule": "main returns no value (void); the program's observable result is whatever main's statements print.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "one of the most basic functions that we need from a program is its ability to tell us what it is doing.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 26,
-       "quote": "when the program runs, it starts at the first statement in main and ends when it finishes the last statement.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "Calling main binds args to the array of command-line strings and then runs its body; when its last statement finishes, control goes back to the system.",
-     "exact_rule": "Calling main binds args to the array of command-line strings and then runs its body; when its last statement finishes, control goes back to the system.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 19,
-       "quote": "In the meantime, you can use args[0] within your program's body to represent the string that you type on the command line when it is executed",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 14,
-       "quote": "which returns control back to the system when finished",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:main_method->main_method@L3",
-   "type": "has_level",
-   "source": "main_method",
-   "target": "main_method@L3",
-   "level": "L3",
-   "logic": "main method -> L3 (Relational): the answer relates the parts (4 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "main is declared inside the class's braces; java Name looks in class Name for main.",
-     "exact_rule": "main is declared inside the class's braces; java Name looks in class Name for main.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 16,
-       "page": 6,
-       "section": "1.1",
-       "quote": "PROGRAM 1.1.1 consists of a single class named HelloWorld that has a single method named main().",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "class_declaration"
-     ],
-     "edge": "class_declaration -prerequisite-> main_method",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 26,
-       "quote": "In Hello.java, the outermost braces contain the class definition, and the inner braces contain the method definition.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "main's body holds the statements; running the program executes them in order, one by one.",
-     "exact_rule": "main's body holds the statements; running the program executes them in order, one by one.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 16,
-       "page": 6,
-       "section": "1.1",
-       "quote": "The first line of a method specifies its name and other information; the rest is a sequence of statements enclosed in braces and each followed by a semicolon.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "statement"
-     ],
-     "edge": "main_method -prerequisite-> statement",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 16,
-       "quote": "The first line of a method specifies its name and other information; the rest is a sequence of statements enclosed in braces and each followed by a semicolon.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "in order, one by one.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "The command-line arguments arrive in main's parameter args, an array of Strings (args[0], args[1], ...).",
-     "exact_rule": "The command-line arguments arrive in main's parameter args, an array of Strings (args[0], args[1], ...).",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 174,
-       "page": 152,
-       "quote": "we can finally explain the args parameter of the main method, which we have been ignoring since Chapter 1.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "command_line_args"
-     ],
-     "edge": "main_method -prerequisite-> command_line_args",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 19,
-       "quote": "In the meantime, you can use args[0] within your program's body to represent the string that you type on the command line when it is executed",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 174,
-       "quote": "we can finally explain the args parameter of the main method",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 175,
-       "quote": "It's not clear from the output, but the elements of args are strings.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Purpose: the single place where a Chapter 1 program's work is written; programming at this stage means specifying a class name and the sequence of statements in its main().",
-     "exact_rule": "Purpose: the single place where a Chapter 1 program's work is written; programming at this stage means specifying a class name and the sequence of statements in its main().",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "name and a sequence of statements for its main() method.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:main_method->main_method@L4",
-   "type": "has_level",
-   "source": "main_method",
-   "target": "main_method@L4",
-   "level": "L4",
-   "logic": "main method -> L4 (Extended abstract): the answer reasons beyond the given code (4 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Changing the order of main's statements changes the order of output; changing public static void main(String[] args) (e.g. dropping static or args) keeps it compiling but leaves the class without a launchable entry point, or breaks compilation if misspelt.",
-     "exact_rule": "Changing the order of main's statements changes the order of output; changing public static void main(String[] args) (e.g. dropping static or args) keeps it compiling but leaves the class without a launchable entry point, or breaks compilation if misspelt.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "in order, one by one.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 23,
-       "quote": "Describe what happens if you omit the following in HelloWorld.java",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "rule_note": "Exact outcome of each omission is asked in SW Ex. 1.1.2-1.1.3 but not stated.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header written as public static void main() (or without static): it compiles, but java Name reports that no main method is found",
-     "exact_rule": "rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header written as public static void main() (or without static): it compiles, but java Name reports that no main method is found",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "error node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 23,
-       "page": 13,
-       "section": "1.1",
-       "quote": "Describe what happens if you omit the following in HelloWorld.java: a. public b. static c. void d. args",
-       "match": "exact",
-       "support": "exercise_or_QA"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "linked_error": [
-      "MainWithoutStringArgs"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "For the moment, we just include these keywords in the code (because they are required) but do not refer to them in the text.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 23,
-       "quote": "Describe what happens if you omit the following in HelloWorld.java",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "rule_note": "Launcher message text not in the sources (JDK 21 behaviour).",
-     "error_kind": "launch error",
-     "trigger_class": "header written as public static void main() (or without static): it compiles, but java Name reports that no main method is found",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Every runnable program needs exactly this main; put Chapter 1 code in it. It is not the place for code that should be reused or tested separately (that needs other methods, Section 2.1).",
-     "exact_rule": "Every runnable program needs exactly this main; put Chapter 1 code in it. It is not the place for code that should be reused or tested separately (that needs other methods, Section 2.1).",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 7,
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class"
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 17,
-       "quote": "When you type java followed by a class name in your terminal application, the system calls the main() method that you defined in that class",
-       "check": "interleaved"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 16,
-       "quote": "Until SECTION 2.1, where we learn about classes that define multiple methods, all of our classes will have this same structure.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: public, static, void and main must be present and correctly spelled. Kind: compile-time. Trigger class: misspelling a keyword (e.g. stati, viod) so the header cannot be parsed",
-     "exact_rule": "rule broken: public, static, void and main must be present and correctly spelled. Kind: compile-time. Trigger class: misspelling a keyword (e.g. stati, viod) so the header cannot be parsed",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [
-      "MissingKeyword"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 21,
-       "quote": "Such errors are called syntax errors and are usually caught by the compiler.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 20,
-       "quote": "For the moment, we just include these keywords in the code (because they are required) but do not refer to them in the text.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 51,
-       "quote": "keyword: A reserved word used by the compiler to analyze programs.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "misspelling a keyword (e.g. stati, viod) so the header cannot be parsed",
      "check_correct": "Yes: the answer agrees with the rule stated for this way.",
      "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
@@ -14728,890 +12880,9 @@
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
     }
    ]
-  },
-  {
-   "id": "lvl:stream_model->stream_model@L0",
-   "type": "has_level",
-   "source": "stream_model",
-   "target": "stream_model@L0",
-   "level": "L0",
-   "logic": "stream model -> L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "Everyday 'reading' (a page, a list) leaves the text in place so you can glance back at it; a Java input stream is consumed: each read removes the next value, and there is no going back.",
-     "exact_rule": "Everyday 'reading' (a page, a list) leaves the text in place so you can glance back at it; a Java input stream is consumed: each read removes the next value, and there is no going back.",
-     "boundary": "Any correct, programming-specific statement about stream model makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "Once your program has read a value, it cannot back up and read it again.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes the value it returns, so a second StdIn.readInt() returns the next value in the stream (input 3 5 gives 3, then 5).",
-     "exact_rule": "wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes the value it returns, so a second StdIn.readInt() returns the next value in the stream (input 3 5 gives 3, then 5).",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "page": 126,
-       "section": "1.5",
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them. Once your program has read a value, it cannot back up and read it again.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "StdInRereads"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 162,
-       "quote": "Can my program re-read data from standard input? A. No. You only get one shot at it, in the same way that you cannot undo a println() command.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "inconsistent_trace",
-     "rule_type": "T",
-     "rule_type_name": "uneven-application rule",
-     "edge_logic": "Points to LT (reads take values from the front in order; prints append at the end in order). An uneven trace reuses an already-consumed value on some reads, or writes some output out of execution order. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")",
-     "exact_rule": "Points to LT (reads take values from the front in order; prints append at the end in order). An uneven trace reuses an already-consumed value on some reads, or writes some output out of execution order. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")",
-     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "page": 126,
-       "section": "1.5",
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them. Once your program has read a value, it cannot back up and read it again.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "linked_misconception": [
-      "StdInRereads"
-     ],
-     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 143,
-       "quote": "calls StdIn.readInt(), a string is removed from the beginning of the stream",
-       "check": "interleaved"
-      },
-      {
-       "type": "web",
-       "site": "SW-site-1.5",
-       "quote": "Each call to StdOut.print() or StdOut.println() appends text at the end of that file.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:stream_model->stream_model@L1",
-   "type": "has_level",
-   "source": "stream_model",
-   "target": "stream_model@L1",
-   "level": "L1",
-   "logic": "stream model -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "A stream is an I/O abstraction: an ordered sequence of values or characters, with no length limit from the program's point of view. Input is read from the front and output is appended at the end.",
-     "exact_rule": "A stream is an I/O abstraction: an ordered sequence of values or characters, with no length limit from the program's point of view. Input is read from the front and output is appended at the end.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 131,
-       "quote": "Java puts the results of a program's sequence of calls on these methods into the form of an abstract stream of characters known as standard output.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 161,
-       "quote": "from the point of view of your program, there is no limit on their length.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "A Java program turns a standard input stream and command-line arguments into a standard output stream (plus drawing and audio). It consumes values when it reads them, so it cannot back up.",
-     "exact_rule": "A Java program turns a standard input stream and command-line arguments into a standard output stream (plus drawing and audio). It consumes values when it reads them, so it cannot back up.",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 131,
-       "quote": "the program converts a standard input stream and a sequence of command-line arguments into a standard output stream, a standard drawing, and a standard audio stream.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:stream_model->stream_model@L2",
-   "type": "has_level",
-   "source": "stream_model",
-   "target": "stream_model@L2",
-   "level": "L2",
-   "logic": "stream model -> L2 (Multistructural): the answer applies the rules of stream model to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "Input values are delivered strictly in stream order: each read removes the next value from the front. Output appears in the order the output calls execute, because each call appends to the end.",
-     "exact_rule": "Input values are delivered strictly in stream order: each read removes the next value from the front. Output appears in the order the output calls execute, because each call appends to the end.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 143,
-       "quote": "calls StdIn.readInt(), a string is removed from the beginning of the stream",
-       "check": "interleaved"
-      },
-      {
-       "type": "web",
-       "site": "SW-site-1.5",
-       "quote": "Each call to StdOut.print() or StdOut.println() appends text at the end of that file.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "A read returns the next unread value, converted to the requested type. With input `3 5 7`, three StdIn.readInt() calls return 3, 5, 7. The output stream is the concatenation of all printed text in execution order.",
-     "exact_rule": "A read returns the next unread value, converted to the requested type. With input `3 5 7`, three StdIn.readInt() calls return 3, 5, 7. The output stream is the concatenation of all printed text in execution order.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "StdIn-API",
-       "quote": "Reads the next token from standard input, parses it as an integer, and returns the integer.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "One read advances the input position past exactly one value and returns it. One print appends its text to the output and returns nothing (void). No other state changes.",
-     "exact_rule": "One read advances the input position past exactly one value and returns it. One print appends its text to the output and returns nothing (void). No other state changes.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "StdIn-API",
-       "quote": "Reads the next token from standard input, parses it as an integer, and returns the integer.",
-       "check": "web-fetched"
-      },
-      {
-       "type": "web",
-       "site": "SW-site-1.5",
-       "quote": "Each call to StdOut.print() or StdOut.println() appends text at the end of that file.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:stream_model->stream_model@L3",
-   "type": "has_level",
-   "source": "stream_model",
-   "target": "stream_model@L3",
-   "level": "L3",
-   "logic": "stream model -> L3 (Relational): the answer relates the parts (3 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "All StdIn calls in a program share one input position. A read before a loop and reads inside the loop therefore take successive values, never the same one.",
-     "exact_rule": "All StdIn calls in a program share one input position. A read before a loop and reads inside the loop therefore take successive values, never the same one.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "page": 126,
-       "section": "1.5",
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them. Once your program has read a value, it cannot back up and read it again.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "standard_input"
-     ],
-     "edge": "stream_model -prerequisite-> standard_input",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "Once your program has read a value, it cannot back up and read it again.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "All StdOut/System.out calls write to one output stream in execution order, and text already written cannot be taken back.",
-     "exact_rule": "All StdOut/System.out calls write to one output stream in execution order, and text already written cannot be taken back.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 131,
-       "page": 121,
-       "section": "1.5",
-       "quote": "Java puts the results of a program's sequence of calls on these methods into the form of an abstract stream of characters known as standard output.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "standard_output"
-     ],
-     "edge": "stream_model -prerequisite-> standard_output",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 162,
-       "quote": "Can my program re-read data from standard input? A. No. You only get one shot at it, in the same way that you cannot undo a println() command.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "SW-site-1.5",
-       "quote": "Each call to StdOut.print() or StdOut.println() appends text at the end of that file.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Streams let a program process an amount of data that is unbounded and not known in advance. They also decouple the program from the device. Plan: input-process-output (the 'filter' plan).",
-     "exact_rule": "Streams let a program process an amount of data that is unbounded and not known in advance. They also decouple the program from the device. Plan: input-process-output (the 'filter' plan).",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 141,
-       "quote": "with standard input, we can write programs that process an unlimited amount of data.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 130,
-       "quote": "An essential feature of standard I/O mechanisms is that there is no limit on the amount of input or output data, from the point of view of the program.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:stream_model->stream_model@L4",
-   "type": "has_level",
-   "source": "stream_model",
-   "target": "stream_model@L4",
-   "level": "L4",
-   "logic": "stream model -> L4 (Extended abstract): the answer reasons beyond the given code (4 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Changing where a stream comes from or goes to (keyboard, file, pipe, another device) keeps the program's behaviour. Changing the order of two reads swaps which value lands in which variable.",
-     "exact_rule": "Changing where a stream comes from or goes to (keyboard, file, pipe, another device) keeps the program's behaviour. Changing the order of two reads swaps which value lands in which variable.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [
-      "StdInRereads"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 161,
-       "quote": "standard input, standard output, standard draw, and standard audio can be tied to different physical devices at different times without making any changes to programs.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Use the stream model when data are processed in one sequential pass, possibly of unknown or huge length. If the program must revisit values (sorting, k-th smallest), first save them in an array.",
-     "exact_rule": "Use the stream model when data are processed in one sequential pass, possibly of unknown or huge length. If the program must revisit values (sorting, k-th smallest), first save them in an array.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 126,
-       "pdf_page": 136,
-       "quote": "One of the key features of the standard input stream is that your program consumes values when it reads them."
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 165,
-       "quote": "Which of the following require saving all the values from standard input (in an array, say), and which could be implemented as a filter using only a fixed number of variables?",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A read must be preceded by available input (the stream is finite and cannot be re-read). Kind: run-time exception. Trigger class: More read calls than values in the stream, e.g. reading 3 values from input `4 7`.",
-     "exact_rule": "rule broken: A read must be preceded by available input (the stream is finite and cannot be re-read). Kind: run-time exception. Trigger class: More read calls than values in the stream, e.g. reading 3 values from input `4 7`.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 162,
-       "quote": "What happens if my program attempts to read data from standard input after it is exhausted? A. You will get an error. StdIn.isEmpty() allows you to avoid such an error by checking whether there is more input available.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "run-time exception",
-     "trigger_class": "More read calls than values in the stream, e.g. reading 3 values from input `4 7`.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: Values are consumed once; to use a value again it must be stored in a variable or array. Kind: silent logic error. Trigger class: Code that calls a read a second time expecting the same value (e.g. readInt() in a test and again in the body), so it silently skips values.",
-     "exact_rule": "rule broken: Values are consumed once; to use a value again it must be stored in a variable or array. Kind: silent logic error. Trigger class: Code that calls a read a second time expecting the same value (e.g. readInt() in a test and again in the body), so it silently skips values.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 136,
-       "quote": "Once your program has read a value, it cannot back up and read it again.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "silent logic error",
-     "trigger_class": "Code that calls a read a second time expecting the same value (e.g. readInt() in a test and again in the body), so it silently skips values.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
   }
  ],
  "level_mis_links": [
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "compile@L0",
-   "misconception": "CompileRunsProgram",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Compiling also executes the program. Right rule: javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can appear then."
-  },
-  {
-   "level_node": "compile@L0",
-   "misconception": "CompilesMeansWorks",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Code that compiles is code that works. Right rule: Code that compiles can still have run-time errors and logic errors."
-  },
-  {
-   "level_node": "compile@L0",
-   "misconception": "CompileRunsProgram",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the compile rule (LT) unevenly: expects output after javac on one try but not another, or runs java Name after a failed compile as if the old Name.class reflected the new edits. (here mixing in: \"compiling also executes the program\")"
-  },
-  {
-   "level_node": "compile@L4",
-   "misconception": "CompileRunsProgram",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Recompiling the same unchanged source gives the same Name.class; any edit to the source is invisible to java Name until recompiled; adding or deleting comments or whitespace changes nothing the program does."
-  },
-  {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
-  },
-  {
-   "level_node": "command_line_args@L0",
-   "misconception": "ArgsAreNumbers",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
-  },
-  {
-   "level_node": "command_line_args@L4",
-   "misconception": "ArgsAreNumbers",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "piping@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A redirected (piped) stream shows up in args[]. Right rule: With `A | B`, B's standard input is A's output stream. It is not an argument, and B just reads standard input as if someone were typing it."
-  },
-  {
-   "level_node": "piping@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (A's writes are added to the end of the shared stream and B's reads take from its front, interleaved by the OS). An uneven trace runs A to completion into a file first, or sends B's output back into A. (here mixing in: \"a redirected file shows up in args[]\")"
-  },
-  {
-   "level_node": "piping@L4",
-   "misconception": "RedirectionIsArgument",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Replacing `A | B` with `A > f; B < f` keeps the result. Changing A's output format (e.g. adding a label) breaks B's typed reads."
-  },
   {
    "level_node": "standard_input@L0",
    "misconception": "StdInRereads",
@@ -15659,134 +12930,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Changing the input data changes the results without recompiling. Swapping two reads swaps the values the two variables get. Changing readInt to readDouble accepts more inputs; the reverse breaks on tokens like 12.2."
-  },
-  {
-   "level_node": "stream_model@L0",
-   "misconception": "StdInRereads",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes the value it returns, so a second StdIn.readInt() returns the next value in the stream (input 3 5 gives 3, then 5)."
-  },
-  {
-   "level_node": "stream_model@L0",
-   "misconception": "StdInRereads",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (reads take values from the front in order; prints append at the end in order). An uneven trace reuses an already-consumed value on some reads, or writes some output out of execution order. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")"
-  },
-  {
-   "level_node": "stream_model@L4",
-   "misconception": "StdInRereads",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing where a stream comes from or goes to (keyboard, file, pipe, another device) keeps the program's behaviour. Changing the order of two reads swaps which value lands in which variable."
-  },
-  {
-   "level_node": "redirection@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A redirected file shows up in args[]. Right rule: With `< data.txt` the operating system supplies standard input from the file. args[] does not contain it, and the program just reads standard input whatever the source."
-  },
-  {
-   "level_node": "redirection@L0",
-   "misconception": "RedirectionIsArgument",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (the OS connects the file before the program runs; reads come from the file and writes go only to the file). An uneven trace shows output on the screen as well as in the file, or treats the file name as a command-line argument. (here mixing in: \"a redirected file shows up in args[]\")"
-  },
-  {
-   "level_node": "redirection@L4",
-   "misconception": "RedirectionIsArgument",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "The program is unchanged whether its input or output is the terminal or a file: the I/O abstraction is conserved. Changing only the file changes only the data."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
-  },
-  {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
   },
   {
    "level_node": "expression@L0",
@@ -15861,6 +13004,246 @@
    "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
   },
   {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
+   "level_node": "redirection@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A redirected file shows up in args[]. Right rule: With `< data.txt` the operating system supplies standard input from the file. args[] does not contain it, and the program just reads standard input whatever the source."
+  },
+  {
+   "level_node": "redirection@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (the OS connects the file before the program runs; reads come from the file and writes go only to the file). An uneven trace shows output on the screen as well as in the file, or treats the file name as a command-line argument. (here mixing in: \"a redirected file shows up in args[]\")"
+  },
+  {
+   "level_node": "redirection@L4",
+   "misconception": "RedirectionIsArgument",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "The program is unchanged whether its input or output is the terminal or a file: the I/O abstraction is conserved. Changing only the file changes only the data."
+  },
+  {
+   "level_node": "piping@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A redirected (piped) stream shows up in args[]. Right rule: With `A | B`, B's standard input is A's output stream. It is not an argument, and B just reads standard input as if someone were typing it."
+  },
+  {
+   "level_node": "piping@L0",
+   "misconception": "RedirectionIsArgument",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (A's writes are added to the end of the shared stream and B's reads take from its front, interleaved by the OS). An uneven trace runs A to completion into a file first, or sends B's output back into A. (here mixing in: \"a redirected file shows up in args[]\")"
+  },
+  {
+   "level_node": "piping@L4",
+   "misconception": "RedirectionIsArgument",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Replacing `A | B` with `A > f; B < f` keeps the result. Changing A's output format (e.g. adding a label) breaks B's typed reads."
+  },
+  {
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "level_node": "command_line_args@L0",
+   "misconception": "ArgsAreNumbers",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
+  },
+  {
+   "level_node": "command_line_args@L4",
+   "misconception": "ArgsAreNumbers",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
+  },
+  {
    "level_node": "run@L0",
    "misconception": "CompileRunsProgram",
    "way": "misconception",
@@ -15886,14 +13269,16 @@
   }
  ],
  "counts": {
-  "tagged": 11,
-  "concepts": 15,
-  "concept_edges": 12,
-  "misconceptions": 40,
-  "mis_edges": 43,
-  "levels": 75,
-  "level_edges": 75,
-  "level_mis_links": 55
+  "tagged": 12,
+  "concepts": 12,
+  "generic": 5,
+  "from_hop": 0,
+  "concept_edges": 7,
+  "misconceptions": 37,
+  "mis_edges": 38,
+  "levels": 60,
+  "level_edges": 60,
+  "level_mis_links": 48
  },
  "warnings": []
 }

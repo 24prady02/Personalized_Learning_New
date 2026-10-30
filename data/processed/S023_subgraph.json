@@ -30,12 +30,6 @@
    "generic": true
   },
   {
-   "id": "break_statement",
-   "why": "prerequisite_of:switch_statement",
-   "hits": [],
-   "generic": false
-  },
-  {
    "id": "control_flow",
    "why": "code",
    "hits": [
@@ -143,14 +137,6 @@
  ],
  "concept_edges": [
   {
-   "id": "pre:break_statement->switch_statement",
-   "type": "prerequisite",
-   "source": "break_statement",
-   "target": "switch_statement",
-   "logic": "Each case of a switch normally ends with break, which exits the switch body.",
-   "grounding": "book_passage"
-  },
-  {
    "id": "pre:statement->block",
    "type": "prerequisite",
    "source": "statement",
@@ -221,30 +207,6 @@
    "kind": "misconception",
    "wrong_belief": "a = b copies the value of a into b.",
    "correct_rule": "Assignment stores the value of the right side into the variable on the left."
-  },
-  {
-   "id": "BreakEndsProgram",
-   "kind": "misconception",
-   "wrong_belief": "break ends the whole program.",
-   "correct_rule": "break ends only the innermost loop (or switch); execution continues after it."
-  },
-  {
-   "id": "BreakExitsIf",
-   "kind": "misconception",
-   "wrong_belief": "break leaves the if statement it is written in.",
-   "correct_rule": "break immediately exits a loop without letting it run to completion, and in a switch it exits the switch body."
-  },
-  {
-   "id": "BreakIgnored",
-   "kind": "misconception",
-   "wrong_belief": "break has no effect; the loop body just carries on.",
-   "correct_rule": "break leaves the innermost loop at once; the rest of the body and later passes do not run."
-  },
-  {
-   "id": "BreakIsContinue",
-   "kind": "misconception",
-   "wrong_belief": "break starts the next iteration of the loop.",
-   "correct_rule": "break exits the loop immediately; continue skips to the next iteration of the loop."
   },
   {
    "id": "CodeAfterIfSkipped",
@@ -723,42 +685,6 @@
    "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
   },
   {
-   "id": "mis:break_statement->BreakEndsProgram",
-   "type": "misconception",
-   "source": "break_statement",
-   "target": "BreakEndsProgram",
-   "role": "primary",
-   "logic": "break ends the whole program.",
-   "twin_logic": "break ends only the innermost loop (or switch); execution continues after it."
-  },
-  {
-   "id": "mis:break_statement->BreakExitsIf",
-   "type": "misconception",
-   "source": "break_statement",
-   "target": "BreakExitsIf",
-   "role": "primary",
-   "logic": "break leaves the if statement it is written in.",
-   "twin_logic": "break immediately exits a loop without letting it run to completion, and in a switch it exits the switch body."
-  },
-  {
-   "id": "mis:break_statement->BreakIgnored",
-   "type": "misconception",
-   "source": "break_statement",
-   "target": "BreakIgnored",
-   "role": "primary",
-   "logic": "break has no effect; the loop body just carries on.",
-   "twin_logic": "break leaves the innermost loop at once; the rest of the body and later passes do not run."
-  },
-  {
-   "id": "mis:break_statement->BreakIsContinue",
-   "type": "misconception",
-   "source": "break_statement",
-   "target": "BreakIsContinue",
-   "role": "primary",
-   "logic": "break starts the next iteration of the loop.",
-   "twin_logic": "break exits the loop immediately; continue skips to the next iteration of the loop."
-  },
-  {
    "id": "mis:control_flow->CodeAfterIfSkipped",
    "type": "misconception",
    "source": "control_flow",
@@ -1099,46 +1025,6 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for block: the answer reasons beyond the given code by these rules.",
-   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
-  },
-  {
-   "id": "break_statement@L0",
-   "concept": "break_statement",
-   "level": "L0",
-   "name": "Prestructural / sensorimotor",
-   "criterion": "L0 for break statement: the answer holds a rule that contradicts Java.",
-   "deciding_question": "Does every rule the answer applies to break statement agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
-  },
-  {
-   "id": "break_statement@L1",
-   "concept": "break_statement",
-   "level": "L1",
-   "name": "Unistructural / atom x text surface",
-   "criterion": "L1 for break statement: the answer states one correct rule without applying it.",
-   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
-  },
-  {
-   "id": "break_statement@L2",
-   "concept": "break_statement",
-   "level": "L2",
-   "name": "Multistructural / block x execution / preoperational",
-   "criterion": "L2 for break statement: the answer applies these rules to every part of the code, in order.",
-   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
-  },
-  {
-   "id": "break_statement@L3",
-   "concept": "break_statement",
-   "level": "L3",
-   "name": "Relational / relations x function (concrete operational begins)",
-   "criterion": "L3 for break statement: the answer relates the parts by these rules.",
-   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
-  },
-  {
-   "id": "break_statement@L4",
-   "concept": "break_statement",
-   "level": "L4",
-   "name": "Extended abstract (concrete-operational reversibility and conservation)",
-   "criterion": "L4 for break statement: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -4560,1150 +4446,6 @@
      "rule_source_status": "verified",
      "error_kind": "compile-time",
      "trigger_class": "using a variable after the block that declared it has closed (cannot find symbol)",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    }
-   ]
-  },
-  {
-   "id": "lvl:break_statement->break_statement@L0",
-   "type": "has_level",
-   "source": "break_statement",
-   "target": "break_statement@L0",
-   "level": "L0",
-   "logic": "break statement -> L0 (Prestructural): the answer holds a rule that contradicts Java (6 ways).",
-   "ways": [
-    {
-     "way": "everyday_reading",
-     "rule_type": "E",
-     "rule_type_name": "folk-meaning rule",
-     "edge_logic": "Folk meaning: in English 'break' means to pause, or to stop or break out of whatever you are in, so a novice reads it as leaving the enclosing if, as starting the next round, or as stopping the whole program. In Java, `break;` ends only the innermost enclosing loop or switch, and execution continues with the statement after it.",
-     "exact_rule": "Folk meaning: in English 'break' means to pause, or to stop or break out of whatever you are in, so a novice reads it as leaving the enclosing if, as starting the next round, or as stopping the whole program. In Java, `break;` ends only the innermost enclosing loop or switch, and execution continues with the statement after it.",
-     "boundary": "Any correct, programming-specific statement about break statement makes the answer L1 or higher.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Pea1986",
-      "Lister2006",
-      "Jimoyiannis2011",
-      "Chen2020",
-      "EckertKautz2026"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Thinkin that break terminates the whole program.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: break leaves the if statement it is written in. Right rule: An if is not a break target: break immediately exits the innermost enclosing loop (or switch) without letting it run to completion.",
-     "exact_rule": "wrong rule: break leaves the if statement it is written in. Right rule: An if is not a break target: break immediately exits the innermost enclosing loop (or switch) without letting it run to completion.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion. Java provides the break statement for this purpose.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "BreakExitsIf"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "Java provides the break statement for this purpose.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §14.15",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: break starts the next iteration of the loop. Right rule: break exits the loop immediately; continue is the statement that skips to the next iteration.",
-     "exact_rule": "wrong rule: break starts the next iteration of the loop. Right rule: break exits the loop immediately; continue is the statement that skips to the next iteration.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion. Java provides the break statement for this purpose.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "BreakIsContinue"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "literature_content": [
-      {
-       "kind": "misconception",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Student thinks the break statement means that the next iteration of the loop is started.",
-       "note": "Iteration-(7)(a)(i)."
-      }
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Student thinks the break statement means that the next iteration of the loop is started.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "When a continue is executed within a loop body, the flow of control transfers directly to the increment statement for the next iteration of the loop.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: break ends the whole program. Right rule: break ends only the innermost loop (or switch); execution continues with the statement after it.",
-     "exact_rule": "wrong rule: break ends the whole program. Right rule: break ends only the innermost loop (or switch); execution continues with the statement after it.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "BreakEndsProgram"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "literature_content": [
-      {
-       "kind": "misconception",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Thinkin that break terminates the whole program.",
-       "note": "source of this node"
-      }
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Thinkin that break terminates the whole program.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "misconception",
-     "rule_type": "M",
-     "rule_type_name": "wrong rule / right rule",
-     "edge_logic": "wrong rule: break has no effect; the loop body just carries on. Right rule: break leaves the innermost loop at once: the rest of the body, the increment, and all later passes are skipped.",
-     "exact_rule": "wrong rule: break has no effect; the loop body just carries on. Right rule: break leaves the innermost loop at once: the rest of the body, the increment, and all later passes are skipped.",
-     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "ProgMiscon2021",
-      "Lister2006",
-      "Ahadi2014",
-      "Jimoyiannis2011",
-      "EckertKautz2026"
-     ],
-     "linked_misconception": [
-      "BreakIgnored"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
-     "literature_content": [
-      {
-       "kind": "misconception",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Student thinks break means to continue to execute the loop body. This is equivalent to ignoring the break statement.",
-       "note": "source of this node"
-      }
-     ],
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "paper",
-       "paper": "EckertKautz2026",
-       "pdf_page": 12,
-       "quote": "Student thinks break means to continue to execute the loop body. This is equivalent to ignoring the break statement.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    },
-    {
-     "way": "inconsistent_trace",
-     "rule_type": "T",
-     "rule_type_name": "uneven-application rule",
-     "edge_logic": "Applies the LT rule unevenly: on some passes the trace continues the body after break, or runs the increment and the test once more after break, so the final loop variable is one too large (e.g. i = 4 instead of 3 when 3 divides N). (here mixing in: \"break leaves the if statement it is written in\")",
-     "exact_rule": "Applies the LT rule unevenly: on some passes the trace continues the body after break, or runs the increment and the test once more after break, so the final loop variable is one too large (e.g. i = 4 instead of 3 when 3 divides N). (here mixing in: \"break leaves the if statement it is written in\")",
-     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
-     "correctness": "correct",
-     "filled_from": "misconception node",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion. Java provides the break statement for this purpose.",
-       "match": "exact",
-       "support": "states_correct_rule"
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "linked_misconception": [
-      "BreakExitsIf"
-     ],
-     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
-     "scope": "language",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      },
-      {
-       "type": "paper",
-       "paper": "Lister2006",
-       "pdf_page": 2,
-       "quote": "A student may make an error while hand executing the code, never-the-less the technique is multistructural.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:break_statement->break_statement@L1",
-   "type": "has_level",
-   "source": "break_statement",
-   "target": "break_statement@L1",
-   "level": "L1",
-   "logic": "break statement -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
-   "ways": [
-    {
-     "way": "names_the_element",
-     "rule_type": "N",
-     "rule_type_name": "identity rule",
-     "edge_logic": "Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.",
-     "exact_rule": "Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.",
-     "boundary": "Covering every part of the code in order is L2.",
-     "correctness": "correct",
-     "filled_from": "concept description",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Jimoyiannis2011",
-      "TeagueLister2014"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "Java provides the break statement for this purpose.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    },
-    {
-     "way": "states_the_rule",
-     "rule_type": "S",
-     "rule_type_name": "declarative rule",
-     "edge_logic": "`break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)",
-     "exact_rule": "`break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)",
-     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Pea1986"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "Java provides the break statement for this purpose.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §14.15",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "one part of the code only (a name or a rule)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:break_statement->break_statement@L2",
-   "type": "has_level",
-   "source": "break_statement",
-   "target": "break_statement@L2",
-   "level": "L2",
-   "logic": "break statement -> L2 (Multistructural): the answer applies the rules of break statement to every part of the code, in order (3 ways).",
-   "ways": [
-    {
-     "way": "line_by_line_trace",
-     "rule_type": "LT",
-     "rule_type_name": "operational sequencing rule",
-     "edge_logic": "When `break` executes: the remaining statements of the body are skipped, the for-loop increment and the condition are not evaluated again, and control continues at the first statement after the loop. In `for (i = 2; i <= N/i; i++) if (N % i == 0) break;` it runs right after the test that found a divisor.",
-     "exact_rule": "When `break` executes: the remaining statements of the body are skipped, the for-loop increment and the condition are not evaluated again, and control continues at the first statement after the loop. In `for (i = 2; i <= N/i; i++) if (N % i == 0) break;` it runs right after the test that found a divisor.",
-     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Smith2025",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "TeagueLister2014",
-      "Chen2020"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "int i; for (i = 2; i <= N/i; i++) if (N % i == 0) break; if (i > N/i) System.out.println(N + \" is prime\");",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "output_prediction",
-     "rule_type": "OP",
-     "rule_type_name": "evaluation / result rule",
-     "edge_logic": "break is a statement and produces no value. Its effect shows in the variables it leaves: after the primality loop for N = 15, i is 3 (the smallest divisor), so `i > N/i` is false and 'is prime' is not printed.",
-     "exact_rule": "break is a statement and produces no value. Its effect shows in the variables it leaves: after the primality loop for N = 15, i is 3 (the smallest divisor), so `i > N/i` is false and 'is prime' is not printed.",
-     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Lister2004",
-      "TeagueLister2014",
-      "EckertKautz2026",
-      "Jimoyiannis2011"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
-     "rule_sources": [
-      {
-       "type": "web",
-       "site": "JLS21-ch14",
-       "quote": "statements, which are executed for their effect and do not have values.",
-       "check": "web-fetched"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    },
-    {
-     "way": "one_step_execution",
-     "rule_type": "OS",
-     "rule_type_name": "state-transition rule",
-     "edge_logic": "One execution of break changes no variable. It changes only the point of control (to after the loop), so every variable keeps its value at the moment of the break.",
-     "exact_rule": "One execution of break changes no variable. It changes only the point of control (to after the loop), so every variable keeps its value at the moment of the break.",
-     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
-     "correctness": "correct or error",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "JLS21-ch14",
-       "quote": "statements, which are executed for their effect and do not have values.",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "every part of the code, step by step (not high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:break_statement->break_statement@L3",
-   "type": "has_level",
-   "source": "break_statement",
-   "target": "break_statement@L3",
-   "level": "L3",
-   "logic": "break statement -> L3 (Relational): the answer relates the parts (6 ways).",
-   "ways": [
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "break gives a while loop a second exit, in the middle of the body. After the loop, the program has to tell which exit was taken by re-testing the state (as in `if (i > N/i)`), so any variable used for that test must be declared before the loop.",
-     "exact_rule": "break gives a while loop a second exit, in the middle of the body. After the loop, the program has to tell which exit was taken by re-testing the state (as in `if (i > N/i)`), so any variable used for that test must be declared before the loop.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion. Java provides the break statement for this purpose.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "while_loop"
-     ],
-     "edge": "while_loop -prerequisite-> break_statement",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "Note that we have to declare i outside the for loop instead of in the initialization statement so that its scope extends beyond the loop.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "Plain break reaches only the innermost loop. In nested loops, ending the outer loop needs `break label;` on a labeled outer statement (or a flag tested by the outer loop).",
-     "exact_rule": "Plain break reaches only the innermost loop. In nested loops, ending the outer loop needs `break label;` on a labeled outer statement (or a flag tested by the outer loop).",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "labeled_break"
-     ],
-     "edge": "break_statement -prerequisite-> labeled_break",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "JLS21-ch14",
-       "quote": "Statements may have label prefixes.",
-       "check": "web-fetched"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §14.15",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "Both skip the rest of the current body. break then leaves the loop (no increment, no further test); continue goes on to the increment and the next test.",
-     "exact_rule": "Both skip the rest of the current body. break then leaves the loop (no increment, no further test); continue goes on to the increment and the next test.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "Java also provides a way to skip to the next iteration of a loop: the continue statement.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "continue_statement"
-     ],
-     "edge": "break_statement -parallel-> continue_statement",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "When a continue is executed within a loop body, the flow of control transfers directly to the increment statement for the next iteration of the loop.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
-     "exact_rule": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "TJ-2e",
-       "pdf_page": 98,
-       "page": 76,
-       "quote": "Each case ends with a break statement, which exits the switch body.",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "switch_statement"
-     ],
-     "edge": "break_statement -prerequisite-> switch_statement",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "TJ-2e",
-       "pdf_page": 98,
-       "quote": "Each case ends with a break statement, which exits the switch body.",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "JLS21-ch14",
-       "quote": "The effect is that, as in C and C++, execution of statements can \"fall through labels.\"",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "relation_to_neighbour",
-     "rule_type": "R",
-     "rule_type_name": "composition rule",
-     "edge_logic": "Two ways to stop a search when the item is found: break leaves the loop at once, while a boolean flag is set and tested in the loop condition so the loop ends at its next test. After either, the code must tell the found case from the loop finishing normally.",
-     "exact_rule": "Two ways to stop a search when the item is found: break leaves the loop at once, while a boolean flag is set and tested in the loop condition so the loop ends at its next test. After either, the code must tell the found case from the loop finishing normally.",
-     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
-     "correctness": "correct or error",
-     "filled_from": "prerequisite / parallel edge",
-     "book_source": [
-      {
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "page": 70,
-       "section": "1.3",
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "match": "exact"
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "TeagueLister2014",
-      "Lister2004",
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017"
-     ],
-     "requires_concept": [
-      "flag_search_loop"
-     ],
-     "edge": "flag_search_loop -parallel-> break_statement",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    },
-    {
-     "way": "purpose_of_the_whole",
-     "rule_type": "P",
-     "rule_type_name": "plan / role rule",
-     "edge_logic": "Plan: early-exit search (Soloway 'loop-and-a-half' or exit-on-found). Stop scanning as soon as the answer is known, e.g. at the first divisor; the loop variable is a stepper whose value at exit reports the find.",
-     "exact_rule": "Plan: early-exit search (Soloway 'loop-and-a-half' or exit-on-found). Stop scanning as soon as the answer is known, e.g. at the first divisor; the loop variable is a stepper whose value at exit reports the find.",
-     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
-     "correctness": "correct or error",
-     "filled_from": "book program",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Lister2006",
-      "Chen2020",
-      "Fowler2021",
-      "Smith2025",
-      "TeagueLister2014",
-      "Jimoyiannis2011"
-     ],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      },
-      {
-       "type": "web",
-       "site": "Sajaniemi-roles",
-       "quote": "A data item stepping through a systematic, predictable succession of values",
-       "check": "web-fetched"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
-    }
-   ]
-  },
-  {
-   "id": "lvl:break_statement->break_statement@L4",
-   "type": "has_level",
-   "source": "break_statement",
-   "target": "break_statement@L4",
-   "level": "L4",
-   "logic": "break statement -> L4 (Extended abstract): the answer reasons beyond the given code (6 ways).",
-   "ways": [
-    {
-     "way": "predict_a_change",
-     "rule_type": "C",
-     "rule_type_name": "conservation rule",
-     "edge_logic": "Removing the break keeps the loop finite but lets it run to completion. In the prime test, i then ends above N/i for every N, so composites are reported as prime. Invariant kept with break: after the loop, `i <= N/i` holds exactly when the break was taken.",
-     "exact_rule": "Removing the break keeps the loop finite but lets it run to completion. In the prime test, i then ends above N/i for every N, so composites are reported as prime. Invariant kept with break: after the loop, `i <= N/i` holds exactly when the break was taken.",
-     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
-     "correctness": "correct",
-     "filled_from": "book rule / misconception node",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "TeagueLister2014",
-      "Lister2011",
-      "Lister2004",
-      "VrachnosJimoyiannis2017"
-     ],
-     "linked_misconception": [
-      "BreakExitsIf"
-     ],
-     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "There are two different ways to leave this loop: either the break statement is executed (because i divides N, so N is not prime) or the for loop condition is not satisfied",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "transfer_to_a_new_program",
-     "rule_type": "X",
-     "rule_type_name": "applicability rule",
-     "edge_logic": "Use break when the reason to stop is discovered in the middle of a pass (first divisor, sentinel found) and folding it into the loop condition would be awkward. Prefer a plain loop condition when the exit can be stated up front. In a method, `return` is often clearer. S&W use break rarely.",
-     "exact_rule": "Use break when the reason to stop is discovered in the middle of a pass (first divisor, sentinel found) and folding it into the loop condition would be awkward. Prefer a plain loop condition when the exit can be stated up front. In a method, `return` is often clearer. S&W use break rarely.",
-     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
-     "correctness": "correct",
-     "filled_from": "book rule",
-     "book_source": [
-      {
-       "source": "SW-1e",
-       "page": 70,
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion."
-      }
-     ],
-     "framework": [
-      "Jimoyiannis2011",
-      "VrachnosJimoyiannis2017",
-      "Lister2011",
-      "PradhanNewar2024",
-      "Lister2004"
-     ],
-     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "You need not think about using these constructs for every program that you write, because you are likely to encounter them much less frequently than the if, while, and for statements.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: break must be inside a loop or switch. Kind: compile-time. Trigger class: `break;` inside an if that is not inside any loop or switch (break outside switch or loop).",
-     "exact_rule": "rule broken: break must be inside a loop or switch. Kind: compile-time. Trigger class: `break;` inside an if that is not inside any loop or switch (break outside switch or loop).",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §14.15",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "`break;` inside an if that is not inside any loop or switch (break outside switch or loop).",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: Statements after break in the same block can never run. Kind: compile-time. Trigger class: Code written directly after `break;` in the same block (unreachable statement).",
-     "exact_rule": "rule broken: Statements after break in the same block can never run. Kind: compile-time. Trigger class: Code written directly after `break;` in the same block (unreachable statement).",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      },
-      {
-       "type": "spec_ref",
-       "ref": "JLS §14.22",
-       "check": "reference-only"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "Code written directly after `break;` in the same block (unreachable statement).",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: break exits only the innermost loop or switch. Kind: silent logic error. Trigger class: A break in an inner loop (or in a switch inside a loop) that was meant to end the outer loop: the outer loop keeps going.",
-     "exact_rule": "rule broken: break exits only the innermost loop or switch. Kind: silent logic error. Trigger class: A break in an inner loop (or in a switch inside a loop) that was meant to end the outer loop: the outer loop keeps going.",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 68,
-       "quote": "The inner loop iterates all the way through for each iteration of the outer loop.",
-       "check": "exact"
-      },
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "In some situations, we want to immediately exit a loop without letting it run to completion.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "silent logic error",
-     "trigger_class": "A break in an inner loop (or in a switch inside a loop) that was meant to end the outer loop: the outer loop keeps going.",
-     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
-     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
-     "check_high_level": "beyond the given code: a change, an input class, or a new program"
-    },
-    {
-     "way": "diagnose_an_error",
-     "rule_type": "D",
-     "rule_type_name": "error rule",
-     "edge_logic": "rule broken: A variable used after the loop to tell how it ended must be in scope. Kind: compile-time. Trigger class: Declaring the loop index in the for header (`for (int i = 2; ...)`) and then testing `i` after the loop (cannot find symbol).",
-     "exact_rule": "rule broken: A variable used after the loop to tell how it ended must be in scope. Kind: compile-time. Trigger class: Declaring the loop index in the for header (`for (int i = 2; ...)`) and then testing `i` after the loop (cannot find symbol).",
-     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
-     "correctness": "correct",
-     "filled_from": "13-type rule research (lr)",
-     "framework": [
-      "Lister2006",
-      "AltadmriBrown2015",
-      "BrownAltadmri2017",
-      "LogicErrorsSurvey",
-      "EckertKautz2026"
-     ],
-     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
-     "linked_error": [],
-     "rule_sources": [
-      {
-       "type": "book",
-       "book": "SW-1e",
-       "pdf_page": 80,
-       "quote": "Note that we have to declare i outside the for loop instead of in the initialization statement so that its scope extends beyond the loop.",
-       "check": "exact"
-      }
-     ],
-     "rule_source_status": "verified",
-     "error_kind": "compile-time",
-     "trigger_class": "Declaring the loop index in the for header (`for (int i = 2; ...)`) and then testing `i` after the loop (cannot find symbol).",
      "check_correct": "Yes: the answer agrees with the rule stated for this way.",
      "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
@@ -12359,182 +11101,6 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "switch_statement@L0",
-   "misconception": "SwitchNoFallThrough",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After the matching case runs, the switch ends even without break. Right rule: Without break, all the statements after the matching label run, including those under later case labels, until a break or the end of the switch."
-  },
-  {
-   "level_node": "switch_statement@L0",
-   "misconception": "SwitchNoFallThrough",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the LT rule unevenly: on a trace the selector is matched correctly but execution stops at the next case label on some runs and falls through on others, or default is run even though a case matched. (here mixing in: \"After the matching case runs, the switch ends even without break\")"
-  },
-  {
-   "level_node": "switch_statement@L4",
-   "misconception": "SwitchNoFallThrough",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "When every case ends with break, reordering the cases does not change behaviour (labels are distinct constants). Removing one break changes behaviour for that value only. Adding a default changes only values with no matching label."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentOppositeDirection",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentAddsToTarget",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentExchangesValues",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentEmptiesSource",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "inconsistent_trace",
-   "way_index": 9,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentCopiesObject",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariableKeepsOldValue",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
-  },
-  {
-   "level_node": "assignment@L4",
-   "misconception": "VariablesHoldExpressions",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
-  },
-  {
    "level_node": "block@L0",
    "misconception": "LocalVarOutsideScope",
    "way": "misconception",
@@ -12581,134 +11147,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
-  },
-  {
-   "level_node": "break_statement@L0",
-   "misconception": "BreakExitsIf",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: break leaves the if statement it is written in. Right rule: An if is not a break target: break immediately exits the innermost enclosing loop (or switch) without letting it run to completion."
-  },
-  {
-   "level_node": "break_statement@L0",
-   "misconception": "BreakIsContinue",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: break starts the next iteration of the loop. Right rule: break exits the loop immediately; continue is the statement that skips to the next iteration."
-  },
-  {
-   "level_node": "break_statement@L0",
-   "misconception": "BreakEndsProgram",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: break ends the whole program. Right rule: break ends only the innermost loop (or switch); execution continues with the statement after it."
-  },
-  {
-   "level_node": "break_statement@L0",
-   "misconception": "BreakIgnored",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: break has no effect; the loop body just carries on. Right rule: break leaves the innermost loop at once: the rest of the body, the increment, and all later passes are skipped."
-  },
-  {
-   "level_node": "break_statement@L0",
-   "misconception": "BreakExitsIf",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Applies the LT rule unevenly: on some passes the trace continues the body after break, or runs the increment and the test once more after break, so the final loop variable is one too large (e.g. i = 4 instead of 3 when 3 divides N). (here mixing in: \"break leaves the if statement it is written in\")"
-  },
-  {
-   "level_node": "break_statement@L4",
-   "misconception": "BreakExitsIf",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Removing the break keeps the loop finite but lets it run to completion. In the prime test, i then ends above N/i for every N, so composites are reported as prime. Invariant kept with break: after the loop, `i <= N/i` holds exactly when the break was taken."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
-  },
-  {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
   },
   {
    "level_node": "expression@L0",
@@ -12877,17 +11315,275 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
+  },
+  {
+   "level_node": "switch_statement@L0",
+   "misconception": "SwitchNoFallThrough",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After the matching case runs, the switch ends even without break. Right rule: Without break, all the statements after the matching label run, including those under later case labels, until a break or the end of the switch."
+  },
+  {
+   "level_node": "switch_statement@L0",
+   "misconception": "SwitchNoFallThrough",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the LT rule unevenly: on a trace the selector is matched correctly but execution stops at the next case label on some runs and falls through on others, or default is run even though a case matched. (here mixing in: \"After the matching case runs, the switch ends even without break\")"
+  },
+  {
+   "level_node": "switch_statement@L4",
+   "misconception": "SwitchNoFallThrough",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "When every case ends with break, reordering the cases does not change behaviour (labels are distinct constants). Removing one break changes behaviour for that value only. Adding a default changes only values with no matching label."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentOppositeDirection",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentAddsToTarget",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentExchangesValues",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentEmptiesSource",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "inconsistent_trace",
+   "way_index": 9,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "SwapWithoutTemp",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentCopiesObject",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariableKeepsOldValue",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
+  },
+  {
+   "level_node": "assignment@L4",
+   "misconception": "VariablesHoldExpressions",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   }
  ],
  "counts": {
   "tagged": 8,
-  "concepts": 9,
-  "concept_edges": 3,
-  "misconceptions": 53,
-  "mis_edges": 59,
-  "levels": 45,
-  "level_edges": 45,
-  "level_mis_links": 65
+  "concepts": 8,
+  "generic": 6,
+  "from_hop": 0,
+  "concept_edges": 2,
+  "misconceptions": 49,
+  "mis_edges": 55,
+  "levels": 40,
+  "level_edges": 40,
+  "level_mis_links": 59
  },
  "warnings": []
 }

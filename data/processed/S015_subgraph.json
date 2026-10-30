@@ -1053,6 +1053,8 @@
  "counts": {
   "tagged": 1,
   "concepts": 1,
+  "generic": 1,
+  "from_hop": 0,
   "concept_edges": 0,
   "misconceptions": 4,
   "mis_edges": 4,

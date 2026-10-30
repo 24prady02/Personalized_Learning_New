@@ -59396,12 +59396,15 @@
      "StdOut\\."
     ],
     "code_text": "masked",
-    "command_patterns": [],
+    "command_patterns": [
+     "\\s>\\s*\\S+"
+    ],
     "operator_symbols": [],
     "java_types": [],
     "generic": true,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -289285,7 +289288,8 @@
    "program_layout two_statements_one_line: '^(?![^\\\\n]*\\\\bfor\\\\s*\\\\()[^\\\\n]*;[ \\\\t]*(?!//)[A-Za-z_][^\\\\n;]*;' -> '^(?![^\\\\n]*\\\\b(?:for\\\\s*\\\\(|case\\\\b|default\\\\s*:))[^\\\\n]*;[ \\\\t]*(?!//|else\\\\b)[A-Za-z_][^\\\\n;]*;'  [skip else / case / default lines]",
    "compile_time_error statement_without_semicolon: '^[ \\\\t]*(?!(?:if|for|while|switch|else|do|return|public|private|protected|static|class|case|default)\\\\b)(?:(?:int|double|boolean|char|long|String|float|short|byte)(?:\\\\[\\\\])*\\\\s+)?[A-Za-z_][\\\\w.\\\\[\\\\]]*\\\\s*(?:=[^;{}\\\\n]*[^;{}\\\\s]|\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\))[ \\\\t]*$' -> '^[ \\\\t]*(?!(?:if|for|while|switch|else|do|return|public|private|protected|static|class|case|default)\\\\b)(?:(?:int|double|boolean|char|long|String|float|short|byte)(?:\\\\[\\\\])*\\\\s+)?[A-Za-z_][\\\\w.\\\\[\\\\]]*\\\\s*(?:=[^;{}\\\\n]*[^;{}\\\\s+\\\\-*/%&|,(<>=?:]|\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\))[ \\\\t]*$'  [continuation lines ending in an operator or comma are not flagged]",
    "while_loop P: '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\(' -> '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\((?![^)\\\\n]*\\\\)\\\\s*;)'  [do-while tail excluded]",
-   "definite_assignment uninitialized_read_regex: '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S])*?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))' -> '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S]){0,2000}?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))'  [bounded gap]"
+   "definite_assignment uninitialized_read_regex: '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S])*?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))' -> '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S]){0,2000}?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))'  [bounded gap]",
+   "standard_output C: added '\\s>\\s*\\S+'  [output redirection shows standard output, as standard_input already has '\\s<\\s*\\S+']"
   ]
  }
 }

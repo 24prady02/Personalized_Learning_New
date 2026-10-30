@@ -4243,36 +4243,36 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "primitive_type@L0",
+   "misconception": "StringIsPrimitive",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+   "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
   },
   {
-   "level_node": "data_type@L0",
-   "misconception": "AnyValueInAnyVariable",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "primitive_type@L0",
+   "misconception": "StringIsPrimitive",
    "way": "inconsistent_trace",
-   "way_index": 3,
+   "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
+   "exact_rule": "Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: \"String is a primitive type like int\")"
   },
   {
-   "level_node": "data_type@L4",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "primitive_type@L0",
+   "misconception": "NewArrayHoldsGarbage",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "level_node": "primitive_type@L4",
+   "misconception": "StringIsPrimitive",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
+   "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
   },
   {
    "level_node": "identifier@L0",
@@ -4339,41 +4339,43 @@
    "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
   },
   {
-   "level_node": "primitive_type@L0",
-   "misconception": "StringIsPrimitive",
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
+   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
   },
   {
-   "level_node": "primitive_type@L0",
-   "misconception": "StringIsPrimitive",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: \"String is a primitive type like int\")"
-  },
-  {
-   "level_node": "primitive_type@L0",
-   "misconception": "NewArrayHoldsGarbage",
+   "level_node": "data_type@L0",
+   "misconception": "AnyValueInAnyVariable",
    "way": "misconception",
-   "way_index": 3,
+   "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
   },
   {
-   "level_node": "primitive_type@L4",
-   "misconception": "StringIsPrimitive",
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
+  },
+  {
+   "level_node": "data_type@L4",
+   "misconception": "AllDoublesToAvoidDivision",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
+   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
   }
  ],
  "counts": {
   "tagged": 4,
   "concepts": 4,
+  "generic": 4,
+  "from_hop": 0,
   "concept_edges": 2,
   "misconceptions": 10,
   "mis_edges": 10,
