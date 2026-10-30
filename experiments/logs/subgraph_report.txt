@@ -1,8 +1,8 @@
 S000  tagged  10  nodes  10 (8 generic)  edges   6  mis  46  levels  50  links  57  ref   missed: -
 S001  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
-S005  tagged  27  nodes  27 (13 generic)  edges  24  mis 177  levels 135  links 198  xfail missed: while_loop
+S005  tagged  28  nodes  28 (13 generic)  edges  25  mis 184  levels 140  links 207  xfail missed: while_loop
 S007  tagged  25  nodes  25 (13 generic)  edges  24  mis 183  levels 125  links 194  ok    missed: -
-S008  tagged  27  nodes  27 (13 generic)  edges  25  mis 180  levels 135  links 201  ok    missed: -
+S008  tagged  28  nodes  28 (13 generic)  edges  26  mis 187  levels 140  links 210  ok    missed: -
 S009  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_creation, indexing, length_field
 S010  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
 S012  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: compound_assignment, increment_operators
@@ -19,5 +19,5 @@ S073  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  
 S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  xfail missed: compile
 S134  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
 S137  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
-fully covered: 10 / 20   (mean concepts per subgraph: 13.1; S000 is the reference case, not counted)
+fully covered: 10 / 20   (mean concepts per subgraph: 13.2; S000 is the reference case, not counted)
 non-generic concepts firing in >= 12 scenarios: none

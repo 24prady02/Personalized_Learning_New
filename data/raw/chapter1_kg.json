@@ -39928,7 +39928,8 @@
     ],
     "code_patterns": [
      "\\bfor\\s*\\(\\s*(?:int|long|double|char)?\\s*[A-Za-z_]\\w*\\s*=",
-     "\\bwhile\\s*\\(\\s*([A-Za-z_]\\w*)\\s*(?:[<>]=?|!=)[^)]*\\)[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|[+\\-]=)"
+     "\\bwhile\\s*\\(\\s*([A-Za-z_]\\w*)\\s*(?:[<>]=?|!=)[^)]*\\)[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|[+\\-]=)",
+     "\\bdo\\s*\\{[\\s\\S]{0,800}?\\b(\\w+)\\s*(?:\\+\\+|--|[+\\-]=)[^}]*\\}\\s*while\\s*\\(\\s*\\1\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -289289,7 +289290,8 @@
    "compile_time_error statement_without_semicolon: '^[ \\\\t]*(?!(?:if|for|while|switch|else|do|return|public|private|protected|static|class|case|default)\\\\b)(?:(?:int|double|boolean|char|long|String|float|short|byte)(?:\\\\[\\\\])*\\\\s+)?[A-Za-z_][\\\\w.\\\\[\\\\]]*\\\\s*(?:=[^;{}\\\\n]*[^;{}\\\\s]|\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\))[ \\\\t]*$' -> '^[ \\\\t]*(?!(?:if|for|while|switch|else|do|return|public|private|protected|static|class|case|default)\\\\b)(?:(?:int|double|boolean|char|long|String|float|short|byte)(?:\\\\[\\\\])*\\\\s+)?[A-Za-z_][\\\\w.\\\\[\\\\]]*\\\\s*(?:=[^;{}\\\\n]*[^;{}\\\\s+\\\\-*/%&|,(<>=?:]|\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\))[ \\\\t]*$'  [continuation lines ending in an operator or comma are not flagged]",
    "while_loop P: '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\(' -> '(?:^|[;{)])[ \\\\t]*while\\\\s*\\\\((?![^)\\\\n]*\\\\)\\\\s*;)'  [do-while tail excluded]",
    "definite_assignment uninitialized_read_regex: '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S])*?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))' -> '\\\\b(?:int|double|boolean|char|long|String)\\\\s+(?P<v>\\\\w+)\\\\s*;(?:(?!\\\\b(?P=v)\\\\s*=(?!=))[\\\\s\\\\S]){0,2000}?\\\\b(?P=v)\\\\b(?!\\\\s*=(?!=))'  [bounded gap]",
-   "standard_output C: added '\\s>\\s*\\S+'  [output redirection shows standard output, as standard_input already has '\\s<\\s*\\S+']"
+   "standard_output C: added '\\s>\\s*\\S+'  [output redirection shows standard output, as standard_input already has '\\s<\\s*\\S+']",
+   "loop_variable P: added do-while form '\\\\bdo\\\\s*\\\\{[\\\\s\\\\S]{0,800}?\\\\b(\\\\w+)\\\\s*(?:\\\\+\\\\+|--|[+\\\\-]=)[^}]*\\\\}\\\\s*while\\\\s*\\\\(\\\\s*\\\\1\\\\b'  [the variable updated in the body and tested in the trailing while]"
   ]
  }
 }

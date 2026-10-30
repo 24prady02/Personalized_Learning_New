@@ -6261,38 +6261,6 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
-  },
-  {
-   "level_node": "double@L4",
-   "misconception": "FloatingPointIsExact",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
-  },
-  {
    "level_node": "literal@L0",
    "misconception": "LargeIntegerLong",
    "way": "misconception",
@@ -6339,6 +6307,62 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
+  },
+  {
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
+  },
+  {
+   "level_node": "double@L4",
+   "misconception": "FloatingPointIsExact",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
+  },
+  {
+   "level_node": "markov_chain@L0",
+   "misconception": "StartPageMatters",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The page ranks depend on which page the surfer starts from. Right rule: For the random-surfer chain the long-run probabilities are the same for all starting pages (basic limit theorem); that is why RandomSurfer can start at page 0."
+  },
+  {
+   "level_node": "markov_chain@L0",
+   "misconception": "StartPageMatters",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies LT (each step uses the row of the current state) unevenly: e.g. on some steps using the starting page's row instead of the current page's row. (here mixing in: \"The page ranks depend on which page the surfer starts from\")"
+  },
+  {
+   "level_node": "markov_chain@L4",
+   "misconception": "StartPageMatters",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing the start state keeps the limiting distribution (if the chain mixes); removing the random leap can break mixing; squaring the matrix gives two-step probabilities."
   },
   {
    "level_node": "simulation_loop@L0",
@@ -6443,30 +6467,6 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Invariant: the counts sum to T, so the fractions sum to 1; dividing before casting ((double)(freq[i] / T)) or counting outside the loop breaks it."
-  },
-  {
-   "level_node": "markov_chain@L0",
-   "misconception": "StartPageMatters",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The page ranks depend on which page the surfer starts from. Right rule: For the random-surfer chain the long-run probabilities are the same for all starting pages (basic limit theorem); that is why RandomSurfer can start at page 0."
-  },
-  {
-   "level_node": "markov_chain@L0",
-   "misconception": "StartPageMatters",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies LT (each step uses the row of the current state) unevenly: e.g. on some steps using the starting page's row instead of the current page's row. (here mixing in: \"The page ranks depend on which page the surfer starts from\")"
-  },
-  {
-   "level_node": "markov_chain@L4",
-   "misconception": "StartPageMatters",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing the start state keeps the limiting distribution (if the chain mixes); removing the random leap can break mixing; squaring the matrix gives two-step probabilities."
   }
  ],
  "counts": {
