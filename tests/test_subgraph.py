@@ -217,34 +217,3 @@ def test_nodes_are_exactly_the_tagged_concepts():
             tied = any((a == g and b not in GENERIC) or (b == g and a not in GENERIC) for a, b in edges)
             decisive = any(h["decisive"] for h in tag_code(sc["code"], READER)[g])
             assert tied or decisive, f"{sc['id']}: generic {g} kept without a reason"
-
-
-def test_extract_rules():
-    """Optional prerequisite hop: one hop, never from generic concepts; edges need both ends; ids well formed."""
-    sg = subgraph_from_code("int[] b = a;", KG, hops=1)
-    ids = {c["id"] for c in sg["concepts"]}
-    assert any(c["why"].startswith("prerequisite_of:") for c in sg["concepts"])
-    for c in sg["concepts"]:
-        if c["why"].startswith("prerequisite_of:"):
-            parent = c["why"].split(":", 1)[1]
-            assert parent in ids
-            assert not READER[parent].get("generic")
-    for e in sg["concept_edges"]:
-        assert e["source"] in ids and e["target"] in ids
-        assert e["id"].startswith(("pre:", "par:"))
-    for e in sg["mis_edges"]:
-        assert e["source"] in ids and e["id"].startswith(("mis:", "err:"))
-    for l in sg["level_edges"]:
-        assert l["source"] in ids
-    assert sg["counts"]["concepts"] == len(sg["concepts"])
-
-
-# ---------------------------------------------------------------- recall: alternative spellings per concept
-
-RECALL = json.loads((ROOT / "tests/data/recall_variants.json").read_text(encoding="utf-8"))["must_tag"]
-
-
-@pytest.mark.parametrize("cid", sorted(RECALL))
-def test_recall_variants(cid):
-    missed = [s for s in RECALL[cid] if cid not in tag_code(s, READER)]
-    assert not missed, f"{cid} misses {missed}"

@@ -3330,38 +3330,6 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "variable_swap@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
-  },
-  {
-   "level_node": "variable_swap@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (three assignments in order, each using current values). Applied unevenly, a student traces the first two steps correctly but uses a's original value in the third, or calls one segment a swap and the other a copy without tracing either. (here mixing in: \"a[i] = a[j]; a[j] = a[i]; exchanges the two values\")"
-  },
-  {
-   "level_node": "variable_swap@L0",
-   "misconception": "AssignmentExchangesValues",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
-  },
-  {
-   "level_node": "variable_swap@L4",
-   "misconception": "SwapWithoutTemp",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Reordering the steps (int t = a; b = t; a = b;) breaks the swap: both variables end up holding a's value. Dropping the temporary breaks it the same way. Running the correct swap twice restores the originals, so a swap is its own inverse."
-  },
-  {
    "level_node": "assignment@L0",
    "misconception": "VariablesHoldExpressions",
    "way": "misconception",
@@ -3464,7 +3432,45 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
+  },
+  {
+   "level_node": "variable_swap@L0",
+   "misconception": "SwapWithoutTemp",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "level_node": "variable_swap@L0",
+   "misconception": "SwapWithoutTemp",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (three assignments in order, each using current values). Applied unevenly, a student traces the first two steps correctly but uses a's original value in the third, or calls one segment a swap and the other a copy without tracing either. (here mixing in: \"a[i] = a[j]; a[j] = a[i]; exchanges the two values\")"
+  },
+  {
+   "level_node": "variable_swap@L0",
+   "misconception": "AssignmentExchangesValues",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "level_node": "variable_swap@L4",
+   "misconception": "SwapWithoutTemp",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Reordering the steps (int t = a; b = t; a = b;) breaks the swap: both variables end up holding a's value. Dropping the temporary breaks it the same way. Running the correct swap twice restores the originals, so a swap is its own inverse."
   }
+ ],
+ "components": [
+  [
+   "assignment",
+   "variable_swap"
+  ]
  ],
  "counts": {
   "tagged": 2,
@@ -3476,7 +3482,8 @@
   "mis_edges": 17,
   "levels": 10,
   "level_edges": 10,
-  "level_mis_links": 17
+  "level_mis_links": 17,
+  "components": 1
  },
  "warnings": []
 }

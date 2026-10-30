@@ -1,13 +1,13 @@
-S000  tagged   4  nodes   4 (2 generic kept)  edges   2  mis  18  levels  20  links  20  ref   missed: -
-S001  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  ok    missed: -
-S007  tagged  17  nodes  17 (5 generic kept)  edges  14  mis 141  levels  85  links 145  ok    missed: -
-S008  tagged  19  nodes  19 (4 generic kept)  edges  16  mis 141  levels  95  links 161  ok    missed: -
-S021  tagged  12  nodes  12 (3 generic kept)  edges  10  mis  87  levels  60  links  91  ok    missed: -
-S026  tagged   2  nodes   2 (1 generic kept)  edges   1  mis  17  levels  10  links  17  ok    missed: -
-S047  tagged   2  nodes   2 (1 generic kept)  edges   1  mis   7  levels  10  links  11  ok    missed: -
-S052  tagged   8  nodes   8 (1 generic kept)  edges   7  mis  17  levels  40  links  23  ok    missed: -
-S057  tagged  26  nodes  26 (5 generic kept)  edges  22  mis 167  levels 130  links 193  ok    missed: -
-S134  tagged   2  nodes   2 (1 generic kept)  edges   1  mis  17  levels  10  links  17  ok    missed: -
-S137  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  ok    missed: -
+S000  tagged   4  nodes   4 (2 generic kept)  edges   2  mis  18  levels  20  links  20  pieces 2  ref   missed: -
+S001  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  pieces 1  ok    missed: -
+S007  tagged  17  nodes  17 (5 generic kept)  edges  14  mis 141  levels  85  links 145  pieces 3  ok    missed: -
+S008  tagged  19  nodes  19 (4 generic kept)  edges  16  mis 141  levels  95  links 161  pieces 4  ok    missed: -
+S021  tagged  12  nodes  12 (3 generic kept)  edges  10  mis  87  levels  60  links  91  pieces 2  ok    missed: -
+S026  tagged   2  nodes   2 (1 generic kept)  edges   1  mis  17  levels  10  links  17  pieces 1  ok    missed: -
+S047  tagged   2  nodes   2 (1 generic kept)  edges   1  mis   7  levels  10  links  11  pieces 1  ok    missed: -
+S052  tagged   8  nodes   8 (1 generic kept)  edges   7  mis  17  levels  40  links  23  pieces 2  ok    missed: -
+S057  tagged  26  nodes  26 (5 generic kept)  edges  22  mis 167  levels 130  links 193  pieces 4  ok    missed: -
+S134  tagged   2  nodes   2 (1 generic kept)  edges   1  mis  17  levels  10  links  17  pieces 1  ok    missed: -
+S137  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  pieces 1  ok    missed: -
 fully covered: 10 / 10   (mean concepts per subgraph: 9.6; S000 is the reference case, not counted)
 non-generic concepts firing in >= 12 scenarios: none

@@ -17027,148 +17027,108 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
+   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
   },
   {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
+   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
   },
   {
-   "level_node": "print@L0",
+   "level_node": "expression@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "expression@L0",
    "misconception": "ParenthesesOnlyIfArgument",
    "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
-  },
-  {
-   "level_node": "print@L4",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
-  },
-  {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "InnerIfIgnoresOuter",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An inner if runs its body whenever its own condition is true, even if the outer if condition is false. Right rule: The inner if is part of the outer branch: it is reached, and its condition tested, only when the outer condition is true."
-  },
-  {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "SequentialIfsAreNested",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. Right rule: Two ifs in sequence are independent: each tests only its own condition."
-  },
-  {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "InnerIfIgnoresOuter",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the nesting rule (LT) unevenly: on some inputs tests the inner condition even though the outer one was false, or matches an else to the if it is lined up with. (here mixing in: \"An inner if runs its body whenever its own condition is true, even if the outer if condition is false\")"
-  },
-  {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "ElseMatchesIndentation",
-   "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The else belongs to the if it is lined up with. Right rule: The else belongs to the most recent unmatched if, whatever the indentation."
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
   {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "MultipleElseIfBranchesRun",
+   "level_node": "expression@L0",
+   "misconception": "TargetTyping",
    "way": "misconception",
    "way_index": 5,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Every true branch of an else-if chain runs. Right rule: Only the first branch whose condition is true runs."
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "level_node": "nested_conditionals@L0",
-   "misconception": "NestedIfsInsteadOfLogicalOperators",
+   "level_node": "expression@L0",
+   "misconception": "VariablesHoldExpressions",
    "way": "misconception",
    "way_index": 6,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A condition on several values has to be written as nested if statements, one value per if. Right rule: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
   {
-   "level_node": "nested_conditionals@L4",
-   "misconception": "InnerIfIgnoresOuter",
+   "level_node": "expression@L0",
+   "misconception": "OutsideInMethodNesting",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "expression@L4",
+   "misconception": "NoAtomicExpression",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Combining if (c1) { if (c2) S; } into if (c1 && c2) S; preserves behaviour when there are no else parts; adding or removing braces around an inner if can move an else to a different if. Swapping some branches can keep the specification only on certain inputs."
+   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
   },
   {
-   "level_node": "if_else_statement@L0",
-   "misconception": "ConditionalIsSequence",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: if-else is the same as two separate ifs. Right rule: In if-else, c is tested once and exactly one of A or B runs, even if A changes the variables that c uses."
+   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
   },
   {
-   "level_node": "if_else_statement@L0",
-   "misconception": "ElseAlwaysExecutes",
-   "way": "misconception",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
+   "way": "inconsistent_trace",
    "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The else branch of an if-else statement always executes. Right rule: The else branch runs only when the if condition is false."
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
   },
   {
-   "level_node": "if_else_statement@L0",
-   "misconception": "BothBranchesExecute",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "ArithmeticOnNumericStrings",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Both the then branch and the else branch run. Right rule: Exactly one of the two branches runs."
+   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
   },
   {
-   "level_node": "if_else_statement@L0",
-   "misconception": "DuplicateCodeInBranches",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Writes the same statements in both branches of an if-else. Right rule: Code common to both branches belongs before or after the if-else."
-  },
-  {
-   "level_node": "if_else_statement@L0",
-   "misconception": "ConditionalIsSequence",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Applies the if-else rule (LT) unevenly: on some traces runs both branches, re-tests the condition after the then branch to decide whether to run the else branch, or runs the else branch whatever the condition. (here mixing in: \"if-else is the same as two separate ifs\")"
-  },
-  {
-   "level_node": "if_else_statement@L0",
-   "misconception": "BranchChosenByIntent",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. Right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
-  },
-  {
-   "level_node": "if_else_statement@L4",
-   "misconception": "ConditionalIsSequence",
+   "level_node": "arithmetic_operators@L4",
+   "misconception": "CaretIsPower",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Swapping the two branches and negating the condition preserves behaviour; swapping the branches alone inverts it. Replacing if-else with two separate ifs is not equivalent when the then branch changes a variable used in the condition."
+   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
   },
   {
    "level_node": "if_statement@L0",
@@ -17331,252 +17291,60 @@
    "exact_rule": "Negating the condition swaps which inputs run the body; changing < to <= changes only the boundary value. Adding a statement under a braceless if does not put it in the body. Whatever the condition, code after the if still runs exactly once."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "InnerIfIgnoresOuter",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+   "exact_rule": "wrong rule: An inner if runs its body whenever its own condition is true, even if the outer if condition is false. Right rule: The inner if is part of the outer branch: it is reached, and its condition tested, only when the outer condition is true."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order. Right rule: Without control statements, statements run once each, top to bottom."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "ProgramLooksAhead",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "SequentialIfsAreNested",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+   "exact_rule": "wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. Right rule: Two ifs in sequence are independent: each tests only its own condition."
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "StatementsRunInAnyOrder",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "InnerIfIgnoresOuter",
    "way": "inconsistent_trace",
    "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")"
+   "exact_rule": "Applies the nesting rule (LT) unevenly: on some inputs tests the inner condition even though the outer one was false, or matches an else to the if it is lined up with. (here mixing in: \"An inner if runs its body whenever its own condition is true, even if the outer if condition is false\")"
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "CodeAfterIfSkipped",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "ElseMatchesIndentation",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
+   "exact_rule": "wrong rule: The else belongs to the if it is lined up with. Right rule: The else belongs to the most recent unmatched if, whatever the indentation."
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "NoShortCircuit",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "MultipleElseIfBranchesRun",
    "way": "misconception",
    "way_index": 5,
    "rule_type": "M",
-   "exact_rule": "wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them). Right rule: In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
+   "exact_rule": "wrong rule: Every true branch of an else-if chain runs. Right rule: Only the first branch whose condition is true runs."
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "LoopImpliedByOneTest",
+   "level_node": "nested_conditionals@L0",
+   "misconception": "NestedIfsInsteadOfLogicalOperators",
    "way": "misconception",
    "way_index": 6,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. Right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop."
+   "exact_rule": "wrong rule: A condition on several values has to be written as nested if statements, one value per if. Right rule: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "IfWaitsForCondition",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "FalseConditionRestartsProgram",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "IfConditionWatched",
-   "way": "misconception",
-   "way_index": 9,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "ProgramEndsAfterLoop",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When a loop finishes the program ends, so code after the loop never runs. Right rule: When the loop condition becomes false, control continues with the first statement after the loop."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "FalseLoopRepeatsNextCode",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. Right rule: Only the body is repeated; once the condition is false the code after the loop runs once."
-  },
-  {
-   "level_node": "control_flow@L4",
-   "misconception": "StatementsRunInAnyOrder",
+   "level_node": "nested_conditionals@L4",
+   "misconception": "InnerIfIgnoresOuter",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "OutsideInMethodNesting",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "expression@L4",
-   "misconception": "NoAtomicExpression",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "ArithmeticOnNumericStrings",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "level_node": "arithmetic_operators@L4",
-   "misconception": "CaretIsPower",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
+   "exact_rule": "Combining if (c1) { if (c2) S; } into if (c1 && c2) S; preserves behaviour when there are no else parts; adding or removing braces around an inner if can move an else to a different if. Swapping some branches can keep the specification only on certain inputs."
   },
   {
    "level_node": "remainder_operator@L0",
@@ -17683,6 +17451,142 @@
    "exact_rule": "Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value."
   },
   {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
+  },
+  {
+   "level_node": "print@L4",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "ConditionalIsSequence",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: if-else is the same as two separate ifs. Right rule: In if-else, c is tested once and exactly one of A or B runs, even if A changes the variables that c uses."
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "ElseAlwaysExecutes",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The else branch of an if-else statement always executes. Right rule: The else branch runs only when the if condition is false."
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "BothBranchesExecute",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Both the then branch and the else branch run. Right rule: Exactly one of the two branches runs."
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "DuplicateCodeInBranches",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Writes the same statements in both branches of an if-else. Right rule: Code common to both branches belongs before or after the if-else."
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "ConditionalIsSequence",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Applies the if-else rule (LT) unevenly: on some traces runs both branches, re-tests the condition after the then branch to decide whether to run the else branch, or runs the else branch whatever the condition. (here mixing in: \"if-else is the same as two separate ifs\")"
+  },
+  {
+   "level_node": "if_else_statement@L0",
+   "misconception": "BranchChosenByIntent",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. Right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
+  },
+  {
+   "level_node": "if_else_statement@L4",
+   "misconception": "ConditionalIsSequence",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping the two branches and negating the condition preserves behaviour; swapping the branches alone inverts it. Replacing if-else with two separate ifs is not equivalent when the then branch changes a variable used in the condition."
+  },
+  {
    "level_node": "comparison_operators@L0",
    "misconception": "ChainedComparison",
    "way": "misconception",
@@ -17753,7 +17657,121 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b)."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order. Right rule: Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")"
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "CodeAfterIfSkipped",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "NoShortCircuit",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them). Right rule: In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "LoopImpliedByOneTest",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. Right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "IfWaitsForCondition",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "FalseConditionRestartsProgram",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "IfConditionWatched",
+   "way": "misconception",
+   "way_index": 9,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "ProgramEndsAfterLoop",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When a loop finishes the program ends, so code after the loop never runs. Right rule: When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "FalseLoopRepeatsNextCode",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. Right rule: Only the body is repeated; once the condition is false the code after the loop runs once."
+  },
+  {
+   "level_node": "control_flow@L4",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
   }
+ ],
+ "components": [
+  [
+   "arithmetic_operators",
+   "boolean_expression",
+   "comparison_operators",
+   "control_flow",
+   "expression",
+   "if_else_statement",
+   "if_statement",
+   "nested_conditionals",
+   "print",
+   "statement",
+   "string_literal"
+  ],
+  [
+   "remainder_operator"
+  ]
  ],
  "counts": {
   "tagged": 12,
@@ -17765,7 +17783,10 @@
   "mis_edges": 87,
   "levels": 60,
   "level_edges": 60,
-  "level_mis_links": 91
+  "level_mis_links": 91,
+  "components": 2
  },
- "warnings": []
+ "warnings": [
+  "concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,boolean_expression,comparison_operators,control_flow,expression,if_else_statement,if_statement,nested_conditionals,print,statement,string_literal | remainder_operator"
+ ]
 }

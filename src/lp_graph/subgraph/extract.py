@@ -134,7 +134,26 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
                 level_mis_links.append({"level_node": le["target"], "misconception": m, "way": way.get("way"),
                                         "way_index": i, "rule_type": way.get("rule_type"), "exact_rule": way.get("exact_rule")})
 
+    # connectivity of the concept nodes over the concept edges (reported, never altered)
+    nbrs: dict[str, set[str]] = {c: set() for c in node_set}
+    for e in concept_edges:
+        nbrs[e["source"]].add(e["target"]); nbrs[e["target"]].add(e["source"])
+    components: list[list[str]] = []
+    seen_c: set[str] = set()
+    for n in sorted(node_set):
+        if n in seen_c:
+            continue
+        stack, comp = [n], set()
+        while stack:
+            x = stack.pop()
+            if x in comp:
+                continue
+            comp.add(x); stack.extend(nbrs[x] - comp)
+        seen_c |= comp; components.append(sorted(comp))
+
     warnings = []
+    if len(components) > 1:
+        warnings.append(f"concept nodes form {len(components)} pieces (the KG has no edge between them): " + " | ".join(",".join(c) for c in components))
     for cid in tags:
         for name in _skipped_signals(idx.concepts.get(cid, {}).get("reader", {})):
             warnings.append(f"{cid}.{name}: compiler-message signal, needs javac output; skipped")
@@ -151,10 +170,11 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
         "levels": sorted(levels.values(), key=_sort_level),
         "level_edges": sorted(level_edges, key=lambda e: e["id"]),
         "level_mis_links": level_mis_links,
+        "components": components,
         "counts": {
             "tagged": len(tags), "concepts": len(concepts), "generic": sum(1 for c in concepts.values() if c["generic"]), "from_hop": sum(1 for c in concepts.values() if c["why"] != "code"), "concept_edges": len(concept_edges),
             "misconceptions": len(misconceptions), "mis_edges": len(mis_edges), "levels": len(levels),
-            "level_edges": len(level_edges), "level_mis_links": len(level_mis_links),
+            "level_edges": len(level_edges), "level_mis_links": len(level_mis_links), "components": len(components),
         },
         "warnings": warnings,
     }

@@ -1,0 +1,12 @@
+scenario,concept_nodes,generic_kept,concept_edges,misconception_edges,misconception_nodes,level_nodes,level_edges,level_mis_links,components,gold_concepts,gold_covered
+S000,4,2,2,18,17,20,20,20,2,definite_assignment,yes
+S001,4,2,5,18,15,20,20,16,1,print println,yes
+S007,17,5,14,141,104,85,85,145,3,for_loop loop_control nested_loops,yes
+S008,19,4,16,141,108,95,95,161,4,do_while_loop formatted_output if_else_statement logical_operators,yes
+S021,12,3,10,87,69,60,60,91,2,if_else_statement nested_conditionals remainder_operator,yes
+S026,2,1,1,17,15,10,10,17,1,assignment variable_swap,yes
+S047,2,1,1,7,6,10,10,11,1,formatted_output standard_output,yes
+S052,8,1,7,17,16,40,40,23,2,command_line_args piping redirection standard_input standard_output,yes
+S057,26,5,22,167,120,130,130,193,4,integer_division normalization,yes
+S134,2,1,1,17,15,10,10,17,1,assignment variable_swap,yes
+S137,4,2,5,18,15,20,20,16,1,println string_literal,yes

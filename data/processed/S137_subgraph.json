@@ -4861,6 +4861,14 @@
    "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
   }
  ],
+ "components": [
+  [
+   "print",
+   "println",
+   "statement",
+   "string_literal"
+  ]
+ ],
  "counts": {
   "tagged": 4,
   "concepts": 4,
@@ -4871,7 +4879,8 @@
   "mis_edges": 18,
   "levels": 20,
   "level_edges": 20,
-  "level_mis_links": 16
+  "level_mis_links": 16,
+  "components": 1
  },
  "warnings": []
 }

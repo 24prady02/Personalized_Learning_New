@@ -11,7 +11,7 @@ edge selection, level decisions.
 ## Setup
 
 ```bash
-pip install -r requirements.txt     # pytest only; the code uses the standard library
+pip install -r requirements.txt     # pytest; matplotlib and networkx only for the results figures
 ```
 
 ## Layout
@@ -24,11 +24,16 @@ data/
   raw/scenarios_20.json         S000 reference case + the 10 gold scenarios whose gold concepts the code alone shows
   raw/scenarios_not_from_code.json  the other 10 gold scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json one extracted subgraph per scenario (output of the report CLI)
+results/
+  results.md                    listing per scenario: code, concept nodes, edges with logic, misconceptions, levels, figure
+  figures/<sid>.png             node visualization of each subgraph
+  tables/summary.csv            one row per scenario
 src/lp_graph/subgraph/
   mask.py                       mask_java, split_statements
   tagger.py                     tag_code, command_segments
   extract.py                    extract_subgraph, subgraph_from_code
   report.py                     python -m lp_graph.subgraph.report
+  results.py                    python -m lp_graph.subgraph.results  (figures + results.md; needs matplotlib, networkx)
 notebooks/                      exploration (empty)
 experiments/logs/               subgraph_report.txt
 slides/                         (empty)
@@ -42,6 +47,7 @@ tests/
 ```bash
 pytest -q
 PYTHONPATH=src python -m lp_graph.subgraph.report --kg data/raw/chapter1_kg.json --gold data/raw/scenarios_20.json --json data/processed
+PYTHONPATH=src python -m lp_graph.subgraph.results        # results/figures, results/tables, results/results.md
 ```
 
 The report prints one line per scenario (concepts tagged, subgraph counts, gold concepts missed) and ends
@@ -72,16 +78,6 @@ in S080). Run them with `--gold data/raw/scenarios_not_from_code.json`; misses t
    The remaining extras relative to a scenario's gold are non-generic constructs really present in the code
    (the loop around S057's division, for instance); only the question and answer, read in a later stage, can
    say which of them the scenario is about.
-
-## Recall audit: alternative spellings
-
-`tests/data/recall_variants.json` holds 581 alternative Java spellings across the 166 code-visible concepts
-(StdOut vs System.out, braces or none, one-line forms, other primitive types, Scanner vs StdIn, shell lines).
-557 are asserted by `test_recall_variants`; the other 24 (`not_decidable`) cannot be decided from a snippet by
-any regex: a type declared outside the snippet (`sum / n`, `long n = i`, `b = a`, `a == b`), operands of unknown
-type (`String s = a + b`), an index of unknown value (`a[n]`), or unbalanced parentheses.
-The audit added 77 general patterns and signals to the KG (see the next section); none changed the 20 scenarios'
-node sets.
 
 ## Concepts the knowledge graph does not have
 

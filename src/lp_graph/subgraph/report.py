@@ -74,7 +74,7 @@ def run(kg_path: Path, gold_path: Path, out_dir: Path | None = None, kg=None, ho
         c = sg["counts"]
         tag = "ref" if is_ref else ("ok" if not missed else ("xfail" if not unexpected else "MISS"))
         lines.append(f"{sid:5} tagged {c['tagged']:3}  nodes {c['concepts']:3} ({c['generic']} generic kept)  edges {c['concept_edges']:3}  mis {c['mis_edges']:3}  "
-                     f"levels {c['levels']:3}  links {c['level_mis_links']:3}  {tag:5} missed: {', '.join(missed) or '-'}")
+                     f"levels {c['levels']:3}  links {c['level_mis_links']:3}  pieces {c['components']}  {tag:5} missed: {', '.join(missed) or '-'}")
         results[sid] = {"subgraph": sg, "missed": missed, "unexpected_miss": unexpected}
         if out_dir:
             out_dir.mkdir(parents=True, exist_ok=True)
