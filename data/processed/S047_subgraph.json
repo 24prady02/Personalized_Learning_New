@@ -17185,302 +17185,6 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentOppositeDirection",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentAddsToTarget",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentExchangesValues",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentEmptiesSource",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "inconsistent_trace",
-   "way_index": 9,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentCopiesObject",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariableKeepsOldValue",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
-  },
-  {
-   "level_node": "assignment@L4",
-   "misconception": "VariablesHoldExpressions",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "AnyValueInAnyVariable",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "LocalVariablesAutoInitialized",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
-  },
-  {
-   "level_node": "declaration@L4",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AnyValueInAnyVariable",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
-  },
-  {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
-  },
-  {
-   "level_node": "data_type@L4",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
    "level_node": "primitive_type@L0",
    "misconception": "StringIsPrimitive",
    "way": "misconception",
@@ -17513,174 +17217,6 @@
    "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
   },
   {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "OutsideInMethodNesting",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "expression@L4",
-   "misconception": "NoAtomicExpression",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
-  },
-  {
-   "level_node": "formatted_output@L0",
-   "misconception": "PrintfAnyConversion",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Any conversion code (%d, %f, %s) works with any argument type. Right rule: The conversion must fit the argument's type (%s accepts any type). printf(\"%12d\", Math.PI) or printf(\"%4.2f\", 512) throws IllegalFormatConversionException at run time."
-  },
-  {
-   "level_node": "formatted_output@L0",
-   "misconception": "FieldWidthIsIntegerDigits",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: %2.4f prints two digits before the decimal point and four after. Right rule: The first number is the width of the whole field. %7.2f means 7 characters in total, with 2 digits after the decimal point."
-  },
-  {
-   "level_node": "formatted_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string."
-  },
-  {
-   "level_node": "formatted_output@L0",
-   "misconception": "PrintfAnyConversion",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (specifiers are paired with arguments left to right, and the other characters pass through). An uneven trace pairs a specifier with the wrong argument, drops the literal text between specifiers, or pads on the wrong side on some fields. (here mixing in: \"Any conversion code (%d, %f, %s) works with any argument type\")"
-  },
-  {
-   "level_node": "formatted_output@L0",
-   "misconception": "ManyDigitsMeanAccurate",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A result printed with many decimal places must be accurate to those places. Right rule: Printing precision is only formatting. A value printed to many places can still be inaccurate, and ensuring accuracy is the hard part."
-  },
-  {
-   "level_node": "formatted_output@L4",
-   "misconception": "PrintfAnyConversion",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing the precision changes only the printed digits, not the stored value. Changing the width changes only the padding. A width smaller than the converted text is ignored, so nothing is truncated."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
-  },
-  {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
-  },
-  {
    "level_node": "double@L0",
    "misconception": "FloatingPointIsExact",
    "way": "misconception",
@@ -17711,6 +17247,38 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   },
   {
    "level_node": "variable@L0",
@@ -17839,6 +17407,438 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentOppositeDirection",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentAddsToTarget",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentExchangesValues",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentEmptiesSource",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "inconsistent_trace",
+   "way_index": 9,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "SwapWithoutTemp",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentCopiesObject",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariableKeepsOldValue",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
+  },
+  {
+   "level_node": "assignment@L4",
+   "misconception": "VariablesHoldExpressions",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "TargetTyping",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "OutsideInMethodNesting",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "level_node": "expression@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "expression@L4",
+   "misconception": "NoAtomicExpression",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
+  },
+  {
+   "level_node": "data_type@L4",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "LocalVariablesAutoInitialized",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "level_node": "declaration@L4",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "formatted_output@L0",
+   "misconception": "PrintfAnyConversion",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Any conversion code (%d, %f, %s) works with any argument type. Right rule: The conversion must fit the argument's type (%s accepts any type). printf(\"%12d\", Math.PI) or printf(\"%4.2f\", 512) throws IllegalFormatConversionException at run time."
+  },
+  {
+   "level_node": "formatted_output@L0",
+   "misconception": "FieldWidthIsIntegerDigits",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: %2.4f prints two digits before the decimal point and four after. Right rule: The first number is the width of the whole field. %7.2f means 7 characters in total, with 2 digits after the decimal point."
+  },
+  {
+   "level_node": "formatted_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string."
+  },
+  {
+   "level_node": "formatted_output@L0",
+   "misconception": "PrintfAnyConversion",
+   "way": "inconsistent_trace",
+   "way_index": 4,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (specifiers are paired with arguments left to right, and the other characters pass through). An uneven trace pairs a specifier with the wrong argument, drops the literal text between specifiers, or pads on the wrong side on some fields. (here mixing in: \"Any conversion code (%d, %f, %s) works with any argument type\")"
+  },
+  {
+   "level_node": "formatted_output@L0",
+   "misconception": "ManyDigitsMeanAccurate",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A result printed with many decimal places must be accurate to those places. Right rule: Printing precision is only formatting. A value printed to many places can still be inaccurate, and ensuring accuracy is the hard part."
+  },
+  {
+   "level_node": "formatted_output@L4",
+   "misconception": "PrintfAnyConversion",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing the precision changes only the printed digits, not the stored value. Changing the width changes only the padding. A width smaller than the converted text is ignored, so nothing is truncated."
   }
  ],
  "counts": {

@@ -66,6 +66,36 @@ Current result: 10 / 20 fully covered from code alone, 20 / 20 with no unexpecte
    Concepts the KG marks `generic` (statement, variable, int, assignment, ...) are kept but flagged, and the
    report shows their count per scenario.
 
+## Recall audit: alternative spellings
+
+`tests/data/recall_variants.json` holds 581 alternative Java spellings across the 166 code-visible concepts
+(StdOut vs System.out, braces or none, one-line forms, other primitive types, Scanner vs StdIn, shell lines).
+557 are asserted by `test_recall_variants`; the other 24 (`not_decidable`) cannot be decided from a snippet by
+any regex: a type declared outside the snippet (`sum / n`, `long n = i`, `b = a`, `a == b`), operands of unknown
+type (`String s = a + b`), an index of unknown value (`a[n]`), or unbalanced parentheses.
+The audit added 77 general patterns and signals to the KG (see the next section); none changed the 20 scenarios'
+node sets.
+
+## Concepts the knowledge graph does not have
+
+Constructs that chapter-1 student code can contain and that no concept node covers, so no regex can produce a
+node for them. Adding a concept (with its levels and misconceptions) is a KG design decision, not a pattern fix:
+
+| Construct | Example | Nearest existing concept |
+|---|---|---|
+| String methods and string comparison | `s.length()`, `s.charAt(0)`, `s.equals(t)`, `s == t` | api (lists the calls), string_type |
+| Method definition, return, parameters, recursion | `static int sq(int x) { return x * x; }` | main_method, method_call (calls only) |
+| import / package | `import java.util.Scanner;` | none |
+| null and object references | `String s = null;` | primitive_vs_reference, array_reference (arrays only) |
+| Unary operators | `-x`, `+x` | arithmetic_operators (binary only), logical_operators (`!`) |
+| Bitwise and shift operators | `a & b`, `x << 1` | exclusive_or (`^` only) |
+| Hex, octal, binary and underscore literals | `0x1F`, `0b101`, `1_000_000` | number_conversion (toBinaryString only) |
+| Character methods | `Character.isDigit(c)`, `Character.toUpperCase(c)` | char, api |
+| StringBuilder | `new StringBuilder()` | none |
+| Exceptions | `try { } catch (Exception e) { }`, `throw` | run_time_error (effects only) |
+| Wrapper types and autoboxing | `Integer n = 5;` | integer_constants, parsing |
+| Collections | `ArrayList<Integer>` | none (later chapter) |
+
 ## Pattern fixes made in the KG (v3.9.5-reader4)
 
 Every fix is listed in `kg["reader"]["pattern_fixes_reader4"]` with the old and new regex, and each touched

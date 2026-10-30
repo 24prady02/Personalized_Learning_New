@@ -223,3 +223,14 @@ def test_extract_rules():
     for l in sg["level_edges"]:
         assert l["source"] in ids
     assert sg["counts"]["concepts"] == len(sg["concepts"])
+
+
+# ---------------------------------------------------------------- recall: alternative spellings per concept
+
+RECALL = json.loads((ROOT / "tests/data/recall_variants.json").read_text(encoding="utf-8"))["must_tag"]
+
+
+@pytest.mark.parametrize("cid", sorted(RECALL))
+def test_recall_variants(cid):
+    missed = [s for s in RECALL[cid] if cid not in tag_code(s, READER)]
+    assert not missed, f"{cid} misses {missed}"

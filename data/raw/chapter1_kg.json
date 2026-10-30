@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9.5-reader4 (reader3 + pattern fixes 2026-10-30, listed in reader.pattern_fixes_reader4)",
+ "version": "3.9.5-reader4 (reader3 + pattern fixes and recall additions 2026-10-30, listed in reader.pattern_fixes_reader4)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -7396,7 +7396,8 @@
      "System\\.out\\.print\\s*\\(",
      "StdOut\\.print\\s*\\(",
      "\\bSystem\\.out\\.print\\s*\\(",
-     "\\bStdOut\\.print\\s*\\("
+     "\\bStdOut\\.print\\s*\\(",
+     "System\\.err\\.print\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -7406,7 +7407,8 @@
     "shown_by_declaration": false,
     "signals": [],
     "yields_to": "println",
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -7962,7 +7964,8 @@
     ],
     "code_patterns": [
      "System\\.out\\.println\\s*\\(",
-     "StdOut\\.println\\s*\\("
+     "StdOut\\.println\\s*\\(",
+     "System\\.err\\.println\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -7970,7 +7973,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -9551,6 +9555,20 @@
       "sources": [
        "code"
       ]
+     },
+     {
+      "name": "type_mismatch_literal",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:int|long|short|byte)\\s+\\w+\\s*=\\s*-?\\d+\\.\\d*\\s*;|\\bint\\s+\\w+\\s*=\\s*\\\"|\\bboolean\\s+\\w+\\s*=\\s*-?\\d|\\bString\\s+\\w+\\s*=\\s*-?\\d+(?:\\.\\d+)?\\s*;|\\bchar\\s+\\w+\\s*=\\s*\\\"",
+      "note": "a literal of the wrong type assigned at declaration"
+     },
+     {
+      "name": "assignment_in_condition",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:if|while)\\s*\\(\\s*\\w+\\s*=(?!=)\\s*(?!true\\b|false\\b)[^=)][^)]*\\)",
+      "note": "= instead of == in a condition does not compile for non-boolean operands"
      }
     ],
     "outcome": "compile_error",
@@ -10144,7 +10162,9 @@
      "/\\s*0(?![.\\d])",
      "%\\s*0(?![.\\d])",
      "\\[\\s*\\w+\\.length\\s*\\]",
-     "<=\\s*\\w+\\.length\\b"
+     "<=\\s*\\w+\\.length\\b",
+     "\\[\\s*-\\s*\\d+\\s*\\]",
+     "\\bnew\\s+\\w+\\s*\\[\\s*-\\s*\\d+\\s*\\]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -10154,7 +10174,8 @@
     "shown_by_declaration": false,
     "signals": [],
     "outcome": "run_error",
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -11647,7 +11668,8 @@
      "args"
     ],
     "code_patterns": [
-     "\\bargs\\s*\\["
+     "\\bargs\\s*\\[",
+     "\\bargs\\.length\\b"
     ],
     "code_text": "masked",
     "command_patterns": [
@@ -14890,9 +14912,17 @@
       "scope": "program",
       "decisive": true,
       "regex": "(?<!final )\\b(?:int|double|char|boolean|long|String|float|short|byte)(?:\\[\\])*\\s+(?:[A-Z]\\w*|[a-z][a-z0-9]*_\\w+)\\s*[=;,]"
+     },
+     {
+      "name": "bad_class_name",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bclass\\s+[a-z]\\w*",
+      "note": "class names start with an upper-case letter"
      }
     ],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -17462,7 +17492,9 @@
      "\\w\\s*[+\\-]\\s*\\w+\\s*[*/%]\\s*\\w",
      "\\w\\s*[*/%]\\s*\\w+\\s*[+\\-]\\s*\\w",
      "[*/%]\\s*\\w+\\s*(?:==|!=|[<>]=?)\\s*\\w+\\s*(?:&&|\\|\\|)",
-     "(?:==|!=|[<>]=?)\\s*\\w+\\s*(?:&&|\\|\\|)\\s*\\w+\\s*(?:==|!=|[<>]=?)"
+     "(?:==|!=|[<>]=?)\\s*\\w+\\s*(?:&&|\\|\\|)\\s*\\w+\\s*(?:==|!=|[<>]=?)",
+     "\\(\\s*\\w+\\s*[+\\-]\\s*\\w+\\s*\\)\\s*[*/%]|[*/%]\\s*\\(\\s*\\w+\\s*[+\\-]\\s*\\w+\\s*\\)",
+     "\\w\\s*[*/%]\\s*\\w+\\s*[*/%]\\s*\\w"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -17471,7 +17503,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -20188,7 +20221,8 @@
      "glue"
     ],
     "code_patterns": [
-     "\\\"(?:\\\\.|[^\\\"\\\\])*\\\"\\s*\\+|\\+\\s*\\\"(?:\\\\.|[^\\\"\\\\])*\\\""
+     "\\\"(?:\\\\.|[^\\\"\\\\])*\\\"\\s*\\+|\\+\\s*\\\"(?:\\\\.|[^\\\"\\\\])*\\\"",
+     "\\+=\\s*\\\"(?:\\\\.|[^\\\"\\\\])*\\\""
     ],
     "code_text": "raw",
     "command_patterns": [],
@@ -20196,7 +20230,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -20511,7 +20546,7 @@
      "\\t"
     ],
     "code_patterns": [
-     "\\\\[ntb\\\"'\\\\]"
+     "\\\\[ntbrf\\\"'\\\\]|\\\\u[0-9A-Fa-f]{4}"
     ],
     "code_text": "raw",
     "command_patterns": [],
@@ -20519,7 +20554,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -20880,8 +20916,26 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "signals": [
+     {
+      "name": "char_to_int_cast",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\(\\s*int\\s*\\)\\s*\\(?\\s*'(?:\\\\.|[^'\\\\])'|\\bchar\\s+(\\w+)[\\s\\S]{0,800}?\\(\\s*int\\s*\\)\\s*\\(?\\s*\\b\\1\\b",
+      "note": "(int) on a char",
+      "text": "raw"
+     },
+     {
+      "name": "char_increment",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|\\+=|-=)",
+      "note": "++ / += on a char variable",
+      "text": "raw"
+     }
+    ],
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -21895,7 +21949,7 @@
      "subtracts"
     ],
     "code_patterns": [
-     "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]"
+     "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -22874,7 +22928,8 @@
      "wraps around"
     ],
     "code_patterns": [
-     "Integer\\.(?:MAX|MIN)_VALUE\\s*[+\\-*]|[+\\-*]\\s*Integer\\.(?:MAX|MIN)_VALUE|Math\\.abs\\s*\\(\\s*Integer\\.MIN_VALUE|-\\s*Integer\\.MIN_VALUE"
+     "Integer\\.(?:MAX|MIN)_VALUE\\s*[+\\-*]|[+\\-*]\\s*Integer\\.(?:MAX|MIN)_VALUE|Math\\.abs\\s*\\(\\s*Integer\\.MIN_VALUE|-\\s*Integer\\.MIN_VALUE",
+     "\\b2147483647\\s*\\+|\\+\\s*2147483647\\b|\\b2147483647\\s*\\*|\\*\\s*2147483647\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -24035,7 +24090,7 @@
     "aliases": [],
     "code_patterns": [
      "\\b214748364[89]\\b",
-     "\\b9223372036854775808\\b"
+     "\\b9223372036854775808(?:L\\b|\\b)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -24044,7 +24099,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -24352,7 +24408,8 @@
      "min_value"
     ],
     "code_patterns": [
-     "Integer\\.(?:MAX|MIN)_VALUE"
+     "Integer\\.(?:MAX|MIN)_VALUE",
+     "Long\\.(?:MAX|MIN)_VALUE"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -24360,7 +24417,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -25242,7 +25300,8 @@
      "\\d*\\.\\d+\\s*[+\\-*/]\\s*\\d*\\.\\d+",
      "(?:==|!=)\\s*-?\\d*\\.\\d+",
      "-?\\d*\\.\\d+\\s*(?:==|!=)",
-     "\\+=\\s*0?\\.\\d+"
+     "\\+=\\s*0?\\.\\d+",
+     "Math\\.abs\\s*\\([^;]*\\)\\s*<=?\\s*(?:\\d*\\.\\d+|\\d+[eE]-\\d+|\\w*(?:eps|EPS|epsilon|EPSILON)\\w*)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -25251,7 +25310,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -28445,7 +28505,8 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "!\\s*\\([^()]*(?:&&|\\|\\|)"
+     "!\\s*\\([^()]*(?:&&|\\|\\|)",
+     "!\\s*\\w+\\s*(?:&&|\\|\\|)\\s*!\\s*\\w+"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -28454,7 +28515,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -29610,7 +29672,7 @@
      "calls a method"
     ],
     "code_patterns": [
-     "\\b(?!out\\b)[a-z]\\w*\\.[a-z]\\w*\\s*\\(",
+     "\\b(?!out\\b)(?!System\\b)(?!StdOut\\b)[A-Za-z_]\\w*\\.[a-z]\\w*\\s*\\(",
      "(?:^|[=(,+\\-*/\\s])(?!if\\b|for\\b|while\\b|switch\\b|return\\b|new\\b)[a-z]\\w*\\s*\\([^)]*\\)\\s*[;)+\\-*/,]"
     ],
     "code_text": "masked",
@@ -29620,7 +29682,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -30495,7 +30558,8 @@
      "random"
     ],
     "code_patterns": [
-     "Math\\.random\\s*\\("
+     "Math\\.random\\s*\\(",
+     "StdRandom\\.(?:uniform|random|bernoulli|gaussian|discrete|shuffle)\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -30503,7 +30567,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -31121,7 +31186,7 @@
      "math.cos"
     ],
     "code_patterns": [
-     "Math\\.(?:sin|cos|tan|atan2?|asin|acos)\\s*\\("
+     "Math\\.(?:sin|cos|tan|atan2?|asin|acos|toRadians|toDegrees)\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -31129,7 +31194,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -31618,7 +31684,9 @@
     "code_patterns": [
      "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)\\s*[\\w(]",
      "\\b(?:double|float|long)\\s+\\w+\\s*=\\s*-?\\d+\\s*;",
-     "(?<![\\d.])\\d+\\s*[*/+\\-]\\s*\\d+\\.\\d"
+     "(?<![\\d.])\\d+\\s*[*/+\\-]\\s*\\d+\\.\\d",
+     "\\b(?:Integer|Double|Long|Boolean)\\.parse\\w+\\s*\\(",
+     "\\*\\s*1\\.0\\b|\\b1\\.0\\s*\\*"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -31631,7 +31699,7 @@
       "name": "int_into_double",
       "scope": "program",
       "decisive": false,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
       "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
      }
     ],
@@ -32932,7 +33000,7 @@
       "name": "int_into_double",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
       "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
      }
     ],
@@ -33246,7 +33314,9 @@
     "aliases": [],
     "code_patterns": [
      "\\\"\\s*\\+\\s*(?:[a-z_]\\w*|\\d|\\()",
-     "(?:[a-z_]\\w*|\\d|\\))\\s*\\+\\s*\\\""
+     "(?:[a-z_]\\w*|\\d|\\))\\s*\\+\\s*\\\"",
+     "String\\.valueOf\\s*\\(",
+     "\\b(?:Integer|Double|Long|Boolean|Character)\\.toString\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -33255,7 +33325,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -42398,8 +42469,16 @@
       "scope": "program",
       "decisive": true,
       "regex": "(?:\\bif\\s*\\([^)]*\\)|\\belse)\\s*\\{(?:[^{}]|\\{[^{}]*\\})*?(?P<at>\\bif\\s*\\()"
+     },
+     {
+      "name": "nested_if_braceless",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bif\\s*\\((?:[^()]|\\([^()]*\\))*\\)\\s*(?:\\{\\s*)?if\\s*\\(",
+      "note": "if directly inside an if, with or without a brace"
      }
-    ]
+    ],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -43000,9 +43079,17 @@
       "name": "nested_for",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:for|while)\\s*\\([^)]*\\)\\s*\\{(?:[^{}]|\\{[^{}]*\\})*?(?P<at>\\bfor\\s*\\()"
+      "regex": "\\b(?:for|while)\\s*\\((?:[^()]|\\([^()]*\\))*\\)\\s*\\{(?:[^{}]|\\{[^{}]*\\})*?(?P<at>\\b(?:for|while)\\s*\\()"
+     },
+     {
+      "name": "nested_loop_braceless",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:for|while)\\s*\\((?:[^()]|\\([^()]*\\))*\\)\\s*(?:for|while)\\s*\\(",
+      "note": "loop whose single body statement is another loop"
      }
-    ]
+    ],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -47836,7 +47923,8 @@
     ],
     "code_patterns": [
      "\\bdo\\s*\\{",
-     "\\bdo\\s*$"
+     "\\bdo\\s*$",
+     "\\bdo\\b(?!\\s*\\.)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -47852,7 +47940,8 @@
       "regex": "(?P<at>\\bdo)\\s*\\{"
      }
     ],
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -53265,7 +53354,7 @@
       "name": "array_printed_regex",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|double|boolean|char|long|String)\\s*\\[\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,800}?print(?:ln)?\\s*\\(\\s*(?P=arr)\\s*\\)"
+      "regex": "\\b(?:int|double|boolean|char|long|String)\\s*\\[\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,800}?print(?:ln)?\\s*\\((?:[^;()]*\\+\\s*)?(?P=arr)\\s*\\)"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -54244,7 +54333,9 @@
     "code_patterns": [
      "\\bfor\\s*\\([^;]*;[^;]*\\.length\\b",
      "\\bfor\\s*\\(\\s*(?:int\\s+)?(\\w+)\\s*=[^;]*;[^;]*;[^)]*\\)\\s*\\{?[^{}]*?\\w\\s*\\[\\s*\\1\\s*\\]",
-     "^\\s*for\\s*\\([^;]*:[^;]*\\)"
+     "^\\s*for\\s*\\([^;]*:[^;]*\\)",
+     "\\bwhile\\s*\\([^)]*\\.length\\b",
+     "\\bwhile\\s*\\(\\s*(\\w+)\\s*[<>]=?[^)]*\\)\\s*\\{?[^{}]*?\\w\\s*\\[\\s*\\1\\s*\\]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -54253,7 +54344,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -55026,7 +55118,8 @@
     "code_patterns": [
      "\\[\\s*\\w+\\.length\\s*-\\s*1\\s*-\\s*\\w+\\s*\\]",
      "\\[\\s*\\w+\\s*-\\s*1\\s*-\\s*\\w+\\s*\\]",
-     "\\w+\\s*<\\s*\\w+(?:\\.length)?\\s*/\\s*2\\b"
+     "\\w+\\s*<\\s*\\w+(?:\\.length)?\\s*/\\s*2\\b",
+     "\\[\\s*\\w+\\s*-\\s*\\w+\\s*-\\s*1\\s*\\]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -55035,7 +55128,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -56141,7 +56235,8 @@
     "aliases": [],
     "code_patterns": [
      "\\bperm\\w*\\s*\\[",
-     "\\[\\]\\s*perm\\w*\\b"
+     "\\[\\]\\s*perm\\w*\\b",
+     "\\bperm(?:utation)?\\w*\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -56151,7 +56246,8 @@
     "shown_by_declaration": false,
     "signals": [],
     "patterns_added_in": "3.9.5-reader2",
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -56868,7 +56964,8 @@
     "aliases": [],
     "code_patterns": [
      "\\bboolean\\s*\\[\\]\\s*\\w+",
-     "\\bnew\\s+boolean\\s*\\["
+     "\\bnew\\s+boolean\\s*\\[",
+     "\\b\\w+\\s*\\[[^\\]]+\\]\\s*=\\s*(?:true|false)\\s*;"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -56877,7 +56974,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -58245,7 +58343,8 @@
     "aliases": [],
     "code_patterns": [
      "\\w\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*\\+=\\s*\\w+\\s*\\[[^\\]]+\\]\\s*\\[[^\\]]+\\]\\s*\\*",
-     "\\w\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*[+\\-]\\s*\\w+\\s*\\["
+     "\\w\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*[+\\-]\\s*\\w+\\s*\\[",
+     "\\w\\s*\\[\\s*(\\w+)\\s*\\]\\s*\\[\\s*(\\w+)\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\2\\s*\\]\\s*\\[\\s*\\1\\s*\\]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -58254,7 +58353,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -59895,7 +59995,8 @@
     ],
     "code_patterns": [
      "\\.printf\\s*\\(",
-     "String\\.format\\s*\\("
+     "String\\.format\\s*\\(",
+     "\\.format\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -59911,7 +60012,8 @@
       "decisive": true,
       "regex": "printf\\s*\\(\\s*\\\"[^\\\"]*(?:%-?\\d+(?:\\.\\d+)?[dfse]|%\\.\\d+f)"
      }
-    ]
+    ],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -60520,7 +60622,8 @@
     "code_patterns": [
      "\\bStdIn\\.",
      "\\bnew\\s+Scanner\\s*\\(",
-     "\\bSystem\\.in\\b"
+     "\\bSystem\\.in\\b",
+     "\\.(?:next(?:Int|Double|Long|Boolean|Line)?|hasNext\\w*)\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [
@@ -60531,7 +60634,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_reviewed_in": "3.9.5-reader3"
+    "patterns_reviewed_in": "3.9.5-reader3",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -62170,7 +62274,9 @@
     "aliases": [],
     "code_patterns": [
      "(?:!=|==)\\s*-?9{3,}\\b",
-     "while\\s*\\(\\s*\\w+\\s*!=\\s*-1\\s*\\)"
+     "while\\s*\\(\\s*\\w+\\s*!=\\s*-1\\s*\\)",
+     "while\\s*\\(\\s*\\w+\\s*!=\\s*-?\\d+\\s*\\)[\\s\\S]{0,400}?(?:StdIn\\.read\\w*|\\.next\\w*)\\s*\\(",
+     "while\\s*\\(\\s*!\\s*\\w+\\.equals\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -62179,7 +62285,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -62497,7 +62604,8 @@
     "code_patterns": [
      "(?i)\\bif\\s*\\(\\s*\\w+(?:\\[[^\\]]+\\])?\\s*[<>]\\s*\\w*(?:max|min|best|largest|smallest)\\w*\\s*\\)",
      "Math\\.(?:max|min)\\s*\\(\\s*(\\w+)\\s*,",
-     "(?i)\\b\\w*(?:max|min)\\w*\\s*=\\s*\\w+\\s*\\[[^\\]]+\\]\\s*;"
+     "(?i)\\b\\w*(?:max|min)\\w*\\s*=\\s*\\w+\\s*\\[[^\\]]+\\]\\s*;",
+     "(?i)\\bif\\s*\\(\\s*\\w+\\s*\\[[^\\]]+\\]\\s*[<>]\\s*\\w+\\s*\\[\\s*\\w*(?:max|min|best)\\w*\\s*\\]"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -62506,7 +62614,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -63108,7 +63217,8 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "if\\s*\\(\\s*!?\\s*(?:StdIn\\.(?:isEmpty|hasNext\\w*)|\\w+\\.hasNext\\w*)\\s*\\("
+     "if\\s*\\(\\s*!?\\s*(?:StdIn\\.(?:isEmpty|hasNext\\w*)|\\w+\\.hasNext\\w*)\\s*\\(",
+     "\\bif\\s*\\(\\s*args\\.length\\s*(?:[<>!=]=?)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -63117,7 +63227,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -63786,7 +63897,9 @@
      "piped",
      "pipes"
     ],
-    "code_patterns": [],
+    "code_patterns": [
+     "\\|\\s*\\S+"
+    ],
     "code_text": "masked",
     "command_patterns": [
      "\\|\\s*java\\b"
@@ -63795,7 +63908,8 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [],
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -65517,7 +65631,8 @@
     "aliases": [],
     "code_patterns": [
      "StdDraw\\.line\\s*\\([^;]*\\[\\s*\\w+\\s*-\\s*1\\s*\\]",
-     "StdDraw\\.(?:line|point)\\s*\\([^;]*Math\\.(?:sin|cos)"
+     "StdDraw\\.(?:line|point)\\s*\\([^;]*Math\\.(?:sin|cos)",
+     "\\w\\s*\\[[^\\]]+\\]\\s*=\\s*[^;]*Math\\.(?:sin|cos|exp|log|sqrt|pow)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -65526,7 +65641,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -70195,7 +70311,10 @@
     "code_patterns": [
      "\\bfreq\\w*\\s*\\[[^\\]]+\\]\\s*\\+\\+",
      "\\bcount\\w*\\s*\\[[^\\]]+\\]\\s*\\+\\+",
-     "\\bRandomSurfer\\b"
+     "\\bRandomSurfer\\b",
+     "\\b\\w+\\s*\\[[^\\]]+\\]\\s*\\+\\+",
+     "\\b\\w+\\s*\\[[^\\]]+\\]\\s*\\+=\\s*1\\b",
+     "\\b(\\w+)\\s*\\[([^\\]]+)\\]\\s*=\\s*\\1\\s*\\[\\2\\]\\s*\\+\\s*1\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -70204,7 +70323,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -72874,7 +72994,8 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "\\b(?:Math|StdIn|StdOut|StdDraw|StdAudio|StdRandom|Integer|Double|String|Arrays)\\.\\w+\\s*\\("
+     "\\b(?:Math|StdIn|StdOut|StdDraw|StdAudio|StdRandom|Integer|Double|String|Arrays)\\.\\w+\\s*\\(",
+     "\\b\\w+\\.(?:length|charAt|substring|equals|equalsIgnoreCase|indexOf|toUpperCase|toLowerCase|compareTo|trim|split|contains|startsWith|endsWith)\\s*\\("
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -72883,7 +73004,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -73202,7 +73324,7 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "<\\s*(?:boolean expression|statement|variable name|type|expression|name)\\s*>"
+     "<\\s*[a-z]+(?:[ \\-][a-z]+)*\\s*>"
     ],
     "code_text": "raw",
     "command_patterns": [],
@@ -73211,7 +73333,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -74180,7 +74303,9 @@
      "Integer\\.toBinaryString\\s*\\(",
      "\\bpower\\w*\\s*(?:\\*=|/=)\\s*2\\b",
      "\\b\\w+\\s*/=\\s*2\\s*;",
-     "\\b(\\w+)\\s*=\\s*\\1\\s*/\\s*2\\s*;"
+     "\\b(\\w+)\\s*=\\s*\\1\\s*/\\s*2\\s*;",
+     "Integer\\.to(?:Binary|Hex|Octal)String\\s*\\(",
+     "Integer\\.parseInt\\s*\\([^,)]*,\\s*\\d+\\s*\\)"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -74189,7 +74314,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -76103,7 +76229,8 @@
     ],
     "code_patterns": [
      "\\w+\\s*<\\s*\\w+\\.length\\s*&&",
-     "&&\\s*\\w+\\s*<\\s*\\w+\\.length"
+     "&&\\s*\\w+\\s*<\\s*\\w+\\.length",
+     "\\b\\w+\\s*(?:<\\s*\\w+(?:\\.length)?|>=\\s*0)\\s*&&\\s*[^;]*\\w\\s*\\["
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -76112,7 +76239,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -78356,9 +78484,17 @@
       "scope": "program",
       "decisive": true,
       "regex": "\\[\\s*\\w+\\.length\\s*\\]"
+     },
+     {
+      "name": "one_based_index_loop",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bfor\\s*\\(\\s*(?:int\\s+)?(\\w+)\\s*=\\s*1\\s*;\\s*\\1\\s*<=\\s*\\w+\\s*;[^)]*\\)\\s*\\{?[^{}]*?\\w\\s*\\[\\s*\\1\\s*\\]",
+      "note": "loop from 1 to n inclusive that indexes an array with the counter"
      }
     ],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.5-reader4"
    }
   },
   {
@@ -289318,7 +289454,55 @@
    "standard_output C: added '\\s>\\s*\\S+'  [output redirection shows standard output, as standard_input already has '\\s<\\s*\\S+']",
    "loop_variable P: added do-while form '\\\\bdo\\\\s*\\\\{[\\\\s\\\\S]{0,800}?\\\\b(\\\\w+)\\\\s*(?:\\\\+\\\\+|--|[+\\\\-]=)[^}]*\\\\}\\\\s*while\\\\s*\\\\(\\\\s*\\\\1\\\\b'  [the variable updated in the body and tested in the trailing while]",
    "widening_conversion, type_conversion: added signal int_into_double  [int value flows into a double target without a cast, e.g. (num1 % num2) + num3 or p[j] = counts[j] / outDegree]",
-   "class_declaration: added signal file_name_mismatch_regex (raw text)  [Name.java mentioned, class is not Name]"
+   "class_declaration: added signal file_name_mismatch_regex (raw text)  [Name.java mentioned, class is not Name]",
+   "print P+: ['System\\\\.err\\\\.print\\\\s*\\\\(']  [System.err.print is the same call on the error stream]",
+   "println P+: ['System\\\\.err\\\\.println\\\\s*\\\\(']  [System.err.println]",
+   "formatted_output P+: ['\\\\.format\\\\s*\\\\(']  [System.out.format is printf]",
+   "do_while_loop P+: ['\\\\bdo\\\\b(?!\\\\s*\\\\.)']  [do without braces (do stmt; while (c);)]",
+   "arithmetic_operators P: '[A-Za-z_0-9)\\\\]][ \\\\t]*(?:[*/%]|\\\\+(?!\\\\+)|-(?!-))[ \\\\t]*[A-Za-z_0-9(]' -> '[A-Za-z_0-9)\\\\]][ \\\\t]*(?:[*/%]|\\\\+(?!\\\\+)|-(?!-))\\\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\\\]]\\\\s*(?:[*/]|\\\\+(?!\\\\+)|-(?!-))[ \\\\t]*[A-Za-z_0-9(]'  [an expression may continue on the next line; a line-initial % (shell prompt) still never matches]",
+   "nested_conditionals S+ nested_if_braceless: '\\\\bif\\\\s*\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\)\\\\s*(?:\\\\{\\\\s*)?if\\\\s*\\\\('  [if directly inside an if, with or without a brace]",
+   "nested_loops S nested_for: '\\\\b(?:for|while)\\\\s*\\\\([^)]*\\\\)\\\\s*\\\\{(?:[^{}]|\\\\{[^{}]*\\\\})*?(?P<at>\\\\bfor\\\\s*\\\\()' -> '\\\\b(?:for|while)\\\\s*\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\)\\\\s*\\\\{(?:[^{}]|\\\\{[^{}]*\\\\})*?(?P<at>\\\\b(?:for|while)\\\\s*\\\\()'  [inner loop may be a while; the outer header may hold nested parentheses]",
+   "nested_loops S+ nested_loop_braceless: '\\\\b(?:for|while)\\\\s*\\\\((?:[^()]|\\\\([^()]*\\\\))*\\\\)\\\\s*(?:for|while)\\\\s*\\\\('  [loop whose single body statement is another loop]",
+   "array_traversal P+: ['\\\\bwhile\\\\s*\\\\([^)]*\\\\.length\\\\b', '\\\\bwhile\\\\s*\\\\(\\\\s*(\\\\w+)\\\\s*[<>]=?[^)]*\\\\)\\\\s*\\\\{?[^{}]*?\\\\w\\\\s*\\\\[\\\\s*\\\\1\\\\s*\\\\]']  [while-loop traversal]",
+   "off_by_one_error S+ one_based_index_loop: '\\\\bfor\\\\s*\\\\(\\\\s*(?:int\\\\s+)?(\\\\w+)\\\\s*=\\\\s*1\\\\s*;\\\\s*\\\\1\\\\s*<=\\\\s*\\\\w+\\\\s*;[^)]*\\\\)\\\\s*\\\\{?[^{}]*?\\\\w\\\\s*\\\\[\\\\s*\\\\1\\\\s*\\\\]'  [loop from 1 to n inclusive that indexes an array with the counter]",
+   "string_concatenation P+: ['\\\\+=\\\\s*\\\\\"(?:\\\\\\\\.|[^\\\\\"\\\\\\\\])*\\\\\"']  [s += \"text\"]",
+   "string_conversion P+: ['String\\\\.valueOf\\\\s*\\\\(', '\\\\b(?:Integer|Double|Long|Boolean|Character)\\\\.toString\\\\s*\\\\(']  [explicit conversions to String]",
+   "escape_sequences P: '\\\\\\\\[ntb\\\\\"\\'\\\\\\\\]' -> '\\\\\\\\[ntbrf\\\\\"\\'\\\\\\\\]|\\\\\\\\u[0-9A-Fa-f]{4}'  [\\r \\f and unicode escapes]",
+   "char_arithmetic S+ char_to_int_cast: \"\\\\(\\\\s*int\\\\s*\\\\)\\\\s*\\\\(?\\\\s*'(?:\\\\\\\\.|[^'\\\\\\\\])'|\\\\bchar\\\\s+(\\\\w+)[\\\\s\\\\S]{0,800}?\\\\(\\\\s*int\\\\s*\\\\)\\\\s*\\\\(?\\\\s*\\\\b\\\\1\\\\b\"  [(int) on a char]",
+   "char_arithmetic S+ char_increment: '\\\\bchar\\\\s+(\\\\w+)\\\\s*(?:=[^;]*)?;[\\\\s\\\\S]{0,800}?\\\\b\\\\1\\\\s*(?:\\\\+\\\\+|--|\\\\+=|-=)'  [++ / += on a char variable]",
+   "naming_convention S+ bad_class_name: '\\\\bclass\\\\s+[a-z]\\\\w*'  [class names start with an upper-case letter]",
+   "overflow P+: ['\\\\b2147483647\\\\s*\\\\+|\\\\+\\\\s*2147483647\\\\b|\\\\b2147483647\\\\s*\\\\*|\\\\*\\\\s*2147483647\\\\b']  [arithmetic on the literal max int]",
+   "int_literal_limit P: '\\\\b9223372036854775808\\\\b' -> '\\\\b9223372036854775808(?:L\\\\b|\\\\b)'  [with or without the L suffix]",
+   "integer_constants P+: ['Long\\\\.(?:MAX|MIN)_VALUE']  [Long constants]",
+   "floating_point_precision P+: ['Math\\\\.abs\\\\s*\\\\([^;]*\\\\)\\\\s*<=?\\\\s*(?:\\\\d*\\\\.\\\\d+|\\\\d+[eE]-\\\\d+|\\\\w*(?:eps|EPS|epsilon|EPSILON)\\\\w*)']  [tolerance comparison instead of ==]",
+   "widening_conversion S int_into_double: '\\\\b(?:int|long)\\\\s+(?:[A-Za-z_]\\\\w*\\\\s*(?:=[^,;]*)?,\\\\s*){0,8}(?P<a>[A-Za-z_]\\\\w*)\\\\s*(?:=[^,;]*)?[,;][\\\\s\\\\S]{0,800}?\\\\b(?:double|float)(?:\\\\s*\\\\[\\\\s*\\\\])?\\\\s+(?P<d>[A-Za-z_]\\\\w*)(?:[\\\\s\\\\S]{0,800}?\\\\b(?P=d))?(?:\\\\s*\\\\[[^\\\\]]+\\\\])?\\\\s*=(?![ \\\\t]*\\\\(\\\\s*(?:double|float)\\\\s*\\\\))[^;]*\\\\b(?P=a)\\\\b[^;]*;' -> '\\\\b(?:int|long)\\\\s+(?:[A-Za-z_]\\\\w*\\\\s*(?:=[^,;]*)?,\\\\s*){0,8}(?P<a>[A-Za-z_]\\\\w*)\\\\s*(?:=[^,;]*)?[,;][\\\\s\\\\S]{0,800}?\\\\b(?:double|float|long)(?:\\\\s*\\\\[\\\\s*\\\\])?\\\\s+(?P<d>[A-Za-z_]\\\\w*)(?:[\\\\s\\\\S]{0,800}?\\\\b(?P=d))?(?:\\\\s*\\\\[[^\\\\]]+\\\\])?\\\\s*=(?![ \\\\t]*\\\\(\\\\s*(?:double|float)\\\\s*\\\\))[^;]*\\\\b(?P=a)\\\\b[^;]*;'  [int into long is a widening too]",
+   "type_conversion S int_into_double: '\\\\b(?:int|long)\\\\s+(?:[A-Za-z_]\\\\w*\\\\s*(?:=[^,;]*)?,\\\\s*){0,8}(?P<a>[A-Za-z_]\\\\w*)\\\\s*(?:=[^,;]*)?[,;][\\\\s\\\\S]{0,800}?\\\\b(?:double|float)(?:\\\\s*\\\\[\\\\s*\\\\])?\\\\s+(?P<d>[A-Za-z_]\\\\w*)(?:[\\\\s\\\\S]{0,800}?\\\\b(?P=d))?(?:\\\\s*\\\\[[^\\\\]]+\\\\])?\\\\s*=(?![ \\\\t]*\\\\(\\\\s*(?:double|float)\\\\s*\\\\))[^;]*\\\\b(?P=a)\\\\b[^;]*;' -> '\\\\b(?:int|long)\\\\s+(?:[A-Za-z_]\\\\w*\\\\s*(?:=[^,;]*)?,\\\\s*){0,8}(?P<a>[A-Za-z_]\\\\w*)\\\\s*(?:=[^,;]*)?[,;][\\\\s\\\\S]{0,800}?\\\\b(?:double|float|long)(?:\\\\s*\\\\[\\\\s*\\\\])?\\\\s+(?P<d>[A-Za-z_]\\\\w*)(?:[\\\\s\\\\S]{0,800}?\\\\b(?P=d))?(?:\\\\s*\\\\[[^\\\\]]+\\\\])?\\\\s*=(?![ \\\\t]*\\\\(\\\\s*(?:double|float)\\\\s*\\\\))[^;]*\\\\b(?P=a)\\\\b[^;]*;'  [int into long is a widening too]",
+   "type_conversion P+: ['\\\\b(?:Integer|Double|Long|Boolean)\\\\.parse\\\\w+\\\\s*\\\\(', '\\\\*\\\\s*1\\\\.0\\\\b|\\\\b1\\\\.0\\\\s*\\\\*']  [parsing is String->number conversion; * 1.0 forces double]",
+   "math_random P+: ['StdRandom\\\\.(?:uniform|random|bernoulli|gaussian|discrete|shuffle)\\\\s*\\\\(']  [StdRandom library]",
+   "trig_functions P: 'Math\\\\.(?:sin|cos|tan|atan2?|asin|acos)\\\\s*\\\\(' -> 'Math\\\\.(?:sin|cos|tan|atan2?|asin|acos|toRadians|toDegrees)\\\\s*\\\\('  [angle conversions]",
+   "method_call P: '\\\\b(?!out\\\\b)[a-z]\\\\w*\\\\.[a-z]\\\\w*\\\\s*\\\\(' -> '\\\\b(?!out\\\\b)(?!System\\\\b)(?!StdOut\\\\b)[A-Za-z_]\\\\w*\\\\.[a-z]\\\\w*\\\\s*\\\\('  [a library call like Math.max(…) or StdIn.readInt() is a method call too (printing calls stay with print/println)]",
+   "api P+: ['\\\\b\\\\w+\\\\.(?:length|charAt|substring|equals|equalsIgnoreCase|indexOf|toUpperCase|toLowerCase|compareTo|trim|split|contains|startsWith|endsWith)\\\\s*\\\\(']  [String API]",
+   "standard_input P+: ['\\\\.(?:next(?:Int|Double|Long|Boolean|Line)?|hasNext\\\\w*)\\\\s*\\\\(']  [Scanner reads]",
+   "piping P+: ['\\\\|\\\\s*\\\\S+']  [pipe into any program, not only java]",
+   "command_line_args P+: ['\\\\bargs\\\\.length\\\\b']  [args.length]",
+   "compile_time_error S+ type_mismatch_literal: '\\\\b(?:int|long|short|byte)\\\\s+\\\\w+\\\\s*=\\\\s*-?\\\\d+\\\\.\\\\d*\\\\s*;|\\\\bint\\\\s+\\\\w+\\\\s*=\\\\s*\\\\\"|\\\\bboolean\\\\s+\\\\w+\\\\s*=\\\\s*-?\\\\d|\\\\bString\\\\s+\\\\w+\\\\s*=\\\\s*-?\\\\d+(?:\\\\.\\\\d+)?\\\\s*;|\\\\bchar\\\\s+\\\\w+\\\\s*=\\\\s*\\\\\"'  [a literal of the wrong type assigned at declaration]",
+   "compile_time_error S+ assignment_in_condition: '\\\\b(?:if|while)\\\\s*\\\\(\\\\s*\\\\w+\\\\s*=(?!=)\\\\s*(?!true\\\\b|false\\\\b)[^=)][^)]*\\\\)'  [= instead of == in a condition does not compile for non-boolean operands]",
+   "run_time_error P+: ['\\\\[\\\\s*-\\\\s*\\\\d+\\\\s*\\\\]', '\\\\bnew\\\\s+\\\\w+\\\\s*\\\\[\\\\s*-\\\\s*\\\\d+\\\\s*\\\\]']  [negative index or negative array size]",
+   "operator_precedence P+: ['\\\\(\\\\s*\\\\w+\\\\s*[+\\\\-]\\\\s*\\\\w+\\\\s*\\\\)\\\\s*[*/%]|[*/%]\\\\s*\\\\(\\\\s*\\\\w+\\\\s*[+\\\\-]\\\\s*\\\\w+\\\\s*\\\\)', '\\\\w\\\\s*[*/%]\\\\s*\\\\w+\\\\s*[*/%]\\\\s*\\\\w']  [parentheses overriding precedence; left-to-right chains of * / %]",
+   "running_extreme P+: ['(?i)\\\\bif\\\\s*\\\\(\\\\s*\\\\w+\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*[<>]\\\\s*\\\\w+\\\\s*\\\\[\\\\s*\\\\w*(?:max|min|best)\\\\w*\\\\s*\\\\]']  [comparison against the element at the best index]",
+   "sentinel_loop P+: ['while\\\\s*\\\\(\\\\s*\\\\w+\\\\s*!=\\\\s*-?\\\\d+\\\\s*\\\\)[\\\\s\\\\S]{0,400}?(?:StdIn\\\\.read\\\\w*|\\\\.next\\\\w*)\\\\s*\\\\(', 'while\\\\s*\\\\(\\\\s*!\\\\s*\\\\w+\\\\.equals\\\\s*\\\\(']  [sentinel value read in the loop; string sentinel]",
+   "matrix_operations P+: ['\\\\w\\\\s*\\\\[\\\\s*(\\\\w+)\\\\s*\\\\]\\\\s*\\\\[\\\\s*(\\\\w+)\\\\s*\\\\]\\\\s*=\\\\s*\\\\w+\\\\s*\\\\[\\\\s*\\\\2\\\\s*\\\\]\\\\s*\\\\[\\\\s*\\\\1\\\\s*\\\\]']  [transpose]",
+   "boolean_flag_array P+: ['\\\\b\\\\w+\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*=\\\\s*(?:true|false)\\\\s*;']  [setting a flag element]",
+   "array_reversal P+: ['\\\\[\\\\s*\\\\w+\\\\s*-\\\\s*\\\\w+\\\\s*-\\\\s*1\\\\s*\\\\]']  [n - i - 1 index]",
+   "printing_array_reference S array_printed_regex: '\\\\b(?:int|double|boolean|char|long|String)\\\\s*\\\\[\\\\]\\\\s*(?P<arr>\\\\w+)[\\\\s\\\\S]{0,800}?print(?:ln)?\\\\s*\\\\(\\\\s*(?P=arr)\\\\s*\\\\)' -> '\\\\b(?:int|double|boolean|char|long|String)\\\\s*\\\\[\\\\]\\\\s*(?P<arr>\\\\w+)[\\\\s\\\\S]{0,800}?print(?:ln)?\\\\s*\\\\((?:[^;()]*\\\\+\\\\s*)?(?P=arr)\\\\s*\\\\)'  [also \"text\" + array]",
+   "input_validation P+: ['\\\\bif\\\\s*\\\\(\\\\s*args\\\\.length\\\\s*(?:[<>!=]=?)']  [checking the number of arguments]",
+   "number_conversion P+: ['Integer\\\\.to(?:Binary|Hex|Octal)String\\\\s*\\\\(', 'Integer\\\\.parseInt\\\\s*\\\\([^,)]*,\\\\s*\\\\d+\\\\s*\\\\)']  [radix conversions]",
+   "loop_guard P+: ['\\\\b\\\\w+\\\\s*(?:<\\\\s*\\\\w+(?:\\\\.length)?|>=\\\\s*0)\\\\s*&&\\\\s*[^;]*\\\\w\\\\s*\\\\[']  [bounds check guarding an index]",
+   "frequency_counting P+: ['\\\\b\\\\w+\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*\\\\+\\\\+', '\\\\b\\\\w+\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*\\\\+=\\\\s*1\\\\b', '\\\\b(\\\\w+)\\\\s*\\\\[([^\\\\]]+)\\\\]\\\\s*=\\\\s*\\\\1\\\\s*\\\\[\\\\2\\\\]\\\\s*\\\\+\\\\s*1\\\\b']  [any array element incremented by one is a histogram count]",
+   "syntax_template P: '<\\\\s*(?:boolean expression|statement|variable name|type|expression|name)\\\\s*>' -> '<\\\\s*[a-z]+(?:[ \\\\-][a-z]+)*\\\\s*>'  [any lower-case placeholder in angle brackets]",
+   "de_morgan P+: ['!\\\\s*\\\\w+\\\\s*(?:&&|\\\\|\\\\|)\\\\s*!\\\\s*\\\\w+']  [the expanded form !a && !b]",
+   "sampling_without_replacement P+: ['\\\\bperm(?:utation)?\\\\w*\\\\b']  [a permutation array named perm]",
+   "function_plotting P+: ['\\\\w\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*=\\\\s*[^;]*Math\\\\.(?:sin|cos|exp|log|sqrt|pow)']  [filling an array with function values]"
   ]
  }
 }
