@@ -16,7 +16,7 @@ S052  tagged  12  nodes  12 (5 generic)  edges   7  mis  38  levels  60  links  
 S057  tagged  31  nodes  31 (12 generic)  edges  31  mis 202  levels 155  links 229  ok    missed: -
 S068  tagged   6  nodes   6 (3 generic)  edges   1  mis  16  levels  30  links  26  xfail missed: power_method, two_models
 S073  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
-S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  MISS  missed: compile
+S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  xfail missed: compile
 S134  tagged  10  nodes  10 (9 generic)  edges   8  mis  61  levels  50  links  69  ok    missed: -
 S137  tagged   7  nodes   7 (5 generic)  edges   5  mis  29  levels  35  links  31  ok    missed: -
 fully covered: 10 / 20   (mean concepts per subgraph: 13.1; S000 is the reference case, not counted)

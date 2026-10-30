@@ -44,8 +44,11 @@ PYTHONPATH=src python -m lp_graph.subgraph.report --kg data/raw/chapter1_kg.json
 ```
 
 The report prints one line per scenario (concepts tagged, subgraph counts, gold concepts missed) and ends
-with `fully covered: N / 20`. Misses marked `xfail` are concepts that only the question or the student's
-answer brings in (S009, S010, S012, S015, S068 have prose or a one-line declaration as "code").
+with `fully covered: N / 20`. Misses marked `xfail` are gold concepts that the code does not show and only the
+question or the student's answer brings in: prose or one-line "code" (S009, S010, S012, S015, S068), the while
+loop a student compares a do-while with (S005), division in a program that only uses `%` (S016), the missing
+`break` in a fall-through switch (S023, S073), and compiling a program whose code only says how to run it (S080).
+Current result: 10 / 20 fully covered from code alone, 20 / 20 with no unexpected miss.
 
 ## How the matcher works
 
@@ -55,9 +58,13 @@ answer brings in (S009, S010, S012, S015, S068 have prose or a one-line declarat
    statement scope, masked or raw text; compiler-message signals without a regex are skipped), `operator_symbols`
    (substrings), `java_types` (whole words), `command_patterns` (regex on `java …` / `javac …` shell segments).
    Concepts with `code_visible: false` never tag. `aliases` are never used here.
-4. `extract_subgraph`: tagged concepts + one incoming `prerequisite` hop from each non-generic tagged concept;
-   `prerequisite` / `parallel` edges with both ends inside; `misconception` / `error` edges from the concepts;
-   `has_level` edges with their ways; links from each way's `linked_misconception`.
+4. `extract_subgraph`: the concept nodes are **exactly the concepts whose code patterns fired**, nothing else.
+   Then `prerequisite` / `parallel` edges with both ends inside; `misconception` / `error` edges from the
+   concepts; `has_level` edges with their ways; links from each way's `linked_misconception`.
+   `--hops 1` optionally adds the source of each incoming prerequisite edge of a non-generic tagged concept
+   (one hop, never from generic concepts); it is off by default because it adds nodes the code did not show.
+   Concepts the KG marks `generic` (statement, variable, int, assignment, ...) are kept but flagged, and the
+   report shows their count per scenario.
 
 ## Pattern fixes made in the KG (v3.9.5-reader4)
 

@@ -21384,108 +21384,284 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "remainder_operator@L0",
-   "misconception": "RemainderIsQuotient",
+   "level_node": "if_statement@L0",
+   "misconception": "IfIsLoop",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: 17 % 5 is 3 (the quotient). Right rule: % returns the remainder, so 17 % 5 is 2."
+   "exact_rule": "wrong rule: an if body repeats while its condition holds. Right rule: An if body runs at most once; only a loop repeats its body."
   },
   {
-   "level_node": "remainder_operator@L0",
-   "misconception": "NegativeRemainderSign",
+   "level_node": "if_statement@L0",
+   "misconception": "IfRequiresElse",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "exact_rule": "wrong rule: Every if statement requires an else. Right rule: An if statement may stand alone; the else part is optional."
   },
   {
-   "level_node": "remainder_operator@L0",
-   "misconception": "RemainderIsQuotient",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (compute the truncated quotient, then the remainder). Applied unevenly, a student gives the remainder for positive operands but the mathematical mod for negatives, or swaps quotient and remainder (17 % 5 as 3). (here mixing in: \"17 % 5 is 3 (the quotient)\")"
-  },
-  {
-   "level_node": "remainder_operator@L4",
-   "misconception": "RemainderIsQuotient",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Negating a flips the remainder's sign, so n % 2 == 1 fails for negative odd n while n % 2 != 0 still works. Changing the divisor changes the cycle length. Swapping % with / swaps the remainder for the quotient."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ChainedComparison",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "EqualityOperatorComparesObjectsValues",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: == compares the contents of two Strings. Right rule: s == t is true only when s and t refer to the same object; \"abc\" == \"ab\" + x is false even when x is \"c\"; s.equals(t) compares the text."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "StringRelationalComparison",
+   "level_node": "if_statement@L0",
+   "misconception": "FalseConditionEndsProgram",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile (use s.compareTo(t))."
+   "exact_rule": "wrong rule: A false condition with no else ends the program. Right rule: When an if condition is false and there is no else, execution continues with the statement after the if."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "LessGreaterSwapped",
+   "level_node": "if_statement@L0",
+   "misconception": "ThenAlwaysExecutes",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: < and > mean the same thing (or a < b means a is greater than b). Right rule: a < b is true when a is smaller than b; a > b when a is larger."
+   "exact_rule": "wrong rule: The then branch always runs. Right rule: The then branch runs only when the condition is true."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ChainedComparison",
-   "way": "inconsistent_trace",
+   "level_node": "if_statement@L0",
+   "misconception": "CodeAfterIfSkipped",
+   "way": "misconception",
    "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate both operands, promote to a common type, then compare). Applied unevenly: the student treats < as <= on the boundary pass of a loop, or compares an int with a double as ints on one line and as doubles on another. (here mixing in: \"90 <= grade <= 100 tests whether grade is between 90 and 100\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "AssignCompares",
+   "level_node": "if_statement@L0",
+   "misconception": "NextStatementIsElse",
    "way": "misconception",
    "way_index": 6,
    "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them and produces a boolean."
+   "exact_rule": "wrong rule: In if (c) A; B; the statement B runs only when c is false. Right rule: B is not part of the if; it runs every time."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ComparisonWithBooleanLiteral",
+   "level_node": "if_statement@L0",
+   "misconception": "IfWaitsForCondition",
    "way": "misconception",
    "way_index": 7,
    "rule_type": "M",
-   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, so writing == true adds nothing."
+   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "EqualsComparesReferences",
+   "level_node": "if_statement@L0",
+   "misconception": "BranchChosenByIntent",
    "way": "misconception",
    "way_index": 8,
    "rule_type": "M",
-   "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters; it is == that compares references."
+   "exact_rule": "wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. Right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
   },
   {
-   "level_node": "comparison_operators@L4",
-   "misconception": "ChainedComparison",
+   "level_node": "if_statement@L0",
+   "misconception": "StatementAfterIfInBranch",
+   "way": "misconception",
+   "way_index": 9,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "FalseConditionRestartsProgram",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "IfConditionWatched",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "IfConditionCheckedInHindsight",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Whether the branch runs is decided by the condition after the branch, or from the point inside the body where the condition becomes true. Right rule: The condition is tested once, before the branch; the whole branch runs if it was true at that moment and none of it runs otherwise."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "IfInLoopUnchecked",
+   "way": "misconception",
+   "way_index": 13,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. Right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "IfIsLoop",
+   "way": "inconsistent_trace",
+   "way_index": 14,
+   "rule_type": "T",
+   "exact_rule": "Applies the if rule (LT) unevenly: tests the condition on some visits but not others (e.g. runs the branch on every loop pass without testing), runs the branch after a false test, or re-checks the condition after the branch has run. (here mixing in: \"an if body repeats while its condition holds\")"
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 15,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "LoopForOneTimeTest",
+   "way": "misconception",
+   "way_index": 16,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Uses a loop where a condition needs to be tested only once. Right rule: A test made once is an if; a loop repeats."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "MapToBooleanWithIf",
+   "way": "misconception",
+   "way_index": 17,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: you need an if to turn a boolean expression into a boolean. Right rule: ok = (x > y); stores the result of the comparison directly."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 18,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "if_statement@L0",
+   "misconception": "SequentialIfsAreNested",
+   "way": "misconception",
+   "way_index": 19,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. Right rule: Two ifs in sequence are independent: each tests only its own condition."
+  },
+  {
+   "level_node": "if_statement@L4",
+   "misconception": "IfIsLoop",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b)."
+   "exact_rule": "Negating the condition swaps which inputs run the body; changing < to <= changes only the boundary value. Adding a statement under a braceless if does not put it in the body. Whatever the condition, code after the if still runs exactly once."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+  },
+  {
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintEqualsPrintln",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "PrintfAddsNewline",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
+  },
+  {
+   "level_node": "standard_output@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "level_node": "standard_output@L4",
+   "misconception": "PrintEqualsPrintln",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "NoReservedWords",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
+  },
+  {
+   "level_node": "identifier@L0",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
+  },
+  {
+   "level_node": "identifier@L4",
+   "misconception": "IdentifierCaseInsensitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
   },
   {
    "level_node": "expression@L0",
@@ -21656,278 +21832,6 @@
    "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
   },
   {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "ArithmeticOnNumericStrings",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "level_node": "arithmetic_operators@L4",
-   "misconception": "CaretIsPower",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfIsLoop",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an if body repeats while its condition holds. Right rule: An if body runs at most once; only a loop repeats its body."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfRequiresElse",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Every if statement requires an else. Right rule: An if statement may stand alone; the else part is optional."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "FalseConditionEndsProgram",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A false condition with no else ends the program. Right rule: When an if condition is false and there is no else, execution continues with the statement after the if."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "ThenAlwaysExecutes",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The then branch always runs. Right rule: The then branch runs only when the condition is true."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "CodeAfterIfSkipped",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "NextStatementIsElse",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: In if (c) A; B; the statement B runs only when c is false. Right rule: B is not part of the if; it runs every time."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfWaitsForCondition",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "BranchChosenByIntent",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. Right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "StatementAfterIfInBranch",
-   "way": "misconception",
-   "way_index": 9,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "FalseConditionRestartsProgram",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfConditionWatched",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfConditionCheckedInHindsight",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Whether the branch runs is decided by the condition after the branch, or from the point inside the body where the condition becomes true. Right rule: The condition is tested once, before the branch; the whole branch runs if it was true at that moment and none of it runs otherwise."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfInLoopUnchecked",
-   "way": "misconception",
-   "way_index": 13,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. Right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "IfIsLoop",
-   "way": "inconsistent_trace",
-   "way_index": 14,
-   "rule_type": "T",
-   "exact_rule": "Applies the if rule (LT) unevenly: tests the condition on some visits but not others (e.g. runs the branch on every loop pass without testing), runs the branch after a false test, or re-checks the condition after the branch has run. (here mixing in: \"an if body repeats while its condition holds\")"
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 15,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "LoopForOneTimeTest",
-   "way": "misconception",
-   "way_index": 16,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Uses a loop where a condition needs to be tested only once. Right rule: A test made once is an if; a loop repeats."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "MapToBooleanWithIf",
-   "way": "misconception",
-   "way_index": 17,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: you need an if to turn a boolean expression into a boolean. Right rule: ok = (x > y); stores the result of the comparison directly."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 18,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "if_statement@L0",
-   "misconception": "SequentialIfsAreNested",
-   "way": "misconception",
-   "way_index": 19,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. Right rule: Two ifs in sequence are independent: each tests only its own condition."
-  },
-  {
-   "level_node": "if_statement@L4",
-   "misconception": "IfIsLoop",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Negating the condition swaps which inputs run the body; changing < to <= changes only the boundary value. Adding a statement under a braceless if does not put it in the body. Whatever the condition, code after the if still runs exactly once."
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
-  },
-  {
-   "level_node": "print@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
-  },
-  {
-   "level_node": "print@L4",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
-  },
-  {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
-  },
-  {
    "level_node": "if_else_statement@L0",
    "misconception": "ConditionalIsSequence",
    "way": "misconception",
@@ -21984,52 +21888,76 @@
    "exact_rule": "Swapping the two branches and negating the condition preserves behaviour; swapping the branches alone inverts it. Replacing if-else with two separate ifs is not equivalent when the then branch changes a variable used in the condition."
   },
   {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
+   "level_node": "comparison_operators@L0",
+   "misconception": "ChainedComparison",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
+   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
   },
   {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
-   "way": "inconsistent_trace",
+   "level_node": "comparison_operators@L0",
+   "misconception": "EqualityOperatorComparesObjectsValues",
+   "way": "misconception",
    "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: == compares the contents of two Strings. Right rule: s == t is true only when s and t refer to the same object; \"abc\" == \"ab\" + x is false even when x is \"c\"; s.equals(t) compares the text."
   },
   {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterIfInBranch",
+   "level_node": "comparison_operators@L0",
+   "misconception": "StringRelationalComparison",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+   "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile (use s.compareTo(t))."
   },
   {
-   "level_node": "block@L0",
-   "misconception": "LoopBodyStatementOutsideLoop",
+   "level_node": "comparison_operators@L0",
+   "misconception": "LessGreaterSwapped",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
+   "exact_rule": "wrong rule: < and > mean the same thing (or a < b means a is greater than b). Right rule: a < b is true when a is smaller than b; a > b when a is larger."
   },
   {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterLoopInBody",
-   "way": "misconception",
+   "level_node": "comparison_operators@L0",
+   "misconception": "ChainedComparison",
+   "way": "inconsistent_trace",
    "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate both operands, promote to a common type, then compare). Applied unevenly: the student treats < as <= on the boundary pass of a loop, or compares an int with a double as ints on one line and as doubles on another. (here mixing in: \"90 <= grade <= 100 tests whether grade is between 90 and 100\")"
   },
   {
-   "level_node": "block@L4",
-   "misconception": "LocalVarOutsideScope",
+   "level_node": "comparison_operators@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them and produces a boolean."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "ComparisonWithBooleanLiteral",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, so writing == true adds nothing."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "EqualsComparesReferences",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters; it is == that compares references."
+  },
+  {
+   "level_node": "comparison_operators@L4",
+   "misconception": "ChainedComparison",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
+   "exact_rule": "Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b)."
   },
   {
    "level_node": "nested_conditionals@L0",
@@ -22086,6 +22014,70 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Combining if (c1) { if (c2) S; } into if (c1 && c2) S; preserves behaviour when there are no else parts; adding or removing braces around an inner if can move an else to a different if. Swapping some branches can keep the specification only on certain inputs."
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")"
+  },
+  {
+   "level_node": "print@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
+  },
+  {
+   "level_node": "print@L4",
+   "misconception": "RepeatedOutputVariablePrintedOnce",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text."
+  },
+  {
+   "level_node": "remainder_operator@L0",
+   "misconception": "RemainderIsQuotient",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 17 % 5 is 3 (the quotient). Right rule: % returns the remainder, so 17 % 5 is 2."
+  },
+  {
+   "level_node": "remainder_operator@L0",
+   "misconception": "NegativeRemainderSign",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+  },
+  {
+   "level_node": "remainder_operator@L0",
+   "misconception": "RemainderIsQuotient",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (compute the truncated quotient, then the remainder). Applied unevenly, a student gives the remainder for positive operands but the mathematical mod for negatives, or swaps quotient and remainder (17 % 5 as 3). (here mixing in: \"17 % 5 is 3 (the quotient)\")"
+  },
+  {
+   "level_node": "remainder_operator@L4",
+   "misconception": "RemainderIsQuotient",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Negating a flips the remainder's sign, so n % 2 == 1 fails for negative odd n while n % 2 != 0 still works. Changing the divisor changes the cycle length. Swapping % with / swaps the remainder for the quotient."
   },
   {
    "level_node": "boolean_expression@L0",
@@ -22160,124 +22152,132 @@
    "exact_rule": "Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
+   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "ArithmeticOnNumericStrings",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
+   "level_node": "arithmetic_operators@L4",
+   "misconception": "CaretIsPower",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LocalVarOutsideScope",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LocalVarOutsideScope",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "StatementAfterIfInBranch",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "LoopBodyStatementOutsideLoop",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "level_node": "block@L0",
+   "misconception": "StatementAfterLoopInBody",
    "way": "misconception",
    "way_index": 5,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
   },
   {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "block@L4",
+   "misconception": "LocalVarOutsideScope",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintEqualsPrintln",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")"
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "PrintfAddsNewline",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line."
-  },
-  {
-   "level_node": "standard_output@L0",
-   "misconception": "RepeatedOutputVariablePrintedOnce",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
-  },
-  {
-   "level_node": "standard_output@L4",
-   "misconception": "PrintEqualsPrintln",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "NoReservedWords",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: keywords may be reused as identifiers. Right rule: Keywords are reserved by Java and cannot be used as variable names."
-  },
-  {
-   "level_node": "identifier@L0",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (a name refers to the declaration with exactly that spelling in scope). Applied unevenly, a student treats Count and count as one variable in one statement but as two in another. (here mixing in: \"System.out.Println and System.out.println name the same method\")"
-  },
-  {
-   "level_node": "identifier@L4",
-   "misconception": "IdentifierCaseInsensitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
+   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
   }
  ],
  "counts": {

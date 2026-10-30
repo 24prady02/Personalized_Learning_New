@@ -17,6 +17,7 @@ NOT_IN_CODE = {
     "S016": {"integer_division"},      # the code has % but no /; the student brings division in
     "S023": {"break_statement"},       # the switch has no break; the student explains the missing break
     "S073": {"break_statement"},
+    "S080": {"compile"},               # no javac command in the code; the student describes compiling it
     "S009": {"array_bounds", "array_creation", "indexing", "length_field"},  # array_creation: endpoint of the gold context edge, also not in the code
     "S010": {"array_bounds", "array_copy", "array_traversal", "for_loop", "indexing", "off_by_one_error"},
     "S012": {"compound_assignment", "increment_operators"},
