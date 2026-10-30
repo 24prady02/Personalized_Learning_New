@@ -50,7 +50,7 @@ def test_command_segments():
 def test_every_code_visible_concept_has_pattern_tests():
     visible = {c["id"] for c in KG["concepts"] if (c.get("reader") or {}).get("code_visible") is not False}
     assert visible == set(PATTERN_TESTS)
-    assert len(visible) == 166
+    assert len(visible) == 182
 
 
 @pytest.mark.parametrize("cid", sorted(PATTERN_TESTS))
@@ -90,9 +90,10 @@ def test_speed():
         regexes = list(rd.get("code_patterns") or []) + [s["regex"] for s in rd.get("signals") or [] if "regex" in s]
         for rx in regexes:
             dt = min(_timed(rx, masked) for _ in range(3))  # best of three: the limit is about the regex, not CPU jitter
-            # 0.25 s: integer_division.int_var_div_literal is linear in (int declarations x 800-char gap) and measures
-            # about 0.21 s on this corpus of 1,400 declarations; the limit is here to catch quadratic patterns
-            if dt > 0.25:
+            # the limit scales with the corpus (0.25 s per 100k characters): a linear pattern such as
+            # integer_division.int_var_div_literal (one 800-char scan per int declaration) stays under it on any
+            # corpus size, while a quadratic pattern blows past it
+            if dt > 0.25 * max(1.0, len(masked) / 100_000):
                 slow.append((cid, rx[:60], round(dt, 3)))
     assert not slow, slow
 
