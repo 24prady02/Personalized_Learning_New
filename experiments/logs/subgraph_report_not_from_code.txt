@@ -1,12 +1,12 @@
-S005  tagged  28  nodes  28 (13 generic)  edges  25  mis 184  levels 140  links 207  xfail missed: while_loop
-S009  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_creation, indexing, length_field
-S010  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
-S012  tagged   4  nodes   4 (4 generic)  edges   2  mis  10  levels  20  links  16  xfail missed: compound_assignment, increment_operators
-S015  tagged   1  nodes   1 (1 generic)  edges   0  mis   4  levels   5  links   4  xfail missed: char, naming_convention, variable
-S016  tagged  20  nodes  20 (13 generic)  edges  18  mis  93  levels 100  links 111  xfail missed: integer_division
-S023  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
-S068  tagged   6  nodes   6 (3 generic)  edges   1  mis  16  levels  30  links  26  xfail missed: power_method, two_models
-S073  tagged   8  nodes   8 (6 generic)  edges   2  mis  55  levels  40  links  59  xfail missed: break_statement
-S080  tagged  24  nodes  24 (11 generic)  edges  14  mis 104  levels 120  links 109  xfail missed: compile
-fully covered: 0 / 10   (mean concepts per subgraph: 10.7; S000 is the reference case, not counted)
+S005  tagged  19  nodes  19 (4 generic kept)  edges  15  mis 138  levels  95  links 158  xfail missed: while_loop
+S009  tagged   0  nodes   0 (0 generic kept)  edges   0  mis   0  levels   0  links   0  xfail missed: array_bounds, array_creation, indexing, length_field
+S010  tagged   0  nodes   0 (0 generic kept)  edges   0  mis   0  levels   0  links   0  xfail missed: array_bounds, array_copy, array_traversal, for_loop, indexing, off_by_one_error
+S012  tagged   0  nodes   0 (0 generic kept)  edges   0  mis   0  levels   0  links   0  xfail missed: compound_assignment, increment_operators
+S015  tagged   0  nodes   0 (0 generic kept)  edges   0  mis   0  levels   0  links   0  xfail missed: char, naming_convention, variable
+S016  tagged  11  nodes  11 (4 generic kept)  edges   7  mis  40  levels  55  links  50  xfail missed: integer_division
+S023  tagged   3  nodes   3 (1 generic kept)  edges   1  mis  17  levels  15  links  21  xfail missed: break_statement
+S068  tagged   3  nodes   3 (0 generic kept)  edges   1  mis   6  levels  15  links  12  xfail missed: power_method, two_models
+S073  tagged   3  nodes   3 (1 generic kept)  edges   1  mis  17  levels  15  links  21  xfail missed: break_statement
+S080  tagged  19  nodes  19 (6 generic kept)  edges  12  mis  71  levels  95  links  72  xfail missed: compile
+fully covered: 0 / 10   (mean concepts per subgraph: 5.8; S000 is the reference case, not counted)
 non-generic concepts firing in >= 12 scenarios: none

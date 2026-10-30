@@ -32,15 +32,38 @@ def _index(kg: dict[str, Any]) -> _Index:
     return idx
 
 
+def _prune_generic(idx: "_Index", tags: dict[str, list[Hit]]) -> dict[str, list[Hit]]:
+    """Drop generic concepts that neither share a relation edge with a non-generic tagged concept nor
+    fired a decisive signal."""
+    generic = {c for c in tags if idx.concepts.get(c, {}).get("reader", {}).get("generic")}
+    specific = set(tags) - generic
+    keep: dict[str, list[Hit]] = {c: h for c, h in tags.items() if c not in generic}
+    for g in generic:
+        decisive = any(h["decisive"] for h in tags[g])
+        linked = any(e["type"] in ("prerequisite", "parallel") and (e["source"] in specific or e["target"] in specific)
+                     for e in idx.out_edges.get(g, []) + idx.in_edges.get(g, []))
+        if decisive or linked:
+            keep[g] = tags[g]
+    return keep
+
+
 def _skipped_signals(rd: dict[str, Any]) -> list[str]:
     return [s.get("name", "?") for s in rd.get("signals") or [] if "regex" not in s]
 
 
-def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: str | None = None, hops: int = 0) -> dict[str, Any]:
-    """Concept nodes are exactly the concepts whose code patterns fired. With ``hops=1`` the source of
-    each incoming prerequisite edge of a non-generic tagged concept is added as well (one hop, never
-    from generic concepts); the default adds nothing the code did not show."""
+def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: str | None = None, hops: int = 0,
+                     keep_generic: bool = False) -> dict[str, Any]:
+    """Concept nodes are the concepts whose code patterns fired, minus bare generic ones.
+
+    A concept the KG marks ``generic`` (statement, identifier, literal, int, ...) fires on almost any Java
+    line. It is kept only when the code ties it to something specific: the KG has a prerequisite or
+    parallel edge between it and a non-generic tagged concept, or one of its own decisive signals fired.
+    ``keep_generic=True`` keeps every tagged concept. With ``hops=1`` the source of each incoming
+    prerequisite edge of a non-generic concept is added as well (one hop, never from generic concepts);
+    the default adds nothing the code did not show."""
     idx = _index(kg)
+    if not keep_generic:
+        tags = _prune_generic(idx, tags)
 
     # 1. concept nodes: tagged; optionally one prerequisite hop from non-generic tagged concepts
     concepts: dict[str, dict[str, Any]] = {}
@@ -137,6 +160,6 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
     }
 
 
-def subgraph_from_code(code: str, kg: dict[str, Any], scenario: str | None = None, hops: int = 0) -> dict[str, Any]:
+def subgraph_from_code(code: str, kg: dict[str, Any], scenario: str | None = None, hops: int = 0, keep_generic: bool = False) -> dict[str, Any]:
     """Tag the code with the concept patterns, then take the subgraph out."""
-    return extract_subgraph(kg, tag_code(code, reader_blocks(kg)), scenario, hops)
+    return extract_subgraph(kg, tag_code(code, reader_blocks(kg)), scenario, hops, keep_generic)

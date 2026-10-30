@@ -60,13 +60,18 @@ in S080). Run them with `--gold data/raw/scenarios_not_from_code.json`; misses t
    statement scope, masked or raw text; compiler-message signals without a regex are skipped), `operator_symbols`
    (substrings), `java_types` (whole words), `command_patterns` (regex on `java …` / `javac …` shell segments).
    Concepts with `code_visible: false` never tag. `aliases` are never used here.
-4. `extract_subgraph`: the concept nodes are **exactly the concepts whose code patterns fired**, nothing else.
-   Then `prerequisite` / `parallel` edges with both ends inside; `misconception` / `error` edges from the
-   concepts; `has_level` edges with their ways; links from each way's `linked_misconception`.
-   `--hops 1` optionally adds the source of each incoming prerequisite edge of a non-generic tagged concept
-   (one hop, never from generic concepts); it is off by default because it adds nodes the code did not show.
-   Concepts the KG marks `generic` (statement, variable, int, assignment, ...) are kept but flagged, and the
-   report shows their count per scenario.
+4. `extract_subgraph`: the concept nodes are the concepts whose code patterns fired, **minus bare generic
+   ones**. The KG marks 21 concepts `generic` (statement, identifier, literal, int, assignment, ...); they fire on
+   almost any Java line. A generic concept is kept only when the code ties it to something specific: the KG
+   has a prerequisite or parallel edge between it and a non-generic tagged concept (assignment stays next to
+   variable_swap, string_literal next to println), or one of its own decisive signals fired (class_declaration
+   with a file-name mismatch). This rule reads nothing but the KG, so it is the same for every snippet.
+   `--keep-generic` keeps every tagged concept. Then `prerequisite` / `parallel` edges with both ends inside;
+   `misconception` / `error` edges from the concepts; `has_level` edges with their ways; links from each way's
+   `linked_misconception`. `--hops 1` optionally adds one prerequisite hop (off by default).
+   The remaining extras relative to a scenario's gold are non-generic constructs really present in the code
+   (the loop around S057's division, for instance); only the question and answer, read in a later stage, can
+   say which of them the scenario is about.
 
 ## Recall audit: alternative spellings
 

@@ -194,16 +194,29 @@ def test_gold_summary_and_breadth():
     assert covered == len(GOLD) - len(expected_partial), f"fully covered from code alone: {covered} / {len(GOLD)}"
     broad = [(c, k) for c, k in fire.items() if k >= 12]
     assert not broad, f"pattern too broad: {broad}"
-    assert 10 <= sum(sizes) / len(sizes) <= 25
+    assert 2 <= sum(sizes) / len(sizes) <= 25
+
+
+GENERIC = {c for c, r in READER.items() if r.get("generic")}
 
 
 def test_nodes_are_exactly_the_tagged_concepts():
+    """With keep_generic every node is a tagged concept and vice versa; by default the generic ones that
+    nothing ties to a specific concept are gone, and no non-generic tagged concept is ever dropped."""
     for sc in SCENARIOS:
         tags = set(tag_code(sc["code"], READER))
+        full = subgraph_from_code(sc["code"], KG, sc["id"], keep_generic=True)
+        assert {c["id"] for c in full["concepts"]} == tags
         sg = subgraph_from_code(sc["code"], KG, sc["id"])
-        assert {c["id"] for c in sg["concepts"]} == tags
+        nodes = {c["id"] for c in sg["concepts"]}
+        assert tags - GENERIC <= nodes <= tags
         assert all(c["why"] == "code" for c in sg["concepts"])
         assert sg["counts"]["from_hop"] == 0
+        edges = {(e["source"], e["target"]) for e in sg["concept_edges"]}
+        for g in nodes & GENERIC:
+            tied = any((a == g and b not in GENERIC) or (b == g and a not in GENERIC) for a, b in edges)
+            decisive = any(h["decisive"] for h in tag_code(sc["code"], READER)[g])
+            assert tied or decisive, f"{sc['id']}: generic {g} kept without a reason"
 
 
 def test_extract_rules():
