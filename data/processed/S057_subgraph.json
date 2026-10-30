@@ -45523,764 +45523,212 @@
  ],
  "level_mis_links": [
   {
-   "level_node": "loop_scope@L0",
-   "misconception": "LoopBodyScopeImpliesLoopLifetime",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value."
-  },
-  {
-   "level_node": "loop_scope@L0",
-   "misconception": "LoopVariableLifetimeScope",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. Right rule: The for variable i is created once by the init, the update changes that same variable on every pass, and i exists only until the end of the for statement."
-  },
-  {
-   "level_node": "loop_scope@L0",
-   "misconception": "ForVariableScopeBeyondLoop",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: i declared in the for header can still be used after the loop has ended. Right rule: i declared in the for header exists only inside the loop, so using it after the loop does not compile."
-  },
-  {
-   "level_node": "loop_scope@L0",
+   "level_node": "block@L0",
    "misconception": "LocalVarOutsideScope",
    "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable exists only from its declaration to the end of its block."
-  },
-  {
-   "level_node": "loop_scope@L0",
-   "misconception": "LoopBodyScopeImpliesLoopLifetime",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Applies the scope rule (LT) unevenly: lets a body variable keep its value from the last pass on some passes but not others, or uses the for variable after the loop in one place but not another. (here mixing in: \"a variable declared in the loop body lives across all iterations\")"
-  },
-  {
-   "level_node": "loop_scope@L4",
-   "misconception": "LoopBodyScopeImpliesLoopLifetime",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Moving a declaration from before the loop into the body re-initializes the variable every pass and makes it unusable after the loop; moving a for-header declaration out (int i; for (i = 0; ...)) keeps the loop's behaviour and makes i usable after it."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "DeclarationCreatesArray",
-   "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: The declaration only names the array variable; until new (or an initializer) creates the array, a[i] gives the compile-time error 'variable a might not have been initialized'."
+   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
   },
   {
-   "level_node": "array_declaration@L0",
-   "misconception": "ArrayElementsUntyped",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array can hold elements of any type. Right rule: Every element of an array has the declared element type: an int[] holds only int values, a String[] only String references."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "ArrayBracketCountIsLength",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The number of brackets in an array type is the array's length. Right rule: Each bracket pair adds one dimension (int[] is 1-D, int[][] is 2-D); the length is not part of the type and is fixed only when the array is created."
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "DeclarationCreatesArray",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: \"int[] a; already makes an array that can be indexed\")"
-  },
-  {
-   "level_node": "array_declaration@L0",
-   "misconception": "ElementNameIsWholeArray",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The name a (written a[] in the book) denotes the whole array; a[i] denotes the single element at index i."
-  },
-  {
-   "level_node": "array_declaration@L4",
-   "misconception": "DeclarationCreatesArray",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time."
-  },
-  {
-   "level_node": "normalization@L0",
-   "misconception": "IntegerProbability",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Probabilities computed with integer division stay correct. Right rule: counts[i][j]/outDegree[i] with two int operands truncates (0 whenever counts < outDegree); Transition multiplies by .90 first so the division is double, and RandomSurfer casts with (double) freq[i] / T."
-  },
-  {
-   "level_node": "normalization@L0",
-   "misconception": "IntegerProbability",
+   "level_node": "block@L0",
+   "misconception": "LocalVarOutsideScope",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Applies LT (left to right: .90*counts, then / outDegree, then + .10/N) unevenly: e.g. dividing before the double factor on some entries (int division), or adding .10/N once per row instead of to every entry. (here mixing in: \"probabilities computed with integer division stay correct\")"
+   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
   },
   {
-   "level_node": "normalization@L0",
-   "misconception": "RowsNeedNotSumToOne",
+   "level_node": "block@L0",
+   "misconception": "StatementAfterIfInBranch",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A page with no outgoing links can have an all-zero row. Right rule: Normalising requires a non-zero total; a page with no links is given 1/N in every column so its row still sums to 1."
+   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
   },
   {
-   "level_node": "normalization@L4",
-   "misconception": "IntegerProbability",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Invariant: weights sum to 1, since .90*(sum of counts/outDegree) + N*(.10/N) = .90 + .10. Changing .90 to .80 without changing .10 breaks it; reordering to counts[i][j]/outDegree[i]*.90 breaks it silently via int division."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentOppositeDirection",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentAddsToTarget",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentExchangesValues",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentEmptiesSource",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "inconsistent_trace",
-   "way_index": 9,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "SwapWithoutTemp",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "AssignmentCopiesObject",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
-  },
-  {
-   "level_node": "assignment@L0",
-   "misconception": "VariableKeepsOldValue",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
-  },
-  {
-   "level_node": "assignment@L4",
-   "misconception": "VariablesHoldExpressions",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
-  },
-  {
-   "level_node": "array_initializer@L0",
-   "misconception": "ArrayInitializerContentsInBrackets",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Initializer values go in [] instead of {}. Right rule: Starting values go in braces, as in int[] a = {v0, v1};; brackets only mark the type or an index."
-  },
-  {
-   "level_node": "array_initializer@L0",
-   "misconception": "ArrayInitializerContentsInBrackets",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: an array of length k+1 is created, then v0..vk are stored at indices 0..k in order. Inconsistent application: the trace puts the first value at index 1 for one initializer but at index 0 for another, or counts the length differently. (here mixing in: \"initializer values go in [] instead of {}\")"
-  },
-  {
-   "level_node": "array_initializer@L0",
-   "misconception": "ArrayBracketCountIsLength",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The number of brackets in an array type or initializer is the array's length. Right rule: Brackets give the number of dimensions; an initializer's length is the number of values between its braces."
-  },
-  {
-   "level_node": "array_initializer@L4",
-   "misconception": "ArrayInitializerContentsInBrackets",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "ComparisonWithBooleanLiteral",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, and if (!b) tests that it is false, so == true adds nothing."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "MapToBooleanWithIf",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: You need an if to turn a boolean expression into a boolean. Right rule: ok = (x > y); stores the result of the comparison directly."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "MapToBooleanWithConditionalOperator",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: You need ? : to turn a boolean expression into a boolean (ok = x > y ? true : false). Right rule: ok = (x > y); already gives the boolean, so the ? : is unnecessary."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "ArithmeticInsteadOfBoolean",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). Right rule: A logic question is written as a boolean expression whose value is true or false, e.g. (year % 4 == 0)."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "ComparisonWithBooleanLiteral",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (arithmetic first, then comparisons, then !, &&, ||, left to right, with short-circuit). Applied unevenly: the student evaluates && before a comparison in one sub-expression, or evaluates the right operand of && on a pass where the left was already false. (here mixing in: \"you must write == true / == false to test a boolean\")"
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "ChainedComparison",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean, which cannot be compared with <); a range test is written 90 <= grade && grade <= 100."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "LoopForOneTimeTest",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Uses a loop where a condition needs to be tested only once. Right rule: A test made once is an if; a while re-tests its condition and repeats its body for as long as the condition is true."
-  },
-  {
-   "level_node": "boolean_expression@L0",
-   "misconception": "NestedIfsInsteadOfLogicalOperators",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A condition on several values has to be written as nested if statements, one value per if. Right rule: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
-  },
-  {
-   "level_node": "boolean_expression@L4",
-   "misconception": "ComparisonWithBooleanLiteral",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value."
-  },
-  {
-   "level_node": "loop_body@L0",
-   "misconception": "LoopBodyAlwaysOnce",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The loop body always runs at least once, even if the condition is false at the start. Right rule: A while or for body runs zero times when the condition is false at the start."
-  },
-  {
-   "level_node": "loop_body@L0",
+   "level_node": "block@L0",
    "misconception": "LoopBodyStatementOutsideLoop",
    "way": "misconception",
-   "way_index": 2,
+   "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
+   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
   },
   {
-   "level_node": "loop_body@L0",
+   "level_node": "block@L0",
    "misconception": "StatementAfterLoopInBody",
    "way": "misconception",
-   "way_index": 3,
+   "way_index": 5,
    "rule_type": "M",
    "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "LoopRunsStatementsSeparately",
+   "level_node": "block@L4",
+   "misconception": "LocalVarOutsideScope",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
+  },
+  {
+   "level_node": "primitive_type@L0",
+   "misconception": "StringIsPrimitive",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
+  },
+  {
+   "level_node": "primitive_type@L0",
+   "misconception": "StringIsPrimitive",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: \"String is a primitive type like int\")"
+  },
+  {
+   "level_node": "primitive_type@L0",
+   "misconception": "NewArrayHoldsGarbage",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "level_node": "primitive_type@L4",
+   "misconception": "StringIsPrimitive",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
+  },
+  {
+   "level_node": "loop_control@L0",
+   "misconception": "PreIncrementBeforeLoop",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: ++i in the for-update runs before the body each pass. Right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
+  },
+  {
+   "level_node": "loop_control@L0",
+   "misconception": "OffByOneBound",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "level_node": "loop_control@L0",
+   "misconception": "PreIncrementBeforeLoop",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: \"++i in the for-update runs before the body each pass\")"
+  },
+  {
+   "level_node": "loop_control@L0",
+   "misconception": "InfiniteLoopUnnoticed",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. Right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ..."
+   "exact_rule": "wrong rule: a condition that never goes false still terminates. Right rule: A while loop stops only when its condition is false at a check, so if no pass changes the variables in the condition, it never stops."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "StateChangeIgnoredAcrossPasses",
+   "level_node": "loop_control@L0",
+   "misconception": "DoubleLoopIndexCount",
    "way": "misconception",
    "way_index": 5,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. Right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+   "exact_rule": "wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. Right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "LoopBodyAlwaysOnce",
-   "way": "inconsistent_trace",
+   "level_node": "loop_control@L0",
+   "misconception": "IdiomOverridesCode",
+   "way": "misconception",
    "way_index": 6,
-   "rule_type": "T",
-   "exact_rule": "Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: \"The loop body always runs at least once, even if the condition is false at the start\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "WhileStopsMidBody",
+   "level_node": "loop_control@L0",
+   "misconception": "LoopHeaderIsEquations",
    "way": "misconception",
    "way_index": 7,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. Right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop."
+   "exact_rule": "wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. Right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. Right rule: The computer executes only what the code states; every needed step and value must be written."
-  },
-  {
-   "level_node": "loop_body@L0",
-   "misconception": "IfInLoopUnchecked",
-   "way": "misconception",
-   "way_index": 9,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. Right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
-  },
-  {
-   "level_node": "loop_body@L0",
-   "misconception": "LoopCountIsStatementCount",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The repeat count of a counted loop says how many of the body statements are executed. Right rule: The repeat count is how many times the whole body runs; every pass runs all body statements."
-  },
-  {
-   "level_node": "loop_body@L0",
+   "level_node": "loop_control@L0",
    "misconception": "ForLoopPartSkipped",
    "way": "misconception",
-   "way_index": 11,
+   "way_index": 8,
    "rule_type": "M",
    "exact_rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
   },
   {
-   "level_node": "loop_body@L0",
-   "misconception": "LoopOutputSameEachPass",
-   "way": "misconception",
-   "way_index": 12,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. Right rule: The body uses the current value of the loop variable, so its output can differ on each pass."
-  },
-  {
-   "level_node": "loop_body@L4",
-   "misconception": "LoopBodyAlwaysOnce",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use)."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "IndexIsValue",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: i and a[i] are the same thing, so the position is the stored value. Right rule: i is a position; a[i] is the value stored at that position."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ArrayIndexStartsAtOne",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0]."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ArrayRangeInclusive",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: The slots are 0 to n - 1."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ArrayAccessWithParentheses",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a(i) accesses element i of an array. Right rule: Array elements are selected with square brackets, a[i]; a(i) would be a call of a method named a."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ArrayElementNotVariable",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. Right rule: Each element a[i] is a variable of the element type and can be used anywhere a variable of that type can, including as an index."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ElementNameIsWholeArray",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The array is a (a[] in the book); a[i] is the single element at index i."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ElementBoundToOldIndex",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After i changes, X[i] still refers to the element at the old value of i. Right rule: a[i] is evaluated with the current value of i each time it is executed."
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "IndexIsValue",
-   "way": "inconsistent_trace",
-   "way_index": 8,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: in a[i], a is evaluated, then i with its current value, then the bounds check, then the element is read or written. Inconsistent application: i is updated on one line, but a later a[i] is traced with the old i. (here mixing in: \"i and a[i] are the same thing, so the position is the stored value\")"
-  },
-  {
-   "level_node": "indexing@L0",
-   "misconception": "ArrayUseScansAllCells",
+   "level_node": "loop_control@L0",
+   "misconception": "ForUpdateBeforeBody",
    "way": "misconception",
    "way_index": 9,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Using an array means every cell must be scanned. Right rule: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs."
+   "exact_rule": "wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value."
   },
   {
-   "level_node": "indexing@L4",
-   "misconception": "IndexIsValue",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. Changing what is stored never changes the positions."
-  },
-  {
-   "level_node": "type_conversion@L0",
-   "misconception": "NoCastIfSameSize",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. Right rule: The compiler decides by types, not values: assigning a double to an int needs a cast even when the value (e.g. 3.0) would fit, because a conversion that might involve loss of information leads to a compile-time error."
-  },
-  {
-   "level_node": "type_conversion@L0",
-   "misconception": "NarrowingAssignmentAllowed",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A double value can be stored in an int variable like an int in a double. Right rule: int to double is automatic (widening); double to int needs a cast, otherwise the assignment is a compile-time error."
-  },
-  {
-   "level_node": "type_conversion@L0",
-   "misconception": "NoCastIfSameSize",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each subexpression is computed in its own type, and conversion happens only where the types meet). Applied unevenly: the student promotes before an int division on one line (treating 9/5 as 1.8) but not on another, or casts the whole expression on one pass and only the first operand on the next. (here mixing in: \"If a variable is at least as big as a value, no cast is needed to assign the value\")"
-  },
-  {
-   "level_node": "type_conversion@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0)."
-  },
-  {
-   "level_node": "type_conversion@L4",
-   "misconception": "NoCastIfSameSize",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order. Right rule: Without control statements, statements run once each, top to bottom."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "StatementsRunInAnyOrder",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")"
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "CodeAfterIfSkipped",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "NoShortCircuit",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them). Right rule: In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "LoopImpliedByOneTest",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. Right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "IfWaitsForCondition",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "FalseConditionRestartsProgram",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "IfConditionWatched",
-   "way": "misconception",
-   "way_index": 9,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
-  },
-  {
-   "level_node": "control_flow@L0",
-   "misconception": "ProgramEndsAfterLoop",
+   "level_node": "loop_control@L0",
+   "misconception": "LoopUpdateChangesDirection",
    "way": "misconception",
    "way_index": 10,
    "rule_type": "M",
-   "exact_rule": "wrong rule: When a loop finishes the program ends, so code after the loop never runs. Right rule: When the loop condition becomes false, control continues with the first statement after the loop."
+   "exact_rule": "wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. Right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update."
   },
   {
-   "level_node": "control_flow@L0",
-   "misconception": "FalseLoopRepeatsNextCode",
+   "level_node": "loop_control@L0",
+   "misconception": "LoopStepAlwaysOne",
    "way": "misconception",
    "way_index": 11,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. Right rule: Only the body is repeated; once the condition is false the code after the loop runs once."
+   "exact_rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
   },
   {
-   "level_node": "control_flow@L4",
-   "misconception": "StatementsRunInAnyOrder",
+   "level_node": "loop_control@L4",
+   "misconception": "PreIncrementBeforeLoop",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
+   "exact_rule": "Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted)."
   },
   {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
   },
   {
-   "level_node": "data_type@L0",
-   "misconception": "AnyValueInAnyVariable",
+   "level_node": "double@L0",
+   "misconception": "WholeNumberLiteralIsInt",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
   },
   {
-   "level_node": "data_type@L0",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "double@L0",
+   "misconception": "FloatingPointIsExact",
    "way": "inconsistent_trace",
    "way_index": 3,
    "rule_type": "T",
-   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
+   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
   },
   {
-   "level_node": "data_type@L4",
-   "misconception": "AllDoublesToAvoidDivision",
+   "level_node": "double@L4",
+   "misconception": "FloatingPointIsExact",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "NoAtomicExpression",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentNotExpression",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "ParenthesesOnlyIfArgument",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "TargetTyping",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "VariablesHoldExpressions",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "OutsideInMethodNesting",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
-  },
-  {
-   "level_node": "expression@L0",
-   "misconception": "AssignmentIsEquation",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "level_node": "expression@L4",
-   "misconception": "NoAtomicExpression",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
+   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
   },
   {
    "level_node": "variable@L0",
@@ -46411,6 +45859,182 @@
    "exact_rule": "Renaming a variable consistently keeps behavior. Reordering statements that write and read it changes results (a = b; b = a; is not a swap). Moving its declaration into a loop body narrows its scope and resets it on every pass."
   },
   {
+   "level_node": "indexing@L0",
+   "misconception": "IndexIsValue",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: i and a[i] are the same thing, so the position is the stored value. Right rule: i is a position; a[i] is the value stored at that position."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ArrayIndexStartsAtOne",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0]."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ArrayRangeInclusive",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: The slots are 0 to n - 1."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ArrayAccessWithParentheses",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a(i) accesses element i of an array. Right rule: Array elements are selected with square brackets, a[i]; a(i) would be a call of a method named a."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ArrayElementNotVariable",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. Right rule: Each element a[i] is a variable of the element type and can be used anywhere a variable of that type can, including as an index."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ElementNameIsWholeArray",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The array is a (a[] in the book); a[i] is the single element at index i."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ElementBoundToOldIndex",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After i changes, X[i] still refers to the element at the old value of i. Right rule: a[i] is evaluated with the current value of i each time it is executed."
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "IndexIsValue",
+   "way": "inconsistent_trace",
+   "way_index": 8,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: in a[i], a is evaluated, then i with its current value, then the bounds check, then the element is read or written. Inconsistent application: i is updated on one line, but a later a[i] is traced with the old i. (here mixing in: \"i and a[i] are the same thing, so the position is the stored value\")"
+  },
+  {
+   "level_node": "indexing@L0",
+   "misconception": "ArrayUseScansAllCells",
+   "way": "misconception",
+   "way_index": 9,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Using an array means every cell must be scanned. Right rule: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs."
+  },
+  {
+   "level_node": "indexing@L4",
+   "misconception": "IndexIsValue",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. Changing what is stored never changes the positions."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Statements in a program can run in any order. Right rule: Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")"
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "CodeAfterIfSkipped",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When the then branch runs, the code after the if is skipped. Right rule: After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "NoShortCircuit",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them). Right rule: In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "LoopImpliedByOneTest",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. Right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "IfWaitsForCondition",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. Right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "FalseConditionRestartsProgram",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. Right rule: A false condition skips the then branch and execution continues with the statement after the if statement."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "IfConditionWatched",
+   "way": "misconception",
+   "way_index": 9,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). Right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "ProgramEndsAfterLoop",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: When a loop finishes the program ends, so code after the loop never runs. Right rule: When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "level_node": "control_flow@L0",
+   "misconception": "FalseLoopRepeatsNextCode",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. Right rule: Only the body is repeated; once the condition is false the code after the loop runs once."
+  },
+  {
+   "level_node": "control_flow@L4",
+   "misconception": "StatementsRunInAnyOrder",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n)."
+  },
+  {
    "level_node": "identifier@L0",
    "misconception": "IdentifierCaseInsensitive",
    "way": "misconception",
@@ -46441,6 +46065,118 @@
    "way_index": 0,
    "rule_type": "C",
    "exact_rule": "Renaming an identifier consistently at its declaration and every use leaves behavior unchanged. Renaming only some occurrences, or changing only the capitalization, breaks compilation with 'cannot find symbol'."
+  },
+  {
+   "level_node": "widening_conversion@L0",
+   "misconception": "NoCastIfSameSize",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. Right rule: The compiler decides by types, not values: assigning a double to an int needs a cast even when the value (e.g. 3.0) would fit, because a conversion that might involve loss of information leads to a compile-time error."
+  },
+  {
+   "level_node": "widening_conversion@L0",
+   "misconception": "NarrowingAssignmentAllowed",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A double value can be stored in an int variable like an int in a double. Right rule: int to double is automatic (widening); double to int needs a cast, otherwise the assignment is a compile-time error."
+  },
+  {
+   "level_node": "widening_conversion@L0",
+   "misconception": "NoCastIfSameSize",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (promotion happens at each operator, at the moment an int operand meets a double). Applied unevenly: the student promotes the whole expression up front on one line (so b*b - 4*c is done in double) but per operator on another. (here mixing in: \"If a variable is at least as big as a value, no cast is needed to assign the value\")"
+  },
+  {
+   "level_node": "widening_conversion@L4",
+   "misconception": "NoCastIfSameSize",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Widening an int to double and casting back restores the original int (reversible); widening a large long to double may not be reversible; widening an int quotient after the division cannot restore the lost fraction."
+  },
+  {
+   "level_node": "array_initializer@L0",
+   "misconception": "ArrayInitializerContentsInBrackets",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Initializer values go in [] instead of {}. Right rule: Starting values go in braces, as in int[] a = {v0, v1};; brackets only mark the type or an index."
+  },
+  {
+   "level_node": "array_initializer@L0",
+   "misconception": "ArrayInitializerContentsInBrackets",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: an array of length k+1 is created, then v0..vk are stored at indices 0..k in order. Inconsistent application: the trace puts the first value at index 1 for one initializer but at index 0 for another, or counts the length differently. (here mixing in: \"initializer values go in [] instead of {}\")"
+  },
+  {
+   "level_node": "array_initializer@L0",
+   "misconception": "ArrayBracketCountIsLength",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The number of brackets in an array type or initializer is the array's length. Right rule: Brackets give the number of dimensions; an initializer's length is the number of values between its braces."
+  },
+  {
+   "level_node": "array_initializer@L4",
+   "misconception": "ArrayInitializerContentsInBrackets",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoFloatLiterals",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "NoLongLiterals",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "WholeNumberLiteralIsInt",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+  },
+  {
+   "level_node": "literal@L0",
+   "misconception": "LargeIntegerLong",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "level_node": "literal@L4",
+   "misconception": "LargeIntegerLong",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
   },
   {
    "level_node": "increment_operators@L0",
@@ -46499,52 +46235,844 @@
    "exact_rule": "As a stand-alone statement, replacing i++ by ++i, i += 1 or i = i + 1 preserves behaviour; inside an expression (x = i++ vs x = ++i) the swap changes the value used by 1."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "type_conversion@L0",
+   "misconception": "NoCastIfSameSize",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
+   "exact_rule": "wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. Right rule: The compiler decides by types, not values: assigning a double to an int needs a cast even when the value (e.g. 3.0) would fit, because a conversion that might involve loss of information leads to a compile-time error."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ComputerFillsInIntent",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
-  },
-  {
-   "level_node": "statement@L0",
-   "misconception": "StatementsRunInAnyOrder",
+   "level_node": "type_conversion@L0",
+   "misconception": "NarrowingAssignmentAllowed",
    "way": "misconception",
-   "way_index": 3,
+   "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
+   "exact_rule": "wrong rule: A double value can be stored in an int variable like an int in a double. Right rule: int to double is automatic (widening); double to int needs a cast, otherwise the assignment is a compile-time error."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "WhitespaceIsSignificant",
+   "level_node": "type_conversion@L0",
+   "misconception": "NoCastIfSameSize",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each subexpression is computed in its own type, and conversion happens only where the types meet). Applied unevenly: the student promotes before an int division on one line (treating 9/5 as 1.8) but not on another, or casts the whole expression on one pass and only the first operand on the next. (here mixing in: \"If a variable is at least as big as a value, no cast is needed to assign the value\")"
+  },
+  {
+   "level_node": "type_conversion@L0",
+   "misconception": "TargetTyping",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0)."
   },
   {
-   "level_node": "statement@L0",
-   "misconception": "ProgramLooksAhead",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
-  },
-  {
-   "level_node": "statement@L4",
-   "misconception": "ComputerFillsInIntent",
+   "level_node": "type_conversion@L4",
+   "misconception": "NoCastIfSameSize",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
+   "exact_rule": "Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly."
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "WholeArrayArithmetic",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = a + b adds the arrays element by element. Right rule: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "IdiomOverridesCode",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "ArrayUseScansAllCells",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Using an array means every cell must be scanned. Right rule: A traversal may cover only part of the array or stop early (as in a search); indexing reaches single elements directly."
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "WholeArrayArithmetic",
+   "way": "inconsistent_trace",
+   "way_index": 4,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: initialize i, test, run the body with the current i, update, test again. Inconsistent application: on some passes the update is applied before the body, or a[i] is traced with the previous i. (here mixing in: \"a = a + b adds the arrays element by element\")"
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "OffByOneBound",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "level_node": "array_traversal@L0",
+   "misconception": "ElementBoundToOldIndex",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After i changes, X[i] still refers to the element at the old value of i. Right rule: a[i] is evaluated with the current value of i each time it is used."
+  },
+  {
+   "level_node": "array_traversal@L4",
+   "misconception": "WholeArrayArithmetic",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "ComparisonWithBooleanLiteral",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, and if (!b) tests that it is false, so == true adds nothing."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "MapToBooleanWithIf",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: You need an if to turn a boolean expression into a boolean. Right rule: ok = (x > y); stores the result of the comparison directly."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "MapToBooleanWithConditionalOperator",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: You need ? : to turn a boolean expression into a boolean (ok = x > y ? true : false). Right rule: ok = (x > y); already gives the boolean, so the ? : is unnecessary."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "ArithmeticInsteadOfBoolean",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). Right rule: A logic question is written as a boolean expression whose value is true or false, e.g. (year % 4 == 0)."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "ComparisonWithBooleanLiteral",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (arithmetic first, then comparisons, then !, &&, ||, left to right, with short-circuit). Applied unevenly: the student evaluates && before a comparison in one sub-expression, or evaluates the right operand of && on a pass where the left was already false. (here mixing in: \"you must write == true / == false to test a boolean\")"
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "ChainedComparison",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean, which cannot be compared with <); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "LoopForOneTimeTest",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Uses a loop where a condition needs to be tested only once. Right rule: A test made once is an if; a while re-tests its condition and repeats its body for as long as the condition is true."
+  },
+  {
+   "level_node": "boolean_expression@L0",
+   "misconception": "NestedIfsInsteadOfLogicalOperators",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A condition on several values has to be written as nested if statements, one value per if. Right rule: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "level_node": "boolean_expression@L4",
+   "misconception": "ComparisonWithBooleanLiteral",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "DeclarationCreatesArray",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: The declaration only names the array variable; until new (or an initializer) creates the array, a[i] gives the compile-time error 'variable a might not have been initialized'."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ArrayElementsUntyped",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array can hold elements of any type. Right rule: Every element of an array has the declared element type: an int[] holds only int values, a String[] only String references."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ArrayBracketCountIsLength",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The number of brackets in an array type is the array's length. Right rule: Each bracket pair adds one dimension (int[] is 1-D, int[][] is 2-D); the length is not part of the type and is fixed only when the array is created."
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "DeclarationCreatesArray",
+   "way": "inconsistent_trace",
+   "way_index": 4,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: \"int[] a; already makes an array that can be indexed\")"
+  },
+  {
+   "level_node": "array_declaration@L0",
+   "misconception": "ElementNameIsWholeArray",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: X[i] names the whole array, not one element. Right rule: The name a (written a[] in the book) denotes the whole array; a[i] denotes the single element at index i."
+  },
+  {
+   "level_node": "array_declaration@L4",
+   "misconception": "DeclarationCreatesArray",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "ChainedComparison",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "EqualityOperatorComparesObjectsValues",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: == compares the contents of two Strings. Right rule: s == t is true only when s and t refer to the same object; \"abc\" == \"ab\" + x is false even when x is \"c\"; s.equals(t) compares the text."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "StringRelationalComparison",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile (use s.compareTo(t))."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "LessGreaterSwapped",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: < and > mean the same thing (or a < b means a is greater than b). Right rule: a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "ChainedComparison",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate both operands, promote to a common type, then compare). Applied unevenly: the student treats < as <= on the boundary pass of a loop, or compares an int with a double as ints on one line and as doubles on another. (here mixing in: \"90 <= grade <= 100 tests whether grade is between 90 and 100\")"
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them and produces a boolean."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "ComparisonWithBooleanLiteral",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, so writing == true adds nothing."
+  },
+  {
+   "level_node": "comparison_operators@L0",
+   "misconception": "EqualsComparesReferences",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters; it is == that compares references."
+  },
+  {
+   "level_node": "comparison_operators@L4",
+   "misconception": "ChainedComparison",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b)."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopBodyAlwaysOnce",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The loop body always runs at least once, even if the condition is false at the start. Right rule: A while or for body runs zero times when the condition is false at the start."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopBodyStatementOutsideLoop",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "StatementAfterLoopInBody",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopRunsStatementsSeparately",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. Right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ..."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "StateChangeIgnoredAcrossPasses",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. Right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopBodyAlwaysOnce",
+   "way": "inconsistent_trace",
+   "way_index": 6,
+   "rule_type": "T",
+   "exact_rule": "Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: \"The loop body always runs at least once, even if the condition is false at the start\")"
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "WhileStopsMidBody",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. Right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "ComputerFillsInIntent",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. Right rule: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "IfInLoopUnchecked",
+   "way": "misconception",
+   "way_index": 9,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. Right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopCountIsStatementCount",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The repeat count of a counted loop says how many of the body statements are executed. Right rule: The repeat count is how many times the whole body runs; every pass runs all body statements."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "ForLoopPartSkipped",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "level_node": "loop_body@L0",
+   "misconception": "LoopOutputSameEachPass",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. Right rule: The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "level_node": "loop_body@L4",
+   "misconception": "LoopBodyAlwaysOnce",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use)."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "data_type@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (find each operand's type, then apply that type's operator). Applied unevenly, a student uses the int operator for 7 / 2 in one line (3) but real division in the next (3.5), or treats a String \"12\" as a number in one + and as text in another. (here mixing in: \"Making every variable a double is the right fix for integer division\")"
+  },
+  {
+   "level_node": "data_type@L4",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Widening a variable's type (int to double) usually still compiles but changes which operations run: / keeps fractions and output prints 3.0. Narrowing it (double to int) breaks every assignment of a double value with a compile-time error. Values that fit both types are kept."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "TargetTyping",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "LaterDoubleLiteralFixesDivision",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first; the double must be in the division itself."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "TargetTyping",
+   "way": "inconsistent_trace",
+   "way_index": 4,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")"
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "AllDoublesToAvoidDivision",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "CastAfterIntDivision",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "level_node": "integer_division@L0",
+   "misconception": "NegativeRemainderSign",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+  },
+  {
+   "level_node": "integer_division@L4",
+   "misconception": "TargetTyping",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero."
+  },
+  {
+   "level_node": "array_default_values@L0",
+   "misconception": "NewArrayHoldsGarbage",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "level_node": "array_default_values@L0",
+   "misconception": "NewArrayHoldsGarbage",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: creation stores the default in every element before any statement can read one. Inconsistent application: the trace reads a fresh a[i] as 0 on one pass but as 'empty' or 'unknown' on another, or gives a new boolean[] the value true. (here mixing in: \"The slots of a new int[n] hold unpredictable values until assigned\")"
+  },
+  {
+   "level_node": "array_default_values@L0",
+   "misconception": "ArrayCreationIsFree",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Creating a big array with new takes no time because the elements are not set yet. Right rule: Because Java sets every element to its default at creation, creating an array takes time proportional to its length."
+  },
+  {
+   "level_node": "array_default_values@L4",
+   "misconception": "NewArrayHoldsGarbage",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: changing the element type changes the default (int 0, double 0.0, boolean false, String null). Moving the creation into a loop resets the defaults on each pass. Adding an explicit loop that stores the default changes nothing."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "AnyValueInAnyVariable",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "level_node": "declaration@L0",
+   "misconception": "LocalVariablesAutoInitialized",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "level_node": "declaration@L4",
+   "misconception": "DeclaredVariableHasNoMemory",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignCompares",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentNotExpression",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentOppositeDirection",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentAddsToTarget",
+   "way": "misconception",
+   "way_index": 5,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a = b adds the value of b to the value already in a (the accumulator model). Right rule: a = b replaces the old value of a with the value of b; the old value is lost."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentIsEquation",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentExchangesValues",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentEmptiesSource",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: After b = a, a no longer holds a value, as if the value had been moved. Right rule: Assignment copies; the variable on the right keeps its value."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariablesHoldExpressions",
+   "way": "inconsistent_trace",
+   "way_index": 9,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: \"= stores the expression itself, not its computed value\")"
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "SwapWithoutTemp",
+   "way": "misconception",
+   "way_index": 10,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "AssignmentCopiesObject",
+   "way": "misconception",
+   "way_index": 11,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: assigning a reference copies the object. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "level_node": "assignment@L0",
+   "misconception": "VariableKeepsOldValue",
+   "way": "misconception",
+   "way_index": 12,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A variable keeps its first value after a new assignment (the static model). Right rule: Each assignment or read replaces the variable's current value."
+  },
+  {
+   "level_node": "assignment@L4",
+   "misconception": "VariablesHoldExpressions",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArraysGrow",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array grows as you add elements. Right rule: An array's length is fixed when it is created, so writing to a[n] throws an exception instead of adding a slot."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArrayAllocationWithoutNew",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Arrays are created without the new keyword. Right rule: An array exists only after new T[n] (or an initializer list in a declaration, which implies creation) has run."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArrayLengthCannotBeZero",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An array cannot have length 0. Right rule: new int[0] is a legal array with a.length == 0 (no element can be indexed)."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArrayCreationIsFree",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Creating a big array with new takes no time because the elements are not set yet. Right rule: Java initializes every element when the array is created, so creation takes time proportional to its length."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArraysGrow",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Points to LT: evaluate the size, allocate the array, fill it with defaults, return the reference, then assign it. Inconsistent application: the size n is treated as the last index on some lines, or the array is assumed to exist already at its declaration. (here mixing in: \"an array grows as you add elements\")"
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArrayRangeInclusive",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: new int[n] has exactly n slots, a[0] through a[n-1]; a[n] does not exist."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "DeclarationCreatesArray",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: Only new (or an initializer) creates the array; before that, using a[i] is the compile-time error 'variable a might not have been initialized'."
+  },
+  {
+   "level_node": "array_creation@L0",
+   "misconception": "ArrayBracketCountIsLength",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The number of brackets in new int[][] is the array's length. Right rule: Bracket pairs give the number of dimensions; the length is the value of the dimension expression inside them."
+  },
+  {
+   "level_node": "array_creation@L4",
+   "misconception": "ArraysGrow",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Conservation: changing n changes a.length and the valid index range but not the element type. Moving 'new' inside a loop gives a fresh array of defaults on every pass (SelfAvoidingWalk relies on this). Re-creating an array never changes arrays that other variables already refer to."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "LoopUpdateChangesDirection",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. Right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "BodyChangeIgnoredByCondition",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "LoopOutputSameEachPass",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. Right rule: The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "LoopVariableLimitsValues",
+   "way": "misconception",
+   "way_index": 4,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. Right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "LoopUpdateChangesDirection",
+   "way": "inconsistent_trace",
+   "way_index": 5,
+   "rule_type": "T",
+   "exact_rule": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")"
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "LoopVariableLifetimeScope",
+   "way": "misconception",
+   "way_index": 6,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. Right rule: The for variable i is created once by the init, the update changes that same variable on every pass, and i exists only until the end of the for statement."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "DoubleLoopIndexCount",
+   "way": "misconception",
+   "way_index": 7,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. Right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect."
+  },
+  {
+   "level_node": "loop_variable@L0",
+   "misconception": "ForInitRepeats",
+   "way": "misconception",
+   "way_index": 8,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The initialization of a for loop runs again after a pass of the body. Right rule: The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "level_node": "loop_variable@L4",
+   "misconception": "LoopUpdateChangesDirection",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count."
+  },
+  {
+   "level_node": "normalization@L0",
+   "misconception": "IntegerProbability",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: Probabilities computed with integer division stay correct. Right rule: counts[i][j]/outDegree[i] with two int operands truncates (0 whenever counts < outDegree); Transition multiplies by .90 first so the division is double, and RandomSurfer casts with (double) freq[i] / T."
+  },
+  {
+   "level_node": "normalization@L0",
+   "misconception": "IntegerProbability",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Applies LT (left to right: .90*counts, then / outDegree, then + .10/N) unevenly: e.g. dividing before the double factor on some entries (int division), or adding .10/N once per row instead of to every entry. (here mixing in: \"probabilities computed with integer division stay correct\")"
+  },
+  {
+   "level_node": "normalization@L0",
+   "misconception": "RowsNeedNotSumToOne",
+   "way": "misconception",
+   "way_index": 3,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: A page with no outgoing links can have an all-zero row. Right rule: Normalising requires a non-zero total; a page with no links is given 1/N in every column so its row still sums to 1."
+  },
+  {
+   "level_node": "normalization@L4",
+   "misconception": "IntegerProbability",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Invariant: weights sum to 1, since .90*(sum of counts/outDegree) + N*(.10/N) = .90 + .10. Changing .90 to .80 without changing .10 breaks it; reordering to counts[i][j]/outDegree[i]*.90 breaks it silently via int division."
   },
   {
    "level_node": "for_loop@L0",
@@ -46667,284 +47195,100 @@
    "exact_rule": "Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass)."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "TargetTyping",
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "exact_rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written."
   },
   {
-   "level_node": "integer_division@L0",
-   "misconception": "IntegerDivisionGivesFraction",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "LaterDoubleLiteralFixesDivision",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first; the double must be in the division itself."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "TargetTyping",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")"
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "AllDoublesToAvoidDivision",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Making every variable a double is the right fix for integer division. Right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "CastAfterIntDivision",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
-  },
-  {
-   "level_node": "integer_division@L0",
-   "misconception": "NegativeRemainderSign",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
-  },
-  {
-   "level_node": "integer_division@L4",
-   "misconception": "TargetTyping",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero."
-  },
-  {
-   "level_node": "array_default_values@L0",
-   "misconception": "NewArrayHoldsGarbage",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
-  },
-  {
-   "level_node": "array_default_values@L0",
-   "misconception": "NewArrayHoldsGarbage",
+   "level_node": "statement@L0",
+   "misconception": "ComputerFillsInIntent",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT: creation stores the default in every element before any statement can read one. Inconsistent application: the trace reads a fresh a[i] as 0 on one pass but as 'empty' or 'unknown' on another, or gives a new boolean[] the value true. (here mixing in: \"The slots of a new int[n] hold unpredictable values until assigned\")"
+   "exact_rule": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")"
   },
   {
-   "level_node": "array_default_values@L0",
-   "misconception": "ArrayCreationIsFree",
+   "level_node": "statement@L0",
+   "misconception": "StatementsRunInAnyOrder",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Creating a big array with new takes no time because the elements are not set yet. Right rule: Because Java sets every element to its default at creation, creating an array takes time proportional to its length."
+   "exact_rule": "wrong rule: Statements in a program can run in any order, so their order makes no difference. Right rule: Without control statements, statements run once each, top to bottom, in the order written."
   },
   {
-   "level_node": "array_default_values@L4",
-   "misconception": "NewArrayHoldsGarbage",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: changing the element type changes the default (int 0, double 0.0, boolean false, String null). Moving the creation into a loop resets the defaults on each pass. Adding an explicit loop that stores the default changes nothing."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoFloatLiterals",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no float literals. Right rule: A decimal literal ending in f is a float; without the f it is a double."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "NoLongLiterals",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Java has no long literals. Right rule: An integer literal ending in L is a long."
-  },
-  {
-   "level_node": "literal@L0",
-   "misconception": "WholeNumberLiteralIsInt",
+   "level_node": "statement@L0",
+   "misconception": "WhitespaceIsSignificant",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double."
+   "exact_rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks."
   },
   {
-   "level_node": "literal@L0",
-   "misconception": "LargeIntegerLong",
-   "way": "inconsistent_trace",
+   "level_node": "statement@L0",
+   "misconception": "ProgramLooksAhead",
+   "way": "misconception",
    "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each literal denotes one fixed value whose type is read from how it is written). Applied unevenly, a student reads 2.0 as an int in one place, or '7' as the number 7 in one expression and as a character in the next. (here mixing in: \"a large integer literal is automatically long\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The program knows what later lines will do and acts on that goal at the current line. Right rule: Each statement executes using only the current state; later lines have no effect until control reaches them."
   },
   {
-   "level_node": "literal@L4",
-   "misconception": "LargeIntegerLong",
+   "level_node": "statement@L4",
+   "misconception": "ComputerFillsInIntent",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Rewriting a literal in another form keeps the value but changes the type, and so the operation: 10 / 3 is 3 but 10.0 / 3 is 3.333..., and \"5\" + 1 is \"51\" but 5 + 1 is 6."
+   "exact_rule": "Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it."
   },
   {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
+   "level_node": "loop_scope@L0",
+   "misconception": "LoopBodyScopeImpliesLoopLifetime",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
+   "exact_rule": "wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value."
   },
   {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "CaretIsPower",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
-  },
-  {
-   "level_node": "arithmetic_operators@L0",
-   "misconception": "ArithmeticOnNumericStrings",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
-  },
-  {
-   "level_node": "arithmetic_operators@L4",
-   "misconception": "CaretIsPower",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
-  },
-  {
-   "level_node": "primitive_type@L0",
-   "misconception": "StringIsPrimitive",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
-  },
-  {
-   "level_node": "primitive_type@L0",
-   "misconception": "StringIsPrimitive",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: \"String is a primitive type like int\")"
-  },
-  {
-   "level_node": "primitive_type@L0",
-   "misconception": "NewArrayHoldsGarbage",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The slots of a new int[n] hold unpredictable values until assigned. Right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
-  },
-  {
-   "level_node": "primitive_type@L4",
-   "misconception": "StringIsPrimitive",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ChainedComparison",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "EqualityOperatorComparesObjectsValues",
+   "level_node": "loop_scope@L0",
+   "misconception": "LoopVariableLifetimeScope",
    "way": "misconception",
    "way_index": 2,
    "rule_type": "M",
-   "exact_rule": "wrong rule: == compares the contents of two Strings. Right rule: s == t is true only when s and t refer to the same object; \"abc\" == \"ab\" + x is false even when x is \"c\"; s.equals(t) compares the text."
+   "exact_rule": "wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. Right rule: The for variable i is created once by the init, the update changes that same variable on every pass, and i exists only until the end of the for statement."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "StringRelationalComparison",
+   "level_node": "loop_scope@L0",
+   "misconception": "ForVariableScopeBeyondLoop",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile (use s.compareTo(t))."
+   "exact_rule": "wrong rule: i declared in the for header can still be used after the loop has ended. Right rule: i declared in the for header exists only inside the loop, so using it after the loop does not compile."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "LessGreaterSwapped",
+   "level_node": "loop_scope@L0",
+   "misconception": "LocalVarOutsideScope",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: < and > mean the same thing (or a < b means a is greater than b). Right rule: a < b is true when a is smaller than b; a > b when a is larger."
+   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable exists only from its declaration to the end of its block."
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ChainedComparison",
+   "level_node": "loop_scope@L0",
+   "misconception": "LoopBodyScopeImpliesLoopLifetime",
    "way": "inconsistent_trace",
    "way_index": 5,
    "rule_type": "T",
-   "exact_rule": "Points to LT (evaluate both operands, promote to a common type, then compare). Applied unevenly: the student treats < as <= on the boundary pass of a loop, or compares an int with a double as ints on one line and as doubles on another. (here mixing in: \"90 <= grade <= 100 tests whether grade is between 90 and 100\")"
+   "exact_rule": "Applies the scope rule (LT) unevenly: lets a body variable keep its value from the last pass on some passes but not others, or uses the for variable after the loop in one place but not another. (here mixing in: \"a variable declared in the loop body lives across all iterations\")"
   },
   {
-   "level_node": "comparison_operators@L0",
-   "misconception": "AssignCompares",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: = compares two values instead of assigning. Right rule: x = y copies the value of y into x; x == y is what compares them and produces a boolean."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "ComparisonWithBooleanLiteral",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, so writing == true adds nothing."
-  },
-  {
-   "level_node": "comparison_operators@L0",
-   "misconception": "EqualsComparesReferences",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters; it is == that compares references."
-  },
-  {
-   "level_node": "comparison_operators@L4",
-   "misconception": "ChainedComparison",
+   "level_node": "loop_scope@L4",
+   "misconception": "LoopBodyScopeImpliesLoopLifetime",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b)."
+   "exact_rule": "Moving a declaration from before the loop into the body re-initializes the variable every pass and makes it unusable after the loop; moving a for-header declaration out (int i; for (i = 0; ...)) keeps the loop's behaviour and makes i usable after it."
   },
   {
    "level_node": "int@L0",
@@ -46979,452 +47323,108 @@
    "exact_rule": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0)."
   },
   {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. Right rule: A double is an approximation: Math.sqrt(2) * Math.sqrt(2) is 2.0000000000000004, so the == test is false; compare doubles with a tolerance."
+   "exact_rule": "wrong rule: a single literal or variable \"isn't an expression\". Right rule: A single variable or literal is an expression whose value is just that value."
   },
   {
-   "level_node": "double@L0",
-   "misconception": "WholeNumberLiteralIsInt",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: 207. and 2.3e4 are int values because they are whole numbers. Right rule: A decimal point or scientific notation makes the literal a double, whatever its value: 207. is 207.0 and 2.3e4 is 23000.0, so int n = 2.3e4; does not compile."
-  },
-  {
-   "level_node": "double@L0",
-   "misconception": "FloatingPointIsExact",
+   "level_node": "expression@L0",
+   "misconception": "NoAtomicExpression",
    "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
-  },
-  {
-   "level_node": "double@L4",
-   "misconception": "FloatingPointIsExact",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits."
-  },
-  {
-   "level_node": "loop_variable@L0",
-   "misconception": "LoopUpdateChangesDirection",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. Right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update."
-  },
-  {
-   "level_node": "loop_variable@L0",
-   "misconception": "BodyChangeIgnoredByCondition",
-   "way": "misconception",
    "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body."
+   "rule_type": "T",
+   "exact_rule": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")"
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "LoopOutputSameEachPass",
+   "level_node": "expression@L0",
+   "misconception": "AssignmentNotExpression",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. Right rule: The body uses the current value of the loop variable, so its output can differ on each pass."
+   "exact_rule": "wrong rule: an assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "LoopVariableLimitsValues",
+   "level_node": "expression@L0",
+   "misconception": "ParenthesesOnlyIfArgument",
    "way": "misconception",
    "way_index": 4,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. Right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it."
+   "exact_rule": "wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "LoopUpdateChangesDirection",
-   "way": "inconsistent_trace",
+   "level_node": "expression@L0",
+   "misconception": "TargetTyping",
+   "way": "misconception",
    "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")"
+   "rule_type": "M",
+   "exact_rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "LoopVariableLifetimeScope",
+   "level_node": "expression@L0",
+   "misconception": "VariablesHoldExpressions",
    "way": "misconception",
    "way_index": 6,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. Right rule: The for variable i is created once by the init, the update changes that same variable on every pass, and i exists only until the end of the for statement."
+   "exact_rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "DoubleLoopIndexCount",
+   "level_node": "expression@L0",
+   "misconception": "OutsideInMethodNesting",
    "way": "misconception",
    "way_index": 7,
    "rule_type": "M",
-   "exact_rule": "wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. Right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect."
+   "exact_rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f."
   },
   {
-   "level_node": "loop_variable@L0",
-   "misconception": "ForInitRepeats",
+   "level_node": "expression@L0",
+   "misconception": "AssignmentIsEquation",
    "way": "misconception",
    "way_index": 8,
    "rule_type": "M",
-   "exact_rule": "wrong rule: The initialization of a for loop runs again after a pass of the body. Right rule: The initialization runs exactly once, before the first condition test."
+   "exact_rule": "wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. Right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   },
   {
-   "level_node": "loop_variable@L4",
-   "misconception": "LoopUpdateChangesDirection",
+   "level_node": "expression@L4",
+   "misconception": "NoAtomicExpression",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count."
+   "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
   },
   {
-   "level_node": "array_traversal@L0",
-   "misconception": "WholeArrayArithmetic",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "misconception",
    "way_index": 1,
    "rule_type": "M",
-   "exact_rule": "wrong rule: a = a + b adds the arrays element by element. Right rule: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+   "exact_rule": "wrong rule: a^2 computes a squared. Right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared."
   },
   {
-   "level_node": "array_traversal@L0",
-   "misconception": "IdiomOverridesCode",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
-  },
-  {
-   "level_node": "array_traversal@L0",
-   "misconception": "ArrayUseScansAllCells",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Using an array means every cell must be scanned. Right rule: A traversal may cover only part of the array or stop early (as in a search); indexing reaches single elements directly."
-  },
-  {
-   "level_node": "array_traversal@L0",
-   "misconception": "WholeArrayArithmetic",
-   "way": "inconsistent_trace",
-   "way_index": 4,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: initialize i, test, run the body with the current i, update, test again. Inconsistent application: on some passes the update is applied before the body, or a[i] is traced with the previous i. (here mixing in: \"a = a + b adds the arrays element by element\")"
-  },
-  {
-   "level_node": "array_traversal@L0",
-   "misconception": "OffByOneBound",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
-  },
-  {
-   "level_node": "array_traversal@L0",
-   "misconception": "ElementBoundToOldIndex",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: After i changes, X[i] still refers to the element at the old value of i. Right rule: a[i] is evaluated with the current value of i each time it is used."
-  },
-  {
-   "level_node": "array_traversal@L4",
-   "misconception": "WholeArrayArithmetic",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed."
-  },
-  {
-   "level_node": "widening_conversion@L0",
-   "misconception": "NoCastIfSameSize",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. Right rule: The compiler decides by types, not values: assigning a double to an int needs a cast even when the value (e.g. 3.0) would fit, because a conversion that might involve loss of information leads to a compile-time error."
-  },
-  {
-   "level_node": "widening_conversion@L0",
-   "misconception": "NarrowingAssignmentAllowed",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A double value can be stored in an int variable like an int in a double. Right rule: int to double is automatic (widening); double to int needs a cast, otherwise the assignment is a compile-time error."
-  },
-  {
-   "level_node": "widening_conversion@L0",
-   "misconception": "NoCastIfSameSize",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Points to LT (promotion happens at each operator, at the moment an int operand meets a double). Applied unevenly: the student promotes the whole expression up front on one line (so b*b - 4*c is done in double) but per operator on another. (here mixing in: \"If a variable is at least as big as a value, no cast is needed to assign the value\")"
-  },
-  {
-   "level_node": "widening_conversion@L4",
-   "misconception": "NoCastIfSameSize",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Widening an int to double and casting back restores the original int (reversible); widening a large long to double may not be reversible; widening an int quotient after the division cannot restore the lost fraction."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "PreIncrementBeforeLoop",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: ++i in the for-update runs before the body each pass. Right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "OffByOneBound",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "PreIncrementBeforeLoop",
-   "way": "inconsistent_trace",
-   "way_index": 3,
-   "rule_type": "T",
-   "exact_rule": "Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: \"++i in the for-update runs before the body each pass\")"
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "InfiniteLoopUnnoticed",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: a condition that never goes false still terminates. Right rule: A while loop stops only when its condition is false at a check, so if no pass changes the variables in the condition, it never stops."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "DoubleLoopIndexCount",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. Right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "IdiomOverridesCode",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "LoopHeaderIsEquations",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. Right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "ForLoopPartSkipped",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "ForUpdateBeforeBody",
-   "way": "misconception",
-   "way_index": 9,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "LoopUpdateChangesDirection",
-   "way": "misconception",
-   "way_index": 10,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. Right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update."
-  },
-  {
-   "level_node": "loop_control@L0",
-   "misconception": "LoopStepAlwaysOne",
-   "way": "misconception",
-   "way_index": 11,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
-  },
-  {
-   "level_node": "loop_control@L4",
-   "misconception": "PreIncrementBeforeLoop",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted)."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArraysGrow",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array grows as you add elements. Right rule: An array's length is fixed when it is created, so writing to a[n] throws an exception instead of adding a slot."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArrayAllocationWithoutNew",
-   "way": "misconception",
-   "way_index": 2,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Arrays are created without the new keyword. Right rule: An array exists only after new T[n] (or an initializer list in a declaration, which implies creation) has run."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArrayLengthCannotBeZero",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: An array cannot have length 0. Right rule: new int[0] is a legal array with a.length == 0 (no element can be indexed)."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArrayCreationIsFree",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Creating a big array with new takes no time because the elements are not set yet. Right rule: Java initializes every element when the array is created, so creation takes time proportional to its length."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArraysGrow",
-   "way": "inconsistent_trace",
-   "way_index": 5,
-   "rule_type": "T",
-   "exact_rule": "Points to LT: evaluate the size, allocate the array, fill it with defaults, return the reference, then assign it. Inconsistent application: the size n is treated as the last index on some lines, or the array is assumed to exist already at its declaration. (here mixing in: \"an array grows as you add elements\")"
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArrayRangeInclusive",
-   "way": "misconception",
-   "way_index": 6,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: new int[n] has exactly n slots, a[0] through a[n-1]; a[n] does not exist."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "DeclarationCreatesArray",
-   "way": "misconception",
-   "way_index": 7,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: int[] a; already makes an array that can be indexed. Right rule: Only new (or an initializer) creates the array; before that, using a[i] is the compile-time error 'variable a might not have been initialized'."
-  },
-  {
-   "level_node": "array_creation@L0",
-   "misconception": "ArrayBracketCountIsLength",
-   "way": "misconception",
-   "way_index": 8,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: The number of brackets in new int[][] is the array's length. Right rule: Bracket pairs give the number of dimensions; the length is the value of the dimension expression inside them."
-  },
-  {
-   "level_node": "array_creation@L4",
-   "misconception": "ArraysGrow",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Conservation: changing n changes a.length and the valid index range but not the element type. Moving 'new' inside a loop gives a fresh array of defaults on every pass (SelfAvoidingWalk relies on this). Re-creating an array never changes arrays that other variables already refer to."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
-  },
-  {
-   "level_node": "declaration@L0",
-   "misconception": "DeclaredVariableHasNoMemory",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "CaretIsPower",
    "way": "inconsistent_trace",
    "way_index": 2,
    "rule_type": "T",
-   "exact_rule": "Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")"
+   "exact_rule": "Points to LT (evaluate operands, then apply the operator in the promoted type). Applied unevenly, a student uses integer division for one / and real division for another / in the same int expression. (here mixing in: \"a^2 computes a squared\")"
   },
   {
-   "level_node": "declaration@L0",
-   "misconception": "AnyValueInAnyVariable",
+   "level_node": "arithmetic_operators@L0",
+   "misconception": "ArithmeticOnNumericStrings",
    "way": "misconception",
    "way_index": 3,
    "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+   "exact_rule": "wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
   },
   {
-   "level_node": "declaration@L0",
-   "misconception": "LocalVariablesAutoInitialized",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
-  },
-  {
-   "level_node": "declaration@L4",
-   "misconception": "DeclaredVariableHasNoMemory",
+   "level_node": "arithmetic_operators@L4",
+   "misconception": "CaretIsPower",
    "way": "predict_a_change",
    "way_index": 0,
    "rule_type": "C",
-   "exact_rule": "Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
-   "way": "misconception",
-   "way_index": 1,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LocalVarOutsideScope",
-   "way": "inconsistent_trace",
-   "way_index": 2,
-   "rule_type": "T",
-   "exact_rule": "Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")"
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterIfInBranch",
-   "way": "misconception",
-   "way_index": 3,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "LoopBodyStatementOutsideLoop",
-   "way": "misconception",
-   "way_index": 4,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass."
-  },
-  {
-   "level_node": "block@L0",
-   "misconception": "StatementAfterLoopInBody",
-   "way": "misconception",
-   "way_index": 5,
-   "rule_type": "M",
-   "exact_rule": "wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
-  },
-  {
-   "level_node": "block@L4",
-   "misconception": "LocalVarOutsideScope",
-   "way": "predict_a_change",
-   "way_index": 0,
-   "rule_type": "C",
-   "exact_rule": "Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile."
+   "exact_rule": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power."
   }
  ],
  "counts": {

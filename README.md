@@ -21,7 +21,8 @@ README.md
 requirements.txt
 data/
   raw/chapter1_kg.json          knowledge graph v3.9.5-reader4 (173 concepts, reader layer with code patterns)
-  raw/scenarios_20.json         S000 reference case + the 20 student scenarios (code, question, answer, gold labels)
+  raw/scenarios_20.json         S000 reference case + the 10 gold scenarios whose gold concepts the code alone shows
+  raw/scenarios_not_from_code.json  the other 10 gold scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json one extracted subgraph per scenario (output of the report CLI)
 src/lp_graph/subgraph/
   mask.py                       mask_java, split_statements
@@ -44,11 +45,12 @@ PYTHONPATH=src python -m lp_graph.subgraph.report --kg data/raw/chapter1_kg.json
 ```
 
 The report prints one line per scenario (concepts tagged, subgraph counts, gold concepts missed) and ends
-with `fully covered: N / 20`. Misses marked `xfail` are gold concepts that the code does not show and only the
-question or the student's answer brings in: prose or one-line "code" (S009, S010, S012, S015, S068), the while
-loop a student compares a do-while with (S005), division in a program that only uses `%` (S016), the missing
-`break` in a fall-through switch (S023, S073), and compiling a program whose code only says how to run it (S080).
-Current result: 10 / 20 fully covered from code alone, 20 / 20 with no unexpected miss.
+with `fully covered: N / 10`. The dataset keeps the scenarios whose gold concepts the code alone shows
+(S001, S007, S008, S021, S026, S047, S052, S057, S134, S137, plus the reference case S000): 10 / 10.
+The other ten gold scenarios are kept in `data/raw/scenarios_not_from_code.json`: their "code" is prose or a
+bare declaration (S009, S010, S012, S015, S068), or a gold concept comes only from the student's answer (the
+while loop compared with a do-while in S005, division in S016, the missing `break` in S023 and S073, compiling
+in S080). Run them with `--gold data/raw/scenarios_not_from_code.json`; misses there are expected (`xfail`).
 
 ## How the matcher works
 

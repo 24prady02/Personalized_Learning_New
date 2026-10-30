@@ -11,7 +11,8 @@ from pathlib import Path
 
 from .extract import subgraph_from_code
 
-# Concepts that the question or the student's answer brings in; they are not in the code.
+# Concepts that the question or the student's answer brings in; they are not in the code. These scenarios now live in
+# data/raw/scenarios_not_from_code.json; the table is kept so that file can be run through the report too.
 NOT_IN_CODE = {
     "S005": {"while_loop"},            # the code is a do-while; the student compares it with a while loop
     "S016": {"integer_division"},      # the code has % but no /; the student brings division in
