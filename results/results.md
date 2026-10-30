@@ -5,19 +5,19 @@ Stage 1 reads only the scenario's code. Every concept node below was found by a 
 
 ## Summary
 
-| scenario | concept nodes | generic kept | concept edges | misconception edges | misconception nodes | level nodes | links | pieces | gold covered |
-|---|---|---|---|---|---|---|---|---|---|
-| S000 | 4 | 2 | 2 | 18 | 17 | 20 | 20 | 2 | yes |
-| S001 | 4 | 2 | 5 | 18 | 15 | 20 | 16 | 1 | yes |
-| S007 | 17 | 5 | 14 | 141 | 104 | 85 | 145 | 3 | yes |
-| S008 | 19 | 4 | 16 | 141 | 108 | 95 | 161 | 4 | yes |
-| S021 | 12 | 3 | 10 | 87 | 69 | 60 | 91 | 2 | yes |
-| S026 | 2 | 1 | 1 | 17 | 15 | 10 | 17 | 1 | yes |
-| S047 | 2 | 1 | 1 | 7 | 6 | 10 | 11 | 1 | yes |
-| S052 | 8 | 1 | 7 | 17 | 16 | 40 | 23 | 2 | yes |
-| S057 | 26 | 5 | 22 | 167 | 120 | 130 | 193 | 4 | yes |
-| S134 | 2 | 1 | 1 | 17 | 15 | 10 | 17 | 1 | yes |
-| S137 | 4 | 2 | 5 | 18 | 15 | 20 | 16 | 1 | yes |
+| scenario | concept nodes | concept edges | misconception edges | misconception nodes | level nodes | pieces | edges traced | misconception nodes |
+|---|---|---|---|---|---|---|---|---|
+| S000 | 4 | 2 | 18 | 17 | 20 | 2 | `pre:declaration->definite_assignment`, `pre:statement->println` | `AnyValueInAnyVariable`, `ComputerFillsInIntent`, `DeclarationWithoutType`, `DeclaredVariableHasNoMemory`, `IdentifierCaseInsensitive`, `LocalVariablesAutoInitialized`, `ParenthesesOnlyIfArgument`, `PrintEqualsPrintln`, `PrintNewLineFirst`, `PrintWithoutFinalNewline`, `PrintedTextIsExecuted`, `ProgramLooksAhead`, `RedeclareToReassign`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `UndeclaredOrRenamedVariable`, `WhitespaceIsSignificant` |
+| S001 | 4 | 5 | 18 | 15 | 20 | 1 | `par:print~println`, `pre:statement->print`, `pre:statement->println`, `pre:string_literal->print`, `pre:string_literal->println` | `ComputerFillsInIntent`, `IdentifierCaseInsensitive`, `ParenthesesOnlyIfArgument`, `PrintEqualsPrintln`, `PrintNewLineFirst`, `PrintWithoutFinalNewline`, `PrintedTextIsExecuted`, `ProgramLooksAhead`, `RepeatedOutputVariablePrintedOnce`, `SingleQuotedString`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringLiteralSpansLines`, `UnclosedStringLiteral`, `WhitespaceIsSignificant` |
+| S007 | 17 | 14 | 141 | 104 | 85 | 3 | `par:assignment~comparison_operators`, `par:println~formatted_output`, `pre:assignment->increment_operators`, `pre:comparison_operators->boolean_expression`, `pre:expression->comparison_operators`, `pre:for_loop->loop_scope`, `pre:for_loop->nested_loops`, `pre:loop_control->for_loop`, `pre:loop_control->increment_operators`, `pre:loop_variable->loop_control`, `pre:standard_output->formatted_output`, `pre:statement->control_flow`, `pre:statement->println`, `pre:string_literal->println` | `AccumulatorDeclaredInLoop`, `ArithmeticInsteadOfBoolean`, `AssignCompares`, `AssignToFinal`, `AssignmentAddsToTarget`, `AssignmentCopiesObject`, `AssignmentEmptiesSource`, `AssignmentExchangesValues`, `AssignmentIsEquation`, `AssignmentNotExpression`, `AssignmentOppositeDirection`, `BodyChangeIgnoredByCondition`, `BracelessMultiStatementBody`, `ChainedComparison`, `CodeAfterIfSkipped`, `ComparisonWithBooleanLiteral`, `ComputerFillsInIntent`, `DoubleLoopIndexCount`, `ElseWithCondition`, `EmptyInnerLoopSkipsRest`, `EqualityOperatorComparesObjectsValues`, `EqualsComparesReferences`, `ExpressionOnLeftOfAssignment`, `FalseConditionRestartsProgram`, `FalseLoopRepeatsNextCode`, `FieldWidthIsIntegerDigits`, `ForCommaSeparators`, `ForInitRepeats`, `ForIsConditional`, `ForLoopPartSkipped`, `ForUpdateBeforeBody`, `ForVariableScopeBeyondLoop`, `ForWhileNotInterchangeable`, `IdentifierCaseInsensitive`, `IdiomOverridesCode`, `IfConditionWatched`, `IfInLoopUnchecked`, `IfWaitsForCondition`, `InconsistentIndentation`, `IncrementByTwo`, `InfiniteLoopUnnoticed`, `InnerCounterOverwritesOuter`, `InnerOuterSwapped`, `LessGreaterSwapped`, `LocalVarOutsideScope`, `LoopBodyAlwaysOnce`, `LoopBodyScopeImpliesLoopLifetime`, `LoopBodyStatementOutsideLoop`, `LoopCountIsStatementCount`, `LoopForOneTimeTest`, `LoopHeaderIsEquations`, `LoopImpliedByOneTest`, `LoopOutputSameEachPass`, `LoopRunsStatementsSeparately`, `LoopStepAlwaysOne`, `LoopUpdateChangesDirection`, `LoopVariableLifetimeScope`, `LoopVariableLimitsValues`, `ManyDigitsMeanAccurate`, `MapToBooleanWithConditionalOperator`, `MapToBooleanWithIf`, `MissingBraces`, `NestedIfsInsteadOfLogicalOperators`, `NestedLoopsLockstep`, `NestedLoopsSequential`, `NoAtomicExpression`, `NoShortCircuit`, `OffByOneBound`, `OuterLoopIgnored`, `OutsideInMethodNesting`, `ParenthesesOnlyIfArgument`, `PostIncrementAssignsLater`, `PreIncrementBeforeLoop`, `PrePostIncrementSameValue`, `PrintEqualsPrintln`, `PrintNewLineFirst`, `PrintWithoutFinalNewline`, `PrintedTextIsExecuted`, `PrintfAddsNewline`, `PrintfAnyConversion`, `ProgramEndsAfterLoop`, `ProgramLooksAhead`, `RedeclareToReassign`, `RepeatedOutputVariablePrintedOnce`, `ReturnDoesNotExitLoop`, `ReversedRelationalOperator`, `SemicolonAfterIfHeader`, `SemicolonAfterLoopHeader`, `SingleIterationInsteadOfLoop`, `SingleQuotedString`, `StateChangeIgnoredAcrossPasses`, `StatementAfterLoopInBody`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringLiteralSpansLines`, `StringRelationalComparison`, `SwapWithoutTemp`, `TargetTyping`, `UnclosedStringLiteral`, `VariableKeepsOldValue`, `VariablesHoldExpressions`, `WhileStopsMidBody`, `WhitespaceIsSignificant`, `WrongIterationCount` |
+| S008 | 19 | 16 | 141 | 108 | 95 | 4 | `par:assignment~comparison_operators`, `par:comparison_operators~logical_operators`, `pre:arithmetic_operators->expression`, `pre:assignment->increment_operators`, `pre:boolean_expression->if_statement`, `pre:comparison_operators->boolean_expression`, `pre:control_flow->if_statement`, `pre:expression->comparison_operators`, `pre:expression->operator_precedence`, `pre:if_statement->if_else_statement`, `pre:logical_operators->boolean_expression`, `pre:logical_operators->short_circuit`, `pre:loop_control->increment_operators`, `pre:loop_variable->loop_control`, `pre:standard_output->formatted_output`, `pre:statement->control_flow` | `ArithmeticInsteadOfBoolean`, `ArithmeticOnNumericStrings`, `ArithmeticPlusPrecedes`, `AssignCompares`, `AssignToFinal`, `AssignmentAddsToTarget`, `AssignmentCopiesObject`, `AssignmentEmptiesSource`, `AssignmentExchangesValues`, `AssignmentIsEquation`, `AssignmentNotExpression`, `AssignmentOppositeDirection`, `BodyChangeIgnoredByCondition`, `BooleanPrecedence`, `BothBranchesExecute`, `BracelessMultiStatementBody`, `BranchChosenByIntent`, `CaretIsPower`, `CastAppliesToWholeExpression`, `ChainedComparison`, `CodeAfterIfSkipped`, `ComparisonWithBooleanLiteral`, `ComputerFillsInIntent`, `ConditionalIsSequence`, `CurlyIfCondition`, `DoWhileTestsFirst`, `DoubleLoopIndexCount`, `DuplicateCodeInBranches`, `ElseAlwaysExecutes`, `ElseWithCondition`, `EqualityOperatorComparesObjectsValues`, `EqualsComparesReferences`, `ExpressionOnLeftOfAssignment`, `FalseConditionEndsProgram`, `FalseConditionRestartsProgram`, `FalseLoopRepeatsNextCode`, `FieldWidthIsIntegerDigits`, `ForInitRepeats`, `ForLoopPartSkipped`, `ForUpdateBeforeBody`, `IdiomOverridesCode`, `IfConditionCheckedInHindsight`, `IfConditionWatched`, `IfInLoopUnchecked`, `IfIsLoop`, `IfRequiresElse`, `IfWaitsForCondition`, `IncrementByTwo`, `InfiniteLoopUnnoticed`, `LessGreaterSwapped`, `LoopBodyAlwaysOnce`, `LoopBodyStatementOutsideLoop`, `LoopCountIsStatementCount`, `LoopForOneTimeTest`, `LoopHeaderIsEquations`, `LoopImpliedByOneTest`, `LoopOutputSameEachPass`, `LoopRunsStatementsSeparately`, `LoopStepAlwaysOne`, `LoopUpdateChangesDirection`, `LoopVariableLifetimeScope`, `LoopVariableLimitsValues`, `ManyDigitsMeanAccurate`, `MapToBooleanWithConditionalOperator`, `MapToBooleanWithIf`, `MissingBraces`, `MissingClarifyingParentheses`, `NestedIfsInsteadOfLogicalOperators`, `NextStatementIsElse`, `NoAtomicExpression`, `NoShortCircuit`, `NoSingleLogicAnd`, `OffByOneBound`, `OutsideInMethodNesting`, `ParenthesesOnlyIfArgument`, `PostIncrementAssignsLater`, `PreIncrementBeforeLoop`, `PrePostIncrementSameValue`, `PrintEqualsPrintln`, `PrintedTextIsExecuted`, `PrintfAddsNewline`, `PrintfAnyConversion`, `ProgramEndsAfterLoop`, `ProgramLooksAhead`, `RedeclareToReassign`, `RemainderIsSubtraction`, `RepeatedOutputVariablePrintedOnce`, `ReturnDoesNotExitLoop`, `ReversedRelationalOperator`, `SemicolonAfterIfHeader`, `SequentialIfsAreNested`, `SingleAmpersandForAnd`, `StateChangeIgnoredAcrossPasses`, `StatementAfterIfInBranch`, `StatementAfterLoopInBody`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringPlusLeftToRight`, `StringRelationalComparison`, `SwapWithoutTemp`, `TargetTyping`, `ThenAlwaysExecutes`, `VariableKeepsOldValue`, `VariablesHoldExpressions`, `WhileStopsMidBody`, `WhitespaceIsSignificant`, `WrongIterationCount`, `WrongOperatorOrder` |
+| S021 | 12 | 10 | 87 | 69 | 60 | 2 | `pre:arithmetic_operators->expression`, `pre:boolean_expression->if_statement`, `pre:comparison_operators->boolean_expression`, `pre:control_flow->if_statement`, `pre:expression->comparison_operators`, `pre:if_else_statement->nested_conditionals`, `pre:if_statement->if_else_statement`, `pre:statement->control_flow`, `pre:statement->print`, `pre:string_literal->print` | `ArithmeticInsteadOfBoolean`, `ArithmeticOnNumericStrings`, `AssignCompares`, `AssignmentIsEquation`, `AssignmentNotExpression`, `BothBranchesExecute`, `BracelessMultiStatementBody`, `BranchChosenByIntent`, `CaretIsPower`, `ChainedComparison`, `CodeAfterIfSkipped`, `ComparisonWithBooleanLiteral`, `ComputerFillsInIntent`, `ConditionalIsSequence`, `CurlyIfCondition`, `DuplicateCodeInBranches`, `ElseAlwaysExecutes`, `ElseMatchesIndentation`, `ElseWithCondition`, `EqualityOperatorComparesObjectsValues`, `EqualsComparesReferences`, `ExpressionOnLeftOfAssignment`, `FalseConditionEndsProgram`, `FalseConditionRestartsProgram`, `FalseLoopRepeatsNextCode`, `IfConditionCheckedInHindsight`, `IfConditionWatched`, `IfInLoopUnchecked`, `IfIsLoop`, `IfRequiresElse`, `IfWaitsForCondition`, `InconsistentIndentation`, `InnerIfIgnoresOuter`, `LessGreaterSwapped`, `LoopForOneTimeTest`, `LoopImpliedByOneTest`, `MapToBooleanWithConditionalOperator`, `MapToBooleanWithIf`, `MissingBraces`, `MultipleElseIfBranchesRun`, `NegativeRemainderSign`, `NestedIfsInsteadOfLogicalOperators`, `NextStatementIsElse`, `NoAtomicExpression`, `NoShortCircuit`, `OutsideInMethodNesting`, `ParenthesesOnlyIfArgument`, `PrintWithoutFinalNewline`, `PrintedTextIsExecuted`, `ProgramEndsAfterLoop`, `ProgramLooksAhead`, `RemainderIsQuotient`, `RemainderIsSubtraction`, `RepeatedOutputVariablePrintedOnce`, `ReturnDoesNotExitLoop`, `ReversedRelationalOperator`, `SemicolonAfterIfHeader`, `SequentialIfsAreNested`, `SingleQuotedString`, `StatementAfterIfInBranch`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringLiteralSpansLines`, `StringRelationalComparison`, `TargetTyping`, `ThenAlwaysExecutes`, `UnclosedStringLiteral`, `VariablesHoldExpressions`, `WhitespaceIsSignificant` |
+| S026 | 2 | 1 | 17 | 15 | 10 | 1 | `pre:assignment->variable_swap` | `AssignCompares`, `AssignToFinal`, `AssignmentAddsToTarget`, `AssignmentCopiesObject`, `AssignmentEmptiesSource`, `AssignmentExchangesValues`, `AssignmentIsEquation`, `AssignmentNotExpression`, `AssignmentOppositeDirection`, `ExpressionOnLeftOfAssignment`, `PrintedTextIsExecuted`, `RedeclareToReassign`, `SwapWithoutTemp`, `VariableKeepsOldValue`, `VariablesHoldExpressions` |
+| S047 | 2 | 1 | 7 | 6 | 10 | 1 | `pre:standard_output->formatted_output` | `FieldWidthIsIntegerDigits`, `ManyDigitsMeanAccurate`, `PrintEqualsPrintln`, `PrintfAddsNewline`, `PrintfAnyConversion`, `RepeatedOutputVariablePrintedOnce` |
+| S052 | 8 | 7 | 17 | 16 | 40 | 2 | `par:standard_input~command_line_args`, `par:standard_input~standard_output`, `pre:command_line_args->black_box_model`, `pre:redirection->data_driven_code`, `pre:redirection->piping`, `pre:standard_input->redirection`, `pre:standard_output->redirection` | `ArgsAlwaysPresent`, `ArgsAreNumbers`, `AudioProgramHangs`, `CompileRunsProgram`, `FirstArgIsArgsOne`, `InputReadOnceBeforeLoop`, `InputTypeMismatch`, `NextLineAfterNextInt`, `PrintEqualsPrintln`, `PrintfAddsNewline`, `ReadPastEndOfInput`, `RedirectionIsArgument`, `RepeatedOutputVariablePrintedOnce`, `RereadIntoVariableInvalid`, `StdInRereads`, `StdLibraryNotInDirectory` |
+| S057 | 26 | 22 | 167 | 120 | 130 | 4 | `par:assignment~comparison_operators`, `pre:arithmetic_operators->expression`, `pre:arithmetic_operators->integer_division`, `pre:array_creation->array_default_values`, `pre:array_creation->array_initializer`, `pre:array_creation->indexing`, `pre:array_declaration->array_creation`, `pre:assignment->increment_operators`, `pre:comparison_operators->boolean_expression`, `pre:data_type->data_structure`, `pre:data_type->primitive_type`, `pre:expression->comparison_operators`, `pre:for_loop->array_traversal`, `pre:for_loop->loop_scope`, `pre:indexing->array_traversal`, `pre:integer_division->normalization`, `pre:loop_control->for_loop`, `pre:loop_control->increment_operators`, `pre:loop_variable->loop_control`, `pre:primitive_type->type_conversion`, `pre:statement->control_flow`, `pre:type_conversion->widening_conversion` | `AccumulatorDeclaredInLoop`, `AllDoublesToAvoidDivision`, `AnyValueInAnyVariable`, `ArithmeticInsteadOfBoolean`, `ArithmeticOnNumericStrings`, `ArrayAccessWithParentheses`, `ArrayAllocationWithoutNew`, `ArrayBracketCountIsLength`, `ArrayCreationIsFree`, `ArrayElementNotVariable`, `ArrayElementsUntyped`, `ArrayIndexStartsAtOne`, `ArrayInitializerContentsInBrackets`, `ArrayLengthCannotBeZero`, `ArrayListIsArray`, `ArrayRangeInclusive`, `ArrayUseScansAllCells`, `ArraysGrow`, `AssignCompares`, `AssignToFinal`, `AssignmentAddsToTarget`, `AssignmentCopiesObject`, `AssignmentEmptiesSource`, `AssignmentExchangesValues`, `AssignmentIsEquation`, `AssignmentNotExpression`, `AssignmentOppositeDirection`, `BodyChangeIgnoredByCondition`, `BracelessMultiStatementBody`, `CaretIsPower`, `CastAfterIntDivision`, `ChainedComparison`, `CodeAfterIfSkipped`, `ComparisonWithBooleanLiteral`, `ComputerFillsInIntent`, `DeclarationCreatesArray`, `DoubleLoopIndexCount`, `EarlyReturnInLoop`, `ElementBoundToOldIndex`, `ElementNameIsWholeArray`, `ElseWithCondition`, `EqualityOperatorComparesObjectsValues`, `EqualsComparesReferences`, `ExpressionOnLeftOfAssignment`, `FalseConditionRestartsProgram`, `FalseLoopRepeatsNextCode`, `ForCommaSeparators`, `ForInitRepeats`, `ForIsConditional`, `ForLoopPartSkipped`, `ForUpdateBeforeBody`, `ForVariableScopeBeyondLoop`, `ForWhileNotInterchangeable`, `IdiomOverridesCode`, `IfConditionWatched`, `IfInLoopUnchecked`, `IfWaitsForCondition`, `IncrementByTwo`, `IndexIsValue`, `InfiniteLoopUnnoticed`, `IntegerDivisionGivesFraction`, `IntegerProbability`, `LaterDoubleLiteralFixesDivision`, `LessGreaterSwapped`, `LocalVarOutsideScope`, `LoopBodyAlwaysOnce`, `LoopBodyScopeImpliesLoopLifetime`, `LoopBodyStatementOutsideLoop`, `LoopCountIsStatementCount`, `LoopForOneTimeTest`, `LoopHeaderIsEquations`, `LoopImpliedByOneTest`, `LoopOutputSameEachPass`, `LoopRunsStatementsSeparately`, `LoopStepAlwaysOne`, `LoopUpdateChangesDirection`, `LoopVariableLifetimeScope`, `LoopVariableLimitsValues`, `MapToBooleanWithConditionalOperator`, `MapToBooleanWithIf`, `MissingBraces`, `NarrowingAssignmentAllowed`, `NegativeArraySize`, `NegativeRemainderSign`, `NestedIfsInsteadOfLogicalOperators`, `NewArrayHoldsGarbage`, `NoAtomicExpression`, `NoCastIfSameSize`, `NoShortCircuit`, `OffByOneBound`, `OutsideInMethodNesting`, `ParenthesesOnlyIfArgument`, `PostIncrementAssignsLater`, `PreIncrementBeforeLoop`, `PrePostIncrementSameValue`, `PrintedTextIsExecuted`, `ProgramEndsAfterLoop`, `ProgramLooksAhead`, `RedeclareToReassign`, `RemainderIsSubtraction`, `ReturnDoesNotExitLoop`, `ReversedRelationalOperator`, `RowsNeedNotSumToOne`, `SemicolonAfterIfHeader`, `SemicolonAfterLoopHeader`, `SingleIterationInsteadOfLoop`, `StateChangeIgnoredAcrossPasses`, `StatementAfterLoopInBody`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringIsPrimitive`, `StringRelationalComparison`, `SwapWithoutTemp`, `TargetTyping`, `VariableKeepsOldValue`, `VariablesHoldExpressions`, `WhileStopsMidBody`, `WhitespaceIsSignificant`, `WholeArrayArithmetic`, `WrongIterationCount` |
+| S134 | 2 | 1 | 17 | 15 | 10 | 1 | `pre:assignment->variable_swap` | `AssignCompares`, `AssignToFinal`, `AssignmentAddsToTarget`, `AssignmentCopiesObject`, `AssignmentEmptiesSource`, `AssignmentExchangesValues`, `AssignmentIsEquation`, `AssignmentNotExpression`, `AssignmentOppositeDirection`, `ExpressionOnLeftOfAssignment`, `PrintedTextIsExecuted`, `RedeclareToReassign`, `SwapWithoutTemp`, `VariableKeepsOldValue`, `VariablesHoldExpressions` |
+| S137 | 4 | 5 | 18 | 15 | 20 | 1 | `par:print~println`, `pre:statement->print`, `pre:statement->println`, `pre:string_literal->print`, `pre:string_literal->println` | `ComputerFillsInIntent`, `IdentifierCaseInsensitive`, `ParenthesesOnlyIfArgument`, `PrintEqualsPrintln`, `PrintNewLineFirst`, `PrintWithoutFinalNewline`, `PrintedTextIsExecuted`, `ProgramLooksAhead`, `RepeatedOutputVariablePrintedOnce`, `SingleQuotedString`, `StatementNeedsNoTerminator`, `StatementsRunInAnyOrder`, `StringLiteralSpansLines`, `UnclosedStringLiteral`, `WhitespaceIsSignificant` |
 
 ## S000
 
@@ -30,10 +30,8 @@ System.out.println(count);
 
 **Concept nodes (4)**: `declaration` (generic), `definite_assignment`, `println`, `statement` (generic)
 
-**Gold concepts**: `definite_assignment` — all in the subgraph
 
-
-**Concept edges (2)**
+**Concept edges traced (2)**
 
 | edge | logic |
 |---|---|
@@ -59,10 +57,8 @@ System.out.print("that I have to learn.");
 
 **Concept nodes (4)**: `print`, `println`, `statement` (generic), `string_literal` (generic)
 
-**Gold concepts**: `print`, `println` — all in the subgraph
 
-
-**Concept edges (5)**
+**Concept edges traced (5)**
 
 | edge | logic |
 |---|---|
@@ -92,10 +88,8 @@ for (int i = 3; i >= 0; i--) {
 
 **Concept nodes (17)**: `assignment` (generic), `boolean_expression`, `comparison_operators`, `control_flow`, `expression` (generic), `for_loop`, `formatted_output`, `increment_operators`, `loop_body`, `loop_control`, `loop_scope`, `loop_variable`, `nested_loops`, `println`, `standard_output` (generic), `statement` (generic), `string_literal` (generic)
 
-**Gold concepts**: `for_loop`, `loop_control`, `nested_loops` — all in the subgraph
 
-
-**Concept edges (14)**
+**Concept edges traced (14)**
 
 | edge | logic |
 |---|---|
@@ -140,10 +134,8 @@ do {
 
 **Concept nodes (19)**: `arithmetic_operators`, `assignment` (generic), `boolean_expression`, `comparison_operators`, `control_flow`, `do_while_loop`, `expression` (generic), `formatted_output`, `if_else_statement`, `if_statement`, `increment_operators`, `logical_operators`, `loop_body`, `loop_control`, `loop_variable`, `operator_precedence`, `short_circuit`, `standard_output` (generic), `statement` (generic)
 
-**Gold concepts**: `do_while_loop`, `formatted_output`, `if_else_statement`, `logical_operators` — all in the subgraph
 
-
-**Concept edges (16)**
+**Concept edges traced (16)**
 
 | edge | logic |
 |---|---|
@@ -188,10 +180,8 @@ if (x % 2 == 0) {
 
 **Concept nodes (12)**: `arithmetic_operators`, `boolean_expression`, `comparison_operators`, `control_flow`, `expression` (generic), `if_else_statement`, `if_statement`, `nested_conditionals`, `print`, `remainder_operator`, `statement` (generic), `string_literal` (generic)
 
-**Gold concepts**: `if_else_statement`, `nested_conditionals`, `remainder_operator` — all in the subgraph
 
-
-**Concept edges (10)**
+**Concept edges traced (10)**
 
 | edge | logic |
 |---|---|
@@ -225,10 +215,8 @@ b = t;
 
 **Concept nodes (2)**: `assignment` (generic), `variable_swap`
 
-**Gold concepts**: `assignment`, `variable_swap` — all in the subgraph
 
-
-**Concept edges (1)**
+**Concept edges traced (1)**
 
 | edge | logic |
 |---|---|
@@ -251,10 +239,8 @@ System.out.printf("|%d items%n", 4);
 
 **Concept nodes (2)**: `formatted_output`, `standard_output` (generic)
 
-**Gold concepts**: `formatted_output`, `standard_output` — all in the subgraph
 
-
-**Concept edges (1)**
+**Concept edges traced (1)**
 
 | edge | logic |
 |---|---|
@@ -278,10 +264,8 @@ System.out.printf("|%d items%n", 4);
 
 **Concept nodes (8)**: `black_box_model`, `command_line_args`, `data_driven_code`, `piping`, `redirection`, `run`, `standard_input`, `standard_output` (generic)
 
-**Gold concepts**: `command_line_args`, `piping`, `redirection`, `standard_input`, `standard_output` — all in the subgraph
 
-
-**Concept edges (7)**
+**Concept edges traced (7)**
 
 | edge | logic |
 |---|---|
@@ -315,10 +299,8 @@ for (int j = 0; j < 5; j++) {
 
 **Concept nodes (26)**: `arithmetic_operators`, `array_creation`, `array_declaration`, `array_default_values`, `array_initializer`, `array_traversal`, `assignment` (generic), `boolean_expression`, `comparison_operators`, `control_flow`, `data_structure`, `data_type` (generic), `expression` (generic), `for_loop`, `increment_operators`, `indexing`, `integer_division`, `loop_body`, `loop_control`, `loop_scope`, `loop_variable`, `normalization`, `primitive_type` (generic), `statement` (generic), `type_conversion`, `widening_conversion`
 
-**Gold concepts**: `integer_division`, `normalization` — all in the subgraph
 
-
-**Concept edges (22)**
+**Concept edges traced (22)**
 
 | edge | logic |
 |---|---|
@@ -364,10 +346,8 @@ b = t;
 
 **Concept nodes (2)**: `assignment` (generic), `variable_swap`
 
-**Gold concepts**: `assignment`, `variable_swap` — all in the subgraph
 
-
-**Concept edges (1)**
+**Concept edges traced (1)**
 
 | edge | logic |
 |---|---|
@@ -390,10 +370,8 @@ System.out.print("that I have to learn.");
 
 **Concept nodes (4)**: `print`, `println`, `statement` (generic), `string_literal` (generic)
 
-**Gold concepts**: `println`, `string_literal` — all in the subgraph
 
-
-**Concept edges (5)**
+**Concept edges traced (5)**
 
 | edge | logic |
 |---|---|

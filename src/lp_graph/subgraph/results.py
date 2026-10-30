@@ -136,25 +136,23 @@ def main(argv=None):
         sg = subgraph_from_code(sc["code"], kg, sid)
         draw(sg, out / "figures" / f"{sid}.png", f"{sid}: subgraph from the code alone")
         c = sg["counts"]
-        g = sc.get("gold", {})
-        gold = sorted(set(g.get("levels", {})) | {x for e in g.get("edges", []) for x in e["id"].split(":", 1)[1].replace("~", "->").split("->")})
-        nodes = {x["id"] for x in sg["concepts"]}
+        edge_ids = [e["id"] for e in sg["concept_edges"]]
+        mis_ids = [m["id"] for m in sg["misconceptions"]]
         rows.append({"scenario": sid, "concept_nodes": c["concepts"], "generic_kept": c["generic"], "concept_edges": c["concept_edges"],
                      "misconception_edges": c["mis_edges"], "misconception_nodes": c["misconceptions"], "level_nodes": c["levels"],
-                     "level_edges": c["level_edges"], "level_mis_links": c["level_mis_links"], "components": c["components"],
-                     "gold_concepts": " ".join(gold), "gold_covered": "yes" if set(gold) <= nodes else "no"})
+                     "level_edges": c["level_edges"], "level_mis_links": c["level_mis_links"], "connected_pieces": c["components"],
+                     "concept_node_ids": " ".join(x["id"] for x in sg["concepts"]),
+                     "edges_traced": " ".join(edge_ids), "misconception_node_ids": " ".join(mis_ids)})
         md.append(f"\n## {sid}\n")
         md.append("```java\n" + sc["code"] + "\n```\n")
         md.append(f"![{sid}](figures/{sid}.png)\n")
         md.append(f"**Concept nodes ({c['concepts']})**: " + ", ".join(
             f"`{x['id']}`" + (" (generic)" if x.get("generic") else "") for x in sg["concepts"]) + "\n")
-        if gold:
-            md.append(f"**Gold concepts**: {', '.join(f'`{x}`' for x in gold)} — " + ("all in the subgraph" if set(gold) <= nodes else f"missing {sorted(set(gold) - nodes)}") + "\n")
-        md.append(f"\n**Concept edges ({c['concept_edges']})**\n\n| edge | logic |\n|---|---|")
+        md.append(f"\n**Concept edges traced ({c['concept_edges']})**\n\n| edge | logic |\n|---|---|")
         for e in sg["concept_edges"]:
             md.append(f"| `{e['id']}` | {(e['logic'] or '').replace('|', '/')} |")
         md.append(f"\n**Misconception and error nodes ({c['misconceptions']}) via {c['mis_edges']} edges**: " + ", ".join(
-            f"`{m['id']}`" for m in sg["misconceptions"]) + "\n")
+            f"`{m}`" for m in mis_ids) + "\n")
         md.append(f"**Level nodes**: {c['levels']} (L0..L4 for each concept), **has_level edges**: {c['level_edges']}, "
                   f"**level→misconception links**: {c['level_mis_links']}, **connected pieces**: {c['components']}\n")
         if sg["warnings"]:
@@ -162,8 +160,13 @@ def main(argv=None):
     with open(out / "tables" / "summary.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader(); w.writerows(rows)
-    summary = ["\n## Summary\n", "| scenario | concept nodes | generic kept | concept edges | misconception edges | misconception nodes | level nodes | links | pieces | gold covered |", "|---|---|---|---|---|---|---|---|---|---|"]
-    summary += [f"| {r['scenario']} | {r['concept_nodes']} | {r['generic_kept']} | {r['concept_edges']} | {r['misconception_edges']} | {r['misconception_nodes']} | {r['level_nodes']} | {r['level_mis_links']} | {r['components']} | {r['gold_covered']} |" for r in rows]
+    summary = ["\n## Summary\n",
+               "| scenario | concept nodes | concept edges | misconception edges | misconception nodes | level nodes | pieces | edges traced | misconception nodes |",
+               "|---|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        summary.append(f"| {r['scenario']} | {r['concept_nodes']} | {r['concept_edges']} | {r['misconception_edges']} | {r['misconception_nodes']} | "
+                       f"{r['level_nodes']} | {r['connected_pieces']} | " + (", ".join(f"`{x}`" for x in r["edges_traced"].split()) or "-") + " | "
+                       + ", ".join(f"`{x}`" for x in r["misconception_node_ids"].split()) + " |")
     md = md[:2] + summary + md[2:]
     (out / "results.md").write_text("\n".join(md), encoding="utf-8")
     print(f"wrote {len(rows)} figures, {out / 'tables' / 'summary.csv'}, {out / 'results.md'}")
