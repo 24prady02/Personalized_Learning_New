@@ -1,4 +1,6 @@
-# Subgraph extraction from code only
+# Think on the Graph
+
+Stage 1: subgraph extraction from code only.
 
 First stage of the Chapter-1 Java pipeline: read a scenario's **Java code** (nothing else),
 match the regex patterns stored on each concept node of the knowledge graph, and take out the
