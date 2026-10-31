@@ -40,12 +40,15 @@ data/
   raw/scenarios_20.json                      S000 reference case + the 10 scenarios whose gold concepts the code alone shows
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
+  processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, stop reason (src/traverse.py)
 src/
   preprocessing.py                           mask_java, split_statements, command_segments, Prepared
   model.py                                   tag_code (pattern channels of every concept) + extract_subgraph / subgraph_from_code
   train.py                                   builds and checks the pattern bank (no learned parameters; see below)
   evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
   utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
+  traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
+  prompts.py                                 the four Stage 2 prompts: edge prune, edge label, sufficiency check, level ladder
 notebooks/
   explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
 experiments/
@@ -54,6 +57,8 @@ experiments/
   logs/train_log.txt                         pattern compile + pattern-test check
   logs/subgraph_report.txt                   one line per scenario over scenarios_20.json, "fully covered: 10 / 10"
   logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
+  logs/traverse_<sid>.txt                    Stage 2 trace: candidates, kept edges, labels, quotes, sufficiency, levels
+  llm_cache/<hash>.json                      every prompt sent in Stage 2 and the model's reply (re-runs are free and deterministic)
 results/
   results.md                                 summary table, then per scenario: code, figure, concept nodes, edges with logic, misconception nodes, level counts
   figures/<sid>.png                          node visualization of each subgraph
@@ -77,7 +82,24 @@ python src/train.py            # compile every pattern, check the 372 labelled s
 python src/evaluate.py         # data/processed, experiments/logs/subgraph_report.txt, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 jupyter notebook notebooks/explore_subgraph.ipynb
+python src/traverse.py S007      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
 ```
+
+## Stage 2: ToG traversal (`traverse.py`, `prompts.py`)
+
+Stage 2 reads the question and the student's answer and walks the Stage 1 subgraph the way Think-on-Graph walks
+a knowledge graph. Settings are in the `traversal` block of `experiments/config.json` (width N = 3, depth D = 3,
+model, prune tool llm / bm25 / sentencebert). Start concepts are all non-generic concept nodes; the answer is
+split into clauses. At each depth, for each current concept: list its edges (depth 1 misconception / error
+edges, deeper the prerequisite / parallel edges inside the same piece), prune to N with one model call (or by
+similarity), label each kept edge with one call (held / correct / not applied for a misconception edge,
+confirmed / broken / not applied for a concept edge, with a verbatim quote and a confidence; a quote not found in
+the answer makes the label not applied), keep the best N by prune score × confidence, ask once whether the paths
+explain every clause and the root cause, and continue from the source of held misconceptions and the far end of
+concept edges. The diagnosis lists the held misconceptions, broken edges, the root cause (furthest back along
+prerequisite edges), a level per concept on a path (from level_mis_links when a held misconception is linked,
+otherwise one level-ladder call), the overall level, unexplained clauses, the stop reason and the call count.
+The model never answers from its own knowledge: every label is an edge of the graph plus a quote.
 
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /
