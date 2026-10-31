@@ -8,11 +8,15 @@ Output: data/processed/<sid>_diagnosis.json.
     python src/traverse.py S007 --prune-tools bm25    # rank edges by similarity instead of the prune prompt
     python src/traverse.py --all                      # every scenario in the file
 
-Part 1 builds lookups from G (ToG's SPARQL server). Part 2 picks the start concepts and the clauses. Part 3 is the
-main loop: edge search (no LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM), keep the
-best N, sufficiency check (LLM), next nodes. Part 4 diagnoses from the kept paths: held misconceptions, broken edges,
-root cause along prerequisite edges, level per concept (level_mis_links, else the level ladder prompt), overall level.
-The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote from the answer.
+Part 1 builds lookups from G (ToG's SPARQL server). Part 2 splits the answer into clauses and selects at most N start
+concepts: the concepts the clauses talk about (one model call, or BM25 / sentence-BERT), chosen from G only. Part 3
+is the main loop: edge search (no LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM), keep
+the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop test
+(graph check first: a held or broken concept with unexamined prerequisites in G sends the walk one hop back; only
+then the model is asked whether every clause is explained), next nodes. Part 4 diagnoses from the kept paths: held
+misconceptions (a held error beside a held misconception on the same concept is evidence, not a second diagnosis),
+broken edges, root cause along prerequisite edges, level per concept (level_mis_links, else the level ladder prompt),
+overall level. The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote.
 """
 from __future__ import annotations
 
@@ -173,12 +177,41 @@ class Graph:
 
 # ====================================================================== Part 2: start
 
-_CLAUSE_SPLIT = re.compile(r"(?<=[.!?])\s+|\s*;\s*|\s+because\s+|\s+so\s+|\s*/\s*", re.I)
+_CLAUSE_SPLIT = re.compile(r"(?<=[.!?])\s+|\s*;\s*|\s+(?=because\s)|\s+(?=so\s)", re.I)
 
 
 def split_clauses(answer: str) -> list[str]:
+    """Clauses of the answer: sentence ends, ';', and the connectives 'because' / 'so' (kept at the head of the
+    clause they introduce). '/' is not a separator: inside a quoted output it stands for a line break."""
     parts = [p.strip(" \"'\n\t") for p in _CLAUSE_SPLIT.split(answer)]
     return [p for p in parts if len(p) >= 1]
+
+
+def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[str, Any], llm: "LLM", sc: dict, log: list[str]) -> list[str]:
+    """ToG's topic entities: the concepts the clauses talk about, at most n, chosen from G's concept list only.
+    With prune_tools llm one model call maps each clause to concepts; otherwise BM25 of the answer against each
+    concept's edge texts. Generic concepts count only when the model names them for a clause."""
+    ids = sorted(g.concepts)
+    if cfg.get("prune_tools", "llm") == "llm":
+        listing = "\n".join(f"- {c}" + (" (generic)" if g.concepts[c].get("generic") else "") for c in ids)
+        clause_text = "\n".join(f"c{i + 1}: {c}" for i, c in enumerate(clauses))
+        reply = llm.ask(prompts.START.format(code=sc["code"], question=sc.get("question", ""), clauses=clause_text, concepts=listing, **prompts.few_shot_fields()))
+        votes: Counter = Counter()
+        order: list[str] = []
+        for m in re.finditer(r"c(\d+)\s*:\s*(.+)", reply):
+            for tok in re.split(r"[,\s]+", m.group(2).strip()):
+                tok = tok.strip(" .;")
+                if tok in g.concepts:
+                    votes[tok] += 1
+                    if tok not in order:
+                        order.append(tok)
+        ranked = sorted(order, key=lambda c: (-votes[c], order.index(c)))
+        log.append("start selection reply: " + " | ".join(reply.splitlines()))
+    else:
+        docs = [" ".join(g.edge_text(e) for e in g.mis_by_concept.get(c, []) + g.cedges_by_concept.get(c, [])) or c for c in ids]
+        scores = bm25_scores(answer, docs) if cfg.get("prune_tools") == "bm25" else sbert_scores(answer, docs)
+        ranked = [c for c, s in sorted(zip(ids, scores), key=lambda x: -x[1]) if s > 0 and not g.concepts[c].get("generic")]
+    return ranked[:n]
 
 
 def _norm(s: str) -> str:
@@ -249,17 +282,31 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     ex = prompts.few_shot_fields()
 
     # ---- Part 2: start
-    topic = sorted(c for c, rec in g.concepts.items() if not rec.get("generic"))
     clauses = split_clauses(answer)
     clause_text = "\n".join(f"c{i + 1}: {c}" for i, c in enumerate(clauses))
-    log.append(f"start concepts ({len(topic)}): {', '.join(topic)}")
     log.append("clauses: " + " | ".join(clauses))
+    topic = select_start(g, clauses, answer, N, cfg, llm, sc, log)
+    log.append(f"start concepts ({len(topic)}): {', '.join(topic)}")
     if not topic:
         return {"scenario": sc["id"], "status": "not diagnosable from the graph", "clauses": clauses, "llm_calls": llm.calls}
 
+    pre_in: dict[str, list[str]] = defaultdict(list)   # concept -> sources of its prerequisite edges in G
+    for e in sg["concept_edges"]:
+        if e["type"] == "prerequisite":
+            pre_in[e["target"]].append(e["source"])
+
+    def tier(c: dict[str, Any]) -> int:
+        """Ranking tier for the keep step: diagnosis first (held misconception, broken edge), then held errors, then confirmations."""
+        if c["label"] == "broken" or (c["label"] == "held" and c["kind"] == "misconception"):
+            return 0
+        if c["label"] == "held":
+            return 1
+        return 2
+
     current = list(topic)
     paths: list[dict[str, Any]] = []
-    used: set[str] = set()
+    used: set[str] = set()        # edges kept on a path
+    examined: set[str] = set()    # edges offered to the prune step at some depth
     stop_reason = "max depth"
     depth_reached = 0
 
@@ -277,6 +324,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             edges.sort(key=lambda e: (0 if e.get("role") == "primary" else 1, e["id"]))
             if not edges:
                 continue
+            examined.update(e["id"] for e in edges)
             # 3b edge prune
             if prune_tool == "llm":
                 p = prompts.PRUNE.format(code=code, question=question, answer=answer, concept=concept, n=min(N, len(edges)),
@@ -293,6 +341,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             for eid, pscore in kept:
                 e = g.edge_by_id[eid]
                 is_mis = eid.startswith(("mis:", "err:"))
+                kind = ("error" if eid.startswith("err:") else "misconception") if is_mis else e["type"]
                 if is_mis:
                     target = e["target"]
                     p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, edge_id=eid,
@@ -307,33 +356,49 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     log.append(f"    {eid}: quote not found in the answer ({quote!r}) -> not applied")
                     label = "not applied"
                 score = pscore * conf if label != "not applied" else 0.0
-                candidates.append({"depth": depth, "source": concept, "edge": eid, "target": target, "kind": "misconception" if is_mis else e["type"],
+                candidates.append({"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
                                    "label": label, "quote": quote, "confidence": conf, "prune_score": pscore, "score": round(score, 4),
                                    "logic": e.get("logic"), "twin_logic": e.get("twin_logic")})
                 log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
-        # 3e keep the best
-        kept_now = sorted([c for c in candidates if c["label"] != "not applied" and c["score"] > 0], key=lambda c: -c["score"])[:N]
+        # 3e keep the best: diagnosis tier first (held misconception, broken), then held errors, then confirmations; score within a tier
+        kept_now = sorted([c for c in candidates if c["label"] != "not applied" and c["score"] > 0], key=lambda c: (tier(c), -c["score"]))[:N]
         if not kept_now:
             stop_reason = "half_stop"
             log.append("  nothing kept -> half_stop")
             break
         paths.extend(kept_now)
         used.update(c["edge"] for c in kept_now)
-        # 3f sufficiency check
-        path_text = "\n".join(_path_line(c) for c in paths)
-        suff = llm.ask(prompts.SUFFICIENCY.format(question=question, clauses=clause_text, paths=path_text))
-        log.append("  sufficiency: " + suff.splitlines()[0] if suff else "  sufficiency: (empty reply)")
-        if parse_yes_no(suff):
-            stop_reason = "sufficient"
-            break
-        # 3g next current nodes
+        log.append("  kept: " + ", ".join(f"{c['edge']} [{c['label']}, tier {tier(c)}, {c['score']:.2f}]" for c in kept_now))
+        # 3f stop test, two parts. (i) Graph check, no LLM: a concept with a held misconception or a broken edge whose
+        # prerequisite edges inside G have not been examined yet means the root cause may lie further back -> go deeper.
+        pending = []
+        for c in paths:
+            if tier(c) != 0:
+                continue
+            for src in pre_in.get(c["source"], []):
+                eid = f"pre:{src}->{c['source']}"
+                if eid not in examined and g.piece_of.get(src) == g.piece_of.get(c["source"]):
+                    pending.append(eid)
+        if pending:
+            log.append("  root cause not settled, unexamined prerequisites: " + ", ".join(sorted(set(pending))))
+        else:
+            # (ii) LLM: are all clauses explained by the kept paths?
+            path_text = "\n".join(_path_line(c) for c in paths)
+            suff = llm.ask(prompts.SUFFICIENCY.format(question=question, clauses=clause_text, paths=path_text))
+            log.append("  sufficiency: " + (suff.splitlines()[0] if suff else "(empty reply)"))
+            if parse_yes_no(suff):
+                stop_reason = "sufficient"
+                break
+        # 3g next current nodes: walk back from concepts with a held misconception / broken edge; forward along concept edges
         nxt: list[str] = []
         for c in kept_now:
-            if c["kind"] == "misconception":
+            if c["kind"] in ("misconception", "error"):
                 if c["label"] == "held" and c["source"] not in nxt:
                     nxt.append(c["source"])
-            elif c["target"] not in nxt:
-                nxt.append(c["target"])
+            else:
+                for end in (c["target"], c["source"]):
+                    if end not in nxt:
+                        nxt.append(end)
         if not nxt:
             stop_reason = "half_stop"
             log.append("  no next nodes -> half_stop")
@@ -341,17 +406,21 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         current = nxt
 
     # ---- Part 4: diagnose
-    held = [c for c in paths if c["label"] == "held"]
+    held_all = [c for c in paths if c["label"] == "held"]
+    held_mis_concepts = {c["source"] for c in held_all if c["kind"] == "misconception"}
+    # an error node is a consequence: beside a held misconception on the same concept it is evidence, not a second diagnosis
+    held = [c for c in held_all if c["kind"] == "misconception" or c["source"] not in held_mis_concepts]
+    evidence_errors = [c for c in held_all if c not in held]
     broken = [c for c in paths if c["label"] == "broken"]
     held_by_concept: dict[str, list[str]] = defaultdict(list)
     for c in held:
         held_by_concept[c["source"]].append(c["target"])
-    broken_concepts = {c["source"] for c in broken} | {c["target"] for c in broken}
-    pre_in: dict[str, list[str]] = defaultdict(list)   # concept -> sources of its prerequisite edges
-    for e in sg["concept_edges"]:
-        if e["type"] == "prerequisite":
-            pre_in[e["target"]].append(e["source"])
+    # a broken prerequisite edge A -> B says the student did not carry A's rule into B: the fault sits at B, the concept
+    # that failed to use its prerequisite. A is the root cause only if it has its own held misconception or broken edge.
+    # (a candidate's "target" is the far end seen from the concept being expanded, so read B from the edge id)
+    broken_concepts = {c["edge"].split("->", 1)[1] if c["edge"].startswith("pre:") else c["source"] for c in broken}
 
+    log.append(f"  root-cause walk: held on {sorted(held_by_concept)}, broken at {sorted(broken_concepts)}, prerequisites {dict(pre_in)}")
     root = None
     for start in sorted(held_by_concept):
         best, seen, stack = start, {start}, [start]
@@ -388,7 +457,11 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         levels[concept] = {"level": lvl, "way": way, "quote": quote, "source": "level_ladder"}
         log.append(f"  level {concept}: {lvl} via {way} \"{quote}\"")
 
-    overall = levels.get(root["concept"], {}).get("level") if root else None
+    if root:
+        overall = levels.get(root["concept"], {}).get("level")
+    else:  # no error found: the student stands at the lowest level reached on any concept the answer touched
+        got = [v["level"] for v in levels.values() if v.get("level")]
+        overall = min(got) if got else None
     explained = set()
     for c in paths:
         q = _norm(c["quote"])
@@ -403,7 +476,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         "settings": {"width": N, "depth": D, "prune_tools": prune_tool, "model": llm.model, "backend": llm.backend},
         "clauses": clauses,
         "start_concepts": topic,
-        "held_misconceptions": [{"concept": c["source"], "misconception": c["target"], "quote": c["quote"], "score": c["score"]} for c in held],
+        "held_misconceptions": [{"concept": c["source"], "misconception": c["target"], "kind": c["kind"], "quote": c["quote"], "score": c["score"]} for c in held],
+        "error_evidence": [{"concept": c["source"], "error": c["target"], "quote": c["quote"]} for c in evidence_errors],
         "broken_edges": [{"edge": c["edge"], "quote": c["quote"], "score": c["score"]} for c in broken],
         "root_cause": root,
         "levels": levels,

@@ -11,6 +11,36 @@ FEW_SHOT = {
     "answer": "It will print 0.",
 }
 
+# ---------------------------------------------------------------- 0. start concepts (ToG topic entities)
+
+START = """A student answered a question about a short Java program. Decide which concepts each clause of the answer talks about.
+
+Program:
+{code}
+
+Question: {question}
+
+Student's answer, split into clauses:
+{clauses}
+
+Concepts available (only these may be used; a concept marked (generic) may be chosen only when the clause names it directly):
+{concepts}
+
+Reply with one line per clause, in this exact format and nothing else:
+c1: concept_a, concept_b
+c2: concept_c
+Write "c3: none" for a clause that talks about no listed concept.
+
+Example. Program:
+{ex_code}
+Question: {ex_question}
+Clauses:
+c1: {ex_answer}
+Concepts available: declaration, definite_assignment, println, statement (generic)
+Reply:
+c1: definite_assignment, declaration
+"""
+
 # ---------------------------------------------------------------- 1. edge prune (ToG relation prune)
 
 PRUNE = """You read a student's answer to a question about a short Java program and decide which rules the answer engages with.
@@ -117,7 +147,7 @@ Student's answer, split into clauses:
 Paths found so far:
 {paths}
 
-Using only these paths, is every clause of the answer explained (each clause is quoted or accounted for by some path), and is the root cause of the answer's error found (or, for a correct answer, is every clause covered by a correct or confirmed path)?
+Using only these paths, is every clause of the answer explained, that is, is each clause quoted by or accounted for by some path? (Whether the root cause has been reached is checked separately on the graph; do not judge that here.)
 
 Reply with exactly {{Yes}} or {{No}} on the first line, then one sentence of explanation.
 """

@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nfor (int i = 3; i >= 0; i--) {\n  for (int j = i; j > 0; j--) {\n    System.out.printf(\"%d \", j);\n  }\n  System.out.println();\n}\n\nQuestion: Give the exact output, including spacing and empty lines. Explain.\n\nStudent's answer, split into clauses:\nc1: 3 2 1 / 2 1 / 1\" (no empty line at the end), \"because the loop stops at 1.\n\nEdge: pre:for_loop->nested_loops  (for_loop -> nested_loops, prerequisite)\nRule (logic): In nested loops the inner for runs its complete set of passes for every single pass of the outer for.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nQuote: the exact words from the student's answer that show it (copy them verbatim; write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nQuote: no empty line at the end\nConfidence: 0.6"
+}

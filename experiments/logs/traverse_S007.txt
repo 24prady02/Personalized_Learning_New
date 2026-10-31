@@ -1,55 +1,30 @@
-start concepts (12): boolean_expression, comparison_operators, control_flow, for_loop, formatted_output, increment_operators, loop_body, loop_control, loop_scope, loop_variable, nested_loops, println
-clauses: 3 2 1 | 2 1 | 1" (no empty line at the end), "because the loop stops at 1.
---- depth 1: current concepts ['boolean_expression', 'comparison_operators', 'control_flow', 'for_loop', 'formatted_output', 'increment_operators', 'loop_body', 'loop_control', 'loop_scope', 'loop_variable', 'nested_loops', 'println']
-  boolean_expression: 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ChainedComparison (0.20)
-    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) "none"
-    mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) "none"
-    mis:boolean_expression->ChainedComparison -> not applied (0.00) "none"
-  comparison_operators: 8 candidates -> kept mis:comparison_operators->LessGreaterSwapped (0.70), err:comparison_operators->ReversedRelationalOperator (0.20), mis:comparison_operators->AssignCompares (0.10)
-    mis:comparison_operators->LessGreaterSwapped -> correct (0.49) "because the loop stops at 1."
-    err:comparison_operators->ReversedRelationalOperator -> not applied (0.00) "none"
-    mis:comparison_operators->AssignCompares -> not applied (0.00) "none"
-  control_flow: 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.50), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->ProgramLooksAhead (0.20)
-    mis:control_flow->ProgramEndsAfterLoop -> not applied (0.00) "none"
-    mis:control_flow->FalseLoopRepeatsNextCode -> not applied (0.00) "none"
-    mis:control_flow->ProgramLooksAhead -> not applied (0.00) "none"
-  for_loop: 21 candidates -> kept err:for_loop->WrongIterationCount (0.60), mis:for_loop->IdiomOverridesCode (0.20), mis:for_loop->ForLoopPartSkipped (0.20)
-    err:for_loop->WrongIterationCount -> held (0.54) "because the loop stops at 1."
-    mis:for_loop->IdiomOverridesCode -> held (0.11) "because the loop stops at 1."
-    mis:for_loop->ForLoopPartSkipped -> not applied (0.00) "none"
-  formatted_output: 4 candidates -> kept mis:formatted_output->PrintfAddsNewline (0.80), mis:formatted_output->PrintfAnyConversion (0.15), mis:formatted_output->FieldWidthIsIntegerDigits (0.05)
-    mis:formatted_output->PrintfAddsNewline -> correct (0.64) "3 2 1"
-    mis:formatted_output->PrintfAnyConversion -> not applied (0.00) "none"
-    mis:formatted_output->FieldWidthIsIntegerDigits -> not applied (0.00) "none"
-  increment_operators: 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.60), mis:increment_operators->PreIncrementBeforeLoop (0.25), mis:increment_operators->IncrementByTwo (0.15)
-    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) "none"
-    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) "none"
-    mis:increment_operators->IncrementByTwo -> not applied (0.00) "none"
-  loop_body: 12 candidates -> kept mis:loop_body->LoopBodyStatementOutsideLoop (0.45), mis:loop_body->ForLoopPartSkipped (0.35), mis:loop_body->LoopBodyAlwaysOnce (0.20)
-    mis:loop_body->LoopBodyStatementOutsideLoop -> correct (0.27) "3 2 1"
-    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) "none"
-    mis:loop_body->LoopBodyAlwaysOnce -> not applied (0.00) "none"
+clauses: 3 2 1 / 2 1 / 1" (no empty line at the end), "because the loop stops at 1.
+start selection reply: c1: loop_control, nested_loops, println
+start concepts (3): loop_control, nested_loops, println
+--- depth 1: current concepts ['loop_control', 'nested_loops', 'println']
   loop_control: 11 candidates -> kept mis:loop_control->OffByOneBound (0.50), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForLoopPartSkipped (0.20)
-    mis:loop_control->OffByOneBound -> held (0.35) "because the loop stops at 1."
-    err:loop_control->WrongIterationCount -> held (0.27) "because the loop stops at 1"
+    mis:loop_control->OffByOneBound -> held (0.30) "because the loop stops at 1."
+    err:loop_control->WrongIterationCount -> held (0.24) "because the loop stops at 1."
     mis:loop_control->ForLoopPartSkipped -> not applied (0.00) "none"
-  loop_scope: 5 candidates -> kept mis:loop_scope->LoopBodyScopeImpliesLoopLifetime (0.50), mis:loop_scope->LoopVariableLifetimeScope (0.35), mis:loop_scope->ForVariableScopeBeyondLoop (0.15)
-    mis:loop_scope->LoopBodyScopeImpliesLoopLifetime -> not applied (0.00) "none"
-    mis:loop_scope->LoopVariableLifetimeScope -> not applied (0.00) "none"
-    mis:loop_scope->ForVariableScopeBeyondLoop -> not applied (0.00) "none"
-  loop_variable: 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.60), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->ForInitRepeats (0.15)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.54) "2 1"
-    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) "none"
-    mis:loop_variable->ForInitRepeats -> not applied (0.00) "none"
   nested_loops: 8 candidates -> kept mis:nested_loops->EmptyInnerLoopSkipsRest (0.70), mis:nested_loops->NestedLoopsLockstep (0.15), mis:nested_loops->NestedLoopsSequential (0.15)
-    mis:nested_loops->EmptyInnerLoopSkipsRest -> held (0.49) "(no empty line at the end)"
-    mis:nested_loops->NestedLoopsLockstep -> correct (0.12) "3 2 1"
-    mis:nested_loops->NestedLoopsSequential -> correct (0.13) "2 1"
+    mis:nested_loops->EmptyInnerLoopSkipsRest -> held (0.42) "no empty line at the end"
+    mis:nested_loops->NestedLoopsLockstep -> correct (0.13) "3 2 1 / 2 1 / 1"
+    mis:nested_loops->NestedLoopsSequential -> correct (0.13) "3 2 1 / 2 1 / 1"
   println: 6 candidates -> kept mis:println->ParenthesesOnlyIfArgument (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
     mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
-    mis:println->PrintEqualsPrintln -> correct (0.24) "3 2 1"
+    mis:println->PrintEqualsPrintln -> correct (0.24) "3 2 1 / 2 1 / 1"
     mis:println->PrintNewLineFirst -> not applied (0.00) "none"
+  kept: mis:nested_loops->EmptyInnerLoopSkipsRest [held, tier 0, 0.42], mis:loop_control->OffByOneBound [held, tier 0, 0.30], err:loop_control->WrongIterationCount [held, tier 1, 0.24]
+  root cause not settled, unexamined prerequisites: pre:for_loop->nested_loops, pre:loop_variable->loop_control
+--- depth 2: current concepts ['nested_loops', 'loop_control']
+  nested_loops: 1 candidates -> kept pre:for_loop->nested_loops (1.00)
+    pre:for_loop->nested_loops -> broken (0.60) "no empty line at the end"
+  loop_control: 3 candidates -> kept pre:loop_variable->loop_control (0.55), pre:loop_control->for_loop (0.40), pre:loop_control->increment_operators (0.05)
+    pre:loop_variable->loop_control -> broken (0.47) "because the loop stops at 1."
+    pre:loop_control->for_loop -> broken (0.34) "because the loop stops at 1."
+    pre:loop_control->increment_operators -> not applied (0.00) "none"
+  kept: pre:for_loop->nested_loops [broken, tier 0, 0.60], pre:loop_variable->loop_control [broken, tier 0, 0.47], pre:loop_control->for_loop [broken, tier 0, 0.34]
   sufficiency: {Yes}
-  level for_loop: L2 via output_prediction "(no empty line at the end), "because the loop stops at 1."
-  level formatted_output: L2 via output_prediction "3 2 1"
-  level loop_variable: L2 via output_prediction "because the loop stops at 1"
+  root-cause walk: held on ['loop_control', 'nested_loops'], broken at ['for_loop', 'loop_control', 'nested_loops'], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'formatted_output': ['standard_output'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level for_loop: L2 via output_prediction "3 2 1 / 2 1 / 1" (no empty line at the end), "because the loop stops at 1."
+  level loop_variable: L0 via inconsistent_trace "because the loop stops at 1"

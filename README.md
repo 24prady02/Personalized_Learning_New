@@ -89,17 +89,41 @@ python src/traverse.py S007      # Stage 2 on one scenario (needs the claude CLI
 
 Stage 2 reads the question and the student's answer and walks the Stage 1 subgraph the way Think-on-Graph walks
 a knowledge graph. Settings are in the `traversal` block of `experiments/config.json` (width N = 3, depth D = 3,
-model, prune tool llm / bm25 / sentencebert). Start concepts are all non-generic concept nodes; the answer is
-split into clauses. At each depth, for each current concept: list its edges (depth 1 misconception / error
-edges, deeper the prerequisite / parallel edges inside the same piece), prune to N with one model call (or by
-similarity), label each kept edge with one call (held / correct / not applied for a misconception edge,
-confirmed / broken / not applied for a concept edge, with a verbatim quote and a confidence; a quote not found in
-the answer makes the label not applied), keep the best N by prune score × confidence, ask once whether the paths
-explain every clause and the root cause, and continue from the source of held misconceptions and the far end of
-concept edges. The diagnosis lists the held misconceptions, broken edges, the root cause (furthest back along
-prerequisite edges), a level per concept on a path (from level_mis_links when a held misconception is linked,
-otherwise one level-ladder call), the overall level, unexplained clauses, the stop reason and the call count.
-The model never answers from its own knowledge: every label is an edge of the graph plus a quote.
+model, prune tool llm / bm25 / sentencebert).
+
+1. **Clauses and start concepts.** The answer is split at sentence ends, `;`, `because` and `so` (not at `/`,
+   which inside a quoted output is a line break). One model call maps each clause to concepts chosen from the
+   subgraph's concept list only (generic ones only when named); the N most-cited become the start concepts.
+2. **Edge search** (no model). Depth 1: the concept's misconception and error edges. Deeper: its prerequisite /
+   parallel edges inside the same connected piece. Edges already on a path are skipped; primary role first.
+3. **Edge prune.** One call per concept picks up to N edges the answer engages with, scores summing to 1
+   (or BM25 / sentence-BERT similarity instead of the call).
+4. **Edge label.** One call per kept edge: held / correct / not applied for a misconception edge shown with its
+   wrong rule and right rule; confirmed / broken / not applied for a concept edge shown with its logic. The reply
+   quotes the answer verbatim and gives a confidence; a quote not found in the answer makes the label not applied.
+   Score = prune score × confidence.
+5. **Keep the best N in two tiers**: held misconceptions and broken edges first, then held errors, then correct /
+   confirmed edges; by score within a tier. Confirmations therefore never crowd out a diagnosis.
+6. **Stop test.** First a graph check with no model: if a concept with a held misconception or a broken edge has a
+   prerequisite edge in the subgraph that has not been examined, the walk goes one hop back. Only when nothing is
+   pending is the model asked whether every clause is explained by the kept paths ({Yes} stops).
+7. **Next concepts**: the source of each held misconception (to walk back), both ends of each kept concept edge.
+8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
+   Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
+   concept that itself holds a misconception or is the target of a broken prerequisite edge (a broken A → B says
+   the student did not carry A into B, so the fault sits at B). Level per concept on a path: from level_mis_links
+   when a held misconception is linked, otherwise one level-ladder call over the deciding questions L0 → L4.
+   Overall level: the root-cause concept's level (for an answer with no error, the lowest level reached).
+   Output also lists unexplained clauses, the stop reason (sufficient / half_stop / max depth) and the call count.
+
+The model never answers from its own knowledge: every label is an edge of the graph plus a quote. Replies are
+cached in `experiments/llm_cache/`, so a re-run costs only the prompts that changed.
+
+Run on S007 (19 model calls, 22 allowed): held OffByOneBound at loop_control, root cause loop_control, level
+L0 from level_mis_links, overall L0, pre:loop_control->for_loop broken. The gold agrees on all of these.
+Differences: the model also reads "no empty line at the end" as EmptyInnerLoopSkipsRest (a reading the gold
+accepts, L0 or L2 for nested_loops), labels pre:for_loop->nested_loops broken where the gold says confirmed, and
+levels for_loop and loop_variable, which the gold does not level.
 
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /
