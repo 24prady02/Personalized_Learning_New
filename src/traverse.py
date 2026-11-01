@@ -246,6 +246,16 @@ def concept_text(g: "Graph", c: str) -> str:
     return " ".join([c.replace("_", " ")] + [g.edge_text(e) for e in g.mis_by_concept.get(c, []) + g.cedges_by_concept.get(c, [])])
 
 
+def _names_in_code(match: str, answer: str) -> bool:
+    """Does the code text that tagged a concept occur in the answer? A word-like text must stand as a whole word
+    ("int" does not count inside "prints"); a symbol like "=" or ";" may stand anywhere."""
+    if not match:
+        return False
+    w = r"[A-Za-z0-9_]"
+    pat = (f"(?<!{w})" if re.match(w, match[0]) else "") + re.escape(match) + (f"(?!{w})" if re.match(w, match[-1]) else "")
+    return re.search(pat, answer) is not None
+
+
 def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[str, Any], llm: "LLM", sc: dict, log: list[str]) -> list[str]:
     """ToG's topic entities. start = stage1 (default): the non-generic concepts of G, that is, the concepts Stage 1
     tagged in the code, as ToG's released code reads the given topic_entity from the dataset. All of them when there
@@ -259,7 +269,7 @@ def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[
         # a generic concept joins the candidates when the student's answer repeats the code text that tagged it
         # (e.g. "=" for assignment in "a = b"): the answer then names that concept, in code rather than in words
         named = [c for c in ids if g.concepts[c].get("generic") and any(
-            (h.get("match") or "").strip() and (h.get("match") or "").strip() in answer for h in g.concepts[c].get("hits") or [])]
+            _names_in_code((h.get("match") or "").strip(), answer) for h in g.concepts[c].get("hits") or [])]
         if named:
             log.append("start (stage1): generic concepts whose tagging text occurs in the answer: " + ", ".join(named))
             cands += named

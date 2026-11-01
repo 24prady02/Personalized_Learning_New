@@ -76,8 +76,8 @@ def make_script(labels: dict[str, tuple[str, str]], start_reply: str = "c1: B", 
 TINY = {
     "scenario": "T001",
     "concepts": [
-        {"id": "A", "generic": False, "hits": [1]}, {"id": "B", "generic": False, "hits": [1, 2]},
-        {"id": "C", "generic": False, "hits": [1]}, {"id": "G", "generic": True, "hits": [1, 2, 3]},
+        {"id": "A", "generic": False, "hits": [{"match": "int"}]}, {"id": "B", "generic": False, "hits": [{"match": "int"}, {"match": "x"}]},
+        {"id": "C", "generic": False, "hits": [{"match": "int"}]}, {"id": "G", "generic": True, "hits": [{"match": "{"}, {"match": "int"}]},
     ],
     "concept_edges": [
         {"id": "pre:A->B", "source": "A", "target": "B", "type": "prerequisite", "logic": "A before B"},
