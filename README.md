@@ -118,9 +118,11 @@ level ways are edges of the search like everything else.
    never competes with a misconception edge for a slot.
 4. **Edge label.** One call per kept edge: held / correct / not applied for a misconception edge shown with its
    wrong rule and right rule; confirmed / broken / not applied for a concept edge shown with its logic; shown /
-   not shown for a level way shown with its level, the level's deciding question and what an answer that shows
-   the way does. The reply quotes the answer verbatim and gives a confidence; a quote not found in the answer
-   makes the label not applied. Score = prune score × confidence.
+   not shown for a level way shown with the concept, the way's name and what an answer that shows the way does,
+   and nothing else: no level name, no deciding question, no level in an id, so the way is judged against its own
+   text like every other edge and its level comes only from where it sits in the graph. The reply quotes the
+   answer verbatim and gives a confidence; a quote not found in the answer makes the label not applied.
+   Score = prune score × confidence.
 5. **Keep the best N in tiers**: held misconceptions and broken edges first, then held errors, then correct /
    confirmed / shown edges; by score within a tier (an edge reached from both ends in one round counts once).
    Confirmations therefore never crowd out a diagnosis. Every labelled edge whose quote is in the answer is
@@ -149,15 +151,22 @@ cached in `experiments/llm_cache/`, so a re-run costs only the prompts that chan
 
 Results over the 10 gold scenarios (`python src/compare.py`, full table in `results/stage2_results.md`; gold is
 used for checking only): held misconception set right in 9/10, every gold "correct" misconception found in 8/10,
-root cause right in 10/10, overall level right in 8/10, 46 of 72 points (one point each for held set, correct set,
+root cause right in 10/10, overall level right in 9/10, 47 of 72 points (one point each for held set, correct set,
 root cause and overall level, plus one per gold-scored concept level and per gold edge), 195 prompts in all, every
 one of them a prune or a label. S134 is found through the generic-concept rule: its only tagged concept is
 variable_swap, the gold misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic,
 and the answer repeats the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root
-cause loop_control, L0). The two remaining level misses: S057 gets L2 overall where the gold says L4, because the
-prune step did not pick the L4 way the student shows ("predict a change": the cast keeps the fraction) and the
-overall level of an error-free answer is the lowest level among its concepts, which arithmetic_operators pulls to
-L2; S052 gets L3 where the gold says L2, because the label step read "args is empty" as showing an L3 way.
+cause loop_control, L0). The one remaining level miss is S052, L3 where the gold says L2: the student's "an
+average of 5 new numbers, no file" matches the redirection way "`A > f` followed by `B < f` has the same effect as
+`A | B`, except that the pipe creates no file", and "args is empty" matches "args.length is the number of arguments
+typed (0 if none)"; the graph files both ways at L3, the gold levels the answer L2. The walk read the edges as the
+graph states them; the disagreement is between the graph's placement of those ways and the gold.
+
+The way-label prompt shows the model the concept, the way's name and the way's text, and nothing else. An earlier
+form also showed the level's name and deciding question; on S057 the model then followed the deciding question's
+boundary ("fixing one given failing case is L3") and rejected two L4 ways whose own text the student matched, which
+put the answer at L2 overall instead of the gold's L4. Judging the way against its own text, like every other edge,
+gives L4.
 
 Two earlier versions were run over the same 10 scenarios and removed. One asked the model for the start concepts
 (a START prompt) and the stop decision (a SUFFICIENCY prompt): same 42/72 points as the rule-based start and stop

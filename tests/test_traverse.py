@@ -54,13 +54,21 @@ def _edge_ids(prompt: str) -> list[str]:
 
 
 def make_script(labels: dict[str, tuple[str, str]]):
-    """labels: edge id -> (label, quote). The prune reply picks every candidate edge with equal scores."""
+    """labels: edge id -> (label, quote). The prune reply picks every candidate edge with equal scores. A level-way
+    label prompt carries no edge id and no level (only the concept, the way and its text), so the way is found by its text."""
+    way_by_text = {w["exact_rule"]: f"lvl:{le['target']}#{i}" for le in TINY["level_edges"] for i, w in enumerate(le["ways"])}
+
     def script(prompt: str) -> str:
         if "Candidate edges of this concept" in prompt:
             ids = _edge_ids(prompt)
             return "\n".join(f"{{{e} (Score: {1 / len(ids):.3f})}}" for e in ids)
         m = re.search(r"Edge: (\S+)", prompt)
-        label, quote = labels.get(m.group(1), ("not applied", "none"))
+        if m:
+            eid = m.group(1)
+        else:
+            assert "Level" not in prompt and "deciding question" not in prompt and "lvl:" not in prompt
+            eid = way_by_text[re.search(r"What an answer that shows this way does: (.+)", prompt).group(1).strip()]
+        label, quote = labels.get(eid, ("not applied", "none"))
         return f"Label: {label}\nQuote: {quote}\nConfidence: 0.9"
     return script
 

@@ -8,7 +8,7 @@ start concepts (3): command_line_args, standard_input, redirection
     err:command_line_args->FirstArgIsArgsOne -> not applied (0.00) "none"
     mis:command_line_args->ArgsAreNumbers -> not applied (0.00) "none"
   command_line_args (level ways): 19 candidates -> kept lvl:command_line_args@L3#4 (0.50), lvl:command_line_args@L3#2 (0.30), lvl:command_line_args@L1#0 (0.20)
-    lvl:command_line_args@L3#4 -> shown (0.30) "args is empty"
+    lvl:command_line_args@L3#4 -> not applied (0.00) "none"
     lvl:command_line_args@L3#2 -> shown (0.18) "args is empty"
     lvl:command_line_args@L1#0 -> shown (0.15) "args is empty"
   standard_input (misconceptions): 7 candidates -> kept mis:standard_input->StdInRereads (0.40), mis:standard_input->InputReadOnceBeforeLoop (0.35), err:standard_input->ReadPastEndOfInput (0.25)
@@ -17,17 +17,18 @@ start concepts (3): command_line_args, standard_input, redirection
     err:standard_input->ReadPastEndOfInput -> not applied (0.00) "none"
   standard_input (level ways): 23 candidates -> kept lvl:standard_input@L3#2 (0.45), lvl:standard_input@L3#9 (0.35), lvl:standard_input@L4#2 (0.20)
     lvl:standard_input@L3#2 -> not applied (0.00) "none"
-    lvl:standard_input@L3#9 -> not applied (0.00) "none"
+    lvl:standard_input@L3#9 -> shown (0.21) "args is empty"
     lvl:standard_input@L4#2 -> not applied (0.00) "none"
   redirection (misconceptions): 1 candidates -> kept mis:redirection->RedirectionIsArgument (1.00)
     mis:redirection->RedirectionIsArgument -> correct (0.95) "args is empty"
   redirection (level ways): 17 candidates -> kept lvl:redirection@L2#1 (0.50), lvl:redirection@L3#2 (0.35), lvl:redirection@L3#0 (0.15)
-    lvl:redirection@L2#1 -> shown (0.42) "1: nothing, the numbers go into data.txt"
+    lvl:redirection@L2#1 -> shown (0.47) "1: nothing, the numbers go into data.txt"
     lvl:redirection@L3#2 -> shown (0.24) "3: an average of 5 new numbers, no file"
     lvl:redirection@L3#0 -> shown (0.14) "1: nothing, the numbers go into data.txt"
-  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56], lvl:redirection@L2#1 [shown, tier 2, 0.42]
+  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56], lvl:redirection@L2#1 [shown, tier 2, 0.47]
   clause coverage: c1 <- lvl:redirection@L2#1; c2 uncovered; c3 <- lvl:redirection@L3#2; c4 <- err:command_line_args->ArgsAlwaysPresent
   no next nodes -> half_stop
   root-cause walk: held on [], broken at [], prerequisites {'black_box_model': ['command_line_args'], 'data_driven_code': ['redirection'], 'piping': ['redirection'], 'redirection': ['standard_input', 'standard_output']}
   level command_line_args: L3 via relation_to_neighbour "args is empty"
   level redirection: L3 via relation_to_neighbour "3: an average of 5 new numbers, no file"
+  level standard_input: L3 via relation_to_neighbour "args is empty"

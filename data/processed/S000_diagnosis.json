@@ -45,12 +45,14 @@
    "source": "level_mis_links"
   },
   "println": {
-   "level": "L1",
-   "way": "names_the_element",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "It will print 0",
-   "edge": "lvl:println@L1#0",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
-   "also_shown": []
+   "also_shown": [
+    "L1 names_the_element"
+   ]
   }
  },
  "overall_level": "L0",
@@ -88,18 +90,18 @@
   {
    "depth": 1,
    "source": "println",
-   "edge": "lvl:println@L1#0",
-   "target": "println@L1",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
    "kind": "level",
    "label": "shown",
    "quote": "It will print 0",
    "confidence": 0.7,
-   "prune_score": 0.15,
-   "score": 0.105,
-   "logic": "System.out.println is a library method that prints its argument followed by a line terminator ('print line').",
+   "prune_score": 0.6,
+   "score": 0.42,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
    "twin_logic": null,
-   "level": "L1",
-   "way": "names_the_element"
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 2,
@@ -149,19 +151,19 @@
   },
   {
    "depth": 1,
-   "source": "definite_assignment",
-   "edge": "lvl:definite_assignment@L0#2",
-   "target": "definite_assignment@L0",
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
    "kind": "level",
    "label": "shown",
    "quote": "It will print 0",
    "confidence": 0.7,
-   "prune_score": 0.10000000000000002,
-   "score": 0.07,
-   "logic": "Points to LT (along every control-flow path, an assignment must come before each read). Applied unevenly, a student checks straight-line code but assumes a variable assigned in only one branch of an if, or inside a loop, is assigned afterwards. (here mixing in: \"local variables get a default value on their own\")",
+   "prune_score": 0.6,
+   "score": 0.42,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
    "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 1,
@@ -171,9 +173,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "It will print 0",
-   "confidence": 0.7,
+   "confidence": 0.6,
    "prune_score": 0.15,
-   "score": 0.105,
+   "score": 0.09,
    "logic": "System.out.println is a library method that prints its argument followed by a line terminator ('print line').",
    "twin_logic": null,
    "level": "L1",
@@ -200,8 +202,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 11,
- "llm_cache_hits": 5,
+ "llm_calls": 0,
+ "llm_cache_hits": 16,
  "llm_calls_by_step": {
   "prune": 5,
   "label": 11

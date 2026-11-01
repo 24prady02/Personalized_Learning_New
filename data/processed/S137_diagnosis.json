@@ -84,8 +84,8 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 2,
- "llm_calls": 18,
- "llm_cache_hits": 88,
+ "llm_calls": 9,
+ "llm_cache_hits": 171,
  "llm_calls_by_step": {
   "prune": 7,
   "label": 21

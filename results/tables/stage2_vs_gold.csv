@@ -1,11 +1,11 @@
 run,scenario,held_ok,held_pred,held_gold,correct_ok,correct_pred,correct_gold,root_ok,root_pred,root_gold,overall_ok,overall_pred,overall_gold,levels,edges,stop,prompts,points,max_points
 default,S001,True,[],[],True,"[""PrintEqualsPrintln"", ""PrintNewLineFirst""]","[""PrintEqualsPrintln""]",True,,,True,L3,L1,2/2,0/1,sufficient,16,6,7
 default,S007,True,"[""OffByOneBound""]","[""OffByOneBound""]",True,"[""PrintEqualsPrintln""]",[],True,"{""concept"": ""loop_control"", ""misconception"": ""OffByOneBound""}","{""concept"": ""loop_control"", ""misconception"": ""OffByOneBound""}",True,L0,L0,1/2,1/2,sufficient,32,6,8
-default,S008,True,[],[],True,"[""AssignmentIsEquation"", ""OffByOneBound"", ""VariableKeepsOldValue""]",[],True,,,True,L2,L2,0/4,0/0,half_stop,24,4,8
+default,S008,True,[],[],True,"[""AssignmentIsEquation"", ""OffByOneBound"", ""VariableKeepsOldValue""]",[],True,,,True,L2,L2,0/4,0/0,sufficient,24,4,8
 default,S021,True,[],[],True,"[""BranchChosenByIntent"", ""CodeAfterIfSkipped"", ""FalseConditionRestartsProgram"", ""RemainderIsSubtraction"", ""StatementsRunInAnyOrder"", ""ThenAlwaysExecutes""]",[],True,,,True,L2,L2,0/3,0/1,half_stop,22,4,8
 default,S026,True,[],[],False,[],"[""AssignmentExchangesValues"", ""SwapWithoutTemp""]",True,,,True,L1,L3,1/1,0/0,sufficient,7,4,5
-default,S047,True,[],[],False,[],"[""FieldWidthIsIntegerDigits""]",True,,,True,L4,L4,1/1,0/0,sufficient,7,4,5
+default,S047,True,[],[],False,[],"[""FieldWidthIsIntegerDigits""]",True,,,True,L4,L4,1/1,0/0,half_stop,7,4,5
 default,S052,True,[],[],True,"[""RedirectionIsArgument""]","[""RedirectionIsArgument""]",True,,,False,L3,L2,0/3,0/4,half_stop,22,3,11
-default,S057,True,[],[],True,"[""CastAfterIntDivision"", ""IntegerDivisionGivesFraction"", ""IntegerProbability"", ""RowsNeedNotSumToOne"", ""TargetTyping""]","[""CastAfterIntDivision"", ""IntegerDivisionGivesFraction"", ""IntegerProbability""]",True,,,False,L2,L4,1/2,0/1,sufficient,20,4,7
-default,S134,False,"[""AssignmentIsEquation"", ""VariablesHoldExpressions""]","[""VariablesHoldExpressions""]",True,[],[],True,"{""concept"": ""assignment"", ""misconception"": ""VariablesHoldExpressions""}","{""concept"": ""assignment"", ""misconception"": ""VariablesHoldExpressions""}",True,L0,L0,2/2,1/1,sufficient,17,6,7
+default,S057,True,[],[],True,"[""CastAfterIntDivision"", ""IntegerDivisionGivesFraction"", ""IntegerProbability"", ""RowsNeedNotSumToOne"", ""TargetTyping""]","[""CastAfterIntDivision"", ""IntegerDivisionGivesFraction"", ""IntegerProbability""]",True,,,True,L4,L4,1/2,0/1,sufficient,20,5,7
+default,S134,False,"[""AssignmentIsEquation"", ""VariablesHoldExpressions""]","[""VariablesHoldExpressions""]",True,[],[],True,"{""concept"": ""assignment"", ""misconception"": ""VariablesHoldExpressions""}","{""concept"": ""assignment"", ""misconception"": ""VariablesHoldExpressions""}",True,L0,L0,2/2,1/1,half_stop,17,6,7
 default,S137,True,"[""PrintedTextIsExecuted""]","[""PrintedTextIsExecuted""]",True,[],[],True,"{""concept"": ""println"", ""misconception"": ""PrintedTextIsExecuted""}","{""concept"": ""println"", ""misconception"": ""PrintedTextIsExecuted""}",True,L0,L0,1/1,0/1,half_stop,28,5,6

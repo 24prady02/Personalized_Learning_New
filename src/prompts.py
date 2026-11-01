@@ -106,7 +106,7 @@ Quote: the exact words from the student's answer that show it (copy them verbati
 Confidence: a number from 0 to 1
 """
 
-LABEL_WAY = """You check whether a student's answer shows one way of understanding a Java concept, as a learning-progression ladder describes it.
+LABEL_WAY = """You check whether a student's answer shows one way of understanding a Java concept.
 
 Program:
 {code}
@@ -116,10 +116,8 @@ Question: {question}
 Student's answer, split into clauses:
 {clauses}
 
-Edge: {edge_id}
 Concept: {concept}
-Level: {level} ({level_name}). Deciding question of this level: {deciding_question}
-Way: {way} ({rule_type})
+Way: {way}
 What an answer that shows this way does: {rule}
 
 Decide:

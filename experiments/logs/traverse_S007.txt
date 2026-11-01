@@ -8,15 +8,15 @@ start concepts (3): for_loop, loop_control, println
     mis:for_loop->IdiomOverridesCode -> not applied (0.00) "none"
     mis:for_loop->ForLoopPartSkipped -> not applied (0.00) "none"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L3#1 (0.30), lvl:for_loop@L2#0 (0.20)
-    lvl:for_loop@L2#1 -> shown (0.35) "3 2 1 / 2 1 / 1"
-    lvl:for_loop@L3#1 -> shown (0.21) "3 2 1 / 2 1 / 1"
-    lvl:for_loop@L2#0 -> not applied (0.00) "none"
+    lvl:for_loop@L2#1 -> shown (0.38) "3 2 1 / 2 1 / 1"
+    lvl:for_loop@L3#1 -> shown (0.22) "3 2 1 / 2 1 / 1"
+    lvl:for_loop@L2#0 -> shown (0.12) "3 2 1 / 2 1 / 1"
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.55), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForLoopPartSkipped (0.15)
     mis:loop_control->OffByOneBound -> held (0.33) "because the loop stops at 1"
     err:loop_control->WrongIterationCount -> held (0.26) "because the loop stops at 1"
     mis:loop_control->ForLoopPartSkipped -> not applied (0.00) "none"
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L4#1 (0.30), lvl:loop_control@L3#5 (0.20)
-    lvl:loop_control@L2#1 -> shown (0.30) "because the loop stops at 1"
+    lvl:loop_control@L2#1 -> not applied (0.00) "none"
     lvl:loop_control@L4#1 -> not applied (0.00) "none"
     lvl:loop_control@L3#5 -> not applied (0.00) "none"
   println (misconceptions): 6 candidates -> kept mis:println->ParenthesesOnlyIfArgument (0.50), mis:println->PrintEqualsPrintln (0.30), err:println->PrintWithoutFinalNewline (0.20)
@@ -25,7 +25,7 @@ start concepts (3): for_loop, loop_control, println
     err:println->PrintWithoutFinalNewline -> not applied (0.00) "none"
   println (level ways): 17 candidates -> kept lvl:println@L0#3 (0.50), lvl:println@L3#2 (0.30), lvl:println@L1#1 (0.20)
     lvl:println@L0#3 -> not applied (0.00) "none"
-    lvl:println@L3#2 -> shown (0.18) "3 2 1 / 2 1 / 1"
+    lvl:println@L3#2 -> shown (0.21) "3 2 1 / 2 1 / 1"
     lvl:println@L1#1 -> not applied (0.00) "none"
   kept: mis:loop_control->OffByOneBound [held, tier 0, 0.33], err:for_loop->WrongIterationCount [held, tier 1, 0.51], err:loop_control->WrongIterationCount [held, tier 1, 0.26]
   root cause not settled, unexamined prerequisites: pre:loop_variable->loop_control

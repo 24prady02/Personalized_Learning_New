@@ -421,9 +421,10 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                         label, quote, conf = parse_label(llm.ask(p, "label"), ("held", "correct", "not applied"))
                     elif is_way:
                         target = e["target"]
-                        p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, edge_id=eid, concept=concept,
-                                                     level=e["level"], level_name=e.get("level_name") or "", deciding_question=e.get("deciding_question") or "",
-                                                     way=e.get("way") or "", rule_type=e.get("rule_type") or "", rule=e.get("logic") or "")
+                        # the way is judged against its own text only: no level name, no deciding question, no level in an id.
+                        # The level comes from where the way sits in the graph (Part 4).
+                        p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, concept=concept,
+                                                     way=(e.get("way") or "").replace("_", " "), rule=e.get("logic") or "")
                         label, quote, conf = parse_label(llm.ask(p, "label"), ("shown", "not applied"))   # "not shown" reads as not applied
                     else:
                         target = g.other_end(e, concept)

@@ -8,9 +8,9 @@ start concepts (3): if_statement, control_flow, arithmetic_operators
     mis:if_statement->CodeAfterIfSkipped -> correct (0.33) "so it prints E, and then after that inner if-else it prints G"
     mis:if_statement->ThenAlwaysExecutes -> correct (0.24) "so it skips the whole first part with B, C and D, and goes to the else part"
   if_statement (level ways): 19 candidates -> kept lvl:if_statement@L2#0 (0.50), lvl:if_statement@L2#1 (0.30), lvl:if_statement@L3#1 (0.20)
-    lvl:if_statement@L2#0 -> shown (0.45) "so it prints E, and then after that inner if-else it prints G"
+    lvl:if_statement@L2#0 -> shown (0.42) "so it prints E, and then after that inner if-else it prints G"
     lvl:if_statement@L2#1 -> shown (0.27) "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2"
-    lvl:if_statement@L3#1 -> shown (0.16) "so it skips the whole first part with B, C and D, and goes to the else part"
+    lvl:if_statement@L3#1 -> shown (0.14) "so it skips the whole first part with B, C and D, and goes to the else part"
   control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->FalseConditionRestartsProgram (0.30), mis:control_flow->StatementsRunInAnyOrder (0.20)
     mis:control_flow->CodeAfterIfSkipped -> correct (0.47) "so it prints E, and then after that inner if-else it prints G"
     mis:control_flow->FalseConditionRestartsProgram -> correct (0.24) "so it skips the whole first part with B, C and D, and goes to the else part"
@@ -18,14 +18,14 @@ start concepts (3): if_statement, control_flow, arithmetic_operators
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.50), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L3#1 (0.20)
     lvl:control_flow@L2#0 -> shown (0.47) "so it prints E, and then after that inner if-else it prints G"
     lvl:control_flow@L2#1 -> shown (0.28) "so it prints E, and then after that inner if-else it prints G"
-    lvl:control_flow@L3#1 -> shown (0.17) "so it prints E, and then after that inner if-else it prints G"
+    lvl:control_flow@L3#1 -> shown (0.18) "so it prints E, and then after that inner if-else it prints G"
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
     mis:arithmetic_operators->RemainderIsSubtraction -> correct (0.97) "it checks 17 % 5, which is 2"
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#1 (0.60), lvl:arithmetic_operators@L2#0 (0.25), lvl:arithmetic_operators@L2#2 (0.15)
-    lvl:arithmetic_operators@L2#1 -> shown (0.54) "it checks 17 % 5, which is 2"
+    lvl:arithmetic_operators@L2#1 -> shown (0.51) "it checks 17 % 5, which is 2"
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) "none"
-    lvl:arithmetic_operators@L2#2 -> shown (0.10) "it checks 17 % 5, which is 2"
-  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.97], lvl:arithmetic_operators@L2#1 [shown, tier 2, 0.54], mis:control_flow->CodeAfterIfSkipped [correct, tier 2, 0.47]
+    lvl:arithmetic_operators@L2#2 -> shown (0.09) "where it checks 17 % 5, which is 2"
+  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.97], lvl:arithmetic_operators@L2#1 [shown, tier 2, 0.51], mis:control_flow->CodeAfterIfSkipped [correct, tier 2, 0.47]
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:if_statement->BranchChosenByIntent; c4 <- mis:if_statement->CodeAfterIfSkipped; c5 uncovered; c6 uncovered
   no next nodes -> half_stop
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'nested_conditionals': ['if_else_statement'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'print': ['statement', 'string_literal']}

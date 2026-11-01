@@ -27,10 +27,9 @@
    "level": "L3",
    "way": "relation_to_neighbour",
    "quote": "args is empty",
-   "edge": "lvl:command_line_args@L3#4",
+   "edge": "lvl:command_line_args@L3#2",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L1 names_the_element"
    ]
   },
@@ -44,6 +43,14 @@
     "L3 relation_to_neighbour",
     "L2 output_prediction"
    ]
+  },
+  "standard_input": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "args is empty",
+   "edge": "lvl:standard_input@L3#9",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L3",
@@ -84,9 +91,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "1: nothing, the numbers go into data.txt",
-   "confidence": 0.85,
+   "confidence": 0.93,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.465,
    "logic": "`java RandomSeq 1000 > data.txt` prints nothing in the terminal and leaves a file of 1,000 values. `java Average < data.txt` prints their average.",
    "twin_logic": null,
    "level": "L2",
@@ -107,22 +114,6 @@
    "score": 0.56,
    "logic": "args[0] can always be read.",
    "twin_logic": "If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
-  },
-  {
-   "depth": 1,
-   "source": "command_line_args",
-   "edge": "lvl:command_line_args@L3#4",
-   "target": "command_line_args@L3",
-   "kind": "level",
-   "label": "shown",
-   "quote": "args is empty",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "Command-line arguments are a fixed number of strings given once when the program starts (args[]); standard input is a stream of any length read while the program runs (StdIn.readInt()). Both arrive as text and must be parsed into numbers.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -158,6 +149,22 @@
   },
   {
    "depth": 1,
+   "source": "standard_input",
+   "edge": "lvl:standard_input@L3#9",
+   "target": "standard_input@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "args is empty",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Command-line arguments are a fixed number of strings given once when the program starts (args[]); standard input is a stream of any length read while the program runs (StdIn.readInt()). Both arrive as text and must be parsed into numbers.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
    "source": "redirection",
    "edge": "mis:redirection->RedirectionIsArgument",
    "target": "RedirectionIsArgument",
@@ -178,9 +185,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "1: nothing, the numbers go into data.txt",
-   "confidence": 0.85,
+   "confidence": 0.93,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.465,
    "logic": "`java RandomSeq 1000 > data.txt` prints nothing in the terminal and leaves a file of 1,000 values. `java Average < data.txt` prints their average.",
    "twin_logic": null,
    "level": "L2",
@@ -194,9 +201,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "3: an average of 5 new numbers, no file",
-   "confidence": 0.68,
+   "confidence": 0.7,
    "prune_score": 0.35,
-   "score": 0.238,
+   "score": 0.245,
    "logic": "`A > f` followed by `B < f` has the same effect as `A | B`, except that the pipe creates no file.",
    "twin_logic": null,
    "level": "L3",
@@ -210,9 +217,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "1: nothing, the numbers go into data.txt",
-   "confidence": 0.9,
+   "confidence": 0.95,
    "prune_score": 0.15,
-   "score": 0.135,
+   "score": 0.1425,
    "logic": "`> file` diverts all standard output (print, println, printf) into the file, so nothing appears in the terminal.",
    "twin_logic": null,
    "level": "L3",
@@ -229,8 +236,8 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 15,
- "llm_cache_hits": 68,
+ "llm_calls": 9,
+ "llm_cache_hits": 130,
  "llm_calls_by_step": {
   "prune": 6,
   "label": 16

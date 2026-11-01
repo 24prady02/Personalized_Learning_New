@@ -7,18 +7,18 @@ start concepts (2): print, println
     mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
     mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) "none"
   print (level ways): 15 candidates -> kept lvl:print@L3#2 (0.60), lvl:print@L1#1 (0.20), lvl:print@L1#0 (0.20)
-    lvl:print@L3#2 -> shown (0.45) "println adds a newline after the text and print does not"
-    lvl:print@L1#1 -> shown (0.17) "print does not"
+    lvl:print@L3#2 -> shown (0.54) "println adds a newline after the text and print does not"
+    lvl:print@L1#1 -> shown (0.18) "println adds a newline after the text and print does not"
     lvl:print@L1#0 -> shown (0.17) "println adds a newline after the text and print does not"
   println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.30), err:println->PrintWithoutFinalNewline (0.10)
     mis:println->PrintEqualsPrintln -> correct (0.58) "println adds a newline after the text and print does not"
     mis:println->PrintNewLineFirst -> correct (0.29) "println adds a newline after the text and print does not"
     err:println->PrintWithoutFinalNewline -> not applied (0.00) "none"
   println (level ways): 17 candidates -> kept lvl:println@L3#2 (0.50), lvl:println@L1#1 (0.30), lvl:println@L1#0 (0.20)
-    lvl:println@L3#2 -> shown (0.36) "println adds a newline after the text and print does not"
+    lvl:println@L3#2 -> shown (0.42) "println adds a newline after the text and print does not"
     lvl:println@L1#1 -> shown (0.28) "println adds a newline after the text and print does not"
-    lvl:println@L1#0 -> shown (0.19) "println adds a newline after the text"
-  kept: mis:println->PrintEqualsPrintln [correct, tier 2, 0.58], lvl:print@L3#2 [shown, tier 2, 0.45], lvl:println@L3#2 [shown, tier 2, 0.36]
+    lvl:println@L1#0 -> shown (0.19) "println adds a newline after the text and print does not"
+  kept: mis:println->PrintEqualsPrintln [correct, tier 2, 0.58], lvl:print@L3#2 [shown, tier 2, 0.54], lvl:println@L3#2 [shown, tier 2, 0.42]
   clause coverage: c1 <- lvl:print@L3#2
   root-cause walk: held on [], broken at [], prerequisites {'print': ['statement', 'string_literal'], 'println': ['statement', 'string_literal']}
   level print: L3 via relation_to_neighbour "println adds a newline after the text and print does not"

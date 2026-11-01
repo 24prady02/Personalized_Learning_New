@@ -6,10 +6,10 @@ start concepts (1): variable_swap
     mis:variable_swap->AssignmentExchangesValues -> not applied (0.00) "none"
     mis:variable_swap->SwapWithoutTemp -> not applied (0.00) "none"
   variable_swap (level ways): 13 candidates -> kept lvl:variable_swap@L1#1 (0.50), lvl:variable_swap@L1#0 (0.30), lvl:variable_swap@L0#0 (0.20)
-    lvl:variable_swap@L1#1 -> shown (0.40) "a becomes b and b becomes a"
-    lvl:variable_swap@L1#0 -> shown (0.26) "a becomes b and b becomes a"
+    lvl:variable_swap@L1#1 -> shown (0.35) "a becomes b and b becomes a"
+    lvl:variable_swap@L1#0 -> shown (0.22) "a becomes b and b becomes a"
     lvl:variable_swap@L0#0 -> not applied (0.00) "none"
-  kept: lvl:variable_swap@L1#1 [shown, tier 2, 0.40], lvl:variable_swap@L1#0 [shown, tier 2, 0.26]
+  kept: lvl:variable_swap@L1#1 [shown, tier 2, 0.35], lvl:variable_swap@L1#0 [shown, tier 2, 0.23]
   clause coverage: c1 <- lvl:variable_swap@L1#1
   root-cause walk: held on [], broken at [], prerequisites {'variable_swap': ['assignment']}
   level variable_swap: L1 via states_the_rule "a becomes b and b becomes a"

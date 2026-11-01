@@ -69,7 +69,8 @@
    "edge": "lvl:for_loop@L3#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction"
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
    ]
   },
   "loop_control": {
@@ -199,9 +200,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "3 2 1 / 2 1 / 1",
-   "confidence": 0.7,
+   "confidence": 0.75,
    "prune_score": 0.5,
-   "score": 0.35,
+   "score": 0.375,
    "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
    "twin_logic": null,
    "level": "L2",
@@ -215,13 +216,29 @@
    "kind": "level",
    "label": "shown",
    "quote": "3 2 1 / 2 1 / 1",
-   "confidence": 0.7,
+   "confidence": 0.75,
    "prune_score": 0.3,
-   "score": 0.21,
+   "score": 0.225,
    "logic": "A for may be the body of another for: the inner for runs its complete set of passes for every single pass of the outer one.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#0",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "3 2 1 / 2 1 / 1",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
   },
   {
    "depth": 1,
@@ -253,22 +270,6 @@
   },
   {
    "depth": 1,
-   "source": "loop_control",
-   "edge": "lvl:loop_control@L2#1",
-   "target": "loop_control@L2",
-   "kind": "level",
-   "label": "shown",
-   "quote": "because the loop stops at 1",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 1,
    "source": "println",
    "edge": "mis:println->PrintEqualsPrintln",
    "target": "PrintEqualsPrintln",
@@ -289,9 +290,9 @@
    "kind": "level",
    "label": "shown",
    "quote": "3 2 1 / 2 1 / 1",
-   "confidence": 0.6,
+   "confidence": 0.7,
    "prune_score": 0.3,
-   "score": 0.18,
+   "score": 0.21,
    "logic": "print leaves the cursor on the line; println ends it; several prints followed by one println make one line.",
    "twin_logic": null,
    "level": "L3",
@@ -363,7 +364,7 @@
  "stop_reason": "sufficient",
  "depth_reached": 2,
  "llm_calls": 0,
- "llm_cache_hits": 41,
+ "llm_cache_hits": 64,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 24
