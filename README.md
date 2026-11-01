@@ -104,8 +104,9 @@ coverage). The earlier model-based start and stop are kept as an ablation: `--st
 1. **Clauses and start concepts.** Quote characters are removed, then the answer is split at sentence ends, `;`,
    before `because` / `so` (after a comma, a space or a closing quote), and a parenthetical remark of two or more
    words becomes its own clause. `/` is kept: inside a written output it is a line break. Start concepts (no
-   model call): every non-generic concept of the subgraph, that is, the concepts Stage 1 tagged in the code. When
-   there are more than N, they are ranked by BM25 of the student's answer against each concept's text (its id
+   model call): every non-generic concept of the subgraph, that is, the concepts Stage 1 tagged in the code, plus
+   a generic concept whose tagging text occurs verbatim in the answer (the student names it in code, e.g. `=` for
+   assignment in "a = b"). When there are more than N, they are ranked by BM25 of the student's answer against each concept's text (its id
    with underscores as spaces plus the texts of its misconception and concept edges), ties broken by the number
    of Stage 1 code hits, then by id. (`--start llm`: one START call maps each clause to concepts instead.)
 2. **Edge search** (no model). Depth 1: the concept's misconception and error edges. Deeper: its prerequisite /
@@ -144,19 +145,21 @@ tables in `results/stage2_results.md`; gold is used for checking only):
 
 | run | start | stop | held set | root cause | overall level | points | prompts |
 |---|---|---|---|---|---|---|---|
-| default | stage1 | rule | 9/10 | 9/10 | 5/10 | 37/72 | 103 |
+| default | stage1 | rule | 9/10 | 10/10 | 6/10 | 42/72 | 114 |
 | llm_start | llm | rule | 8/10 | 10/10 | 6/10 | 42/72 | 114 |
 | llm_stop | stage1 | llm | 9/10 | 9/10 | 5/10 | 37/72 | 113 |
 | llm_ablation | llm | llm | 8/10 | 10/10 | 6/10 | 42/72 | 126 |
 
+(llm_stop was run before the generic-concept rule above was added; it misses S134 for that reason.)
+
 The stop step makes no difference to any diagnosis: the rule and the SUFFICIENCY prompt give the same points, and
-the prompt costs 10 to 12 extra calls. The start step does matter in one case: in S134 the only non-generic
-concept of the subgraph is variable_swap, while the gold misconception (VariablesHoldExpressions) sits on
-assignment, which Stage 1 marks generic; the Stage 1 start never looks there (1/7 points), the START prompt names
-assignment from the clauses and finds it (6/7). On S007 the Stage 1 start is exact (OffByOneBound only) and the
-START prompt adds EmptyInnerLoopSkipsRest, which the gold tolerates but does not list. Overall levels are the
-weak part of both runs: S026 and S047 find no evidence at all (correct answers on variable_swap and
-formatted_output), S057 and S137 land one level away from the gold.
+the prompt costs 10 to 12 extra calls. The start step needed one rule: in S134 the only non-generic concept of
+the subgraph is variable_swap, while the gold misconception (VariablesHoldExpressions) sits on assignment, which
+Stage 1 marks generic; the answer repeats the `=` that tagged it, so assignment joins the start concepts and the
+misconception, root cause, L0 and the broken edge are found (6/7), exactly what the START prompt finds. On S007
+the Stage 1 start is exact (OffByOneBound only) and the START prompt adds EmptyInnerLoopSkipsRest, which the gold
+tolerates but does not list. Overall levels are the weak part of both runs: S026 and S047 find no evidence at
+all (correct answers on variable_swap and formatted_output), S057 and S137 land one level away from the gold.
 
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /

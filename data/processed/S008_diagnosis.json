@@ -18,20 +18,20 @@
  "start_concepts": [
   "arithmetic_operators",
   "loop_control",
-  "loop_variable"
+  "assignment"
  ],
  "held_misconceptions": [],
  "error_evidence": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
-  "loop_control": {
+  "assignment": {
    "level": "L2",
    "way": "line_by_line_trace",
    "quote": "At i = 9 num2 drops to 11",
    "source": "level_ladder"
   },
-  "loop_variable": {
+  "loop_control": {
    "level": "L2",
    "way": "line_by_line_trace",
    "quote": "At i = 9 num2 drops to 11",
@@ -42,17 +42,17 @@
  "paths": [
   {
    "depth": 1,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopOutputSameEachPass",
-   "target": "LoopOutputSameEachPass",
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
    "kind": "misconception",
    "label": "correct",
-   "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.9,
-   "prune_score": 0.6,
-   "score": 0.54,
-   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "quote": "At i = 9 num2 drops to 11",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value."
   },
   {
    "depth": 1,
@@ -114,45 +114,45 @@
   },
   {
    "depth": 1,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopOutputSameEachPass",
-   "target": "LoopOutputSameEachPass",
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
    "kind": "misconception",
    "label": "correct",
-   "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.9,
-   "prune_score": 0.6,
-   "score": 0.54,
-   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "quote": "At i = 9 num2 drops to 11",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value."
   },
   {
    "depth": 1,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
-   "target": "LoopUpdateChangesDirection",
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
    "kind": "misconception",
    "label": "correct",
-   "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.6,
+   "quote": "At i = 9 num2 drops to 11",
+   "confidence": 0.75,
    "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
-   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+   "score": 0.1125,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   }
  ],
  "clause_coverage": {
+  "At i = 9 num2 drops to 11": "mis:assignment->VariableKeepsOldValue",
   "So it prints 8, 10, 12, 13": "err:loop_control->WrongIterationCount"
  },
  "unexplained_clauses": [
   "num1 is 9 and num2 starts at 12",
-  "At i = 9 num2 drops to 11",
   "at i = 11 it drops to 10"
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 14,
- "llm_cache_hits": 23,
+ "llm_calls": 5,
+ "llm_cache_hits": 48,
  "llm_calls_by_step": {
   "start": 0,
   "prune": 3,

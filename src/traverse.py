@@ -256,6 +256,13 @@ def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[
     ids = sorted(g.concepts)
     if cfg.get("start", "stage1") == "stage1":
         cands = [c for c in ids if not g.concepts[c].get("generic")]
+        # a generic concept joins the candidates when the student's answer repeats the code text that tagged it
+        # (e.g. "=" for assignment in "a = b"): the answer then names that concept, in code rather than in words
+        named = [c for c in ids if g.concepts[c].get("generic") and any(
+            (h.get("match") or "").strip() and (h.get("match") or "").strip() in answer for h in g.concepts[c].get("hits") or [])]
+        if named:
+            log.append("start (stage1): generic concepts whose tagging text occurs in the answer: " + ", ".join(named))
+            cands += named
         if len(cands) <= n:
             log.append(f"start (stage1): {len(cands)} tagged concepts, all used")
             return cands

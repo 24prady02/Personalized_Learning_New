@@ -1,9 +1,23 @@
 clauses: After t = a and a = b, a is b | Then b = t means b equals a | so both are b
-start (stage1): 1 tagged concepts, all used
-start concepts (1): variable_swap
---- depth 1: current concepts ['variable_swap']
+start (stage1): generic concepts whose tagging text occurs in the answer: assignment
+start (stage1): 2 tagged concepts, all used
+start concepts (2): variable_swap, assignment
+--- depth 1: current concepts ['variable_swap', 'assignment']
   variable_swap: 2 candidates -> kept mis:variable_swap->SwapWithoutTemp (0.70), mis:variable_swap->AssignmentExchangesValues (0.30)
     mis:variable_swap->SwapWithoutTemp -> not applied (0.00) "none"
     mis:variable_swap->AssignmentExchangesValues -> not applied (0.00) "none"
+  assignment: 15 candidates -> kept mis:assignment->VariablesHoldExpressions (0.60), mis:assignment->AssignmentIsEquation (0.25), mis:assignment->SwapWithoutTemp (0.15)
+    mis:assignment->VariablesHoldExpressions -> held (0.51) "Then b = t means b equals a"
+    mis:assignment->AssignmentIsEquation -> held (0.23) "Then b = t means b equals a"
+    mis:assignment->SwapWithoutTemp -> not applied (0.00) "none"
+  kept: mis:assignment->VariablesHoldExpressions [held, tier 0, 0.51], mis:assignment->AssignmentIsEquation [held, tier 0, 0.23]
+  clause coverage: c1 uncovered; c2 <- mis:assignment->VariablesHoldExpressions; c3 uncovered
+--- depth 2: current concepts ['assignment']
+  assignment: 1 candidates -> kept pre:assignment->variable_swap (1.00)
+    pre:assignment->variable_swap -> broken (0.95) "so both are b"
+  kept: pre:assignment->variable_swap [broken, tier 0, 0.95]
+  clause coverage: c1 uncovered; c2 <- mis:assignment->VariablesHoldExpressions; c3 <- pre:assignment->variable_swap
+--- depth 3: current concepts ['variable_swap', 'assignment']
   nothing kept -> half_stop
-  root-cause walk: held on [], broken at [], prerequisites {'variable_swap': ['assignment']}
+  root-cause walk: held on ['assignment'], broken at ['variable_swap'], prerequisites {'variable_swap': ['assignment']}
+  level variable_swap: L0 via inconsistent_trace "Then b = t means b equals a"

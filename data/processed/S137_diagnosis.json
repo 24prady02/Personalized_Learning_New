@@ -16,7 +16,8 @@
  ],
  "start_concepts": [
   "print",
-  "println"
+  "println",
+  "statement"
  ],
  "held_misconceptions": [
   {
@@ -83,12 +84,12 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 2,
- "llm_calls": 13,
- "llm_cache_hits": 23,
+ "llm_calls": 4,
+ "llm_cache_hits": 114,
  "llm_calls_by_step": {
   "start": 0,
-  "prune": 3,
-  "label": 9,
+  "prune": 4,
+  "label": 12,
   "sufficiency": 0,
   "level": 1
  }

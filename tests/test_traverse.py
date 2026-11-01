@@ -135,6 +135,19 @@ def test_start_stage1_on_s007_is_ranked_by_bm25_then_hits_then_id():
     assert any(l.startswith("start (stage1) BM25") for l in log)
 
 
+def test_start_stage1_admits_a_generic_concept_the_answer_names_in_code():
+    # S134: the only tagged concept is variable_swap; the answer repeats "=", the text that tagged the generic
+    # concept assignment, so assignment joins the start concepts. S007's answer repeats none of its generic hits.
+    llm = ScriptedLLM(make_script({}))
+    for sid, expect_generic in (("S134", ["assignment"]), ("S007", [])):
+        sg = json.loads((ROOT / f"data/processed/{sid}_subgraph.json").read_text(encoding="utf-8"))
+        g = Graph(sg)
+        sc = SCENARIOS[sid]
+        chosen = select_start(g, split_clauses(sc["answer"]), sc["answer"], 3, CFG, llm, sc, [])
+        assert [c for c in chosen if g.concepts[c].get("generic")] == expect_generic
+    assert llm.calls == 0
+
+
 def test_start_llm_mode_uses_the_start_prompt():
     g = Graph(TINY)
     llm = ScriptedLLM(make_script({}, start_reply="c1: C, G\nc2: B"))

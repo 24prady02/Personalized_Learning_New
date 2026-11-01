@@ -29,8 +29,8 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 3,
- "llm_cache_hits": 23,
+ "llm_calls": 0,
+ "llm_cache_hits": 64,
  "llm_calls_by_step": {
   "start": 0,
   "prune": 1,

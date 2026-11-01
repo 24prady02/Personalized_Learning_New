@@ -1,7 +1,8 @@
 clauses: System.out.println | x is 5 | sets x to 5
-start (stage1): 2 tagged concepts, all used
-start concepts (2): print, println
---- depth 1: current concepts ['print', 'println']
+start (stage1): generic concepts whose tagging text occurs in the answer: statement
+start (stage1): 3 tagged concepts, all used
+start concepts (3): print, println, statement
+--- depth 1: current concepts ['print', 'println', 'statement']
   print: 3 candidates -> kept mis:print->ParenthesesOnlyIfArgument (0.50), mis:print->RepeatedOutputVariablePrintedOnce (0.30), err:print->PrintWithoutFinalNewline (0.20)
     mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
     mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) "none"
@@ -10,6 +11,10 @@ start concepts (2): print, println
     mis:println->PrintedTextIsExecuted -> held (0.81) "sets x to 5"
     mis:println->PrintEqualsPrintln -> not applied (0.00) "none"
     mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
+  statement: 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.70), mis:statement->ProgramLooksAhead (0.20), err:statement->StatementNeedsNoTerminator (0.10)
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) "none"
+    mis:statement->ProgramLooksAhead -> not applied (0.00) "none"
+    err:statement->StatementNeedsNoTerminator -> not applied (0.00) "none"
   kept: mis:println->PrintedTextIsExecuted [held, tier 0, 0.81]
   root cause not settled, unexamined prerequisites: pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['println']

@@ -299,7 +299,7 @@
  "stop_reason": "sufficient",
  "depth_reached": 2,
  "llm_calls": 0,
- "llm_cache_hits": 23,
+ "llm_cache_hits": 39,
  "llm_calls_by_step": {
   "start": 0,
   "prune": 5,

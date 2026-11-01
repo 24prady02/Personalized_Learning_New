@@ -162,8 +162,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 11,
- "llm_cache_hits": 23,
+ "llm_calls": 0,
+ "llm_cache_hits": 91,
  "llm_calls_by_step": {
   "start": 0,
   "prune": 3,
