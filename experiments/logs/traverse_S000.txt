@@ -1,5 +1,5 @@
 clauses: It will print 0
-start (stage1): 2 tagged concepts, all used
+start: 2 tagged concepts, all used
 start concepts (2): definite_assignment, println
 --- depth 1: current concepts ['definite_assignment', 'println']
   definite_assignment: 1 candidates -> kept mis:definite_assignment->LocalVariablesAutoInitialized (1.00)

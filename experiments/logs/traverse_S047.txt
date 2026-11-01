@@ -1,5 +1,5 @@
 clauses: With %.3f it would print 3.142 and no spaces | price itself is still 3.14159 | only the printed digits change
-start (stage1): 1 tagged concepts, all used
+start: 1 tagged concepts, all used
 start concepts (1): formatted_output
 --- depth 1: current concepts ['formatted_output']
   formatted_output: 4 candidates -> kept mis:formatted_output->FieldWidthIsIntegerDigits (0.60), mis:formatted_output->ManyDigitsMeanAccurate (0.30), mis:formatted_output->PrintfAnyConversion (0.10)

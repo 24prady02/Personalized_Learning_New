@@ -1,6 +1,6 @@
 clauses: After t = a and a = b, a is b | Then b = t means b equals a | so both are b
-start (stage1): generic concepts whose tagging text occurs in the answer: assignment
-start (stage1): 2 tagged concepts, all used
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: 2 tagged concepts, all used
 start concepts (2): variable_swap, assignment
 --- depth 1: current concepts ['variable_swap', 'assignment']
   variable_swap: 2 candidates -> kept mis:variable_swap->SwapWithoutTemp (0.70), mis:variable_swap->AssignmentExchangesValues (0.30)

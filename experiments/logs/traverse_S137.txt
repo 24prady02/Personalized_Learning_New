@@ -1,6 +1,6 @@
 clauses: System.out.println | x is 5 | sets x to 5
-start (stage1): generic concepts whose tagging text occurs in the answer: statement
-start (stage1): 3 tagged concepts, all used
+start: generic concepts whose tagging text occurs in the answer: statement
+start: 3 tagged concepts, all used
 start concepts (3): print, println, statement
 --- depth 1: current concepts ['print', 'println', 'statement']
   print: 3 candidates -> kept mis:print->ParenthesesOnlyIfArgument (0.50), mis:print->RepeatedOutputVariablePrintedOnce (0.30), err:print->PrintWithoutFinalNewline (0.20)

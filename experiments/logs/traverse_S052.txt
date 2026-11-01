@@ -1,6 +1,6 @@
 clauses: 1: nothing, the numbers go into data.txt | 2: the average | 3: an average of 5 new numbers, no file | args is empty
-start (stage1) BM25 of the answer against each tagged concept: command_line_args 12.19 (hits 2), standard_input 11.51 (hits 1), redirection 9.95 (hits 2), piping 8.65 (hits 2), run 4.42 (hits 3), data_driven_code 3.62 (hits 1), black_box_model 1.16 (hits 2)
-start (stage1) chosen: command_line_args, standard_input, redirection
+start: BM25 of the answer against each tagged concept: command_line_args 12.19 (hits 2), standard_input 11.51 (hits 1), redirection 9.95 (hits 2), piping 8.65 (hits 2), run 4.42 (hits 3), data_driven_code 3.62 (hits 1), black_box_model 1.16 (hits 2)
+start: chosen command_line_args, standard_input, redirection
 start concepts (3): command_line_args, standard_input, redirection
 --- depth 1: current concepts ['command_line_args', 'standard_input', 'redirection']
   command_line_args: 3 candidates -> kept err:command_line_args->ArgsAlwaysPresent (0.80), mis:command_line_args->ArgsAreNumbers (0.10), err:command_line_args->FirstArgIsArgsOne (0.10)

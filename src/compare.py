@@ -1,8 +1,8 @@
 """Compare Stage 2 diagnoses with the gold labels of data/raw/scenarios_20.json (checking only; gold is never an input).
 
-    python src/compare.py                       # data/processed/<sid>_diagnosis.json  (default settings)
-    python src/compare.py --tag llm_ablation    # data/processed/<sid>_diagnosis.llm_ablation.json
-    python src/compare.py --tag "" llm_ablation # both side by side
+    python src/compare.py                  # data/processed/<sid>_diagnosis.json  (default settings)
+    python src/compare.py --tag bm25       # data/processed/<sid>_diagnosis.bm25.json (a run made with --tag bm25)
+    python src/compare.py --tag "" bm25    # both side by side
 
 Per scenario: held misconceptions (gold.held vs the held misconception edges), correct misconceptions (gold.correct vs
 edges labelled correct in the evidence), root cause, overall level (in gold accept list), per-concept levels the gold

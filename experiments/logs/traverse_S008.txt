@@ -1,7 +1,7 @@
 clauses: num1 is 9 and num2 starts at 12 | At i = 9 num2 drops to 11 | at i = 11 it drops to 10 | So it prints 8, 10, 12, 13
-start (stage1): generic concepts whose tagging text occurs in the answer: assignment, statement
-start (stage1) BM25 of the answer against each tagged concept: arithmetic_operators 25.42 (hits 1), loop_control 17.92 (hits 1), assignment 16.45 (hits 1), loop_variable 14.67 (hits 1), increment_operators 12.58 (hits 1), loop_body 9.14 (hits 2), if_statement 8.98 (hits 1), control_flow 7.33 (hits 2), formatted_output 6.79 (hits 1), statement 6.61 (hits 1), do_while_loop 6.19 (hits 3), logical_operators 5.15 (hits 1), if_else_statement 4.69 (hits 1), boolean_expression 4.27 (hits 1), comparison_operators 4.21 (hits 1), operator_precedence 3.97 (hits 1), short_circuit 2.96 (hits 1)
-start (stage1) chosen: arithmetic_operators, loop_control, assignment
+start: generic concepts whose tagging text occurs in the answer: assignment, statement
+start: BM25 of the answer against each tagged concept: arithmetic_operators 25.42 (hits 1), loop_control 17.92 (hits 1), assignment 16.45 (hits 1), loop_variable 14.67 (hits 1), increment_operators 12.58 (hits 1), loop_body 9.14 (hits 2), if_statement 8.98 (hits 1), control_flow 7.33 (hits 2), formatted_output 6.79 (hits 1), statement 6.61 (hits 1), do_while_loop 6.19 (hits 3), logical_operators 5.15 (hits 1), if_else_statement 4.69 (hits 1), boolean_expression 4.27 (hits 1), comparison_operators 4.21 (hits 1), operator_precedence 3.97 (hits 1), short_circuit 2.96 (hits 1)
+start: chosen arithmetic_operators, loop_control, assignment
 start concepts (3): arithmetic_operators, loop_control, assignment
 --- depth 1: current concepts ['arithmetic_operators', 'loop_control', 'assignment']
   arithmetic_operators: 3 candidates -> kept mis:arithmetic_operators->CaretIsPower (0.34), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.33), mis:arithmetic_operators->RemainderIsSubtraction (0.33)

@@ -1,6 +1,6 @@
 clauses: So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even | because 17 divided by 2 leaves 1 | so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2 | so it prints E, and then after that inner if-else it prints G | so overall I think the answer would be AEG, which makes sense | because…
-start (stage1) BM25 of the answer against each tagged concept: if_statement 45.01 (hits 1), control_flow 36.20 (hits 1), arithmetic_operators 35.97 (hits 1), if_else_statement 34.80 (hits 1), remainder_operator 29.95 (hits 1), nested_conditionals 29.17 (hits 1), print 25.92 (hits 2), boolean_expression 18.52 (hits 1), comparison_operators 18.24 (hits 1)
-start (stage1) chosen: if_statement, control_flow, arithmetic_operators
+start: BM25 of the answer against each tagged concept: if_statement 45.01 (hits 1), control_flow 36.20 (hits 1), arithmetic_operators 35.97 (hits 1), if_else_statement 34.80 (hits 1), remainder_operator 29.95 (hits 1), nested_conditionals 29.17 (hits 1), print 25.92 (hits 2), boolean_expression 18.52 (hits 1), comparison_operators 18.24 (hits 1)
+start: chosen if_statement, control_flow, arithmetic_operators
 start concepts (3): if_statement, control_flow, arithmetic_operators
 --- depth 1: current concepts ['if_statement', 'control_flow', 'arithmetic_operators']
   if_statement: 22 candidates -> kept mis:if_statement->CodeAfterIfSkipped (0.45), mis:if_statement->BranchChosenByIntent (0.30), mis:if_statement->ThenAlwaysExecutes (0.25)

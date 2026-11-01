@@ -8,9 +8,8 @@ from pathlib import Path
 
 import pytest
 
-import prompts
 import traverse
-from traverse import DEFAULT_TRAVERSAL, Graph, covered_clauses, select_start, split_clauses
+from traverse import DEFAULT_TRAVERSAL, STEPS, Graph, covered_clauses, select_start, split_clauses
 from utils import load_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -54,16 +53,12 @@ def _edge_ids(prompt: str) -> list[str]:
     return re.findall(r"^- ((?:mis|err|pre|par):\S+) \|", prompt, re.M)
 
 
-def make_script(labels: dict[str, tuple[str, str]], start_reply: str = "c1: B", sufficiency: str = "{Yes}"):
+def make_script(labels: dict[str, tuple[str, str]]):
     """labels: edge id -> (label, quote). The prune reply picks every candidate edge with equal scores."""
     def script(prompt: str) -> str:
-        if prompt.startswith("A student answered a question about a short Java program. Decide"):
-            return start_reply
         if "Candidate edges of this concept" in prompt:
             ids = _edge_ids(prompt)
             return "\n".join(f"{{{e} (Score: {1 / len(ids):.3f})}}" for e in ids)
-        if "Paths found so far" in prompt:
-            return sufficiency + "\nmock"
         if "learning-progression ladder" in prompt:
             return "Level: L1\nWay: mock\nQuote: none"
         m = re.search(r"Edge: (\S+)", prompt)
@@ -72,7 +67,7 @@ def make_script(labels: dict[str, tuple[str, str]], start_reply: str = "c1: B", 
     return script
 
 
-# A -pre-> B -pre-> C; misconceptions on B and C; G generic (must never be a start concept).
+# A -pre-> B -pre-> C; misconceptions on B and C; G generic (its tagging text does not occur in the answer).
 TINY = {
     "scenario": "T001",
     "concepts": [
@@ -98,6 +93,12 @@ TINY_SC = {"id": "T001", "code": "int x;", "question": "What prints?", "answer":
 CFG = {**DEFAULT_TRAVERSAL, "width": 3, "depth": 3}
 
 
+def test_the_model_is_asked_in_three_places_only():
+    assert STEPS == ("prune", "label", "level")
+    import prompts
+    assert not hasattr(prompts, "START") and not hasattr(prompts, "SUFFICIENCY")
+
+
 # ---------------------------------------------------------------- 1. clause split
 
 def test_split_clauses_s007():
@@ -112,47 +113,39 @@ def test_split_clauses_rules():
 
 # ---------------------------------------------------------------- 2. start concepts from Stage 1
 
-def test_start_stage1_no_llm_no_generic_at_most_n_deterministic():
+def test_start_no_llm_no_generic_at_most_n_deterministic():
     g = Graph(TINY)
-    llm = ScriptedLLM(make_script({}))
-    runs = [select_start(g, ["c"], TINY_SC["answer"], 2, CFG, llm, TINY_SC, []) for _ in range(3)]
-    assert llm.calls == 0
+    runs = [select_start(g, TINY_SC["answer"], 2, []) for _ in range(3)]
     assert all(r == runs[0] for r in runs)
     assert len(runs[0]) == 2 and "G" not in runs[0]
-    assert select_start(g, ["c"], TINY_SC["answer"], 3, CFG, llm, TINY_SC, []) == ["A", "B", "C"]   # <= N: all tagged concepts
-    assert llm.calls == 0
+    assert select_start(g, TINY_SC["answer"], 3, []) == ["A", "B", "C"]   # <= N: all tagged concepts
 
 
-def test_start_stage1_on_s007_is_ranked_by_bm25_then_hits_then_id():
+def test_start_on_s007_is_ranked_by_bm25_then_hits_then_id():
     sg = json.loads((ROOT / "data/processed/S007_subgraph.json").read_text(encoding="utf-8"))
     g = Graph(sg)
-    llm = ScriptedLLM(make_script({}))
     log: list[str] = []
-    chosen = select_start(g, S007_CLAUSES, S007_ANSWER, 3, CFG, llm, SCENARIOS["S007"], log)
-    assert llm.calls == 0
+    chosen = select_start(g, S007_ANSWER, 3, log)
     assert len(chosen) == 3 and all(not g.concepts[c].get("generic") for c in chosen)
     assert "loop_control" in chosen
-    assert any(l.startswith("start (stage1) BM25") for l in log)
+    assert any(l.startswith("start: BM25") for l in log)
 
 
-def test_start_stage1_admits_a_generic_concept_the_answer_names_in_code():
+def test_start_admits_a_generic_concept_the_answer_names_in_code():
     # S134: the only tagged concept is variable_swap; the answer repeats "=", the text that tagged the generic
     # concept assignment, so assignment joins the start concepts. S007's answer repeats none of its generic hits.
-    llm = ScriptedLLM(make_script({}))
     for sid, expect_generic in (("S134", ["assignment"]), ("S007", [])):
         sg = json.loads((ROOT / f"data/processed/{sid}_subgraph.json").read_text(encoding="utf-8"))
         g = Graph(sg)
-        sc = SCENARIOS[sid]
-        chosen = select_start(g, split_clauses(sc["answer"]), sc["answer"], 3, CFG, llm, sc, [])
+        chosen = select_start(g, SCENARIOS[sid]["answer"], 3, [])
         assert [c for c in chosen if g.concepts[c].get("generic")] == expect_generic
-    assert llm.calls == 0
 
 
-def test_start_llm_mode_uses_the_start_prompt():
-    g = Graph(TINY)
-    llm = ScriptedLLM(make_script({}, start_reply="c1: C, G\nc2: B"))
-    out = select_start(g, ["c1", "c2"], TINY_SC["answer"], 3, {**CFG, "start": "llm"}, llm, TINY_SC, [])
-    assert llm.asks_by_step["start"] == 1 and out == ["C", "G", "B"]
+def test_names_in_code_whole_word_for_words_anywhere_for_symbols():
+    assert traverse._names_in_code("=", "a = b")
+    assert not traverse._names_in_code("int", "It prints 0")
+    assert traverse._names_in_code("int", "an int is printed")
+    assert not traverse._names_in_code("", "anything")
 
 
 # ---------------------------------------------------------------- 3/4. evidence and the rule-based stop
@@ -163,15 +156,15 @@ def test_covered_clauses_uses_norm_matching():
 
 
 def test_rule_stop_waits_for_pending_prerequisites_and_full_coverage():
-    # depth 1: MisC held covers clause 1; both clauses are not yet covered and pre:B->C is unexamined -> deeper.
-    # depth 2: pre:B->C broken covers clause 2; nothing pending any more -> stop: sufficient, no SUFFICIENCY prompt.
+    # depth 1: MisC held covers clause 1; clause 2 is not covered and pre:B->C is unexamined -> deeper.
+    # depth 2: pre:B->C broken covers clause 2; nothing pending any more -> stop: sufficient.
     labels = {"mis:C->MisC": ("held", "It prints 0"), "pre:B->C": ("broken", "because x is unset")}
     llm = ScriptedLLM(make_script(labels))
     log: list[str] = []
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, log)
-    assert llm.asks_by_step["sufficiency"] == 0 and llm.asks_by_step["start"] == 0
+    assert set(llm.asks_by_step) <= {"prune", "label", "level"}
     assert d["stop_reason"] == "sufficient" and d["depth_reached"] == 2
-    assert d["unexplained_clauses"] == [] and d["llm_calls_by_step"]["sufficiency"] == 0
+    assert d["unexplained_clauses"] == [] and set(d["llm_calls_by_step"]) == set(STEPS)
     assert any("c1 <- mis:C->MisC" in l and "c2 <- pre:B->C" in l for l in log)
     assert d["root_cause"] == {"concept": "C", "misconception": "MisC"} and d["overall_level"] == "L0"
 
@@ -183,14 +176,13 @@ def test_rule_stop_does_not_stop_while_a_prerequisite_is_pending():
     log: list[str] = []
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, log)
     assert any("unexamined prerequisites: pre:B->C" in l for l in log)
-    assert d["depth_reached"] == 2 and d["stop_reason"] == "sufficient" and llm.asks_by_step["sufficiency"] == 0
+    assert d["depth_reached"] == 2 and d["stop_reason"] == "sufficient"
 
 
 def test_rule_stop_runs_to_max_depth_when_a_clause_is_uncovered():
     labels = {"mis:C->MisC": ("held", "It prints 0"), "pre:B->C": ("confirmed", "It prints 0"), "pre:A->B": ("confirmed", "prints 0")}
     llm = ScriptedLLM(make_script(labels))
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, [])
-    assert llm.asks_by_step["sufficiency"] == 0
     assert d["stop_reason"] == "max depth" and d["depth_reached"] == 3
     assert d["unexplained_clauses"] == ["because x is unset"]
 
@@ -207,16 +199,6 @@ def test_evidence_keeps_dropped_correct_labels():
     assert d["clause_coverage"]["because x is unset"] == "mis:C->MisC2"
 
 
-def test_llm_start_and_stop_still_run():
-    labels = {"mis:B->MisB": ("held", "It prints 0"), "mis:C->MisC": ("correct", "because x is unset"), "pre:A->B": ("confirmed", "x is unset")}
-    llm = ScriptedLLM(make_script(labels, start_reply="c1: B\nc2: C", sufficiency="{Yes}"))
-    d = traverse.traverse(TINY, TINY_SC, {**CFG, "start": "llm", "stop": "llm"}, llm, [])
-    assert d["settings"]["start"] == "llm" and d["settings"]["stop"] == "llm"
-    assert d["start_concepts"] == ["B", "C"]
-    assert d["llm_calls_by_step"]["start"] == 1 and d["llm_calls_by_step"]["sufficiency"] == 1
-    assert d["stop_reason"] == "sufficient" and d["depth_reached"] == 2
-
-
 # ---------------------------------------------------------------- S007 end to end, replayed from the cache
 
 def test_s007_diagnosis_from_cached_replies():
@@ -224,10 +206,9 @@ def test_s007_diagnosis_from_cached_replies():
     cfg = {**DEFAULT_TRAVERSAL, "cache_dir": "experiments/llm_cache"}
     d = traverse.traverse(sg, SCENARIOS["S007"], cfg, ReplayLLM(cfg), [])
     assert d["clauses"] == S007_CLAUSES
-    assert d["llm_calls_by_step"]["start"] == 0 and d["llm_calls_by_step"]["sufficiency"] == 0
+    assert set(d["llm_calls_by_step"]) == {"prune", "label", "level"}
     assert {"concept": "loop_control", "misconception": "OffByOneBound"} in [
         {"concept": h["concept"], "misconception": h["misconception"]} for h in d["held_misconceptions"]]
     assert d["root_cause"] == {"concept": "loop_control", "misconception": "OffByOneBound"}
     assert d["overall_level"] == "L0" and d["levels"]["loop_control"]["level"] == "L0"
     assert d["stop_reason"] == "sufficient" and d["unexplained_clauses"] == []
-    assert prompts.SUFFICIENCY[:20] not in ""   # the prompt still exists for --stop llm

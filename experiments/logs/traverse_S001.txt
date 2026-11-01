@@ -1,5 +1,5 @@
 clauses: println adds a newline after the text and print does not
-start (stage1): 2 tagged concepts, all used
+start: 2 tagged concepts, all used
 start concepts (2): print, println
 --- depth 1: current concepts ['print', 'println']
   print: 3 candidates -> kept err:print->PrintWithoutFinalNewline (1.00)

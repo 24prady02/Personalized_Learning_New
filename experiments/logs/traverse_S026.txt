@@ -1,5 +1,5 @@
 clauses: a becomes b and b becomes a
-start (stage1): 1 tagged concepts, all used
+start: 1 tagged concepts, all used
 start concepts (1): variable_swap
 --- depth 1: current concepts ['variable_swap']
   variable_swap: 2 candidates -> kept mis:variable_swap->AssignmentExchangesValues (0.60), mis:variable_swap->SwapWithoutTemp (0.40)

@@ -1,4 +1,4 @@
-"""The four prompts of the ToG traversal (edge prune, edge label, sufficiency check, level ladder).
+"""The three prompts of the ToG traversal (edge prune, edge label, level ladder): the only places the model is asked.
 
 Every prompt is a plain string with {placeholders}; traverse.py fills them. The few-shot example is the
 reference case S000 (code, question, answer) with a worked reply in the exact output format each prompt expects.
@@ -10,36 +10,6 @@ FEW_SHOT = {
     "question": "What does the system print?",
     "answer": "It will print 0.",
 }
-
-# ---------------------------------------------------------------- 0. start concepts (ToG topic entities)
-
-START = """A student answered a question about a short Java program. Decide which concepts each clause of the answer talks about.
-
-Program:
-{code}
-
-Question: {question}
-
-Student's answer, split into clauses:
-{clauses}
-
-Concepts available (only these may be used; a concept marked (generic) may be chosen only when the clause names it directly):
-{concepts}
-
-Reply with one line per clause, in this exact format and nothing else:
-c1: concept_a, concept_b
-c2: concept_c
-Write "c3: none" for a clause that talks about no listed concept.
-
-Example. Program:
-{ex_code}
-Question: {ex_question}
-Clauses:
-c1: {ex_answer}
-Concepts available: declaration, definite_assignment, println, statement (generic)
-Reply:
-c1: definite_assignment, declaration
-"""
 
 # ---------------------------------------------------------------- 1. edge prune (ToG relation prune)
 
@@ -135,24 +105,7 @@ Quote: the exact words from the student's answer that show it (copy them verbati
 Confidence: a number from 0 to 1
 """
 
-# ---------------------------------------------------------------- 3. sufficiency check (ToG prompt_evaluate)
-
-SUFFICIENCY = """A student answered a question about a Java program. Reasoning paths were found in a knowledge graph; each path is a concept, an edge with its rule, the node it reaches, the label given to it and the student's words that support the label.
-
-Question: {question}
-
-Student's answer, split into clauses:
-{clauses}
-
-Paths found so far:
-{paths}
-
-Using only these paths, is every clause of the answer explained, that is, is each clause quoted by or accounted for by some path? (Whether the root cause has been reached is checked separately on the graph; do not judge that here.)
-
-Reply with exactly {{Yes}} or {{No}} on the first line, then one sentence of explanation.
-"""
-
-# ---------------------------------------------------------------- 4. level ladder
+# ---------------------------------------------------------------- 3. level ladder
 
 LEVEL_LADDER = """You place a student's answer on a learning-progression ladder for one Java concept, going from L0 up to L4 and stopping at the first level whose deciding question is answered in favour of that level.
 

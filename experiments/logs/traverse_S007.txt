@@ -1,6 +1,6 @@
 clauses: 3 2 1 / 2 1 / 1 | no empty line at the end | because the loop stops at 1
-start (stage1) BM25 of the answer against each tagged concept: for_loop 18.33 (hits 1), loop_control 15.80 (hits 1), println 13.66 (hits 1), increment_operators 13.33 (hits 1), formatted_output 11.32 (hits 1), control_flow 10.69 (hits 1), boolean_expression 8.24 (hits 1), loop_variable 6.73 (hits 1), loop_body 5.75 (hits 1), nested_loops 3.01 (hits 1), comparison_operators 2.29 (hits 1), loop_scope 2.22 (hits 1)
-start (stage1) chosen: for_loop, loop_control, println
+start: BM25 of the answer against each tagged concept: for_loop 18.33 (hits 1), loop_control 15.80 (hits 1), println 13.66 (hits 1), increment_operators 13.33 (hits 1), formatted_output 11.32 (hits 1), control_flow 10.69 (hits 1), boolean_expression 8.24 (hits 1), loop_variable 6.73 (hits 1), loop_body 5.75 (hits 1), nested_loops 3.01 (hits 1), comparison_operators 2.29 (hits 1), loop_scope 2.22 (hits 1)
+start: chosen for_loop, loop_control, println
 start concepts (3): for_loop, loop_control, println
 --- depth 1: current concepts ['for_loop', 'loop_control', 'println']
   for_loop: 21 candidates -> kept err:for_loop->WrongIterationCount (0.60), mis:for_loop->IdiomOverridesCode (0.20), mis:for_loop->ForLoopPartSkipped (0.20)

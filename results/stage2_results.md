@@ -18,37 +18,3 @@ held 9/10, correct 7/10, root 10/10, overall level 6/10, points 42/72, prompts 1
 | S057 | yes [] | no ['AllDoublesToAvoidDivision', 'IntegerDivisionGivesFraction', 'IntegerProbability', 'RowsNeedNotSumToOne', 'TargetTyping'] | yes | no L3 (gold L4) | 1/2 | 0/1 | sufficient | 11 | 3/7 |
 | S134 | no ['AssignmentIsEquation', 'VariablesHoldExpressions'] | yes [] | yes | yes L0 (gold L0) | 2/2 | 1/1 | half_stop | 10 | 6/7 |
 | S137 | yes ['PrintedTextIsExecuted'] | yes [] | yes | no L1 (gold L0) | 0/1 | 0/1 | half_stop | 17 | 3/6 |
-
-## llm_start  (10 scenarios)
-
-held 8/10, correct 7/10, root 10/10, overall level 6/10, points 42/72, prompts 114
-
-| scenario | held | correct | root | overall | levels | edges | stop | prompts | points |
-|---|---|---|---|---|---|---|---|---|---|
-| S001 | yes [] | yes ['PrintEqualsPrintln', 'PrintNewLineFirst'] | yes | yes L1 (gold L1) | 1/2 | 0/1 | sufficient | 8 | 5/7 |
-| S007 | no ['EmptyInnerLoopSkipsRest', 'OffByOneBound'] | yes ['NestedLoopsLockstep', 'NestedLoopsSequential', 'PrintfAddsNewline'] | yes | yes L0 (gold L0) | 2/2 | 1/2 | sufficient | 21 | 6/8 |
-| S008 | yes [] | yes ['BothBranchesExecute', 'BranchChosenByIntent', 'ElseAlwaysExecutes', 'IdiomOverridesCode', 'IncrementByTwo', 'LoopOutputSameEachPass', 'LoopUpdateChangesDirection'] | yes | yes L2 (gold L2) | 1/4 | 0/0 | half_stop | 16 | 5/8 |
-| S021 | yes [] | yes ['BothBranchesExecute', 'BranchChosenByIntent', 'CodeAfterIfSkipped', 'ElseAlwaysExecutes', 'FalseConditionRestartsProgram', 'StatementsRunInAnyOrder'] | yes | yes L2 (gold L2) | 1/3 | 0/1 | half_stop | 15 | 5/8 |
-| S026 | yes [] | no [] | yes | no None (gold L3) | 0/1 | 0/0 | half_stop | 4 | 2/5 |
-| S047 | yes [] | no [] | yes | no None (gold L4) | 0/1 | 0/0 | half_stop | 5 | 2/5 |
-| S052 | yes [] | yes ['RedirectionIsArgument'] | yes | yes L2 (gold L2) | 2/3 | 0/4 | half_stop | 11 | 6/11 |
-| S057 | yes [] | no ['AllDoublesToAvoidDivision', 'IntegerDivisionGivesFraction', 'TargetTyping'] | yes | no L3 (gold L4) | 0/2 | 0/1 | sufficient | 13 | 2/7 |
-| S134 | no ['AssignmentIsEquation', 'VariablesHoldExpressions'] | yes [] | yes | yes L0 (gold L0) | 2/2 | 1/1 | half_stop | 11 | 6/7 |
-| S137 | yes ['PrintedTextIsExecuted'] | yes [] | yes | no L1 (gold L0) | 0/1 | 0/1 | half_stop | 10 | 3/6 |
-
-## llm_ablation  (10 scenarios)
-
-held 8/10, correct 7/10, root 10/10, overall level 6/10, points 42/72, prompts 126
-
-| scenario | held | correct | root | overall | levels | edges | stop | prompts | points |
-|---|---|---|---|---|---|---|---|---|---|
-| S001 | yes [] | yes ['PrintEqualsPrintln', 'PrintNewLineFirst'] | yes | yes L1 (gold L1) | 1/2 | 0/1 | sufficient | 9 | 5/7 |
-| S007 | no ['EmptyInnerLoopSkipsRest', 'OffByOneBound'] | yes ['NestedLoopsLockstep', 'NestedLoopsSequential', 'PrintfAddsNewline'] | yes | yes L0 (gold L0) | 2/2 | 1/2 | half_stop | 26 | 6/8 |
-| S008 | yes [] | yes ['BothBranchesExecute', 'BranchChosenByIntent', 'ElseAlwaysExecutes', 'IdiomOverridesCode', 'IncrementByTwo', 'LoopOutputSameEachPass', 'LoopUpdateChangesDirection'] | yes | yes L2 (gold L2) | 1/4 | 0/0 | half_stop | 17 | 5/8 |
-| S021 | yes [] | yes ['BothBranchesExecute', 'BranchChosenByIntent', 'CodeAfterIfSkipped', 'ElseAlwaysExecutes', 'FalseConditionRestartsProgram', 'StatementsRunInAnyOrder'] | yes | yes L2 (gold L2) | 1/3 | 0/1 | half_stop | 16 | 5/8 |
-| S026 | yes [] | no [] | yes | no None (gold L3) | 0/1 | 0/0 | half_stop | 4 | 2/5 |
-| S047 | yes [] | no [] | yes | no None (gold L4) | 0/1 | 0/0 | half_stop | 5 | 2/5 |
-| S052 | yes [] | yes ['RedirectionIsArgument'] | yes | yes L2 (gold L2) | 2/3 | 0/4 | half_stop | 12 | 6/11 |
-| S057 | yes [] | no ['AllDoublesToAvoidDivision', 'IntegerDivisionGivesFraction', 'TargetTyping'] | yes | no L3 (gold L4) | 0/2 | 0/1 | half_stop | 14 | 2/7 |
-| S134 | no ['AssignmentIsEquation', 'VariablesHoldExpressions'] | yes [] | yes | yes L0 (gold L0) | 2/2 | 1/1 | half_stop | 13 | 6/7 |
-| S137 | yes ['PrintedTextIsExecuted'] | yes [] | yes | no L1 (gold L0) | 0/1 | 0/1 | half_stop | 10 | 3/6 |

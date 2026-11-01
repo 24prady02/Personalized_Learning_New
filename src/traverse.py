@@ -6,25 +6,24 @@ Output: data/processed/<sid>_diagnosis.json.
 
     python src/traverse.py S007                       # one scenario, default settings (start stage1, stop rule)
     python src/traverse.py S007 --prune-tools bm25    # rank edges by similarity instead of the prune prompt
-    python src/traverse.py S007 --start llm --stop llm   # ablation: the START and SUFFICIENCY prompts of the earlier version
     python src/traverse.py --all                      # every scenario in the file
 
 The LLM is used in three places only: edge pruning (replaceable by BM25 / sentence-BERT), edge labelling, and the
 level ladder for a concept that has no misconception link. Start concepts and the stop decision are not model calls.
 
 Part 1 builds lookups from G (ToG's SPARQL server). Part 2 splits the answer into clauses and selects at most N start
-concepts: with start = stage1 (default) these are Stage 1's tagged (non-generic) concepts, the given topic entities
-that ToG's released code reads from the dataset; more than N of them are ranked by BM25 of the answer against each
-concept's text. (start = llm keeps the earlier START prompt as an ablation.) Part 3 is the main loop: edge search (no
-LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM, quote checked against the answer), keep
-the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop test,
-next nodes. Every labelled candidate whose quote is in the answer is recorded as evidence, kept or not. The stop test
-with stop = rule (default) is (i) a graph check: a held or broken concept with unexamined prerequisites in G sends the
-walk one hop back; (ii) clause coverage: stop when the quote of some evidence edge covers every clause. (stop = llm
-keeps the SUFFICIENCY prompt as an ablation.) Part 4 diagnoses from the kept paths: held misconceptions (a held error
-beside a held misconception on the same concept is evidence, not a second diagnosis), broken edges, root cause along
-prerequisite edges, level per concept (level_mis_links, else the level ladder prompt), overall level, and the
-clauses no evidence covers. The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote.
+concepts, with no model call: Stage 1's tagged (non-generic) concepts, the given topic entities that ToG's released
+code reads from the dataset, plus a generic concept whose tagging text the answer repeats (e.g. "=" for assignment);
+more than N of them are ranked by BM25 of the answer against each concept's text. Part 3 is the main loop: edge search
+(no LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM, quote checked against the answer),
+keep the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop
+test, next nodes. Every labelled candidate whose quote is in the answer is recorded as evidence, kept or not. The
+stop test is a rule, no model call: (i) graph check, a held or broken concept with unexamined prerequisites in G
+sends the walk one hop back; (ii) clause coverage, stop when the quote of some evidence edge covers every clause.
+Part 4 diagnoses from the kept paths: held misconceptions (a held error beside a held misconception on the same
+concept is evidence, not a second diagnosis), broken edges, root cause along prerequisite edges, level per concept
+(level_mis_links, else the level ladder prompt), overall level, and the clauses no evidence covers. The LLM never
+answers from its own knowledge: every label is tied to an edge of G and a quote.
 """
 from __future__ import annotations
 
@@ -47,11 +46,9 @@ DEFAULT_TRAVERSAL = {
     "width": 3, "depth": 3, "temperature": 0, "max_output": 256,
     "prune_tools": "llm", "backend": "claude-cli", "model": "claude-opus-5-5",
     "few_shot_scenario": "S000", "cache_dir": "experiments/llm_cache",
-    "start": "stage1",   # start concepts = Stage 1's tagged concepts (ToG's given topic entities); "llm" = START prompt (ablation)
-    "stop": "rule",      # stop = graph check + clause coverage; "llm" = SUFFICIENCY prompt (ablation)
 }
 
-STEPS = ("start", "prune", "label", "sufficiency", "level")
+STEPS = ("prune", "label", "level")   # the only places the model is asked
 
 
 # ====================================================================== LLM client
@@ -256,52 +253,28 @@ def _names_in_code(match: str, answer: str) -> bool:
     return re.search(pat, answer) is not None
 
 
-def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[str, Any], llm: "LLM", sc: dict, log: list[str]) -> list[str]:
-    """ToG's topic entities. start = stage1 (default): the non-generic concepts of G, that is, the concepts Stage 1
-    tagged in the code, as ToG's released code reads the given topic_entity from the dataset. All of them when there
-    are at most n; otherwise the top n by BM25 of the student's answer against each concept's text, ties broken by
-    the number of Stage 1 code hits, then by id. No model call, never a generic concept.
-    start = llm (ablation): one START call maps each clause to concepts (or BM25 / sentence-BERT when prune_tools
-    is not llm); generic concepts count only when the model names them for a clause."""
+def select_start(g: "Graph", answer: str, n: int, log: list[str]) -> list[str]:
+    """ToG's topic entities, with no model call. Candidates: the non-generic concepts of G, that is, the concepts
+    Stage 1 tagged in the code (ToG's released code reads the given topic_entity from the dataset the same way), plus
+    a generic concept whose tagging text the answer repeats (e.g. "=" for assignment in "a = b": the student names
+    the concept in code rather than in words). All of them when there are at most n; otherwise the top n by BM25 of
+    the student's answer against each concept's text, ties broken by the number of Stage 1 code hits, then by id."""
     ids = sorted(g.concepts)
-    if cfg.get("start", "stage1") == "stage1":
-        cands = [c for c in ids if not g.concepts[c].get("generic")]
-        # a generic concept joins the candidates when the student's answer repeats the code text that tagged it
-        # (e.g. "=" for assignment in "a = b"): the answer then names that concept, in code rather than in words
-        named = [c for c in ids if g.concepts[c].get("generic") and any(
-            _names_in_code((h.get("match") or "").strip(), answer) for h in g.concepts[c].get("hits") or [])]
-        if named:
-            log.append("start (stage1): generic concepts whose tagging text occurs in the answer: " + ", ".join(named))
-            cands += named
-        if len(cands) <= n:
-            log.append(f"start (stage1): {len(cands)} tagged concepts, all used")
-            return cands
-        scores = bm25_scores(answer, [concept_text(g, c) for c in cands])
-        hits = {c: len(g.concepts[c].get("hits") or []) for c in cands}
-        ranked = sorted(cands, key=lambda c: (-scores[cands.index(c)], -hits[c], c))
-        log.append("start (stage1) BM25 of the answer against each tagged concept: " +
-                   ", ".join(f"{c} {scores[cands.index(c)]:.2f} (hits {hits[c]})" for c in ranked))
-        log.append(f"start (stage1) chosen: {', '.join(ranked[:n])}")
-        return ranked[:n]
-    if cfg.get("prune_tools", "llm") == "llm":
-        listing = "\n".join(f"- {c}" + (" (generic)" if g.concepts[c].get("generic") else "") for c in ids)
-        clause_text = "\n".join(f"c{i + 1}: {c}" for i, c in enumerate(clauses))
-        reply = llm.ask(prompts.START.format(code=sc["code"], question=sc.get("question", ""), clauses=clause_text, concepts=listing, **prompts.few_shot_fields()), "start")
-        votes: Counter = Counter()
-        order: list[str] = []
-        for m in re.finditer(r"c(\d+)\s*:\s*(.+)", reply):
-            for tok in re.split(r"[,\s]+", m.group(2).strip()):
-                tok = tok.strip(" .;")
-                if tok in g.concepts:
-                    votes[tok] += 1
-                    if tok not in order:
-                        order.append(tok)
-        ranked = sorted(order, key=lambda c: (-votes[c], order.index(c)))
-        log.append("start selection reply: " + " | ".join(reply.splitlines()))
-    else:
-        docs = [" ".join(g.edge_text(e) for e in g.mis_by_concept.get(c, []) + g.cedges_by_concept.get(c, [])) or c for c in ids]
-        scores = bm25_scores(answer, docs) if cfg.get("prune_tools") == "bm25" else sbert_scores(answer, docs)
-        ranked = [c for c, s in sorted(zip(ids, scores), key=lambda x: -x[1]) if s > 0 and not g.concepts[c].get("generic")]
+    cands = [c for c in ids if not g.concepts[c].get("generic")]
+    named = [c for c in ids if g.concepts[c].get("generic") and any(
+        _names_in_code((h.get("match") or "").strip(), answer) for h in g.concepts[c].get("hits") or [])]
+    if named:
+        log.append("start: generic concepts whose tagging text occurs in the answer: " + ", ".join(named))
+        cands += named
+    if len(cands) <= n:
+        log.append(f"start: {len(cands)} tagged concepts, all used")
+        return cands
+    scores = bm25_scores(answer, [concept_text(g, c) for c in cands])
+    hits = {c: len(g.concepts[c].get("hits") or []) for c in cands}
+    ranked = sorted(cands, key=lambda c: (-scores[cands.index(c)], -hits[c], c))
+    log.append("start: BM25 of the answer against each tagged concept: " +
+               ", ".join(f"{c} {scores[cands.index(c)]:.2f} (hits {hits[c]})" for c in ranked))
+    log.append(f"start: chosen {', '.join(ranked[:n])}")
     return ranked[:n]
 
 
@@ -339,10 +312,6 @@ def parse_label(reply: str, allowed: tuple[str, ...]) -> tuple[str, str, float]:
     return label, quote, conf
 
 
-def parse_yes_no(reply: str) -> bool:
-    return bool(re.search(r"\{\s*Yes\s*\}", reply, re.I))
-
-
 def parse_level(reply: str) -> tuple[str | None, str | None, str]:
     lvl = re.search(r"Level:\s*(L[0-4]|none)", reply, re.I)
     way = re.search(r"Way:\s*(.+)", reply)
@@ -358,13 +327,12 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     g = Graph(sg)
     N, D = int(cfg.get("width", 3)), int(cfg.get("depth", 3))
     prune_tool = cfg.get("prune_tools", "llm")
-    start_mode, stop_mode = cfg.get("start", "stage1"), cfg.get("stop", "rule")
     llm = llm or LLM(cfg)
     log = log if log is not None else []
     asks0 = Counter(llm.asks_by_step)
     code, question, answer = sc["code"], sc.get("question", ""), sc.get("answer", "")
     ex = prompts.few_shot_fields()
-    settings = {"width": N, "depth": D, "prune_tools": prune_tool, "start": start_mode, "stop": stop_mode, "model": llm.model, "backend": llm.backend}
+    settings = {"width": N, "depth": D, "prune_tools": prune_tool, "model": llm.model, "backend": llm.backend}
 
     def calls_by_step() -> dict[str, int]:
         return {s: llm.asks_by_step[s] - asks0[s] for s in STEPS}
@@ -373,7 +341,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     clauses = split_clauses(answer)
     clause_text = "\n".join(f"c{i + 1}: {c}" for i, c in enumerate(clauses))
     log.append("clauses: " + " | ".join(clauses))
-    topic = select_start(g, clauses, answer, N, cfg, llm, sc, log)
+    topic = select_start(g, answer, N, log)
     log.append(f"start concepts ({len(topic)}): {', '.join(topic)}")
     if not topic:
         return {"scenario": sc["id"], "status": "not diagnosable from the graph", "settings": settings, "clauses": clauses,
@@ -479,20 +447,12 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     pending.append(eid)
         if pending:
             log.append("  root cause not settled, unexamined prerequisites: " + ", ".join(sorted(set(pending))))
-        elif stop_mode == "rule":
-            # (ii) rule, no LLM: every clause is covered by the quote of some verified evidence edge (kept or not)
+        else:
+            # (ii) clause coverage, no LLM: every clause is covered by the quote of some verified evidence edge (kept or not)
             covered = covered_clauses(evidence, clauses)
             log.append("  clause coverage: " + "; ".join(
                 f"c{i + 1} <- {covered[i]}" if i in covered else f"c{i + 1} uncovered" for i in range(len(clauses))))
             if len(covered) == len(clauses):
-                stop_reason = "sufficient"
-                break
-        else:
-            # (ii) LLM (ablation): are all clauses explained by the kept paths?
-            path_text = "\n".join(_path_line(c) for c in paths)
-            suff = llm.ask(prompts.SUFFICIENCY.format(question=question, clauses=clause_text, paths=path_text), "sufficiency")
-            log.append("  sufficiency: " + (suff.splitlines()[0] if suff else "(empty reply)"))
-            if parse_yes_no(suff):
                 stop_reason = "sufficient"
                 break
         # 3g next current nodes: walk back from concepts with a held misconception / broken edge; forward along concept edges
@@ -594,12 +554,6 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     }
 
 
-def _path_line(c: dict[str, Any]) -> str:
-    if c["kind"] == "misconception":
-        return f"{c['source']} —[wrong: \"{c['logic']}\"]→ {c['target']} ({c['label']}: \"{c['quote']}\")"
-    return f"{c['source']} —[{c['kind']}: \"{c['logic']}\"]→ {c['target']} ({c['label']}: \"{c['quote']}\")"
-
-
 # ====================================================================== CLI
 
 def main(argv=None) -> None:
@@ -615,11 +569,9 @@ def main(argv=None) -> None:
     ap.add_argument("--model", default=tcfg["model"])
     ap.add_argument("--width", type=int, default=tcfg["width"])
     ap.add_argument("--depth", type=int, default=tcfg["depth"])
-    ap.add_argument("--start", choices=["stage1", "llm"], default=tcfg["start"], help="start concepts: Stage 1 tagged concepts (default) or the START prompt")
-    ap.add_argument("--stop", choices=["rule", "llm"], default=tcfg["stop"], help="stop test: graph check + clause coverage (default) or the SUFFICIENCY prompt")
-    ap.add_argument("--tag", default="", help="suffix for the output files, e.g. --tag llm_ablation -> S007_diagnosis.llm_ablation.json")
+    ap.add_argument("--tag", default="", help="suffix for the output files, e.g. --tag bm25 -> S007_diagnosis.bm25.json")
     a = ap.parse_args(argv)
-    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth, start=a.start, stop=a.stop)
+    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth)
     tag = f".{a.tag}" if a.tag else ""
 
     scenarios = {s["id"]: s for s in load_scenarios(a.scenarios)}

@@ -41,7 +41,6 @@ data/
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
   processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step
-  processed/<sid>_diagnosis.llm_ablation.json  the same with --start llm --stop llm (the earlier model-based start and stop)
 src/
   preprocessing.py                           mask_java, split_statements, command_segments, Prepared
   model.py                                   tag_code (pattern channels of every concept) + extract_subgraph / subgraph_from_code
@@ -49,7 +48,7 @@ src/
   evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
   utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
   traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
-  prompts.py                                 the Stage 2 prompts: edge prune, edge label, level ladder (and START / SUFFICIENCY for the ablation)
+  prompts.py                                 the three Stage 2 prompts: edge prune, edge label, level ladder (the only places the model is asked)
   compare.py                                 Stage 2 vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
 notebooks/
   explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
@@ -66,7 +65,7 @@ results/
   figures/<sid>.png                          node visualization of each subgraph
   tables/summary.csv                         one row per scenario (counts, concept ids, edges traced, misconception node ids)
   metrics.json                               coverage and size metrics
-  stage2_results.md, tables/stage2_vs_gold.csv   Stage 2 diagnoses against the gold, default run and ablation side by side
+  stage2_results.md, tables/stage2_vs_gold.csv   Stage 2 diagnoses against the gold (checking only)
 paper/
   main.tex, references.bib, main.pdf         mid-term progress report (ACM format)
   figures/                                   figures used by the paper
@@ -86,20 +85,20 @@ python src/evaluate.py         # data/processed, experiments/logs/subgraph_repor
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 jupyter notebook notebooks/explore_subgraph.ipynb
 python src/traverse.py S007      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
-python src/traverse.py --all     # every scenario; add --start llm --stop llm --tag llm_ablation for the model-based start/stop
-python src/compare.py --tag "" llm_ablation   # both runs against the gold
+python src/traverse.py --all     # every scenario
+python src/compare.py            # Stage 2 diagnoses against the gold (gold is used for checking only)
 ```
 
 ## Stage 2: ToG traversal (`traverse.py`, `prompts.py`)
 
 Stage 2 reads the question and the student's answer and walks the Stage 1 subgraph the way Think-on-Graph walks
 a knowledge graph. Settings are in the `traversal` block of `experiments/config.json` (width N = 3, depth D = 3,
-model, prune tool llm / bm25 / sentencebert, `start` stage1 / llm, `stop` rule / llm).
+model, prune tool llm / bm25 / sentencebert).
 
 The model is used in three places only: edge pruning (replaceable by BM25 / sentence-BERT), edge labelling, and
 the level ladder for a concept that has no misconception link. Start concepts are Stage 1's tagged concepts, as
 ToG's released code uses the given topic entities, and the stop decision is a rule (graph check plus clause
-coverage). The earlier model-based start and stop are kept as an ablation: `--start llm --stop llm`.
+coverage).
 
 1. **Clauses and start concepts.** Quote characters are removed, then the answer is split at sentence ends, `;`,
    before `because` / `so` (after a comma, a space or a closing quote), and a parenthetical remark of two or more
@@ -108,7 +107,7 @@ coverage). The earlier model-based start and stop are kept as an ablation: `--st
    a generic concept whose tagging text occurs verbatim in the answer (the student names it in code, e.g. `=` for
    assignment in "a = b"). When there are more than N, they are ranked by BM25 of the student's answer against each concept's text (its id
    with underscores as spaces plus the texts of its misconception and concept edges), ties broken by the number
-   of Stage 1 code hits, then by id. (`--start llm`: one START call maps each clause to concepts instead.)
+   of Stage 1 code hits, then by id.
 2. **Edge search** (no model). Depth 1: the concept's misconception and error edges. Deeper: its prerequisite /
    parallel edges inside the same connected piece. Edges already on a path are skipped; primary role first.
 3. **Edge prune.** One call per concept picks up to N edges the answer engages with, scores summing to 1
@@ -125,7 +124,7 @@ coverage). The earlier model-based start and stop are kept as an ablation: `--st
    prerequisite edge in the subgraph that has not been examined, the walk goes one hop back. (ii) Clause
    coverage: a clause is covered when the normalised quote of some evidence edge is contained in it or contains
    it. The walk stops with reason "sufficient" when nothing is pending and every clause is covered; at max depth
-   the uncovered clauses are reported as unexplained. (`--stop llm`: the SUFFICIENCY prompt decides (ii) instead.)
+   the uncovered clauses are reported as unexplained.
 7. **Next concepts**: the source of each held misconception (to walk back), both ends of each kept concept edge.
 8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
    Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
@@ -134,32 +133,25 @@ coverage). The earlier model-based start and stop are kept as an ablation: `--st
    when a held misconception is linked, otherwise one level-ladder call over the deciding questions L0 → L4.
    Overall level: the root-cause concept's level (for an answer with no error, the lowest level reached).
    Output also lists the evidence, which edge covers each clause, the uncovered clauses, the stop reason
-   (sufficient / half_stop / max depth) and the number of prompts per step (start, prune, label, sufficiency,
-   level); with the default settings start and sufficiency are 0.
+   (sufficient / half_stop / max depth) and the number of prompts per step (prune, label, level).
 
 The model never answers from its own knowledge: every label is an edge of the graph plus a quote. Replies are
 cached in `experiments/llm_cache/`, so a re-run costs only the prompts that changed.
 
-Results over the 10 gold scenarios (`python src/compare.py --tag "" llm_start llm_stop llm_ablation`, full
-tables in `results/stage2_results.md`; gold is used for checking only):
+Results over the 10 gold scenarios (`python src/compare.py`, full table in `results/stage2_results.md`; gold is
+used for checking only): held misconception set right in 9/10, root cause right in 10/10, overall level right in
+6/10, 42 of 72 points (one point each for held set, correct set, root cause and overall level, plus one per
+gold-scored concept level and per gold edge), 114 prompts in all, none of them for start concepts or the stop
+decision. S134 is found through the generic-concept rule: its only tagged concept is variable_swap, the gold
+misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic, and the answer repeats
+the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root cause loop_control,
+L0). Overall levels are the weak part: S026 and S047 label no edge at all (correct answers on variable_swap and
+formatted_output), so they get no level; S057 and S137 land one level away from the gold.
 
-| run | start | stop | held set | root cause | overall level | points | prompts |
-|---|---|---|---|---|---|---|---|
-| default | stage1 | rule | 9/10 | 10/10 | 6/10 | 42/72 | 114 |
-| llm_start | llm | rule | 8/10 | 10/10 | 6/10 | 42/72 | 114 |
-| llm_stop | stage1 | llm | 9/10 | 9/10 | 5/10 | 37/72 | 113 |
-| llm_ablation | llm | llm | 8/10 | 10/10 | 6/10 | 42/72 | 126 |
-
-(llm_stop was run before the generic-concept rule above was added; it misses S134 for that reason.)
-
-The stop step makes no difference to any diagnosis: the rule and the SUFFICIENCY prompt give the same points, and
-the prompt costs 10 to 12 extra calls. The start step needed one rule: in S134 the only non-generic concept of
-the subgraph is variable_swap, while the gold misconception (VariablesHoldExpressions) sits on assignment, which
-Stage 1 marks generic; the answer repeats the `=` that tagged it, so assignment joins the start concepts and the
-misconception, root cause, L0 and the broken edge are found (6/7), exactly what the START prompt finds. On S007
-the Stage 1 start is exact (OffByOneBound only) and the START prompt adds EmptyInnerLoopSkipsRest, which the gold
-tolerates but does not list. Overall levels are the weak part of both runs: S026 and S047 find no evidence at
-all (correct answers on variable_swap and formatted_output), S057 and S137 land one level away from the gold.
+An earlier version asked the model for the start concepts (a START prompt over the clauses) and for the stop
+decision (a SUFFICIENCY prompt over the kept paths). Run side by side over the same 10 scenarios it scored the same
+42/72 points with 126 prompts; the stop prompt changed no diagnosis and the start prompt found nothing the rules
+above do not. Both were removed.
 
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /

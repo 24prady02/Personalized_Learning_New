@@ -4,8 +4,6 @@
   "width": 3,
   "depth": 3,
   "prune_tools": "llm",
-  "start": "stage1",
-  "stop": "rule",
   "model": "claude-opus-5-5",
   "backend": "claude-cli"
  },
@@ -98,10 +96,8 @@
  "llm_calls": 0,
  "llm_cache_hits": 16,
  "llm_calls_by_step": {
-  "start": 0,
   "prune": 2,
   "label": 4,
-  "sufficiency": 0,
   "level": 1
  }
 }
