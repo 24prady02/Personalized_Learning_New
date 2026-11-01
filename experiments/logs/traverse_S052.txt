@@ -1,0 +1,21 @@
+clauses: 1: nothing, the numbers go into data.txt | 2: the average | 3: an average of 5 new numbers, no file | args is empty
+start (stage1) BM25 of the answer against each tagged concept: command_line_args 12.19 (hits 2), standard_input 11.51 (hits 1), redirection 9.95 (hits 2), piping 8.65 (hits 2), run 4.42 (hits 3), data_driven_code 3.62 (hits 1), black_box_model 1.16 (hits 2)
+start (stage1) chosen: command_line_args, standard_input, redirection
+start concepts (3): command_line_args, standard_input, redirection
+--- depth 1: current concepts ['command_line_args', 'standard_input', 'redirection']
+  command_line_args: 3 candidates -> kept err:command_line_args->ArgsAlwaysPresent (0.80), mis:command_line_args->ArgsAreNumbers (0.10), err:command_line_args->FirstArgIsArgsOne (0.10)
+    err:command_line_args->ArgsAlwaysPresent -> correct (0.56) "args is empty"
+    mis:command_line_args->ArgsAreNumbers -> not applied (0.00) "none"
+    err:command_line_args->FirstArgIsArgsOne -> not applied (0.00) "none"
+  standard_input: 7 candidates -> kept mis:standard_input->InputReadOnceBeforeLoop (0.40), mis:standard_input->StdInRereads (0.35), err:standard_input->ReadPastEndOfInput (0.25)
+    mis:standard_input->InputReadOnceBeforeLoop -> not applied (0.00) "none"
+    mis:standard_input->StdInRereads -> not applied (0.00) "none"
+    err:standard_input->ReadPastEndOfInput -> not applied (0.00) "none"
+  redirection: 1 candidates -> kept mis:redirection->RedirectionIsArgument (1.00)
+    mis:redirection->RedirectionIsArgument -> correct (0.95) "args is empty"
+  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56]
+  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered; c4 <- err:command_line_args->ArgsAlwaysPresent
+  no next nodes -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'black_box_model': ['command_line_args'], 'data_driven_code': ['redirection'], 'piping': ['redirection'], 'redirection': ['standard_input', 'standard_output']}
+  level command_line_args: L2 via output_prediction "args is empty"
+  level redirection: L2 via output_prediction "1: nothing, the numbers go into data.txt"

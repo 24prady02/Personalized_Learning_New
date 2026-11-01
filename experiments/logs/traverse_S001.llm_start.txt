@@ -1,0 +1,14 @@
+clauses: println adds a newline after the text and print does not
+start selection reply: c1: println, print
+start concepts (2): println, print
+--- depth 1: current concepts ['println', 'print']
+  println: 6 candidates -> kept mis:println->PrintEqualsPrintln (0.55), mis:println->PrintNewLineFirst (0.40), err:println->PrintWithoutFinalNewline (0.05)
+    mis:println->PrintEqualsPrintln -> correct (0.53) "println adds a newline after the text and print does not"
+    mis:println->PrintNewLineFirst -> correct (0.38) "println adds a newline after the text and print does not"
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) "none"
+  print: 3 candidates -> kept err:print->PrintWithoutFinalNewline (1.00)
+    err:print->PrintWithoutFinalNewline -> not applied (0.00) "none"
+  kept: mis:println->PrintEqualsPrintln [correct, tier 2, 0.53], mis:println->PrintNewLineFirst [correct, tier 2, 0.38]
+  clause coverage: c1 <- mis:println->PrintEqualsPrintln
+  root-cause walk: held on [], broken at [], prerequisites {'print': ['statement', 'string_literal'], 'println': ['statement', 'string_literal']}
+  level println: L1 via states_the_rule "println adds a newline after the text and print does not"

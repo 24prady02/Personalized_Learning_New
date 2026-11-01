@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint count;\nSystem.out.println(count);\n\nQuestion: What does the system print?\n\nStudent's answer, split into clauses:\nc1: It will print 0\n\nEdge: pre:declaration->definite_assignment  (declaration -> definite_assignment, prerequisite)\nRule (logic): A declared local variable has no defined value until it is assigned, and the compiler rejects any read before that assignment.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nQuote: the exact words from the student's answer that show it (copy them verbatim; write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nQuote: It will print 0\nConfidence: 0.97"
+}

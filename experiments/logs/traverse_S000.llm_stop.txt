@@ -1,0 +1,19 @@
+clauses: It will print 0
+start (stage1): 2 tagged concepts, all used
+start concepts (2): definite_assignment, println
+--- depth 1: current concepts ['definite_assignment', 'println']
+  definite_assignment: 1 candidates -> kept mis:definite_assignment->LocalVariablesAutoInitialized (1.00)
+    mis:definite_assignment->LocalVariablesAutoInitialized -> held (0.95) "It will print 0"
+  println: 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) "none"
+    mis:println->PrintNewLineFirst -> not applied (0.00) "none"
+    mis:println->PrintEqualsPrintln -> not applied (0.00) "none"
+  kept: mis:definite_assignment->LocalVariablesAutoInitialized [held, tier 0, 0.95]
+  root cause not settled, unexamined prerequisites: pre:declaration->definite_assignment
+--- depth 2: current concepts ['definite_assignment']
+  definite_assignment: 1 candidates -> kept pre:declaration->definite_assignment (1.00)
+    pre:declaration->definite_assignment -> broken (0.97) "It will print 0"
+  kept: pre:declaration->definite_assignment [broken, tier 0, 0.97]
+  sufficiency: {Yes}
+  root-cause walk: held on ['definite_assignment'], broken at ['definite_assignment'], prerequisites {'definite_assignment': ['declaration'], 'println': ['statement']}
+  level declaration: L0 via misconception "It will print 0"

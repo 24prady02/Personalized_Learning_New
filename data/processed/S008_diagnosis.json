@@ -1,0 +1,163 @@
+{
+ "scenario": "S008",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "stage1",
+  "stop": "rule",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "num1 is 9 and num2 starts at 12",
+  "At i = 9 num2 drops to 11",
+  "at i = 11 it drops to 10",
+  "So it prints 8, 10, 12, 13"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "loop_control",
+  "loop_variable"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "loop_control": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "At i = 9 num2 drops to 11",
+   "source": "level_ladder"
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "At i = 9 num2 drops to 11",
+   "source": "level_ladder"
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+  }
+ ],
+ "clause_coverage": {
+  "So it prints 8, 10, 12, 13": "err:loop_control->WrongIterationCount"
+ },
+ "unexplained_clauses": [
+  "num1 is 9 and num2 starts at 12",
+  "At i = 9 num2 drops to 11",
+  "at i = 11 it drops to 10"
+ ],
+ "stop_reason": "half_stop",
+ "depth_reached": 1,
+ "llm_calls": 14,
+ "llm_cache_hits": 23,
+ "llm_calls_by_step": {
+  "start": 0,
+  "prune": 3,
+  "label": 9,
+  "sufficiency": 0,
+  "level": 2
+ }
+}

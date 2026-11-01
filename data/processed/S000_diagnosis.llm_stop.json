@@ -1,0 +1,130 @@
+{
+ "scenario": "S000",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "stage1",
+  "stop": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It will print 0"
+ ],
+ "start_concepts": [
+  "definite_assignment",
+  "println"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "definite_assignment",
+   "misconception": "LocalVariablesAutoInitialized",
+   "kind": "misconception",
+   "quote": "It will print 0",
+   "score": 0.95
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:declaration->definite_assignment",
+   "quote": "It will print 0",
+   "score": 0.97
+  }
+ ],
+ "root_cause": {
+  "concept": "definite_assignment",
+  "misconception": "LocalVariablesAutoInitialized"
+ },
+ "levels": {
+  "declaration": {
+   "level": "L0",
+   "way": "misconception",
+   "quote": "It will print 0",
+   "source": "level_ladder"
+  },
+  "definite_assignment": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "LocalVariablesAutoInitialized",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "definite_assignment",
+   "edge": "mis:definite_assignment->LocalVariablesAutoInitialized",
+   "target": "LocalVariablesAutoInitialized",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "It will print 0",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "local variables get a default value on their own",
+   "twin_logic": "A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "depth": 2,
+   "source": "definite_assignment",
+   "edge": "pre:declaration->definite_assignment",
+   "target": "declaration",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "It will print 0",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A declared local variable has no defined value until it is assigned, and the compiler rejects any read before that assignment.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "definite_assignment",
+   "edge": "mis:definite_assignment->LocalVariablesAutoInitialized",
+   "target": "LocalVariablesAutoInitialized",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "It will print 0",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "local variables get a default value on their own",
+   "twin_logic": "A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "depth": 2,
+   "source": "definite_assignment",
+   "edge": "pre:declaration->definite_assignment",
+   "target": "declaration",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "It will print 0",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A declared local variable has no defined value until it is assigned, and the compiler rejects any read before that assignment.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "It will print 0": "mis:definite_assignment->LocalVariablesAutoInitialized"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 2,
+ "llm_calls": 0,
+ "llm_cache_hits": 10,
+ "llm_calls_by_step": {
+  "start": 0,
+  "prune": 3,
+  "label": 5,
+  "sufficiency": 1,
+  "level": 1
+ }
+}

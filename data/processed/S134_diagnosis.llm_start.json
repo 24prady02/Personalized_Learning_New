@@ -1,0 +1,170 @@
+{
+ "scenario": "S134",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "llm",
+  "stop": "rule",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "After t = a and a = b, a is b",
+  "Then b = t means b equals a",
+  "so both are b"
+ ],
+ "start_concepts": [
+  "variable_swap",
+  "assignment"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "assignment",
+   "misconception": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "quote": "Then b = t means b equals a",
+   "score": 0.51
+  },
+  {
+   "concept": "assignment",
+   "misconception": "AssignmentIsEquation",
+   "kind": "misconception",
+   "quote": "Then b = t means b equals a",
+   "score": 0.225
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:assignment->variable_swap",
+   "quote": "so both are b",
+   "score": 0.95
+  }
+ ],
+ "root_cause": {
+  "concept": "assignment",
+  "misconception": "VariablesHoldExpressions"
+ },
+ "levels": {
+  "assignment": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "VariablesHoldExpressions",
+   "source": "level_mis_links"
+  },
+  "variable_swap": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "Then b = t means b equals a",
+   "source": "level_ladder"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "Then b = t means b equals a",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "y = x + k; makes y always equal to x + k, so when x changes later, y changes too.",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "Then b = t means b equals a",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->variable_swap",
+   "target": "variable_swap",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "so both are b",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "Then b = t means b equals a",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "y = x + k; makes y always equal to x + k, so when x changes later, y changes too.",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "held",
+   "quote": "Then b = t means b equals a",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->variable_swap",
+   "target": "variable_swap",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "so both are b",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "Then b = t means b equals a": "mis:assignment->VariablesHoldExpressions",
+  "so both are b": "pre:assignment->variable_swap"
+ },
+ "unexplained_clauses": [
+  "After t = a and a = b, a is b"
+ ],
+ "stop_reason": "half_stop",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 114,
+ "llm_calls_by_step": {
+  "start": 1,
+  "prune": 3,
+  "label": 6,
+  "sufficiency": 0,
+  "level": 1
+ }
+}

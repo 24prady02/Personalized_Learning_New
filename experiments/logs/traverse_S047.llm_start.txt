@@ -1,0 +1,10 @@
+clauses: With %.3f it would print 3.142 and no spaces | price itself is still 3.14159 | only the printed digits change
+start selection reply: c1: formatted_output | c2: none | c3: formatted_output
+start concepts (1): formatted_output
+--- depth 1: current concepts ['formatted_output']
+  formatted_output: 4 candidates -> kept mis:formatted_output->FieldWidthIsIntegerDigits (0.60), mis:formatted_output->ManyDigitsMeanAccurate (0.30), mis:formatted_output->PrintfAnyConversion (0.10)
+    mis:formatted_output->FieldWidthIsIntegerDigits -> not applied (0.00) "none"
+    mis:formatted_output->ManyDigitsMeanAccurate -> not applied (0.00) "none"
+    mis:formatted_output->PrintfAnyConversion -> not applied (0.00) "none"
+  nothing kept -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'formatted_output': ['standard_output']}

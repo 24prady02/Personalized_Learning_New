@@ -1,0 +1,23 @@
+clauses: num1 is 9 and num2 starts at 12 | At i = 9 num2 drops to 11 | at i = 11 it drops to 10 | So it prints 8, 10, 12, 13
+start (stage1) BM25 of the answer against each tagged concept: arithmetic_operators 25.68 (hits 1), loop_control 19.12 (hits 1), loop_variable 14.94 (hits 1), increment_operators 13.64 (hits 1), loop_body 9.82 (hits 2), if_statement 9.77 (hits 1), control_flow 8.24 (hits 2), formatted_output 7.35 (hits 1), do_while_loop 6.46 (hits 3), logical_operators 5.48 (hits 1), if_else_statement 5.36 (hits 1), operator_precedence 4.52 (hits 1), boolean_expression 4.42 (hits 1), comparison_operators 4.34 (hits 1), short_circuit 3.10 (hits 1)
+start (stage1) chosen: arithmetic_operators, loop_control, loop_variable
+start concepts (3): arithmetic_operators, loop_control, loop_variable
+--- depth 1: current concepts ['arithmetic_operators', 'loop_control', 'loop_variable']
+  arithmetic_operators: 3 candidates -> kept mis:arithmetic_operators->CaretIsPower (0.34), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.33), mis:arithmetic_operators->RemainderIsSubtraction (0.33)
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) "none"
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) "none"
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) "none"
+  loop_control: 11 candidates -> kept err:loop_control->WrongIterationCount (0.45), mis:loop_control->OffByOneBound (0.35), mis:loop_control->ForLoopPartSkipped (0.20)
+    err:loop_control->WrongIterationCount -> correct (0.38) "So it prints 8, 10, 12, 13"
+    mis:loop_control->OffByOneBound -> correct (0.28) "So it prints 8, 10, 12, 13"
+    mis:loop_control->ForLoopPartSkipped -> not applied (0.00) "none"
+  loop_variable: 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.60), mis:loop_variable->BodyChangeIgnoredByCondition (0.25), mis:loop_variable->LoopUpdateChangesDirection (0.15)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.54) "So it prints 8, 10, 12, 13"
+    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) "none"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.09) "So it prints 8, 10, 12, 13"
+  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.54], err:loop_control->WrongIterationCount [correct, tier 2, 0.38], mis:loop_control->OffByOneBound [correct, tier 2, 0.28]
+  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered; c4 <- err:loop_control->WrongIterationCount
+  no next nodes -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators', 'logical_operators'], 'comparison_operators': ['expression'], 'operator_precedence': ['expression'], 'if_else_statement': ['if_statement'], 'short_circuit': ['logical_operators'], 'loop_control': ['loop_variable'], 'formatted_output': ['standard_output'], 'control_flow': ['statement']}
+  level loop_control: L2 via line_by_line_trace "At i = 9 num2 drops to 11"
+  level loop_variable: L2 via line_by_line_trace "At i = 9 num2 drops to 11"

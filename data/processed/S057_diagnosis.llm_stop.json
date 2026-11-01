@@ -1,0 +1,174 @@
+{
+ "scenario": "S057",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "stage1",
+  "stop": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "All zeros",
+  "because int / int is integer division",
+  "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
+ ],
+ "start_concepts": [
+  "normalization",
+  "integer_division",
+  "arithmetic_operators"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "integer_division": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "source": "level_ladder"
+  },
+  "normalization": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "because int / int is integer division",
+   "source": "level_ladder"
+  }
+ },
+ "overall_level": "L3",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "normalization",
+   "edge": "mis:normalization->IntegerProbability",
+   "target": "IntegerProbability",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "because int / int is integer division",
+   "confidence": 0.97,
+   "prune_score": 0.85,
+   "score": 0.8245,
+   "logic": "counts[i][j] / degree[i] gives the correct probability because the result is stored in a double.",
+   "twin_logic": "counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "because int / int is integer division",
+   "confidence": 0.97,
+   "prune_score": 0.5,
+   "score": 0.485,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "All zeros",
+   "confidence": 0.93,
+   "prune_score": 0.3,
+   "score": 0.279,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "normalization",
+   "edge": "mis:normalization->IntegerProbability",
+   "target": "IntegerProbability",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "because int / int is integer division",
+   "confidence": 0.97,
+   "prune_score": 0.85,
+   "score": 0.8245,
+   "logic": "counts[i][j] / degree[i] gives the correct probability because the result is stored in a double.",
+   "twin_logic": "counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T."
+  },
+  {
+   "depth": 1,
+   "source": "normalization",
+   "edge": "mis:normalization->RowsNeedNotSumToOne",
+   "target": "RowsNeedNotSumToOne",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "A page with no outgoing links can have an all-zero row.",
+   "twin_logic": "Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "because int / int is integer division",
+   "confidence": 0.97,
+   "prune_score": 0.5,
+   "score": 0.485,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "All zeros",
+   "confidence": 0.93,
+   "prune_score": 0.3,
+   "score": 0.279,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->AllDoublesToAvoidDivision",
+   "target": "AllDoublesToAvoidDivision",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "confidence": 0.95,
+   "prune_score": 0.2,
+   "score": 0.19,
+   "logic": "Making every variable a double is the right fix for integer division.",
+   "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+  }
+ ],
+ "clause_coverage": {
+  "All zeros": "mis:integer_division->TargetTyping",
+  "because int / int is integer division": "mis:normalization->IntegerProbability",
+  "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1": "mis:normalization->RowsNeedNotSumToOne"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "half_stop",
+ "depth_reached": 1,
+ "llm_calls": 1,
+ "llm_cache_hits": 102,
+ "llm_calls_by_step": {
+  "start": 0,
+  "prune": 3,
+  "label": 6,
+  "sufficiency": 1,
+  "level": 2
+ }
+}

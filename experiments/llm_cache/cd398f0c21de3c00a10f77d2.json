@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint t = a;\na = b;\nb = t;\n\nQuestion: Explain in plain English what these three lines do.\n\nStudent's answer, split into clauses:\nc1: After t = a and a = b, a is b\nc2: Then b = t means b equals a\nc3: so both are b\n\nEdge: pre:assignment->variable_swap  (assignment -> variable_swap, prerequisite)\nRule (logic): The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nQuote: the exact words from the student's answer that show it (copy them verbatim; write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nQuote: so both are b\nConfidence: 0.95"
+}

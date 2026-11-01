@@ -15,7 +15,9 @@
     "backend": "claude-cli",
     "model": "claude-opus-5-5",
     "few_shot_scenario": "S000",
-    "cache_dir": "experiments/llm_cache"
+    "cache_dir": "experiments/llm_cache",
+    "start": "stage1",
+    "stop": "rule"
   },
   "outputs": {
     "processed": "data/processed/<sid>_subgraph.json",

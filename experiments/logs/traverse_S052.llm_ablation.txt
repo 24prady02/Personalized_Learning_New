@@ -1,0 +1,18 @@
+clauses: 1: nothing, the numbers go into data.txt | 2: the average | 3: an average of 5 new numbers, no file | args is empty
+start selection reply: c1: redirection | c2: redirection, standard_input | c3: piping | c4: command_line_args
+start concepts (3): redirection, standard_input, piping
+--- depth 1: current concepts ['redirection', 'standard_input', 'piping']
+  redirection: 1 candidates -> kept mis:redirection->RedirectionIsArgument (1.00)
+    mis:redirection->RedirectionIsArgument -> correct (0.95) "args is empty"
+  standard_input: 7 candidates -> kept mis:standard_input->InputReadOnceBeforeLoop (0.40), mis:standard_input->StdInRereads (0.35), err:standard_input->ReadPastEndOfInput (0.25)
+    mis:standard_input->InputReadOnceBeforeLoop -> not applied (0.00) "none"
+    mis:standard_input->StdInRereads -> not applied (0.00) "none"
+    err:standard_input->ReadPastEndOfInput -> not applied (0.00) "none"
+  piping: 1 candidates -> kept mis:piping->RedirectionIsArgument (1.00)
+    mis:piping->RedirectionIsArgument -> correct (0.95) "args is empty"
+  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], mis:piping->RedirectionIsArgument [correct, tier 2, 0.95]
+  sufficiency: {No}
+  no next nodes -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'black_box_model': ['command_line_args'], 'data_driven_code': ['redirection'], 'piping': ['redirection'], 'redirection': ['standard_input', 'standard_output']}
+  level piping: L2 via output_prediction "3: an average of 5 new numbers, no file"
+  level redirection: L2 via output_prediction "1: nothing, the numbers go into data.txt"

@@ -1,0 +1,22 @@
+clauses: System.out.println | x is 5 | sets x to 5
+start (stage1): 2 tagged concepts, all used
+start concepts (2): print, println
+--- depth 1: current concepts ['print', 'println']
+  print: 3 candidates -> kept mis:print->ParenthesesOnlyIfArgument (0.50), mis:print->RepeatedOutputVariablePrintedOnce (0.30), err:print->PrintWithoutFinalNewline (0.20)
+    mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
+    mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) "none"
+    err:print->PrintWithoutFinalNewline -> not applied (0.00) "none"
+  println: 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.90), mis:println->PrintEqualsPrintln (0.05), mis:println->ParenthesesOnlyIfArgument (0.05)
+    mis:println->PrintedTextIsExecuted -> held (0.81) "sets x to 5"
+    mis:println->PrintEqualsPrintln -> not applied (0.00) "none"
+    mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
+  kept: mis:println->PrintedTextIsExecuted [held, tier 0, 0.81]
+  root cause not settled, unexamined prerequisites: pre:statement->println, pre:string_literal->println
+--- depth 2: current concepts ['println']
+  println: 3 candidates -> kept pre:string_literal->println (0.80), pre:statement->println (0.15), par:print~println (0.05)
+    pre:string_literal->println -> not applied (0.00) "none"
+    pre:statement->println -> not applied (0.00) "none"
+    par:print~println -> not applied (0.00) "none"
+  nothing kept -> half_stop
+  root-cause walk: held on ['println'], broken at [], prerequisites {'print': ['statement', 'string_literal'], 'println': ['statement', 'string_literal']}
+  level println: L1 via names_the_element "System.out.println"

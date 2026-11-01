@@ -1,0 +1,9 @@
+clauses: a becomes b and b becomes a
+start selection reply: c1: variable_swap
+start concepts (1): variable_swap
+--- depth 1: current concepts ['variable_swap']
+  variable_swap: 2 candidates -> kept mis:variable_swap->AssignmentExchangesValues (0.60), mis:variable_swap->SwapWithoutTemp (0.40)
+    mis:variable_swap->AssignmentExchangesValues -> not applied (0.00) "none"
+    mis:variable_swap->SwapWithoutTemp -> not applied (0.00) "none"
+  nothing kept -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'variable_swap': ['assignment']}

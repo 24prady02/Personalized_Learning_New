@@ -1,0 +1,41 @@
+{
+ "scenario": "S026",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "stage1",
+  "stop": "rule",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "a becomes b and b becomes a"
+ ],
+ "start_concepts": [
+  "variable_swap"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {},
+ "overall_level": null,
+ "paths": [],
+ "evidence": [],
+ "clause_coverage": {},
+ "unexplained_clauses": [
+  "a becomes b and b becomes a"
+ ],
+ "stop_reason": "half_stop",
+ "depth_reached": 1,
+ "llm_calls": 3,
+ "llm_cache_hits": 23,
+ "llm_calls_by_step": {
+  "start": 0,
+  "prune": 1,
+  "label": 2,
+  "sufficiency": 0,
+  "level": 0
+ }
+}

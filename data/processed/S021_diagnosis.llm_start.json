@@ -1,0 +1,195 @@
+{
+ "scenario": "S021",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "start": "llm",
+  "stop": "rule",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even",
+  "because 17 divided by 2 leaves 1",
+  "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
+  "so it prints E, and then after that inner if-else it prints G",
+  "so overall I think the answer would be AEG, which makes sense",
+  "because…"
+ ],
+ "start_concepts": [
+  "print",
+  "control_flow",
+  "if_else_statement"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "control_flow": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
+   "source": "level_ladder"
+  },
+  "if_else_statement": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
+   "source": "level_ladder"
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "target": "BothBranchesExecute",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.96,
+   "prune_score": 0.4,
+   "score": 0.384,
+   "logic": "Both the then branch and the else branch run.",
+   "twin_logic": "Exactly one of the two branches runs."
+  },
+  {
+   "depth": 1,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BranchChosenByIntent",
+   "target": "BranchChosenByIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.93,
+   "prune_score": 0.35,
+   "score": 0.3255,
+   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
+   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseConditionRestartsProgram",
+   "target": "FalseConditionRestartsProgram",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
+   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement."
+  },
+  {
+   "depth": 1,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "target": "BothBranchesExecute",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.96,
+   "prune_score": 0.4,
+   "score": 0.384,
+   "logic": "Both the then branch and the else branch run.",
+   "twin_logic": "Exactly one of the two branches runs."
+  },
+  {
+   "depth": 1,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BranchChosenByIntent",
+   "target": "BranchChosenByIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.93,
+   "prune_score": 0.35,
+   "score": 0.3255,
+   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
+   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
+  },
+  {
+   "depth": 1,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->ElseAlwaysExecutes",
+   "target": "ElseAlwaysExecutes",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "The else branch of an if-else statement always executes.",
+   "twin_logic": "The else branch runs only when the if condition is false."
+  }
+ ],
+ "clause_coverage": {
+  "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2": "mis:control_flow->FalseConditionRestartsProgram",
+  "so it prints E, and then after that inner if-else it prints G": "mis:control_flow->CodeAfterIfSkipped"
+ },
+ "unexplained_clauses": [
+  "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even",
+  "because 17 divided by 2 leaves 1",
+  "so overall I think the answer would be AEG, which makes sense",
+  "because…"
+ ],
+ "stop_reason": "half_stop",
+ "depth_reached": 1,
+ "llm_calls": 0,
+ "llm_cache_hits": 70,
+ "llm_calls_by_step": {
+  "start": 1,
+  "prune": 3,
+  "label": 9,
+  "sufficiency": 0,
+  "level": 2
+ }
+}

@@ -1,0 +1,20 @@
+clauses: All zeros | because int / int is integer division | Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1
+start selection reply: c1: integer_division | c2: integer_division, arithmetic_operators | c3: type_conversion, widening_conversion, normalization
+start concepts (3): integer_division, arithmetic_operators, type_conversion
+--- depth 1: current concepts ['integer_division', 'arithmetic_operators', 'type_conversion']
+  integer_division: 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->AllDoublesToAvoidDivision (0.20)
+    mis:integer_division->IntegerDivisionGivesFraction -> correct (0.48) "because int / int is integer division"
+    mis:integer_division->TargetTyping -> correct (0.28) "All zeros"
+    mis:integer_division->AllDoublesToAvoidDivision -> correct (0.19) "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
+  arithmetic_operators: 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) "none"
+  type_conversion: 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
+    mis:type_conversion->TargetTyping -> correct (0.76) "because int / int is integer division"
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) "none"
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) "none"
+  kept: mis:type_conversion->TargetTyping [correct, tier 2, 0.76], mis:integer_division->IntegerDivisionGivesFraction [correct, tier 2, 0.48], mis:integer_division->TargetTyping [correct, tier 2, 0.28]
+  sufficiency: {No}
+  no next nodes -> half_stop
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation'], 'indexing': ['array_creation'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'normalization': ['integer_division'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'widening_conversion': ['type_conversion']}
+  level integer_division: L3 via relation_to_neighbour "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
+  level type_conversion: L3 via purpose_of_the_whole "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"

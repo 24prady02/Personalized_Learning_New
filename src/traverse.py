@@ -4,19 +4,27 @@ Inputs: G = data/processed/<sid>_subgraph.json; the scenario (code, question, an
 the "traversal" block of experiments/config.json (width N, depth D, model, prune_tools, ...).
 Output: data/processed/<sid>_diagnosis.json.
 
-    python src/traverse.py S007                       # one scenario
+    python src/traverse.py S007                       # one scenario, default settings (start stage1, stop rule)
     python src/traverse.py S007 --prune-tools bm25    # rank edges by similarity instead of the prune prompt
+    python src/traverse.py S007 --start llm --stop llm   # ablation: the START and SUFFICIENCY prompts of the earlier version
     python src/traverse.py --all                      # every scenario in the file
 
+The LLM is used in three places only: edge pruning (replaceable by BM25 / sentence-BERT), edge labelling, and the
+level ladder for a concept that has no misconception link. Start concepts and the stop decision are not model calls.
+
 Part 1 builds lookups from G (ToG's SPARQL server). Part 2 splits the answer into clauses and selects at most N start
-concepts: the concepts the clauses talk about (one model call, or BM25 / sentence-BERT), chosen from G only. Part 3
-is the main loop: edge search (no LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM), keep
-the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop test
-(graph check first: a held or broken concept with unexamined prerequisites in G sends the walk one hop back; only
-then the model is asked whether every clause is explained), next nodes. Part 4 diagnoses from the kept paths: held
-misconceptions (a held error beside a held misconception on the same concept is evidence, not a second diagnosis),
-broken edges, root cause along prerequisite edges, level per concept (level_mis_links, else the level ladder prompt),
-overall level. The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote.
+concepts: with start = stage1 (default) these are Stage 1's tagged (non-generic) concepts, the given topic entities
+that ToG's released code reads from the dataset; more than N of them are ranked by BM25 of the answer against each
+concept's text. (start = llm keeps the earlier START prompt as an ablation.) Part 3 is the main loop: edge search (no
+LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM, quote checked against the answer), keep
+the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop test,
+next nodes. Every labelled candidate whose quote is in the answer is recorded as evidence, kept or not. The stop test
+with stop = rule (default) is (i) a graph check: a held or broken concept with unexamined prerequisites in G sends the
+walk one hop back; (ii) clause coverage: stop when the quote of some evidence edge covers every clause. (stop = llm
+keeps the SUFFICIENCY prompt as an ablation.) Part 4 diagnoses from the kept paths: held misconceptions (a held error
+beside a held misconception on the same concept is evidence, not a second diagnosis), broken edges, root cause along
+prerequisite edges, level per concept (level_mis_links, else the level ladder prompt), overall level, and the
+clauses no evidence covers. The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote.
 """
 from __future__ import annotations
 
@@ -39,7 +47,11 @@ DEFAULT_TRAVERSAL = {
     "width": 3, "depth": 3, "temperature": 0, "max_output": 256,
     "prune_tools": "llm", "backend": "claude-cli", "model": "claude-opus-5-5",
     "few_shot_scenario": "S000", "cache_dir": "experiments/llm_cache",
+    "start": "stage1",   # start concepts = Stage 1's tagged concepts (ToG's given topic entities); "llm" = START prompt (ablation)
+    "stop": "rule",      # stop = graph check + clause coverage; "llm" = SUFFICIENCY prompt (ablation)
 }
+
+STEPS = ("start", "prune", "label", "sufficiency", "level")
 
 
 # ====================================================================== LLM client
@@ -52,6 +64,7 @@ class LLM:
         self.cfg = cfg
         self.calls = 0
         self.cache_hits = 0
+        self.asks_by_step: Counter = Counter()   # every prompt sent, by traversal step (cached or not)
         self.cache_dir = ROOT / cfg.get("cache_dir", "experiments/llm_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.backend = cfg.get("backend", "claude-cli")
@@ -61,7 +74,8 @@ class LLM:
             import anthropic  # noqa: F401  (pip install anthropic)
             self._client = anthropic.Anthropic()
 
-    def ask(self, prompt: str) -> str:
+    def ask(self, prompt: str, step: str = "other") -> str:
+        self.asks_by_step[step] += 1
         key = hashlib.sha256((self.backend + "|" + self.model + "|" + prompt).encode("utf-8")).hexdigest()[:24]
         f = self.cache_dir / f"{key}.json"
         if f.exists():
@@ -177,25 +191,85 @@ class Graph:
 
 # ====================================================================== Part 2: start
 
-_CLAUSE_SPLIT = re.compile(r"(?<=[.!?])\s+|\s*;\s*|\s+(?=because\s)|\s+(?=so\s)", re.I)
+_QUOTES = re.compile(r"[\"'“”‘’]")
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|\s*;\s*")
+_PAREN = re.compile(r"\(([^()]*\s[^()]*)\)")   # a remark of two or more words; "(double)" or "(x)" stays in its clause
+_CONNECTIVE = re.compile(r"(?:,\s*|\s+)(?=(?:because|so)\b)", re.I)
+_CLAUSE_STRIP = " ,.;:!?\n\t"
 
 
 def split_clauses(answer: str) -> list[str]:
-    """Clauses of the answer: sentence ends, ';', and the connectives 'because' / 'so' (kept at the head of the
-    clause they introduce). '/' is not a separator: inside a quoted output it stands for a line break."""
-    parts = [p.strip(" \"'\n\t") for p in _CLAUSE_SPLIT.split(answer)]
-    return [p for p in parts if len(p) >= 1]
+    """Clauses of the answer. Quote characters are removed first. Splits: sentence ends and ';'; before 'because' /
+    'so' when a comma, a space or a (removed) closing quote precedes them; a parenthetical remark '(...)' becomes its
+    own clause. '/' is kept inside a clause: in a written output it stands for a line break."""
+    text = _QUOTES.sub("", answer)
+    out: list[str] = []
+    for sentence in _SENTENCE_SPLIT.split(text):
+        for i, piece in enumerate(_PAREN.split(sentence)):   # odd indices are the insides of parentheses
+            pieces = [piece] if i % 2 else _CONNECTIVE.split(piece)
+            for p in pieces:
+                p = p.strip(_CLAUSE_STRIP)
+                if p:
+                    out.append(p)
+    return out
+
+
+def _norm(s: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+
+
+def quote_in_answer(quote: str, answer: str) -> bool:
+    q = _norm(quote)
+    return bool(q) and q != "none" and q in _norm(answer)
+
+
+def covered_clauses(evidence: list[dict[str, Any]], clauses: list[str]) -> dict[int, str]:
+    """Clause index -> id of the first evidence edge whose quote covers it. A clause is covered when the normalised
+    quote is contained in the normalised clause or the clause in the quote (the same matching as Part 4)."""
+    covered: dict[int, str] = {}
+    for c in evidence:
+        q = _norm(c["quote"])
+        if not q:
+            continue
+        for i, cl in enumerate(clauses):
+            if i in covered:
+                continue
+            n = _norm(cl)
+            if q in n or n in q:
+                covered[i] = c["edge"]
+    return covered
+
+
+def concept_text(g: "Graph", c: str) -> str:
+    """A concept's text for BM25: its id with underscores turned into spaces, plus the texts of its misconception
+    edges and concept edges."""
+    return " ".join([c.replace("_", " ")] + [g.edge_text(e) for e in g.mis_by_concept.get(c, []) + g.cedges_by_concept.get(c, [])])
 
 
 def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[str, Any], llm: "LLM", sc: dict, log: list[str]) -> list[str]:
-    """ToG's topic entities: the concepts the clauses talk about, at most n, chosen from G's concept list only.
-    With prune_tools llm one model call maps each clause to concepts; otherwise BM25 of the answer against each
-    concept's edge texts. Generic concepts count only when the model names them for a clause."""
+    """ToG's topic entities. start = stage1 (default): the non-generic concepts of G, that is, the concepts Stage 1
+    tagged in the code, as ToG's released code reads the given topic_entity from the dataset. All of them when there
+    are at most n; otherwise the top n by BM25 of the student's answer against each concept's text, ties broken by
+    the number of Stage 1 code hits, then by id. No model call, never a generic concept.
+    start = llm (ablation): one START call maps each clause to concepts (or BM25 / sentence-BERT when prune_tools
+    is not llm); generic concepts count only when the model names them for a clause."""
     ids = sorted(g.concepts)
+    if cfg.get("start", "stage1") == "stage1":
+        cands = [c for c in ids if not g.concepts[c].get("generic")]
+        if len(cands) <= n:
+            log.append(f"start (stage1): {len(cands)} tagged concepts, all used")
+            return cands
+        scores = bm25_scores(answer, [concept_text(g, c) for c in cands])
+        hits = {c: len(g.concepts[c].get("hits") or []) for c in cands}
+        ranked = sorted(cands, key=lambda c: (-scores[cands.index(c)], -hits[c], c))
+        log.append("start (stage1) BM25 of the answer against each tagged concept: " +
+                   ", ".join(f"{c} {scores[cands.index(c)]:.2f} (hits {hits[c]})" for c in ranked))
+        log.append(f"start (stage1) chosen: {', '.join(ranked[:n])}")
+        return ranked[:n]
     if cfg.get("prune_tools", "llm") == "llm":
         listing = "\n".join(f"- {c}" + (" (generic)" if g.concepts[c].get("generic") else "") for c in ids)
         clause_text = "\n".join(f"c{i + 1}: {c}" for i, c in enumerate(clauses))
-        reply = llm.ask(prompts.START.format(code=sc["code"], question=sc.get("question", ""), clauses=clause_text, concepts=listing, **prompts.few_shot_fields()))
+        reply = llm.ask(prompts.START.format(code=sc["code"], question=sc.get("question", ""), clauses=clause_text, concepts=listing, **prompts.few_shot_fields()), "start")
         votes: Counter = Counter()
         order: list[str] = []
         for m in re.finditer(r"c(\d+)\s*:\s*(.+)", reply):
@@ -212,15 +286,6 @@ def select_start(g: "Graph", clauses: list[str], answer: str, n: int, cfg: dict[
         scores = bm25_scores(answer, docs) if cfg.get("prune_tools") == "bm25" else sbert_scores(answer, docs)
         ranked = [c for c, s in sorted(zip(ids, scores), key=lambda x: -x[1]) if s > 0 and not g.concepts[c].get("generic")]
     return ranked[:n]
-
-
-def _norm(s: str) -> str:
-    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
-
-
-def quote_in_answer(quote: str, answer: str) -> bool:
-    q = _norm(quote)
-    return bool(q) and q != "none" and q in _norm(answer)
 
 
 # ====================================================================== Part 3 helpers: parsing replies (ToG regexes)
@@ -276,10 +341,16 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     g = Graph(sg)
     N, D = int(cfg.get("width", 3)), int(cfg.get("depth", 3))
     prune_tool = cfg.get("prune_tools", "llm")
+    start_mode, stop_mode = cfg.get("start", "stage1"), cfg.get("stop", "rule")
     llm = llm or LLM(cfg)
     log = log if log is not None else []
+    asks0 = Counter(llm.asks_by_step)
     code, question, answer = sc["code"], sc.get("question", ""), sc.get("answer", "")
     ex = prompts.few_shot_fields()
+    settings = {"width": N, "depth": D, "prune_tools": prune_tool, "start": start_mode, "stop": stop_mode, "model": llm.model, "backend": llm.backend}
+
+    def calls_by_step() -> dict[str, int]:
+        return {s: llm.asks_by_step[s] - asks0[s] for s in STEPS}
 
     # ---- Part 2: start
     clauses = split_clauses(answer)
@@ -288,7 +359,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     topic = select_start(g, clauses, answer, N, cfg, llm, sc, log)
     log.append(f"start concepts ({len(topic)}): {', '.join(topic)}")
     if not topic:
-        return {"scenario": sc["id"], "status": "not diagnosable from the graph", "clauses": clauses, "llm_calls": llm.calls}
+        return {"scenario": sc["id"], "status": "not diagnosable from the graph", "settings": settings, "clauses": clauses,
+                "llm_calls": llm.calls, "llm_calls_by_step": calls_by_step()}
 
     pre_in: dict[str, list[str]] = defaultdict(list)   # concept -> sources of its prerequisite edges in G
     for e in sg["concept_edges"]:
@@ -305,6 +377,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
 
     current = list(topic)
     paths: list[dict[str, Any]] = []
+    evidence: list[dict[str, Any]] = []   # every labelled candidate (any depth) whose quote is in the answer, kept or not
     used: set[str] = set()        # edges kept on a path
     examined: set[str] = set()    # edges offered to the prune step at some depth
     stop_reason = "max depth"
@@ -329,7 +402,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             if prune_tool == "llm":
                 p = prompts.PRUNE.format(code=code, question=question, answer=answer, concept=concept, n=min(N, len(edges)),
                                          edges="\n".join("- " + g.edge_text(e) for e in edges), **ex)
-                kept = parse_prune(llm.ask(p), {e["id"] for e in edges}, N)
+                kept = parse_prune(llm.ask(p, "prune"), {e["id"] for e in edges}, N)
             else:
                 docs = [g.edge_text(e) for e in edges]
                 scores = bm25_scores(answer, docs) if prune_tool == "bm25" else sbert_scores(answer, docs)
@@ -346,22 +419,30 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     target = e["target"]
                     p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, edge_id=eid,
                                                  logic=e.get("logic") or "", twin_logic=e.get("twin_logic") or "", **ex)
-                    label, quote, conf = parse_label(llm.ask(p), ("held", "correct", "not applied"))
+                    label, quote, conf = parse_label(llm.ask(p, "label"), ("held", "correct", "not applied"))
                 else:
                     target = g.other_end(e, concept)
                     p = prompts.LABEL_CONCEPT.format(code=code, question=question, clauses=clause_text, edge_id=eid,
                                                      source=e["source"], target=e["target"], etype=e["type"], logic=e.get("logic") or "")
-                    label, quote, conf = parse_label(llm.ask(p), ("confirmed", "broken", "not applied"))
+                    label, quote, conf = parse_label(llm.ask(p, "label"), ("confirmed", "broken", "not applied"))
                 if label != "not applied" and not quote_in_answer(quote, answer):
                     log.append(f"    {eid}: quote not found in the answer ({quote!r}) -> not applied")
                     label = "not applied"
                 score = pscore * conf if label != "not applied" else 0.0
-                candidates.append({"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
-                                   "label": label, "quote": quote, "confidence": conf, "prune_score": pscore, "score": round(score, 4),
-                                   "logic": e.get("logic"), "twin_logic": e.get("twin_logic")})
+                cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
+                        "label": label, "quote": quote, "confidence": conf, "prune_score": pscore, "score": round(score, 4),
+                        "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
+                candidates.append(cand)
+                if label != "not applied":
+                    evidence.append(cand)
                 log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
         # 3e keep the best: diagnosis tier first (held misconception, broken), then held errors, then confirmations; score within a tier
-        kept_now = sorted([c for c in candidates if c["label"] != "not applied" and c["score"] > 0], key=lambda c: (tier(c), -c["score"]))[:N]
+        # (the same edge reached from both of its ends in one round counts once, with its higher score)
+        best_by_edge: dict[str, dict[str, Any]] = {}
+        for c in sorted(candidates, key=lambda c: -c["score"]):
+            if c["label"] != "not applied" and c["score"] > 0:
+                best_by_edge.setdefault(c["edge"], c)
+        kept_now = sorted(best_by_edge.values(), key=lambda c: (tier(c), -c["score"]))[:N]
         if not kept_now:
             stop_reason = "half_stop"
             log.append("  nothing kept -> half_stop")
@@ -381,10 +462,18 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     pending.append(eid)
         if pending:
             log.append("  root cause not settled, unexamined prerequisites: " + ", ".join(sorted(set(pending))))
+        elif stop_mode == "rule":
+            # (ii) rule, no LLM: every clause is covered by the quote of some verified evidence edge (kept or not)
+            covered = covered_clauses(evidence, clauses)
+            log.append("  clause coverage: " + "; ".join(
+                f"c{i + 1} <- {covered[i]}" if i in covered else f"c{i + 1} uncovered" for i in range(len(clauses))))
+            if len(covered) == len(clauses):
+                stop_reason = "sufficient"
+                break
         else:
-            # (ii) LLM: are all clauses explained by the kept paths?
+            # (ii) LLM (ablation): are all clauses explained by the kept paths?
             path_text = "\n".join(_path_line(c) for c in paths)
-            suff = llm.ask(prompts.SUFFICIENCY.format(question=question, clauses=clause_text, paths=path_text))
+            suff = llm.ask(prompts.SUFFICIENCY.format(question=question, clauses=clause_text, paths=path_text), "sufficiency")
             log.append("  sufficiency: " + (suff.splitlines()[0] if suff else "(empty reply)"))
             if parse_yes_no(suff):
                 stop_reason = "sufficient"
@@ -452,7 +541,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             lines.append(f"{le['level']} {rec.get('name', '')}\n  deciding question: {rec.get('deciding_question', '')}\n  ways: {ways}")
         if not lines:
             continue
-        reply = llm.ask(prompts.LEVEL_LADDER.format(code=code, question=question, clauses=clause_text, concept=concept, levels="\n".join(lines)))
+        reply = llm.ask(prompts.LEVEL_LADDER.format(code=code, question=question, clauses=clause_text, concept=concept, levels="\n".join(lines)), "level")
         lvl, way, quote = parse_level(reply)
         levels[concept] = {"level": lvl, "way": way, "quote": quote, "source": "level_ladder"}
         log.append(f"  level {concept}: {lvl} via {way} \"{quote}\"")
@@ -462,18 +551,12 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     else:  # no error found: the student stands at the lowest level reached on any concept the answer touched
         got = [v["level"] for v in levels.values() if v.get("level")]
         overall = min(got) if got else None
-    explained = set()
-    for c in paths:
-        q = _norm(c["quote"])
-        for i, cl in enumerate(clauses):
-            n = _norm(cl)
-            if q and (q in n or n in q):
-                explained.add(i)
-    unexplained = [cl for i, cl in enumerate(clauses) if i not in explained]
+    covered = covered_clauses(evidence, clauses)
+    unexplained = [cl for i, cl in enumerate(clauses) if i not in covered]
 
     return {
         "scenario": sc["id"],
-        "settings": {"width": N, "depth": D, "prune_tools": prune_tool, "model": llm.model, "backend": llm.backend},
+        "settings": settings,
         "clauses": clauses,
         "start_concepts": topic,
         "held_misconceptions": [{"concept": c["source"], "misconception": c["target"], "kind": c["kind"], "quote": c["quote"], "score": c["score"]} for c in held],
@@ -483,11 +566,14 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         "levels": levels,
         "overall_level": overall,
         "paths": paths,
+        "evidence": evidence,
+        "clause_coverage": {clauses[i]: eid for i, eid in sorted(covered.items())},
         "unexplained_clauses": unexplained,
         "stop_reason": stop_reason,
         "depth_reached": depth_reached,
         "llm_calls": llm.calls,
         "llm_cache_hits": llm.cache_hits,
+        "llm_calls_by_step": calls_by_step(),
     }
 
 
@@ -512,8 +598,12 @@ def main(argv=None) -> None:
     ap.add_argument("--model", default=tcfg["model"])
     ap.add_argument("--width", type=int, default=tcfg["width"])
     ap.add_argument("--depth", type=int, default=tcfg["depth"])
+    ap.add_argument("--start", choices=["stage1", "llm"], default=tcfg["start"], help="start concepts: Stage 1 tagged concepts (default) or the START prompt")
+    ap.add_argument("--stop", choices=["rule", "llm"], default=tcfg["stop"], help="stop test: graph check + clause coverage (default) or the SUFFICIENCY prompt")
+    ap.add_argument("--tag", default="", help="suffix for the output files, e.g. --tag llm_ablation -> S007_diagnosis.llm_ablation.json")
     a = ap.parse_args(argv)
-    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth)
+    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth, start=a.start, stop=a.stop)
+    tag = f".{a.tag}" if a.tag else ""
 
     scenarios = {s["id"]: s for s in load_scenarios(a.scenarios)}
     ids = sorted(scenarios) if a.all else [a.scenario]
@@ -526,14 +616,14 @@ def main(argv=None) -> None:
         log: list[str] = []
         diag = traverse(sg, scenarios[sid], tcfg, llm, log)
         diag["llm_calls"] = llm.calls - calls0
-        out = Path(a.processed) / f"{sid}_diagnosis.json"
+        out = Path(a.processed) / f"{sid}_diagnosis{tag}.json"
         out.write_text(json.dumps(diag, indent=1, ensure_ascii=False), encoding="utf-8")
         (ROOT / "experiments/logs").mkdir(parents=True, exist_ok=True)
-        (ROOT / "experiments/logs" / f"traverse_{sid}.txt").write_text("\n".join(log) + "\n", encoding="utf-8")
+        (ROOT / "experiments/logs" / f"traverse_{sid}{tag}.txt").write_text("\n".join(log) + "\n", encoding="utf-8")
         held = [h["misconception"] for h in diag.get("held_misconceptions", [])]
         lv = ", ".join(f"{k}:{v['level']}" for k, v in diag.get("levels", {}).items())
         print(f"{sid}: held={held} root={diag.get('root_cause')} overall={diag.get('overall_level')} levels={{{lv}}} "
-              f"stop={diag.get('stop_reason')} calls={diag['llm_calls']} -> {out}")
+              f"stop={diag.get('stop_reason')} prompts={diag.get('llm_calls_by_step')} fresh_calls={diag['llm_calls']} -> {out}")
 
 
 if __name__ == "__main__":
