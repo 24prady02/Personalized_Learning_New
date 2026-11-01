@@ -22,20 +22,36 @@
  "broken_edges": [],
  "root_cause": null,
  "levels": {
+  "arithmetic_operators": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule"
+   ]
+  },
   "integer_division": {
    "level": "L3",
    "way": "relation_to_neighbour",
    "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
-   "source": "level_ladder"
+   "edge": "lvl:integer_division@L3#1",
+   "source": "level_way",
+   "also_shown": []
   },
   "normalization": {
    "level": "L3",
    "way": "relation_to_neighbour",
    "quote": "because int / int is integer division",
-   "source": "level_ladder"
+   "edge": "lvl:normalization@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
+   ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L2",
  "paths": [
   {
    "depth": 1,
@@ -46,8 +62,8 @@
    "label": "correct",
    "quote": "because int / int is integer division",
    "confidence": 0.97,
-   "prune_score": 0.85,
-   "score": 0.8245,
+   "prune_score": 0.8,
+   "score": 0.776,
    "logic": "counts[i][j] / degree[i] gives the correct probability because the result is stored in a double.",
    "twin_logic": "counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T."
   },
@@ -68,16 +84,18 @@
   {
    "depth": 1,
    "source": "integer_division",
-   "edge": "mis:integer_division->TargetTyping",
-   "target": "TargetTyping",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "All zeros",
-   "confidence": 0.93,
-   "prune_score": 0.3,
-   "score": 0.279,
-   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "edge": "lvl:integer_division@L3#1",
+   "target": "integer_division@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -90,8 +108,8 @@
    "label": "correct",
    "quote": "because int / int is integer division",
    "confidence": 0.97,
-   "prune_score": 0.85,
-   "score": 0.8245,
+   "prune_score": 0.8,
+   "score": 0.776,
    "logic": "counts[i][j] / degree[i] gives the correct probability because the result is stored in a double.",
    "twin_logic": "counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T."
   },
@@ -104,10 +122,42 @@
    "label": "correct",
    "quote": "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
    "confidence": 0.7,
-   "prune_score": 0.15,
-   "score": 0.105,
+   "prune_score": 0.2,
+   "score": 0.14,
    "logic": "A page with no outgoing links can have an all-zero row.",
    "twin_logic": "Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "depth": 1,
+   "source": "normalization",
+   "edge": "lvl:normalization@L3#1",
+   "target": "normalization@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "because int / int is integer division",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Type flow decides the result: with a double operand anywhere to the left (.90*...) the division is floating-point; with two ints it truncates (2/5 == 0).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "normalization",
+   "edge": "lvl:normalization@L3#2",
+   "target": "normalization@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Turn raw counts into probabilities (the \"divide each count by the total\" plan); the same plan turns visit counts freq[i] into rank estimates freq[i]/T.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   },
   {
    "depth": 1,
@@ -126,30 +176,78 @@
   {
    "depth": 1,
    "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
    "edge": "mis:integer_division->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
    "quote": "All zeros",
    "confidence": 0.93,
-   "prune_score": 0.3,
-   "score": 0.279,
+   "prune_score": 0.25,
+   "score": 0.2325,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
    "depth": 1,
    "source": "integer_division",
-   "edge": "mis:integer_division->AllDoublesToAvoidDivision",
-   "target": "AllDoublesToAvoidDivision",
-   "kind": "misconception",
-   "label": "correct",
+   "edge": "lvl:integer_division@L3#1",
+   "target": "integer_division@L3",
+   "kind": "level",
+   "label": "shown",
    "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
-   "confidence": 0.95,
-   "prune_score": 0.2,
-   "score": 0.19,
-   "logic": "Making every variable a double is the right fix for integer division.",
-   "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L1#1",
+   "target": "arithmetic_operators@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "because int / int is integer division",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-x) and unary plus leaves it unchanged; they bind more tightly than * and /, so -a * b is (-a) * b.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
   }
  ],
  "clause_coverage": {
@@ -160,11 +258,10 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 96,
+ "llm_calls": 16,
+ "llm_cache_hits": 72,
  "llm_calls_by_step": {
-  "prune": 3,
-  "label": 6,
-  "level": 2
+  "prune": 6,
+  "label": 14
  }
 }

@@ -3,19 +3,31 @@ start: BM25 of the answer against each tagged concept: command_line_args 12.19 (
 start: chosen command_line_args, standard_input, redirection
 start concepts (3): command_line_args, standard_input, redirection
 --- depth 1: current concepts ['command_line_args', 'standard_input', 'redirection']
-  command_line_args: 3 candidates -> kept err:command_line_args->ArgsAlwaysPresent (0.80), mis:command_line_args->ArgsAreNumbers (0.10), err:command_line_args->FirstArgIsArgsOne (0.10)
+  command_line_args (misconceptions): 3 candidates -> kept err:command_line_args->ArgsAlwaysPresent (0.80), err:command_line_args->FirstArgIsArgsOne (0.10), mis:command_line_args->ArgsAreNumbers (0.10)
     err:command_line_args->ArgsAlwaysPresent -> correct (0.56) "args is empty"
-    mis:command_line_args->ArgsAreNumbers -> not applied (0.00) "none"
     err:command_line_args->FirstArgIsArgsOne -> not applied (0.00) "none"
-  standard_input: 7 candidates -> kept mis:standard_input->InputReadOnceBeforeLoop (0.40), mis:standard_input->StdInRereads (0.35), err:standard_input->ReadPastEndOfInput (0.25)
-    mis:standard_input->InputReadOnceBeforeLoop -> not applied (0.00) "none"
+    mis:command_line_args->ArgsAreNumbers -> not applied (0.00) "none"
+  command_line_args (level ways): 19 candidates -> kept lvl:command_line_args@L3#4 (0.50), lvl:command_line_args@L3#2 (0.30), lvl:command_line_args@L1#0 (0.20)
+    lvl:command_line_args@L3#4 -> shown (0.30) "args is empty"
+    lvl:command_line_args@L3#2 -> shown (0.18) "args is empty"
+    lvl:command_line_args@L1#0 -> shown (0.15) "args is empty"
+  standard_input (misconceptions): 7 candidates -> kept mis:standard_input->StdInRereads (0.40), mis:standard_input->InputReadOnceBeforeLoop (0.35), err:standard_input->ReadPastEndOfInput (0.25)
     mis:standard_input->StdInRereads -> not applied (0.00) "none"
+    mis:standard_input->InputReadOnceBeforeLoop -> not applied (0.00) "none"
     err:standard_input->ReadPastEndOfInput -> not applied (0.00) "none"
-  redirection: 1 candidates -> kept mis:redirection->RedirectionIsArgument (1.00)
+  standard_input (level ways): 23 candidates -> kept lvl:standard_input@L3#2 (0.45), lvl:standard_input@L3#9 (0.35), lvl:standard_input@L4#2 (0.20)
+    lvl:standard_input@L3#2 -> not applied (0.00) "none"
+    lvl:standard_input@L3#9 -> not applied (0.00) "none"
+    lvl:standard_input@L4#2 -> not applied (0.00) "none"
+  redirection (misconceptions): 1 candidates -> kept mis:redirection->RedirectionIsArgument (1.00)
     mis:redirection->RedirectionIsArgument -> correct (0.95) "args is empty"
-  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56]
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered; c4 <- err:command_line_args->ArgsAlwaysPresent
+  redirection (level ways): 17 candidates -> kept lvl:redirection@L2#1 (0.50), lvl:redirection@L3#2 (0.35), lvl:redirection@L3#0 (0.15)
+    lvl:redirection@L2#1 -> shown (0.42) "1: nothing, the numbers go into data.txt"
+    lvl:redirection@L3#2 -> shown (0.24) "3: an average of 5 new numbers, no file"
+    lvl:redirection@L3#0 -> shown (0.14) "1: nothing, the numbers go into data.txt"
+  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56], lvl:redirection@L2#1 [shown, tier 2, 0.42]
+  clause coverage: c1 <- lvl:redirection@L2#1; c2 uncovered; c3 <- lvl:redirection@L3#2; c4 <- err:command_line_args->ArgsAlwaysPresent
   no next nodes -> half_stop
   root-cause walk: held on [], broken at [], prerequisites {'black_box_model': ['command_line_args'], 'data_driven_code': ['redirection'], 'piping': ['redirection'], 'redirection': ['standard_input', 'standard_output']}
-  level command_line_args: L2 via output_prediction "args is empty"
-  level redirection: L2 via output_prediction "1: nothing, the numbers go into data.txt"
+  level command_line_args: L3 via relation_to_neighbour "args is empty"
+  level redirection: L3 via relation_to_neighbour "3: an average of 5 new numbers, no file"

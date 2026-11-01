@@ -50,7 +50,7 @@ class ReplayLLM(traverse.LLM):
 
 
 def _edge_ids(prompt: str) -> list[str]:
-    return re.findall(r"^- ((?:mis|err|pre|par):\S+) \|", prompt, re.M)
+    return re.findall(r"^- ((?:mis|err|pre|par|lvl):\S+) \|", prompt, re.M)
 
 
 def make_script(labels: dict[str, tuple[str, str]]):
@@ -59,8 +59,6 @@ def make_script(labels: dict[str, tuple[str, str]]):
         if "Candidate edges of this concept" in prompt:
             ids = _edge_ids(prompt)
             return "\n".join(f"{{{e} (Score: {1 / len(ids):.3f})}}" for e in ids)
-        if "learning-progression ladder" in prompt:
-            return "Level: L1\nWay: mock\nQuote: none"
         m = re.search(r"Edge: (\S+)", prompt)
         label, quote = labels.get(m.group(1), ("not applied", "none"))
         return f"Label: {label}\nQuote: {quote}\nConfidence: 0.9"
@@ -85,7 +83,14 @@ TINY = {
         {"id": "mis:C->MisC", "source": "C", "target": "MisC", "type": "misconception", "role": "primary", "logic": "wrong C", "twin_logic": "right C"},
         {"id": "mis:C->MisC2", "source": "C", "target": "MisC2", "type": "misconception", "role": "secondary", "logic": "wrong C2", "twin_logic": "right C2"},
     ],
-    "levels": [], "level_edges": [],
+    "levels": [{"id": "C@L0", "concept": "C", "level": "L0", "name": "Prestructural", "deciding_question": "q0"},
+               {"id": "C@L2", "concept": "C", "level": "L2", "name": "Multistructural", "deciding_question": "q2"},
+               {"id": "C@L3", "concept": "C", "level": "L3", "name": "Relational", "deciding_question": "q3"}],
+    "level_edges": [
+        {"id": "lvl:C->C@L0", "source": "C", "target": "C@L0", "level": "L0", "ways": [{"way": "misconception", "exact_rule": "wrong C"}, {"way": "everyday_reading", "exact_rule": "reads C as everyday"}]},
+        {"id": "lvl:C->C@L2", "source": "C", "target": "C@L2", "level": "L2", "ways": [{"way": "output_prediction", "exact_rule": "predicts 0"}]},
+        {"id": "lvl:C->C@L3", "source": "C", "target": "C@L3", "level": "L3", "ways": [{"way": "relation_to_neighbour", "exact_rule": "relates x to its declaration"}]},
+    ],
     "level_mis_links": [{"level_node": "B@L0", "misconception": "MisB"}, {"level_node": "C@L0", "misconception": "MisC"}],
     "components": [["A", "B", "C", "G"]],
 }
@@ -93,10 +98,42 @@ TINY_SC = {"id": "T001", "code": "int x;", "question": "What prints?", "answer":
 CFG = {**DEFAULT_TRAVERSAL, "width": 3, "depth": 3}
 
 
-def test_the_model_is_asked_in_three_places_only():
-    assert STEPS == ("prune", "label", "level")
+def test_the_model_is_asked_in_two_places_only():
+    assert STEPS == ("prune", "label")
     import prompts
-    assert not hasattr(prompts, "START") and not hasattr(prompts, "SUFFICIENCY")
+    assert not hasattr(prompts, "START") and not hasattr(prompts, "SUFFICIENCY") and not hasattr(prompts, "LEVEL_LADDER")
+
+
+def test_level_ways_are_edges_of_the_graph_without_misconception_ways():
+    g = Graph(TINY)
+    ids = [e["id"] for e in g.ways_by_concept["C"]]
+    assert ids == ["lvl:C@L0#1", "lvl:C@L2#0", "lvl:C@L3#0"]      # the "misconception" way is left out
+    assert g.edge_by_id["lvl:C@L3#0"]["logic"] == "relates x to its declaration"
+    assert g.edge_text(g.edge_by_id["lvl:C@L2#0"]).startswith("lvl:C@L2#0 | level L2 way output_prediction: predicts 0")
+
+
+def test_level_by_rule_highest_shown_way_and_l0_when_a_misconception_is_held():
+    # correct answer: the L2 and L3 ways are shown -> L3 (the highest), no model call for the level itself
+    labels = {"lvl:C@L2#0": ("shown", "It prints 0"), "lvl:C@L3#0": ("shown", "x is unset")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["level"] == "L3" and d["levels"]["C"]["way"] == "relation_to_neighbour"
+    assert d["levels"]["C"]["also_shown"] == ["L2 output_prediction"] and d["overall_level"] == "L3"
+    assert set(d["llm_calls_by_step"]) == {"prune", "label"}
+    # the same ways shown, but MisC held as well -> L0
+    labels["mis:C->MisC"] = ("held", "It prints 0")
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["misconception"] == "MisC" and d["overall_level"] == "L0"
+    # an L0 way shown (everyday reading) with no misconception -> L0 too
+    labels = {"lvl:C@L0#1": ("shown", "x is unset"), "lvl:C@L3#0": ("shown", "It prints 0")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["way"] == "everyday_reading"
+
+
+def test_level_ways_never_become_next_hops():
+    labels = {"lvl:C@L3#0": ("shown", "It prints 0")}
+    log: list[str] = []
+    d = traverse.traverse(TINY, TINY_SC, CFG, ScriptedLLM(make_script(labels)), log)
+    assert d["stop_reason"] == "half_stop" and d["depth_reached"] == 1 and any("no next nodes" in l for l in log)
 
 
 # ---------------------------------------------------------------- 1. clause split
@@ -162,7 +199,7 @@ def test_rule_stop_waits_for_pending_prerequisites_and_full_coverage():
     llm = ScriptedLLM(make_script(labels))
     log: list[str] = []
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, log)
-    assert set(llm.asks_by_step) <= {"prune", "label", "level"}
+    assert set(llm.asks_by_step) <= {"prune", "label"}
     assert d["stop_reason"] == "sufficient" and d["depth_reached"] == 2
     assert d["unexplained_clauses"] == [] and set(d["llm_calls_by_step"]) == set(STEPS)
     assert any("c1 <- mis:C->MisC" in l and "c2 <- pre:B->C" in l for l in log)
@@ -206,7 +243,7 @@ def test_s007_diagnosis_from_cached_replies():
     cfg = {**DEFAULT_TRAVERSAL, "cache_dir": "experiments/llm_cache"}
     d = traverse.traverse(sg, SCENARIOS["S007"], cfg, ReplayLLM(cfg), [])
     assert d["clauses"] == S007_CLAUSES
-    assert set(d["llm_calls_by_step"]) == {"prune", "label", "level"}
+    assert set(d["llm_calls_by_step"]) == {"prune", "label"}
     assert {"concept": "loop_control", "misconception": "OffByOneBound"} in [
         {"concept": h["concept"], "misconception": h["misconception"]} for h in d["held_misconceptions"]]
     assert d["root_cause"] == {"concept": "loop_control", "misconception": "OffByOneBound"}

@@ -29,19 +29,33 @@
    "level": "L2",
    "way": "output_prediction",
    "quote": "it checks 17 % 5, which is 2",
-   "source": "level_ladder"
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
   },
   "control_flow": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
-   "source": "level_ladder"
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "edge": "lvl:control_flow@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
   },
   "if_statement": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
-   "source": "level_ladder"
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "edge": "lvl:if_statement@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
   }
  },
  "overall_level": "L2",
@@ -62,6 +76,22 @@
   },
   {
    "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "it checks 17 % 5, which is 2",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
    "source": "control_flow",
    "edge": "mis:control_flow->CodeAfterIfSkipped",
    "target": "CodeAfterIfSkipped",
@@ -73,37 +103,9 @@
    "score": 0.475,
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way."
-  },
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "mis:if_statement->CodeAfterIfSkipped",
-   "target": "CodeAfterIfSkipped",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "so it prints E, and then after that inner if-else it prints G",
-   "confidence": 0.95,
-   "prune_score": 0.45,
-   "score": 0.4275,
-   "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
   }
  ],
  "evidence": [
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "mis:if_statement->CodeAfterIfSkipped",
-   "target": "CodeAfterIfSkipped",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "so it prints E, and then after that inner if-else it prints G",
-   "confidence": 0.95,
-   "prune_score": 0.45,
-   "score": 0.4275,
-   "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
-  },
   {
    "depth": 1,
    "source": "if_statement",
@@ -113,10 +115,24 @@
    "label": "correct",
    "quote": "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
    "confidence": 0.93,
-   "prune_score": 0.3,
-   "score": 0.279,
+   "prune_score": 0.4,
+   "score": 0.372,
    "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
    "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.95,
+   "prune_score": 0.35,
+   "score": 0.3325,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
   },
   {
    "depth": 1,
@@ -134,6 +150,54 @@
   },
   {
    "depth": 1,
+   "source": "if_statement",
+   "edge": "lvl:if_statement@L2#0",
+   "target": "if_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Evaluate the condition once; if true, execute the body; then, in either case, continue with the statement after the if.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "lvl:if_statement@L2#1",
+   "target": "if_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "An if produces no value; its observable result is that the body's effects (assignments, output) happen exactly once when the condition is true and not at all when it is false; e.g. if (x < 0) x = -x; leaves x = 5 for 5 and gives 5 for -5.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "lvl:if_statement@L3#1",
+   "target": "if_statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
    "source": "control_flow",
    "edge": "mis:control_flow->CodeAfterIfSkipped",
    "target": "CodeAfterIfSkipped",
@@ -149,30 +213,78 @@
   {
    "depth": 1,
    "source": "control_flow",
-   "edge": "mis:control_flow->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "so it prints E, and then after that inner if-else it prints G",
-   "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
-  },
-  {
-   "depth": 1,
-   "source": "control_flow",
    "edge": "mis:control_flow->FalseConditionRestartsProgram",
    "target": "FalseConditionRestartsProgram",
    "kind": "misconception",
    "label": "correct",
    "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
    "confidence": 0.8,
-   "prune_score": 0.2,
-   "score": 0.16,
+   "prune_score": 0.3,
+   "score": 0.24,
    "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
    "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.93,
+   "prune_score": 0.3,
+   "score": 0.279,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L3#1",
+   "target": "control_flow@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "so it prints E, and then after that inner if-else it prints G",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -187,6 +299,38 @@
    "score": 0.97,
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
    "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "it checks 17 % 5, which is 2",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#2",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "it checks 17 % 5, which is 2",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
   }
  ],
  "clause_coverage": {
@@ -201,11 +345,10 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 66,
+ "llm_calls": 15,
+ "llm_cache_hits": 57,
  "llm_calls_by_step": {
-  "prune": 3,
-  "label": 7,
-  "level": 3
+  "prune": 6,
+  "label": 16
  }
 }

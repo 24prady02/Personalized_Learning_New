@@ -36,17 +36,21 @@
   "misconception": "LocalVariablesAutoInitialized"
  },
  "levels": {
-  "declaration": {
-   "level": "L0",
-   "way": "misconception",
-   "quote": "It will print 0",
-   "source": "level_ladder"
-  },
   "definite_assignment": {
    "level": "L0",
    "way": "misconception",
    "misconception": "LocalVariablesAutoInitialized",
+   "quote": "It will print 0",
+   "edge": "mis:definite_assignment->LocalVariablesAutoInitialized",
    "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "It will print 0",
+   "edge": "lvl:println@L1#0",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -64,6 +68,38 @@
    "score": 0.95,
    "logic": "local variables get a default value on their own",
    "twin_logic": "A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "depth": 1,
+   "source": "definite_assignment",
+   "edge": "lvl:definite_assignment@L0#0",
+   "target": "definite_assignment@L0",
+   "kind": "level",
+   "label": "shown",
+   "quote": "It will print 0",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "Everyday intuition, and some older languages, treat a new or empty quantity as zero (\"nothing yet means 0\"). A Java local variable has no value at all until it is assigned, and the compiler rejects any read before that.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L1#0",
+   "target": "println@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "It will print 0",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "System.out.println is a library method that prints its argument followed by a line terminator ('print line').",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
   },
   {
    "depth": 2,
@@ -96,6 +132,54 @@
    "twin_logic": "A local variable has no value until it is assigned, and using it before then does not compile."
   },
   {
+   "depth": 1,
+   "source": "definite_assignment",
+   "edge": "lvl:definite_assignment@L0#0",
+   "target": "definite_assignment@L0",
+   "kind": "level",
+   "label": "shown",
+   "quote": "It will print 0",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "Everyday intuition, and some older languages, treat a new or empty quantity as zero (\"nothing yet means 0\"). A Java local variable has no value at all until it is assigned, and the compiler rejects any read before that.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "definite_assignment",
+   "edge": "lvl:definite_assignment@L0#2",
+   "target": "definite_assignment@L0",
+   "kind": "level",
+   "label": "shown",
+   "quote": "It will print 0",
+   "confidence": 0.7,
+   "prune_score": 0.10000000000000002,
+   "score": 0.07,
+   "logic": "Points to LT (along every control-flow path, an assignment must come before each read). Applied unevenly, a student checks straight-line code but assumes a variable assigned in only one branch of an if, or inside a loop, is assigned afterwards. (here mixing in: \"local variables get a default value on their own\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L1#0",
+   "target": "println@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "It will print 0",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "System.out.println is a library method that prints its argument followed by a line terminator ('print line').",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
    "depth": 2,
    "source": "definite_assignment",
    "edge": "pre:declaration->definite_assignment",
@@ -116,11 +200,10 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 9,
+ "llm_calls": 11,
+ "llm_cache_hits": 5,
  "llm_calls_by_step": {
-  "prune": 3,
-  "label": 5,
-  "level": 1
+  "prune": 5,
+  "label": 11
  }
 }

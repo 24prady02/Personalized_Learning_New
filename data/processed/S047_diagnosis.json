@@ -19,23 +19,132 @@
  "error_evidence": [],
  "broken_edges": [],
  "root_cause": null,
- "levels": {},
- "overall_level": null,
- "paths": [],
- "evidence": [],
- "clause_coverage": {},
- "unexplained_clauses": [
-  "With %.3f it would print 3.142 and no spaces",
-  "price itself is still 3.14159",
-  "only the printed digits change"
+ "levels": {
+  "formatted_output": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "only the printed digits change",
+   "edge": "lvl:formatted_output@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 output_prediction"
+   ]
+  }
+ },
+ "overall_level": "L4",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L4#0",
+   "target": "formatted_output@L4",
+   "kind": "level",
+   "label": "shown",
+   "quote": "only the printed digits change",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Changing the precision changes only the printed digits, not the stored value. Changing the width changes only the padding. A width smaller than the converted text is ignored, so nothing is truncated.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L2#2",
+   "target": "formatted_output@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "price itself is still 3.14159",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "One call appends one formatted string to standard output and adds no newline unless \\n or %n is in the format. The stored values of the arguments do not change (only their printed form is rounded).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L2#1",
+   "target": "formatted_output@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "With %.3f it would print 3.142 and no spaces",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "The output is the formatted text. printf(\"%7.5f\", Math.PI) gives 3.14159, printf(\"PI is approximately %.2f\\n\", Math.PI) gives `PI is approximately 3.14` and a newline, and printf(\"%5d\", 42) gives `   42`. Rounding is half-up.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
  ],
- "stop_reason": "half_stop",
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L4#0",
+   "target": "formatted_output@L4",
+   "kind": "level",
+   "label": "shown",
+   "quote": "only the printed digits change",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Changing the precision changes only the printed digits, not the stored value. Changing the width changes only the padding. A width smaller than the converted text is ignored, so nothing is truncated.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L2#2",
+   "target": "formatted_output@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "price itself is still 3.14159",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "One call appends one formatted string to standard output and adds no newline unless \\n or %n is in the format. The stored values of the arguments do not change (only their printed form is rounded).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "formatted_output",
+   "edge": "lvl:formatted_output@L2#1",
+   "target": "formatted_output@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "With %.3f it would print 3.142 and no spaces",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "The output is the formatted text. printf(\"%7.5f\", Math.PI) gives 3.14159, printf(\"PI is approximately %.2f\\n\", Math.PI) gives `PI is approximately 3.14` and a newline, and printf(\"%5d\", 42) gives `   42`. Rounding is half-up.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "With %.3f it would print 3.142 and no spaces": "lvl:formatted_output@L2#1",
+  "price itself is still 3.14159": "lvl:formatted_output@L2#2",
+  "only the printed digits change": "lvl:formatted_output@L4#0"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 73,
+ "llm_calls": 5,
+ "llm_cache_hits": 61,
  "llm_calls_by_step": {
-  "prune": 1,
-  "label": 3,
-  "level": 0
+  "prune": 2,
+  "label": 5
  }
 }

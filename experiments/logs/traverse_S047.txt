@@ -2,9 +2,14 @@ clauses: With %.3f it would print 3.142 and no spaces | price itself is still 3.
 start: 1 tagged concepts, all used
 start concepts (1): formatted_output
 --- depth 1: current concepts ['formatted_output']
-  formatted_output: 4 candidates -> kept mis:formatted_output->FieldWidthIsIntegerDigits (0.60), mis:formatted_output->ManyDigitsMeanAccurate (0.30), mis:formatted_output->PrintfAnyConversion (0.10)
+  formatted_output (misconceptions): 4 candidates -> kept mis:formatted_output->FieldWidthIsIntegerDigits (0.60), mis:formatted_output->ManyDigitsMeanAccurate (0.40)
     mis:formatted_output->FieldWidthIsIntegerDigits -> not applied (0.00) "none"
     mis:formatted_output->ManyDigitsMeanAccurate -> not applied (0.00) "none"
-    mis:formatted_output->PrintfAnyConversion -> not applied (0.00) "none"
-  nothing kept -> half_stop
+  formatted_output (level ways): 15 candidates -> kept lvl:formatted_output@L4#0 (0.60), lvl:formatted_output@L2#2 (0.25), lvl:formatted_output@L2#1 (0.15)
+    lvl:formatted_output@L4#0 -> shown (0.57) "only the printed digits change"
+    lvl:formatted_output@L2#2 -> shown (0.21) "price itself is still 3.14159"
+    lvl:formatted_output@L2#1 -> shown (0.12) "With %.3f it would print 3.142 and no spaces"
+  kept: lvl:formatted_output@L4#0 [shown, tier 2, 0.57], lvl:formatted_output@L2#2 [shown, tier 2, 0.21], lvl:formatted_output@L2#1 [shown, tier 2, 0.12]
+  clause coverage: c1 <- lvl:formatted_output@L2#1; c2 <- lvl:formatted_output@L2#2; c3 <- lvl:formatted_output@L4#0
   root-cause walk: held on [], broken at [], prerequisites {'formatted_output': ['standard_output']}
+  level formatted_output: L4 via predict_a_change "only the printed digits change"

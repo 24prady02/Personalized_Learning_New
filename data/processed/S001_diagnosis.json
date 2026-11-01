@@ -19,14 +19,30 @@
  "broken_edges": [],
  "root_cause": null,
  "levels": {
-  "println": {
-   "level": "L1",
-   "way": "states_the_rule",
+  "print": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
    "quote": "println adds a newline after the text and print does not",
-   "source": "level_ladder"
+   "edge": "lvl:print@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule",
+    "L1 names_the_element"
+   ]
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "println adds a newline after the text and print does not",
+   "edge": "lvl:println@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule",
+    "L1 names_the_element"
+   ]
   }
  },
- "overall_level": "L1",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,
@@ -37,27 +53,93 @@
    "label": "correct",
    "quote": "println adds a newline after the text and print does not",
    "confidence": 0.97,
-   "prune_score": 0.55,
-   "score": 0.5335,
+   "prune_score": 0.6000000000000001,
+   "score": 0.582,
    "logic": "print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines.",
    "twin_logic": "println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
   },
   {
    "depth": 1,
-   "source": "println",
-   "edge": "mis:println->PrintNewLineFirst",
-   "target": "PrintNewLineFirst",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "print",
+   "edge": "lvl:print@L3#2",
+   "target": "print@L3",
+   "kind": "level",
+   "label": "shown",
    "quote": "println adds a newline after the text and print does not",
-   "confidence": 0.95,
-   "prune_score": 0.4,
-   "score": 0.38,
-   "logic": "println(s) prints a newline and then s.",
-   "twin_logic": "println(s) prints s and then the newline."
+   "confidence": 0.75,
+   "prune_score": 0.6,
+   "score": 0.45,
+   "logic": "print leaves the cursor on the same line; println ends the line; a line built from several prints should end with println.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#2",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text and print does not",
+   "confidence": 0.72,
+   "prune_score": 0.5,
+   "score": 0.36,
+   "logic": "print leaves the cursor on the line; println ends it; several prints followed by one println make one line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
+  {
+   "depth": 1,
+   "source": "print",
+   "edge": "lvl:print@L3#2",
+   "target": "print@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text and print does not",
+   "confidence": 0.75,
+   "prune_score": 0.6,
+   "score": 0.45,
+   "logic": "print leaves the cursor on the same line; println ends the line; a line built from several prints should end with println.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "print",
+   "edge": "lvl:print@L1#1",
+   "target": "print@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "print does not",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "print(String s) prints the string (or \"null\" for a null reference); print(int) etc. print the value's string form; no line terminator is written.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "print",
+   "edge": "lvl:print@L1#0",
+   "target": "print@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text and print does not",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "System.out.print(x) is a library method call (on the PrintStream System.out) that displays x in the terminal without ending the line.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
   {
    "depth": 1,
    "source": "println",
@@ -67,8 +149,8 @@
    "label": "correct",
    "quote": "println adds a newline after the text and print does not",
    "confidence": 0.97,
-   "prune_score": 0.55,
-   "score": 0.5335,
+   "prune_score": 0.6000000000000001,
+   "score": 0.582,
    "logic": "print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines.",
    "twin_logic": "println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
   },
@@ -81,23 +163,70 @@
    "label": "correct",
    "quote": "println adds a newline after the text and print does not",
    "confidence": 0.95,
-   "prune_score": 0.4,
-   "score": 0.38,
+   "prune_score": 0.30000000000000004,
+   "score": 0.285,
    "logic": "println(s) prints a newline and then s.",
    "twin_logic": "println(s) prints s and then the newline."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#2",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text and print does not",
+   "confidence": 0.72,
+   "prune_score": 0.5,
+   "score": 0.36,
+   "logic": "print leaves the cursor on the line; println ends it; several prints followed by one println make one line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L1#1",
+   "target": "println@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text and print does not",
+   "confidence": 0.93,
+   "prune_score": 0.3,
+   "score": 0.279,
+   "logic": "println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L1#0",
+   "target": "println@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "println adds a newline after the text",
+   "confidence": 0.95,
+   "prune_score": 0.2,
+   "score": 0.19,
+   "logic": "System.out.println is a library method that prints its argument followed by a line terminator ('print line').",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
   }
  ],
  "clause_coverage": {
-  "println adds a newline after the text and print does not": "mis:println->PrintEqualsPrintln"
+  "println adds a newline after the text and print does not": "lvl:print@L3#2"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 16,
+ "llm_calls": 12,
+ "llm_cache_hits": 9,
  "llm_calls_by_step": {
-  "prune": 2,
-  "label": 4,
-  "level": 1
+  "prune": 4,
+  "label": 12
  }
 }

@@ -3,25 +3,37 @@ start: generic concepts whose tagging text occurs in the answer: statement
 start: 3 tagged concepts, all used
 start concepts (3): print, println, statement
 --- depth 1: current concepts ['print', 'println', 'statement']
-  print: 3 candidates -> kept mis:print->ParenthesesOnlyIfArgument (0.50), mis:print->RepeatedOutputVariablePrintedOnce (0.30), err:print->PrintWithoutFinalNewline (0.20)
+  print (misconceptions): 3 candidates -> kept mis:print->ParenthesesOnlyIfArgument (0.50), mis:print->RepeatedOutputVariablePrintedOnce (0.30), err:print->PrintWithoutFinalNewline (0.20)
     mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
     mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) "none"
     err:print->PrintWithoutFinalNewline -> not applied (0.00) "none"
-  println: 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.90), mis:println->PrintEqualsPrintln (0.05), mis:println->ParenthesesOnlyIfArgument (0.05)
+  print (level ways): 15 candidates -> kept lvl:print@L2#2 (0.60), lvl:print@L3#1 (0.25), lvl:print@L2#1 (0.15)
+    lvl:print@L2#2 -> not applied (0.00) "none"
+    lvl:print@L3#1 -> not applied (0.00) "none"
+    lvl:print@L2#1 -> not applied (0.00) "none"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.90), mis:println->ParenthesesOnlyIfArgument (0.05), mis:println->IdentifierCaseInsensitive (0.05)
     mis:println->PrintedTextIsExecuted -> held (0.81) "sets x to 5"
-    mis:println->PrintEqualsPrintln -> not applied (0.00) "none"
     mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
-  statement: 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.70), mis:statement->ProgramLooksAhead (0.20), err:statement->StatementNeedsNoTerminator (0.10)
+    mis:println->IdentifierCaseInsensitive -> not applied (0.00) "none"
+  println (level ways): 17 candidates -> kept lvl:println@L2#2 (0.50), lvl:println@L3#1 (0.35), lvl:println@L0#0 (0.15)
+    lvl:println@L2#2 -> not applied (0.00) "none"
+    lvl:println@L3#1 -> not applied (0.00) "none"
+    lvl:println@L0#0 -> not applied (0.00) "none"
+  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.80), mis:statement->ProgramLooksAhead (0.10), mis:statement->StatementsRunInAnyOrder (0.10)
     mis:statement->ComputerFillsInIntent -> not applied (0.00) "none"
     mis:statement->ProgramLooksAhead -> not applied (0.00) "none"
-    err:statement->StatementNeedsNoTerminator -> not applied (0.00) "none"
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) "none"
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#0 (0.60), lvl:statement@L2#2 (0.25), lvl:statement@L2#1 (0.15)
+    lvl:statement@L0#0 -> not applied (0.00) "none"
+    lvl:statement@L2#2 -> not applied (0.00) "none"
+    lvl:statement@L2#1 -> not applied (0.00) "none"
   kept: mis:println->PrintedTextIsExecuted [held, tier 0, 0.81]
   root cause not settled, unexamined prerequisites: pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['println']
-  println: 3 candidates -> kept pre:string_literal->println (0.80), pre:statement->println (0.15), par:print~println (0.05)
+  println (concept edges): 3 candidates -> kept pre:string_literal->println (0.75), pre:statement->println (0.20), par:print~println (0.05)
     pre:string_literal->println -> not applied (0.00) "none"
     pre:statement->println -> not applied (0.00) "none"
     par:print~println -> not applied (0.00) "none"
   nothing kept -> half_stop
   root-cause walk: held on ['println'], broken at [], prerequisites {'print': ['statement', 'string_literal'], 'println': ['statement', 'string_literal']}
-  level println: L1 via names_the_element "System.out.println"
+  level println: L0 via misconception "sets x to 5"

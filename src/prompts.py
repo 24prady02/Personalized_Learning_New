@@ -1,4 +1,5 @@
-"""The three prompts of the ToG traversal (edge prune, edge label, level ladder): the only places the model is asked.
+"""The prompts of the ToG traversal: one edge prune prompt and three edge label prompts (misconception edge, concept
+edge, level way). These are the only places the model is asked.
 
 Every prompt is a plain string with {placeholders}; traverse.py fills them. The few-shot example is the
 reference case S000 (code, question, answer) with a worked reply in the exact output format each prompt expects.
@@ -24,10 +25,10 @@ Student's answer: "{answer}"
 
 Concept under consideration: {concept}
 
-Candidate edges of this concept. A misconception/error edge shows the wrong rule (logic) and the right rule (twin_logic); a concept edge shows the rule that links the two concepts.
+Candidate edges of this concept. A misconception/error edge shows the wrong rule (logic) and the right rule (twin_logic); a concept edge shows the rule that links the two concepts; a level way (lvl:) shows one way an answer can display a level of understanding of the concept.
 {edges}
 
-Task: pick the {n} edges whose rule the student's answer engages with, either by following the wrong rule, by following the right rule, or by breaking / confirming the link. Rate each with a score in (0, 1]; the scores of the picked edges must sum to 1. Ignore edges the answer says nothing about.
+Task: pick the {n} edges whose rule the student's answer engages with, either by following the wrong rule, by following the right rule, by breaking / confirming the link, or by doing what a level way describes. Rate each with a score in (0, 1]; the scores of the picked edges must sum to 1. Ignore edges the answer says nothing about.
 
 Reply with one line per picked edge, in this exact format and nothing else:
 {{edge_id (Score: 0.6)}}
@@ -105,9 +106,7 @@ Quote: the exact words from the student's answer that show it (copy them verbati
 Confidence: a number from 0 to 1
 """
 
-# ---------------------------------------------------------------- 3. level ladder
-
-LEVEL_LADDER = """You place a student's answer on a learning-progression ladder for one Java concept, going from L0 up to L4 and stopping at the first level whose deciding question is answered in favour of that level.
+LABEL_WAY = """You check whether a student's answer shows one way of understanding a Java concept, as a learning-progression ladder describes it.
 
 Program:
 {code}
@@ -117,17 +116,20 @@ Question: {question}
 Student's answer, split into clauses:
 {clauses}
 
+Edge: {edge_id}
 Concept: {concept}
+Level: {level} ({level_name}). Deciding question of this level: {deciding_question}
+Way: {way} ({rule_type})
+What an answer that shows this way does: {rule}
 
-Levels, in order. Each level has a deciding question and the ways an answer can show that level. Choose at most one way per level.
-{levels}
-
-Go through L0, L1, L2, L3, L4 in that order. At each level ask its deciding question. If the answer belongs to that level, stop and report that level and the way that fits; otherwise go up. If no level fits, report none.
+Decide:
+- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);
+- not shown: the answer does not do this.
 
 Reply in exactly three lines and nothing else:
-Level: L0 | L1 | L2 | L3 | L4 | none
-Way: the name of the way, or none
-Quote: the exact words from the student's answer that show it (verbatim), or none
+Label: shown | not shown
+Quote: the exact words from the student's answer that show it (copy them verbatim; write none if not shown)
+Confidence: a number from 0 to 1
 """
 
 

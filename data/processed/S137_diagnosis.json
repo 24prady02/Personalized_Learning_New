@@ -34,13 +34,15 @@
  },
  "levels": {
   "println": {
-   "level": "L1",
-   "way": "names_the_element",
-   "quote": "System.out.println",
-   "source": "level_ladder"
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "PrintedTextIsExecuted",
+   "quote": "sets x to 5",
+   "edge": "mis:println->PrintedTextIsExecuted",
+   "source": "held_misconception"
   }
  },
- "overall_level": "L1",
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
@@ -82,11 +84,10 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 123,
+ "llm_calls": 18,
+ "llm_cache_hits": 88,
  "llm_calls_by_step": {
-  "prune": 4,
-  "label": 12,
-  "level": 1
+  "prune": 7,
+  "label": 21
  }
 }

@@ -23,7 +23,7 @@
    "misconception": "OffByOneBound",
    "kind": "misconception",
    "quote": "because the loop stops at 1",
-   "score": 0.3
+   "score": 0.33
   },
   {
    "concept": "for_loop",
@@ -42,19 +42,19 @@
  ],
  "broken_edges": [
   {
-   "edge": "pre:loop_control->for_loop",
-   "quote": "because the loop stops at 1",
-   "score": 0.51
-  },
-  {
    "edge": "pre:loop_variable->loop_control",
    "quote": "because the loop stops at 1",
-   "score": 0.44
+   "score": 0.48
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "because the loop stops at 1",
+   "score": 0.34
   },
   {
    "edge": "pre:for_loop->nested_loops",
    "quote": "no empty line at the end",
-   "score": 0.21
+   "score": 0.3
   }
  ],
  "root_cause": {
@@ -63,28 +63,30 @@
  },
  "levels": {
   "for_loop": {
-   "level": "L2",
-   "way": "output_prediction",
+   "level": "L3",
+   "way": "relation_to_neighbour",
    "quote": "3 2 1 / 2 1 / 1",
-   "source": "level_ladder"
+   "edge": "lvl:for_loop@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
   },
   "loop_control": {
    "level": "L0",
    "way": "misconception",
    "misconception": "OffByOneBound",
+   "quote": "because the loop stops at 1",
+   "edge": "mis:loop_control->OffByOneBound",
    "source": "level_mis_links"
   },
-  "loop_variable": {
-   "level": "L2",
-   "way": "output_prediction",
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
    "quote": "3 2 1 / 2 1 / 1",
-   "source": "level_ladder"
-  },
-  "nested_loops": {
-   "level": "L2",
-   "way": "output_prediction",
-   "quote": "3 2 1 / 2 1 / 1",
-   "source": "level_ladder"
+   "edge": "lvl:println@L3#2",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -98,8 +100,8 @@
    "label": "held",
    "quote": "because the loop stops at 1",
    "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
+   "prune_score": 0.55,
+   "score": 0.33,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -133,20 +135,6 @@
   },
   {
    "depth": 2,
-   "source": "for_loop",
-   "edge": "pre:loop_control->for_loop",
-   "target": "loop_control",
-   "kind": "prerequisite",
-   "label": "broken",
-   "quote": "because the loop stops at 1",
-   "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
    "source": "loop_control",
    "edge": "pre:loop_variable->loop_control",
    "target": "loop_variable",
@@ -154,9 +142,23 @@
    "label": "broken",
    "quote": "because the loop stops at 1",
    "confidence": 0.8,
-   "prune_score": 0.55,
-   "score": 0.44,
+   "prune_score": 0.6000000000000001,
+   "score": 0.48,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "because the loop stops at 1",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
   {
@@ -168,8 +170,8 @@
    "label": "broken",
    "quote": "no empty line at the end",
    "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
+   "prune_score": 0.5,
+   "score": 0.3,
    "logic": "In nested loops the inner for runs its complete set of passes for every single pass of the outer for.",
    "twin_logic": null
   }
@@ -191,6 +193,38 @@
   },
   {
    "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "3 2 1 / 2 1 / 1",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#1",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "3 2 1 / 2 1 / 1",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "A for may be the body of another for: the inner for runs its complete set of passes for every single pass of the outer one.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
    "source": "loop_control",
    "edge": "mis:loop_control->OffByOneBound",
    "target": "OffByOneBound",
@@ -198,8 +232,8 @@
    "label": "held",
    "quote": "because the loop stops at 1",
    "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
+   "prune_score": 0.55,
+   "score": 0.33,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -219,6 +253,22 @@
   },
   {
    "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "because the loop stops at 1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
    "source": "println",
    "edge": "mis:println->PrintEqualsPrintln",
    "target": "PrintEqualsPrintln",
@@ -232,6 +282,22 @@
    "twin_logic": "println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
   },
   {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#2",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "3 2 1 / 2 1 / 1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "print leaves the cursor on the line; println ends it; several prints followed by one println make one line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
    "depth": 2,
    "source": "loop_control",
    "edge": "pre:loop_variable->loop_control",
@@ -240,8 +306,8 @@
    "label": "broken",
    "quote": "because the loop stops at 1",
    "confidence": 0.8,
-   "prune_score": 0.55,
-   "score": 0.44,
+   "prune_score": 0.6000000000000001,
+   "score": 0.48,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
    "twin_logic": null
   },
@@ -254,22 +320,8 @@
    "label": "broken",
    "quote": "because the loop stops at 1",
    "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "for_loop",
-   "edge": "pre:loop_control->for_loop",
-   "target": "loop_control",
-   "kind": "prerequisite",
-   "label": "broken",
-   "quote": "because the loop stops at 1",
-   "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
+   "prune_score": 0.30000000000000004,
+   "score": 0.255,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
@@ -282,14 +334,28 @@
    "label": "broken",
    "quote": "no empty line at the end",
    "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
+   "prune_score": 0.5,
+   "score": 0.3,
    "logic": "In nested loops the inner for runs its complete set of passes for every single pass of the outer for.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "quote": "because the loop stops at 1",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   }
  ],
  "clause_coverage": {
-  "3 2 1 / 2 1 / 1": "mis:println->PrintEqualsPrintln",
+  "3 2 1 / 2 1 / 1": "lvl:for_loop@L2#1",
   "no empty line at the end": "pre:for_loop->nested_loops",
   "because the loop stops at 1": "err:for_loop->WrongIterationCount"
  },
@@ -297,10 +363,9 @@
  "stop_reason": "sufficient",
  "depth_reached": 2,
  "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_cache_hits": 41,
  "llm_calls_by_step": {
-  "prune": 5,
-  "label": 15,
-  "level": 3
+  "prune": 8,
+  "label": 24
  }
 }

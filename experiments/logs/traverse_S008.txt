@@ -4,21 +4,34 @@ start: BM25 of the answer against each tagged concept: arithmetic_operators 25.4
 start: chosen arithmetic_operators, loop_control, assignment
 start concepts (3): arithmetic_operators, loop_control, assignment
 --- depth 1: current concepts ['arithmetic_operators', 'loop_control', 'assignment']
-  arithmetic_operators: 3 candidates -> kept mis:arithmetic_operators->CaretIsPower (0.34), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.33), mis:arithmetic_operators->RemainderIsSubtraction (0.33)
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.34), mis:arithmetic_operators->CaretIsPower (0.33), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.33)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) "none"
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) "none"
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) "none"
-    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) "none"
-  loop_control: 11 candidates -> kept err:loop_control->WrongIterationCount (0.45), mis:loop_control->OffByOneBound (0.35), mis:loop_control->ForLoopPartSkipped (0.20)
-    err:loop_control->WrongIterationCount -> correct (0.38) "So it prints 8, 10, 12, 13"
-    mis:loop_control->OffByOneBound -> correct (0.28) "So it prints 8, 10, 12, 13"
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#2 (0.50), lvl:arithmetic_operators@L2#0 (0.35), lvl:arithmetic_operators@L2#1 (0.15)
+    lvl:arithmetic_operators@L2#2 -> shown (0.33) "num1 is 9 and num2 starts at 12"
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) "none"
+    lvl:arithmetic_operators@L2#1 -> shown (0.09) "num1 is 9 and num2 starts at 12"
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.50), mis:loop_control->OffByOneBound (0.30), mis:loop_control->ForLoopPartSkipped (0.20)
+    err:loop_control->WrongIterationCount -> correct (0.42) "So it prints 8, 10, 12, 13"
+    mis:loop_control->OffByOneBound -> correct (0.24) "So it prints 8, 10, 12, 13"
     mis:loop_control->ForLoopPartSkipped -> not applied (0.00) "none"
-  assignment: 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->VariablesHoldExpressions (0.40), mis:assignment->AssignmentIsEquation (0.15)
-    mis:assignment->VariableKeepsOldValue -> correct (0.42) "At i = 9 num2 drops to 11"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.50), lvl:loop_control@L2#1 (0.35), lvl:loop_control@L2#2 (0.15)
+    lvl:loop_control@L2#0 -> shown (0.35) "At i = 9 num2 drops to 11"
+    lvl:loop_control@L2#1 -> shown (0.21) "So it prints 8, 10, 12, 13"
+    lvl:loop_control@L2#2 -> shown (0.09) "At i = 9 num2 drops to 11"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->VariablesHoldExpressions (0.30), mis:assignment->AssignmentIsEquation (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.47) "At i = 9 num2 drops to 11"
     mis:assignment->VariablesHoldExpressions -> not applied (0.00) "none"
-    mis:assignment->AssignmentIsEquation -> correct (0.11) "At i = 9 num2 drops to 11"
-  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.42], err:loop_control->WrongIterationCount [correct, tier 2, 0.38], mis:loop_control->OffByOneBound [correct, tier 2, 0.28]
-  clause coverage: c1 uncovered; c2 <- mis:assignment->VariableKeepsOldValue; c3 uncovered; c4 <- err:loop_control->WrongIterationCount
+    mis:assignment->AssignmentIsEquation -> correct (0.15) "At i = 9 num2 drops to 11"
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L2#0 (0.50), lvl:assignment@L3#7 (0.30), lvl:assignment@L2#1 (0.20)
+    lvl:assignment@L2#0 -> shown (0.40) "num1 is 9 and num2 starts at 12"
+    lvl:assignment@L3#7 -> shown (0.22) "At i = 9 num2 drops to 11"
+    lvl:assignment@L2#1 -> shown (0.17) "num1 is 9 and num2 starts at 12"
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.47], err:loop_control->WrongIterationCount [correct, tier 2, 0.42], lvl:assignment@L2#0 [shown, tier 2, 0.40]
+  clause coverage: c1 <- lvl:arithmetic_operators@L2#2; c2 <- lvl:loop_control@L2#0; c3 uncovered; c4 <- err:loop_control->WrongIterationCount
   no next nodes -> half_stop
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators', 'logical_operators'], 'comparison_operators': ['expression'], 'operator_precedence': ['expression'], 'if_else_statement': ['if_statement'], 'short_circuit': ['logical_operators'], 'loop_control': ['loop_variable'], 'formatted_output': ['standard_output'], 'control_flow': ['statement']}
-  level assignment: L2 via line_by_line_trace "At i = 9 num2 drops to 11"
+  level arithmetic_operators: L2 via one_step_execution "num1 is 9 and num2 starts at 12"
+  level assignment: L3 via relation_to_neighbour "At i = 9 num2 drops to 11"
   level loop_control: L2 via line_by_line_trace "At i = 9 num2 drops to 11"

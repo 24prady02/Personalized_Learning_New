@@ -3,21 +3,28 @@ start: generic concepts whose tagging text occurs in the answer: assignment
 start: 2 tagged concepts, all used
 start concepts (2): variable_swap, assignment
 --- depth 1: current concepts ['variable_swap', 'assignment']
-  variable_swap: 2 candidates -> kept mis:variable_swap->SwapWithoutTemp (0.70), mis:variable_swap->AssignmentExchangesValues (0.30)
+  variable_swap (misconceptions): 2 candidates -> kept mis:variable_swap->SwapWithoutTemp (0.70), mis:variable_swap->AssignmentExchangesValues (0.30)
     mis:variable_swap->SwapWithoutTemp -> not applied (0.00) "none"
     mis:variable_swap->AssignmentExchangesValues -> not applied (0.00) "none"
-  assignment: 15 candidates -> kept mis:assignment->VariablesHoldExpressions (0.60), mis:assignment->AssignmentIsEquation (0.25), mis:assignment->SwapWithoutTemp (0.15)
-    mis:assignment->VariablesHoldExpressions -> held (0.51) "Then b = t means b equals a"
-    mis:assignment->AssignmentIsEquation -> held (0.23) "Then b = t means b equals a"
+  variable_swap (level ways): 13 candidates -> kept lvl:variable_swap@L0#2 (0.60), lvl:variable_swap@L0#0 (0.25), lvl:variable_swap@L2#0 (0.15)
+    lvl:variable_swap@L0#2 -> shown (0.36) "Then b = t means b equals a"
+    lvl:variable_swap@L0#0 -> shown (0.15) "Then b = t means b equals a"
+    lvl:variable_swap@L2#0 -> not applied (0.00) "none"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariablesHoldExpressions (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->SwapWithoutTemp (0.20)
+    mis:assignment->VariablesHoldExpressions -> held (0.42) "Then b = t means b equals a"
+    mis:assignment->AssignmentIsEquation -> held (0.27) "Then b = t means b equals a"
     mis:assignment->SwapWithoutTemp -> not applied (0.00) "none"
-  kept: mis:assignment->VariablesHoldExpressions [held, tier 0, 0.51], mis:assignment->AssignmentIsEquation [held, tier 0, 0.23]
-  clause coverage: c1 uncovered; c2 <- mis:assignment->VariablesHoldExpressions; c3 uncovered
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L0#9 (0.55), lvl:assignment@L0#0 (0.30), lvl:assignment@L2#0 (0.15)
+    lvl:assignment@L0#9 -> shown (0.44) "Then b = t means b equals a"
+    lvl:assignment@L0#0 -> shown (0.21) "Then b = t means b equals a"
+    lvl:assignment@L2#0 -> shown (0.09) "After t = a and a = b, a is b"
+  kept: mis:assignment->VariablesHoldExpressions [held, tier 0, 0.42], mis:assignment->AssignmentIsEquation [held, tier 0, 0.27], lvl:assignment@L0#9 [shown, tier 2, 0.44]
+  clause coverage: c1 <- lvl:assignment@L2#0; c2 <- lvl:variable_swap@L0#2; c3 uncovered
 --- depth 2: current concepts ['assignment']
-  assignment: 1 candidates -> kept pre:assignment->variable_swap (1.00)
+  assignment (concept edges): 1 candidates -> kept pre:assignment->variable_swap (1.00)
     pre:assignment->variable_swap -> broken (0.95) "so both are b"
   kept: pre:assignment->variable_swap [broken, tier 0, 0.95]
-  clause coverage: c1 uncovered; c2 <- mis:assignment->VariablesHoldExpressions; c3 <- pre:assignment->variable_swap
---- depth 3: current concepts ['variable_swap', 'assignment']
-  nothing kept -> half_stop
+  clause coverage: c1 <- lvl:assignment@L2#0; c2 <- lvl:variable_swap@L0#2; c3 <- pre:assignment->variable_swap
   root-cause walk: held on ['assignment'], broken at ['variable_swap'], prerequisites {'variable_swap': ['assignment']}
+  level assignment: L0 via misconception "Then b = t means b equals a"
   level variable_swap: L0 via inconsistent_trace "Then b = t means b equals a"

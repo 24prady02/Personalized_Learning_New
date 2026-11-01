@@ -3,32 +3,44 @@ start: BM25 of the answer against each tagged concept: for_loop 18.33 (hits 1), 
 start: chosen for_loop, loop_control, println
 start concepts (3): for_loop, loop_control, println
 --- depth 1: current concepts ['for_loop', 'loop_control', 'println']
-  for_loop: 21 candidates -> kept err:for_loop->WrongIterationCount (0.60), mis:for_loop->IdiomOverridesCode (0.20), mis:for_loop->ForLoopPartSkipped (0.20)
+  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.60), mis:for_loop->IdiomOverridesCode (0.25), mis:for_loop->ForLoopPartSkipped (0.15)
     err:for_loop->WrongIterationCount -> held (0.51) "because the loop stops at 1"
     mis:for_loop->IdiomOverridesCode -> not applied (0.00) "none"
     mis:for_loop->ForLoopPartSkipped -> not applied (0.00) "none"
-  loop_control: 11 candidates -> kept mis:loop_control->OffByOneBound (0.50), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForLoopPartSkipped (0.20)
-    mis:loop_control->OffByOneBound -> held (0.30) "because the loop stops at 1"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L3#1 (0.30), lvl:for_loop@L2#0 (0.20)
+    lvl:for_loop@L2#1 -> shown (0.35) "3 2 1 / 2 1 / 1"
+    lvl:for_loop@L3#1 -> shown (0.21) "3 2 1 / 2 1 / 1"
+    lvl:for_loop@L2#0 -> not applied (0.00) "none"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.55), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForLoopPartSkipped (0.15)
+    mis:loop_control->OffByOneBound -> held (0.33) "because the loop stops at 1"
     err:loop_control->WrongIterationCount -> held (0.26) "because the loop stops at 1"
     mis:loop_control->ForLoopPartSkipped -> not applied (0.00) "none"
-  println: 6 candidates -> kept mis:println->ParenthesesOnlyIfArgument (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L4#1 (0.30), lvl:loop_control@L3#5 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.30) "because the loop stops at 1"
+    lvl:loop_control@L4#1 -> not applied (0.00) "none"
+    lvl:loop_control@L3#5 -> not applied (0.00) "none"
+  println (misconceptions): 6 candidates -> kept mis:println->ParenthesesOnlyIfArgument (0.50), mis:println->PrintEqualsPrintln (0.30), err:println->PrintWithoutFinalNewline (0.20)
     mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) "none"
     mis:println->PrintEqualsPrintln -> correct (0.24) "3 2 1 / 2 1 / 1"
-    mis:println->PrintNewLineFirst -> not applied (0.00) "none"
-  kept: mis:loop_control->OffByOneBound [held, tier 0, 0.30], err:for_loop->WrongIterationCount [held, tier 1, 0.51], err:loop_control->WrongIterationCount [held, tier 1, 0.26]
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) "none"
+  println (level ways): 17 candidates -> kept lvl:println@L0#3 (0.50), lvl:println@L3#2 (0.30), lvl:println@L1#1 (0.20)
+    lvl:println@L0#3 -> not applied (0.00) "none"
+    lvl:println@L3#2 -> shown (0.18) "3 2 1 / 2 1 / 1"
+    lvl:println@L1#1 -> not applied (0.00) "none"
+  kept: mis:loop_control->OffByOneBound [held, tier 0, 0.33], err:for_loop->WrongIterationCount [held, tier 1, 0.51], err:loop_control->WrongIterationCount [held, tier 1, 0.26]
   root cause not settled, unexamined prerequisites: pre:loop_variable->loop_control
 --- depth 2: current concepts ['loop_control', 'for_loop']
-  loop_control: 3 candidates -> kept pre:loop_variable->loop_control (0.55), pre:loop_control->for_loop (0.40), pre:loop_control->increment_operators (0.05)
-    pre:loop_variable->loop_control -> broken (0.44) "because the loop stops at 1"
-    pre:loop_control->for_loop -> broken (0.34) "because the loop stops at 1"
+  loop_control (concept edges): 3 candidates -> kept pre:loop_variable->loop_control (0.60), pre:loop_control->for_loop (0.30), pre:loop_control->increment_operators (0.10)
+    pre:loop_variable->loop_control -> broken (0.48) "because the loop stops at 1"
+    pre:loop_control->for_loop -> broken (0.26) "because the loop stops at 1"
     pre:loop_control->increment_operators -> not applied (0.00) "none"
-  for_loop: 3 candidates -> kept pre:loop_control->for_loop (0.60), pre:for_loop->nested_loops (0.35), pre:for_loop->loop_scope (0.05)
-    pre:loop_control->for_loop -> broken (0.51) "because the loop stops at 1"
-    pre:for_loop->nested_loops -> broken (0.21) "no empty line at the end"
+  for_loop (concept edges): 3 candidates -> kept pre:for_loop->nested_loops (0.50), pre:loop_control->for_loop (0.40), pre:for_loop->loop_scope (0.10)
+    pre:for_loop->nested_loops -> broken (0.30) "no empty line at the end"
+    pre:loop_control->for_loop -> broken (0.34) "because the loop stops at 1"
     pre:for_loop->loop_scope -> not applied (0.00) "none"
-  kept: pre:loop_control->for_loop [broken, tier 0, 0.51], pre:loop_variable->loop_control [broken, tier 0, 0.44], pre:for_loop->nested_loops [broken, tier 0, 0.21]
-  clause coverage: c1 <- mis:println->PrintEqualsPrintln; c2 <- pre:for_loop->nested_loops; c3 <- err:for_loop->WrongIterationCount
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.48], pre:loop_control->for_loop [broken, tier 0, 0.34], pre:for_loop->nested_loops [broken, tier 0, 0.30]
+  clause coverage: c1 <- lvl:for_loop@L2#1; c2 <- pre:for_loop->nested_loops; c3 <- err:for_loop->WrongIterationCount
   root-cause walk: held on ['for_loop', 'loop_control'], broken at ['for_loop', 'loop_control', 'nested_loops'], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'formatted_output': ['standard_output'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level for_loop: L2 via output_prediction "3 2 1 / 2 1 / 1"
-  level loop_variable: L2 via output_prediction "3 2 1 / 2 1 / 1"
-  level nested_loops: L2 via output_prediction "3 2 1 / 2 1 / 1"
+  level for_loop: L3 via relation_to_neighbour "3 2 1 / 2 1 / 1"
+  level loop_control: L0 via misconception "because the loop stops at 1"
+  level println: L3 via relation_to_neighbour "3 2 1 / 2 1 / 1"

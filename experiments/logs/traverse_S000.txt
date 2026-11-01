@@ -2,18 +2,27 @@ clauses: It will print 0
 start: 2 tagged concepts, all used
 start concepts (2): definite_assignment, println
 --- depth 1: current concepts ['definite_assignment', 'println']
-  definite_assignment: 1 candidates -> kept mis:definite_assignment->LocalVariablesAutoInitialized (1.00)
+  definite_assignment (misconceptions): 1 candidates -> kept mis:definite_assignment->LocalVariablesAutoInitialized (1.00)
     mis:definite_assignment->LocalVariablesAutoInitialized -> held (0.95) "It will print 0"
-  println: 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) "none"
+  definite_assignment (level ways): 14 candidates -> kept lvl:definite_assignment@L0#0 (0.70), lvl:definite_assignment@L2#1 (0.20), lvl:definite_assignment@L0#2 (0.10)
+    lvl:definite_assignment@L0#0 -> shown (0.63) "It will print 0"
+    lvl:definite_assignment@L2#1 -> not applied (0.00) "none"
+    lvl:definite_assignment@L0#2 -> shown (0.07) "It will print 0"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.30), mis:println->PrintEqualsPrintln (0.30)
     mis:println->PrintNewLineFirst -> not applied (0.00) "none"
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) "none"
     mis:println->PrintEqualsPrintln -> not applied (0.00) "none"
-  kept: mis:definite_assignment->LocalVariablesAutoInitialized [held, tier 0, 0.95]
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.60), lvl:println@L2#0 (0.25), lvl:println@L1#0 (0.15)
+    lvl:println@L2#1 -> not applied (0.00) "none"
+    lvl:println@L2#0 -> not applied (0.00) "none"
+    lvl:println@L1#0 -> shown (0.10) "It will print 0"
+  kept: mis:definite_assignment->LocalVariablesAutoInitialized [held, tier 0, 0.95], lvl:definite_assignment@L0#0 [shown, tier 2, 0.63], lvl:println@L1#0 [shown, tier 2, 0.10]
   root cause not settled, unexamined prerequisites: pre:declaration->definite_assignment
 --- depth 2: current concepts ['definite_assignment']
-  definite_assignment: 1 candidates -> kept pre:declaration->definite_assignment (1.00)
+  definite_assignment (concept edges): 1 candidates -> kept pre:declaration->definite_assignment (1.00)
     pre:declaration->definite_assignment -> broken (0.97) "It will print 0"
   kept: pre:declaration->definite_assignment [broken, tier 0, 0.97]
   clause coverage: c1 <- mis:definite_assignment->LocalVariablesAutoInitialized
   root-cause walk: held on ['definite_assignment'], broken at ['definite_assignment'], prerequisites {'definite_assignment': ['declaration'], 'println': ['statement']}
-  level declaration: L0 via misconception "It will print 0"
+  level definite_assignment: L0 via misconception "It will print 0"
+  level println: L1 via names_the_element "It will print 0"

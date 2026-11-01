@@ -4,26 +4,30 @@ Inputs: G = data/processed/<sid>_subgraph.json; the scenario (code, question, an
 the "traversal" block of experiments/config.json (width N, depth D, model, prune_tools, ...).
 Output: data/processed/<sid>_diagnosis.json.
 
-    python src/traverse.py S007                       # one scenario, default settings (start stage1, stop rule)
+    python src/traverse.py S007                       # one scenario
     python src/traverse.py S007 --prune-tools bm25    # rank edges by similarity instead of the prune prompt
     python src/traverse.py --all                      # every scenario in the file
 
-The LLM is used in three places only: edge pruning (replaceable by BM25 / sentence-BERT), edge labelling, and the
-level ladder for a concept that has no misconception link. Start concepts and the stop decision are not model calls.
+The LLM is used in two places only: edge pruning (replaceable by BM25 / sentence-BERT) and edge labelling. Start
+concepts, the stop decision and the levels are read from the graph by rule.
 
-Part 1 builds lookups from G (ToG's SPARQL server). Part 2 splits the answer into clauses and selects at most N start
-concepts, with no model call: Stage 1's tagged (non-generic) concepts, the given topic entities that ToG's released
-code reads from the dataset, plus a generic concept whose tagging text the answer repeats (e.g. "=" for assignment);
-more than N of them are ranked by BM25 of the answer against each concept's text. Part 3 is the main loop: edge search
-(no LLM), edge prune (LLM or bm25/sentencebert), target lookup, edge label (LLM, quote checked against the answer),
-keep the best N in two tiers (held misconception / broken edge first, then held errors, then confirmations), stop
-test, next nodes. Every labelled candidate whose quote is in the answer is recorded as evidence, kept or not. The
-stop test is a rule, no model call: (i) graph check, a held or broken concept with unexamined prerequisites in G
-sends the walk one hop back; (ii) clause coverage, stop when the quote of some evidence edge covers every clause.
-Part 4 diagnoses from the kept paths: held misconceptions (a held error beside a held misconception on the same
-concept is evidence, not a second diagnosis), broken edges, root cause along prerequisite edges, level per concept
-(level_mis_links, else the level ladder prompt), overall level, and the clauses no evidence covers. The LLM never
-answers from its own knowledge: every label is tied to an edge of G and a quote.
+Part 1 builds lookups from G (ToG's SPARQL server); each way of a has_level edge becomes an edge of its own
+(lvl:<concept>@<L>#i, logic = the way's exact rule), so levels are searched like everything else. Part 2 splits the
+answer into clauses and selects at most N start concepts, with no model call: Stage 1's tagged (non-generic)
+concepts, the given topic entities that ToG's released code reads from the dataset, plus a generic concept whose
+tagging text the answer repeats (e.g. "=" for assignment); more than N of them are ranked by BM25 of the answer
+against each concept's text. Part 3 is the main loop: edge search (no LLM; depth 1 = misconception / error edges and
+level ways, deeper = prerequisite / parallel edges in the same piece), edge prune (LLM or bm25/sentencebert, each
+family to N on its own), target lookup, edge label (LLM, quote checked against the answer: held / correct for a
+misconception edge, confirmed / broken for a concept edge, shown for a level way), keep the best N in tiers (held
+misconception / broken edge first, then held errors, then correct / confirmed / shown), stop test, next nodes. Every
+labelled candidate whose quote is in the answer is recorded as evidence, kept or not. The stop test is a rule, no
+model call: (i) graph check, a held or broken concept with unexamined prerequisites in G sends the walk one hop
+back; (ii) clause coverage, stop when the quote of some evidence edge covers every clause. Part 4 diagnoses: held
+misconceptions (a held error beside a held misconception on the same concept is evidence, not a second diagnosis),
+broken edges, root cause along prerequisite edges, level per concept by rule (L0 when a misconception is held or an
+L0 way is shown, otherwise the highest level with a shown way), overall level, and the clauses no evidence covers.
+The LLM never answers from its own knowledge: every label is tied to an edge of G and a quote.
 """
 from __future__ import annotations
 
@@ -48,7 +52,7 @@ DEFAULT_TRAVERSAL = {
     "few_shot_scenario": "S000", "cache_dir": "experiments/llm_cache",
 }
 
-STEPS = ("prune", "label", "level")   # the only places the model is asked
+STEPS = ("prune", "label")   # the only places the model is asked
 
 
 # ====================================================================== LLM client
@@ -172,10 +176,23 @@ class Graph:
             concept = l["level_node"].split("@")[0]
             self.level_link.setdefault((concept, l["misconception"]), l["level_node"])
         self.levels = {l["id"]: l for l in sg["levels"]}
-        self.level_edges_by_concept: dict[str, list[dict]] = defaultdict(list)
-        for le in sg["level_edges"]:
-            self.level_edges_by_concept[le["source"]].append(le)
+        # lookup 6: level ways as edges. Each way of a has_level edge becomes one edge concept -> level node, with the
+        # way's exact rule as its logic, so the search can prune and label it like any other edge. Ways of kind
+        # "misconception" are left out: they restate misconception edges, which the search already has.
+        self.ways_by_concept: dict[str, list[dict]] = defaultdict(list)
+        for le in sorted(sg["level_edges"], key=lambda x: (x["source"], x["level"])):
+            rec = self.levels.get(le["target"], {})
+            for i, w in enumerate(le.get("ways") or []):
+                if (w.get("way") or "") == "misconception":
+                    continue
+                self.ways_by_concept[le["source"]].append({
+                    "id": f"lvl:{le['target']}#{i}", "source": le["source"], "target": le["target"], "type": "level_way",
+                    "level": le["level"], "level_name": rec.get("name", ""), "deciding_question": rec.get("deciding_question", ""),
+                    "way": w.get("way"), "rule_type": w.get("rule_type_name") or w.get("rule_type"), "logic": w.get("exact_rule") or w.get("edge_logic") or ""})
         self.edge_by_id = {e["id"]: e for e in sg["mis_edges"] + sg["concept_edges"]}
+        for ws in self.ways_by_concept.values():
+            for e in ws:
+                self.edge_by_id[e["id"]] = e
 
     def other_end(self, edge: dict, concept: str) -> str:
         return edge["target"] if edge["source"] == concept else edge["source"]
@@ -183,6 +200,8 @@ class Graph:
     def edge_text(self, e: dict) -> str:
         if e["id"].startswith(("mis:", "err:")):
             return f"{e['id']} | wrong rule: {e.get('logic') or ''} | right rule: {e.get('twin_logic') or ''}"
+        if e["id"].startswith("lvl:"):
+            return f"{e['id']} | level {e['level']} way {e['way']}: {e.get('logic') or ''}"
         return f"{e['id']} | rule: {e.get('logic') or ''}"
 
 
@@ -312,15 +331,6 @@ def parse_label(reply: str, allowed: tuple[str, ...]) -> tuple[str, str, float]:
     return label, quote, conf
 
 
-def parse_level(reply: str) -> tuple[str | None, str | None, str]:
-    lvl = re.search(r"Level:\s*(L[0-4]|none)", reply, re.I)
-    way = re.search(r"Way:\s*(.+)", reply)
-    quote = re.search(r"Quote:\s*(.+)", reply)
-    level = lvl.group(1).upper() if lvl and lvl.group(1).lower() != "none" else None
-    w = way.group(1).strip() if way else None
-    return level, (None if not w or w.lower() == "none" else w), (quote.group(1).strip().strip('"') if quote else "")
-
-
 # ====================================================================== the traversal
 
 def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: LLM | None = None, log: list[str] | None = None) -> dict[str, Any]:
@@ -373,54 +383,66 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         candidates: list[dict[str, Any]] = []
         log.append(f"--- depth {depth}: current concepts {current}")
         for concept in current:
-            # 3a edge search
+            # 3a edge search. Depth 1: the concept's misconception / error edges and its level ways, as two families
+            # (each pruned to N on its own, so a diagnosis edge and a level way never compete for the same slot).
+            # Deeper: prerequisite / parallel edges inside the same piece.
             if depth == 1:
-                edges = list(g.mis_by_concept.get(concept, []))
+                families = [("misconceptions", list(g.mis_by_concept.get(concept, []))), ("level ways", list(g.ways_by_concept.get(concept, [])))]
             else:
-                edges = [e for e in g.cedges_by_concept.get(concept, []) if g.piece_of.get(g.other_end(e, concept)) == g.piece_of.get(concept)]
-            edges = [e for e in edges if e["id"] not in used]
-            edges.sort(key=lambda e: (0 if e.get("role") == "primary" else 1, e["id"]))
-            if not edges:
-                continue
-            examined.update(e["id"] for e in edges)
-            # 3b edge prune
-            if prune_tool == "llm":
-                p = prompts.PRUNE.format(code=code, question=question, answer=answer, concept=concept, n=min(N, len(edges)),
-                                         edges="\n".join("- " + g.edge_text(e) for e in edges), **ex)
-                kept = parse_prune(llm.ask(p, "prune"), {e["id"] for e in edges}, N)
-            else:
-                docs = [g.edge_text(e) for e in edges]
-                scores = bm25_scores(answer, docs) if prune_tool == "bm25" else sbert_scores(answer, docs)
-                top = sorted(zip(edges, scores), key=lambda x: -x[1])[:N]
-                tot = sum(max(s, 0) for _, s in top) or 1.0
-                kept = [(e["id"], max(s, 0) / tot) for e, s in top]
-            log.append(f"  {concept}: {len(edges)} candidates -> kept " + ", ".join(f"{e} ({s:.2f})" for e, s in kept))
-            # 3c target lookup + 3d edge label
-            for eid, pscore in kept:
-                e = g.edge_by_id[eid]
-                is_mis = eid.startswith(("mis:", "err:"))
-                kind = ("error" if eid.startswith("err:") else "misconception") if is_mis else e["type"]
-                if is_mis:
-                    target = e["target"]
-                    p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, edge_id=eid,
-                                                 logic=e.get("logic") or "", twin_logic=e.get("twin_logic") or "", **ex)
-                    label, quote, conf = parse_label(llm.ask(p, "label"), ("held", "correct", "not applied"))
+                families = [("concept edges", [e for e in g.cedges_by_concept.get(concept, []) if g.piece_of.get(g.other_end(e, concept)) == g.piece_of.get(concept)])]
+            for family, edges in families:
+                edges = [e for e in edges if e["id"] not in used]
+                edges.sort(key=lambda e: (0 if e.get("role") == "primary" else 1, e["id"]))
+                if not edges:
+                    continue
+                examined.update(e["id"] for e in edges)
+                # 3b edge prune
+                if prune_tool == "llm":
+                    p = prompts.PRUNE.format(code=code, question=question, answer=answer, concept=concept, n=min(N, len(edges)),
+                                             edges="\n".join("- " + g.edge_text(e) for e in edges), **ex)
+                    kept = parse_prune(llm.ask(p, "prune"), {e["id"] for e in edges}, N)
                 else:
-                    target = g.other_end(e, concept)
-                    p = prompts.LABEL_CONCEPT.format(code=code, question=question, clauses=clause_text, edge_id=eid,
-                                                     source=e["source"], target=e["target"], etype=e["type"], logic=e.get("logic") or "")
-                    label, quote, conf = parse_label(llm.ask(p, "label"), ("confirmed", "broken", "not applied"))
-                if label != "not applied" and not quote_in_answer(quote, answer):
-                    log.append(f"    {eid}: quote not found in the answer ({quote!r}) -> not applied")
-                    label = "not applied"
-                score = pscore * conf if label != "not applied" else 0.0
-                cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
-                        "label": label, "quote": quote, "confidence": conf, "prune_score": pscore, "score": round(score, 4),
-                        "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
-                candidates.append(cand)
-                if label != "not applied":
-                    evidence.append(cand)
-                log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
+                    docs = [g.edge_text(e) for e in edges]
+                    scores = bm25_scores(answer, docs) if prune_tool == "bm25" else sbert_scores(answer, docs)
+                    top = sorted(zip(edges, scores), key=lambda x: -x[1])[:N]
+                    tot = sum(max(s, 0) for _, s in top) or 1.0
+                    kept = [(e["id"], max(s, 0) / tot) for e, s in top]
+                log.append(f"  {concept} ({family}): {len(edges)} candidates -> kept " + ", ".join(f"{e} ({s:.2f})" for e, s in kept))
+                # 3c target lookup + 3d edge label
+                for eid, pscore in kept:
+                    e = g.edge_by_id[eid]
+                    is_mis = eid.startswith(("mis:", "err:"))
+                    is_way = eid.startswith("lvl:")
+                    kind = ("error" if eid.startswith("err:") else "misconception") if is_mis else ("level" if is_way else e["type"])
+                    if is_mis:
+                        target = e["target"]
+                        p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, edge_id=eid,
+                                                     logic=e.get("logic") or "", twin_logic=e.get("twin_logic") or "", **ex)
+                        label, quote, conf = parse_label(llm.ask(p, "label"), ("held", "correct", "not applied"))
+                    elif is_way:
+                        target = e["target"]
+                        p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, edge_id=eid, concept=concept,
+                                                     level=e["level"], level_name=e.get("level_name") or "", deciding_question=e.get("deciding_question") or "",
+                                                     way=e.get("way") or "", rule_type=e.get("rule_type") or "", rule=e.get("logic") or "")
+                        label, quote, conf = parse_label(llm.ask(p, "label"), ("shown", "not applied"))   # "not shown" reads as not applied
+                    else:
+                        target = g.other_end(e, concept)
+                        p = prompts.LABEL_CONCEPT.format(code=code, question=question, clauses=clause_text, edge_id=eid,
+                                                         source=e["source"], target=e["target"], etype=e["type"], logic=e.get("logic") or "")
+                        label, quote, conf = parse_label(llm.ask(p, "label"), ("confirmed", "broken", "not applied"))
+                    if label != "not applied" and not quote_in_answer(quote, answer):
+                        log.append(f"    {eid}: quote not found in the answer ({quote!r}) -> not applied")
+                        label = "not applied"
+                    score = pscore * conf if label != "not applied" else 0.0
+                    cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
+                            "label": label, "quote": quote, "confidence": conf, "prune_score": pscore, "score": round(score, 4),
+                            "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
+                    if is_way:
+                        cand.update(level=e["level"], way=e.get("way"))
+                    candidates.append(cand)
+                    if label != "not applied":
+                        evidence.append(cand)
+                    log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
         # 3e keep the best: diagnosis tier first (held misconception, broken), then held errors, then confirmations; score within a tier
         # (the same edge reached from both of its ends in one round counts once, with its higher score)
         best_by_edge: dict[str, dict[str, Any]] = {}
@@ -461,6 +483,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             if c["kind"] in ("misconception", "error"):
                 if c["label"] == "held" and c["source"] not in nxt:
                     nxt.append(c["source"])
+            elif c["kind"] == "level":
+                continue   # a level way leads nowhere: it describes the concept itself
             else:
                 for end in (c["target"], c["source"]):
                     if end not in nxt:
@@ -503,25 +527,37 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         if root is None or len(pre_in.get(cand["concept"], [])) < len(pre_in.get(root["concept"], [])):
             root = cand
 
-    on_paths = sorted({c["source"] for c in paths} | {c["target"] for c in paths if c["kind"] != "misconception"})
+    # Levels by rule, from the evidence, no model call. A concept's level is L0 when it holds a misconception or an L0
+    # way is shown (the L0 deciding question: does every rule the answer applies agree with the language rule?).
+    # Otherwise it is the highest level with a shown way: the levels are cumulative, an answer at L4 also does L3.
+    # A concept with no held misconception and no shown way gets no level.
+    held_mis_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    shown_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for c in evidence:
+        if c["kind"] == "misconception" and c["label"] == "held":
+            held_mis_ev[c["source"]].append(c)
+        elif c["kind"] == "level" and c["label"] == "shown":
+            shown_ev[c["source"]].append(c)
+    touched = sorted({c["source"] for c in evidence} | {c["target"] for c in evidence if c["kind"] not in ("misconception", "error", "level")})
     levels: dict[str, dict[str, Any]] = {}
-    for concept in on_paths:
-        linked = [(m, g.level_link[(concept, m)]) for m in held_by_concept.get(concept, []) if (concept, m) in g.level_link]
-        if linked:
-            m, node = linked[0]
-            levels[concept] = {"level": node.split("@")[1], "way": "misconception", "misconception": m, "source": "level_mis_links"}
+    for concept in touched:
+        held_here = sorted(held_mis_ev.get(concept, []), key=lambda c: -c["score"])
+        ways_here = sorted(shown_ev.get(concept, []), key=lambda c: (c["level"], c["score"]), reverse=True)
+        l0_ways = [c for c in ways_here if c["level"] == "L0"]
+        if held_here:
+            m = held_here[0]
+            levels[concept] = {"level": "L0", "way": "misconception", "misconception": m["target"], "quote": m["quote"], "edge": m["edge"],
+                               "source": "level_mis_links" if (concept, m["target"]) in g.level_link else "held_misconception"}
+        elif l0_ways:
+            w = l0_ways[0]
+            levels[concept] = {"level": "L0", "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way"}
+        elif ways_here:
+            w = ways_here[0]
+            levels[concept] = {"level": w["level"], "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way",
+                               "also_shown": [f"{c['level']} {c['way']}" for c in ways_here[1:]]}
+        else:
             continue
-        lines = []
-        for le in sorted(g.level_edges_by_concept.get(concept, []), key=lambda x: x["level"]):
-            rec = g.levels.get(le["target"], {})
-            ways = "; ".join(f"{w.get('way')} ({w.get('rule_type')}): {(w.get('exact_rule') or '')[:160]}" for w in le["ways"])
-            lines.append(f"{le['level']} {rec.get('name', '')}\n  deciding question: {rec.get('deciding_question', '')}\n  ways: {ways}")
-        if not lines:
-            continue
-        reply = llm.ask(prompts.LEVEL_LADDER.format(code=code, question=question, clauses=clause_text, concept=concept, levels="\n".join(lines)), "level")
-        lvl, way, quote = parse_level(reply)
-        levels[concept] = {"level": lvl, "way": way, "quote": quote, "source": "level_ladder"}
-        log.append(f"  level {concept}: {lvl} via {way} \"{quote}\"")
+        log.append(f"  level {concept}: {levels[concept]['level']} via {levels[concept]['way']} \"{levels[concept]['quote']}\"")
 
     if root:
         overall = levels.get(root["concept"], {}).get("level")

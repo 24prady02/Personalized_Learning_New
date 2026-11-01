@@ -48,7 +48,7 @@ src/
   evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
   utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
   traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
-  prompts.py                                 the three Stage 2 prompts: edge prune, edge label, level ladder (the only places the model is asked)
+  prompts.py                                 the Stage 2 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
   compare.py                                 Stage 2 vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
 notebooks/
   explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
@@ -95,10 +95,10 @@ Stage 2 reads the question and the student's answer and walks the Stage 1 subgra
 a knowledge graph. Settings are in the `traversal` block of `experiments/config.json` (width N = 3, depth D = 3,
 model, prune tool llm / bm25 / sentencebert).
 
-The model is used in three places only: edge pruning (replaceable by BM25 / sentence-BERT), edge labelling, and
-the level ladder for a concept that has no misconception link. Start concepts are Stage 1's tagged concepts, as
-ToG's released code uses the given topic entities, and the stop decision is a rule (graph check plus clause
-coverage).
+The model is used in two places only: edge pruning (replaceable by BM25 / sentence-BERT) and edge labelling.
+Start concepts are Stage 1's tagged concepts, as ToG's released code uses the given topic entities; the stop
+decision is a rule (graph check plus clause coverage); and levels are read from the graph by rule, because the
+level ways are edges of the search like everything else.
 
 1. **Clauses and start concepts.** Quote characters are removed, then the answer is split at sentence ends, `;`,
    before `because` / `so` (after a comma, a space or a closing quote), and a parenthetical remark of two or more
@@ -108,16 +108,21 @@ coverage).
    assignment in "a = b"). When there are more than N, they are ranked by BM25 of the student's answer against each concept's text (its id
    with underscores as spaces plus the texts of its misconception and concept edges), ties broken by the number
    of Stage 1 code hits, then by id.
-2. **Edge search** (no model). Depth 1: the concept's misconception and error edges. Deeper: its prerequisite /
-   parallel edges inside the same connected piece. Edges already on a path are skipped; primary role first.
-3. **Edge prune.** One call per concept picks up to N edges the answer engages with, scores summing to 1
-   (or BM25 / sentence-BERT similarity instead of the call).
+2. **Edge search** (no model). Depth 1: two families, the concept's misconception and error edges, and its
+   **level ways**. Every way of a has_level edge in the graph is an edge of its own (`lvl:<concept>@<L>#i`, logic =
+   the way's exact rule); ways of kind "misconception" are left out because the misconception edges already carry
+   them. Deeper: the concept's prerequisite / parallel edges inside the same connected piece. Edges already on a
+   path are skipped; primary role first.
+3. **Edge prune.** One call per concept and family picks up to N edges the answer engages with, scores summing
+   to 1 (or BM25 / sentence-BERT similarity instead of the call). Pruning each family on its own means a level way
+   never competes with a misconception edge for a slot.
 4. **Edge label.** One call per kept edge: held / correct / not applied for a misconception edge shown with its
-   wrong rule and right rule; confirmed / broken / not applied for a concept edge shown with its logic. The reply
-   quotes the answer verbatim and gives a confidence; a quote not found in the answer makes the label not applied.
-   Score = prune score × confidence.
-5. **Keep the best N in two tiers**: held misconceptions and broken edges first, then held errors, then correct /
-   confirmed edges; by score within a tier (an edge reached from both ends in one round counts once).
+   wrong rule and right rule; confirmed / broken / not applied for a concept edge shown with its logic; shown /
+   not shown for a level way shown with its level, the level's deciding question and what an answer that shows
+   the way does. The reply quotes the answer verbatim and gives a confidence; a quote not found in the answer
+   makes the label not applied. Score = prune score × confidence.
+5. **Keep the best N in tiers**: held misconceptions and broken edges first, then held errors, then correct /
+   confirmed / shown edges; by score within a tier (an edge reached from both ends in one round counts once).
    Confirmations therefore never crowd out a diagnosis. Every labelled edge whose quote is in the answer is
    recorded as **evidence**, kept or not, so a dropped "correct" label still explains its clause.
 6. **Stop test** (no model). (i) Graph check: if a concept with a held misconception or a broken edge has a
@@ -126,32 +131,40 @@ coverage).
    it. The walk stops with reason "sufficient" when nothing is pending and every clause is covered; at max depth
    the uncovered clauses are reported as unexplained.
 7. **Next concepts**: the source of each held misconception (to walk back), both ends of each kept concept edge.
+   A level way leads nowhere: it describes the concept itself.
 8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
    Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
    concept that itself holds a misconception or is the target of a broken prerequisite edge (a broken A → B says
-   the student did not carry A into B, so the fault sits at B). Level per concept on a path: from level_mis_links
-   when a held misconception is linked, otherwise one level-ladder call over the deciding questions L0 → L4.
-   Overall level: the root-cause concept's level (for an answer with no error, the lowest level reached).
-   Output also lists the evidence, which edge covers each clause, the uncovered clauses, the stop reason
-   (sufficient / half_stop / max depth) and the number of prompts per step (prune, label, level).
+   the student did not carry A into B, so the fault sits at B). Level per concept, by rule from the evidence and
+   with no model call: L0 when the concept holds a misconception or an L0 way (everyday reading, inconsistent
+   trace) is shown, since the L0 deciding question asks whether every rule the answer applies agrees with the
+   language rule; otherwise the highest level with a shown way, because the levels are cumulative and an answer
+   at L4 also does L3. A concept with no held misconception and no shown way gets no level. Overall level: the
+   root-cause concept's level (for an answer with no error, the lowest level reached). Output also lists the
+   evidence, which edge covers each clause, the uncovered clauses, the stop reason (sufficient / half_stop / max
+   depth) and the number of prompts per step (prune, label).
 
 The model never answers from its own knowledge: every label is an edge of the graph plus a quote. Replies are
 cached in `experiments/llm_cache/`, so a re-run costs only the prompts that changed.
 
 Results over the 10 gold scenarios (`python src/compare.py`, full table in `results/stage2_results.md`; gold is
-used for checking only): held misconception set right in 9/10, root cause right in 10/10, overall level right in
-6/10, 42 of 72 points (one point each for held set, correct set, root cause and overall level, plus one per
-gold-scored concept level and per gold edge), 114 prompts in all, none of them for start concepts or the stop
-decision. S134 is found through the generic-concept rule: its only tagged concept is variable_swap, the gold
-misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic, and the answer repeats
-the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root cause loop_control,
-L0). Overall levels are the weak part: S026 and S047 label no edge at all (correct answers on variable_swap and
-formatted_output), so they get no level; S057 and S137 land one level away from the gold.
+used for checking only): held misconception set right in 9/10, every gold "correct" misconception found in 8/10,
+root cause right in 10/10, overall level right in 8/10, 46 of 72 points (one point each for held set, correct set,
+root cause and overall level, plus one per gold-scored concept level and per gold edge), 195 prompts in all, every
+one of them a prune or a label. S134 is found through the generic-concept rule: its only tagged concept is
+variable_swap, the gold misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic,
+and the answer repeats the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root
+cause loop_control, L0). The two remaining level misses: S057 gets L2 overall where the gold says L4, because the
+prune step did not pick the L4 way the student shows ("predict a change": the cast keeps the fraction) and the
+overall level of an error-free answer is the lowest level among its concepts, which arithmetic_operators pulls to
+L2; S052 gets L3 where the gold says L2, because the label step read "args is empty" as showing an L3 way.
 
-An earlier version asked the model for the start concepts (a START prompt over the clauses) and for the stop
-decision (a SUFFICIENCY prompt over the kept paths). Run side by side over the same 10 scenarios it scored the same
-42/72 points with 126 prompts; the stop prompt changed no diagnosis and the start prompt found nothing the rules
-above do not. Both were removed.
+Two earlier versions were run over the same 10 scenarios and removed. One asked the model for the start concepts
+(a START prompt) and the stop decision (a SUFFICIENCY prompt): same 42/72 points as the rule-based start and stop
+of the time, 126 prompts against 114; neither prompt changed a diagnosis. The other levelled a concept with one
+level-ladder prompt over all its ways after the walk, and only for concepts on a kept path: 42/72 points, overall
+level right in 6/10, with correct answers (S026, S047) getting no level at all because no misconception edge was
+labelled and the level ways were never searched. Making the ways edges of the search raised that to 46/72 and 8/10.
 
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /

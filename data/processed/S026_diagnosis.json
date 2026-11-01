@@ -17,21 +17,97 @@
  "error_evidence": [],
  "broken_edges": [],
  "root_cause": null,
- "levels": {},
- "overall_level": null,
- "paths": [],
- "evidence": [],
- "clause_coverage": {},
- "unexplained_clauses": [
-  "a becomes b and b becomes a"
+ "levels": {
+  "variable_swap": {
+   "level": "L1",
+   "way": "states_the_rule",
+   "quote": "a becomes b and b becomes a",
+   "edge": "lvl:variable_swap@L1#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 names_the_element"
+   ]
+  }
+ },
+ "overall_level": "L1",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "variable_swap",
+   "edge": "lvl:variable_swap@L1#1",
+   "target": "variable_swap@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "int t = a; a = b; b = t; exchanges a and b. The temporary t must have their type, and the three statements must run in exactly this order.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "variable_swap",
+   "edge": "lvl:variable_swap@L1#0",
+   "target": "variable_swap@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "Variable swap: the three-assignment idiom that exchanges the values of two variables through a temporary variable.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  }
  ],
- "stop_reason": "half_stop",
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "variable_swap",
+   "edge": "lvl:variable_swap@L1#1",
+   "target": "variable_swap@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "int t = a; a = b; b = t; exchanges a and b. The temporary t must have their type, and the three statements must run in exactly this order.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "variable_swap",
+   "edge": "lvl:variable_swap@L1#0",
+   "target": "variable_swap@L1",
+   "kind": "level",
+   "label": "shown",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "Variable swap: the three-assignment idiom that exchanges the values of two variables through a temporary variable.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  }
+ ],
+ "clause_coverage": {
+  "a becomes b and b becomes a": "lvl:variable_swap@L1#1"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 69,
+ "llm_calls": 5,
+ "llm_cache_hits": 59,
  "llm_calls_by_step": {
-  "prune": 1,
-  "label": 2,
-  "level": 0
+  "prune": 2,
+  "label": 5
  }
 }
