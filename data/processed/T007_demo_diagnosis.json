@@ -1,0 +1,628 @@
+{
+ "scenario": "T007_demo",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "i % 2 == 0 means theres no remainder when you divide by 2",
+  "so its true for 0 and 2",
+  "count++ adds 2 to count each time",
+  "so count ends at 4 and it prints 4"
+ ],
+ "start_concepts": [
+  "for_loop",
+  "loop_control",
+  "remainder_operator"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "increment_operators",
+   "misconception": "IncrementByTwo",
+   "kind": "misconception",
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "score": 0.873
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "score": 0.63,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  }
+ ],
+ "root_cause": {
+  "concept": "increment_operators",
+  "misconception": "IncrementByTwo"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so its true for 0 and 2",
+   "edge": "lvl:for_loop@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "increment_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IncrementByTwo",
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "rule": "wrong rule: i++ increases i by 2. Right rule: i++ (and ++i) increases i by exactly 1.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so its true for 0 and 2",
+   "edge": "lvl:loop_control@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so its true for 0 and 2",
+   "edge": "lvl:loop_variable@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  },
+  "remainder_operator": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "edge": "lvl:remainder_operator@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 names_the_element"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "mis:remainder_operator->RemainderIsQuotient",
+   "target": "RemainderIsQuotient",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "17 % 5 is 3 (the quotient).",
+   "twin_logic": "% returns the remainder, so 17 % 5 is 2."
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "lvl:remainder_operator@L3#1",
+   "target": "remainder_operator@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.9,
+   "score": 0.54,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.97,
+   "prune_score": 0.9,
+   "score": 0.873,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L0#0",
+   "target": "increment_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so its true for 0 and 2; count++ adds 2 to count each time",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#0",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "so its true for 0 and 2; count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "mis:remainder_operator->RemainderIsQuotient",
+   "target": "RemainderIsQuotient",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "17 % 5 is 3 (the quotient).",
+   "twin_logic": "% returns the remainder, so 17 % 5 is 2."
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "mis:remainder_operator->RemainderIsSubtraction",
+   "target": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "lvl:remainder_operator@L3#1",
+   "target": "remainder_operator@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "lvl:remainder_operator@L1#0",
+   "target": "remainder_operator@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2",
+   "confidence": 0.9,
+   "prune_score": 0.35,
+   "score": 0.315,
+   "logic": "Remainder operator %: the binary operator that gives the remainder after dividing a by b.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "lvl:remainder_operator@L2#1",
+   "target": "remainder_operator@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "17 % 3 is 2, 76 % 12 is 4, 1234 % 99 is 46, -14 % 3 is -2, and 14 % -3 is 2.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.9,
+   "score": 0.54,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.97,
+   "prune_score": 0.9,
+   "score": 0.873,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L0#0",
+   "target": "increment_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "count++ adds 2 to count each time; so count ends at 4 and it prints 4",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so its true for 0 and 2",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  }
+ ],
+ "clause_coverage": {
+  "i % 2 == 0 means theres no remainder when you divide by 2": "mis:remainder_operator->RemainderIsQuotient",
+  "so its true for 0 and 2": "mis:for_loop->ForIsConditional",
+  "count++ adds 2 to count each time": "mis:for_loop->ForIsConditional",
+  "so count ends at 4 and it prints 4": "lvl:for_loop@L2#0"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 25
+ }
+}

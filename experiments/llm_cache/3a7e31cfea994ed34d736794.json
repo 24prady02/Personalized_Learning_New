@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint sum = 7;\nint count = 2;\ndouble avg = (double) (sum / count);\nSystem.out.println(avg);\n\nQuestion: What does this program print, and why?\n\nStudent's answer, split into clauses:\nc1: It prints 3.5\nc2: The (double) cast turns the division into a decimal division\nc3: so 7 / 2 gives 3.5 and that is stored in avg\n\nEdge: pre:type_conversion->explicit_cast  (type_conversion -> explicit_cast, prerequisite)\nRule (logic): A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nClauses: 2, 3\nConfidence: 0.8"
+}

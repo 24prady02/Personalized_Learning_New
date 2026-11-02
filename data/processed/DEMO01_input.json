@@ -1,0 +1,5 @@
+{
+ "code": "int count = 0;\nfor (int i = 0; i < 4; i++) {\n  if (i % 2 == 0) {\n    count++;\n  }\n}\nSystem.out.println(count);",
+ "question": "What is printed? Explain.",
+ "answer": "i % 2 == 0 means there's no remainder when you divide by 2, so it's true for 0 and 2. count++ adds 2 to count each time, so count ends at 4 and it prints 4."
+}

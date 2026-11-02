@@ -1,0 +1,73 @@
+clauses: i % 2 == 0 means theres no remainder when you divide by 2 | so its true for 0 and 2 | count++ adds 2 to count each time | so count ends at 4 and it prints 4
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: for_loop 31.18 (hits 1), loop_control 29.31 (hits 1), remainder_operator 27.01 (hits 1), arithmetic_operators 24.76 (hits 1), if_statement 19.18 (hits 1), loop_body 19.03 (hits 1), increment_operators 18.02 (hits 1), assignment 16.89 (hits 1), control_flow 16.87 (hits 1), loop_variable 13.02 (hits 1), counter_pattern 12.43 (hits 2), comparison_operators 12.39 (hits 1), boolean_expression 12.15 (hits 2), loop_scope 11.57 (hits 1), println 10.51 (hits 1)
+start: chosen for_loop, loop_control, remainder_operator
+start concepts (3): for_loop, loop_control, remainder_operator
+--- depth 1: current concepts ['for_loop', 'loop_control', 'remainder_operator']
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ForIsConditional (0.40), err:for_loop->WrongIterationCount (0.35), mis:for_loop->ForLoopPartSkipped (0.25)
+    mis:for_loop->ForIsConditional -> correct (0.32) "so its true for 0 and 2; count++ adds 2 to count each time"
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    mis:for_loop->ForLoopPartSkipped -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L2#2 (0.30), lvl:for_loop@L2#0 (0.20)
+    lvl:for_loop@L2#1 -> shown (0.30) "so its true for 0 and 2"
+    lvl:for_loop@L2#2 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.12) "so its true for 0 and 2; count++ adds 2 to count each time; so count ends at 4 and it prints 4"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.50), err:loop_control->WrongIterationCount (0.35), mis:loop_control->LoopStepAlwaysOne (0.15)
+    mis:loop_control->OffByOneBound -> correct (0.35) "so its true for 0 and 2"
+    err:loop_control->WrongIterationCount -> correct (0.21) "so its true for 0 and 2"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#2 (0.30), lvl:loop_control@L2#0 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.30) "so its true for 0 and 2"
+    lvl:loop_control@L2#2 -> not applied (0.00) ""
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.50), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.10)
+    mis:remainder_operator->RemainderIsQuotient -> correct (0.45) "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2"
+    mis:remainder_operator->RemainderIsSubtraction -> correct (0.34) "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2"
+    mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L3#1 (0.50), lvl:remainder_operator@L1#0 (0.35), lvl:remainder_operator@L2#1 (0.15)
+    lvl:remainder_operator@L3#1 -> shown (0.42) "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2"
+    lvl:remainder_operator@L1#0 -> shown (0.32) "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2"
+    lvl:remainder_operator@L2#1 -> shown (0.10) "so its true for 0 and 2"
+  kept: mis:remainder_operator->RemainderIsQuotient [correct, tier 2, 0.45], lvl:remainder_operator@L3#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.35]
+  clause coverage: c1 <- mis:remainder_operator->RemainderIsQuotient; c2 <- mis:for_loop->ForIsConditional; c3 <- mis:for_loop->ForIsConditional; c4 <- lvl:for_loop@L2#0
+  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['for_loop', 'loop_control']
+  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.90), pre:for_loop->loop_scope (0.10)
+    pre:loop_control->for_loop -> confirmed (0.54) "so its true for 0 and 2"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_control (concept edges): 2 candidates -> kept pre:loop_control->increment_operators (0.70), pre:loop_variable->loop_control (0.30)
+    pre:loop_control->increment_operators -> broken (0.63) "count++ adds 2 to count each time; so count ends at 4 and it prints 4"
+    pre:loop_variable->loop_control -> confirmed (0.18) "so its true for 0 and 2"
+  kept: pre:loop_control->increment_operators [broken, tier 0, 0.63], pre:loop_control->for_loop [confirmed, tier 2, 0.54], pre:loop_variable->loop_control [confirmed, tier 2, 0.18]
+  reached across pre:loop_control->increment_operators, entered next: increment_operators
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- mis:remainder_operator->RemainderIsQuotient; c2 <- mis:for_loop->ForIsConditional; c3 <- mis:for_loop->ForIsConditional; c4 <- lvl:for_loop@L2#0
+  not yet read: own edges of increment_operators, own edges of loop_variable
+--- depth 3: current concepts ['increment_operators', 'loop_control', 'for_loop', 'loop_variable']
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.90), mis:increment_operators->IdiomOverridesCode (0.07), mis:increment_operators->PrePostIncrementSameValue (0.03)
+    mis:increment_operators->IncrementByTwo -> held (0.87) "count++ adds 2 to count each time; so count ends at 4 and it prints 4"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#0 (0.70), lvl:increment_operators@L2#2 (0.20), lvl:increment_operators@L1#0 (0.10)
+    lvl:increment_operators@L0#0 -> shown (0.67) "count++ adds 2 to count each time; so count ends at 4 and it prints 4"
+    lvl:increment_operators@L2#2 -> not applied (0.00) ""
+    lvl:increment_operators@L1#0 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.70), mis:loop_variable->LoopUpdateChangesDirection (0.20), mis:loop_variable->ForInitRepeats (0.10)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.60) "so its true for 0 and 2"
+    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.45), lvl:loop_variable@L2#2 (0.35), lvl:loop_variable@L2#0 (0.20)
+    lvl:loop_variable@L2#1 -> shown (0.32) "so its true for 0 and 2"
+    lvl:loop_variable@L2#2 -> shown (0.21) "so its true for 0 and 2"
+    lvl:loop_variable@L2#0 -> not applied (0.00) ""
+  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.87], lvl:increment_operators@L0#0 [shown, tier 2, 0.67], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.59]
+  clause coverage: c1 <- mis:remainder_operator->RemainderIsQuotient; c2 <- mis:for_loop->ForIsConditional; c3 <- mis:for_loop->ForIsConditional; c4 <- lvl:for_loop@L2#0
+  not yet read: pre:assignment->increment_operators
+  root-cause walk: held on ['increment_operators'], broken at [] (consequences: pre:loop_control->increment_operators), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'counter_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L2 via output_prediction "so its true for 0 and 2"
+  level increment_operators: L0 via misconception "count++ adds 2 to count each time; so count ends at 4 and it prints 4"
+  level loop_control: L2 via output_prediction "so its true for 0 and 2"
+  level loop_variable: L2 via output_prediction "so its true for 0 and 2"
+  level remainder_operator: L3 via purpose_of_the_whole "i % 2 == 0 means theres no remainder when you divide by 2; so its true for 0 and 2"
