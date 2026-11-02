@@ -1,0 +1,47 @@
+clauses: At the if nothing happens yet | because x is 1 | Then x becomes 10 | so x > 5 is true and the if prints big | Then it prints 10
+start: generic concepts whose tagging text occurs in the answer: expression
+start: BM25 of the answer against each tagged concept: if_statement 12.44 (hits 1), println 12.24 (hits 1), control_flow 9.81 (hits 1), boolean_expression 7.82 (hits 1), expression 6.95 (hits 2), comparison_operators 5.45 (hits 1)
+start: chosen if_statement, println, control_flow
+start concepts (3): if_statement, println, control_flow
+--- depth 1: current concepts ['if_statement', 'println', 'control_flow']
+  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->IfConditionWatched (0.50), mis:if_statement->IfWaitsForCondition (0.40), mis:if_statement->IfConditionCheckedInHindsight (0.10)
+    mis:if_statement->IfConditionWatched -> held (0.47) "At the if nothing happens yet; because x is 1; Then x becomes 10; so x > 5 is true and the if prints big"
+    mis:if_statement->IfWaitsForCondition -> held (0.32) "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+    mis:if_statement->IfConditionCheckedInHindsight -> not applied (0.00) ""
+  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L0#0 (0.70), lvl:if_statement@L0#14 (0.20), lvl:if_statement@L2#0 (0.10)
+    lvl:if_statement@L0#0 -> shown (0.67) "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+    lvl:if_statement@L0#14 -> shown (0.18) "At the if nothing happens yet; because x is 1; so x > 5 is true and the if prints big"
+    lvl:if_statement@L2#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.25), mis:println->PrintNewLineFirst (0.15)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L2#0 (0.20)
+    lvl:println@L2#1 -> shown (0.30) "so x > 5 is true and the if prints big; Then it prints 10"
+    lvl:println@L3#0 -> shown (0.21) "Then it prints 10"
+    lvl:println@L2#0 -> not applied (0.00) ""
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->IfConditionWatched (0.60), mis:control_flow->IfWaitsForCondition (0.30), mis:control_flow->CodeAfterIfSkipped (0.10)
+    mis:control_flow->IfConditionWatched -> held (0.54) "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+    mis:control_flow->IfWaitsForCondition -> held (0.26) "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+    mis:control_flow->CodeAfterIfSkipped -> correct (0.08) "so x > 5 is true and the if prints big; Then it prints 10"
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#3 (0.65), lvl:control_flow@L0#0 (0.20), lvl:control_flow@L2#0 (0.15)
+    lvl:control_flow@L0#3 -> shown (0.62) "Then x becomes 10; so x > 5 is true and the if prints big"
+    lvl:control_flow@L0#0 -> shown (0.17) "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+    lvl:control_flow@L2#0 -> not applied (0.00) ""
+  kept: mis:control_flow->IfConditionWatched [held, tier 0, 0.54], mis:if_statement->IfConditionWatched [held, tier 0, 0.47], mis:if_statement->IfWaitsForCondition [held, tier 0, 0.32]
+  clause coverage: c1 <- mis:if_statement->IfConditionWatched; c2 <- mis:if_statement->IfConditionWatched; c3 <- mis:if_statement->IfConditionWatched; c4 <- mis:if_statement->IfConditionWatched; c5 <- lvl:println@L2#1
+  root cause not settled, unexamined edges: pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:statement->control_flow
+--- depth 2: current concepts ['control_flow', 'if_statement']
+  control_flow (concept edges): 2 candidates -> kept pre:statement->control_flow (0.60), pre:control_flow->if_statement (0.40)
+    pre:statement->control_flow -> broken (0.54) "At the if nothing happens yet; so x > 5 is true and the if prints big"
+    pre:control_flow->if_statement -> broken (0.36) "At the if nothing happens yet; so x > 5 is true and the if prints big"
+  if_statement (concept edges): 2 candidates -> kept pre:control_flow->if_statement (0.70), pre:boolean_expression->if_statement (0.30)
+    pre:control_flow->if_statement -> broken (0.63) "At the if nothing happens yet; so x > 5 is true and the if prints big"
+    pre:boolean_expression->if_statement -> confirmed (0.20) "At the if nothing happens yet; because x is 1; so x > 5 is true and the if prints big"
+  kept: pre:control_flow->if_statement [broken, tier 0, 0.63], pre:statement->control_flow [broken, tier 0, 0.54], pre:boolean_expression->if_statement [confirmed, tier 2, 0.20]
+  clause coverage: c1 <- mis:if_statement->IfConditionWatched; c2 <- mis:if_statement->IfConditionWatched; c3 <- mis:if_statement->IfConditionWatched; c4 <- mis:if_statement->IfConditionWatched; c5 <- lvl:println@L2#1
+  held: mis:if_statement->IfConditionWatched, mis:if_statement->IfWaitsForCondition (same words as mis:if_statement->IfConditionWatched); filed at the dependent concept: mis:control_flow->IfConditionWatched
+  root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:control_flow->if_statement, pre:statement->control_flow), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level control_flow: L0 via misconception "At the if nothing happens yet; Then x becomes 10; so x > 5 is true and the if prints big"
+  level if_statement: L0 via misconception "At the if nothing happens yet; because x is 1; Then x becomes 10; so x > 5 is true and the if prints big"
+  level println: L3 via relation_to_neighbour "Then it prints 10"

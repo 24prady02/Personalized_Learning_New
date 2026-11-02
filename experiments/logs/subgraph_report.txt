@@ -9,5 +9,25 @@ S052  tagged   8  nodes   8 (1 generic kept)  edges   7  mis  17  levels  40  li
 S057  tagged  26  nodes  26 (5 generic kept)  edges  22  mis 167  levels 130  links 193  pieces 4  ok    missed: -
 S134  tagged   2  nodes   2 (1 generic kept)  edges   1  mis  17  levels  10  links  17  pieces 1  ok    missed: -
 S137  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  pieces 1  ok    missed: -
-fully covered: 10 / 10   (mean concepts per subgraph: 9.6; S000 is the reference case, not counted)
-non-generic concepts firing in >= 12 scenarios: none
+T001  tagged   7  nodes   7 (3 generic kept)  edges   5  mis  30  levels  35  links  33  pieces 2  ok    missed: -
+T002  tagged   8  nodes   8 (3 generic kept)  edges   5  mis  35  levels  40  links  46  pieces 3  ok    missed: -
+T003  tagged   9  nodes   9 (4 generic kept)  edges   8  mis  87  levels  45  links  84  pieces 1  ok    missed: -
+T004  tagged   6  nodes   6 (2 generic kept)  edges   4  mis  31  levels  30  links  37  pieces 2  ok    missed: -
+T005  tagged  19  nodes  19 (4 generic kept)  edges  16  mis 155  levels  95  links 160  pieces 3  ok    missed: -
+T006  tagged  13  nodes  13 (3 generic kept)  edges  10  mis 119  levels  65  links 124  pieces 3  ok    missed: -
+T007  tagged  17  nodes  17 (3 generic kept)  edges  14  mis 152  levels  85  links 155  pieces 3  ok    missed: -
+T008  tagged  12  nodes  12 (4 generic kept)  edges  11  mis 102  levels  60  links 103  pieces 1  ok    missed: -
+T009  tagged   9  nodes   9 (3 generic kept)  edges   8  mis  88  levels  45  links  91  pieces 1  ok    missed: -
+T010  tagged   9  nodes   9 (4 generic kept)  edges   8  mis  87  levels  45  links  84  pieces 1  ok    missed: -
+T011  tagged  18  nodes  18 (4 generic kept)  edges  15  mis 134  levels  90  links 141  pieces 3  ok    missed: -
+T012  tagged  16  nodes  16 (3 generic kept)  edges  13  mis 135  levels  80  links 143  pieces 3  ok    missed: -
+T013  tagged  10  nodes  10 (4 generic kept)  edges  10  mis  64  levels  50  links  73  pieces 2  ok    missed: -
+T014  tagged  14  nodes  14 (3 generic kept)  edges  10  mis 123  levels  70  links 128  pieces 4  ok    missed: -
+T015  tagged   8  nodes   8 (4 generic kept)  edges   5  mis  50  levels  40  links  51  pieces 3  ok    missed: -
+T016  tagged   4  nodes   4 (2 generic kept)  edges   5  mis  18  levels  20  links  16  pieces 1  ok    missed: -
+T017  tagged   5  nodes   5 (2 generic kept)  edges   2  mis  25  levels  25  links  29  pieces 3  ok    missed: -
+T018  tagged  13  nodes  13 (4 generic kept)  edges  12  mis 119  levels  65  links 122  pieces 2  ok    missed: -
+T019  tagged   6  nodes   6 (3 generic kept)  edges   3  mis  42  levels  30  links  45  pieces 3  ok    missed: -
+T020  tagged  10  nodes  10 (4 generic kept)  edges   9  mis  93  levels  50  links  91  pieces 1  ok    missed: -
+fully covered: 30 / 30   (mean concepts per subgraph: 10.3; S000 is the reference case, not counted)
+non-generic concepts firing in >= 12 scenarios: println (20), comparison_operators (18), boolean_expression (17), control_flow (16), arithmetic_operators (13)

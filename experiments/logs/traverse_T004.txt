@@ -1,0 +1,39 @@
+clauses: The first line prints 3 | because int division drops the fraction of 3.4 | The second line also prints 3 | because % gives how many times 5 fits into 17
+start: BM25 of the answer against each tagged concept: integer_division 12.84 (hits 1), remainder_operator 11.44 (hits 1), println 9.79 (hits 1), arithmetic_operators 9.28 (hits 1)
+start: chosen integer_division, remainder_operator, println
+start concepts (3): integer_division, remainder_operator, println
+--- depth 1: current concepts ['integer_division', 'remainder_operator', 'println']
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.80), mis:integer_division->NegativeRemainderSign (0.15), mis:integer_division->CastAfterIntDivision (0.05)
+    mis:integer_division->IntegerDivisionGivesFraction -> correct (0.76) "The first line prints 3; because int division drops the fraction of 3.4"
+    mis:integer_division->NegativeRemainderSign -> not applied (0.00) ""
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L1#0 (0.45), lvl:integer_division@L2#1 (0.35), lvl:integer_division@L3#2 (0.20)
+    lvl:integer_division@L1#0 -> shown (0.43) "The first line prints 3; because int division drops the fraction of 3.4"
+    lvl:integer_division@L2#1 -> shown (0.33) "The first line prints 3; because int division drops the fraction of 3.4"
+    lvl:integer_division@L3#2 -> not applied (0.00) ""
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (1.00)
+    mis:remainder_operator->RemainderIsQuotient -> held (0.98) "The second line also prints 3; because % gives how many times 5 fits into 17"
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#3 (0.80), lvl:remainder_operator@L2#1 (0.10), lvl:remainder_operator@L1#0 (0.10)
+    lvl:remainder_operator@L0#3 -> shown (0.76) "The second line also prints 3; because % gives how many times 5 fits into 17"
+    lvl:remainder_operator@L2#1 -> not applied (0.00) ""
+    lvl:remainder_operator@L1#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.60), lvl:println@L2#0 (0.25), lvl:println@L3#4 (0.15)
+    lvl:println@L2#1 -> shown (0.39) "The first line prints 3; The second line also prints 3"
+    lvl:println@L2#0 -> not applied (0.00) ""
+    lvl:println@L3#4 -> not applied (0.00) ""
+  kept: mis:remainder_operator->RemainderIsQuotient [held, tier 0, 0.98], mis:integer_division->IntegerDivisionGivesFraction [correct, tier 2, 0.76], lvl:remainder_operator@L0#3 [shown, tier 2, 0.76]
+  clause coverage: c1 <- mis:integer_division->IntegerDivisionGivesFraction; c2 <- mis:integer_division->IntegerDivisionGivesFraction; c3 <- mis:remainder_operator->RemainderIsQuotient; c4 <- mis:remainder_operator->RemainderIsQuotient
+  root cause not settled, unexamined edges: pre:integer_division->remainder_operator
+--- depth 2: current concepts ['remainder_operator']
+  remainder_operator (concept edges): 1 candidates -> kept pre:integer_division->remainder_operator (1.00)
+    pre:integer_division->remainder_operator -> broken (0.95) "The second line also prints 3; because % gives how many times 5 fits into 17"
+  kept: pre:integer_division->remainder_operator [broken, tier 0, 0.95]
+  clause coverage: c1 <- mis:integer_division->IntegerDivisionGivesFraction; c2 <- mis:integer_division->IntegerDivisionGivesFraction; c3 <- mis:remainder_operator->RemainderIsQuotient; c4 <- mis:remainder_operator->RemainderIsQuotient
+  root-cause walk: held on ['remainder_operator'], broken at [] (consequences: pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
+  level integer_division: L2 via output_prediction "The first line prints 3; because int division drops the fraction of 3.4"
+  level println: L2 via output_prediction "The first line prints 3; The second line also prints 3"
+  level remainder_operator: L0 via misconception "The second line also prints 3; because % gives how many times 5 fits into 17"

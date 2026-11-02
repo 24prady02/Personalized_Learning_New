@@ -1,0 +1,125 @@
+clauses: Hmm, ok | I think it prints 3, 2, 1 and then Go | each on its own line | count goes down by one each pass | so the loop ends when count hits 0 | I think | so
+start: generic concepts whose tagging text occurs in the answer: string_literal
+start: BM25 of the answer against each tagged concept: loop_control 26.51 (hits 1), while_loop 18.06 (hits 1), increment_operators 17.52 (hits 1), loop_body 16.10 (hits 1), loop_variable 15.83 (hits 1), println 15.28 (hits 1), control_flow 12.01 (hits 1), boolean_expression 10.92 (hits 1), string_literal 9.34 (hits 1), comparison_operators 3.73 (hits 1)
+start: chosen loop_control, while_loop, increment_operators
+start concepts (3): loop_control, while_loop, increment_operators
+--- depth 1: current concepts ['loop_control', 'while_loop', 'increment_operators']
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.40), mis:loop_control->InfiniteLoopUnnoticed (0.40), mis:loop_control->LoopStepAlwaysOne (0.20)
+    err:loop_control->WrongIterationCount -> correct (0.36) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    mis:loop_control->InfiniteLoopUnnoticed -> correct (0.24) "count goes down by one each pass; so the loop ends when count hits 0"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#2 (0.30), lvl:loop_control@L2#0 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.42) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:loop_control@L2#2 -> shown (0.26) "count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:loop_control@L2#0 -> shown (0.14) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  while_loop (misconceptions): 19 candidates -> kept mis:while_loop->LoopTerminatingCondition (0.40), mis:while_loop->ProgramEndsAfterLoop (0.35), mis:while_loop->LoopVariableNotUpdated (0.25)
+    mis:while_loop->LoopTerminatingCondition -> correct (0.34) "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0"
+    mis:while_loop->ProgramEndsAfterLoop -> correct (0.33) "I think it prints 3, 2, 1 and then Go"
+    mis:while_loop->LoopVariableNotUpdated -> not applied (0.00) ""
+  while_loop (level ways): 24 candidates -> kept lvl:while_loop@L2#1 (0.50), lvl:while_loop@L3#0 (0.30), lvl:while_loop@L3#6 (0.20)
+    lvl:while_loop@L2#1 -> shown (0.45) "I think it prints 3, 2, 1 and then Go; each on its own line; so the loop ends when count hits 0"
+    lvl:while_loop@L3#0 -> shown (0.26) "count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:while_loop@L3#6 -> shown (0.16) "count goes down by one each pass; so the loop ends when count hits 0"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.50), mis:increment_operators->IdiomOverridesCode (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.20)
+    mis:increment_operators->IncrementByTwo -> correct (0.30) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.45), lvl:increment_operators@L3#4 (0.35), lvl:increment_operators@L1#0 (0.20)
+    lvl:increment_operators@L2#2 -> shown (0.32) "count goes down by one each pass"
+    lvl:increment_operators@L3#4 -> shown (0.28) "count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:increment_operators@L1#0 -> shown (0.15) "count goes down by one each pass"
+  kept: lvl:while_loop@L2#1 [shown, tier 2, 0.45], lvl:loop_control@L2#1 [shown, tier 2, 0.42], err:loop_control->WrongIterationCount [correct, tier 2, 0.36]
+  clause coverage: c1 uncovered; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:while_loop@L2#1; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount; c6 uncovered; c7 uncovered
+  uncovered clauses bring in: boolean_expression (3.90), loop_variable (3.07), loop_body (0.85)
+  not yet read: own edges of boolean_expression, own edges of loop_body, own edges of loop_variable, pre:assignment->increment_operators, pre:boolean_expression->while_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:while_loop->loop_body, pre:while_loop->loop_variable
+--- depth 2: current concepts ['loop_control', 'while_loop', 'increment_operators', 'boolean_expression', 'loop_variable', 'loop_body']
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.80), pre:loop_control->increment_operators (0.20)
+    pre:loop_variable->loop_control -> confirmed (0.72) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    pre:loop_control->increment_operators -> confirmed (0.15) "count goes down by one each pass; so the loop ends when count hits 0"
+  while_loop (concept edges): 3 candidates -> kept pre:boolean_expression->while_loop (0.45), pre:while_loop->loop_variable (0.40), pre:while_loop->loop_body (0.15)
+    pre:boolean_expression->while_loop -> confirmed (0.38) "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0"
+    pre:while_loop->loop_variable -> confirmed (0.36) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    pre:while_loop->loop_body -> confirmed (0.14) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass"
+  increment_operators (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.70) "count goes down by one each pass"
+  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->LoopForOneTimeTest (0.70), mis:boolean_expression->ArithmeticInsteadOfBoolean (0.20), mis:boolean_expression->ComparisonWithBooleanLiteral (0.10)
+    mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
+    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) ""
+    mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
+  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L3#3 (0.60), lvl:boolean_expression@L3#6 (0.25), lvl:boolean_expression@L2#1 (0.15)
+    lvl:boolean_expression@L3#3 -> shown (0.48) "count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:boolean_expression@L3#6 -> shown (0.17) "so the loop ends when count hits 0"
+    lvl:boolean_expression@L2#1 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.45), mis:loop_variable->LoopOutputSameEachPass (0.30), mis:loop_variable->LoopUpdateChangesDirection (0.25)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.41) "count goes down by one each pass; so the loop ends when count hits 0"
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.28) "I think it prints 3, 2, 1 and then Go"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.21) "count goes down by one each pass"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.60), lvl:loop_variable@L2#2 (0.20), lvl:loop_variable@L3#0 (0.20)
+    lvl:loop_variable@L2#1 -> shown (0.56) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:loop_variable@L2#2 -> shown (0.17) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:loop_variable@L3#0 -> shown (0.14) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopOutputSameEachPass (0.50), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
+    mis:loop_body->LoopOutputSameEachPass -> correct (0.45) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.26) "I think it prints 3, 2, 1 and then Go"
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L2#1 (0.45), lvl:loop_body@L2#2 (0.40), lvl:loop_body@L2#0 (0.15)
+    lvl:loop_body@L2#1 -> shown (0.41) "I think it prints 3, 2, 1 and then Go; each on its own line; count goes down by one each pass"
+    lvl:loop_body@L2#2 -> shown (0.34) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:loop_body@L2#0 -> shown (0.10) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass"
+  kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.72], pre:assignment->increment_operators [confirmed, tier 2, 0.70], lvl:loop_variable@L2#1 [shown, tier 2, 0.56]
+  reached across pre:assignment->increment_operators, entered next: assignment
+  clause coverage: c1 uncovered; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:while_loop@L2#1; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount; c6 uncovered; c7 uncovered
+  uncovered clauses bring in: println (1.36), control_flow (1.24), comparison_operators (1.06)
+  not yet read: own edges of assignment, own edges of comparison_operators, own edges of control_flow, own edges of println, pre:comparison_operators->boolean_expression
+--- depth 3: current concepts ['loop_variable', 'loop_control', 'assignment', 'increment_operators', 'boolean_expression', 'println', 'control_flow', 'comparison_operators']
+  loop_variable (concept edges): 1 candidates -> kept pre:while_loop->loop_variable (1.00)
+    pre:while_loop->loop_variable -> confirmed (0.90) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> confirmed (0.75) "count goes down by one each pass; so the loop ends when count hits 0"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.60), mis:assignment->AssignmentIsEquation (0.25), mis:assignment->PrintedTextIsExecuted (0.15)
+    mis:assignment->VariableKeepsOldValue -> correct (0.54) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass"
+    mis:assignment->AssignmentIsEquation -> correct (0.15) "count goes down by one each pass"
+    mis:assignment->PrintedTextIsExecuted -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.45), lvl:assignment@L3#9 (0.35), lvl:assignment@L2#2 (0.20)
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L3#9 -> shown (0.21) "count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:assignment@L2#2 -> shown (0.12) "count goes down by one each pass"
+  boolean_expression (concept edges): 2 candidates -> kept pre:boolean_expression->while_loop (0.80), pre:comparison_operators->boolean_expression (0.20)
+    pre:boolean_expression->while_loop -> confirmed (0.68) "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0"
+    pre:comparison_operators->boolean_expression -> confirmed (0.14) "so the loop ends when count hits 0"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.10)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.60), lvl:println@L2#0 (0.25), lvl:println@L3#0 (0.15)
+    lvl:println@L2#1 -> shown (0.54) "I think it prints 3, 2, 1 and then Go; each on its own line"
+    lvl:println@L2#0 -> shown (0.20) "I think it prints 3, 2, 1 and then Go; each on its own line"
+    lvl:println@L3#0 -> shown (0.10) "I think it prints 3, 2, 1 and then Go"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.60), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->StatementsRunInAnyOrder (0.10)
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.57) "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0"
+    mis:control_flow->FalseLoopRepeatsNextCode -> correct (0.23) "I think it prints 3, 2, 1 and then Go"
+    mis:control_flow->StatementsRunInAnyOrder -> correct (0.06) "I think it prints 3, 2, 1 and then Go"
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#1 (0.50), lvl:control_flow@L2#0 (0.35), lvl:control_flow@L2#2 (0.15)
+    lvl:control_flow@L2#1 -> shown (0.47) "I think it prints 3, 2, 1 and then Go; each on its own line"
+    lvl:control_flow@L2#0 -> shown (0.30) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+    lvl:control_flow@L2#2 -> shown (0.09) "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->LessGreaterSwapped (1.00)
+    mis:comparison_operators->LessGreaterSwapped -> correct (0.85) "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0"
+  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L3#5 (0.50), lvl:comparison_operators@L2#1 (0.30), lvl:comparison_operators@L2#0 (0.20)
+    lvl:comparison_operators@L3#5 -> shown (0.35) "so the loop ends when count hits 0"
+    lvl:comparison_operators@L2#1 -> shown (0.18) "so the loop ends when count hits 0"
+    lvl:comparison_operators@L2#0 -> not applied (0.00) ""
+  kept: pre:while_loop->loop_variable [confirmed, tier 2, 0.90], mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.85], pre:loop_control->increment_operators [confirmed, tier 2, 0.75]
+  clause coverage: c1 uncovered; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:while_loop@L2#1; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount; c6 uncovered; c7 uncovered
+  not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'loop_body': ['while_loop'], 'loop_variable': ['while_loop']}
+  level assignment: L3 via purpose_of_the_whole "count goes down by one each pass; so the loop ends when count hits 0"
+  level boolean_expression: L3 via relation_to_neighbour "count goes down by one each pass; so the loop ends when count hits 0"
+  level comparison_operators: L3 via purpose_of_the_whole "so the loop ends when count hits 0"
+  level control_flow: L2 via output_prediction "I think it prints 3, 2, 1 and then Go; each on its own line"
+  level increment_operators: L3 via purpose_of_the_whole "count goes down by one each pass; so the loop ends when count hits 0"
+  level loop_body: L2 via output_prediction "I think it prints 3, 2, 1 and then Go; each on its own line; count goes down by one each pass"
+  level loop_control: L2 via output_prediction "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  level loop_variable: L3 via relation_to_neighbour "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0"
+  level println: L3 via relation_to_neighbour "I think it prints 3, 2, 1 and then Go"
+  level while_loop: L3 via relation_to_neighbour "count goes down by one each pass; so the loop ends when count hits 0"

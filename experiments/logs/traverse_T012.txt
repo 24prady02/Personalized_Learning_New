@@ -1,0 +1,77 @@
+clauses: The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4 | sum goes 0, 1, 3, 6, 10 | so the loop just adds up 1 to 4 | Then 10 / 4 prints 2 | because two ints divide to a whole number | If sum were a double it would print 2.5
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: integer_division 41.10 (hits 1), arithmetic_operators 38.11 (hits 1), loop_control 36.19 (hits 1), for_loop 34.67 (hits 1), assignment 20.81 (hits 1), loop_body 19.54 (hits 1), loop_variable 18.63 (hits 1), increment_operators 17.86 (hits 1), println 14.63 (hits 1), boolean_expression 14.46 (hits 1), accumulator_pattern 12.92 (hits 1), control_flow 11.99 (hits 1), comparison_operators 10.74 (hits 1), loop_scope 10.53 (hits 1)
+start: chosen integer_division, arithmetic_operators, loop_control
+start concepts (3): integer_division, arithmetic_operators, loop_control
+--- depth 1: current concepts ['integer_division', 'arithmetic_operators', 'loop_control']
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.60), mis:integer_division->AllDoublesToAvoidDivision (0.25), mis:integer_division->LaterDoubleLiteralFixesDivision (0.15)
+    mis:integer_division->IntegerDivisionGivesFraction -> correct (0.58) "Then 10 / 4 prints 2; because two ints divide to a whole number"
+    mis:integer_division->AllDoublesToAvoidDivision -> correct (0.16) "If sum were a double it would print 2.5"
+    mis:integer_division->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#0 (0.50), lvl:integer_division@L1#1 (0.30), lvl:integer_division@L2#1 (0.20)
+    lvl:integer_division@L4#0 -> shown (0.47) "If sum were a double it would print 2.5"
+    lvl:integer_division@L1#1 -> shown (0.28) "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5"
+    lvl:integer_division@L2#1 -> shown (0.19) "Then 10 / 4 prints 2"
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.50), mis:arithmetic_operators->CaretIsPower (0.25), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.25)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.50), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L3#1 (0.15)
+    lvl:arithmetic_operators@L4#0 -> shown (0.47) "If sum were a double it would print 2.5"
+    lvl:arithmetic_operators@L2#1 -> shown (0.34) "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5"
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.50), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForUpdateBeforeBody (0.20)
+    mis:loop_control->OffByOneBound -> correct (0.45) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+    err:loop_control->WrongIterationCount -> correct (0.27) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.17) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.47) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    lvl:loop_control@L2#0 -> shown (0.24) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    lvl:loop_control@L3#6 -> shown (0.16) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4"
+  kept: mis:integer_division->IntegerDivisionGivesFraction [correct, tier 2, 0.58], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.47], lvl:integer_division@L4#0 [shown, tier 2, 0.47]
+  clause coverage: c1 <- mis:loop_control->OffByOneBound; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:loop_control@L3#6; c4 <- mis:integer_division->IntegerDivisionGivesFraction; c5 <- mis:integer_division->IntegerDivisionGivesFraction; c6 <- mis:integer_division->AllDoublesToAvoidDivision
+  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['integer_division', 'arithmetic_operators', 'loop_control']
+  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
+    pre:arithmetic_operators->integer_division -> confirmed (0.95) "Then 10 / 4 prints 2; because two ints divide to a whole number"
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.85) "sum goes 0, 1, 3, 6, 10; Then 10 / 4 prints 2; because two ints divide to a whole number"
+  loop_control (concept edges): 3 candidates -> kept pre:loop_variable->loop_control (0.60), pre:loop_control->for_loop (0.30), pre:loop_control->increment_operators (0.10)
+    pre:loop_variable->loop_control -> confirmed (0.54) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+    pre:loop_control->for_loop -> confirmed (0.26) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    pre:loop_control->increment_operators -> confirmed (0.06) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+  kept: pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.95], pre:arithmetic_operators->expression [confirmed, tier 2, 0.85], pre:loop_variable->loop_control [confirmed, tier 2, 0.54]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- mis:loop_control->OffByOneBound; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:loop_control@L3#6; c4 <- mis:integer_division->IntegerDivisionGivesFraction; c5 <- mis:integer_division->IntegerDivisionGivesFraction; c6 <- mis:integer_division->AllDoublesToAvoidDivision
+  not yet read: own edges of expression, own edges of loop_variable
+--- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression', 'loop_variable', 'loop_control']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
+    mis:expression->TargetTyping -> correct (0.48) "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5"
+    mis:expression->AssignmentIsEquation -> correct (0.20) "sum goes 0, 1, 3, 6, 10"
+    mis:expression->VariablesHoldExpressions -> correct (0.11) "sum goes 0, 1, 3, 6, 10"
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.45), lvl:expression@L4#0 (0.40), lvl:expression@L2#1 (0.15)
+    lvl:expression@L3#1 -> shown (0.44) "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5"
+    lvl:expression@L4#0 -> shown (0.36) "If sum were a double it would print 2.5"
+    lvl:expression@L2#1 -> shown (0.14) "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.60), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->ForInitRepeats (0.15)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.51) "sum goes 0, 1, 3, 6, 10"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.19) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+    mis:loop_variable->ForInitRepeats -> correct (0.11) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.60), lvl:loop_variable@L2#0 (0.25), lvl:loop_variable@L3#2 (0.15)
+    lvl:loop_variable@L2#1 -> shown (0.54) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+    lvl:loop_variable@L2#0 -> shown (0.20) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    lvl:loop_variable@L3#2 -> shown (0.10) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.80), pre:loop_control->increment_operators (0.20)
+    pre:loop_control->for_loop -> confirmed (0.68) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10"
+    pre:loop_control->increment_operators -> confirmed (0.12) "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.68], lvl:loop_variable@L2#1 [shown, tier 2, 0.54], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.51]
+  reached across pre:loop_control->for_loop, entered next: for_loop
+  clause coverage: c1 <- mis:loop_control->OffByOneBound; c2 <- err:loop_control->WrongIterationCount; c3 <- lvl:loop_control@L3#6; c4 <- mis:integer_division->IntegerDivisionGivesFraction; c5 <- mis:integer_division->IntegerDivisionGivesFraction; c6 <- mis:integer_division->AllDoublesToAvoidDivision
+  not yet read: own edges of for_loop, pre:expression->comparison_operators
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level arithmetic_operators: L4 via predict_a_change "If sum were a double it would print 2.5"
+  level expression: L4 via predict_a_change "If sum were a double it would print 2.5"
+  level integer_division: L4 via predict_a_change "If sum were a double it would print 2.5"
+  level loop_control: L3 via purpose_of_the_whole "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4"
+  level loop_variable: L3 via purpose_of_the_whole "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4"

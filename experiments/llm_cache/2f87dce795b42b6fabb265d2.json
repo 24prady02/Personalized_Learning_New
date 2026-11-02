@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint score = 72;\nif (score >= 70) {\n  System.out.println(\"pass\");\n} else {\n  System.out.println(\"fail\");\n}\n\nQuestion: What is printed? Explain.\n\nStudent's answer, split into clauses:\nc1: It prints pass\nc2: because 72 is at least 70\n\nEdge: pre:string_literal->println  (string_literal -> println, prerequisite)\nRule (logic): println(\"s\") outputs exactly the characters between the quotes and then ends the line.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 1\nConfidence: 0.8"
+}

@@ -1,0 +1,662 @@
+{
+ "scenario": "T013",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints true",
+  "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+  "so both sides are true"
+ ],
+ "start_concepts": [
+  "comparison_operators",
+  "boolean_expression",
+  "println"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "boolean_expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "edge": "lvl:boolean_expression@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "comparison_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "edge": "lvl:comparison_operators@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole",
+    "L2 output_prediction"
+   ]
+  },
+  "logical_operators": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "edge": "lvl:logical_operators@L3#6",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 states_the_rule"
+   ]
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints true",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->ChainedComparison",
+   "target": "ChainedComparison",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "90 <= grade <= 100 tests whether grade is between 90 and 100.",
+   "twin_logic": "a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "mis:boolean_expression->ChainedComparison",
+   "target": "ChainedComparison",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "90 <= grade <= 100 tests whether grade is between 90 and 100.",
+   "twin_logic": "a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "lvl:boolean_expression@L2#1",
+   "target": "boolean_expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints true; so both sides are true",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "boolean_expression",
+   "edge": "pre:logical_operators->boolean_expression",
+   "target": "logical_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "&&, || and ! combine conditions p and q into one larger condition that is still true or false.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "par:comparison_operators~logical_operators",
+   "target": "logical_operators",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Relational operators compare two numbers to give a boolean; logical operators combine booleans into one boolean.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:comparison_operators->boolean_expression",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "pre:boolean->comparison_operators",
+   "target": "boolean",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "A comparison such as a < b takes two numbers and produces a boolean result.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "mis:logical_operators->NestedIfsInsteadOfLogicalOperators",
+   "target": "NestedIfsInsteadOfLogicalOperators",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "A condition on several values has to be written as nested if statements, one value per if.",
+   "twin_logic": "Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "lvl:logical_operators@L2#1",
+   "target": "logical_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.93,
+   "prune_score": 0.35,
+   "score": 0.3255,
+   "logic": "The result is a boolean: with x = 10, x > 0 && x < 10 is false and x < 0 || x > 10 is false; true || anything is true.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->ChainedComparison",
+   "target": "ChainedComparison",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "90 <= grade <= 100 tests whether grade is between 90 and 100.",
+   "twin_logic": "a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "err:comparison_operators->ReversedRelationalOperator",
+   "target": "ReversedRelationalOperator",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Writes =< or => instead of <= and >=.",
+   "twin_logic": "The operators are written <= and >=."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L3#2",
+   "target": "comparison_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Comparisons bind tighter than && and ||, so they are evaluated first and logical operators combine their boolean results.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L3#5",
+   "target": "comparison_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "Used to test a numeric condition: thresholds and sign checks, range tests, divisibility (n % k == 0), loop continuation (i < N), sentinel checks, and running-extreme updates (if (x > max) max = x).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "mis:boolean_expression->ChainedComparison",
+   "target": "ChainedComparison",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "90 <= grade <= 100 tests whether grade is between 90 and 100.",
+   "twin_logic": "a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "mis:boolean_expression->NestedIfsInsteadOfLogicalOperators",
+   "target": "NestedIfsInsteadOfLogicalOperators",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "A condition on several values has to be written as nested if statements, one value per if.",
+   "twin_logic": "Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "mis:boolean_expression->ArithmeticInsteadOfBoolean",
+   "target": "ArithmeticInsteadOfBoolean",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints true; so both sides are true",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "A true/false question is answered with arithmetic (e.g. 1 for true).",
+   "twin_logic": "A logic question is written as a boolean expression whose value is true or false."
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "lvl:boolean_expression@L2#1",
+   "target": "boolean_expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints true; so both sides are true",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "boolean_expression",
+   "edge": "lvl:boolean_expression@L3#0",
+   "target": "boolean_expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Comparisons are the atoms of boolean expressions; because they bind tighter than && and ||, month >= 1 && month <= 12 groups as (month >= 1) && (month <= 12) without parentheses.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints true",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "par:comparison_operators~logical_operators",
+   "target": "logical_operators",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Relational operators compare two numbers to give a boolean; logical operators combine booleans into one boolean.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:comparison_operators->boolean_expression",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:boolean->comparison_operators",
+   "target": "boolean",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "A comparison such as a < b takes two numbers and produces a boolean result.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "boolean_expression",
+   "edge": "pre:logical_operators->boolean_expression",
+   "target": "logical_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "&&, || and ! combine conditions p and q into one larger condition that is still true or false.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "mis:logical_operators->NestedIfsInsteadOfLogicalOperators",
+   "target": "NestedIfsInsteadOfLogicalOperators",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "A condition on several values has to be written as nested if statements, one value per if.",
+   "twin_logic": "Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "lvl:logical_operators@L1#1",
+   "target": "logical_operators@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints true; so both sides are true",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "a && b is true if both operands are true and false otherwise; a || b is false if both are false and true otherwise; !a is the opposite of a; these definitions are given in full by truth tables.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "lvl:logical_operators@L2#1",
+   "target": "logical_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.93,
+   "prune_score": 0.35,
+   "score": 0.3255,
+   "logic": "The result is a boolean: with x = 10, x > 0 && x < 10 is false and x < 0 || x > 10 is false; true || anything is true.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "logical_operators",
+   "edge": "lvl:logical_operators@L3#6",
+   "target": "logical_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "Used to combine several conditions into one test: a range check (lo <= x && x <= hi), alternatives (x == 0 || y == 0), a guard followed by the real test (i < n && a[i] != 0), or a rule built step by step as in LeapYear.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "pre:boolean->comparison_operators",
+   "target": "boolean",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "A comparison such as a < b takes two numbers and produces a boolean result.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "pre:expression->comparison_operators",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "It prints true": "mis:boolean_expression->ArithmeticInsteadOfBoolean",
+  "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between": "mis:comparison_operators->ChainedComparison",
+  "so both sides are true": "mis:comparison_operators->ChainedComparison"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
+ "llm_calls_by_step": {
+  "prune": 12,
+  "label": 24
+ }
+}

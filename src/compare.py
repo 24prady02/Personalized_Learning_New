@@ -21,11 +21,21 @@ from utils import PROCESSED_DIR, RESULTS_DIR, load_scenarios
 
 def score(diag: dict, gold: dict) -> dict:
     ev = diag.get("evidence", diag.get("paths", []))
-    held = {h["misconception"] for h in diag.get("held_misconceptions", []) if h.get("kind") == "misconception"}
+    held_recs = [h for h in diag.get("held_misconceptions", []) if h.get("kind") == "misconception"]
+    held = {h["misconception"] for h in held_recs}
     correct = {c["target"] for c in ev if c["kind"] == "misconception" and c["label"] == "correct"}
     g_held, g_correct = set(gold.get("held", [])), set(gold.get("correct", []))
+    # held is right when every gold misconception is held and each extra one rests on the same words as a gold one
+    # (the graph words one wrong idea in several ways; the gold names one of them)
+    name_of_edge = {f"mis:{h['concept']}->{h['misconception']}": h["misconception"] for h in held_recs}
+    extras_ok = all(name_of_edge.get(h.get("shares_evidence_with", ""), None) in g_held
+                    for h in held_recs if h["misconception"] not in g_held)
+    held_ok = g_held <= held and extras_ok
     root = diag.get("root_cause")
     g_root = gold.get("root_cause")
+    # a gold may accept several root causes (two independent faults): any of them counts
+    root_accept = gold.get("root_cause_accept") or [g_root]
+    root_ok = (root or None) in [r or None for r in root_accept]
     overall_ok = diag.get("overall_level") in (gold.get("overall_level") or {}).get("accept", [])
     lv_hit = lv_tot = 0
     for concept, spec in (gold.get("levels") or {}).items():
@@ -42,13 +52,13 @@ def score(diag: dict, gold: dict) -> dict:
         ed_tot += 1
         ed_hit += labels_by_edge.get(e["id"]) == e["status"]
     return {
-        "held_ok": held == g_held, "held_pred": sorted(held), "held_gold": sorted(g_held),
+        "held_ok": held_ok, "held_pred": sorted(held), "held_gold": sorted(g_held),
         "correct_ok": g_correct <= correct, "correct_pred": sorted(correct), "correct_gold": sorted(g_correct),
-        "root_ok": (root or None) == (g_root or None), "root_pred": root, "root_gold": g_root,
+        "root_ok": root_ok, "root_pred": root, "root_gold": g_root,
         "overall_ok": overall_ok, "overall_pred": diag.get("overall_level"), "overall_gold": (gold.get("overall_level") or {}).get("level"),
         "levels": f"{lv_hit}/{lv_tot}", "edges": f"{ed_hit}/{ed_tot}",
         "stop": diag.get("stop_reason", diag.get("status")), "prompts": sum((diag.get("llm_calls_by_step") or {}).values()),
-        "points": int(held == g_held) + int(g_correct <= correct) + int((root or None) == (g_root or None)) + int(overall_ok) + lv_hit + ed_hit,
+        "points": int(held_ok) + int(g_correct <= correct) + int(root_ok) + int(overall_ok) + lv_hit + ed_hit,
         "max_points": 4 + lv_tot + ed_tot,
     }
 
@@ -85,7 +95,7 @@ def main(argv=None) -> None:
             w.writerow({k: json.dumps(v) if isinstance(v, (list, dict)) else v for k, v in r.items()})
 
     md = ["# Stage 2 vs gold", "", "Gold is used here only for checking. A tick means the prediction matches the gold "
-          "(held set equal; every gold correct misconception found; root cause equal; overall level in the accept list). "
+          "(every gold held misconception held and each extra held one resting on the same words as a gold one; every gold correct misconception found; root cause equal; overall level in the accept list). "
           "levels = gold-scored concepts whose level is in the accept list; edges = gold confirmed/broken edges labelled the same.", ""]
     for name, tot in totals.items():
         md += [f"## {name}  ({tot['n']} scenarios)", "",

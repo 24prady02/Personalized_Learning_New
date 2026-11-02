@@ -19,18 +19,18 @@
  ],
  "held_misconceptions": [
   {
+   "concept": "for_loop",
+   "misconception": "WrongIterationCount",
+   "kind": "error",
+   "quote": "because the loop stops at 1",
+   "score": 0.42
+  },
+  {
    "concept": "loop_control",
    "misconception": "OffByOneBound",
    "kind": "misconception",
    "quote": "because the loop stops at 1",
    "score": 0.33
-  },
-  {
-   "concept": "for_loop",
-   "misconception": "WrongIterationCount",
-   "kind": "error",
-   "quote": "because the loop stops at 1",
-   "score": 0.51
   }
  ],
  "error_evidence": [
@@ -79,6 +79,7 @@
    "misconception": "OffByOneBound",
    "quote": "because the loop stops at 1",
    "edge": "mis:loop_control->OffByOneBound",
+   "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "source": "level_mis_links"
   },
   "println": {
@@ -114,9 +115,9 @@
    "kind": "error",
    "label": "held",
    "quote": "because the loop stops at 1",
-   "confidence": 0.85,
+   "confidence": 0.7,
    "prune_score": 0.6,
-   "score": 0.51,
+   "score": 0.42,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -128,9 +129,9 @@
    "kind": "error",
    "label": "held",
    "quote": "because the loop stops at 1",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.24,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -186,9 +187,9 @@
    "kind": "error",
    "label": "held",
    "quote": "because the loop stops at 1",
-   "confidence": 0.85,
+   "confidence": 0.7,
    "prune_score": 0.6,
-   "score": 0.51,
+   "score": 0.42,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -262,9 +263,9 @@
    "kind": "error",
    "label": "held",
    "quote": "because the loop stops at 1",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.24,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -363,8 +364,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 64,
+ "llm_calls": 9,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 24

@@ -34,6 +34,20 @@
   {
    "depth": 1,
    "source": "variable_swap",
+   "edge": "mis:variable_swap->AssignmentExchangesValues",
+   "target": "AssignmentExchangesValues",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "b = a exchanges the values of a and b.",
+   "twin_logic": "b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "depth": 1,
+   "source": "variable_swap",
    "edge": "lvl:variable_swap@L1#1",
    "target": "variable_swap@L1",
    "kind": "level",
@@ -68,6 +82,20 @@
   {
    "depth": 1,
    "source": "variable_swap",
+   "edge": "mis:variable_swap->AssignmentExchangesValues",
+   "target": "AssignmentExchangesValues",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "a becomes b and b becomes a",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "b = a exchanges the values of a and b.",
+   "twin_logic": "b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "depth": 1,
+   "source": "variable_swap",
    "edge": "lvl:variable_swap@L1#1",
    "target": "variable_swap@L1",
    "kind": "level",
@@ -99,13 +127,13 @@
   }
  ],
  "clause_coverage": {
-  "a becomes b and b becomes a": "lvl:variable_swap@L1#1"
+  "a becomes b and b becomes a": "mis:variable_swap->AssignmentExchangesValues"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 3,
- "llm_cache_hits": 113,
+ "llm_calls": 2,
+ "llm_cache_hits": 80,
  "llm_calls_by_step": {
   "prune": 2,
   "label": 5

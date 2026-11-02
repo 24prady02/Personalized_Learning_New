@@ -1,0 +1,64 @@
+clauses: i goes from 1 to 10, including 10 | because of <= | For each i the if checks i % 3 == 0, which is the remainder after dividing by 3 | It is 0 only for 3, 6 and 9 | so the output is 3 6 9 with a space after each number
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: arithmetic_operators 45.86 (hits 1), remainder_operator 38.93 (hits 1), loop_control 29.18 (hits 1), for_loop 27.35 (hits 1), loop_variable 26.72 (hits 1), increment_operators 21.70 (hits 1), assignment 21.54 (hits 1), if_statement 14.79 (hits 1), string_concatenation 14.77 (hits 1), boolean_expression 14.20 (hits 2), control_flow 13.34 (hits 1), loop_scope 13.07 (hits 1), string_conversion 12.82 (hits 1), loop_body 11.77 (hits 1), comparison_operators 11.54 (hits 1), print 8.65 (hits 2)
+start: chosen arithmetic_operators, remainder_operator, loop_control
+start concepts (3): arithmetic_operators, remainder_operator, loop_control
+--- depth 1: current concepts ['arithmetic_operators', 'remainder_operator', 'loop_control']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
+    mis:arithmetic_operators->RemainderIsSubtraction -> correct (0.97) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#1 (0.50), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L1#0 (0.20)
+    lvl:arithmetic_operators@L2#1 -> shown (0.40) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L1#0 -> shown (0.17) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3"
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsSubtraction (0.50), mis:remainder_operator->RemainderIsQuotient (0.50)
+    mis:remainder_operator->RemainderIsSubtraction -> correct (0.47) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+    mis:remainder_operator->RemainderIsQuotient -> correct (0.47) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L1#0 (0.50), lvl:remainder_operator@L3#1 (0.30), lvl:remainder_operator@L2#1 (0.20)
+    lvl:remainder_operator@L1#0 -> shown (0.47) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3"
+    lvl:remainder_operator@L3#1 -> not applied (0.00) ""
+    lvl:remainder_operator@L2#1 -> shown (0.14) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.60), err:loop_control->WrongIterationCount (0.25), mis:loop_control->ForLoopPartSkipped (0.15)
+    mis:loop_control->OffByOneBound -> correct (0.57) "i goes from 1 to 10, including 10; because of <="
+    err:loop_control->WrongIterationCount -> correct (0.20) "i goes from 1 to 10, including 10; because of <="
+    mis:loop_control->ForLoopPartSkipped -> correct (0.09) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.60), lvl:loop_control@L2#0 (0.25), lvl:loop_control@L3#5 (0.15)
+    lvl:loop_control@L2#1 -> shown (0.54) "i goes from 1 to 10, including 10; because of <="
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+    lvl:loop_control@L3#5 -> shown (0.10) "i goes from 1 to 10, including 10; because of <="
+  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.97], mis:loop_control->OffByOneBound [correct, tier 2, 0.57], lvl:loop_control@L2#1 [shown, tier 2, 0.54]
+  clause coverage: c1 <- mis:loop_control->OffByOneBound; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:arithmetic_operators->RemainderIsSubtraction; c4 <- mis:arithmetic_operators->RemainderIsSubtraction; c5 uncovered
+  uncovered clauses bring in: loop_variable (6.14), for_loop (5.29), print (4.99)
+--- depth 2: current concepts ['loop_variable', 'for_loop', 'print']
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.60), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->ForInitRepeats (0.15)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.54) "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9; so the output is 3 6 9 with a space after each number"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.15) "i goes from 1 to 10, including 10; so the output is 3 6 9 with a space after each number"
+    mis:loop_variable->ForInitRepeats -> correct (0.09) "i goes from 1 to 10, including 10; so the output is 3 6 9 with a space after each number"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.60), lvl:loop_variable@L2#0 (0.25), lvl:loop_variable@L3#0 (0.15)
+    lvl:loop_variable@L2#1 -> shown (0.51) "i goes from 1 to 10, including 10; It is 0 only for 3, 6 and 9"
+    lvl:loop_variable@L2#0 -> not applied (0.00) ""
+    lvl:loop_variable@L3#0 -> shown (0.09) "i goes from 1 to 10, including 10; because of <="
+  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.50), mis:for_loop->ForIsConditional (0.30), mis:for_loop->ForLoopPartSkipped (0.20)
+    err:for_loop->WrongIterationCount -> correct (0.47) "i goes from 1 to 10, including 10; because of <="
+    mis:for_loop->ForIsConditional -> correct (0.27) "i goes from 1 to 10, including 10; For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; so the output is 3 6 9 with a space after each number"
+    mis:for_loop->ForLoopPartSkipped -> correct (0.13) "i goes from 1 to 10, including 10; For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; so the output is 3 6 9 with a space after each number"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L2#2 (0.20)
+    lvl:for_loop@L2#1 -> shown (0.45) "i goes from 1 to 10, including 10; because of <=; so the output is 3 6 9 with a space after each number"
+    lvl:for_loop@L2#0 -> shown (0.21) "i goes from 1 to 10, including 10; because of <=; For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9; so the output is 3 6 9 with a space after each number"
+    lvl:for_loop@L2#2 -> shown (0.12) "i goes from 1 to 10, including 10; because of <=; For each i the if checks i % 3 == 0, which is the remainder after dividing by 3"
+  print (misconceptions): 3 candidates -> kept err:print->PrintWithoutFinalNewline (0.80), mis:print->RepeatedOutputVariablePrintedOnce (0.15), mis:print->ParenthesesOnlyIfArgument (0.05)
+    err:print->PrintWithoutFinalNewline -> not applied (0.00) ""
+    mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) ""
+    mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) ""
+  print (level ways): 15 candidates -> kept lvl:print@L2#1 (0.50), lvl:print@L3#1 (0.30), lvl:print@L2#2 (0.20)
+    lvl:print@L2#1 -> shown (0.42) "so the output is 3 6 9 with a space after each number"
+    lvl:print@L3#1 -> shown (0.24) "so the output is 3 6 9 with a space after each number"
+    lvl:print@L2#2 -> shown (0.13) "so the output is 3 6 9 with a space after each number"
+  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.54], lvl:loop_variable@L2#1 [shown, tier 2, 0.51], err:for_loop->WrongIterationCount [correct, tier 2, 0.47]
+  clause coverage: c1 <- mis:loop_control->OffByOneBound; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:arithmetic_operators->RemainderIsSubtraction; c4 <- mis:arithmetic_operators->RemainderIsSubtraction; c5 <- mis:loop_variable->LoopOutputSameEachPass
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level arithmetic_operators: L2 via output_prediction "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"
+  level for_loop: L2 via output_prediction "i goes from 1 to 10, including 10; because of <=; so the output is 3 6 9 with a space after each number"
+  level loop_control: L3 via relation_to_neighbour "i goes from 1 to 10, including 10; because of <="
+  level loop_variable: L3 via relation_to_neighbour "i goes from 1 to 10, including 10; because of <="
+  level print: L3 via relation_to_neighbour "so the output is 3 6 9 with a space after each number"
+  level remainder_operator: L2 via output_prediction "For each i the if checks i % 3 == 0, which is the remainder after dividing by 3; It is 0 only for 3, 6 and 9"

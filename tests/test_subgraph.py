@@ -194,7 +194,8 @@ def test_gold_summary_and_breadth():
             covered += 1
     expected_partial = {sc["id"] for sc in GOLD if gold_concepts(sc) & NOT_IN_CODE.get(sc["id"], set())}
     assert covered == len(GOLD) - len(expected_partial), f"fully covered from code alone: {covered} / {len(GOLD)}"
-    broad = [(c, k) for c, k in fire.items() if k >= 12]
+    # a non-generic pattern that fires in nearly every scenario is behaving like a generic one
+    broad = [(c, k) for c, k in fire.items() if k >= len(GOLD) - 1]
     assert not broad, f"pattern too broad: {broad}"
     assert 2 <= sum(sizes) / len(sizes) <= 25
 

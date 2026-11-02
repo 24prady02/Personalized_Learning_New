@@ -64,25 +64,11 @@
    "kind": "misconception",
    "label": "correct",
    "quote": "At i = 9 num2 drops to 11",
-   "confidence": 0.93,
+   "confidence": 0.95,
    "prune_score": 0.5,
-   "score": 0.465,
+   "score": 0.475,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value."
-  },
-  {
-   "depth": 1,
-   "source": "loop_control",
-   "edge": "err:loop_control->WrongIterationCount",
-   "target": "WrongIterationCount",
-   "kind": "error",
-   "label": "correct",
-   "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.85,
-   "prune_score": 0.5,
-   "score": 0.425,
-   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
   {
    "depth": 1,
@@ -99,6 +85,22 @@
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#2",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "quote": "num1 is 9 and num2 starts at 12",
+   "confidence": 0.72,
+   "prune_score": 0.5,
+   "score": 0.36,
+   "logic": "An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
   }
  ],
  "evidence": [
@@ -126,9 +128,9 @@
    "kind": "error",
    "label": "correct",
    "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.85,
+   "confidence": 0.7,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.35,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -140,11 +142,25 @@
    "kind": "misconception",
    "label": "correct",
    "quote": "So it prints 8, 10, 12, 13",
-   "confidence": 0.8,
+   "confidence": 0.85,
    "prune_score": 0.3,
-   "score": 0.24,
+   "score": 0.255,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "So it prints 8, 10, 12, 13",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
   },
   {
    "depth": 1,
@@ -202,9 +218,9 @@
    "kind": "misconception",
    "label": "correct",
    "quote": "At i = 9 num2 drops to 11",
-   "confidence": 0.93,
+   "confidence": 0.95,
    "prune_score": 0.5,
-   "score": 0.465,
+   "score": 0.475,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value."
   },
@@ -215,10 +231,10 @@
    "target": "AssignmentIsEquation",
    "kind": "misconception",
    "label": "correct",
-   "quote": "At i = 9 num2 drops to 11",
-   "confidence": 0.75,
+   "quote": "num1 is 9 and num2 starts at 12",
+   "confidence": 0.8,
    "prune_score": 0.2,
-   "score": 0.15,
+   "score": 0.16,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
    "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   },
@@ -280,8 +296,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 88,
+ "llm_calls": 9,
+ "llm_cache_hits": 60,
  "llm_calls_by_step": {
   "prune": 6,
   "label": 18

@@ -1,0 +1,68 @@
+clauses: a = b puts the 3 from a into b | so now both are 3 | It prints 3 3 and then true since theyre the same
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: string_concatenation 14.50 (hits 1), assignment 9.66 (hits 1), comparison_operators 9.23 (hits 1), println 9.01 (hits 1), string_conversion 8.98 (hits 2)
+start: chosen string_concatenation, assignment, comparison_operators
+start concepts (3): string_concatenation, assignment, comparison_operators
+--- depth 1: current concepts ['string_concatenation', 'assignment', 'comparison_operators']
+  string_concatenation (misconceptions): 3 candidates -> kept mis:string_concatenation->ArithmeticPlusPrecedes (0.50), mis:string_concatenation->StringPlusLeftToRight (0.30), mis:string_concatenation->StringPlusStringifiesExpression (0.20)
+    mis:string_concatenation->ArithmeticPlusPrecedes -> not applied (0.00) ""
+    mis:string_concatenation->StringPlusLeftToRight -> not applied (0.00) ""
+    mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
+  string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#1 (0.60), lvl:string_concatenation@L3#1 (0.25), lvl:string_concatenation@L1#1 (0.15)
+    lvl:string_concatenation@L2#1 -> shown (0.39) "It prints 3 3 and then true since theyre the same"
+    lvl:string_concatenation@L3#1 -> shown (0.15) "It prints 3 3 and then true since theyre the same"
+    lvl:string_concatenation@L1#1 -> shown (0.09) "It prints 3 3 and then true since theyre the same"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->AssignmentOppositeDirection (0.80), mis:assignment->AssignmentEmptiesSource (0.10), mis:assignment->AssignmentExchangesValues (0.10)
+    mis:assignment->AssignmentOppositeDirection -> held (0.78) "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same"
+    mis:assignment->AssignmentEmptiesSource -> correct (0.08) "so now both are 3"
+    mis:assignment->AssignmentExchangesValues -> correct (0.09) "so now both are 3"
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L2#2 (0.45), lvl:assignment@L2#0 (0.30), lvl:assignment@L3#8 (0.25)
+    lvl:assignment@L2#2 -> not applied (0.00) ""
+    lvl:assignment@L2#0 -> not applied (0.00) ""
+    lvl:assignment@L3#8 -> not applied (0.00) ""
+  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->AssignCompares (0.80), mis:comparison_operators->EqualityOperatorComparesObjectsValues (0.15), mis:comparison_operators->EqualsComparesReferences (0.05)
+    mis:comparison_operators->AssignCompares -> correct (0.56) "a = b puts the 3 from a into b; It prints 3 3 and then true since theyre the same"
+    mis:comparison_operators->EqualityOperatorComparesObjectsValues -> not applied (0.00) ""
+    mis:comparison_operators->EqualsComparesReferences -> not applied (0.00) ""
+  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L2#1 (0.50), lvl:comparison_operators@L3#4 (0.30), lvl:comparison_operators@L2#0 (0.20)
+    lvl:comparison_operators@L2#1 -> shown (0.45) "It prints 3 3 and then true since theyre the same"
+    lvl:comparison_operators@L3#4 -> not applied (0.00) ""
+    lvl:comparison_operators@L2#0 -> shown (0.14) "It prints 3 3 and then true since theyre the same"
+  kept: mis:assignment->AssignmentOppositeDirection [held, tier 0, 0.78], mis:comparison_operators->AssignCompares [correct, tier 2, 0.56], lvl:comparison_operators@L2#1 [shown, tier 2, 0.45]
+  clause coverage: c1 <- mis:assignment->AssignmentOppositeDirection; c2 <- mis:assignment->AssignmentOppositeDirection; c3 <- lvl:string_concatenation@L2#1
+  not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:string_concatenation->string_conversion
+--- depth 2: current concepts ['assignment', 'string_concatenation', 'comparison_operators']
+  assignment (concept edges): 1 candidates -> kept par:assignment~comparison_operators (1.00)
+    par:assignment~comparison_operators -> broken (0.75) "a = b puts the 3 from a into b; so now both are 3"
+  string_concatenation (concept edges): 1 candidates -> kept pre:string_concatenation->string_conversion (1.00)
+    pre:string_concatenation->string_conversion -> confirmed (0.60) "It prints 3 3 and then true since theyre the same"
+  comparison_operators (concept edges): 1 candidates -> kept pre:expression->comparison_operators (1.00)
+    pre:expression->comparison_operators -> confirmed (0.80) "It prints 3 3 and then true since theyre the same"
+  kept: par:assignment~comparison_operators [broken, tier 0, 0.75], pre:expression->comparison_operators [confirmed, tier 2, 0.80], pre:string_concatenation->string_conversion [confirmed, tier 2, 0.60]
+  reached across pre:expression->comparison_operators, entered next: expression
+  reached across pre:string_concatenation->string_conversion, entered next: string_conversion
+  clause coverage: c1 <- mis:assignment->AssignmentOppositeDirection; c2 <- mis:assignment->AssignmentOppositeDirection; c3 <- lvl:string_concatenation@L2#1
+  not yet read: own edges of expression, own edges of string_conversion
+--- depth 3: current concepts ['comparison_operators', 'assignment', 'expression', 'string_conversion', 'string_concatenation']
+  expression (misconceptions): 8 candidates -> kept mis:expression->AssignmentIsEquation (0.60), mis:expression->VariablesHoldExpressions (0.25), mis:expression->NoAtomicExpression (0.15)
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#3 (0.40), lvl:expression@L3#0 (0.35), lvl:expression@L2#1 (0.25)
+    lvl:expression@L3#3 -> shown (0.24) "It prints 3 3 and then true since theyre the same"
+    lvl:expression@L3#0 -> shown (0.28) "It prints 3 3 and then true since theyre the same"
+    lvl:expression@L2#1 -> shown (0.15) "It prints 3 3 and then true since theyre the same"
+  string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
+    mis:string_conversion->StringPlusLeftToRight -> not applied (0.00) ""
+  string_conversion (level ways): 13 candidates -> kept lvl:string_conversion@L2#1 (0.70), lvl:string_conversion@L2#0 (0.20), lvl:string_conversion@L1#1 (0.10)
+    lvl:string_conversion@L2#1 -> shown (0.42) "It prints 3 3 and then true since theyre the same"
+    lvl:string_conversion@L2#0 -> not applied (0.00) ""
+    lvl:string_conversion@L1#1 -> shown (0.06) "It prints 3 3 and then true since theyre the same"
+  kept: lvl:string_conversion@L2#1 [shown, tier 2, 0.42], lvl:expression@L3#0 [shown, tier 2, 0.28], lvl:expression@L3#3 [shown, tier 2, 0.24]
+  clause coverage: c1 <- mis:assignment->AssignmentOppositeDirection; c2 <- mis:assignment->AssignmentOppositeDirection; c3 <- lvl:string_concatenation@L2#1
+  root-cause walk: held on ['assignment'], broken at [] (consequences: par:assignment~comparison_operators), prerequisites {'comparison_operators': ['expression'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level assignment: L0 via misconception "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same"
+  level comparison_operators: L2 via output_prediction "It prints 3 3 and then true since theyre the same"
+  level expression: L3 via relation_to_neighbour "It prints 3 3 and then true since theyre the same"
+  level string_concatenation: L3 via relation_to_neighbour "It prints 3 3 and then true since theyre the same"
+  level string_conversion: L2 via output_prediction "It prints 3 3 and then true since theyre the same"

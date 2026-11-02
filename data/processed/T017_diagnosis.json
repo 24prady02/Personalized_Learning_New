@@ -1,0 +1,321 @@
+{
+ "scenario": "T017",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints 8",
+  "% takes 5 away from 13"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "println",
+  "remainder_operator"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "remainder_operator",
+   "misconception": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "quote": "It prints 8; % takes 5 away from 13",
+   "score": 0.98
+  },
+  {
+   "concept": "arithmetic_operators",
+   "misconception": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "quote": "It prints 8; % takes 5 away from 13",
+   "score": 0.97
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": {
+  "concept": "arithmetic_operators",
+  "misconception": "RemainderIsSubtraction"
+ },
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "RemainderIsSubtraction",
+   "quote": "It prints 8; % takes 5 away from 13",
+   "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
+   "rule": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "source": "held_misconception",
+   "note": "no L0 way names this misconception at this concept in the graph"
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "% takes 5 away from 13",
+   "edge": "lvl:expression@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 8",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "remainder_operator": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "RemainderIsSubtraction",
+   "quote": "It prints 8; % takes 5 away from 13",
+   "edge": "mis:remainder_operator->RemainderIsSubtraction",
+   "rule": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "source": "held_misconception",
+   "note": "no L0 way names this misconception at this concept in the graph"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "mis:remainder_operator->RemainderIsSubtraction",
+   "target": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.98,
+   "prune_score": 1.0,
+   "score": 0.98,
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
+   "target": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 8",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 8",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "% takes 5 away from 13",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
+   "target": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 8",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "remainder_operator",
+   "edge": "mis:remainder_operator->RemainderIsSubtraction",
+   "target": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.98,
+   "prune_score": 1.0,
+   "score": 0.98,
+   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints 8; % takes 5 away from 13",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 8",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "% takes 5 away from 13",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "clause_coverage": {
+  "It prints 8": "mis:arithmetic_operators->RemainderIsSubtraction",
+  "% takes 5 away from 13": "mis:arithmetic_operators->RemainderIsSubtraction"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 28,
+ "llm_calls_by_step": {
+  "prune": 10,
+  "label": 18
+ }
+}

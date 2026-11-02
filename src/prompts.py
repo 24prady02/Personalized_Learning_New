@@ -48,38 +48,37 @@ Reply:
 
 # ---------------------------------------------------------------- 2. edge label
 
-LABEL_MIS = """You compare a student's words with a wrong rule and the right rule about one Java concept.
+LABEL_MIS = """You compare a student's words with the wrong rules and right rules of one Java concept. The edges below are judged together: the same words can fit several wrong rules, and you choose, for each edge, whether the student's own reasoning follows it.
 
 Program:
 {code}
 
 Question: {question}
 
-Student's answer, split into clauses:
+Student's answer, split into numbered clauses:
 {clauses}
 
-Edge: {edge_id}
-Wrong rule (logic): {logic}
-Right rule (twin_logic): {twin_logic}
+Concept: {concept}
+Edges (each with its wrong rule and the right rule):
+{edges}
 
-Decide:
-- held: the answer follows the wrong rule;
-- correct: the answer follows the right rule where the two differ;
-- not applied: the answer does not touch this rule.
+For each edge decide:
+- held: the answer follows the wrong rule in what sets it apart from the right rule. Where the answer gives a reason, the reason must be this wrong rule's own; a result this rule would also predict, reached by a different reason, does not hold it. When several wrong rules could fit the same words, held goes to the one(s) whose claim the student actually makes; a student can hold more than one;
+- correct: the answer follows the right rule where the two differ, by stating it or by doing it (code or a value in the answer that does what the right rule says and the wrong rule would get wrong counts);
+- not applied: the answer neither follows nor contradicts this rule, or the rule is about something that appears neither in the program nor in the answer.
 
-Reply in exactly three lines and nothing else:
-Label: held | correct | not applied
-Quote: the exact words from the student's answer that show it (copy them verbatim; write none if not applied)
-Confidence: a number from 0 to 1
+Reply with exactly one line per edge, in this format and nothing else:
+edge_id | held or correct or not applied | clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied) | confidence: a number from 0 to 1
 
-Example. Student's answer: "{ex_answer}"
-Edge: mis:definite_assignment->LocalVariablesAutoInitialized
-Wrong rule: A local variable that is declared but not assigned holds 0 (or false, or null).
-Right rule: Java refuses to compile a read of a local variable that may not have been assigned.
+Example. Student's answer, split into numbered clauses:
+c1: {ex_answer}
+Concept: definite_assignment
+Edges:
+- mis:definite_assignment->LocalVariablesAutoInitialized | wrong rule: A local variable that is declared but not assigned holds 0 (or false, or null). | right rule: Java refuses to compile a read of a local variable that may not have been assigned.
+- mis:definite_assignment->DeclarationAssignsNull | wrong rule: A declared int holds null until assigned. | right rule: An int can never hold null; an unassigned local has no value the program may read.
 Reply:
-Label: held
-Quote: It will print 0.
-Confidence: 0.95
+mis:definite_assignment->LocalVariablesAutoInitialized | held | clauses: 1 | confidence: 0.95
+mis:definite_assignment->DeclarationAssignsNull | not applied | clauses: none | confidence: 0.9
 """
 
 LABEL_CONCEPT = """You check whether a student's answer confirms or breaks the rule that links two Java concepts.
@@ -102,7 +101,7 @@ Decide:
 
 Reply in exactly three lines and nothing else:
 Label: confirmed | broken | not applied
-Quote: the exact words from the student's answer that show it (copy them verbatim; write none if not applied)
+Clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)
 Confidence: a number from 0 to 1
 """
 
@@ -126,7 +125,7 @@ Decide:
 
 Reply in exactly three lines and nothing else:
 Label: shown | not shown
-Quote: the exact words from the student's answer that show it (copy them verbatim; write none if not shown)
+Clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)
 Confidence: a number from 0 to 1
 """
 

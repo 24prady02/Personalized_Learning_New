@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint count = 3;\nwhile (count > 0) {\n  System.out.println(count);\n  count--;\n}\nSystem.out.println(\"Go!\");\n\nQuestion: What is the output? Explain.\n\nStudent's answer, split into clauses:\nc1: Hmm, ok\nc2: I think it prints 3, 2, 1 and then Go\nc3: each on its own line\nc4: count goes down by one each pass\nc5: so the loop ends when count hits 0\nc6: I think\nc7: so\n\nConcept: loop_body\nWay: line by line trace\nWhat an answer that shows this way does: On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: shown\nClauses: 2, 4\nConfidence: 0.7"
+}

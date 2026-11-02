@@ -6,15 +6,15 @@ start concepts (3): normalization, integer_division, arithmetic_operators
 --- depth 1: current concepts ['normalization', 'integer_division', 'arithmetic_operators']
   normalization (misconceptions): 2 candidates -> kept mis:normalization->IntegerProbability (0.80), mis:normalization->RowsNeedNotSumToOne (0.20)
     mis:normalization->IntegerProbability -> correct (0.78) "because int / int is integer division"
-    mis:normalization->RowsNeedNotSumToOne -> correct (0.14) "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
+    mis:normalization->RowsNeedNotSumToOne -> not applied (0.00) "none"
   normalization (level ways): 15 candidates -> kept lvl:normalization@L4#2 (0.50), lvl:normalization@L3#1 (0.30), lvl:normalization@L3#2 (0.20)
     lvl:normalization@L4#2 -> shown (0.47) "because int / int is integer division"
     lvl:normalization@L3#1 -> shown (0.28) "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2"
     lvl:normalization@L3#2 -> shown (0.16) "(double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
   integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->CastAfterIntDivision (0.25), mis:integer_division->TargetTyping (0.25)
     mis:integer_division->IntegerDivisionGivesFraction -> correct (0.48) "because int / int is integer division"
-    mis:integer_division->CastAfterIntDivision -> correct (0.17) "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
-    mis:integer_division->TargetTyping -> correct (0.23) "All zeros"
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) "none"
+    mis:integer_division->TargetTyping -> correct (0.24) "because int / int is integer division"
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L3#1 (0.45), lvl:integer_division@L4#2 (0.35), lvl:integer_division@L4#1 (0.20)
     lvl:integer_division@L3#1 -> shown (0.43) "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
     lvl:integer_division@L4#2 -> shown (0.33) "All zeros"
@@ -25,7 +25,7 @@ start concepts (3): normalization, integer_division, arithmetic_operators
     lvl:arithmetic_operators@L2#1 -> shown (0.33) "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2"
     lvl:arithmetic_operators@L1#1 -> shown (0.12) "because int / int is integer division"
   kept: mis:normalization->IntegerProbability [correct, tier 2, 0.78], mis:integer_division->IntegerDivisionGivesFraction [correct, tier 2, 0.48], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.47]
-  clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:normalization->IntegerProbability; c3 <- mis:normalization->RowsNeedNotSumToOne
+  clause coverage: c1 <- lvl:integer_division@L4#2; c2 <- mis:normalization->IntegerProbability; c3 <- lvl:normalization@L3#1
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation'], 'indexing': ['array_creation'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'normalization': ['integer_division'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'widening_conversion': ['type_conversion']}
   level arithmetic_operators: L4 via predict_a_change "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1"
   level integer_division: L4 via diagnose_an_error "All zeros"

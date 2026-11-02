@@ -58,10 +58,22 @@ def make_script(labels: dict[str, tuple[str, str]]):
     label prompt carries no edge id and no level (only the concept, the way and its text), so the way is found by its text."""
     way_by_text = {w["exact_rule"]: f"lvl:{le['target']}#{i}" for le in TINY["level_edges"] for i, w in enumerate(le["ways"])}
 
+    def clause_no(prompt: str, quote: str) -> str:
+        """The quote becomes the number of the clause that contains it: that is how the model now gives its evidence."""
+        clauses = re.findall(r"^c(\d+): (.+)$", prompt, re.M)
+        hits = [n for n, text in clauses if traverse._norm(quote) in traverse._norm(text)]
+        return hits[0] if hits else "none"
+
     def script(prompt: str) -> str:
         if "Candidate edges of this concept" in prompt:
             ids = _edge_ids(prompt)
             return "\n".join(f"{{{e} (Score: {1 / len(ids):.3f})}}" for e in ids)
+        if "Edges (each with its wrong rule and the right rule)" in prompt:      # the misconception set, judged together
+            lines = []
+            for eid in _edge_ids(prompt):
+                label, quote = labels.get(eid, ("not applied", "none"))
+                lines.append(f"{eid} | {label} | clauses: {clause_no(prompt, quote) if label != 'not applied' else 'none'} | confidence: 0.9")
+            return "\n".join(lines)
         m = re.search(r"Edge: (\S+)", prompt)
         if m:
             eid = m.group(1)
@@ -69,7 +81,7 @@ def make_script(labels: dict[str, tuple[str, str]]):
             assert "Level" not in prompt and "deciding question" not in prompt and "lvl:" not in prompt
             eid = way_by_text[re.search(r"What an answer that shows this way does: (.+)", prompt).group(1).strip()]
         label, quote = labels.get(eid, ("not applied", "none"))
-        return f"Label: {label}\nQuote: {quote}\nConfidence: 0.9"
+        return f"Label: {label}\nClauses: {clause_no(prompt, quote) if label != 'not applied' else 'none'}\nConfidence: 0.9"
     return script
 
 
@@ -137,11 +149,87 @@ def test_level_by_rule_highest_shown_way_and_l0_when_a_misconception_is_held():
     assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["way"] == "everyday_reading"
 
 
+def test_every_held_misconception_stays_and_shared_words_are_marked():
+    # MisC and MisC2 both held on C from different words: two findings, the level reads the strongest edge and names the other
+    labels = {"mis:C->MisC": ("held", "It prints 0"), "mis:C->MisC2": ("held", "x is unset")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert sorted(h["misconception"] for h in d["held_misconceptions"]) == ["MisC", "MisC2"]
+    assert not any("shares_evidence_with" in h for h in d["held_misconceptions"])
+    assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["misconception"] == "MisC" and d["levels"]["C"]["rule"] == "wrong C"
+    assert d["levels"]["C"]["also_held"] == ["MisC2"] and d["root_cause"] == {"concept": "C", "misconception": "MisC"}
+    # both held from the same words: both stay, the weaker is marked as resting on the same words as the stronger
+    labels = {"mis:C->MisC": ("held", "It prints 0"), "mis:C->MisC2": ("held", "It prints 0")}
+    log: list[str] = []
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), log)
+    assert sorted(h["misconception"] for h in d["held_misconceptions"]) == ["MisC", "MisC2"]
+    weaker = [h for h in d["held_misconceptions"] if h["misconception"] == "MisC2"][0]
+    assert weaker["shares_evidence_with"] == "mis:C->MisC"
+    assert any("same words as mis:C->MisC" in l for l in log)
+    # a held misconception with no L0 way at its concept in the graph is reported as a graph gap
+    labels = {"mis:C->MisC2": ("held", "It prints 0")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["source"] == "held_misconception" and "no L0 way" in d["levels"]["C"]["note"]
+    # held misconceptions on two different concepts stay two findings
+    labels = {"mis:B->MisB": ("held", "x is unset"), "mis:C->MisC": ("held", "It prints 0")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert sorted(h["misconception"] for h in d["held_misconceptions"]) == ["MisB", "MisC"]
+
+
+def test_same_misconception_at_both_ends_of_a_prerequisite_edge_is_filed_at_the_dependent_concept():
+    import copy
+    tiny = copy.deepcopy(TINY)
+    tiny["mis_edges"].append({"id": "mis:B->MisC", "source": "B", "target": "MisC", "type": "misconception", "role": "primary",
+                              "logic": "wrong C", "twin_logic": "right C"})
+    labels = {"mis:B->MisC": ("held", "It prints 0"), "mis:C->MisC": ("held", "It prints 0")}
+    d = traverse.traverse(tiny, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert [(h["concept"], h["misconception"]) for h in d["held_misconceptions"]] == [("C", "MisC")]
+    assert d["root_cause"] == {"concept": "C", "misconception": "MisC"}      # not B, the prerequisite end
+    assert "B" not in d["levels"] or d["levels"]["B"]["level"] == "L0"     # B's own evidence is untouched
+    # without a prerequisite edge between the two concepts both findings stay
+    two = [{"kind": "misconception", "source": "B", "target": "M", "score": 1}, {"kind": "misconception", "source": "C", "target": "M", "score": 1}]
+    assert len(traverse.filed_at_dependent(two, {})) == 2 and len(traverse.filed_at_dependent(two, {"C": ["B"]})) == 1
+
+
+def test_a_broken_edge_on_the_words_of_a_held_misconception_is_its_consequence_not_a_root():
+    # MisC held at C from "It prints 0"; the second clause stays uncovered, so the walk goes back over pre:B->C
+    # (confirmed) and finds pre:A->B broken from the same words as the misconception -> the fault stays at C
+    labels = {"mis:C->MisC": ("held", "It prints 0"), "pre:B->C": ("confirmed", "It prints 0"), "pre:A->B": ("broken", "It prints 0")}
+    d = traverse.traverse(TINY, TINY_SC, CFG, ScriptedLLM(make_script(labels)), [])
+    assert d["root_cause"] == {"concept": "C", "misconception": "MisC"}
+    assert [b for b in d["broken_edges"] if b["edge"] == "pre:A->B"][0]["consequence_of"] == "mis:C->MisC"
+    # the same broken edge on other words is a fault of its own, further back, and becomes the root
+    labels["pre:A->B"] = ("broken", "x is unset")
+    d = traverse.traverse(TINY, TINY_SC, CFG, ScriptedLLM(make_script(labels)), [])
+    assert d["root_cause"] == {"concept": "B", "misconception": None}
+    assert "consequence_of" not in [b for b in d["broken_edges"] if b["edge"] == "pre:A->B"][0]
+
+
+def test_uncovered_clauses_bring_in_a_concept_the_start_left_out():
+    import copy
+    tiny = copy.deepcopy(TINY)
+    tiny["mis_edges"][0]["logic"] = "x is unset is the wrong B"    # B's text shares words with the second clause
+    tiny["mis_edges"][2]["logic"] = "prints 0 is the wrong C"      # C's text shares words with the first clause
+    labels = {"mis:B->MisB": ("held", "x is unset"), "mis:C->MisC": ("held", "It prints 0")}
+    log: list[str] = []
+    d = traverse.traverse(tiny, TINY_SC, {**CFG, "width": 1}, ScriptedLLM(make_script(labels)), log)
+    assert len(d["start_concepts"]) == 1
+    start, other = d["start_concepts"][0], ("C" if d["start_concepts"][0] == "B" else "B")
+    # depth 1 explains one clause; the concept the start left out is brought in as a start concept, by the clause it
+    # explains or because the answer names it (B is named by the "x" in the answer)
+    assert any(l.startswith(f"  uncovered clauses bring in: {other}") or l.startswith(f"  named in the answer, entered next: {other}") for l in log)
+    assert any(l.startswith(f"  {other} (misconceptions)") for l in log)
+    assert sorted(h["misconception"] for h in d["held_misconceptions"]) == ["MisB", "MisC"]
+    assert d["levels"]["B"]["level"] == "L0" and d["levels"]["C"]["level"] == "L0" and d["unexplained_clauses"] == []
+
+
 def test_level_ways_never_become_next_hops():
     labels = {"lvl:C@L3#0": ("shown", "It prints 0")}
     log: list[str] = []
     d = traverse.traverse(TINY, TINY_SC, CFG, ScriptedLLM(make_script(labels)), log)
-    assert d["stop_reason"] == "half_stop" and d["depth_reached"] == 1 and any("no next nodes" in l for l in log)
+    # the shown way itself leads nowhere; what the walk reads next is the concept edges of the entered concepts
+    assert not any("reached across lvl:" in l for l in log)
+    assert any("not yet read: pre:A->B, pre:B->C" in l for l in log) and any("(concept edges)" in l for l in log)
+    assert d["stop_reason"] == "half_stop" and d["depth_reached"] == 2 and any("no next nodes" in l for l in log)
 
 
 # ---------------------------------------------------------------- 1. clause split
@@ -220,16 +308,19 @@ def test_rule_stop_does_not_stop_while_a_prerequisite_is_pending():
     llm = ScriptedLLM(make_script(labels))
     log: list[str] = []
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, log)
-    assert any("unexamined prerequisites: pre:B->C" in l for l in log)
+    assert any("not yet read:" in l and "pre:B->C" in l for l in log)
     assert d["depth_reached"] == 2 and d["stop_reason"] == "sufficient"
+    assert [e["edge"] for e in d["evidence"] if e["label"] == "confirmed"] == ["pre:B->C"]    # the link is read and confirmed
 
 
 def test_rule_stop_runs_to_max_depth_when_a_clause_is_uncovered():
     labels = {"mis:C->MisC": ("held", "It prints 0"), "pre:B->C": ("confirmed", "It prints 0"), "pre:A->B": ("confirmed", "prints 0")}
     llm = ScriptedLLM(make_script(labels))
     d = traverse.traverse(TINY, TINY_SC, CFG, llm, [])
-    assert d["stop_reason"] == "max depth" and d["depth_reached"] == 3
+    # every edge of the piece is read by depth 3 and the second clause is still unexplained: the walk runs out, it is never "sufficient"
+    assert d["stop_reason"] in ("max depth", "half_stop") and d["depth_reached"] == 3
     assert d["unexplained_clauses"] == ["because x is unset"]
+    assert sorted(e["edge"] for e in d["evidence"] if e["label"] == "confirmed") == ["pre:A->B", "pre:B->C"]
 
 
 def test_evidence_keeps_dropped_correct_labels():

@@ -71,20 +71,6 @@
   },
   {
    "depth": 1,
-   "source": "command_line_args",
-   "edge": "err:command_line_args->ArgsAlwaysPresent",
-   "target": "ArgsAlwaysPresent",
-   "kind": "error",
-   "label": "correct",
-   "quote": "args is empty",
-   "confidence": 0.7,
-   "prune_score": 0.8,
-   "score": 0.56,
-   "logic": "args[0] can always be read.",
-   "twin_logic": "If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
-  },
-  {
-   "depth": 1,
    "source": "redirection",
    "edge": "lvl:redirection@L2#1",
    "target": "redirection@L2",
@@ -98,23 +84,25 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "redirection",
+   "edge": "lvl:redirection@L3#2",
+   "target": "redirection@L3",
+   "kind": "level",
+   "label": "shown",
+   "quote": "3: an average of 5 new numbers, no file",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "`A > f` followed by `B < f` has the same effect as `A | B`, except that the pipe creates no file.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
-  {
-   "depth": 1,
-   "source": "command_line_args",
-   "edge": "err:command_line_args->ArgsAlwaysPresent",
-   "target": "ArgsAlwaysPresent",
-   "kind": "error",
-   "label": "correct",
-   "quote": "args is empty",
-   "confidence": 0.7,
-   "prune_score": 0.8,
-   "score": 0.56,
-   "logic": "args[0] can always be read.",
-   "twin_logic": "If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
-  },
   {
    "depth": 1,
    "source": "command_line_args",
@@ -229,15 +217,15 @@
  "clause_coverage": {
   "1: nothing, the numbers go into data.txt": "lvl:redirection@L2#1",
   "3: an average of 5 new numbers, no file": "lvl:redirection@L3#2",
-  "args is empty": "err:command_line_args->ArgsAlwaysPresent"
+  "args is empty": "lvl:command_line_args@L3#2"
  },
  "unexplained_clauses": [
   "2: the average"
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 9,
- "llm_cache_hits": 130,
+ "llm_calls": 7,
+ "llm_cache_hits": 100,
  "llm_calls_by_step": {
   "prune": 6,
   "label": 16

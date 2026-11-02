@@ -1,0 +1,94 @@
+clauses: It prints A and then B | because with if-else both blocks run, one after the other | Then 10 / 4 is 2.5 | so the last line is 2.5
+start: BM25 of the answer against each tagged concept: arithmetic_operators 19.70 (hits 1), control_flow 14.97 (hits 1), println 13.94 (hits 1), if_statement 13.69 (hits 1), integer_division 12.81 (hits 1), if_else_statement 11.90 (hits 1), boolean_expression 5.77 (hits 1), comparison_operators 3.85 (hits 1)
+start: chosen arithmetic_operators, control_flow, println
+start concepts (3): arithmetic_operators, control_flow, println
+--- depth 1: current concepts ['arithmetic_operators', 'control_flow', 'println']
+  arithmetic_operators (misconceptions): 3 candidates -> kept 
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L0#0 (0.60), lvl:arithmetic_operators@L2#1 (0.25), lvl:arithmetic_operators@L3#1 (0.15)
+    lvl:arithmetic_operators@L0#0 -> shown (0.42) "Then 10 / 4 is 2.5; so the last line is 2.5"
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->StatementsRunInAnyOrder (0.40), mis:control_flow->FalseConditionRestartsProgram (0.10)
+    mis:control_flow->CodeAfterIfSkipped -> correct (0.42) "Then 10 / 4 is 2.5; so the last line is 2.5"
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L0#3 (0.35), lvl:control_flow@L2#1 (0.20)
+    lvl:control_flow@L2#0 -> not applied (0.00) ""
+    lvl:control_flow@L0#3 -> not applied (0.00) ""
+    lvl:control_flow@L2#1 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#1 (0.20)
+    lvl:println@L2#1 -> shown (0.33) "It prints A and then B; so the last line is 2.5"
+    lvl:println@L3#0 -> shown (0.21) "It prints A and then B; so the last line is 2.5"
+    lvl:println@L3#1 -> shown (0.12) "It prints A and then B; so the last line is 2.5"
+  kept: mis:control_flow->CodeAfterIfSkipped [correct, tier 2, 0.42], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.42], lvl:println@L2#1 [shown, tier 2, 0.33]
+  clause coverage: c1 <- lvl:println@L2#1; c2 uncovered; c3 <- lvl:arithmetic_operators@L0#0; c4 <- lvl:arithmetic_operators@L0#0
+  uncovered clauses bring in: if_statement (7.18), if_else_statement (6.63), boolean_expression (2.48)
+  not yet read: own edges of boolean_expression, own edges of if_else_statement, own edges of if_statement, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:control_flow->if_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+--- depth 2: current concepts ['arithmetic_operators', 'control_flow', 'println', 'if_statement', 'if_else_statement', 'boolean_expression']
+  arithmetic_operators (concept edges): 2 candidates -> kept pre:arithmetic_operators->integer_division (0.90), pre:arithmetic_operators->expression (0.10)
+    pre:arithmetic_operators->integer_division -> broken (0.87) "Then 10 / 4 is 2.5; so the last line is 2.5"
+    pre:arithmetic_operators->expression -> confirmed (0.07) "Then 10 / 4 is 2.5; so the last line is 2.5"
+  control_flow (concept edges): 2 candidates -> kept pre:control_flow->if_statement (0.80), pre:statement->control_flow (0.20)
+    pre:control_flow->if_statement -> broken (0.76) "It prints A and then B; because with if-else both blocks run, one after the other"
+    pre:statement->control_flow -> broken (0.17) "It prints A and then B; because with if-else both blocks run, one after the other"
+  println (concept edges): 2 candidates -> kept pre:statement->println (0.70), pre:string_literal->println (0.30)
+    pre:statement->println -> confirmed (0.49) "It prints A and then B; so the last line is 2.5"
+    pre:string_literal->println -> confirmed (0.21) "It prints A and then B"
+  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.35), mis:if_statement->CodeAfterIfSkipped (0.15)
+    mis:if_statement->BranchChosenByIntent -> not applied (0.00) ""
+    mis:if_statement->ThenAlwaysExecutes -> held (0.24) "It prints A and then B; because with if-else both blocks run, one after the other"
+    mis:if_statement->CodeAfterIfSkipped -> correct (0.14) "Then 10 / 4 is 2.5; so the last line is 2.5"
+  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L3#1 (0.50), lvl:if_statement@L0#14 (0.30), lvl:if_statement@L3#2 (0.20)
+    lvl:if_statement@L3#1 -> not applied (0.00) ""
+    lvl:if_statement@L0#14 -> not applied (0.00) ""
+    lvl:if_statement@L3#2 -> not applied (0.00) ""
+  if_else_statement (misconceptions): 6 candidates -> kept mis:if_else_statement->BothBranchesExecute (0.70), mis:if_else_statement->ElseAlwaysExecutes (0.20), mis:if_else_statement->ConditionalIsSequence (0.10)
+    mis:if_else_statement->BothBranchesExecute -> held (0.68) "It prints A and then B; because with if-else both blocks run, one after the other"
+    mis:if_else_statement->ElseAlwaysExecutes -> not applied (0.00) ""
+    mis:if_else_statement->ConditionalIsSequence -> not applied (0.00) ""
+  if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L0#5 (0.60), lvl:if_else_statement@L0#0 (0.25), lvl:if_else_statement@L2#1 (0.15)
+    lvl:if_else_statement@L0#5 -> shown (0.51) "It prints A and then B; because with if-else both blocks run, one after the other"
+    lvl:if_else_statement@L0#0 -> shown (0.24) "It prints A and then B; because with if-else both blocks run, one after the other"
+    lvl:if_else_statement@L2#1 -> not applied (0.00) ""
+  boolean_expression (misconceptions): 8 candidates -> kept err:boolean_expression->ElseWithCondition (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->NestedIfsInsteadOfLogicalOperators (0.20)
+    err:boolean_expression->ElseWithCondition -> not applied (0.00) ""
+    mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
+    mis:boolean_expression->NestedIfsInsteadOfLogicalOperators -> not applied (0.00) ""
+  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L3#2 (0.60), lvl:boolean_expression@L3#6 (0.25), lvl:boolean_expression@L2#1 (0.15)
+    lvl:boolean_expression@L3#2 -> not applied (0.00) ""
+    lvl:boolean_expression@L3#6 -> not applied (0.00) ""
+    lvl:boolean_expression@L2#1 -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.87], pre:control_flow->if_statement [broken, tier 0, 0.76], mis:if_else_statement->BothBranchesExecute [held, tier 0, 0.68]
+  reached across pre:arithmetic_operators->integer_division, entered next: integer_division
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- pre:control_flow->if_statement; c3 <- lvl:arithmetic_operators@L0#0; c4 <- lvl:arithmetic_operators@L0#0
+  not yet read: own edges of integer_division, pre:boolean_expression->if_statement, pre:comparison_operators->boolean_expression, pre:if_statement->if_else_statement
+--- depth 3: current concepts ['integer_division', 'arithmetic_operators', 'if_statement', 'control_flow', 'if_else_statement', 'boolean_expression']
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (1.00)
+    mis:integer_division->IntegerDivisionGivesFraction -> held (0.97) "Then 10 / 4 is 2.5; so the last line is 2.5"
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#0 (0.70), lvl:integer_division@L1#1 (0.15), lvl:integer_division@L2#1 (0.15)
+    lvl:integer_division@L0#0 -> shown (0.59) "Then 10 / 4 is 2.5; so the last line is 2.5"
+    lvl:integer_division@L1#1 -> not applied (0.00) ""
+    lvl:integer_division@L2#1 -> not applied (0.00) ""
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.70) "Then 10 / 4 is 2.5; so the last line is 2.5"
+  if_statement (concept edges): 2 candidates -> kept pre:if_statement->if_else_statement (0.80), pre:boolean_expression->if_statement (0.20)
+    pre:if_statement->if_else_statement -> broken (0.78) "It prints A and then B; because with if-else both blocks run, one after the other"
+    pre:boolean_expression->if_statement -> broken (0.19) "It prints A and then B; because with if-else both blocks run, one after the other"
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.85) "It prints A and then B; because with if-else both blocks run, one after the other"
+  boolean_expression (concept edges): 1 candidates -> kept pre:comparison_operators->boolean_expression (1.00)
+    pre:comparison_operators->boolean_expression -> not applied (0.00) ""
+  kept: mis:integer_division->IntegerDivisionGivesFraction [held, tier 0, 0.97], pre:statement->control_flow [broken, tier 0, 0.85], pre:if_statement->if_else_statement [broken, tier 0, 0.78]
+  reached across pre:statement->control_flow, entered next: statement
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- pre:control_flow->if_statement; c3 <- lvl:arithmetic_operators@L0#0; c4 <- lvl:arithmetic_operators@L0#0
+  not yet read: own edges of statement
+  root-cause walk: held on ['if_else_statement', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:control_flow->if_statement, pre:statement->control_flow, pre:if_statement->if_else_statement), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level arithmetic_operators: L0 via everyday_reading "Then 10 / 4 is 2.5; so the last line is 2.5"
+  level if_else_statement: L0 via misconception "It prints A and then B; because with if-else both blocks run, one after the other"
+  level if_statement: L0 via misconception "It prints A and then B; because with if-else both blocks run, one after the other"
+  level integer_division: L0 via misconception "Then 10 / 4 is 2.5; so the last line is 2.5"
+  level println: L3 via relation_to_neighbour "It prints A and then B; so the last line is 2.5"

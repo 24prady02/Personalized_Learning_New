@@ -4,7 +4,7 @@ start: chosen command_line_args, standard_input, redirection
 start concepts (3): command_line_args, standard_input, redirection
 --- depth 1: current concepts ['command_line_args', 'standard_input', 'redirection']
   command_line_args (misconceptions): 3 candidates -> kept err:command_line_args->ArgsAlwaysPresent (0.80), err:command_line_args->FirstArgIsArgsOne (0.10), mis:command_line_args->ArgsAreNumbers (0.10)
-    err:command_line_args->ArgsAlwaysPresent -> correct (0.56) "args is empty"
+    err:command_line_args->ArgsAlwaysPresent -> not applied (0.00) "none"
     err:command_line_args->FirstArgIsArgsOne -> not applied (0.00) "none"
     mis:command_line_args->ArgsAreNumbers -> not applied (0.00) "none"
   command_line_args (level ways): 19 candidates -> kept lvl:command_line_args@L3#4 (0.50), lvl:command_line_args@L3#2 (0.30), lvl:command_line_args@L1#0 (0.20)
@@ -25,8 +25,8 @@ start concepts (3): command_line_args, standard_input, redirection
     lvl:redirection@L2#1 -> shown (0.47) "1: nothing, the numbers go into data.txt"
     lvl:redirection@L3#2 -> shown (0.24) "3: an average of 5 new numbers, no file"
     lvl:redirection@L3#0 -> shown (0.14) "1: nothing, the numbers go into data.txt"
-  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], err:command_line_args->ArgsAlwaysPresent [correct, tier 2, 0.56], lvl:redirection@L2#1 [shown, tier 2, 0.47]
-  clause coverage: c1 <- lvl:redirection@L2#1; c2 uncovered; c3 <- lvl:redirection@L3#2; c4 <- err:command_line_args->ArgsAlwaysPresent
+  kept: mis:redirection->RedirectionIsArgument [correct, tier 2, 0.95], lvl:redirection@L2#1 [shown, tier 2, 0.47], lvl:redirection@L3#2 [shown, tier 2, 0.24]
+  clause coverage: c1 <- lvl:redirection@L2#1; c2 uncovered; c3 <- lvl:redirection@L3#2; c4 <- lvl:command_line_args@L3#2
   no next nodes -> half_stop
   root-cause walk: held on [], broken at [], prerequisites {'black_box_model': ['command_line_args'], 'data_driven_code': ['redirection'], 'piping': ['redirection'], 'redirection': ['standard_input', 'standard_output']}
   level command_line_args: L3 via relation_to_neighbour "args is empty"

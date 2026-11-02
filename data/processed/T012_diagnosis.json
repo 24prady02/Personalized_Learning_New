@@ -1,0 +1,864 @@
+{
+ "scenario": "T012",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+  "sum goes 0, 1, 3, 6, 10",
+  "so the loop just adds up 1 to 4",
+  "Then 10 / 4 prints 2",
+  "because two ints divide to a whole number",
+  "If sum were a double it would print 2.5"
+ ],
+ "start_concepts": [
+  "integer_division",
+  "arithmetic_operators",
+  "loop_control"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "If sum were a double it would print 2.5",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "expression": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "If sum were a double it would print 2.5",
+   "edge": "lvl:expression@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 output_prediction"
+   ]
+  },
+  "integer_division": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "If sum were a double it would print 2.5",
+   "edge": "lvl:integer_division@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 states_the_rule"
+   ]
+  },
+  "loop_control": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4",
+   "edge": "lvl:loop_control@L3#6",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "loop_variable": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4",
+   "edge": "lvl:loop_variable@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  }
+ },
+ "overall_level": "L3",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.97,
+   "prune_score": 0.6,
+   "score": 0.582,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "target": "arithmetic_operators@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L4#0",
+   "target": "integer_division@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10; Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.97,
+   "prune_score": 0.6,
+   "score": 0.582,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->AllDoublesToAvoidDivision",
+   "target": "AllDoublesToAvoidDivision",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "Making every variable a double is the right fix for integer division.",
+   "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L4#0",
+   "target": "integer_division@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L1#1",
+   "target": "integer_division@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5,
+    6
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5",
+   "confidence": 0.93,
+   "prune_score": 0.3,
+   "score": 0.279,
+   "logic": "If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L2#1",
+   "target": "integer_division@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4
+   ],
+   "quote": "Then 10 / 4 prints 2",
+   "confidence": 0.95,
+   "prune_score": 0.2,
+   "score": 0.19,
+   "logic": "10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "target": "arithmetic_operators@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5,
+    6
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5",
+   "confidence": 0.96,
+   "prune_score": 0.35,
+   "score": 0.336,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L3#6",
+   "target": "loop_control@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10; Then 10 / 4 prints 2; because two ints divide to a whole number",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.30000000000000004,
+   "score": 0.255,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.6,
+   "prune_score": 0.10000000000000002,
+   "score": 0.06,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5,
+    6
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5,
+    6
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5",
+   "confidence": 0.97,
+   "prune_score": 0.45,
+   "score": 0.4365,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L4#0",
+   "target": "expression@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    6
+   ],
+   "quote": "If sum were a double it would print 2.5",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5,
+    6
+   ],
+   "quote": "Then 10 / 4 prints 2; because two ints divide to a whole number; If sum were a double it would print 2.5",
+   "confidence": 0.93,
+   "prune_score": 0.15,
+   "score": 0.1395,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#0",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#2",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; so the loop just adds up 1 to 4",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4; sum goes 0, 1, 3, 6, 10",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4": "mis:loop_control->OffByOneBound",
+  "sum goes 0, 1, 3, 6, 10": "err:loop_control->WrongIterationCount",
+  "so the loop just adds up 1 to 4": "lvl:loop_control@L3#6",
+  "Then 10 / 4 prints 2": "mis:integer_division->IntegerDivisionGivesFraction",
+  "because two ints divide to a whole number": "mis:integer_division->IntegerDivisionGivesFraction",
+  "If sum were a double it would print 2.5": "mis:integer_division->AllDoublesToAvoidDivision"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 41,
+ "llm_calls_by_step": {
+  "prune": 14,
+  "label": 27
+ }
+}

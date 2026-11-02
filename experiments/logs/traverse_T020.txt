@@ -1,0 +1,88 @@
+clauses: It prints pass | because 72 is at least 70
+start: BM25 of the answer against each tagged concept: if_statement 4.54 (hits 1), control_flow 4.37 (hits 1), println 3.02 (hits 1), if_else_statement 1.45 (hits 1), comparison_operators 0.34 (hits 1), boolean_expression 0.33 (hits 1)
+start: chosen if_statement, control_flow, println
+start concepts (3): if_statement, control_flow, println
+--- depth 1: current concepts ['if_statement', 'control_flow', 'println']
+  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.60), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->IfConditionCheckedInHindsight (0.10)
+    mis:if_statement->BranchChosenByIntent -> correct (0.51) "It prints pass; because 72 is at least 70"
+    mis:if_statement->ThenAlwaysExecutes -> correct (0.24) "because 72 is at least 70"
+    mis:if_statement->IfConditionCheckedInHindsight -> not applied (0.00) ""
+  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L2#0 (0.45), lvl:if_statement@L2#1 (0.40), lvl:if_statement@L1#0 (0.15)
+    lvl:if_statement@L2#0 -> shown (0.32) "It prints pass; because 72 is at least 70"
+    lvl:if_statement@L2#1 -> shown (0.34) "It prints pass; because 72 is at least 70"
+    lvl:if_statement@L1#0 -> shown (0.12) "It prints pass; because 72 is at least 70"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->IfConditionWatched (0.40), mis:control_flow->IfWaitsForCondition (0.35), mis:control_flow->ProgramLooksAhead (0.25)
+    mis:control_flow->IfConditionWatched -> not applied (0.00) ""
+    mis:control_flow->IfWaitsForCondition -> not applied (0.00) ""
+    mis:control_flow->ProgramLooksAhead -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#1 (0.50), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L2#2 (0.20)
+    lvl:control_flow@L2#1 -> shown (0.42) "It prints pass; because 72 is at least 70"
+    lvl:control_flow@L2#0 -> shown (0.21) "It prints pass; because 72 is at least 70"
+    lvl:control_flow@L2#2 -> shown (0.14) "It prints pass; because 72 is at least 70"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.80), mis:println->PrintNewLineFirst (0.10), mis:println->PrintEqualsPrintln (0.10)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#1 (0.50), lvl:println@L2#1 (0.30), lvl:println@L1#0 (0.20)
+    lvl:println@L3#1 -> shown (0.30) "It prints pass"
+    lvl:println@L2#1 -> shown (0.18) "It prints pass"
+    lvl:println@L1#0 -> shown (0.12) "It prints pass"
+  kept: mis:if_statement->BranchChosenByIntent [correct, tier 2, 0.51], lvl:control_flow@L2#1 [shown, tier 2, 0.42], lvl:if_statement@L2#1 [shown, tier 2, 0.34]
+  clause coverage: c1 <- mis:if_statement->BranchChosenByIntent; c2 <- mis:if_statement->BranchChosenByIntent
+  not yet read: pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:if_statement->if_else_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+--- depth 2: current concepts ['if_statement', 'control_flow', 'println']
+  if_statement (concept edges): 3 candidates -> kept pre:boolean_expression->if_statement (0.60), pre:control_flow->if_statement (0.25), pre:if_statement->if_else_statement (0.15)
+    pre:boolean_expression->if_statement -> confirmed (0.57) "It prints pass; because 72 is at least 70"
+    pre:control_flow->if_statement -> confirmed (0.21) "It prints pass; because 72 is at least 70"
+    pre:if_statement->if_else_statement -> confirmed (0.10) "It prints pass; because 72 is at least 70"
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> confirmed (0.70) "It prints pass; because 72 is at least 70"
+  println (concept edges): 2 candidates -> kept pre:string_literal->println (0.80), pre:statement->println (0.20)
+    pre:string_literal->println -> confirmed (0.64) "It prints pass"
+    pre:statement->println -> not applied (0.00) ""
+  kept: pre:statement->control_flow [confirmed, tier 2, 0.70], pre:string_literal->println [confirmed, tier 2, 0.64], pre:boolean_expression->if_statement [confirmed, tier 2, 0.57]
+  reached across pre:statement->control_flow, entered next: statement
+  reached across pre:string_literal->println, entered next: string_literal
+  reached across pre:boolean_expression->if_statement, entered next: boolean_expression
+  clause coverage: c1 <- mis:if_statement->BranchChosenByIntent; c2 <- mis:if_statement->BranchChosenByIntent
+  not yet read: own edges of boolean_expression, own edges of statement, own edges of string_literal
+--- depth 3: current concepts ['statement', 'control_flow', 'string_literal', 'println', 'boolean_expression', 'if_statement']
+  statement (misconceptions): 5 candidates -> kept mis:statement->ProgramLooksAhead (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ComputerFillsInIntent (0.20)
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#1 (0.50), lvl:statement@L2#2 (0.30), lvl:statement@L2#0 (0.20)
+    lvl:statement@L2#1 -> shown (0.42) "It prints pass"
+    lvl:statement@L2#2 -> not applied (0.00) ""
+    lvl:statement@L2#0 -> not applied (0.00) ""
+  control_flow (concept edges): 1 candidates -> kept pre:control_flow->if_statement (1.00)
+    pre:control_flow->if_statement -> confirmed (0.85) "It prints pass; because 72 is at least 70"
+  string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (1.00)
+    mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
+  string_literal (level ways): 16 candidates -> kept lvl:string_literal@L3#1 (0.60), lvl:string_literal@L2#1 (0.30), lvl:string_literal@L3#0 (0.10)
+    lvl:string_literal@L3#1 -> shown (0.36) "It prints pass"
+    lvl:string_literal@L2#1 -> shown (0.21) "It prints pass"
+    lvl:string_literal@L3#0 -> shown (0.07) "It prints pass"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ComparisonWithBooleanLiteral (0.20)
+    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) ""
+    mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
+    mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
+  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#2 (0.30), lvl:boolean_expression@L2#0 (0.20)
+    lvl:boolean_expression@L2#1 -> shown (0.35) "It prints pass; because 72 is at least 70"
+    lvl:boolean_expression@L3#2 -> shown (0.21) "It prints pass; because 72 is at least 70"
+    lvl:boolean_expression@L2#0 -> not applied (0.00) ""
+  if_statement (concept edges): 1 candidates -> kept pre:if_statement->if_else_statement (1.00)
+    pre:if_statement->if_else_statement -> confirmed (0.65) "It prints pass; because 72 is at least 70"
+  kept: pre:control_flow->if_statement [confirmed, tier 2, 0.85], pre:if_statement->if_else_statement [confirmed, tier 2, 0.65], lvl:statement@L2#1 [shown, tier 2, 0.42]
+  reached across pre:if_statement->if_else_statement, entered next: if_else_statement
+  clause coverage: c1 <- mis:if_statement->BranchChosenByIntent; c2 <- mis:if_statement->BranchChosenByIntent
+  not yet read: own edges of if_else_statement, pre:comparison_operators->boolean_expression
+  root-cause walk: held on [], broken at [], prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level boolean_expression: L3 via relation_to_neighbour "It prints pass; because 72 is at least 70"
+  level control_flow: L2 via output_prediction "It prints pass; because 72 is at least 70"
+  level if_statement: L2 via output_prediction "It prints pass; because 72 is at least 70"
+  level println: L3 via relation_to_neighbour "It prints pass"
+  level statement: L2 via output_prediction "It prints pass"
+  level string_literal: L3 via relation_to_neighbour "It prints pass"

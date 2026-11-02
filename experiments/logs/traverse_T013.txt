@@ -1,0 +1,68 @@
+clauses: It prints true | age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between | so both sides are true
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: comparison_operators 10.45 (hits 1), boolean_expression 10.27 (hits 1), println 8.91 (hits 1), assignment 8.84 (hits 1), logical_operators 8.19 (hits 1), short_circuit 7.76 (hits 1), operator_precedence 6.98 (hits 1)
+start: chosen comparison_operators, boolean_expression, println
+start concepts (3): comparison_operators, boolean_expression, println
+--- depth 1: current concepts ['comparison_operators', 'boolean_expression', 'println']
+  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->ChainedComparison (0.60), mis:comparison_operators->LessGreaterSwapped (0.25), err:comparison_operators->ReversedRelationalOperator (0.15)
+    mis:comparison_operators->ChainedComparison -> correct (0.48) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    mis:comparison_operators->LessGreaterSwapped -> correct (0.23) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+    err:comparison_operators->ReversedRelationalOperator -> correct (0.09) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L3#2 (0.40), lvl:comparison_operators@L2#1 (0.35), lvl:comparison_operators@L3#5 (0.25)
+    lvl:comparison_operators@L3#2 -> shown (0.28) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    lvl:comparison_operators@L2#1 -> shown (0.30) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    lvl:comparison_operators@L3#5 -> shown (0.23) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ChainedComparison (0.60), mis:boolean_expression->NestedIfsInsteadOfLogicalOperators (0.25), mis:boolean_expression->ArithmeticInsteadOfBoolean (0.15)
+    mis:boolean_expression->ChainedComparison -> correct (0.48) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+    mis:boolean_expression->NestedIfsInsteadOfLogicalOperators -> correct (0.15) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    mis:boolean_expression->ArithmeticInsteadOfBoolean -> correct (0.11) "It prints true; so both sides are true"
+  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L2#1 (0.45), lvl:boolean_expression@L3#0 (0.30), lvl:boolean_expression@L2#0 (0.25)
+    lvl:boolean_expression@L2#1 -> shown (0.42) "It prints true; so both sides are true"
+    lvl:boolean_expression@L3#0 -> shown (0.21) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    lvl:boolean_expression@L2#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L2#0 (0.30), lvl:println@L2#2 (0.20)
+    lvl:println@L2#1 -> shown (0.35) "It prints true"
+    lvl:println@L2#0 -> not applied (0.00) ""
+    lvl:println@L2#2 -> not applied (0.00) ""
+  kept: mis:comparison_operators->ChainedComparison [correct, tier 2, 0.48], mis:boolean_expression->ChainedComparison [correct, tier 2, 0.48], lvl:boolean_expression@L2#1 [shown, tier 2, 0.42]
+  clause coverage: c1 <- mis:boolean_expression->ArithmeticInsteadOfBoolean; c2 <- mis:comparison_operators->ChainedComparison; c3 <- mis:comparison_operators->ChainedComparison
+  not yet read: par:assignment~comparison_operators, par:comparison_operators~logical_operators, pre:boolean->comparison_operators, pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:logical_operators->boolean_expression, pre:statement->println
+--- depth 2: current concepts ['comparison_operators', 'boolean_expression', 'println']
+  comparison_operators (concept edges): 5 candidates -> kept par:comparison_operators~logical_operators (0.50), pre:comparison_operators->boolean_expression (0.30), pre:boolean->comparison_operators (0.20)
+    par:comparison_operators~logical_operators -> confirmed (0.45) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    pre:comparison_operators->boolean_expression -> confirmed (0.26) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    pre:boolean->comparison_operators -> confirmed (0.17) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+  boolean_expression (concept edges): 1 candidates -> kept pre:logical_operators->boolean_expression (1.00)
+    pre:logical_operators->boolean_expression -> confirmed (0.90) "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  kept: pre:logical_operators->boolean_expression [confirmed, tier 2, 0.90], par:comparison_operators~logical_operators [confirmed, tier 2, 0.45], pre:comparison_operators->boolean_expression [confirmed, tier 2, 0.26]
+  reached across pre:logical_operators->boolean_expression, entered next: logical_operators
+  clause coverage: c1 <- mis:boolean_expression->ArithmeticInsteadOfBoolean; c2 <- mis:comparison_operators->ChainedComparison; c3 <- mis:comparison_operators->ChainedComparison
+  not yet read: own edges of logical_operators
+--- depth 3: current concepts ['logical_operators', 'boolean_expression', 'comparison_operators']
+  logical_operators (misconceptions): 4 candidates -> kept mis:logical_operators->NestedIfsInsteadOfLogicalOperators (0.60), mis:logical_operators->NoSingleLogicAnd (0.25), mis:logical_operators->SingleAmpersandForAnd (0.15)
+    mis:logical_operators->NestedIfsInsteadOfLogicalOperators -> correct (0.36) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    mis:logical_operators->NoSingleLogicAnd -> not applied (0.00) ""
+    mis:logical_operators->SingleAmpersandForAnd -> not applied (0.00) ""
+  logical_operators (level ways): 19 candidates -> kept lvl:logical_operators@L1#1 (0.40), lvl:logical_operators@L2#1 (0.35), lvl:logical_operators@L3#6 (0.25)
+    lvl:logical_operators@L1#1 -> shown (0.28) "It prints true; so both sides are true"
+    lvl:logical_operators@L2#1 -> shown (0.33) "It prints true; age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    lvl:logical_operators@L3#6 -> shown (0.21) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+  comparison_operators (concept edges): 3 candidates -> kept pre:boolean->comparison_operators (0.70), pre:expression->comparison_operators (0.25), par:assignment~comparison_operators (0.05)
+    pre:boolean->comparison_operators -> confirmed (0.59) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    pre:expression->comparison_operators -> confirmed (0.20) "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+    par:assignment~comparison_operators -> not applied (0.00) ""
+  kept: pre:boolean->comparison_operators [confirmed, tier 2, 0.59], mis:logical_operators->NestedIfsInsteadOfLogicalOperators [correct, tier 2, 0.36], lvl:logical_operators@L2#1 [shown, tier 2, 0.33]
+  reached across pre:boolean->comparison_operators, entered next: boolean
+  clause coverage: c1 <- mis:boolean_expression->ArithmeticInsteadOfBoolean; c2 <- mis:comparison_operators->ChainedComparison; c3 <- mis:comparison_operators->ChainedComparison
+  not yet read: own edges of boolean, pre:boolean->logical_operators, pre:logical_operators->short_circuit
+  root-cause walk: held on [], broken at [], prerequisites {'comparison_operators': ['boolean', 'expression'], 'logical_operators': ['boolean'], 'boolean_expression': ['comparison_operators', 'logical_operators'], 'operator_precedence': ['expression'], 'short_circuit': ['logical_operators'], 'println': ['statement']}
+  level boolean_expression: L3 via relation_to_neighbour "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+  level comparison_operators: L3 via relation_to_neighbour "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between; so both sides are true"
+  level logical_operators: L3 via purpose_of_the_whole "age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between"
+  level println: L2 via output_prediction "It prints true"

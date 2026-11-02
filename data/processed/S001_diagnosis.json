@@ -161,10 +161,10 @@
    "target": "PrintNewLineFirst",
    "kind": "misconception",
    "label": "correct",
-   "quote": "println adds a newline after the text and print does not",
-   "confidence": 0.95,
+   "quote": "println adds a newline after the text",
+   "confidence": 0.97,
    "prune_score": 0.30000000000000004,
-   "score": 0.285,
+   "score": 0.291,
    "logic": "println(s) prints a newline and then s.",
    "twin_logic": "println(s) prints s and then the newline."
   },
@@ -223,8 +223,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 0,
- "llm_cache_hits": 32,
+ "llm_calls": 6,
+ "llm_cache_hits": 22,
  "llm_calls_by_step": {
   "prune": 4,
   "label": 12

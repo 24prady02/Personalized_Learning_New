@@ -1,0 +1,718 @@
+{
+ "scenario": "T008",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints A and then B",
+  "because with if-else both blocks run, one after the other",
+  "Then 10 / 4 is 2.5",
+  "so the last line is 2.5"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "control_flow",
+  "println"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "integer_division",
+   "misconception": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "score": 0.97
+  },
+  {
+   "concept": "if_else_statement",
+   "misconception": "BothBranchesExecute",
+   "kind": "misconception",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "score": 0.679
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "score": 0.873,
+   "consequence_of": "mis:integer_division->IntegerDivisionGivesFraction"
+  },
+  {
+   "edge": "pre:control_flow->if_statement",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "score": 0.76,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "score": 0.85,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "edge": "pre:if_statement->if_else_statement",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "score": 0.776,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  }
+ ],
+ "root_cause": {
+  "concept": "if_else_statement",
+  "misconception": "BothBranchesExecute"
+ },
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "edge": "lvl:arithmetic_operators@L0#0",
+   "source": "level_way"
+  },
+  "if_else_statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "BothBranchesExecute",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "rule": "wrong rule: Both the then branch and the else branch run. Right rule: Exactly one of the two branches runs.",
+   "source": "level_mis_links"
+  },
+  "if_statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ThenAlwaysExecutes",
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "rule": "wrong rule: The then branch always runs. Right rule: The then branch runs only when the condition is true.",
+   "source": "level_mis_links"
+  },
+  "integer_division": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IntegerDivisionGivesFraction",
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.",
+   "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 output_prediction"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L0#0",
+   "target": "arithmetic_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 0.6,
+   "score": 0.42,
+   "logic": "In maths notation, multiplication can be implicit (2x), ^ or a superscript means a power, ÷ is exact division, and % means percent. In Java * must be written, / depends on the operand types, % is the remainder, and there is no power operator (^ is exclusive or).",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "confidence": 0.65,
+   "prune_score": 0.5,
+   "score": 0.325,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "integer_division",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.97,
+   "prune_score": 0.9,
+   "score": 0.873,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->IntegerDivisionGivesFraction"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:control_flow->if_statement",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "depth": 2,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "target": "BothBranchesExecute",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.97,
+   "prune_score": 0.7000000000000001,
+   "score": 0.679,
+   "logic": "Both the then branch and the else branch run.",
+   "twin_logic": "Exactly one of the two branches runs."
+  },
+  {
+   "depth": 3,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "depth": 3,
+   "source": "if_statement",
+   "edge": "pre:if_statement->if_else_statement",
+   "target": "if_else_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.97,
+   "prune_score": 0.8,
+   "score": 0.776,
+   "logic": "if-else extends if with a second block that runs exactly when the condition is false.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L0#0",
+   "target": "arithmetic_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 0.6,
+   "score": 0.42,
+   "logic": "In maths notation, multiplication can be implicit (2x), ^ or a superscript means a power, ÷ is exact division, and % means percent. In Java * must be written, / depends on the operand types, % is the remainder, and there is no power operator (^ is exclusive or).",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "confidence": 0.65,
+   "prune_score": 0.5,
+   "score": 0.325,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#1",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "integer_division",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.97,
+   "prune_score": 0.9,
+   "score": 0.873,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->IntegerDivisionGivesFraction"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 0.1,
+   "score": 0.07,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:control_flow->if_statement",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints A and then B; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 0.7,
+   "score": 0.49,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:string_literal->println",
+   "target": "string_literal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints A and then B",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "target": "ThenAlwaysExecutes",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "The then branch always runs.",
+   "twin_logic": "The then branch runs only when the condition is true."
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "mis:if_statement->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.9,
+   "prune_score": 0.15,
+   "score": 0.135,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 2,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "target": "BothBranchesExecute",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.97,
+   "prune_score": 0.7000000000000001,
+   "score": 0.679,
+   "logic": "Both the then branch and the else branch run.",
+   "twin_logic": "Exactly one of the two branches runs."
+  },
+  {
+   "depth": 2,
+   "source": "if_else_statement",
+   "edge": "lvl:if_else_statement@L0#5",
+   "target": "if_else_statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the if-else rule (LT) unevenly: on some traces runs both branches, re-tests the condition after the then branch to decide whether to run the else branch, or runs the else branch whatever the condition. (here mixing in: \"if-else is the same as two separate ifs\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "if_else_statement",
+   "edge": "lvl:if_else_statement@L0#0",
+   "target": "if_else_statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.95,
+   "prune_score": 0.25,
+   "score": 0.2375,
+   "logic": "Folk meaning: in English 'otherwise' can be heard as 'and then also', and 'if ... else ...' as two separate rules that are each checked. In Java the condition is tested once and exactly one of the two branches runs.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "integer_division",
+   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
+   "target": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "depth": 3,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#0",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0).",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then 10 / 4 is 2.5; so the last line is 2.5",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "if_statement",
+   "edge": "pre:if_statement->if_else_statement",
+   "target": "if_else_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.97,
+   "prune_score": 0.8,
+   "score": 0.776,
+   "logic": "if-else extends if with a second block that runs exactly when the condition is false.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  },
+  {
+   "depth": 3,
+   "source": "if_statement",
+   "edge": "pre:boolean_expression->if_statement",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.93,
+   "prune_score": 0.2,
+   "score": 0.186,
+   "logic": "An if runs its block only when its boolean expression evaluates to true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It prints A and then B; because with if-else both blocks run, one after the other",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_else_statement->BothBranchesExecute"
+  }
+ ],
+ "clause_coverage": {
+  "It prints A and then B": "lvl:println@L2#1",
+  "because with if-else both blocks run, one after the other": "pre:control_flow->if_statement",
+  "Then 10 / 4 is 2.5": "lvl:arithmetic_operators@L0#0",
+  "so the last line is 2.5": "lvl:arithmetic_operators@L0#0"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 59,
+ "llm_calls_by_step": {
+  "prune": 21,
+  "label": 38
+ }
+}

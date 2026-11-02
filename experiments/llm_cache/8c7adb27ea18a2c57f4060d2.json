@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint age = 15;\nboolean teen = age >= 13 && age <= 19;\nSystem.out.println(teen);\n\nQuestion: What is printed? Explain.\n\nStudent's answer, split into clauses:\nc1: It prints true\nc2: age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between\nc3: so both sides are true\n\nConcept: println\nWay: output prediction\nWhat an answer that shows this way does: Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: shown\nClauses: 1\nConfidence: 0.7"
+}

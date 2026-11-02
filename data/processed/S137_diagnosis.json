@@ -39,6 +39,7 @@
    "misconception": "PrintedTextIsExecuted",
    "quote": "sets x to 5",
    "edge": "mis:println->PrintedTextIsExecuted",
+   "rule": "System.out.println(\"x is 5\"); sets x to 5 (text inside the quotes is run as code).",
    "source": "held_misconception"
   }
  },
@@ -85,7 +86,7 @@
  "stop_reason": "half_stop",
  "depth_reached": 2,
  "llm_calls": 9,
- "llm_cache_hits": 171,
+ "llm_cache_hits": 144,
  "llm_calls_by_step": {
   "prune": 7,
   "label": 21

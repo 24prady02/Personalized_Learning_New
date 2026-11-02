@@ -93,16 +93,18 @@
   {
    "depth": 1,
    "source": "control_flow",
-   "edge": "mis:control_flow->CodeAfterIfSkipped",
-   "target": "CodeAfterIfSkipped",
-   "kind": "misconception",
-   "label": "correct",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
    "quote": "so it prints E, and then after that inner if-else it prints G",
    "confidence": 0.95,
    "prune_score": 0.5,
    "score": 0.475,
-   "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
   }
  ],
  "evidence": [
@@ -113,10 +115,10 @@
    "target": "BranchChosenByIntent",
    "kind": "misconception",
    "label": "correct",
-   "quote": "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2",
-   "confidence": 0.93,
+   "quote": "it checks whether x is even, and 17 is not even",
+   "confidence": 0.9,
    "prune_score": 0.4,
-   "score": 0.372,
+   "score": 0.36,
    "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
    "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs."
   },
@@ -128,9 +130,9 @@
    "kind": "misconception",
    "label": "correct",
    "quote": "so it prints E, and then after that inner if-else it prints G",
-   "confidence": 0.95,
+   "confidence": 0.93,
    "prune_score": 0.35,
-   "score": 0.3325,
+   "score": 0.3255,
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way."
   },
@@ -204,25 +206,11 @@
    "kind": "misconception",
    "label": "correct",
    "quote": "so it prints E, and then after that inner if-else it prints G",
-   "confidence": 0.95,
+   "confidence": 0.93,
    "prune_score": 0.5,
-   "score": 0.475,
+   "score": 0.465,
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way."
-  },
-  {
-   "depth": 1,
-   "source": "control_flow",
-   "edge": "mis:control_flow->FalseConditionRestartsProgram",
-   "target": "FalseConditionRestartsProgram",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "so it skips the whole first part with B, C and D, and goes to the else part",
-   "confidence": 0.8,
-   "prune_score": 0.3,
-   "score": 0.24,
-   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
-   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement."
   },
   {
    "depth": 1,
@@ -334,19 +322,19 @@
   }
  ],
  "clause_coverage": {
-  "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2": "mis:if_statement->BranchChosenByIntent",
+  "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even": "mis:if_statement->BranchChosenByIntent",
+  "so it skips the whole first part with B, C and D, and goes to the else part, where it checks 17 % 5, which is 2": "mis:if_statement->ThenAlwaysExecutes",
   "so it prints E, and then after that inner if-else it prints G": "mis:if_statement->CodeAfterIfSkipped"
  },
  "unexplained_clauses": [
-  "So first Java looks at the code and the first thing it does is print A, which always happens no matter what x is, and then it checks whether x is even, and 17 is not even",
   "because 17 divided by 2 leaves 1",
   "so overall I think the answer would be AEG, which makes sense",
   "because…"
  ],
  "stop_reason": "half_stop",
  "depth_reached": 1,
- "llm_calls": 1,
- "llm_cache_hits": 109,
+ "llm_calls": 7,
+ "llm_cache_hits": 75,
  "llm_calls_by_step": {
   "prune": 6,
   "label": 16

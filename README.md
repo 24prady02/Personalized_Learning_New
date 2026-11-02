@@ -37,7 +37,7 @@ requirements.txt                             pytest; matplotlib, networkx (figur
 pytest.ini                                   testpaths = tests, pythonpath = src
 data/
   raw/chapter1_kg.json                       knowledge graph v3.9.5-reader4 (173 concepts, 1896 edges, 296 misconception/error records, 865 level nodes)
-  raw/scenarios_20.json                      S000 reference case + the 10 scenarios whose gold concepts the code alone shows
+  raw/scenarios_20.json                      S000 reference case + 10 scenarios whose gold concepts the code alone shows + 5 test scenarios T001-T005 written for Stage 2
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
   processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step
@@ -116,31 +116,56 @@ level ways are edges of the search like everything else.
 3. **Edge prune.** One call per concept and family picks up to N edges the answer engages with, scores summing
    to 1 (or BM25 / sentence-BERT similarity instead of the call). Pruning each family on its own means a level way
    never competes with a misconception edge for a slot.
-4. **Edge label.** One call per kept edge: held / correct / not applied for a misconception edge shown with its
-   wrong rule and right rule; confirmed / broken / not applied for a concept edge shown with its logic; shown /
+4. **Edge label.** The kept misconception / error edges of a concept are judged together in one call, one reply
+   line per edge: held / correct / not applied, each shown with its wrong rule and right rule. Judging them side
+   by side lets the model give held to the rule whose claim the student actually makes when several wrong rules
+   would fit the same words, and still hold two when the student holds two (held means the answer follows the
+   wrong rule in what sets it apart from the right rule: where the student gives a reason it must be this rule's
+   own, a result the rule would also predict but reached by another reason does not hold it, and a rule about
+   something neither the program nor the answer contains is not applied). Evidence is given as clause numbers,
+   not a free quote, so the code knows exactly which words each label rests on and two labels on the same clause
+   are known to rest on the same words. One call per edge, with the same clause-number evidence: confirmed /
+   broken / not applied for a concept edge shown with its logic; shown /
    not shown for a level way shown with the concept, the way's name and what an answer that shows the way does,
    and nothing else: no level name, no deciding question, no level in an id, so the way is judged against its own
-   text like every other edge and its level comes only from where it sits in the graph. The reply quotes the
-   answer verbatim and gives a confidence; a quote not found in the answer makes the label not applied.
+   text like every other edge and its level comes only from where it sits in the graph. Every reply names the
+   clauses and gives a confidence; a label with no clause behind it is not applied.
    Score = prune score × confidence.
 5. **Keep the best N in tiers**: held misconceptions and broken edges first, then held errors, then correct /
    confirmed / shown edges; by score within a tier (an edge reached from both ends in one round counts once).
    Confirmations therefore never crowd out a diagnosis. Every labelled edge whose quote is in the answer is
    recorded as **evidence**, kept or not, so a dropped "correct" label still explains its clause.
-6. **Stop test** (no model). (i) Graph check: if a concept with a held misconception or a broken edge has a
-   prerequisite edge in the subgraph that has not been examined, the walk goes one hop back. (ii) Clause
-   coverage: a clause is covered when the normalised quote of some evidence edge is contained in it or contains
-   it. The walk stops with reason "sufficient" when nothing is pending and every clause is covered; at max depth
-   the uncovered clauses are reported as unexplained.
-7. **Next concepts**: the source of each held misconception (to walk back), both ends of each kept concept edge.
-   A level way leads nowhere: it describes the concept itself.
+6. **Stop test** (no model). (i) Graph check: every concept the walk has entered has its concept edges, the
+   prerequisite and parallel links to the other concepts of its piece, read before the walk may stop. For a
+   faulted concept that is where the root cause lies; for a concept the student got right it is the conceptual
+   trace, the confirmed links between concepts, which is as much part of the diagnosis as the faults. (ii) Clause
+   coverage: a clause is covered when some labelled edge names it. The walk stops with reason "sufficient" when
+   no concept edge is pending and every clause is covered; at max depth the uncovered clauses are reported as
+   unexplained.
+7. **Next concepts**: every entered concept whose concept edges are unread (it reads them next); the far end of
+   each kept concept edge, entered as a start concept so its own misconception edges and level ways are read and
+   it gets a level of its own; the source of each held misconception (to walk back). An edge is offered once per
+   depth, not from each of its ends. A level way leads nowhere: it describes the concept itself. When clauses
+   remain uncovered and the width is
+   not full, the uncovered clauses bring in concepts the walk has not entered yet: BM25 of those clauses against
+   the unvisited concepts of the start pool, best first, no model call. Such a concept enters as a start concept,
+   so its own misconception edges and level ways are read at the next depth. This is what lets a correct
+   multi-concept answer, whose labels give no direction of their own, reach every concept the student wrote about.
 8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
+   Every held misconception stays: a student can hold several at once, and the judgement is made at the label
+   step, edge by edge. A held misconception resting on the same words as a stronger one on the same concept is
+   marked `shares_evidence_with` that edge (the graph words one wrong idea in several ways, e.g.
+   IfConditionWatched / IfWaitsForCondition on if_statement; both come out held, and the comparison counts the
+   pair as one). One fault, one location: the same misconception held at both ends of a prerequisite edge is
+   filed at the dependent concept, and a broken edge shown by the same words as a held misconception is that
+   misconception's consequence (`consequence_of`), so neither marks a root cause of its own.
    Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
    concept that itself holds a misconception or is the target of a broken prerequisite edge (a broken A → B says
    the student did not carry A into B, so the fault sits at B). Level per concept, by rule from the evidence and
-   with no model call: L0 when the concept holds a misconception or an L0 way (everyday reading, inconsistent
-   trace) is shown, since the L0 deciding question asks whether every rule the answer applies agrees with the
-   language rule; otherwise the highest level with a shown way, because the levels are cumulative and an answer
+   with no model call: L0 when the concept holds a misconception (the level then reads the edge of that one
+   misconception, the kept finding, and carries the L0 way's own text from `level_mis_links` as `rule`) or an L0
+   way (everyday reading, inconsistent trace) is shown, since the L0 deciding question asks whether every rule the
+   answer applies agrees with the language rule; otherwise the highest level with a shown way, because the levels are cumulative and an answer
    at L4 also does L3. A concept with no held misconception and no shown way gets no level. Overall level: the
    root-cause concept's level (for an answer with no error, the lowest level reached). Output also lists the
    evidence, which edge covers each clause, the uncovered clauses, the stop reason (sufficient / half_stop / max

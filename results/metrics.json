@@ -1,11 +1,11 @@
 {
- "scenarios": 10,
- "fully_covered": 10,
+ "scenarios": 30,
+ "fully_covered": 30,
  "gold_concept_recall_mean": 1.0,
- "gold_share_of_nodes_mean": 0.534,
- "mean_concept_nodes": 9.6,
- "mean_concept_edges": 8.2,
- "subgraphs_in_one_piece": 5,
+ "gold_share_of_nodes_mean": 0.362,
+ "mean_concept_nodes": 10.3,
+ "mean_concept_edges": 8.5,
+ "subgraphs_in_one_piece": 11,
  "per_scenario": {
   "S000": {
    "nodes": 4,
@@ -59,6 +59,106 @@
   },
   "S137": {
    "nodes": 4,
+   "missed": [],
+   "pieces": 1
+  },
+  "T001": {
+   "nodes": 7,
+   "missed": [],
+   "pieces": 2
+  },
+  "T002": {
+   "nodes": 8,
+   "missed": [],
+   "pieces": 3
+  },
+  "T003": {
+   "nodes": 9,
+   "missed": [],
+   "pieces": 1
+  },
+  "T004": {
+   "nodes": 6,
+   "missed": [],
+   "pieces": 2
+  },
+  "T005": {
+   "nodes": 19,
+   "missed": [],
+   "pieces": 3
+  },
+  "T006": {
+   "nodes": 13,
+   "missed": [],
+   "pieces": 3
+  },
+  "T007": {
+   "nodes": 17,
+   "missed": [],
+   "pieces": 3
+  },
+  "T008": {
+   "nodes": 12,
+   "missed": [],
+   "pieces": 1
+  },
+  "T009": {
+   "nodes": 9,
+   "missed": [],
+   "pieces": 1
+  },
+  "T010": {
+   "nodes": 9,
+   "missed": [],
+   "pieces": 1
+  },
+  "T011": {
+   "nodes": 18,
+   "missed": [],
+   "pieces": 3
+  },
+  "T012": {
+   "nodes": 16,
+   "missed": [],
+   "pieces": 3
+  },
+  "T013": {
+   "nodes": 10,
+   "missed": [],
+   "pieces": 2
+  },
+  "T014": {
+   "nodes": 14,
+   "missed": [],
+   "pieces": 4
+  },
+  "T015": {
+   "nodes": 8,
+   "missed": [],
+   "pieces": 3
+  },
+  "T016": {
+   "nodes": 4,
+   "missed": [],
+   "pieces": 1
+  },
+  "T017": {
+   "nodes": 5,
+   "missed": [],
+   "pieces": 3
+  },
+  "T018": {
+   "nodes": 13,
+   "missed": [],
+   "pieces": 2
+  },
+  "T019": {
+   "nodes": 6,
+   "missed": [],
+   "pieces": 3
+  },
+  "T020": {
+   "nodes": 10,
    "missed": [],
    "pieces": 1
   }

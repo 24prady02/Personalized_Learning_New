@@ -1,0 +1,52 @@
+clauses: It prints 8 | % takes 5 away from 13
+start: 3 tagged concepts, all used
+start concepts (3): arithmetic_operators, println, remainder_operator
+--- depth 1: current concepts ['arithmetic_operators', 'println', 'remainder_operator']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
+    mis:arithmetic_operators->RemainderIsSubtraction -> held (0.97) "It prints 8; % takes 5 away from 13"
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L0#0 (0.50), lvl:arithmetic_operators@L2#1 (0.30), lvl:arithmetic_operators@L3#1 (0.20)
+    lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.40), mis:println->PrintEqualsPrintln (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L2#0 (0.30), lvl:println@L1#0 (0.20)
+    lvl:println@L2#1 -> shown (0.30) "It prints 8"
+    lvl:println@L2#0 -> not applied (0.00) ""
+    lvl:println@L1#0 -> not applied (0.00) ""
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsSubtraction (1.00)
+    mis:remainder_operator->RemainderIsSubtraction -> held (0.98) "It prints 8; % takes 5 away from 13"
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#3 (0.45), lvl:remainder_operator@L0#0 (0.35), lvl:remainder_operator@L1#0 (0.20)
+    lvl:remainder_operator@L0#3 -> not applied (0.00) ""
+    lvl:remainder_operator@L0#0 -> not applied (0.00) ""
+    lvl:remainder_operator@L1#0 -> not applied (0.00) ""
+  kept: mis:remainder_operator->RemainderIsSubtraction [held, tier 0, 0.98], mis:arithmetic_operators->RemainderIsSubtraction [held, tier 0, 0.97], lvl:println@L2#1 [shown, tier 2, 0.30]
+  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction
+  not yet read: pre:arithmetic_operators->expression, pre:statement->println
+--- depth 2: current concepts ['remainder_operator', 'arithmetic_operators', 'println']
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.70) "It prints 8; % takes 5 away from 13"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.70]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction
+  not yet read: own edges of expression
+--- depth 3: current concepts ['expression', 'arithmetic_operators']
+  expression (misconceptions): 8 candidates -> kept mis:expression->OutsideInMethodNesting (0.50), mis:expression->TargetTyping (0.25), mis:expression->NoAtomicExpression (0.25)
+    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#0 (0.20)
+    lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L2#1 -> shown (0.18) "It prints 8"
+    lvl:expression@L3#0 -> shown (0.16) "% takes 5 away from 13"
+  kept: lvl:expression@L2#1 [shown, tier 2, 0.18], lvl:expression@L3#0 [shown, tier 2, 0.16]
+  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction
+  root-cause walk: held on ['arithmetic_operators', 'remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+  level arithmetic_operators: L0 via misconception "It prints 8; % takes 5 away from 13"
+  level expression: L3 via relation_to_neighbour "% takes 5 away from 13"
+  level println: L2 via output_prediction "It prints 8"
+  level remainder_operator: L0 via misconception "It prints 8; % takes 5 away from 13"

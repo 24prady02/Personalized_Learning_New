@@ -1,0 +1,594 @@
+{
+ "scenario": "T015",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "a = b puts the 3 from a into b",
+  "so now both are 3",
+  "It prints 3 3 and then true since theyre the same"
+ ],
+ "start_concepts": [
+  "string_concatenation",
+  "assignment",
+  "comparison_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "assignment",
+   "misconception": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "quote": "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same",
+   "score": 0.776
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "par:assignment~comparison_operators",
+   "quote": "a = b puts the 3 from a into b; so now both are 3",
+   "score": 0.75,
+   "consequence_of": "mis:assignment->AssignmentOppositeDirection"
+  }
+ ],
+ "root_cause": {
+  "concept": "assignment",
+  "misconception": "AssignmentOppositeDirection"
+ },
+ "levels": {
+  "assignment": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "AssignmentOppositeDirection",
+   "quote": "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "rule": "wrong rule: a = b copies the value of a into b. Right rule: Assignment stores the value of the right side into the variable on the left.",
+   "source": "level_mis_links"
+  },
+  "comparison_operators": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "edge": "lvl:comparison_operators@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "edge": "lvl:expression@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 output_prediction"
+   ]
+  },
+  "string_concatenation": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "edge": "lvl:string_concatenation@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 states_the_rule"
+   ]
+  },
+  "string_conversion": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "edge": "lvl:string_conversion@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same",
+   "confidence": 0.97,
+   "prune_score": 0.8,
+   "score": 0.776,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->AssignCompares",
+   "target": "AssignCompares",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "a = b puts the 3 from a into b; It prints 3 3 and then true since theyre the same",
+   "confidence": 0.7,
+   "prune_score": 0.8,
+   "score": 0.56,
+   "logic": "= compares two values instead of assigning",
+   "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "par:assignment~comparison_operators",
+   "target": "comparison_operators",
+   "kind": "parallel",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "a = b puts the 3 from a into b; so now both are 3",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->AssignmentOppositeDirection"
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:expression->comparison_operators",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L2#1",
+   "target": "string_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.7000000000000001,
+   "score": 0.42,
+   "logic": "A String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + (2+3) is \"bc5\", \"bc\" + 2 + 3 is \"bc23\", \"1234\" + 99 is \"123499\".",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#3",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "A comparison takes numeric expressions and yields a boolean expression, and it has lower precedence than arithmetic, so a + b < c compares the sum.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L2#1",
+   "target": "string_concatenation@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.65,
+   "prune_score": 0.6,
+   "score": 0.39,
+   "logic": "The result is a String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + 2 + 3 is \"bc23\", and \"bc\" + (2+3) is \"bc5\".",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L3#1",
+   "target": "string_concatenation@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "The non-String operand is converted to its printed form (int 99 to \"99\", double 1.0 to \"1.0\", char 'a' to \"a\") before joining.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L1#1",
+   "target": "string_concatenation@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "If either operand of + is a String, the other is converted to a String, and the result is a new String made of the first operand's characters followed by the second's.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "a = b puts the 3 from a into b; so now both are 3; It prints 3 3 and then true since theyre the same",
+   "confidence": 0.97,
+   "prune_score": 0.8,
+   "score": 0.776,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentEmptiesSource",
+   "target": "AssignmentEmptiesSource",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so now both are 3",
+   "confidence": 0.8,
+   "prune_score": 0.1,
+   "score": 0.08,
+   "logic": "After b = a, a no longer holds a value, as if the value had been moved.",
+   "twin_logic": "Assignment copies; the variable on the right keeps its value."
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentExchangesValues",
+   "target": "AssignmentExchangesValues",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so now both are 3",
+   "confidence": 0.85,
+   "prune_score": 0.1,
+   "score": 0.085,
+   "logic": "b = a exchanges the values of a and b.",
+   "twin_logic": "b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->AssignCompares",
+   "target": "AssignCompares",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "a = b puts the 3 from a into b; It prints 3 3 and then true since theyre the same",
+   "confidence": 0.7,
+   "prune_score": 0.8,
+   "score": 0.56,
+   "logic": "= compares two values instead of assigning",
+   "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#0",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "par:assignment~comparison_operators",
+   "target": "comparison_operators",
+   "kind": "parallel",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "a = b puts the 3 from a into b; so now both are 3",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->AssignmentOppositeDirection"
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:expression->comparison_operators",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#3",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "A comparison takes numeric expressions and yields a boolean expression, and it has lower precedence than arithmetic, so a + b < c compares the sum.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L2#1",
+   "target": "string_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.7000000000000001,
+   "score": 0.42,
+   "logic": "A String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + (2+3) is \"bc5\", \"bc\" + 2 + 3 is \"bc23\", \"1234\" + 99 is \"123499\".",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L1#1",
+   "target": "string_conversion@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "It prints 3 3 and then true since theyre the same",
+   "confidence": 0.6,
+   "prune_score": 0.10000000000000002,
+   "score": 0.06,
+   "logic": "When either operand of + is a String, the other operand is converted to a String and the result is the characters of the first followed by those of the second; System.out.print and println also convert any argument to a String.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  }
+ ],
+ "clause_coverage": {
+  "a = b puts the 3 from a into b": "mis:assignment->AssignmentOppositeDirection",
+  "so now both are 3": "mis:assignment->AssignmentOppositeDirection",
+  "It prints 3 3 and then true since theyre the same": "lvl:string_concatenation@L2#1"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 23
+ }
+}

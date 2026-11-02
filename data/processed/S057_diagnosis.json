@@ -121,20 +121,6 @@
   {
    "depth": 1,
    "source": "normalization",
-   "edge": "mis:normalization->RowsNeedNotSumToOne",
-   "target": "RowsNeedNotSumToOne",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "A page with no outgoing links can have an all-zero row.",
-   "twin_logic": "Each row is a probability distribution; a page with no links is made equally likely to move to every page."
-  },
-  {
-   "depth": 1,
-   "source": "normalization",
    "edge": "lvl:normalization@L4#2",
    "target": "normalization@L4",
    "kind": "level",
@@ -197,28 +183,14 @@
   {
    "depth": 1,
    "source": "integer_division",
-   "edge": "mis:integer_division->CastAfterIntDivision",
-   "target": "CastAfterIntDivision",
-   "kind": "misconception",
-   "label": "correct",
-   "quote": "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
-  },
-  {
-   "depth": 1,
-   "source": "integer_division",
    "edge": "mis:integer_division->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
-   "quote": "All zeros",
-   "confidence": 0.93,
+   "quote": "because int / int is integer division",
+   "confidence": 0.95,
    "prune_score": 0.25,
-   "score": 0.2325,
+   "score": 0.2375,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -320,15 +292,15 @@
   }
  ],
  "clause_coverage": {
-  "All zeros": "mis:integer_division->TargetTyping",
+  "All zeros": "lvl:integer_division@L4#2",
   "because int / int is integer division": "mis:normalization->IntegerProbability",
-  "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1": "mis:normalization->RowsNeedNotSumToOne"
+  "Cast: (double) counts[j] / outDegree gives 0, 0, 0.4, 0.4, 0.2, which sums to 1": "lvl:normalization@L3#1"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 1,
- "llm_calls": 9,
- "llm_cache_hits": 141,
+ "llm_calls": 5,
+ "llm_cache_hits": 115,
  "llm_calls_by_step": {
   "prune": 6,
   "label": 14

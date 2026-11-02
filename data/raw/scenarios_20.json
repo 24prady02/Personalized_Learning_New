@@ -624,6 +624,1316 @@
     }
    },
    "reference_case": false
+  },
+  {
+   "id": "T001",
+   "code": "int a = 2, b = 3;\nSystem.out.println(\"Sum: \" + a + b);",
+   "question": "What does this print? Explain.",
+   "answer": "It prints Sum: 5. The plus adds a and b first, 2 + 3 is 5, and then the 5 is joined to the text.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "string_concatenation"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "string_concatenation": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[4] misconception",
+      "rule": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+      "student_evidence": "The plus adds a and b first"
+     }
+    },
+    "edges": [
+     {
+      "id": "par:string_concatenation~arithmetic_operators",
+      "status": "broken",
+      "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+      "student_evidence": "The plus adds a and b first, 2 + 3 is 5"
+     }
+    ],
+    "held": [
+     "ArithmeticPlusPrecedes"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "string_concatenation",
+     "misconception": "ArithmeticPlusPrecedes"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "T002",
+   "code": "int a = 7, b = 2;\ndouble r = a / b;\nSystem.out.println(r);",
+   "question": "What does this print? Explain.",
+   "answer": "It prints 3.5. r is a double, so the division a / b is done with decimals.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "integer_division",
+     "type_conversion"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "integer_division": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[1] misconception",
+      "rule": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+      "student_evidence": "r is a double, so the division a / b is done with decimals"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:arithmetic_operators->integer_division",
+      "status": "broken",
+      "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+      "student_evidence": "the division a / b is done with decimals"
+     }
+    ],
+    "held": [
+     "TargetTyping"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "integer_division",
+     "misconception": "TargetTyping"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "T003",
+   "code": "int x = 1;\nif (x > 5) {\n  System.out.println(\"big\");\n}\nx = 10;\nSystem.out.println(x);",
+   "question": "What is printed? Explain.",
+   "answer": "At the if nothing happens yet because x is 1. Then x becomes 10, so x > 5 is true and the if prints big. Then it prints 10.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "if_statement",
+     "control_flow"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "if_statement": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[11] misconception",
+      "rule": "An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch.",
+      "student_evidence": "Then x becomes 10, so x > 5 is true and the if prints big"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:control_flow->if_statement",
+      "status": "broken",
+      "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+      "student_evidence": "Then x becomes 10, so x > 5 is true and the if prints big"
+     },
+     {
+      "id": "pre:boolean_expression->if_statement",
+      "status": "confirmed",
+      "logic": "An if runs its block only when its boolean expression evaluates to true.",
+      "student_evidence": "At the if nothing happens yet because x is 1"
+     }
+    ],
+    "held": [
+     "IfConditionWatched"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "if_statement",
+     "misconception": "IfConditionWatched"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "T004",
+   "code": "int n = 17;\nSystem.out.println(n / 5);\nSystem.out.println(n % 5);",
+   "question": "What are the two printed values? Explain each.",
+   "answer": "The first line prints 3, because int division drops the fraction of 3.4. The second line also prints 3, because % gives how many times 5 fits into 17.",
+   "gold": {
+    "label": "partially_correct",
+    "main": [
+     "integer_division",
+     "remainder_operator"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "integer_division": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[2] output_prediction",
+      "rule": "Dividing two ints gives an int: the fractional part is discarded.",
+      "student_evidence": "The first line prints 3, because int division drops the fraction of 3.4"
+     },
+     "remainder_operator": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[1] misconception",
+      "rule": "% returns the remainder, so 17 % 5 is 2.",
+      "student_evidence": "% gives how many times 5 fits into 17"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:integer_division->remainder_operator",
+      "status": "broken",
+      "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
+      "student_evidence": "The second line also prints 3"
+     }
+    ],
+    "held": [
+     "RemainderIsQuotient"
+    ],
+    "correct": [
+     "IntegerDivisionGivesFraction"
+    ],
+    "root_cause": {
+     "concept": "remainder_operator",
+     "misconception": "RemainderIsQuotient"
+    }
+   },
+   "reference_case": false
+  },
+  {
+   "id": "T005",
+   "code": "for (int i = 1; i <= 10; i++) {\n  if (i % 3 == 0) {\n    System.out.print(i + \" \");\n  }\n}",
+   "question": "What is the output? Trace the loop.",
+   "answer": "i goes from 1 to 10, including 10 because of <=. For each i the if checks i % 3 == 0, which is the remainder after dividing by 3. It is 0 only for 3, 6 and 9, so the output is 3 6 9 with a space after each number.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "for_loop",
+     "if_statement",
+     "remainder_operator"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2",
+      "L3"
+     ]
+    },
+    "levels": {
+     "for_loop": {
+      "level": "L2",
+      "accept": [
+       "L2",
+       "L3"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "i goes from 1 to 10, including 10 because of <="
+     },
+     "if_statement": {
+      "level": "L2",
+      "accept": [
+       "L2",
+       "L3"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "For each i the if checks i % 3 == 0"
+     },
+     "remainder_operator": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "which is the remainder after dividing by 3"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:loop_control->for_loop",
+      "status": "confirmed",
+      "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+      "student_evidence": "i goes from 1 to 10, including 10 because of <="
+     },
+     {
+      "id": "pre:boolean_expression->if_statement",
+      "status": "confirmed",
+      "logic": "An if runs its block only when its boolean expression evaluates to true.",
+      "student_evidence": "For each i the if checks i % 3 == 0"
+     }
+    ],
+    "held": [],
+    "correct": [
+     "OffByOneBound",
+     "RemainderIsQuotient"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false
+  },
+  {
+   "id": "T006",
+   "tests": "A",
+   "code": "for (int i = 0; i <= 3; i++) {\n  System.out.print(i);\n}",
+   "question": "What does this print? Explain why.",
+   "answer": "It prints 0123. The loop keeps going until i is 3, it would be the same with i < 3 since both stop at 3.",
+   "gold": {
+    "label": "partially_correct",
+    "main": [
+     "loop_control",
+     "for_loop"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "loop_control": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[2] misconception",
+      "rule": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+      "student_evidence": "it would be the same with i < 3 since both stop at 3"
+     },
+     "for_loop": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[2] output_prediction",
+      "rule": "",
+      "student_evidence": "It prints 0123"
+     }
+    },
+    "edges": [],
+    "held": [
+     "OffByOneBound"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "loop_control",
+     "misconception": "OffByOneBound"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "for_loop",
+    "increment_operators",
+    "loop_body",
+    "loop_control",
+    "loop_scope",
+    "loop_variable",
+    "print",
+    "statement"
+   ]
+  },
+  {
+   "id": "T007",
+   "tests": "B",
+   "code": "int count = 0;\nfor (int i = 0; i < 4; i++) {\n  if (i % 2 == 0) {\n    count++;\n  }\n}\nSystem.out.println(count);",
+   "question": "What is printed? Explain.",
+   "answer": "i % 2 == 0 means there's no remainder when you divide by 2, so it's true for 0 and 2. count++ adds 2 to count each time, so count ends at 4 and it prints 4.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "increment_operators",
+     "remainder_operator",
+     "counter_pattern"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "increment_operators": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[2] misconception",
+      "rule": "",
+      "student_evidence": "count++ adds 2 to count each time"
+     },
+     "remainder_operator": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "i % 2 == 0 means there's no remainder when you divide by 2, so it's true for 0 and 2"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:assignment->increment_operators",
+      "status": "broken",
+      "logic": "i++ is shorthand for the assignment i = i + 1.",
+      "student_evidence": "count++ adds 2 to count each time"
+     },
+     {
+      "id": "pre:loop_body->counter_pattern",
+      "status": "confirmed",
+      "logic": "count++ sits inside the body, usually under an if, so it runs once on every pass that matches.",
+      "student_evidence": "it's true for 0 and 2"
+     }
+    ],
+    "held": [
+     "IncrementByTwo"
+    ],
+    "correct": [
+     "RemainderIsQuotient"
+    ],
+    "root_cause": {
+     "concept": "increment_operators",
+     "misconception": "IncrementByTwo"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "arithmetic_operators",
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "counter_pattern",
+    "expression",
+    "for_loop",
+    "if_statement",
+    "increment_operators",
+    "loop_body",
+    "loop_control",
+    "loop_scope",
+    "loop_variable",
+    "println",
+    "remainder_operator",
+    "statement"
+   ]
+  },
+  {
+   "id": "T008",
+   "tests": "C",
+   "code": "int x = 10;\nif (x > 3) {\n  System.out.println(\"A\");\n} else {\n  System.out.println(\"B\");\n}\nSystem.out.println(x / 4);",
+   "question": "Write the exact output and explain each line.",
+   "answer": "It prints A and then B, because with if-else both blocks run, one after the other. Then 10 / 4 is 2.5 so the last line is 2.5.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "if_else_statement",
+     "integer_division"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "if_else_statement": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[3] misconception",
+      "rule": "",
+      "student_evidence": "with if-else both blocks run, one after the other"
+     },
+     "integer_division": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[2] misconception",
+      "rule": "Dividing two ints gives an int: the fractional part is discarded.",
+      "student_evidence": "10 / 4 is 2.5"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:if_statement->if_else_statement",
+      "status": "broken",
+      "logic": "if-else extends if with a second block that runs exactly when the condition is false.",
+      "student_evidence": "both blocks run, one after the other"
+     },
+     {
+      "id": "pre:arithmetic_operators->integer_division",
+      "status": "broken",
+      "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+      "student_evidence": "10 / 4 is 2.5"
+     }
+    ],
+    "held": [
+     "BothBranchesExecute",
+     "IntegerDivisionGivesFraction"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "if_else_statement",
+     "misconception": "BothBranchesExecute"
+    },
+    "root_cause_accept": [
+     {
+      "concept": "if_else_statement",
+      "misconception": "BothBranchesExecute"
+     },
+     {
+      "concept": "integer_division",
+      "misconception": "IntegerDivisionGivesFraction"
+     }
+    ]
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "arithmetic_operators",
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "if_else_statement",
+    "if_statement",
+    "integer_division",
+    "println",
+    "statement",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "T009",
+   "tests": "D",
+   "code": "int n = 2;\nif (n < 5) {\n  System.out.println(n);\n  n++;\n}",
+   "question": "What does this print? Explain.",
+   "answer": "It prints 2, 3, 4. The if keeps running while n is less than 5 and n++ adds one every time, then it stops at 5.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "if_statement"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "if_statement": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[1] misconception",
+      "rule": "",
+      "student_evidence": "The if keeps running while n is less than 5"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:control_flow->if_statement",
+      "status": "broken",
+      "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+      "student_evidence": "The if keeps running while n is less than 5"
+     }
+    ],
+    "held": [
+     "IfIsLoop"
+    ],
+    "correct": [
+     "IncrementByTwo"
+    ],
+    "root_cause": {
+     "concept": "if_statement",
+     "misconception": "IfIsLoop"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "if_statement",
+    "increment_operators",
+    "println",
+    "statement"
+   ]
+  },
+  {
+   "id": "T010",
+   "tests": "E",
+   "code": "int t = 30;\nif (t > 25) {\n  System.out.println(\"hot\");\n}\nSystem.out.println(\"done\");",
+   "question": "What is printed? Explain.",
+   "answer": "It prints hot. Since the if was true, Java runs what's inside and skips the rest, so done never prints.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "if_statement",
+     "control_flow"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "if_statement": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[5] misconception",
+      "rule": "",
+      "student_evidence": "Java runs what's inside and skips the rest, so done never prints"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:control_flow->if_statement",
+      "status": "broken",
+      "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+      "student_evidence": "skips the rest, so done never prints"
+     }
+    ],
+    "held": [
+     "CodeAfterIfSkipped"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "if_statement",
+     "misconception": "CodeAfterIfSkipped"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "if_statement",
+    "println",
+    "statement",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "T011",
+   "tests": "F",
+   "code": "for (int i = 0; i < 6; i++) {\n  System.out.print(i + \" \");\n  i = i + 2;\n}",
+   "question": "What does the for loop print? Explain.",
+   "answer": "It prints 0 1 2 3 4 5. The i = i + 2 inside doesn't matter, the loop still goes 6 times because of i < 6.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "for_loop",
+     "loop_control",
+     "loop_variable"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "loop_variable": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[2] misconception",
+      "rule": "",
+      "student_evidence": "The i = i + 2 inside doesn't matter, the loop still goes 6 times"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:loop_variable->loop_control",
+      "status": "broken",
+      "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+      "student_evidence": "The i = i + 2 inside doesn't matter"
+     },
+     {
+      "id": "pre:loop_control->for_loop",
+      "status": "broken",
+      "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+      "student_evidence": "the loop still goes 6 times because of i < 6"
+     }
+    ],
+    "held": [
+     "BodyChangeIgnoredByCondition"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "loop_variable",
+     "misconception": "BodyChangeIgnoredByCondition"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "accumulator_pattern",
+    "arithmetic_operators",
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "for_loop",
+    "increment_operators",
+    "loop_body",
+    "loop_control",
+    "loop_scope",
+    "loop_variable",
+    "print",
+    "statement",
+    "string_concatenation",
+    "string_conversion",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "T012",
+   "tests": "G",
+   "code": "int sum = 0;\nfor (int i = 1; i <= 4; i++) {\n  sum = sum + i;\n}\nSystem.out.println(sum / 4);",
+   "question": "What is printed? Explain what the code does.",
+   "answer": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4. sum goes 0, 1, 3, 6, 10, so the loop just adds up 1 to 4. Then 10 / 4 prints 2, because two ints divide to a whole number. If sum were a double it would print 2.5.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "for_loop",
+     "accumulator_pattern",
+     "integer_division"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L3",
+      "L4"
+     ]
+    },
+    "levels": {
+     "loop_control": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+     },
+     "accumulator_pattern": {
+      "level": "L3",
+      "accept": [
+       "L2",
+       "L3"
+      ],
+      "way": "purpose_of_the_whole",
+      "rule": "",
+      "student_evidence": "sum goes 0, 1, 3, 6, 10, so the loop just adds up 1 to 4"
+     },
+     "integer_division": {
+      "level": "L4",
+      "accept": [
+       "L4"
+      ],
+      "way": "predict_a_change",
+      "rule": "",
+      "student_evidence": "If sum were a double it would print 2.5"
+     },
+     "for_loop": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "The for loop runs with i = 1, 2, 3, 4"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:loop_control->for_loop",
+      "status": "confirmed",
+      "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+      "student_evidence": "The for loop runs with i = 1, 2, 3, 4, since <= 4 includes 4"
+     },
+     {
+      "id": "pre:loop_body->accumulator_pattern",
+      "status": "confirmed",
+      "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+      "student_evidence": "sum goes 0, 1, 3, 6, 10"
+     },
+     {
+      "id": "pre:arithmetic_operators->integer_division",
+      "status": "confirmed",
+      "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+      "student_evidence": "10 / 4 prints 2, because two ints divide to a whole number"
+     }
+    ],
+    "held": [],
+    "correct": [
+     "OffByOneBound",
+     "IntegerDivisionGivesFraction"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "accumulator_pattern",
+    "arithmetic_operators",
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "for_loop",
+    "increment_operators",
+    "integer_division",
+    "loop_body",
+    "loop_control",
+    "loop_scope",
+    "loop_variable",
+    "println",
+    "statement"
+   ]
+  },
+  {
+   "id": "T013",
+   "tests": "H",
+   "code": "int age = 15;\nboolean teen = age >= 13 && age <= 19;\nSystem.out.println(teen);",
+   "question": "What is printed? Explain.",
+   "answer": "It prints true. age >= 13 && age <= 19 checks that age is at least 13 and at most 19, and 15 is in between, so both sides are true.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "logical_operators",
+     "comparison_operators",
+     "boolean_expression"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L1",
+      "L2"
+     ]
+    },
+    "levels": {
+     "comparison_operators": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19"
+     },
+     "logical_operators": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "15 is in between, so both sides are true"
+     }
+    },
+    "edges": [
+     {
+      "id": "par:comparison_operators~logical_operators",
+      "status": "confirmed",
+      "logic": "Relational operators compare two numbers to give a boolean; logical operators combine booleans into one boolean.",
+      "student_evidence": "age >= 13 && age <= 19 checks that age is at least 13 and at most 19"
+     },
+     {
+      "id": "pre:logical_operators->boolean_expression",
+      "status": "confirmed",
+      "logic": "&&, || and ! combine conditions p and q into one larger condition that is still true or false.",
+      "student_evidence": "both sides are true"
+     }
+    ],
+    "held": [],
+    "correct": [],
+    "root_cause": null
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean",
+    "boolean_expression",
+    "comparison_operators",
+    "expression",
+    "logical_operators",
+    "operator_precedence",
+    "println",
+    "short_circuit",
+    "statement"
+   ]
+  },
+  {
+   "id": "T014",
+   "tests": "I",
+   "code": "int total = 0;\nfor (int i = 2; i <= 8; i += 2) {\n  total += i;\n}\nSystem.out.println(total);",
+   "question": "What is printed? Trace the loop.",
+   "answer": "i goes 2, 4, 6, 8 and each one gets added to total with +=. 2 + 4 + 6 + 8 = 22, so it prints 22.",
+   "gold": {
+    "label": "partially_correct",
+    "main": [
+     "for_loop",
+     "accumulator_pattern"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L2"
+     ]
+    },
+    "levels": {
+     "for_loop": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "i goes 2, 4, 6, 8"
+     },
+     "accumulator_pattern": {
+      "level": "L2",
+      "accept": [
+       "L2"
+      ],
+      "way": "L2[1] line_by_line_trace",
+      "rule": "",
+      "student_evidence": "each one gets added to total with +="
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:loop_control->for_loop",
+      "status": "confirmed",
+      "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+      "student_evidence": "i goes 2, 4, 6, 8"
+     },
+     {
+      "id": "pre:loop_body->accumulator_pattern",
+      "status": "confirmed",
+      "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+      "student_evidence": "each one gets added to total with +="
+     }
+    ],
+    "held": [],
+    "correct": [],
+    "root_cause": null,
+    "error_evidence": [
+     {
+      "clause": "2 + 4 + 6 + 8 = 22, so it prints 22",
+      "kind": "arithmetic slip",
+      "note": "rules applied correctly; the sum is 20"
+     }
+    ]
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "accumulator_pattern",
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "compound_assignment",
+    "control_flow",
+    "expression",
+    "for_loop",
+    "loop_body",
+    "loop_control",
+    "loop_scope",
+    "loop_variable",
+    "println",
+    "statement"
+   ]
+  },
+  {
+   "id": "T015",
+   "tests": "J",
+   "code": "int a = 3;\nint b = 9;\na = b;\nSystem.out.println(a + \" \" + b);\nSystem.out.println(a == b);",
+   "question": "What are the two printed lines? Explain.",
+   "answer": "a = b puts the 3 from a into b, so now both are 3. It prints 3 3 and then true since they're the same.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "assignment"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "assignment": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[4] misconception",
+      "rule": "",
+      "student_evidence": "a = b puts the 3 from a into b"
+     }
+    },
+    "edges": [],
+    "held": [
+     "AssignmentOppositeDirection"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "assignment",
+     "misconception": "AssignmentOppositeDirection"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "comparison_operators",
+    "expression",
+    "println",
+    "statement",
+    "string_concatenation",
+    "string_conversion",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "T016",
+   "tests": "K",
+   "code": "System.out.print(\"Hi \");\nSystem.out.print(\"there\");\nSystem.out.println(\"!\");\nSystem.out.println(\"Bye\");",
+   "question": "Write the exact output, line by line.",
+   "answer": "Each print gives its own line, same as println, so it shows Hi, then there, then !, then Bye, all on separate lines.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "println",
+     "print"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "println": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "L0[1] misconception",
+      "rule": "",
+      "student_evidence": "Each print gives its own line, same as println"
+     }
+    },
+    "edges": [
+     {
+      "id": "par:print~println",
+      "status": "broken",
+      "logic": "print leaves the cursor on the same line after printing; println moves the cursor to the next line after printing.",
+      "student_evidence": "Each print gives its own line, same as println"
+     }
+    ],
+    "held": [
+     "PrintEqualsPrintln"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "println",
+     "misconception": "PrintEqualsPrintln"
+    }
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "print",
+    "println",
+    "statement",
+    "string_literal"
+   ]
+  },
+  {
+   "id": "T017",
+   "tests": "L",
+   "code": "int a = 13;\nSystem.out.println(a % 5);",
+   "question": "What is printed? Explain.",
+   "answer": "It prints 8. % takes 5 away from 13.",
+   "gold": {
+    "label": "wrong",
+    "main": [
+     "remainder_operator"
+    ],
+    "overall_level": {
+     "level": "L0",
+     "accept": [
+      "L0"
+     ]
+    },
+    "levels": {
+     "remainder_operator": {
+      "level": "L0",
+      "accept": [
+       "L0"
+      ],
+      "way": "",
+      "rule": "",
+      "student_evidence": "% takes 5 away from 13"
+     }
+    },
+    "edges": [],
+    "held": [
+     "RemainderIsSubtraction"
+    ],
+    "correct": [],
+    "root_cause": {
+     "concept": "remainder_operator",
+     "misconception": "RemainderIsSubtraction"
+    },
+    "graph_gap": "mis:remainder_operator->RemainderIsSubtraction has no L0 misconception way in level_mis_links; the level L0 should be reported as not backed by a level way"
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "arithmetic_operators",
+    "expression",
+    "println",
+    "remainder_operator",
+    "statement"
+   ]
+  },
+  {
+   "id": "T018",
+   "tests": "M",
+   "code": "int count = 3;\nwhile (count > 0) {\n  System.out.println(count);\n  count--;\n}\nSystem.out.println(\"Go!\");",
+   "question": "What is the output? Explain.",
+   "answer": "Hmm, ok. I think it prints 3, 2, 1 and then \"Go!\" (each on its own line). count goes down by one each pass, so the loop ends when count hits 0. I think so.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "while_loop",
+     "loop_control"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L1",
+      "L2"
+     ]
+    },
+    "levels": {
+     "while_loop": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[2] output_prediction",
+      "rule": "",
+      "student_evidence": "it prints 3, 2, 1 and then \"Go!\""
+     },
+     "loop_control": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "count goes down by one each pass, so the loop ends when count hits 0"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:boolean_expression->while_loop",
+      "status": "confirmed",
+      "logic": "A while tests its boolean condition before every pass and stops the first time it evaluates to false.",
+      "student_evidence": "the loop ends when count hits 0"
+     }
+    ],
+    "held": [],
+    "correct": [],
+    "root_cause": null,
+    "no_evidence_clauses": [
+     "Hmm, ok.",
+     "I think so."
+    ]
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "increment_operators",
+    "loop_body",
+    "loop_control",
+    "loop_variable",
+    "println",
+    "statement",
+    "string_literal",
+    "while_loop"
+   ]
+  },
+  {
+   "id": "T019",
+   "tests": "N",
+   "code": "int i = 5;\nint x = i++;\nSystem.out.println(x + i);",
+   "question": "What is printed? Explain.",
+   "answer": "Prints 11: x gets the old 5 and only then i goes up to 6. With ++i instead it would print 12.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "increment_operators"
+    ],
+    "overall_level": {
+     "level": "L4",
+     "accept": [
+      "L3",
+      "L4"
+     ]
+    },
+    "levels": {
+     "increment_operators": {
+      "level": "L4",
+      "accept": [
+       "L3",
+       "L4"
+      ],
+      "way": "L4[1] predict_a_change",
+      "rule": "",
+      "student_evidence": "With ++i instead it would print 12"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:assignment->increment_operators",
+      "status": "confirmed",
+      "logic": "i++ is shorthand for the assignment i = i + 1.",
+      "student_evidence": "x gets the old 5 and only then i goes up to 6"
+     }
+    ],
+    "held": [],
+    "correct": [
+     "PrePostIncrementSameValue"
+    ],
+    "root_cause": null
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "arithmetic_operators",
+    "assignment",
+    "expression",
+    "increment_operators",
+    "println",
+    "statement"
+   ]
+  },
+  {
+   "id": "T020",
+   "tests": "O",
+   "code": "int score = 72;\nif (score >= 70) {\n  System.out.println(\"pass\");\n} else {\n  System.out.println(\"fail\");\n}",
+   "question": "What is printed? Explain.",
+   "answer": "It prints pass because 72 is at least 70.",
+   "gold": {
+    "label": "correct",
+    "main": [
+     "if_else_statement"
+    ],
+    "overall_level": {
+     "level": "L2",
+     "accept": [
+      "L1",
+      "L2"
+     ]
+    },
+    "levels": {
+     "if_else_statement": {
+      "level": "L2",
+      "accept": [
+       "L1",
+       "L2"
+      ],
+      "way": "L2[3] one_step_execution",
+      "rule": "",
+      "student_evidence": "It prints pass because 72 is at least 70"
+     }
+    },
+    "edges": [
+     {
+      "id": "pre:boolean_expression->if_statement",
+      "status": "confirmed",
+      "logic": "An if runs its block only when its boolean expression evaluates to true.",
+      "student_evidence": "because 72 is at least 70"
+     }
+    ],
+    "held": [],
+    "correct": [],
+    "root_cause": null
+   },
+   "reference_case": false,
+   "expected_stage1_concepts": [
+    "assignment",
+    "boolean_expression",
+    "comparison_operators",
+    "control_flow",
+    "expression",
+    "if_else_statement",
+    "if_statement",
+    "println",
+    "statement",
+    "string_literal"
+   ]
   }
  ]
 }

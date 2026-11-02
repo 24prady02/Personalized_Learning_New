@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint total = 0;\nfor (int i = 2; i <= 8; i += 2) {\n  total += i;\n}\nSystem.out.println(total);\n\nQuestion: What is printed? Trace the loop.\n\nStudent's answer, split into clauses:\nc1: i goes 2, 4, 6, 8 and each one gets added to total with +=\nc2: 2 + 4 + 6 + 8 = 22\nc3: so it prints 22\n\nEdge: par:assignment~comparison_operators  (assignment -> comparison_operators, parallel)\nRule (logic): x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not applied\nClauses: none\nConfidence: 0.93"
+}

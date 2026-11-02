@@ -1,0 +1,593 @@
+{
+ "scenario": "T019",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "Prints 11: x gets the old 5 and only then i goes up to 6",
+  "With ++i instead it would print 12"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "increment_operators",
+  "println"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "edge": "lvl:arithmetic_operators@L2#2",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "assignment": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "edge": "lvl:assignment@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "edge": "lvl:expression@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "increment_operators": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "With ++i instead it would print 12",
+   "edge": "lvl:increment_operators@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PrePostIncrementSameValue",
+   "target": "PrePostIncrementSameValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "x = i++ and x = ++i store the same value in x.",
+   "twin_logic": "Both increment i, but ++i has the value after the increment and i++ the value before."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L4#0",
+   "target": "increment_operators@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "With ++i instead it would print 12",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "As a stand-alone statement, replacing i++ by ++i, i += 1 or i = i + 1 preserves behaviour; inside an expression (x = i++ vs x = ++i) the swap changes the value used by 1.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.7,
+   "prune_score": 0.6000000000000001,
+   "score": 0.42,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.8,
+   "prune_score": 0.55,
+   "score": 0.44,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#2",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#2",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PrePostIncrementSameValue",
+   "target": "PrePostIncrementSameValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "x = i++ and x = ++i store the same value in x.",
+   "twin_logic": "Both increment i, but ++i has the value after the increment and i++ the value before."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.9,
+   "prune_score": 0.10000000000000002,
+   "score": 0.09,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L4#0",
+   "target": "increment_operators@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "With ++i instead it would print 12",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "As a stand-alone statement, replacing i++ by ++i, i += 1 or i = i + 1 preserves behaviour; inside an expression (x = i++ vs x = ++i) the swap changes the value used by 1.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#0",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.95,
+   "prune_score": 0.3,
+   "score": 0.285,
+   "logic": "i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value. Both happen before the rest of the enclosing expression continues.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#1",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.95,
+   "prune_score": 0.2,
+   "score": 0.19,
+   "logic": "With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.7,
+   "prune_score": 0.6000000000000001,
+   "score": 0.42,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "y = x + k; makes y always equal to x + k, so when x changes later, y changes too.",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#1",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.8,
+   "prune_score": 0.55,
+   "score": 0.44,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#2",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#0",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Prints 11: x gets the old 5 and only then i goes up to 6; With ++i instead it would print 12",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "Operands are evaluated left to right, each fully before its operator is applied. Precedence and parentheses decide the grouping, and a method's arguments are all evaluated before the method is called.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "clause_coverage": {
+  "Prints 11: x gets the old 5 and only then i goes up to 6": "lvl:arithmetic_operators@L2#2",
+  "With ++i instead it would print 12": "lvl:arithmetic_operators@L2#2"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 35,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 22
+ }
+}

@@ -1,0 +1,1340 @@
+{
+ "scenario": "T018",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "Hmm, ok",
+  "I think it prints 3, 2, 1 and then Go",
+  "each on its own line",
+  "count goes down by one each pass",
+  "so the loop ends when count hits 0",
+  "I think",
+  "so"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "while_loop",
+  "increment_operators"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "assignment": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:assignment@L3#9",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  },
+  "boolean_expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:boolean_expression@L3#3",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
+   ]
+  },
+  "comparison_operators": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "so the loop ends when count hits 0",
+   "edge": "lvl:comparison_operators@L3#5",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "control_flow": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line",
+   "edge": "lvl:control_flow@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 one_step_execution"
+   ]
+  },
+  "increment_operators": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:increment_operators@L3#4",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L1 names_the_element"
+   ]
+  },
+  "loop_body": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line; count goes down by one each pass",
+   "edge": "lvl:loop_body@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "loop_control": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:loop_control@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "loop_variable": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:loop_variable@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 one_step_execution"
+   ]
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "while_loop": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "edge": "lvl:while_loop@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 output_prediction"
+   ]
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#1",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "A while statement has no value; its result is the state and output after the passes it made: e.g. TenHellos with i = 4 and i <= 10 prints 4th to 10th Hello (7 passes) and leaves i = 11.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "pre:while_loop->loop_variable",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "A loop variable is a counter that the loop initializes, tests in its condition and increments on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->InfiniteLoopUnnoticed",
+   "target": "InfiniteLoopUnnoticed",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "A while loop always stops on its own, even if nothing in its body can make the condition false.",
+   "twin_logic": "A while loop stops only when its condition is false at a check, so if no pass changes the variables in the condition, it never stops."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#2",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "One update changes only the loop variable, by exactly the rule written (i++ adds 1, i = i - 4 subtracts 4); one test reads it and returns true or false without changing it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "mis:while_loop->LoopTerminatingCondition",
+   "target": "LoopTerminatingCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "For and while loops end when the condition becomes true.",
+   "twin_logic": "A for or while loop ends when its condition becomes false."
+  },
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "mis:while_loop->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.95,
+   "prune_score": 0.35,
+   "score": 0.3325,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#1",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "A while statement has no value; its result is the state and output after the passes it made: e.g. TenHellos with i = 4 and i <= 10 prints 4th to 10th Hello (7 passes) and leaves i = 11.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L3#0",
+   "target": "while_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "The loop condition is a boolean expression evaluated before every pass; the loop stops the first time it is false, so the body must eventually make it false.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L3#6",
+   "target": "while_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "The while condition usually tests a loop variable that is initialized before the loop and updated in the body; if the body never changes it, the loop never ends.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#4",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L1#0",
+   "target": "increment_operators@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtracts 1 from) a numeric variable.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "while_loop",
+   "edge": "pre:boolean_expression->while_loop",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "A while tests its boolean condition before every pass and stops the first time it evaluates to false.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "while_loop",
+   "edge": "pre:while_loop->loop_variable",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "A loop variable is a counter that the loop initializes, tests in its condition and increments on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "while_loop",
+   "edge": "pre:while_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass",
+   "confidence": 0.9,
+   "prune_score": 0.15,
+   "score": 0.135,
+   "logic": "The loop body is the block of statements that a while (or for) loop repeats on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "boolean_expression",
+   "edge": "lvl:boolean_expression@L3#3",
+   "target": "boolean_expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "boolean_expression",
+   "edge": "lvl:boolean_expression@L3#6",
+   "target": "boolean_expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5
+   ],
+   "quote": "so the loop ends when count hits 0",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Expresses a decision condition or guard (which branch runs, whether a loop continues) or computes a flag; common plans: range test lo <= x && x <= hi, divisibility test n % k == 0, combined rule as in LeapYear.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body."
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.92,
+   "prune_score": 0.3,
+   "score": 0.276,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#0",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StatementAfterLoopInBody",
+   "target": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "A statement written after the loop is repeated with the loop body.",
+   "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L2#1",
+   "target": "loop_body@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line; count goes down by one each pass",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L2#2",
+   "target": "loop_body@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L2#0",
+   "target": "loop_body@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "pre:while_loop->loop_variable",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "A loop variable is a counter that the loop initializes, tests in its condition and increments on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentIsEquation",
+   "target": "AssignmentIsEquation",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L3#9",
+   "target": "assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#2",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4
+   ],
+   "quote": "count goes down by one each pass",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "boolean_expression",
+   "edge": "pre:boolean_expression->while_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "A while tests its boolean condition before every pass and stops the first time it evaluates to false.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "boolean_expression",
+   "edge": "pre:comparison_operators->boolean_expression",
+   "target": "comparison_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5
+   ],
+   "quote": "so the loop ends when count hits 0",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "lvl:println@L2#0",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.95,
+   "prune_score": 0.6000000000000001,
+   "score": 0.57,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseLoopRepeatsNextCode",
+   "target": "FalseLoopRepeatsNextCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.75,
+   "prune_score": 0.30000000000000004,
+   "score": 0.225,
+   "logic": "A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats.",
+   "twin_logic": "Only the body is repeated; once the condition is false the code after the loop runs once."
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go",
+   "confidence": 0.6,
+   "prune_score": 0.10000000000000002,
+   "score": 0.06,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; each on its own line",
+   "confidence": 0.95,
+   "prune_score": 0.5,
+   "score": 0.475,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#2",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; count goes down by one each pass; so the loop ends when count hits 0",
+   "confidence": 0.62,
+   "prune_score": 0.15,
+   "score": 0.093,
+   "logic": "One step executes the single statement at the current control point using the current values, updates at most the variables it assigns, and moves the control point to the next statement (or, for an if/loop test, to the chosen branch, back to the test, or past the statement).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "I think it prints 3, 2, 1 and then Go; so the loop ends when count hits 0",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L3#5",
+   "target": "comparison_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5
+   ],
+   "quote": "so the loop ends when count hits 0",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Used to test a numeric condition: thresholds and sign checks, range tests, divisibility (n % k == 0), loop continuation (i < N), sentinel checks, and running-extreme updates (if (x > max) max = x).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5
+   ],
+   "quote": "so the loop ends when count hits 0",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "I think it prints 3, 2, 1 and then Go": "err:loop_control->WrongIterationCount",
+  "each on its own line": "lvl:while_loop@L2#1",
+  "count goes down by one each pass": "err:loop_control->WrongIterationCount",
+  "so the loop ends when count hits 0": "err:loop_control->WrongIterationCount"
+ },
+ "unexplained_clauses": [
+  "Hmm, ok",
+  "I think",
+  "so"
+ ],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 76,
+ "llm_calls_by_step": {
+  "prune": 26,
+  "label": 50
+ }
+}

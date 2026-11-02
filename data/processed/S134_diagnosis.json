@@ -22,24 +22,14 @@
    "misconception": "VariablesHoldExpressions",
    "kind": "misconception",
    "quote": "Then b = t means b equals a",
-   "score": 0.425
-  },
-  {
-   "concept": "assignment",
-   "misconception": "AssignmentIsEquation",
-   "kind": "misconception",
-   "quote": "Then b = t means b equals a",
-   "score": 0.27
+   "score": 0.425,
+   "also_fits": [
+    "AssignmentIsEquation"
+   ]
   }
  ],
  "error_evidence": [],
- "broken_edges": [
-  {
-   "edge": "pre:assignment->variable_swap",
-   "quote": "so both are b",
-   "score": 0.95
-  }
- ],
+ "broken_edges": [],
  "root_cause": {
   "concept": "assignment",
   "misconception": "VariablesHoldExpressions"
@@ -51,7 +41,11 @@
    "misconception": "VariablesHoldExpressions",
    "quote": "Then b = t means b equals a",
    "edge": "mis:assignment->VariablesHoldExpressions",
-   "source": "level_mis_links"
+   "rule": "wrong rule: = stores the expression itself, not its computed value. Right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
+   "source": "level_mis_links",
+   "also_fits": [
+    "AssignmentIsEquation"
+   ]
   },
   "variable_swap": {
    "level": "L0",
@@ -75,7 +69,10 @@
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "y = x + k; makes y always equal to x + k, so when x changes later, y changes too.",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
+   "also_fits": [
+    "AssignmentIsEquation"
+   ]
   },
   {
    "depth": 1,
@@ -85,9 +82,9 @@
    "kind": "misconception",
    "label": "held",
    "quote": "Then b = t means b equals a",
-   "confidence": 0.9,
+   "confidence": 0.82,
    "prune_score": 0.3,
-   "score": 0.27,
+   "score": 0.246,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
    "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   },
@@ -106,23 +103,23 @@
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
-  },
-  {
-   "depth": 2,
-   "source": "assignment",
-   "edge": "pre:assignment->variable_swap",
-   "target": "variable_swap",
-   "kind": "prerequisite",
-   "label": "broken",
-   "quote": "so both are b",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows.",
-   "twin_logic": null
   }
  ],
  "evidence": [
+  {
+   "depth": 1,
+   "source": "variable_swap",
+   "edge": "mis:variable_swap->AssignmentExchangesValues",
+   "target": "AssignmentExchangesValues",
+   "kind": "misconception",
+   "label": "correct",
+   "quote": "After t = a and a = b, a is b",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "b = a exchanges the values of a and b.",
+   "twin_logic": "b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
   {
    "depth": 1,
    "source": "variable_swap",
@@ -167,7 +164,10 @@
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "y = x + k; makes y always equal to x + k, so when x changes later, y changes too.",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
+   "also_fits": [
+    "AssignmentIsEquation"
+   ]
   },
   {
    "depth": 1,
@@ -177,9 +177,9 @@
    "kind": "misconception",
    "label": "held",
    "quote": "Then b = t means b equals a",
-   "confidence": 0.9,
+   "confidence": 0.82,
    "prune_score": 0.3,
-   "score": 0.27,
+   "score": 0.246,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
    "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
   },
@@ -198,35 +198,20 @@
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
-  },
-  {
-   "depth": 2,
-   "source": "assignment",
-   "edge": "pre:assignment->variable_swap",
-   "target": "variable_swap",
-   "kind": "prerequisite",
-   "label": "broken",
-   "quote": "so both are b",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows.",
-   "twin_logic": null
   }
  ],
  "clause_coverage": {
+  "After t = a and a = b, a is b": "mis:variable_swap->AssignmentExchangesValues",
   "Then b = t means b equals a": "lvl:variable_swap@L0#2",
   "so both are b": "lvl:variable_swap@L0#0"
  },
- "unexplained_clauses": [
-  "After t = a and a = b, a is b"
- ],
- "stop_reason": "half_stop",
- "depth_reached": 3,
- "llm_calls": 6,
- "llm_cache_hits": 152,
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 1,
+ "llm_calls": 5,
+ "llm_cache_hits": 125,
  "llm_calls_by_step": {
-  "prune": 5,
-  "label": 12
+  "prune": 4,
+  "label": 11
  }
 }

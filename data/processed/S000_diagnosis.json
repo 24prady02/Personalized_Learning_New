@@ -42,6 +42,7 @@
    "misconception": "LocalVariablesAutoInitialized",
    "quote": "It will print 0",
    "edge": "mis:definite_assignment->LocalVariablesAutoInitialized",
+   "rule": "wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile.",
    "source": "level_mis_links"
   },
   "println": {
@@ -202,8 +203,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 16,
+ "llm_calls": 4,
+ "llm_cache_hits": 12,
  "llm_calls_by_step": {
   "prune": 5,
   "label": 11

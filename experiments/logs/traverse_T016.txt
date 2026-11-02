@@ -1,0 +1,60 @@
+clauses: Each print gives its own line, same as println | so it shows Hi, then there, then !, then Bye, all on separate lines
+start: 2 tagged concepts, all used
+start concepts (2): print, println
+--- depth 1: current concepts ['print', 'println']
+  print (misconceptions): 3 candidates -> kept err:print->PrintWithoutFinalNewline (0.80), mis:print->RepeatedOutputVariablePrintedOnce (0.10), mis:print->ParenthesesOnlyIfArgument (0.10)
+    err:print->PrintWithoutFinalNewline -> not applied (0.00) ""
+    mis:print->RepeatedOutputVariablePrintedOnce -> not applied (0.00) ""
+    mis:print->ParenthesesOnlyIfArgument -> not applied (0.00) ""
+  print (level ways): 15 candidates -> kept lvl:print@L3#2 (0.50), lvl:print@L2#2 (0.30), lvl:print@L2#0 (0.20)
+    lvl:print@L3#2 -> not applied (0.00) ""
+    lvl:print@L2#2 -> not applied (0.00) ""
+    lvl:print@L2#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.90), err:println->PrintWithoutFinalNewline (0.06), mis:println->PrintNewLineFirst (0.04)
+    mis:println->PrintEqualsPrintln -> held (0.87) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L0#3 (0.50), lvl:println@L3#2 (0.30), lvl:println@L0#0 (0.20)
+    lvl:println@L0#3 -> shown (0.35) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+    lvl:println@L3#2 -> not applied (0.00) ""
+    lvl:println@L0#0 -> shown (0.16) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+  kept: mis:println->PrintEqualsPrintln [held, tier 0, 0.87], lvl:println@L0#3 [shown, tier 2, 0.35], lvl:println@L0#0 [shown, tier 2, 0.16]
+  clause coverage: c1 <- mis:println->PrintEqualsPrintln; c2 <- mis:println->PrintEqualsPrintln
+  not yet read: par:print~println, pre:statement->print, pre:statement->println, pre:string_literal->print, pre:string_literal->println
+--- depth 2: current concepts ['println', 'print']
+  println (concept edges): 3 candidates -> kept par:print~println (0.80), pre:statement->println (0.15), pre:string_literal->println (0.05)
+    par:print~println -> broken (0.78) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+    pre:statement->println -> confirmed (0.10) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+    pre:string_literal->println -> confirmed (0.03) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+  print (concept edges): 2 candidates -> kept pre:statement->print (0.60), pre:string_literal->print (0.40)
+    pre:statement->print -> confirmed (0.48) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+    pre:string_literal->print -> confirmed (0.30) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+  kept: par:print~println [broken, tier 0, 0.78], pre:statement->print [confirmed, tier 2, 0.48], pre:string_literal->print [confirmed, tier 2, 0.30]
+  reached across pre:statement->print, entered next: statement
+  reached across pre:string_literal->print, entered next: string_literal
+  clause coverage: c1 <- mis:println->PrintEqualsPrintln; c2 <- mis:println->PrintEqualsPrintln
+  not yet read: own edges of statement, own edges of string_literal
+--- depth 3: current concepts ['print', 'println', 'statement', 'string_literal']
+  println (concept edges): 2 candidates -> kept pre:string_literal->println (0.70), pre:statement->println (0.30)
+    pre:string_literal->println -> confirmed (0.49) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+    pre:statement->println -> confirmed (0.21) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.40), mis:statement->ComputerFillsInIntent (0.35), mis:statement->WhitespaceIsSignificant (0.25)
+    mis:statement->StatementsRunInAnyOrder -> correct (0.30) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+    mis:statement->WhitespaceIsSignificant -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L3#2 (0.50), lvl:statement@L2#0 (0.30), lvl:statement@L2#2 (0.20)
+    lvl:statement@L3#2 -> not applied (0.00) ""
+    lvl:statement@L2#0 -> shown (0.24) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+    lvl:statement@L2#2 -> shown (0.14) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+  string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (1.00)
+    mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
+  string_literal (level ways): 16 candidates -> kept lvl:string_literal@L3#0 (0.50), lvl:string_literal@L3#1 (0.30), lvl:string_literal@L2#1 (0.20)
+    lvl:string_literal@L3#0 -> shown (0.38) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+    lvl:string_literal@L3#1 -> shown (0.18) "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+    lvl:string_literal@L2#1 -> shown (0.14) "so it shows Hi, then there, then !, then Bye, all on separate lines"
+  kept: pre:string_literal->println [confirmed, tier 2, 0.49], lvl:string_literal@L3#0 [shown, tier 2, 0.38], mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.30]
+  clause coverage: c1 <- mis:println->PrintEqualsPrintln; c2 <- mis:println->PrintEqualsPrintln
+  root-cause walk: held on ['println'], broken at [] (consequences: par:print~println), prerequisites {'print': ['statement', 'string_literal'], 'println': ['statement', 'string_literal']}
+  level println: L0 via misconception "Each print gives its own line, same as println; so it shows Hi, then there, then !, then Bye, all on separate lines"
+  level statement: L2 via line_by_line_trace "so it shows Hi, then there, then !, then Bye, all on separate lines"
+  level string_literal: L3 via relation_to_neighbour "so it shows Hi, then there, then !, then Bye, all on separate lines"
