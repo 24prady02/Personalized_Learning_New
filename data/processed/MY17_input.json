@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {2, 4, 6};\nint sum = 0;\nfor (int i = 0; i < a.length; i++) {\n    sum += a[i];\n}\nSystem.out.println(\"Total: \" + sum);",
+ "question": "Explain how the loop computes the total, and what would change if a fourth element, 8, were added.",
+ "answer": "The loop visits each index from 0 to a.length - 1 and adds that element to sum, so it prints Total: 12. With 8 added, a.length becomes 4, so the loop runs once more and prints Total: 20, with no other change to the code"
+}

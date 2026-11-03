@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint[] a = {2, 4, 6};\nint sum = 0;\nfor (int i = 0; i < a.length; i++) {\n    sum += a[i];\n}\nSystem.out.println(\"Total: \" + sum);\n\nQuestion: Explain how the loop computes the total, and what would change if a fourth element, 8, were added.\n\nStudent's answer, split into clauses:\nc1: The loop visits each index from 0 to a.length - 1 and adds that element to sum\nc2: so it prints Total: 12\nc3: With 8 added, a.length becomes 4\nc4: so the loop runs once more and prints Total: 20, with no other change to the code\n\nEdge: pre:indexing->array_traversal  (indexing -> array_traversal, prerequisite)\nRule (logic): A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 1, 4\nConfidence: 0.9"
+}
