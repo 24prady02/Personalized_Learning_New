@@ -1,0 +1,140 @@
+{
+ "scenario": "MY05",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It does not compile",
+  "c is a letter, not a number",
+  "so you cannot add 1 to it",
+  "Java will give an error that a char and an int cannot be added"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "println"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->expression",
+   "quote": "so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "score": 0.7
+  }
+ ],
+ "root_cause": null,
+ "levels": {
+  "expression": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "edge": "lvl:expression@L4#4",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L4",
+ "paths": [
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L4#4",
+   "target": "expression@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L4#4",
+   "target": "expression@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  }
+ ],
+ "clause_coverage": {
+  "It does not compile": "lvl:expression@L4#4",
+  "c is a letter, not a number": "lvl:expression@L4#4",
+  "so you cannot add 1 to it": "pre:arithmetic_operators->expression",
+  "Java will give an error that a char and an int cannot be added": "pre:arithmetic_operators->expression"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 22,
+ "llm_calls_by_step": {
+  "prune": 8,
+  "label": 14
+ }
+}
