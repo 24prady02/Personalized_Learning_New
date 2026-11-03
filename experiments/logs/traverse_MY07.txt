@@ -1,0 +1,47 @@
+clauses: It prints 2147483648 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big | because it makes room for it automatically
+start: 2 tagged concepts, all used
+start concepts (2): arithmetic_operators, println
+--- depth 1: current concepts ['arithmetic_operators', 'println']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.34), mis:arithmetic_operators->RemainderIsSubtraction (0.33), mis:arithmetic_operators->CaretIsPower (0.33)
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#5 (0.60), lvl:arithmetic_operators@L1#1 (0.25), lvl:arithmetic_operators@L2#2 (0.15)
+    lvl:arithmetic_operators@L4#5 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#2 -> shown (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.45), lvl:println@L3#3 (0.35), lvl:println@L2#0 (0.20)
+    lvl:println@L2#1 -> shown (0.27) "It prints 2147483648"
+    lvl:println@L3#3 -> not applied (0.00) ""
+    lvl:println@L2#0 -> shown (0.12) "It prints 2147483648"
+  kept: lvl:println@L2#1 [shown, tier 2, 0.27], lvl:println@L2#0 [shown, tier 2, 0.12], lvl:arithmetic_operators@L2#2 [shown, tier 2, 0.09]
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 uncovered
+  not yet read: pre:arithmetic_operators->expression, pre:statement->println
+--- depth 2: current concepts ['arithmetic_operators', 'println']
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.60) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 uncovered
+  not yet read: own edges of expression
+--- depth 3: current concepts ['expression', 'arithmetic_operators']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+    mis:expression->VariablesHoldExpressions -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+  expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
+    lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+    lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L3#1 -> not applied (0.00) ""
+  kept: lvl:expression@L0#0 [shown, tier 2, 0.42], mis:expression->AssignmentIsEquation [correct, tier 2, 0.12], mis:expression->VariablesHoldExpressions [correct, tier 2, 0.12]
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 <- lvl:expression@L0#0
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+  level arithmetic_operators: L2 via one_step_execution "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+  level expression: L0 via everyday_reading "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+  level println: L2 via output_prediction "It prints 2147483648"

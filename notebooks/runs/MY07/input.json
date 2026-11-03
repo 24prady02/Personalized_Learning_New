@@ -1,0 +1,5 @@
+{
+ "code": "int big = 2147483647;\nbig = big + 1;\nSystem.out.println(big);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 2147483648. Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big, because it makes room for it automatically."
+}
