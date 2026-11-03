@@ -28,6 +28,16 @@ def _git(*args: str) -> str:
     return (r.stdout + r.stderr).strip()
 
 
+def _push() -> str:
+    """Push the branch; if GitHub has commits this computer lacks (e.g. a file deleted on the GitHub page), put ours on top
+    of them (rebase) and push again."""
+    out = _git("push", "origin", "HEAD")
+    if "rejected" in out or "failed to push" in out:
+        branch = _git("rev-parse", "--abbrev-ref", "HEAD")
+        out += NL + _git("pull", "--rebase", "origin", branch) + NL + _git("push", "origin", "HEAD")
+    return out
+
+
 def _figure_lines(text: str) -> str:
     """'Figure N: <abs path>.png' lines of a step report -> markdown image links to figureNN.png in the same folder."""
     def link(m: re.Match) -> str:
@@ -101,7 +111,7 @@ def upload_run(sid: str, build_page: bool = True, extra: tuple[str, ...] = ()) -
     msg = f"Scenario {sid}: held {held}; root cause {root}; overall {diag.get('overall_level')}" + NL + NL + "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" + NL
     out = [_git("add", "-A", "--", *run_files(sid), *extra)]
     out.append(_git("commit", "-q", "-m", msg))
-    out.append(_git("push", "origin", "HEAD"))
+    out.append(_push())
     out.append(_git("log", "--oneline", "-1"))
     return NL.join(o for o in out if o)
 
@@ -110,7 +120,7 @@ def upload_notebook() -> str:
     """Commit and push the notebook file as saved on disk (press Ctrl+S in the notebook first)."""
     out = [_git("add", "--", "notebooks/think_on_the_graph.ipynb"),
            _git("commit", "-q", "-m", "Notebook saved with its latest run" + NL + NL + "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" + NL),
-           _git("push", "origin", "HEAD"), _git("log", "--oneline", "-1")]
+           _push(), _git("log", "--oneline", "-1")]
     return NL.join(o for o in out if o)
 
 
