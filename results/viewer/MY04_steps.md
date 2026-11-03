@@ -401,7 +401,7 @@ mis:switch_statement->SwitchNoFallThrough [held, tier 0, 0.96], lvl:switch_state
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure04.png
+Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure04.png
 
 ### Depth 2: current concepts 'switch_statement', 'control_flow', 'println'
 
@@ -491,7 +491,7 @@ reached across pre:string_literal->println, entered next: string_literal
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement, own edges of string_literal
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure05.png
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure05.png
 
 ### Depth 3: current concepts 'statement', 'control_flow', 'string_literal', 'println'
 
@@ -744,6 +744,8 @@ mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [s
 | c4 | The other cases are skipped | lvl:control_flow@L0#0 |
 | c5 | because they do not match | lvl:control_flow@L0#0 |
 
+Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure06.png
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['statement', 'switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
@@ -787,7 +789,7 @@ Clause coverage (final):
 | The other cases are skipped | lvl:control_flow@L0#0 |
 | because they do not match | lvl:control_flow@L0#0 |
 
-Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure06.png
+Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure07.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |

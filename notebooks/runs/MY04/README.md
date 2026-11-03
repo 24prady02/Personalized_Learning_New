@@ -1,4 +1,7 @@
 # Think on the Graph: every output of the run MY04
+
+Files of this scenario: `input.json` (program, question, answer), `diagnosis.json`, `subgraph.json`, `traverse_log.txt`, `report.html` (this report as one full-page file, with the interactive graph `MY04_G.html`), `MY04.ipynb` (this report as a notebook).
+
 ## 0. Input
 Program:
 ```java
@@ -56,10 +59,12 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 | string_literal | 4 | 16 |
 | switch_statement | 1 | 16 |
 
-Figure 1: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure01.png
+**Figure 1**
 
-Figure 2: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure02.png
+![Figure 1](figure01.png)
+**Figure 2**
 
+![Figure 2](figure02.png)
 ## 2. Clauses and start concepts (no model)
 The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
 | clause | text |
@@ -76,8 +81,9 @@ start concepts (3): control_flow, println, switch_statement
 
 Start concepts: control_flow, println, switch_statement
 
-Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure03.png
+**Figure 3**
 
+![Figure 3](figure03.png)
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
@@ -401,8 +407,9 @@ mis:switch_statement->SwitchNoFallThrough [held, tier 0, 0.96], lvl:switch_state
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure04.png
+**Figure 4 (the graph after depth 1)**
 
+![Figure 4](figure04.png)
 ### Depth 2: current concepts 'switch_statement', 'control_flow', 'println'
 
 #### control_flow, concept edges: 1 edges offered
@@ -491,8 +498,9 @@ reached across pre:string_literal->println, entered next: string_literal
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement, own edges of string_literal
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure05.png
+**Figure 5 (the graph after depth 2)**
 
+![Figure 5](figure05.png)
 ### Depth 3: current concepts 'statement', 'control_flow', 'string_literal', 'println'
 
 #### statement, misconceptions: 5 edges offered
@@ -744,6 +752,9 @@ mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [s
 | c4 | The other cases are skipped | lvl:control_flow@L0#0 |
 | c5 | because they do not match | lvl:control_flow@L0#0 |
 
+**Figure 6 (the graph after depth 3)**
+
+![Figure 6](figure06.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['statement', 'switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
@@ -787,8 +798,9 @@ Clause coverage (final):
 | The other cases are skipped | lvl:control_flow@L0#0 |
 | because they do not match | lvl:control_flow@L0#0 |
 
-Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY04_figure06.png
+**Figure 7 (final picture)**
 
+![Figure 7](figure07.png)
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
