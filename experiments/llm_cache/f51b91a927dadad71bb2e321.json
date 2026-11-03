@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint a = 7, b = 2;\ndouble q = a / b;\nint r = a % b;\nSystem.out.println(q + \" \" + r);\n\nQuestion: Explain how Java works out q and r.\n\nStudent's answer, split into clauses:\nc1: q is a double\nc2: so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5\n\nEdge: par:string_concatenation~arithmetic_operators  (string_concatenation -> arithmetic_operators, parallel)\nRule (logic): + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not applied\nClauses: none\nConfidence: 0.9"
+}

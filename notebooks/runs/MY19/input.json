@@ -1,0 +1,5 @@
+{
+ "code": "int a = 7, b = 2;\ndouble q = a / b;\nint r = a % b;\nSystem.out.println(q + \" \" + r);",
+ "question": "Explain how Java works out q and r.",
+ "answer": "q is a double, so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5."
+}

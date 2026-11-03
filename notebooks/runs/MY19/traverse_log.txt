@@ -1,0 +1,60 @@
+clauses: q is a double | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5
+start: BM25 of the answer against each tagged concept: integer_division 15.96 (hits 1), arithmetic_operators 14.08 (hits 1), remainder_operator 12.41 (hits 2), string_concatenation 7.62 (hits 1), string_conversion 7.07 (hits 2), type_conversion 6.21 (hits 1), println 5.69 (hits 1), widening_conversion 3.44 (hits 1)
+start: chosen integer_division, arithmetic_operators, remainder_operator
+start concepts (3): integer_division, arithmetic_operators, remainder_operator
+--- depth 1: current concepts ['integer_division', 'arithmetic_operators', 'remainder_operator']
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->TargetTyping (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.30), mis:integer_division->CastAfterIntDivision (0.10)
+    mis:integer_division->TargetTyping -> held (0.54) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L0#0 (0.30), lvl:integer_division@L3#2 (0.20)
+    lvl:integer_division@L0#4 -> shown (0.35) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:integer_division@L0#0 -> shown (0.27) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:integer_division@L3#2 -> not applied (0.00) ""
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.90), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.05), mis:arithmetic_operators->CaretIsPower (0.05)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L0#0 (0.45), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
+    lvl:arithmetic_operators@L0#0 -> shown (0.34) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.50), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.10)
+    mis:remainder_operator->RemainderIsQuotient -> not applied (0.00) ""
+    mis:remainder_operator->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#3 (0.45), lvl:remainder_operator@L3#0 (0.35), lvl:remainder_operator@L1#0 (0.20)
+    lvl:remainder_operator@L0#3 -> not applied (0.00) ""
+    lvl:remainder_operator@L3#0 -> not applied (0.00) ""
+    lvl:remainder_operator@L1#0 -> not applied (0.00) ""
+  kept: mis:integer_division->TargetTyping [held, tier 0, 0.54], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
+  clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
+  not yet read: par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
+--- depth 2: current concepts ['integer_division', 'arithmetic_operators', 'remainder_operator']
+  integer_division (concept edges): 2 candidates -> kept pre:arithmetic_operators->integer_division (0.60), pre:integer_division->remainder_operator (0.40)
+    pre:arithmetic_operators->integer_division -> broken (0.57) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    pre:integer_division->remainder_operator -> broken (0.36) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  arithmetic_operators (concept edges): 2 candidates -> kept pre:arithmetic_operators->expression (0.90), par:string_concatenation~arithmetic_operators (0.10)
+    pre:arithmetic_operators->expression -> broken (0.63) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->expression [broken, tier 0, 0.63], pre:arithmetic_operators->integer_division [broken, tier 0, 0.57], pre:integer_division->remainder_operator [broken, tier 0, 0.36]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
+  not yet read: own edges of expression
+--- depth 3: current concepts ['expression', 'arithmetic_operators', 'integer_division', 'remainder_operator']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
+    mis:expression->TargetTyping -> held (0.74) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L0#0 -> shown (0.24) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:expression@L2#1 -> not applied (0.00) ""
+  arithmetic_operators (concept edges): 1 candidates -> kept par:string_concatenation~arithmetic_operators (1.00)
+    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
+  kept: mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, tier 2, 0.24]
+  clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
+  root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
+  level arithmetic_operators: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  level expression: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  level integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
