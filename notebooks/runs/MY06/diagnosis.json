@@ -1,0 +1,690 @@
+{
+ "scenario": "MY06",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints 1, then 3, then 6",
+  "sum starts at 0 and on every pass i is added to it",
+  "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "accumulator_pattern",
+  "for_loop"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "loop_body",
+   "misconception": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.54
+  },
+  {
+   "concept": "accumulator_pattern",
+   "misconception": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.34
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.21
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_body->accumulator_pattern",
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.7,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.36,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  }
+ ],
+ "root_cause": {
+  "concept": "loop_body",
+  "misconception": "LoopBodyStatementOutsideLoop"
+ },
+ "levels": {
+  "accumulator_pattern": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "LoopBodyScopeImpliesLoopLifetime",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime",
+   "rule": "wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value.",
+   "source": "level_mis_links"
+  },
+  "for_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForLoopPartSkipped",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "mis:for_loop->ForLoopPartSkipped",
+   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "source": "level_mis_links"
+  },
+  "loop_body": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "LoopBodyStatementOutsideLoop",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "mis:loop_body->LoopBodyStatementOutsideLoop",
+   "rule": "wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForLoopPartSkipped",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "source": "level_mis_links"
+  },
+  "loop_variable": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "lvl:loop_variable@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "accumulator_pattern",
+   "edge": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime",
+   "target": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "a variable declared in the loop body lives across all iterations",
+   "twin_logic": "A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.35,
+   "score": 0.1925,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "depth": 2,
+   "source": "accumulator_pattern",
+   "edge": "pre:loop_body->accumulator_pattern",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.7,
+   "score": 0.42,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopBodyStatementOutsideLoop",
+   "target": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
+   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L0#6",
+   "target": "loop_body@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: \"The loop body always runs at least once, even if the condition is false at the start\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.35,
+   "score": 0.1925,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L3#6",
+   "target": "loop_control@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 1,
+   "source": "accumulator_pattern",
+   "edge": "err:accumulator_pattern->AccumulatorDeclaredInLoop",
+   "target": "AccumulatorDeclaredInLoop",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "Declaring sum inside the loop body keeps a running total across passes.",
+   "twin_logic": "The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "depth": 1,
+   "source": "accumulator_pattern",
+   "edge": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime",
+   "target": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "a variable declared in the loop body lives across all iterations",
+   "twin_logic": "A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "depth": 1,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L0#0",
+   "target": "accumulator_pattern@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "Folk meaning: 'the sum' is a single mathematical quantity that simply exists, and a person adding numbers keeps the running total in mind automatically. In Java the total is a variable that must be declared and initialized before the loop and explicitly updated on every pass (sum += x).",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "depth": 2,
+   "source": "accumulator_pattern",
+   "edge": "pre:loop_body->accumulator_pattern",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.7,
+   "score": 0.42,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopBodyStatementOutsideLoop",
+   "target": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
+   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L0#6",
+   "target": "loop_body@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: \"The loop body always runs at least once, even if the condition is false at the start\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#0",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#2",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  }
+ ],
+ "clause_coverage": {
+  "It prints 1, then 3, then 6": "err:loop_control->WrongIterationCount",
+  "sum starts at 0 and on every pass i is added to it": "mis:loop_control->ForLoopPartSkipped",
+  "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6": "mis:loop_control->ForLoopPartSkipped"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 42,
+ "llm_calls_by_step": {
+  "prune": 15,
+  "label": 27
+ }
+}

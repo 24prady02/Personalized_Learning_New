@@ -1,0 +1,79 @@
+clauses: It prints 1, then 3, then 6 | sum starts at 0 and on every pass i is added to it | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: loop_control 25.41 (hits 1), accumulator_pattern 25.00 (hits 1), for_loop 22.98 (hits 1), increment_operators 20.62 (hits 1), loop_variable 17.70 (hits 1), loop_body 17.18 (hits 1), loop_scope 17.09 (hits 1), arithmetic_operators 16.83 (hits 1), assignment 14.36 (hits 1), println 9.34 (hits 1), boolean_expression 8.46 (hits 1), control_flow 8.41 (hits 1), comparison_operators 1.87 (hits 1)
+start: chosen loop_control, accumulator_pattern, for_loop
+start concepts (3): loop_control, accumulator_pattern, for_loop
+--- depth 1: current concepts ['loop_control', 'accumulator_pattern', 'for_loop']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->IdiomOverridesCode (0.45), mis:loop_control->ForLoopPartSkipped (0.35), err:loop_control->WrongIterationCount (0.20)
+    mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
+    mis:loop_control->ForLoopPartSkipped -> held (0.19) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    err:loop_control->WrongIterationCount -> correct (0.16) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.30) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+    lvl:loop_control@L3#6 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  accumulator_pattern (misconceptions): 4 candidates -> kept err:accumulator_pattern->AccumulatorDeclaredInLoop (0.45), mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime (0.40), mis:accumulator_pattern->StateChangeIgnoredAcrossPasses (0.15)
+    err:accumulator_pattern->AccumulatorDeclaredInLoop -> held (0.41) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime -> held (0.34) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:accumulator_pattern->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L4#1 (0.50), lvl:accumulator_pattern@L0#0 (0.30), lvl:accumulator_pattern@L0#2 (0.20)
+    lvl:accumulator_pattern@L4#1 -> not applied (0.00) ""
+    lvl:accumulator_pattern@L0#0 -> shown (0.26) "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:accumulator_pattern@L0#2 -> not applied (0.00) ""
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->LoopCountIsStatementCount (0.40), mis:for_loop->ForLoopPartSkipped (0.35), mis:for_loop->IdiomOverridesCode (0.25)
+    mis:for_loop->LoopCountIsStatementCount -> not applied (0.00) ""
+    mis:for_loop->ForLoopPartSkipped -> held (0.21) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L0#11 (0.30), lvl:for_loop@L2#2 (0.30)
+    lvl:for_loop@L2#1 -> not applied (0.00) ""
+    lvl:for_loop@L0#11 -> not applied (0.00) ""
+    lvl:for_loop@L2#2 -> not applied (0.00) ""
+  kept: mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime [held, tier 0, 0.34], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.21], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.19]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  not yet read: pre:for_loop->loop_scope, pre:loop_body->accumulator_pattern, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['accumulator_pattern', 'for_loop', 'loop_control']
+  accumulator_pattern (concept edges): 1 candidates -> kept pre:loop_body->accumulator_pattern (1.00)
+    pre:loop_body->accumulator_pattern -> broken (0.70) "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.60), pre:for_loop->loop_scope (0.40)
+    pre:loop_control->for_loop -> broken (0.36) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_variable->loop_control -> confirmed (0.42) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    pre:loop_control->increment_operators -> confirmed (0.17) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  kept: pre:loop_body->accumulator_pattern [broken, tier 0, 0.70], pre:loop_control->for_loop [broken, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.42]
+  reached across pre:loop_body->accumulator_pattern, entered next: loop_body
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  not yet read: own edges of loop_body, own edges of loop_variable
+--- depth 3: current concepts ['loop_body', 'accumulator_pattern', 'loop_control', 'for_loop', 'loop_variable']
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopBodyStatementOutsideLoop (0.60), mis:loop_body->StateChangeIgnoredAcrossPasses (0.25), mis:loop_body->LoopOutputSameEachPass (0.15)
+    mis:loop_body->LoopBodyStatementOutsideLoop -> held (0.54) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+    mis:loop_body->LoopOutputSameEachPass -> correct (0.12) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.50), lvl:loop_body@L3#0 (0.30), lvl:loop_body@L2#0 (0.20)
+    lvl:loop_body@L0#6 -> shown (0.35) "It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:loop_body@L3#0 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+  loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> confirmed (0.55) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopVariableLifetimeScope (0.35), mis:loop_variable->ForInitRepeats (0.25)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.32) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> correct (0.16) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L2#0 (0.30), lvl:loop_variable@L3#2 (0.20)
+    lvl:loop_variable@L2#1 -> shown (0.30) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:loop_variable@L2#0 -> shown (0.17) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:loop_variable@L3#2 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  kept: mis:loop_body->LoopBodyStatementOutsideLoop [held, tier 0, 0.54], pre:loop_control->increment_operators [confirmed, tier 2, 0.55], lvl:loop_body@L0#6 [shown, tier 2, 0.35]
+  reached across pre:loop_control->increment_operators, entered next: increment_operators
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  not yet read: own edges of increment_operators
+  held: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
+  root-cause walk: held on ['accumulator_pattern', 'for_loop', 'loop_body'], broken at [] (consequences: pre:loop_body->accumulator_pattern, pre:loop_control->for_loop), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level accumulator_pattern: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level for_loop: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level loop_body: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level loop_control: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level loop_variable: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"

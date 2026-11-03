@@ -1,0 +1,5 @@
+{
+ "code": "for (int i = 1; i <= 3; i++) {\n    int sum = 0;\n    sum = sum + i;\n    System.out.println(sum);\n}",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 1, then 3, then 6. sum starts at 0 and on every pass i is added to it, so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6."
+}
