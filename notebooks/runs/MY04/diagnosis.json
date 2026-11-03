@@ -1,0 +1,542 @@
+{
+ "scenario": "MY04",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints only Tue",
+  "day is 2",
+  "so the switch jumps to case 2, prints Tue, and then the switch is finished",
+  "The other cases are skipped",
+  "because they do not match"
+ ],
+ "start_concepts": [
+  "control_flow",
+  "println",
+  "switch_statement"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "switch_statement",
+   "misconception": "SwitchNoFallThrough",
+   "kind": "misconception",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "score": 0.96
+  },
+  {
+   "concept": "statement",
+   "misconception": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "score": 0.275
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "score": 0.75,
+   "consequence_of": "mis:switch_statement->SwitchNoFallThrough"
+  }
+ ],
+ "root_cause": {
+  "concept": "statement",
+  "misconception": "ComputerFillsInIntent"
+ },
+ "levels": {
+  "control_flow": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "edge": "lvl:control_flow@L0#0",
+   "source": "level_way"
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "edge": "lvl:println@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ComputerFillsInIntent",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "edge": "mis:statement->ComputerFillsInIntent",
+   "rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written.",
+   "source": "level_mis_links"
+  },
+  "string_literal": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "edge": "lvl:string_literal@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "switch_statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "SwitchNoFallThrough",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "edge": "mis:switch_statement->SwitchNoFallThrough",
+   "rule": "wrong rule: After the matching case runs, the switch ends even without break. Right rule: Without break, all the statements after the matching label run, including those under later case labels, until a break or the end of the switch.",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "mis:switch_statement->SwitchNoFallThrough",
+   "target": "SwitchNoFallThrough",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.96,
+   "prune_score": 1.0,
+   "score": 0.96,
+   "logic": "After the matching case runs, the switch ends even without break.",
+   "twin_logic": "Without break, statements in switch blocks fall through into the following cases."
+  },
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "lvl:switch_statement@L0#0",
+   "target": "switch_statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Folk meaning: everyday 'switch' means flip to one setting, and 'case' reads like 'in case of X do Y', a self-contained rule. Novices therefore expect only the matching case to run. In a Java switch statement, the case labels are only entry points: execution starts at the matching label and falls through the following cases until a break.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:switch_statement->SwitchNoFallThrough"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:string_literal->println",
+   "target": "string_literal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->ComputerFillsInIntent",
+   "target": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L0#2",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "confidence": 0.72,
+   "prune_score": 0.5,
+   "score": 0.36,
+   "logic": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "string_literal",
+   "edge": "lvl:string_literal@L3#1",
+   "target": "string_literal@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#1",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "mis:switch_statement->SwitchNoFallThrough",
+   "target": "SwitchNoFallThrough",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.96,
+   "prune_score": 1.0,
+   "score": 0.96,
+   "logic": "After the matching case runs, the switch ends even without break.",
+   "twin_logic": "Without break, statements in switch blocks fall through into the following cases."
+  },
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "lvl:switch_statement@L0#0",
+   "target": "switch_statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Folk meaning: everyday 'switch' means flip to one setting, and 'case' reads like 'in case of X do Y', a self-contained rule. Novices therefore expect only the matching case to run. In a Java switch statement, the case labels are only entry points: execution starts at the matching label and falls through the following cases until a break.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "lvl:switch_statement@L0#2",
+   "target": "switch_statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Applies the LT rule unevenly: on a trace the selector is matched correctly but execution stops at the next case label on some runs and falls through on others, or default is run even though a case matched. (here mixing in: \"After the matching case runs, the switch ends even without break\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "switch_statement",
+   "edge": "lvl:switch_statement@L2#1",
+   "target": "switch_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "A switch statement has no value. Its result is the effect of the case(s) run: with `day = 3`, the S&W day switch prints Wed. Without breaks, day = 5 would print Fri, then Sat.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:switch_statement->SwitchNoFallThrough"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:string_literal->println",
+   "target": "string_literal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->ComputerFillsInIntent",
+   "target": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L0#2",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "confidence": 0.72,
+   "prune_score": 0.5,
+   "score": 0.36,
+   "logic": "Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: \"The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "string_literal",
+   "edge": "lvl:string_literal@L3#1",
+   "target": "string_literal@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "string_literal",
+   "edge": "lvl:string_literal@L2#1",
+   "target": "string_literal@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.55,
+   "prune_score": 0.35,
+   "score": 0.1925,
+   "logic": "Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: \"Hi, \" has 4 characters, and printing it shows Hi, followed by a space.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "It prints only Tue": "lvl:control_flow@L0#0",
+  "day is 2": "lvl:switch_statement@L0#2",
+  "so the switch jumps to case 2, prints Tue, and then the switch is finished": "lvl:control_flow@L0#0",
+  "The other cases are skipped": "lvl:control_flow@L0#0",
+  "because they do not match": "lvl:control_flow@L0#0"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 37,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 24
+ }
+}

@@ -1,0 +1,67 @@
+clauses: It prints only Tue | day is 2 | so the switch jumps to case 2, prints Tue, and then the switch is finished | The other cases are skipped | because they do not match
+start: 3 tagged concepts, all used
+start concepts (3): control_flow, println, switch_statement
+--- depth 1: current concepts ['control_flow', 'println', 'switch_statement']
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.60), mis:control_flow->StatementsRunInAnyOrder (0.25), mis:control_flow->FalseConditionRestartsProgram (0.15)
+    mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#3 (0.50), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#0 (0.20)
+    lvl:control_flow@L0#3 -> not applied (0.00) ""
+    lvl:control_flow@L0#0 -> shown (0.21) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
+    lvl:control_flow@L2#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.40), lvl:println@L3#1 (0.35), lvl:println@L2#1 (0.25)
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L3#1 -> shown (0.21) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    lvl:println@L2#1 -> shown (0.15) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  switch_statement (misconceptions): 1 candidates -> kept mis:switch_statement->SwitchNoFallThrough (1.00)
+    mis:switch_statement->SwitchNoFallThrough -> held (0.96) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
+  switch_statement (level ways): 16 candidates -> kept lvl:switch_statement@L0#0 (0.60), lvl:switch_statement@L0#2 (0.25), lvl:switch_statement@L2#1 (0.15)
+    lvl:switch_statement@L0#0 -> shown (0.56) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
+    lvl:switch_statement@L0#2 -> shown (0.15) "day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
+    lvl:switch_statement@L2#1 -> shown (0.09) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  kept: mis:switch_statement->SwitchNoFallThrough [held, tier 0, 0.96], lvl:switch_statement@L0#0 [shown, tier 2, 0.56], lvl:control_flow@L0#0 [shown, tier 2, 0.21]
+  clause coverage: c1 <- lvl:control_flow@L0#0; c2 <- lvl:switch_statement@L0#2; c3 <- lvl:control_flow@L0#0; c4 <- lvl:control_flow@L0#0; c5 <- lvl:control_flow@L0#0
+  not yet read: pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+--- depth 2: current concepts ['switch_statement', 'control_flow', 'println']
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.75) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
+  println (concept edges): 2 candidates -> kept pre:statement->println (0.60), pre:string_literal->println (0.40)
+    pre:statement->println -> not applied (0.00) ""
+    pre:string_literal->println -> confirmed (0.28) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  kept: pre:statement->control_flow [broken, tier 0, 0.75], pre:string_literal->println [confirmed, tier 2, 0.28]
+  reached across pre:statement->control_flow, entered next: statement
+  reached across pre:string_literal->println, entered next: string_literal
+  clause coverage: c1 <- lvl:control_flow@L0#0; c2 <- lvl:switch_statement@L0#2; c3 <- lvl:control_flow@L0#0; c4 <- lvl:control_flow@L0#0; c5 <- lvl:control_flow@L0#0
+  not yet read: own edges of statement, own edges of string_literal
+--- depth 3: current concepts ['statement', 'control_flow', 'string_literal', 'println']
+  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
+    mis:statement->ComputerFillsInIntent -> held (0.28) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L3#4 (0.20)
+    lvl:statement@L0#2 -> shown (0.36) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
+    lvl:statement@L0#0 -> not applied (0.00) ""
+    lvl:statement@L3#4 -> not applied (0.00) ""
+  string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (0.80), err:string_literal->UnclosedStringLiteral (0.10), err:string_literal->SingleQuotedString (0.10)
+    mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
+    err:string_literal->UnclosedStringLiteral -> not applied (0.00) ""
+    err:string_literal->SingleQuotedString -> not applied (0.00) ""
+  string_literal (level ways): 16 candidates -> kept lvl:string_literal@L3#1 (0.45), lvl:string_literal@L2#1 (0.35), lvl:string_literal@L2#0 (0.20)
+    lvl:string_literal@L3#1 -> shown (0.27) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    lvl:string_literal@L2#1 -> shown (0.19) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    lvl:string_literal@L2#0 -> not applied (0.00) ""
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+  clause coverage: c1 <- lvl:control_flow@L0#0; c2 <- lvl:switch_statement@L0#2; c3 <- lvl:control_flow@L0#0; c4 <- lvl:control_flow@L0#0; c5 <- lvl:control_flow@L0#0
+  root-cause walk: held on ['statement', 'switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
+  level println: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  level statement: L0 via misconception "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  level string_literal: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  level switch_statement: L0 via misconception "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"

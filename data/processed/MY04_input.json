@@ -1,0 +1,5 @@
+{
+ "code": "int day = 2;\nswitch (day) {\n    case 1: System.out.println(\"Mon\");\n    case 2: System.out.println(\"Tue\");\n    case 3: System.out.println(\"Wed\");\n    default: System.out.println(\"Other\");\n}",
+ "question": "What does this program print, and why?",
+ "answer": "It prints only Tue. day is 2, so the switch jumps to case 2, prints Tue, and then the switch is finished. The other cases are skipped because they do not match."
+}
