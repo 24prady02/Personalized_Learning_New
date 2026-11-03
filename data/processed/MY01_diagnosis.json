@@ -8,75 +8,99 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "It prints -4 and then 1",
-  "-7 / 2 is -3.5, and integer division rounds down",
-  "so it becomes -4",
-  "A remainder is never negative",
-  "so -7 % 2 is 1",
-  "because -4 * 2 + 1 = -7"
+  "It prints 3.5",
+  "The (double) cast turns the division into a decimal division",
+  "so 7 / 2 gives 3.5 and that is stored in avg"
  ],
  "start_concepts": [
-  "remainder_operator",
-  "arithmetic_operators",
-  "integer_division"
+  "explicit_cast",
+  "integer_division",
+  "arithmetic_operators"
  ],
  "held_misconceptions": [
   {
-   "concept": "remainder_operator",
-   "misconception": "NegativeRemainderSign",
+   "concept": "type_conversion",
+   "misconception": "TargetTyping",
    "kind": "misconception",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "score": 0.873
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.8
+  },
+  {
+   "concept": "explicit_cast",
+   "misconception": "CastAfterIntDivision",
+   "kind": "misconception",
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.76
+  },
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "kind": "misconception",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.68
+  },
+  {
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "kind": "misconception",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.665
   }
  ],
  "error_evidence": [],
- "broken_edges": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.95,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:type_conversion->explicit_cast",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.8,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  }
+ ],
  "root_cause": {
-  "concept": "remainder_operator",
-  "misconception": "NegativeRemainderSign"
+  "concept": "type_conversion",
+  "misconception": "TargetTyping"
  },
  "levels": {
-  "arithmetic_operators": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "because -4 * 2 + 1 = -7",
-   "edge": "lvl:arithmetic_operators@L3#1",
-   "source": "level_way",
-   "also_shown": []
+  "explicit_cast": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAfterIntDivision",
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6.",
+   "source": "level_mis_links"
   },
   "expression": {
    "level": "L0",
-   "way": "everyday_reading",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "edge": "lvl:expression@L0#0",
-   "source": "level_way"
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "edge": "mis:expression->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "source": "level_mis_links"
   },
   "integer_division": {
    "level": "L0",
    "way": "misconception",
-   "misconception": "NegativeRemainderSign",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "edge": "mis:integer_division->NegativeRemainderSign",
-   "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "misconception": "CastAfterIntDivision",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "source": "level_mis_links"
   },
-  "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints -4 and then 1",
-   "edge": "lvl:println@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
-  },
-  "remainder_operator": {
+  "type_conversion": {
    "level": "L0",
    "way": "misconception",
-   "misconception": "NegativeRemainderSign",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "edge": "mis:remainder_operator->NegativeRemainderSign",
-   "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "misconception": "TargetTyping",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "edge": "mis:type_conversion->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
    "source": "level_mis_links"
   }
  },
@@ -84,78 +108,98 @@
  "paths": [
   {
    "depth": 1,
-   "source": "remainder_operator",
-   "edge": "mis:remainder_operator->NegativeRemainderSign",
-   "target": "NegativeRemainderSign",
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
-    3,
-    4,
-    5
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "confidence": 0.97,
-   "prune_score": 0.9,
-   "score": 0.873,
-   "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
   },
   {
    "depth": 1,
    "source": "integer_division",
-   "edge": "mis:integer_division->NegativeRemainderSign",
-   "target": "NegativeRemainderSign",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
    "kind": "misconception",
    "label": "held",
    "clauses": [
     2,
-    3,
-    4,
-    5
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "confidence": 0.97,
-   "prune_score": 0.75,
-   "score": 0.7275,
-   "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
   },
   {
    "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
-   "target": "RemainderIsSubtraction",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
-    5,
-    6
+    2,
+    3
    ],
-   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
   },
   {
    "depth": 2,
-   "source": "remainder_operator",
-   "edge": "pre:integer_division->remainder_operator",
-   "target": "integer_division",
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
-    6
+    2,
+    3
    ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
    "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
-   "twin_logic": null
+   "score": 0.95,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
@@ -165,72 +209,50 @@
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    2,
-    5,
-    6
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.7,
+   "quote": "so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.6,
    "prune_score": 1.0,
-   "score": 0.7,
+   "score": 0.6,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "integer_division",
-   "edge": "pre:arithmetic_operators->integer_division",
-   "target": "arithmetic_operators",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    5,
-    6
-   ],
-   "quote": "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
-   "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
-   "twin_logic": null
-  },
-  {
    "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
    "clauses": [
     2,
     3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
    "depth": 3,
@@ -240,12 +262,13 @@
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    1,
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "confidence": 0.65,
-   "prune_score": 0.3,
-   "score": 0.195,
+   "quote": "It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
    "twin_logic": null,
    "level": "L0",
@@ -255,194 +278,79 @@
  "evidence": [
   {
    "depth": 1,
-   "source": "remainder_operator",
-   "edge": "mis:remainder_operator->NegativeRemainderSign",
-   "target": "NegativeRemainderSign",
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
    "kind": "misconception",
    "label": "held",
    "clauses": [
     2,
-    3,
-    4,
-    5
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "confidence": 0.97,
-   "prune_score": 0.9,
-   "score": 0.873,
-   "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
   },
   {
    "depth": 1,
-   "source": "remainder_operator",
-   "edge": "lvl:remainder_operator@L0#0",
-   "target": "remainder_operator@L0",
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    4,
-    5,
-    6
+    2,
+    3
    ],
-   "quote": "A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "In everyday use % means percent (50% of x), and in maths 'mod' always gives a non-negative result. In Java % is the remainder of truncating division, and its sign follows the left operand (-14 % 3 is -2).",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 1,
-   "source": "remainder_operator",
-   "edge": "lvl:remainder_operator@L0#3",
-   "target": "remainder_operator@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    4,
-    5
-   ],
-   "quote": "A remainder is never negative; so -7 % 2 is 1",
-   "confidence": 0.55,
-   "prune_score": 0.35,
-   "score": 0.1925,
-   "logic": "Points to LT (compute the truncated quotient, then the remainder). Applied unevenly, a student gives the remainder for positive operands but the mathematical mod for negatives, or swaps quotient and remainder (17 % 5 as 3). (here mixing in: \"17 % 5 is 3 (the quotient)\")",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
   },
   {
-   "depth": 1,
-   "source": "remainder_operator",
-   "edge": "lvl:remainder_operator@L3#0",
-   "target": "remainder_operator@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "% is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
-   "target": "RemainderIsSubtraction",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    5,
-    6
-   ],
-   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L3#1",
-   "target": "arithmetic_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "integer_division",
-   "edge": "mis:integer_division->NegativeRemainderSign",
-   "target": "NegativeRemainderSign",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "confidence": 0.97,
-   "prune_score": 0.75,
-   "score": 0.7275,
-   "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
-  },
-  {
-   "depth": 1,
-   "source": "integer_division",
-   "edge": "mis:integer_division->IntegerDivisionGivesFraction",
-   "target": "IntegerDivisionGivesFraction",
-   "kind": "misconception",
-   "label": "correct",
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "broken",
    "clauses": [
     2,
     3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
-   "confidence": 0.75,
-   "prune_score": 0.2,
-   "score": 0.15,
-   "logic": "10 / 3 evaluates to 3.333....",
-   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
-  },
-  {
-   "depth": 1,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L3#0",
-   "target": "integer_division@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
-   "logic": "/ and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 2,
-   "source": "remainder_operator",
-   "edge": "pre:integer_division->remainder_operator",
-   "target": "integer_division",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
    "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
-   "twin_logic": null
+   "score": 0.8,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
@@ -450,18 +358,18 @@
    "edge": "pre:arithmetic_operators->integer_division",
    "target": "arithmetic_operators",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
-    3,
-    5,
-    6
+    2,
+    3
    ],
-   "quote": "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.95,
    "prune_score": 1.0,
-   "score": 0.6,
+   "score": 0.95,
    "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
@@ -471,74 +379,67 @@
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    2,
-    5,
-    6
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
-   "confidence": 0.7,
+   "quote": "so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.6,
    "prune_score": 1.0,
-   "score": 0.7,
+   "score": 0.6,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L2#1",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
    "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
    "clauses": [
     2,
     3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so 7 / 2 gives 3.5 and that is stored in avg",
    "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "prune_score": 0.1,
+   "score": 0.06,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
   {
    "depth": 3,
@@ -548,72 +449,31 @@
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    1,
+    3
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "confidence": 0.65,
-   "prune_score": 0.3,
-   "score": 0.195,
+   "quote": "It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L2#1",
-   "target": "expression@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3,
-    5
-   ],
-   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
   }
  ],
  "clause_coverage": {
-  "It prints -4 and then 1": "lvl:println@L2#1",
-  "-7 / 2 is -3.5, and integer division rounds down": "mis:remainder_operator->NegativeRemainderSign",
-  "so it becomes -4": "mis:remainder_operator->NegativeRemainderSign",
-  "A remainder is never negative": "mis:remainder_operator->NegativeRemainderSign",
-  "so -7 % 2 is 1": "mis:remainder_operator->NegativeRemainderSign",
-  "because -4 * 2 + 1 = -7": "lvl:remainder_operator@L0#0"
+  "It prints 3.5": "mis:explicit_cast->CastAfterIntDivision",
+  "The (double) cast turns the division into a decimal division": "mis:explicit_cast->CastAfterIntDivision",
+  "so 7 / 2 gives 3.5 and that is stored in avg": "mis:explicit_cast->CastAfterIntDivision"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 38,
- "llm_cache_hits": 0,
+ "llm_calls": 0,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 24
+  "prune": 13,
+  "label": 22
  }
 }

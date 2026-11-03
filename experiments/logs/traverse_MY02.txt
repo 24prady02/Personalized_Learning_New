@@ -1,0 +1,72 @@
+clauses: It prints -4 and then 1 | -7 / 2 is -3.5, and integer division rounds down | so it becomes -4 | A remainder is never negative | so -7 % 2 is 1 | because -4 * 2 + 1 = -7
+start: BM25 of the answer against each tagged concept: remainder_operator 22.32 (hits 1), arithmetic_operators 16.99 (hits 1), integer_division 15.68 (hits 1), println 10.56 (hits 1)
+start: chosen remainder_operator, arithmetic_operators, integer_division
+start concepts (3): remainder_operator, arithmetic_operators, integer_division
+--- depth 1: current concepts ['remainder_operator', 'arithmetic_operators', 'integer_division']
+  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->NegativeRemainderSign (0.90), mis:remainder_operator->RemainderIsSubtraction (0.05), mis:remainder_operator->RemainderIsQuotient (0.05)
+    mis:remainder_operator->NegativeRemainderSign -> held (0.87) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
+    mis:remainder_operator->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:remainder_operator->RemainderIsQuotient -> not applied (0.00) ""
+  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#0 (0.40), lvl:remainder_operator@L0#3 (0.35), lvl:remainder_operator@L3#0 (0.25)
+    lvl:remainder_operator@L0#0 -> shown (0.36) "A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
+    lvl:remainder_operator@L0#3 -> shown (0.19) "A remainder is never negative; so -7 % 2 is 1"
+    lvl:remainder_operator@L3#0 -> shown (0.15) "because -4 * 2 + 1 = -7"
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
+    mis:arithmetic_operators->RemainderIsSubtraction -> correct (0.75) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#1 (0.50), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L2#0 (0.15)
+    lvl:arithmetic_operators@L3#1 -> shown (0.30) "because -4 * 2 + 1 = -7"
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.05)
+    mis:integer_division->NegativeRemainderSign -> held (0.73) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
+    mis:integer_division->IntegerDivisionGivesFraction -> correct (0.15) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
+    mis:integer_division->TargetTyping -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#4 (0.50), lvl:integer_division@L3#0 (0.30), lvl:integer_division@L1#1 (0.20)
+    lvl:integer_division@L4#4 -> not applied (0.00) ""
+    lvl:integer_division@L3#0 -> shown (0.26) "because -4 * 2 + 1 = -7"
+    lvl:integer_division@L1#1 -> not applied (0.00) ""
+  kept: mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
+  clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- lvl:remainder_operator@L0#0
+  uncovered clauses bring in: println (2.34)
+  not yet read: own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
+--- depth 2: current concepts ['remainder_operator', 'integer_division', 'arithmetic_operators', 'println']
+  remainder_operator (concept edges): 1 candidates -> kept pre:integer_division->remainder_operator (1.00)
+    pre:integer_division->remainder_operator -> confirmed (0.75) "because -4 * 2 + 1 = -7"
+  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
+    pre:arithmetic_operators->integer_division -> confirmed (0.60) "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.70) "-7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), err:println->PrintWithoutFinalNewline (0.20)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#4 (0.25)
+    lvl:println@L2#1 -> shown (0.24) "It prints -4 and then 1"
+    lvl:println@L3#0 -> shown (0.24) "It prints -4 and then 1"
+    lvl:println@L3#4 -> not applied (0.00) ""
+  kept: pre:integer_division->remainder_operator [confirmed, tier 2, 0.75], pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- lvl:remainder_operator@L0#0
+  not yet read: own edges of expression, pre:statement->println
+--- depth 3: current concepts ['integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.20), mis:expression->VariablesHoldExpressions (0.20)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.45), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.25)
+    lvl:expression@L3#1 -> shown (0.27) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
+    lvl:expression@L0#0 -> shown (0.20) "-7 / 2 is -3.5, and integer division rounds down"
+    lvl:expression@L2#1 -> shown (0.17) "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.70) "It prints -4 and then 1"
+  kept: pre:statement->println [confirmed, tier 2, 0.70], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- lvl:remainder_operator@L0#0
+  not yet read: own edges of statement
+  held: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
+  root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
+  level arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
+  level expression: L0 via everyday_reading "-7 / 2 is -3.5, and integer division rounds down"
+  level integer_division: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
+  level println: L3 via relation_to_neighbour "It prints -4 and then 1"
+  level remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"

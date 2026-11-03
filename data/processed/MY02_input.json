@@ -1,0 +1,5 @@
+{
+ "code": "int a = -7;\nint b = 2;\nSystem.out.println(a / b);\nSystem.out.println(a % b);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints -4 and then 1. -7 / 2 is -3.5, and integer division rounds down, so it becomes -4. A remainder is never negative, so -7 % 2 is 1, because -4 * 2 + 1 = -7."
+}
