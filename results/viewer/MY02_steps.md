@@ -398,7 +398,7 @@ mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure04.png
+Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure04.png
 
 ### Depth 2: current concepts 'remainder_operator', 'integer_division', 'arithmetic_operators', 'println'
 
@@ -607,7 +607,7 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, pre:statement->println
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure05.png
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure05.png
 
 ### Depth 3: current concepts 'integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println'
 
@@ -764,7 +764,7 @@ reached across pre:statement->println, entered next: statement
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
-Figure 6: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure06.png
+Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure06.png
 
 Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
 

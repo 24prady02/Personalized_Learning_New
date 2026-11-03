@@ -1,4 +1,7 @@
 # Think on the Graph: every output of the run MY02
+
+Files of this scenario: `input.json` (program, question, answer), `diagnosis.json`, `subgraph.json`, `traverse_log.txt`, `report.html` (this report as one full-page file, with the interactive graph `MY02_G.html`), `MY02.ipynb` (this report as a notebook).
+
 ## 0. Input
 Program:
 ```java
@@ -51,10 +54,12 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 | remainder_operator | 3 | 14 |
 | statement | 5 | 19 |
 
-Figure 1: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure01.png
+**Figure 1**
 
-Figure 2: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure02.png
+![Figure 1](figure01.png)
+**Figure 2**
 
+![Figure 2](figure02.png)
 ## 2. Clauses and start concepts (no model)
 The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
 | clause | text |
@@ -74,8 +79,9 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
 
 Start concepts: remainder_operator, arithmetic_operators, integer_division
 
-Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure03.png
+**Figure 3**
 
+![Figure 3](figure03.png)
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
@@ -398,8 +404,9 @@ mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure04.png
+**Figure 4 (the graph after depth 1)**
 
+![Figure 4](figure04.png)
 ### Depth 2: current concepts 'remainder_operator', 'integer_division', 'arithmetic_operators', 'println'
 
 #### remainder_operator, concept edges: 1 edges offered
@@ -607,8 +614,9 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, pre:statement->println
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure05.png
+**Figure 5 (the graph after depth 2)**
 
+![Figure 5](figure05.png)
 ### Depth 3: current concepts 'integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println'
 
 #### expression, misconceptions: 8 edges offered
@@ -764,8 +772,9 @@ reached across pre:statement->println, entered next: statement
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
-Figure 6: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure06.png
+**Figure 6 (the graph after depth 3)**
 
+![Figure 6](figure06.png)
 Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
@@ -809,8 +818,9 @@ Clause coverage (final):
 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
 | because -4 * 2 + 1 = -7 | lvl:remainder_operator@L0#0 |
 
-Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure07.png
+**Figure 7 (final picture)**
 
+![Figure 7](figure07.png)
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
