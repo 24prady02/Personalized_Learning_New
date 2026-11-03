@@ -1,0 +1,5 @@
+{
+ "code": "char c = 'A';\nint n = c + 1;\nSystem.out.println(n);",
+ "question": "Explain, step by step, what Java does with c + 1 and why.",
+ "answer": "“c holds the letter A. A letter is not a number, so Java cannot add 1 to it, and this line gives a compile error.”"
+}

@@ -1,0 +1,135 @@
+{
+ "scenario": "MY12",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "c holds the letter A",
+  "A letter is not a number",
+  "so Java cannot add 1 to it, and this line gives a compile error"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "println"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->expression",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "score": 0.8
+  }
+ ],
+ "root_cause": null,
+ "levels": {
+  "expression": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "edge": "lvl:expression@L4#4",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L4",
+ "paths": [
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L4#4",
+   "target": "expression@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L4#4",
+   "target": "expression@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  }
+ ],
+ "clause_coverage": {
+  "A letter is not a number": "pre:arithmetic_operators->expression",
+  "so Java cannot add 1 to it, and this line gives a compile error": "pre:arithmetic_operators->expression"
+ },
+ "unexplained_clauses": [
+  "c holds the letter A"
+ ],
+ "stop_reason": "half_stop",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 22,
+ "llm_calls_by_step": {
+  "prune": 8,
+  "label": 14
+ }
+}

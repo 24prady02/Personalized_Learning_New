@@ -1,0 +1,46 @@
+clauses: c holds the letter A | A letter is not a number | so Java cannot add 1 to it, and this line gives a compile error
+start: 2 tagged concepts, all used
+start concepts (2): arithmetic_operators, println
+--- depth 1: current concepts ['arithmetic_operators', 'println']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->CaretIsPower (0.10), mis:arithmetic_operators->RemainderIsSubtraction (0.10)
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L1#1 (0.50), lvl:arithmetic_operators@L4#3 (0.30), lvl:arithmetic_operators@L0#0 (0.20)
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#3 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->IdentifierCaseInsensitive (0.30), mis:println->ParenthesesOnlyIfArgument (0.30)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
+    mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L0#0 (0.30), lvl:println@L4#3 (0.20)
+    lvl:println@L2#1 -> not applied (0.00) ""
+    lvl:println@L0#0 -> not applied (0.00) ""
+    lvl:println@L4#3 -> not applied (0.00) ""
+  nothing kept at this depth
+  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
+  not yet read: pre:arithmetic_operators->expression, pre:statement->println
+--- depth 2: current concepts ['arithmetic_operators', 'println']
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> broken (0.80) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 uncovered; c2 <- pre:arithmetic_operators->expression; c3 <- pre:arithmetic_operators->expression
+  not yet read: own edges of expression
+--- depth 3: current concepts ['expression', 'arithmetic_operators']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L4#4 (0.45), lvl:expression@L3#1 (0.30), lvl:expression@L0#0 (0.25)
+    lvl:expression@L4#4 -> shown (0.36) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L0#0 -> not applied (0.00) ""
+  kept: lvl:expression@L4#4 [shown, tier 2, 0.36]
+  clause coverage: c1 uncovered; c2 <- pre:arithmetic_operators->expression; c3 <- pre:arithmetic_operators->expression
+  no next nodes -> half_stop
+  root-cause walk: held on [], broken at ['expression'], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+  level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
