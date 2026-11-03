@@ -1,4 +1,7 @@
 # Think on the Graph: every output of the run MY03
+
+Files of this scenario: `input.json` (program, question, answer), `diagnosis.json`, `subgraph.json`, `traverse_log.txt`, `report.html` (this report as one full-page file, with the interactive graph `MY03_G.html`), `MY03.ipynb` (this report as a notebook).
+
 ## 0. Input
 Program:
 ```java
@@ -69,10 +72,12 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 | string_conversion | 1 | 13 |
 | string_literal | 4 | 16 |
 
-Figure 1: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure01.png
+**Figure 1**
 
-Figure 2: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure02.png
+![Figure 1](figure01.png)
+**Figure 2**
 
+![Figure 2](figure02.png)
 ## 2. Clauses and start concepts (no model)
 The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
 | clause | text |
@@ -90,8 +95,9 @@ start concepts (3): array_aliasing, indexing, string_concatenation
 
 Start concepts: array_aliasing, indexing, string_concatenation
 
-Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure03.png
+**Figure 3**
 
+![Figure 3](figure03.png)
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
@@ -416,8 +422,9 @@ mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_alias
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:string_concatenation->string_conversion
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure04.png
+**Figure 4 (the graph after depth 1)**
 
+![Figure 4](figure04.png)
 ### Depth 2: current concepts 'array_aliasing', 'string_concatenation'
 
 #### string_concatenation, concept edges: 1 edges offered
@@ -463,8 +470,9 @@ reached across pre:string_concatenation->string_conversion, entered next: string
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of string_conversion
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure05.png
+**Figure 5 (the graph after depth 2)**
 
+![Figure 5](figure05.png)
 ### Depth 3: current concepts 'string_conversion', 'string_concatenation'
 
 #### string_conversion, misconceptions: 1 edges offered
@@ -568,6 +576,9 @@ lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
 | c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
+**Figure 6 (the graph after depth 3)**
+
+![Figure 6](figure06.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primitive_vs_reference': ['array_reference', 'primitive_type'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
 - array_aliasing: L0 via misconception "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
@@ -605,8 +616,9 @@ Clause coverage (final):
 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
-Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure06.png
+**Figure 7 (final picture)**
 
+![Figure 7](figure07.png)
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|

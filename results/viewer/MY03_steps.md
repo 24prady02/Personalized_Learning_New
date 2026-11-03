@@ -416,7 +416,7 @@ mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_alias
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:string_concatenation->string_conversion
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure04.png
+Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure04.png
 
 ### Depth 2: current concepts 'array_aliasing', 'string_concatenation'
 
@@ -463,7 +463,7 @@ reached across pre:string_concatenation->string_conversion, entered next: string
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of string_conversion
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure05.png
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure05.png
 
 ### Depth 3: current concepts 'string_conversion', 'string_concatenation'
 
@@ -568,6 +568,8 @@ lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
 | c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
+Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure06.png
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primitive_vs_reference': ['array_reference', 'primitive_type'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
 - array_aliasing: L0 via misconception "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
@@ -605,7 +607,7 @@ Clause coverage (final):
 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
-Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure06.png
+Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure07.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
