@@ -1,0 +1,493 @@
+{
+ "scenario": "MY13",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "In double avg = (double)",
+  "s / c",
+  "the cast comes first",
+  "so the division is a decimal one",
+  "so 7 / 2 is 3.5"
+ ],
+ "start_concepts": [
+  "explicit_cast",
+  "integer_division",
+  "arithmetic_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "explicit_cast",
+   "misconception": "CastAfterIntDivision",
+   "kind": "misconception",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.69
+  },
+  {
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "kind": "misconception",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.651
+  },
+  {
+   "concept": "type_conversion",
+   "misconception": "TargetTyping",
+   "kind": "misconception",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.48
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.9,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:arithmetic_operators->expression",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.7,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:primitive_type->type_conversion",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.18,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  }
+ ],
+ "root_cause": {
+  "concept": "type_conversion",
+  "misconception": "TargetTyping"
+ },
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "explicit_cast": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAfterIntDivision",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6.",
+   "source": "level_mis_links"
+  },
+  "expression": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "OutsideInMethodNesting",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "edge": "mis:expression->OutsideInMethodNesting",
+   "rule": "wrong rule: nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f.",
+   "source": "level_mis_links"
+  },
+  "integer_division": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAfterIntDivision",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "source": "level_mis_links"
+  },
+  "type_conversion": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "edge": "mis:type_conversion->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.92,
+   "prune_score": 0.75,
+   "score": 0.69,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.93,
+   "prune_score": 0.7000000000000001,
+   "score": 0.651,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.92,
+   "prune_score": 0.75,
+   "score": 0.69,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "lvl:explicit_cast@L0#0",
+   "target": "explicit_cast@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.93,
+   "prune_score": 0.7000000000000001,
+   "score": 0.651,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "target": "arithmetic_operators@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "expression",
+   "edge": "mis:expression->OutsideInMethodNesting",
+   "target": "OutsideInMethodNesting",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "In f(g(x)), f runs first and then g runs.",
+   "twin_logic": "In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "depth": 2,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  }
+ ],
+ "clause_coverage": {
+  "the cast comes first": "mis:explicit_cast->CastAfterIntDivision",
+  "so the division is a decimal one": "mis:explicit_cast->CastAfterIntDivision",
+  "so 7 / 2 is 3.5": "mis:explicit_cast->CastAfterIntDivision"
+ },
+ "unexplained_clauses": [
+  "In double avg = (double)",
+  "s / c"
+ ],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 53,
+ "llm_calls_by_step": {
+  "prune": 19,
+  "label": 34
+ }
+}

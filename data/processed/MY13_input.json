@@ -1,0 +1,5 @@
+{
+ "code": "int s = 7, c = 2;\ndouble avg = (double) (s / c);\nSystem.out.println(avg);",
+ "question": "Explain the order in which Java works out (double) (s / c).",
+ "answer": "In \"double avg = (double) (s / c);\" the cast comes first, so the division is a decimal one, so 7 / 2 is 3.5."
+}
