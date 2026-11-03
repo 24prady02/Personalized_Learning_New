@@ -22,7 +22,8 @@ import webbrowser
 from pathlib import Path
 
 import matplotlib
-matplotlib.use("Agg")
+if __name__ == "__main__":
+    matplotlib.use("Agg")                      # headless; imported from the notebook it keeps the inline backend
 import matplotlib.pyplot as plt  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -54,17 +55,20 @@ def next_id() -> str:
 
 
 class ProgressLLM(traverse.LLM):
+    verbose = True
+
     def ask(self, prompt, step="other"):
         m = re.search(r"^(?:Concept under consideration|Concept): (\S+)", prompt, re.M)
         e = re.search(r"^Edge: (\S+)", prompt, re.M)
         what = (m.group(1) if m else "") + (f" {e.group(1)}" if e else "")
         t, calls = time.time(), self.calls
         reply = super().ask(prompt, step)
-        print(f"  {step:5s} {what:45s} {'cached' if self.calls == calls else f'claude -p {time.time() - t:.0f}s'}", flush=True)
+        if self.verbose:
+            print(f"  {step:5s} {what:45s} {'cached' if self.calls == calls else f'claude -p {time.time() - t:.0f}s'}", flush=True)
         return reply
 
 
-def run(sid: str, sc: dict, open_browser: bool = True) -> Path:
+def run(sid: str, sc: dict, open_browser: bool = True, verbose: bool = True) -> Path:
     kg = load_kg()
     cfg = load_config()
     tcfg = {**traverse.DEFAULT_TRAVERSAL, **cfg.get("traversal", {})}
@@ -82,6 +86,7 @@ def run(sid: str, sc: dict, open_browser: bool = True) -> Path:
     # Stage 2
     print(f"Stage 2: backend {tcfg['backend']}, model {tcfg['model']}, width {tcfg['width']}, depth {tcfg['depth']}")
     llm = ProgressLLM(tcfg)
+    llm.verbose = verbose
     log: list[str] = []
     diag = traverse.traverse(sg, {"id": sid, "code": code, "question": question, "answer": answer}, tcfg, llm, log)
     diag["llm_calls"] = llm.calls
@@ -98,6 +103,7 @@ def run(sid: str, sc: dict, open_browser: bool = True) -> Path:
     def save(n: int):
         f = RESULTS_DIR / "viewer" / f"{sid}_figure{n:02d}.png"
         plt.savefig(f, dpi=110, bbox_inches="tight"); plt.close("all"); figs.append(f)
+    _show = plt.show
     plt.show = lambda *a, **k: None
     viz.draw_graph(sg, pos, "Stage 1: the concept layer of G, with every concept edge"); save(1)
     viz.draw_full_G(sg, pos, "Stage 1: the whole subgraph G (concepts, misconception / error nodes, level nodes L0-L4)"); save(2)
@@ -125,6 +131,7 @@ def run(sid: str, sc: dict, open_browser: bool = True) -> Path:
                    reached=set(levels), start=start, concept_labels={c: v.get("level") for c, v in levels.items()},
                    satellites=sats, cedge_status=final_status, kept={s[1] for s in sats}, root=root.get("concept"),
                    level_of={c: v.get("level") for c, v in levels.items()}); save(n)
+    plt.show = _show
 
     # the report (every output) -> HTML with the figures embedded, full width
     md_path = steps_report.main(sid)
