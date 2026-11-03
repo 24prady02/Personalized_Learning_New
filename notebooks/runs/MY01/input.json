@@ -1,0 +1,5 @@
+{
+ "code": "int sum = 7;\nint count = 2;\ndouble avg = (double) (sum / count);\nSystem.out.println(avg);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 3.5. The (double) cast turns the division into a decimal division, so 7 / 2 gives 3.5 and that is stored in avg."
+}

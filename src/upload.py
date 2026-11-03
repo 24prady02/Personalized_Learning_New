@@ -1,7 +1,8 @@
 """Upload one scenario run to GitHub as its own commit.
 
-    upload_run("MY03")           # builds results/viewer/MY03_demo.html and notebooks/runs/MY03.ipynb (the run as its own notebook page,
-                                 # shown by GitHub) from the cached prompts, commits the run's files, pushes
+    upload_run("MY03")           # builds results/viewer/MY03_demo.html and the scenario's own folder notebooks/runs/MY03/ (its notebook
+                                 # page MY03.ipynb, shown by GitHub, plus input, diagnosis, log, step report, figures, HTML report)
+                                 # from the cached prompts, commits the run's files, pushes
 
 Used by the notebook at the end of every run, so each scenario is a separate commit on the branch. Git is called
 exactly as from a terminal (the stored login of this computer); nothing is read from it here.
@@ -49,15 +50,31 @@ def run_notebook(sid: str) -> Path:
     flush()
     nb = nbformat.v4.new_notebook(cells=cells, metadata={"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"},
                                                          "language_info": {"name": "python"}})
-    out = ROOT / "notebooks/runs" / f"{sid}.ipynb"
+    out = ROOT / "notebooks/runs" / sid / f"{sid}.ipynb"
     out.parent.mkdir(parents=True, exist_ok=True)
     nbformat.validate(nb)
     nbformat.write(nb, out)
     return out
 
 
+def scenario_folder(sid: str) -> Path:
+    """notebooks/runs/<sid>/: everything of one scenario in one folder (copies of the run's files, plain names)."""
+    import shutil
+    folder = ROOT / "notebooks/runs" / sid
+    folder.mkdir(parents=True, exist_ok=True)
+    pairs = [(PROCESSED_DIR / f"{sid}_input.json", "input.json"), (PROCESSED_DIR / f"{sid}_subgraph.json", "subgraph.json"),
+             (PROCESSED_DIR / f"{sid}_diagnosis.json", "diagnosis.json"), (ROOT / "experiments/logs" / f"traverse_{sid}.txt", "traverse_log.txt"),
+             (ROOT / "results/viewer" / f"{sid}_steps.md", "steps.md"), (ROOT / "results/viewer" / f"{sid}_demo.html", "report.html"),
+             (ROOT / "results/viewer" / f"{sid}_G.html", f"{sid}_G.html")]
+    pairs += [(f, f.name.replace(f"{sid}_", "")) for f in sorted((ROOT / "results/viewer").glob(f"{sid}_figure*.png"))]
+    for src, name in pairs:
+        if src.exists():
+            shutil.copyfile(src, folder / name)
+    return folder
+
+
 def run_files(sid: str) -> list[str]:
-    files = [f"notebooks/runs/{sid}.ipynb", f"data/processed/{sid}_subgraph.json", f"data/processed/{sid}_input.json", f"data/processed/{sid}_diagnosis.json",
+    files = [f"notebooks/runs/{sid}", f"data/processed/{sid}_subgraph.json", f"data/processed/{sid}_input.json", f"data/processed/{sid}_diagnosis.json",
              f"experiments/logs/traverse_{sid}.txt", f"results/viewer/{sid}_steps.md", f"results/viewer/{sid}_demo.html",
              f"results/viewer/{sid}_G.html", "experiments/llm_cache"]
     files += [str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "results/viewer").glob(f"{sid}_figure*.png"))]
@@ -72,6 +89,7 @@ def upload_run(sid: str, build_page: bool = True, extra: tuple[str, ...] = ()) -
         sc = json.loads((PROCESSED_DIR / f"{sid}_input.json").read_text(encoding="utf-8"))
         demo.run(sid, sc, open_browser=False, verbose=False)        # every prompt is cached: no new Claude call
     run_notebook(sid)
+    scenario_folder(sid)
     held = ", ".join(h["misconception"] for h in diag.get("held_misconceptions", [])) or "none"
     root = (diag.get("root_cause") or {}).get("concept", "none")
     msg = f"Scenario {sid}: held {held}; root cause {root}; overall {diag.get('overall_level')}\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\n"
