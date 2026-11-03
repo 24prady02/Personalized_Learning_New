@@ -390,7 +390,7 @@ mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.76], mis:integer_divisi
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
 
-Figure 4: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure04.png
+Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure04.png
 
 ### Depth 2: current concepts 'explicit_cast', 'integer_division', 'arithmetic_operators'
 
@@ -493,7 +493,7 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of type_conversion
 
-Figure 5: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure05.png
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure05.png
 
 ### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'type_conversion', 'explicit_cast', 'expression'
 
@@ -714,7 +714,7 @@ mis:type_conversion->TargetTyping [held, tier 0, 0.80], mis:expression->TargetTy
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:primitive_type->type_conversion
 
-Figure 6: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure06.png
+Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure06.png
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast', 'expression', 'integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
