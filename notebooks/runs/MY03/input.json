@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 9;\nSystem.out.println(a[0] + \" \" + b[0]);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 1 9. The line b = a makes b a copy of a, so b is a separate array. Changing b[0] to 9 only changes b, and a[0] is still 1."
+}
