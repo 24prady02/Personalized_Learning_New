@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {3, 8, 1, 6};\nint max = a[0];\nfor (int i = 1; i < a.length; i++) {\n    if (a[i] > max) {\n        max = a[i];\n    }\n}\nSystem.out.println(max);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 8. max starts as the first element, 3. The loop then looks at every later element and, whenever one is bigger than max, max takes its value, so after 8 it never changes. The loop starts at i = 1 because a[0] is already in max, and i < a.length stops at the last index without going past the end. For any array, this code prints its largest element."
+}
