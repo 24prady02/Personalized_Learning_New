@@ -1,7 +1,8 @@
 """Upload one scenario run to GitHub as its own commit.
 
-    upload_run("MY03")           # builds results/viewer/MY03_demo.html and the scenario's own folder notebooks/runs/MY03/ (its notebook
-                                 # page MY03.ipynb, shown by GitHub, plus input, diagnosis, log, step report, figures, HTML report)
+    upload_run("MY03")           # builds results/viewer/MY03_demo.html and the scenario's own folder notebooks/runs/MY03/
+                                 # (README.md = the step report with the figures, shown by GitHub when the folder is opened;
+                                 # MY03.ipynb = the same as a notebook; input, diagnosis, subgraph, log, figures, HTML report)
                                  # from the cached prompts, commits the run's files, pushes
 
 Used by the notebook at the end of every run, so each scenario is a separate commit on the branch. Git is called
@@ -10,6 +11,8 @@ exactly as from a terminal (the stored login of this computer); nothing is read 
 from __future__ import annotations
 
 import json
+import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -17,37 +20,31 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import PROCESSED_DIR, ROOT  # noqa: E402
 
+NL = chr(10)
+
 
 def _git(*args: str) -> str:
     r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
     return (r.stdout + r.stderr).strip()
 
 
-def run_notebook(sid: str) -> Path:
-    """notebooks/runs/<sid>.ipynb: the run's step report as markdown cells with each figure as an image output, so GitHub
-    shows every scenario as its own notebook page. Built from results/viewer/<sid>_steps.md and <sid>_figureNN.png."""
-    import base64
-    import re
-    import nbformat
-    text = (ROOT / "results/viewer" / f"{sid}_steps.md").read_text(encoding="utf-8")
-    cells, buf = [], []
+def _figure_lines(text: str) -> str:
+    """'Figure N: <abs path>.png' lines of a step report -> markdown image links to figureNN.png in the same folder."""
+    def link(m: re.Match) -> str:
+        return f"**Figure {m.group(1)}{m.group(2) or ''}**" + NL + NL + f"![Figure {m.group(1)}]({m.group(3)})"
+    return re.sub(r"^Figure (\d+)( \([^)]*\))?: .+?(figure\d+\.png)\s*$", link, text, flags=re.M)
 
-    def flush():
-        if "".join(buf).strip():
-            cells.append(nbformat.v4.new_markdown_cell("".join(buf).rstrip() + chr(10)))
-        buf.clear()
-    for line in text.splitlines(keepends=True):
-        m = re.match(r"Figure (\d+)( \(final picture\))?: (.+\.png)\s*$", line)
-        if m and Path(m.group(3).strip()).exists():
-            flush()
-            png = base64.b64encode(Path(m.group(3).strip()).read_bytes()).decode("ascii")
-            cell = nbformat.v4.new_code_cell(f"# Figure {m.group(1)}{m.group(2) or ''}", execution_count=int(m.group(1)))
-            cell.outputs = [nbformat.v4.new_output("display_data", data={"image/png": png, "text/plain": f"Figure {m.group(1)}"})]
-            cell.metadata["scrolled"] = False
-            cells.append(cell)
-        else:
-            buf.append(line)
-    flush()
+
+def _report(sid: str) -> str:
+    return _figure_lines((ROOT / "results/viewer" / f"{sid}_steps.md").read_text(encoding="utf-8"))
+
+
+def run_notebook(sid: str) -> Path:
+    """notebooks/runs/<sid>/<sid>.ipynb: the step report as markdown cells, one per section, figures as relative image links
+    (figureNN.png beside it), so the file stays small enough for GitHub to show."""
+    import nbformat
+    parts = re.split(r"(?m)^(?=## )", _report(sid))
+    cells = [nbformat.v4.new_markdown_cell(p.rstrip() + NL) for p in parts if p.strip()]
     nb = nbformat.v4.new_notebook(cells=cells, metadata={"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"},
                                                          "language_info": {"name": "python"}})
     out = ROOT / "notebooks/runs" / sid / f"{sid}.ipynb"
@@ -58,18 +55,27 @@ def run_notebook(sid: str) -> Path:
 
 
 def scenario_folder(sid: str) -> Path:
-    """notebooks/runs/<sid>/: everything of one scenario in one folder (copies of the run's files, plain names)."""
-    import shutil
+    """notebooks/runs/<sid>/: everything of one scenario in one folder, with README.md (the step report with its figures),
+    which GitHub shows as soon as the folder is opened."""
     folder = ROOT / "notebooks/runs" / sid
     folder.mkdir(parents=True, exist_ok=True)
     pairs = [(PROCESSED_DIR / f"{sid}_input.json", "input.json"), (PROCESSED_DIR / f"{sid}_subgraph.json", "subgraph.json"),
              (PROCESSED_DIR / f"{sid}_diagnosis.json", "diagnosis.json"), (ROOT / "experiments/logs" / f"traverse_{sid}.txt", "traverse_log.txt"),
-             (ROOT / "results/viewer" / f"{sid}_steps.md", "steps.md"), (ROOT / "results/viewer" / f"{sid}_demo.html", "report.html"),
-             (ROOT / "results/viewer" / f"{sid}_G.html", f"{sid}_G.html")]
+             (ROOT / "results/viewer" / f"{sid}_demo.html", "report.html"), (ROOT / "results/viewer" / f"{sid}_G.html", f"{sid}_G.html")]
     pairs += [(f, f.name.replace(f"{sid}_", "")) for f in sorted((ROOT / "results/viewer").glob(f"{sid}_figure*.png"))]
     for src, name in pairs:
         if src.exists():
             shutil.copyfile(src, folder / name)
+    old = folder / "steps.md"                       # earlier layout; README.md replaces it
+    if old.exists():
+        old.unlink()
+    if (ROOT / "results/viewer" / f"{sid}_steps.md").exists():
+        head = (f"Files of this scenario: `input.json` (program, question, answer), `diagnosis.json`, `subgraph.json`, `traverse_log.txt`, "
+                f"`report.html` (this report as one full-page file, with the interactive graph `{sid}_G.html`), `{sid}.ipynb` (this report as a notebook)."
+                + NL + NL)
+        text = _report(sid)
+        text = text.replace(NL, NL + NL + head, 1) if text.startswith("# ") else head + text
+        (folder / "README.md").write_text(text, encoding="utf-8")
     return folder
 
 
@@ -92,20 +98,20 @@ def upload_run(sid: str, build_page: bool = True, extra: tuple[str, ...] = ()) -
     scenario_folder(sid)
     held = ", ".join(h["misconception"] for h in diag.get("held_misconceptions", [])) or "none"
     root = (diag.get("root_cause") or {}).get("concept", "none")
-    msg = f"Scenario {sid}: held {held}; root cause {root}; overall {diag.get('overall_level')}\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\n"
-    out = [_git("add", "--", *run_files(sid), *extra)]
+    msg = f"Scenario {sid}: held {held}; root cause {root}; overall {diag.get('overall_level')}" + NL + NL + "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" + NL
+    out = [_git("add", "-A", "--", *run_files(sid), *extra)]
     out.append(_git("commit", "-q", "-m", msg))
     out.append(_git("push", "origin", "HEAD"))
     out.append(_git("log", "--oneline", "-1"))
-    return "\n".join(o for o in out if o)
+    return NL.join(o for o in out if o)
 
 
 def upload_notebook() -> str:
     """Commit and push the notebook file as saved on disk (press Ctrl+S in the notebook first)."""
     out = [_git("add", "--", "notebooks/think_on_the_graph.ipynb"),
-           _git("commit", "-q", "-m", "Notebook saved with its latest run\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\n"),
+           _git("commit", "-q", "-m", "Notebook saved with its latest run" + NL + NL + "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" + NL),
            _git("push", "origin", "HEAD"), _git("log", "--oneline", "-1")]
-    return "\n".join(o for o in out if o)
+    return NL.join(o for o in out if o)
 
 
 if __name__ == "__main__":

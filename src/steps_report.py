@@ -116,11 +116,22 @@ def main(sid: str) -> Path:
     R_PRUNE = re.compile(r"^  (\S+) \(([^)]+)\): (\d+) candidates -> kept ?(.*)$")
     R_LABEL = re.compile(r'^    (\S+) -> (.+?) \(([0-9.]+)\) "(.*)"$')
     fig_no = 4
+    fig_done = 0                                    # depth whose picture has been placed (one picture per depth, as the notebook draws)
+
+    def depth_figure():
+        nonlocal fig_no, fig_done
+        if depth and fig_done != depth:
+            f = RESULTS_DIR / "viewer" / f"{sid}_figure{fig_no:02d}.png"
+            if f.exists():
+                w(f"\nFigure {fig_no} (the graph after depth {depth}): {f}\n")
+            fig_no += 1
+            fig_done = depth
     i = 0
     while i < len(log):
         line = log[i]
         m = R_DEPTH.match(line)
         if m:
+            depth_figure()
             depth = int(m.group(1))
             w(f"\n### Depth {depth}: current concepts {m.group(2)}\n")
             i += 1
@@ -204,16 +215,14 @@ def main(sid: str) -> Path:
             w("\n**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  not yet read:"):
             w("\n**Graph check, not yet read (the walk may not stop while these remain):** " + line.split(":", 1)[1].strip() + "\n")
-            f = RESULTS_DIR / "viewer" / f"{sid}_figure{fig_no:02d}.png"
-            if f.exists():
-                w(f"\nFigure {fig_no}: {f}\n")
-            fig_no += 1
         elif line.startswith("  no next nodes"):
             w("\n**No next nodes -> half_stop**\n")
         elif line.startswith("  root-cause walk:"):
+            depth_figure()
             w("\n## 4. Diagnosis (rules over the labelled graph, no model)\n")
             w("Root-cause walk: " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  held:"):
+            depth_figure()
             w("\nHeld set after the one-fault rules: " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  level "):
             w("- " + line.strip()[6:] + "\n")
