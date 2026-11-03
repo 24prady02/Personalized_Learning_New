@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {5, 10, 15};\nfor (int i = 0; i <= a.length; i++) {\n    System.out.println(a[i]);\n}",
+ "question": "Explain which indexes the loop visits and why",
+ "answer": "i goes from 0 to a.length. Using <= or < makes no difference here, because both go through the whole array, so it visits each element once."
+}
