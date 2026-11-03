@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {5, 10, 15};\nfor (int i = 0; i <= a.length; i++) {\n    System.out.println(a[i]);\n}",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 0, then 5, 10 and 15. Arrays start at a[1], so a[0] is before the first element and just gives 0. Then a[1], a[2] and a[3] are 5, 10 and 15."
+}

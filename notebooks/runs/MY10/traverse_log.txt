@@ -1,0 +1,80 @@
+clauses: It prints 0, then 5, 10 and 15 | Arrays start at a[1] | so a[0] is before the first element and just gives 0 | Then a[1], a[2] and a[3] are 5, 10 and 15
+start: BM25 of the answer against each tagged concept: indexing 35.54 (hits 1), array_traversal 34.58 (hits 2), run_time_error 28.43 (hits 1), loop_control 26.24 (hits 1), off_by_one_error 25.47 (hits 1), array_bounds 24.89 (hits 1), array_declaration 21.43 (hits 1), for_loop 21.24 (hits 1), loop_body 20.32 (hits 1), println 19.62 (hits 1), increment_operators 17.90 (hits 1), array_initializer 16.65 (hits 1), length_field 15.96 (hits 1), loop_variable 13.95 (hits 1), control_flow 11.28 (hits 1), boolean_expression 10.07 (hits 1), comparison_operators 6.88 (hits 1), loop_scope 6.53 (hits 1), data_structure 1.11 (hits 1)
+start: chosen indexing, array_traversal, run_time_error
+start concepts (3): indexing, array_traversal, run_time_error
+--- depth 1: current concepts ['indexing', 'array_traversal', 'run_time_error']
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.65), mis:indexing->ArrayRangeInclusive (0.25), mis:indexing->ElementBoundToOldIndex (0.10)
+    mis:indexing->ArrayIndexStartsAtOne -> held (0.62) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:indexing->ArrayRangeInclusive -> not applied (0.00) ""
+    mis:indexing->ElementBoundToOldIndex -> correct (0.06) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L0#0 (0.60), lvl:indexing@L3#6 (0.25), lvl:indexing@L4#2 (0.15)
+    lvl:indexing@L0#0 -> shown (0.54) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:indexing@L3#6 -> not applied (0.00) ""
+    lvl:indexing@L4#2 -> not applied (0.00) ""
+  array_traversal (misconceptions): 6 candidates -> kept mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.25), mis:array_traversal->ElementBoundToOldIndex (0.15)
+    mis:array_traversal->OffByOneBound -> correct (0.45) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:array_traversal->IdiomOverridesCode -> correct (0.17) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:array_traversal->ElementBoundToOldIndex -> correct (0.08) "Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L4#3 (0.55), lvl:array_traversal@L2#0 (0.25), lvl:array_traversal@L3#0 (0.20)
+    lvl:array_traversal@L4#3 -> not applied (0.00) ""
+    lvl:array_traversal@L2#0 -> not applied (0.00) ""
+    lvl:array_traversal@L3#0 -> shown (0.14) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->CompilesMeansWorks (0.50), err:run_time_error->ArgsAlwaysPresent (0.35), err:run_time_error->NegativeArraySize (0.15)
+    mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
+    err:run_time_error->ArgsAlwaysPresent -> not applied (0.00) ""
+    err:run_time_error->NegativeArraySize -> not applied (0.00) ""
+  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L2#1 (0.40), lvl:run_time_error@L0#0 (0.35), lvl:run_time_error@L4#4 (0.25)
+    lvl:run_time_error@L2#1 -> not applied (0.00) ""
+    lvl:run_time_error@L0#0 -> not applied (0.00) ""
+    lvl:run_time_error@L4#4 -> not applied (0.00) ""
+  kept: mis:indexing->ArrayIndexStartsAtOne [held, tier 0, 0.62], lvl:indexing@L0#0 [shown, tier 2, 0.54], mis:array_traversal->OffByOneBound [correct, tier 2, 0.45]
+  clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
+  not yet read: pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->off_by_one_error
+--- depth 2: current concepts ['indexing', 'array_traversal']
+  indexing (concept edges): 3 candidates -> kept pre:indexing->off_by_one_error (0.45), pre:indexing->array_bounds (0.35), pre:indexing->array_traversal (0.20)
+    pre:indexing->off_by_one_error -> broken (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:indexing->array_bounds -> broken (0.32) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:indexing->array_traversal -> confirmed (0.12) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_traversal (concept edges): 1 candidates -> kept pre:for_loop->array_traversal (1.00)
+    pre:for_loop->array_traversal -> broken (0.85) "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  kept: pre:for_loop->array_traversal [broken, tier 0, 0.85], pre:indexing->off_by_one_error [broken, tier 0, 0.42], pre:indexing->array_bounds [broken, tier 0, 0.32]
+  reached across pre:for_loop->array_traversal, entered next: for_loop
+  reached across pre:indexing->off_by_one_error, entered next: off_by_one_error
+  reached across pre:indexing->array_bounds, entered next: array_bounds
+  clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
+  not yet read: own edges of array_bounds, own edges of for_loop, own edges of off_by_one_error
+--- depth 3: current concepts ['for_loop', 'array_traversal', 'off_by_one_error', 'indexing', 'array_bounds']
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->IdiomOverridesCode (0.45), err:for_loop->WrongIterationCount (0.35), mis:for_loop->ForLoopPartSkipped (0.20)
+    mis:for_loop->IdiomOverridesCode -> correct (0.32) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    err:for_loop->WrongIterationCount -> correct (0.21) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:for_loop->ForLoopPartSkipped -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
+    lvl:for_loop@L2#1 -> shown (0.24) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:for_loop@L3#2 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.15) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
+    pre:indexing->array_traversal -> confirmed (0.60) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
+    mis:off_by_one_error->OffByOneBound -> correct (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    err:off_by_one_error->WrongIterationCount -> correct (0.19) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    err:off_by_one_error->FencepostExtraSeparator -> not applied (0.00) ""
+  off_by_one_error (level ways): 16 candidates -> kept lvl:off_by_one_error@L0#0 (0.60), lvl:off_by_one_error@L4#3 (0.25), lvl:off_by_one_error@L3#0 (0.15)
+    lvl:off_by_one_error@L0#0 -> shown (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:off_by_one_error@L4#3 -> not applied (0.00) ""
+    lvl:off_by_one_error@L3#0 -> not applied (0.00) ""
+  array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.65), mis:array_bounds->OffByOneBound (0.35)
+    mis:array_bounds->OutOfBoundsElementsAreNull -> held (0.45) "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
+    mis:array_bounds->OffByOneBound -> correct (0.24) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L0#0 (0.50), lvl:array_bounds@L0#2 (0.30), lvl:array_bounds@L3#0 (0.20)
+    lvl:array_bounds@L0#0 -> shown (0.40) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:array_bounds@L0#2 -> shown (0.18) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:array_bounds@L3#0 -> not applied (0.00) ""
+  kept: mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.46], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
+  clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
+  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
+  root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level array_bounds: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
+  level array_traversal: L3 via relation_to_neighbour "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  level for_loop: L2 via output_prediction "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  level indexing: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  level off_by_one_error: L0 via everyday_reading "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
