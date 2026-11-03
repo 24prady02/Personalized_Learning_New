@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nfor (int i = 0; i < 10; i += 3) {\n    System.out.println(i);\n}\n\nQuestion: Explain how i changes from one pass of the loop to the next.\n\nStudent's answer, split into clauses:\nc1: A for loop moves i on by one each pass\nc2: so i goes 0, 1, 2 and\nc3: so on up to 9\n\nConcept: loop_control\nWay: one step execution\nWhat an answer that shows this way does: One update changes only the loop variable, by exactly the rule written (i++ adds 1, i = i - 4 subtracts 4); one test reads it and returns true or false without changing it.\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not shown\nClauses: none\nConfidence: 0.9"
+}

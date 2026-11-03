@@ -1,0 +1,45 @@
+clauses: A for loop moves i on by one each pass | so i goes 0, 1, 2 and | so on up to 9
+start: BM25 of the answer against each tagged concept: loop_control 17.91 (hits 1), for_loop 15.17 (hits 1), loop_variable 11.17 (hits 1), loop_scope 8.35 (hits 1), compound_assignment 6.28 (hits 1), loop_body 6.04 (hits 1), accumulator_pattern 5.62 (hits 1), control_flow 5.15 (hits 1), boolean_expression 5.13 (hits 1), println 1.90 (hits 1), comparison_operators 1.52 (hits 1)
+start: chosen loop_control, for_loop, loop_variable
+start concepts (3): loop_control, for_loop, loop_variable
+--- depth 1: current concepts ['loop_control', 'for_loop', 'loop_variable']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->LoopStepAlwaysOne (0.60), mis:loop_control->IdiomOverridesCode (0.25), err:loop_control->WrongIterationCount (0.15)
+    mis:loop_control->LoopStepAlwaysOne -> held (0.57) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+    mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
+    err:loop_control->WrongIterationCount -> held (0.09) "so i goes 0, 1, 2 and; so on up to 9"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#2 (0.50), lvl:loop_control@L2#1 (0.30), lvl:loop_control@L3#2 (0.20)
+    lvl:loop_control@L2#2 -> not applied (0.00) ""
+    lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#2 -> not applied (0.00) ""
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->LoopStepAlwaysOne (0.60), mis:for_loop->IdiomOverridesCode (0.25), err:for_loop->WrongIterationCount (0.15)
+    mis:for_loop->LoopStepAlwaysOne -> held (0.57) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+    mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#2 (0.30), lvl:for_loop@L0#0 (0.20)
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L2#2 -> not applied (0.00) ""
+    lvl:for_loop@L0#0 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
+    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> correct (0.09) "so i goes 0, 1, 2 and; so on up to 9"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L0#5 (0.35), lvl:loop_variable@L2#2 (0.25)
+    lvl:loop_variable@L2#1 -> shown (0.28) "so i goes 0, 1, 2 and; so on up to 9"
+    lvl:loop_variable@L0#5 -> not applied (0.00) ""
+    lvl:loop_variable@L2#2 -> shown (0.17) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
+  kept: mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
+  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+--- depth 2: current concepts ['loop_control', 'for_loop', 'loop_variable']
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.65), pre:loop_control->for_loop (0.35)
+    pre:loop_variable->loop_control -> broken (0.52) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+    pre:loop_control->for_loop -> broken (0.28) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
+  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  held: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
+  root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+  level loop_control: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
+  level loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"

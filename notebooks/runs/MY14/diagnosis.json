@@ -1,0 +1,353 @@
+{
+ "scenario": "MY14",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "A for loop moves i on by one each pass",
+  "so i goes 0, 1, 2 and",
+  "so on up to 9"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "loop_variable"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "for_loop",
+   "misconception": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "score": 0.57
+  }
+ ],
+ "error_evidence": [
+  {
+   "concept": "loop_control",
+   "error": "WrongIterationCount",
+   "quote": "so i goes 0, 1, 2 and; so on up to 9"
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "score": 0.52,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "score": 0.28,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  }
+ ],
+ "root_cause": {
+  "concept": "for_loop",
+  "misconception": "LoopStepAlwaysOne"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "LoopStepAlwaysOne",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "edge": "mis:for_loop->LoopStepAlwaysOne",
+   "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "LoopStepAlwaysOne",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "edge": "mis:loop_control->LoopStepAlwaysOne",
+   "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "source": "level_mis_links"
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "edge": "lvl:loop_variable@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.8,
+   "prune_score": 0.65,
+   "score": 0.52,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.8,
+   "prune_score": 0.65,
+   "score": 0.52,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->LoopStepAlwaysOne"
+  }
+ ],
+ "clause_coverage": {
+  "A for loop moves i on by one each pass": "mis:loop_control->LoopStepAlwaysOne",
+  "so i goes 0, 1, 2 and": "mis:loop_control->LoopStepAlwaysOne",
+  "so on up to 9": "mis:loop_control->LoopStepAlwaysOne"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 2,
+ "llm_calls": 0,
+ "llm_cache_hits": 23,
+ "llm_calls_by_step": {
+  "prune": 8,
+  "label": 15
+ }
+}
