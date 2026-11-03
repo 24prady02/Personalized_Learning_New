@@ -1,0 +1,328 @@
+{
+ "scenario": "MY09",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "It prints 3.0",
+  "Because d is a double, Java knows the result should have decimals",
+  "so it does the division a / b with decimals and gets 3.0"
+ ],
+ "start_concepts": [
+  "integer_division",
+  "println",
+  "arithmetic_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "kind": "misconception",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.76
+  },
+  {
+   "concept": "integer_division",
+   "misconception": "TargetTyping",
+   "kind": "misconception",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.644
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.85,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "edge": "pre:arithmetic_operators->expression",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.8,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  }
+ ],
+ "root_cause": {
+  "concept": "expression",
+  "misconception": "TargetTyping"
+ },
+ "levels": {
+  "expression": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "edge": "mis:expression->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "source": "level_mis_links"
+  },
+  "integer_division": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "edge": "mis:integer_division->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 3.0",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.7000000000000001,
+   "score": 0.644,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 3.0",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.7000000000000001,
+   "score": 0.644,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints 3.0",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  }
+ ],
+ "clause_coverage": {
+  "It prints 3.0": "lvl:println@L2#1",
+  "Because d is a double, Java knows the result should have decimals": "mis:integer_division->TargetTyping",
+  "so it does the division a / b with decimals and gets 3.0": "mis:integer_division->TargetTyping"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 29,
+ "llm_calls_by_step": {
+  "prune": 11,
+  "label": 18
+ }
+}

@@ -1,0 +1,5 @@
+{
+ "code": "int a = 6;\nint b = 2;\ndouble d = a / b;\nSystem.out.println(d);",
+ "question": "What does this program print, and why?",
+ "answer": "It prints 3.0. Because d is a double, Java knows the result should have decimals, so it does the division a / b with decimals and gets 3.0."
+}

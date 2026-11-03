@@ -1,0 +1,56 @@
+clauses: It prints 3.0 | Because d is a double, Java knows the result should have decimals | so it does the division a / b with decimals and gets 3.0
+start: generic concepts whose tagging text occurs in the answer: expression
+start: BM25 of the answer against each tagged concept: integer_division 21.26 (hits 1), println 10.55 (hits 1), arithmetic_operators 7.53 (hits 1), expression 6.67 (hits 2), type_conversion 6.51 (hits 1), widening_conversion 3.12 (hits 1)
+start: chosen integer_division, println, arithmetic_operators
+start concepts (3): integer_division, println, arithmetic_operators
+--- depth 1: current concepts ['integer_division', 'println', 'arithmetic_operators']
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->TargetTyping (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->CastAfterIntDivision (0.10)
+    mis:integer_division->TargetTyping -> held (0.64) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.60), lvl:integer_division@L2#0 (0.25), lvl:integer_division@L1#1 (0.15)
+    lvl:integer_division@L0#4 -> shown (0.48) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    lvl:integer_division@L2#0 -> not applied (0.00) ""
+    lvl:integer_division@L1#1 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.30)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#3 (0.30), lvl:println@L2#0 (0.20)
+    lvl:println@L2#1 -> shown (0.30) "It prints 3.0"
+    lvl:println@L3#3 -> not applied (0.00) ""
+    lvl:println@L2#0 -> not applied (0.00) ""
+  arithmetic_operators (misconceptions): 3 candidates -> kept 
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#0 (0.40), lvl:arithmetic_operators@L4#0 (0.35), lvl:arithmetic_operators@L2#1 (0.25)
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+  kept: mis:integer_division->TargetTyping [held, tier 0, 0.64], lvl:integer_division@L0#4 [shown, tier 2, 0.48], lvl:println@L2#1 [shown, tier 2, 0.30]
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
+--- depth 2: current concepts ['integer_division', 'println', 'arithmetic_operators']
+  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
+    pre:arithmetic_operators->integer_division -> broken (0.85) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> not applied (0.00) ""
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> broken (0.80) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  not yet read: own edges of expression
+--- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
+    mis:expression->TargetTyping -> held (0.76) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L1#1 -> not applied (0.00) ""
+    lvl:expression@L2#1 -> not applied (0.00) ""
+  kept: mis:expression->TargetTyping [held, tier 0, 0.76]
+  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
+  level expression: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  level integer_division: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  level println: L2 via output_prediction "It prints 3.0"
