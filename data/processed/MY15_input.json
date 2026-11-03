@@ -1,0 +1,5 @@
+{
+ "code": "for (int i = 1; i <= 3; i++) {\n    System.out.print(i);\n}",
+ "question": "Explain, pass by pass, what happens to i in this loop",
+ "answer": "Each pass starts by setting i = 1 again. Then i++ runs before the body and adds 2, so i is 3. So every pass prints the same thing, 3"
+}

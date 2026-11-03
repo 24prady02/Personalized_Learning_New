@@ -1,0 +1,577 @@
+{
+ "scenario": "MY15",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "Each pass starts by setting i = 1 again",
+  "Then i++ runs before the body and adds 2",
+  "so i is 3",
+  "So every pass prints the same thing, 3"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "increment_operators",
+  "for_loop"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "increment_operators",
+   "misconception": "IncrementByTwo",
+   "kind": "misconception",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "score": 0.4275
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "score": 0.405
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "ForInitRepeats",
+   "kind": "misconception",
+   "quote": "Each pass starts by setting i = 1 again",
+   "score": 0.38
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:assignment->increment_operators",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "score": 0.54,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "score": 0.54,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "score": 0.34,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "score": 0.85,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  }
+ ],
+ "root_cause": {
+  "concept": "loop_control",
+  "misconception": "ForUpdateBeforeBody"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForInitRepeats",
+   "quote": "Each pass starts by setting i = 1 again",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "rule": "wrong rule: The initialization of a for loop runs again after a pass of the body. Right rule: The initialization runs exactly once, before the first condition test.",
+   "source": "level_mis_links",
+   "also_held": [
+    "ForUpdateBeforeBody"
+   ]
+  },
+  "increment_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IncrementByTwo",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "rule": "wrong rule: i++ increases i by 2. Right rule: i++ (and ++i) increases i by exactly 1.",
+   "source": "level_mis_links",
+   "also_held": [
+    "PreIncrementBeforeLoop"
+   ]
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForUpdateBeforeBody",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "rule": "wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.95,
+   "prune_score": 0.45,
+   "score": 0.4275,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Each pass starts by setting i = 1 again; so i is 3",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentAddsToTarget",
+   "target": "AssignmentAddsToTarget",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.5,
+   "prune_score": 0.2,
+   "score": 0.1,
+   "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
+   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost."
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L0#3",
+   "target": "loop_control@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: \"++i in the for-update runs before the body each pass\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.95,
+   "prune_score": 0.45,
+   "score": 0.4275,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PreIncrementBeforeLoop",
+   "target": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "++i in the for-update runs before the body each pass",
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L0#0",
+   "target": "increment_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.85,
+   "prune_score": 0.55,
+   "score": 0.4675,
+   "logic": "Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.9,
+   "prune_score": 0.35,
+   "score": 0.315,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L0#11",
+   "target": "for_loop@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the for sequencing rule (LT) unevenly: updates before the body on the first pass only, re-runs the init after a pass, or skips the test on some passes. (here mixing in: \"The body of a for statement executes at most once\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Each pass starts by setting i = 1 again; so i is 3",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value."
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentAddsToTarget",
+   "target": "AssignmentAddsToTarget",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.5,
+   "prune_score": 0.2,
+   "score": 0.1,
+   "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
+   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost."
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  }
+ ],
+ "clause_coverage": {
+  "Each pass starts by setting i = 1 again": "lvl:loop_control@L0#3",
+  "Then i++ runs before the body and adds 2": "mis:loop_control->ForUpdateBeforeBody",
+  "so i is 3": "mis:loop_control->ForUpdateBeforeBody",
+  "So every pass prints the same thing, 3": "mis:loop_control->ForUpdateBeforeBody"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 23
+ }
+}
