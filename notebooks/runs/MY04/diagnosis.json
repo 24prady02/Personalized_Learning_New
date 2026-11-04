@@ -26,16 +26,18 @@
    "kind": "misconception",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
    "score": 0.96
-  },
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
   {
    "concept": "statement",
    "misconception": "ComputerFillsInIntent",
-   "kind": "misconception",
+   "shadow_of": "mis:switch_statement->SwitchNoFallThrough",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
    "score": 0.275
   }
  ],
- "error_evidence": [],
  "broken_edges": [
   {
    "edge": "pre:statement->control_flow",
@@ -45,8 +47,8 @@
   }
  ],
  "root_cause": {
-  "concept": "statement",
-  "misconception": "ComputerFillsInIntent"
+  "concept": "switch_statement",
+  "misconception": "SwitchNoFallThrough"
  },
  "levels": {
   "control_flow": {
@@ -54,7 +56,8 @@
    "way": "everyday_reading",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match",
    "edge": "lvl:control_flow@L0#0",
-   "source": "level_way"
+   "source": "level_way",
+   "also_shown": []
   },
   "println": {
    "level": "L3",
@@ -68,12 +71,11 @@
   },
   "statement": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "ComputerFillsInIntent",
-   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "edge": "mis:statement->ComputerFillsInIntent",
-   "rule": "wrong rule: The computer fills in omitted steps or values the programmer meant. Right rule: The computer executes only the statements written; every needed step and value must be written.",
-   "source": "level_mis_links"
+   "way": "inconsistent_trace",
+   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+   "edge": "lvl:statement@L0#2",
+   "source": "level_way",
+   "also_shown": []
   },
   "string_literal": {
    "level": "L3",
@@ -531,7 +533,7 @@
   "because they do not match": "lvl:control_flow@L0#0"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
  "llm_cache_hits": 37,
