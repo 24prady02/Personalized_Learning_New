@@ -1,0 +1,463 @@
+{
+ "scenario": "MY20",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "n is a whole number from 1 to 6, for example 4"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "explicit_cast",
+  "math_random"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "explicit_cast": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:explicit_cast@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "expression": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:expression@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "math_random": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:math_random@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule"
+   ]
+  }
+ },
+ "overall_level": "L2",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "math_random",
+   "edge": "mis:math_random->RandomCanReturnOne",
+   "target": "RandomCanReturnOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.85,
+   "prune_score": 0.85,
+   "score": 0.7225,
+   "logic": "Math.random() can return exactly 1.0.",
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+  },
+  {
+   "depth": 1,
+   "source": "math_random",
+   "edge": "lvl:math_random@L2#1",
+   "target": "math_random@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "A double in [0, 1) that differs from call to call and run to run (e.g. RandomInt 1000 prints 548, then 141); (int) (Math.random() * 6) + 1 is an int from 1 to 6; Math.random() < 0.5 is true about half the time.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 0.6000000000000001,
+   "score": 0.48,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "pre:math_library->math_random",
+   "target": "math_library",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "pre:explicit_cast->math_random",
+   "target": "math_random",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "To turn Math.random()'s double in [0, 1) into a random int from 0 to N-1, multiply it by N and cast the result to int.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "math_library",
+   "edge": "mis:math_library->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 0.9,
+   "score": 0.675,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 0.6000000000000001,
+   "score": 0.48,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "depth": 1,
+   "source": "explicit_cast",
+   "edge": "lvl:explicit_cast@L2#1",
+   "target": "explicit_cast@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "(int) 2.71828 is int 2; (int) -2.7 is -2; (int) 11 * 0.3 is double 3.3; (int) (11 * 0.3) is int 3; (double) 3 / 5 is 0.6 but (double) (3 / 5) is 0.0; (char) ('a' + 4) is 'e'.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "math_random",
+   "edge": "mis:math_random->RandomCanReturnOne",
+   "target": "RandomCanReturnOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.85,
+   "prune_score": 0.85,
+   "score": 0.7225,
+   "logic": "Math.random() can return exactly 1.0.",
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+  },
+  {
+   "depth": 1,
+   "source": "math_random",
+   "edge": "lvl:math_random@L2#1",
+   "target": "math_random@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "A double in [0, 1) that differs from call to call and run to run (e.g. RandomInt 1000 prints 548, then 141); (int) (Math.random() * 6) + 1 is an int from 1 to 6; Math.random() < 0.5 is true about half the time.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "math_random",
+   "edge": "lvl:math_random@L1#1",
+   "target": "math_random@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Each call returns a new double r with 0 <= r < 1; multiplying by N gives a value in [0, N), and casting truncates it to an int between 0 and N-1.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "pre:explicit_cast->math_random",
+   "target": "math_random",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "To turn Math.random()'s double in [0, 1) into a random int from 0 to N-1, multiply it by N and cast the result to int.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "pre:math_library->math_random",
+   "target": "math_library",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "math_library",
+   "edge": "mis:math_library->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 0.9,
+   "score": 0.675,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "n is a whole number from 1 to 6, for example 4": "lvl:arithmetic_operators@L2#1"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 39,
+ "llm_calls_by_step": {
+  "prune": 14,
+  "label": 25
+ }
+}

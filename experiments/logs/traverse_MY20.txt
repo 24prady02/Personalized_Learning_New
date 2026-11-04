@@ -1,0 +1,72 @@
+clauses: n is a whole number from 1 to 6, for example 4
+start: BM25 of the answer against each tagged concept: arithmetic_operators 9.57 (hits 1), explicit_cast 7.86 (hits 1), math_random 4.79 (hits 1), method_call 4.46 (hits 1), math_library 2.61 (hits 1), api 1.78 (hits 1), type_conversion 1.03 (hits 1), println 0.88 (hits 1)
+start: chosen arithmetic_operators, explicit_cast, math_random
+start concepts (3): arithmetic_operators, explicit_cast, math_random
+--- depth 1: current concepts ['arithmetic_operators', 'explicit_cast', 'math_random']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.40), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.30), mis:arithmetic_operators->CaretIsPower (0.30)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#1 (0.50), lvl:arithmetic_operators@L2#0 (0.30), lvl:arithmetic_operators@L3#0 (0.20)
+    lvl:arithmetic_operators@L2#1 -> shown (0.30) "n is a whole number from 1 to 6, for example 4"
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#0 -> not applied (0.00) ""
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastRounds (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), err:explicit_cast->RoundReturnsInt (0.10)
+    mis:explicit_cast->CastRounds -> correct (0.48) "n is a whole number from 1 to 6, for example 4"
+    mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
+    err:explicit_cast->RoundReturnsInt -> not applied (0.00) ""
+  explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L3#1 (0.50), lvl:explicit_cast@L3#5 (0.30), lvl:explicit_cast@L2#1 (0.20)
+    lvl:explicit_cast@L3#1 -> not applied (0.00) ""
+    lvl:explicit_cast@L3#5 -> not applied (0.00) ""
+    lvl:explicit_cast@L2#1 -> shown (0.12) "n is a whole number from 1 to 6, for example 4"
+  math_random (misconceptions): 2 candidates -> kept mis:math_random->RandomCanReturnOne (0.85), mis:math_random->ProbabilityIsPrediction (0.15)
+    mis:math_random->RandomCanReturnOne -> correct (0.72) "n is a whole number from 1 to 6, for example 4"
+    mis:math_random->ProbabilityIsPrediction -> not applied (0.00) ""
+  math_random (level ways): 16 candidates -> kept lvl:math_random@L2#1 (0.60), lvl:math_random@L4#0 (0.25), lvl:math_random@L1#1 (0.15)
+    lvl:math_random@L2#1 -> shown (0.54) "n is a whole number from 1 to 6, for example 4"
+    lvl:math_random@L4#0 -> not applied (0.00) ""
+    lvl:math_random@L1#1 -> shown (0.09) "n is a whole number from 1 to 6, for example 4"
+  kept: mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], lvl:math_random@L2#1 [shown, tier 2, 0.54], mis:explicit_cast->CastRounds [correct, tier 2, 0.48]
+  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  not yet read: pre:arithmetic_operators->expression, pre:explicit_cast->math_random, pre:math_library->math_random, pre:type_conversion->explicit_cast
+--- depth 2: current concepts ['arithmetic_operators', 'explicit_cast', 'math_random']
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.75) "n is a whole number from 1 to 6, for example 4"
+  explicit_cast (concept edges): 2 candidates -> kept pre:explicit_cast->math_random (0.60), pre:type_conversion->explicit_cast (0.40)
+    pre:explicit_cast->math_random -> confirmed (0.51) "n is a whole number from 1 to 6, for example 4"
+    pre:type_conversion->explicit_cast -> confirmed (0.32) "n is a whole number from 1 to 6, for example 4"
+  math_random (concept edges): 1 candidates -> kept pre:math_library->math_random (1.00)
+    pre:math_library->math_random -> confirmed (0.80) "n is a whole number from 1 to 6, for example 4"
+  kept: pre:math_library->math_random [confirmed, tier 2, 0.80], pre:arithmetic_operators->expression [confirmed, tier 2, 0.75], pre:explicit_cast->math_random [confirmed, tier 2, 0.51]
+  reached across pre:math_library->math_random, entered next: math_library
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  not yet read: own edges of expression, own edges of math_library
+--- depth 3: current concepts ['math_library', 'math_random', 'expression', 'arithmetic_operators', 'explicit_cast']
+  math_library (misconceptions): 4 candidates -> kept mis:math_library->CastRounds (0.90), err:math_library->MathMethodWithoutClassName (0.05), err:math_library->WrongArgumentType (0.05)
+    mis:math_library->CastRounds -> correct (0.68) "n is a whole number from 1 to 6, for example 4"
+    err:math_library->MathMethodWithoutClassName -> not applied (0.00) ""
+    err:math_library->WrongArgumentType -> not applied (0.00) ""
+  math_library (level ways): 20 candidates -> kept lvl:math_library@L3#1 (0.50), lvl:math_library@L3#3 (0.30), lvl:math_library@L2#2 (0.20)
+    lvl:math_library@L3#1 -> not applied (0.00) ""
+    lvl:math_library@L3#3 -> not applied (0.00) ""
+    lvl:math_library@L2#2 -> not applied (0.00) ""
+  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.45), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.20)
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L3#1 (0.20)
+    lvl:expression@L2#1 -> shown (0.38) "n is a whole number from 1 to 6, for example 4"
+    lvl:expression@L1#1 -> not applied (0.00) ""
+    lvl:expression@L3#1 -> not applied (0.00) ""
+  explicit_cast (concept edges): 1 candidates -> kept pre:type_conversion->explicit_cast (1.00)
+    pre:type_conversion->explicit_cast -> confirmed (0.80) "n is a whole number from 1 to 6, for example 4"
+  kept: pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.68], lvl:expression@L2#1 [shown, tier 2, 0.38]
+  reached across pre:type_conversion->explicit_cast, entered next: type_conversion
+  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  not yet read: own edges of type_conversion, pre:expression->method_call, pre:method_call->math_library
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'math_random': ['explicit_cast', 'math_library'], 'method_call': ['expression'], 'api': ['method_call'], 'math_library': ['method_call'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+  level arithmetic_operators: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
+  level explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
+  level expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
+  level math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"

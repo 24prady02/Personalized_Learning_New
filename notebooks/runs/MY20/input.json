@@ -1,0 +1,5 @@
+{
+ "code": "int n = (int) (Math.random() * 6) + 1;\nSystem.out.println(n);",
+ "question": "Explain what values n can have",
+ "answer": "n is a whole number from 1 to 6, for example 4"
+}
