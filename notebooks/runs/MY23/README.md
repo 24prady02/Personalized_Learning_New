@@ -744,22 +744,28 @@ mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTy
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['explicit_cast', 'expression', 'integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
 - explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-- expression: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+- expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
 - integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-- type_conversion: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+- type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 
 **Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| type_conversion | TargetTyping | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.68 |  |
 | integer_division | CastAfterIntDivision | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.651 |  |
-| expression | TargetTyping | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.595 |  |
 | explicit_cast | CastAfterIntDivision | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.552 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| expression | TargetTyping | mis:type_conversion->TargetTyping | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.595 |
+| type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.68 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -768,15 +774,15 @@ Root-cause walk: held on ['explicit_cast', 'expression', 'integer_division', 'ty
 | pre:arithmetic_operators->expression | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.75 | mis:integer_division->CastAfterIntDivision |
 | pre:type_conversion->explicit_cast | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.7 | mis:integer_division->CastAfterIntDivision |
 
-### Root cause: type_conversion / TargetTyping
+### Root cause: explicit_cast / CastAfterIntDivision
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | explicit_cast | L0 | misconception | CastAfterIntDivision | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6. |  |  |
-| expression | L0 | misconception | TargetTyping | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
+| expression | L0 | everyday_reading |  | level_way | so sum / count keeps its fraction and avg is 3.5 |  |  |  |
 | integer_division | L0 | misconception | CastAfterIntDivision | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |  |  |
-| type_conversion | L0 | misconception | TargetTyping | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0). |  |  |
+| type_conversion | L0 | everyday_reading |  | level_way | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |  |  |  |
 
 ### Overall level: L0
 
@@ -883,11 +889,12 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
-  root-cause walk: held on ['explicit_cast', 'expression', 'integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+  root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
   level explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  level expression: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
   level integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  level type_conversion: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 ```
 
 ## 8. Full diagnosis JSON
@@ -912,25 +919,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
  ],
  "held_misconceptions": [
   {
-   "concept": "type_conversion",
-   "misconception": "TargetTyping",
-   "kind": "misconception",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.68
-  },
-  {
    "concept": "integer_division",
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "score": 0.651
-  },
-  {
-   "concept": "expression",
-   "misconception": "TargetTyping",
-   "kind": "misconception",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.595
   },
   {
    "concept": "explicit_cast",
@@ -941,6 +934,22 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:type_conversion->TargetTyping",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.595
+  },
+  {
+   "concept": "type_conversion",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.68
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:arithmetic_operators->integer_division",
@@ -962,8 +971,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   }
  ],
  "root_cause": {
-  "concept": "type_conversion",
-  "misconception": "TargetTyping"
+  "concept": "explicit_cast",
+  "misconception": "CastAfterIntDivision"
  },
  "levels": {
   "explicit_cast": {
@@ -977,12 +986,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   },
   "expression": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "edge": "mis:expression->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "source": "level_mis_links"
+   "way": "everyday_reading",
+   "quote": "so sum / count keeps its fraction and avg is 3.5",
+   "edge": "lvl:expression@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "integer_division": {
    "level": "L0",
@@ -995,12 +1003,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   },
   "type_conversion": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
+   "way": "everyday_reading",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "edge": "mis:type_conversion->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
-   "source": "level_mis_links"
+   "edge": "lvl:type_conversion@L0#0",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",

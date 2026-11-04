@@ -62,8 +62,9 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
-  root-cause walk: held on ['explicit_cast', 'expression', 'integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+  root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
   level explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  level expression: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
   level integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  level type_conversion: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"

@@ -18,25 +18,11 @@
  ],
  "held_misconceptions": [
   {
-   "concept": "type_conversion",
-   "misconception": "TargetTyping",
-   "kind": "misconception",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.68
-  },
-  {
    "concept": "integer_division",
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "score": 0.651
-  },
-  {
-   "concept": "expression",
-   "misconception": "TargetTyping",
-   "kind": "misconception",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.595
   },
   {
    "concept": "explicit_cast",
@@ -47,6 +33,22 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:type_conversion->TargetTyping",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.595
+  },
+  {
+   "concept": "type_conversion",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.68
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:arithmetic_operators->integer_division",
@@ -68,8 +70,8 @@
   }
  ],
  "root_cause": {
-  "concept": "type_conversion",
-  "misconception": "TargetTyping"
+  "concept": "explicit_cast",
+  "misconception": "CastAfterIntDivision"
  },
  "levels": {
   "explicit_cast": {
@@ -83,12 +85,11 @@
   },
   "expression": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "edge": "mis:expression->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "source": "level_mis_links"
+   "way": "everyday_reading",
+   "quote": "so sum / count keeps its fraction and avg is 3.5",
+   "edge": "lvl:expression@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "integer_division": {
    "level": "L0",
@@ -101,12 +102,11 @@
   },
   "type_conversion": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
+   "way": "everyday_reading",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "edge": "mis:type_conversion->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
-   "source": "level_mis_links"
+   "edge": "lvl:type_conversion@L0#0",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
