@@ -28,6 +28,7 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": {
   "concept": "array_aliasing",
