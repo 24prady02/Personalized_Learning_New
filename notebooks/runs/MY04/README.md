@@ -396,6 +396,15 @@ Parsed labels:
 
 mis:switch_statement->SwitchNoFallThrough [held, tier 0, 0.96], lvl:switch_statement@L0#0 [shown, tier 2, 0.56], lvl:control_flow@L0#0 [shown, tier 2, 0.21]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints only Tue | mis:switch_statement->SwitchNoFallThrough |
+| c2 | day is 2 | not covered yet |
+| c3 | so the switch jumps to case 2, prints Tue, and then the switch is finished | mis:switch_statement->SwitchNoFallThrough |
+| c4 | The other cases are skipped | mis:switch_statement->SwitchNoFallThrough |
+| c5 | because they do not match | mis:switch_statement->SwitchNoFallThrough |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 
 **Figure 4 (the graph after depth 1)**
@@ -477,6 +486,15 @@ pre:statement->control_flow [broken, tier 0, 0.75], pre:string_literal->println 
 reached across pre:statement->control_flow, entered next: statement
 
 reached across pre:string_literal->println, entered next: string_literal
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints only Tue | mis:switch_statement->SwitchNoFallThrough |
+| c2 | day is 2 | not covered yet |
+| c3 | so the switch jumps to case 2, prints Tue, and then the switch is finished | mis:switch_statement->SwitchNoFallThrough |
+| c4 | The other cases are skipped | mis:switch_statement->SwitchNoFallThrough |
+| c5 | because they do not match | mis:switch_statement->SwitchNoFallThrough |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement, own edges of string_literal
 
@@ -725,9 +743,20 @@ Parsed labels:
 
 mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints only Tue | mis:switch_statement->SwitchNoFallThrough |
+| c2 | day is 2 | not covered yet |
+| c3 | so the switch jumps to case 2, prints Tue, and then the switch is finished | mis:switch_statement->SwitchNoFallThrough |
+| c4 | The other cases are skipped | mis:switch_statement->SwitchNoFallThrough |
+| c5 | because they do not match | mis:switch_statement->SwitchNoFallThrough |
+
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:statement->ComputerFillsInIntent (shadow of mis:switch_statement->SwitchNoFallThrough)
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
@@ -742,6 +771,11 @@ Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:s
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | switch_statement | SwitchNoFallThrough | misconception | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match | 0.96 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| statement | ComputerFillsInIntent | mis:switch_statement->SwitchNoFallThrough | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished | 0.275 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -831,7 +865,7 @@ start concepts (3): control_flow, println, switch_statement
     lvl:switch_statement@L0#2 -> shown (0.15) "day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
     lvl:switch_statement@L2#1 -> shown (0.09) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
   kept: mis:switch_statement->SwitchNoFallThrough [held, tier 0, 0.96], lvl:switch_statement@L0#0 [shown, tier 2, 0.56], lvl:control_flow@L0#0 [shown, tier 2, 0.21]
-  clause coverage (rule edges): c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
+  clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   not yet read: pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['switch_statement', 'control_flow', 'println']
   control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
@@ -842,7 +876,7 @@ start concepts (3): control_flow, println, switch_statement
   kept: pre:statement->control_flow [broken, tier 0, 0.75], pre:string_literal->println [confirmed, tier 2, 0.28]
   reached across pre:statement->control_flow, entered next: statement
   reached across pre:string_literal->println, entered next: string_literal
-  clause coverage (rule edges): c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
+  clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   not yet read: own edges of statement, own edges of string_literal
 --- depth 3: current concepts ['statement', 'control_flow', 'string_literal', 'println']
   statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
@@ -864,7 +898,7 @@ start concepts (3): control_flow, println, switch_statement
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
   kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
-  clause coverage (rule edges): c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
+  clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 uncovered; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   shadows: mis:statement->ComputerFillsInIntent (shadow of mis:switch_statement->SwitchNoFallThrough)
   root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
   level control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
