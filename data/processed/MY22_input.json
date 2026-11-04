@@ -1,0 +1,5 @@
+{
+ "code": "int i = 5;\ni++;\nSystem.out.println(i);",
+ "question": "Explain what i++ does to i.",
+ "answer": "I think i++ adds 1 to i, though it might add 2, I’m not sure. Probably it makes i 6."
+}
