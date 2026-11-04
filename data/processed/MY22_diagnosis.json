@@ -17,6 +17,7 @@
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -29,14 +30,18 @@
    "also_shown": []
   },
   "increment_operators": {
-   "level": "L0",
-   "way": "everyday_reading",
-   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure",
-   "edge": "lvl:increment_operators@L0#0",
-   "source": "level_way"
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Probably it makes i 6",
+   "edge": "lvl:increment_operators@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 names_the_element",
+    "L0 everyday_reading"
+   ]
   }
  },
- "overall_level": "L0",
+ "overall_level": "L2",
  "paths": [
   {
    "depth": 1,

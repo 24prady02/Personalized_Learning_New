@@ -495,7 +495,7 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment'], 'println': ['statement']}
 - assignment: L2 via one_step_execution "Probably it makes i 6"
-- increment_operators: L0 via everyday_reading "I think i++ adds 1 to i, though it might add 2, Im not sure"
+- increment_operators: L2 via output_prediction "Probably it makes i 6"
 
 **Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 0, cache hits 22
 
@@ -511,9 +511,9 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | assignment | L2 | one_step_execution |  | level_way | Probably it makes i 6 |  |  |  |
-| increment_operators | L0 | everyday_reading |  | level_way | I think i++ adds 1 to i, though it might add 2, Im not sure |  |  |  |
+| increment_operators | L2 | output_prediction |  | level_way | Probably it makes i 6 |  | L1 names_the_element, L0 everyday_reading |  |
 
-### Overall level: L0
+### Overall level: L2
 
 Clause coverage (final):
 | clause | covered by |
@@ -591,7 +591,7 @@ start concepts (2): increment_operators, println
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment'], 'println': ['statement']}
   level assignment: L2 via one_step_execution "Probably it makes i 6"
-  level increment_operators: L0 via everyday_reading "I think i++ adds 1 to i, though it might add 2, Im not sure"
+  level increment_operators: L2 via output_prediction "Probably it makes i 6"
 ```
 
 ## 8. Full diagnosis JSON
@@ -615,6 +615,7 @@ start concepts (2): increment_operators, println
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -627,14 +628,18 @@ start concepts (2): increment_operators, println
    "also_shown": []
   },
   "increment_operators": {
-   "level": "L0",
-   "way": "everyday_reading",
-   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure",
-   "edge": "lvl:increment_operators@L0#0",
-   "source": "level_way"
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Probably it makes i 6",
+   "edge": "lvl:increment_operators@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 names_the_element",
+    "L0 everyday_reading"
+   ]
   }
  },
- "overall_level": "L0",
+ "overall_level": "L2",
  "paths": [
   {
    "depth": 1,

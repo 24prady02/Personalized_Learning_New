@@ -43,4 +43,4 @@ start concepts (2): increment_operators, println
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment'], 'println': ['statement']}
   level assignment: L2 via one_step_execution "Probably it makes i 6"
-  level increment_operators: L0 via everyday_reading "I think i++ adds 1 to i, though it might add 2, Im not sure"
+  level increment_operators: L2 via output_prediction "Probably it makes i 6"
