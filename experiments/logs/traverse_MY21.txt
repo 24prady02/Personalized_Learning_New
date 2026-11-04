@@ -1,0 +1,61 @@
+clauses: The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends
+start: BM25 of the answer against each tagged concept: for_loop 10.15 (hits 1), loop_body 9.53 (hits 1), loop_variable 8.36 (hits 1), loop_control 8.28 (hits 1), println 7.56 (hits 1), increment_operators 7.45 (hits 1), control_flow 4.56 (hits 1), boolean_expression 3.31 (hits 1), loop_scope 2.29 (hits 1), comparison_operators 0.87 (hits 1)
+start: chosen for_loop, loop_body, loop_variable
+start concepts (3): for_loop, loop_body, loop_variable
+--- depth 1: current concepts ['for_loop', 'loop_body', 'loop_variable']
+  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.40), mis:for_loop->ForUpdateBeforeBody (0.35), mis:for_loop->ForIsConditional (0.25)
+    err:for_loop->WrongIterationCount -> correct (0.36) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.32) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:for_loop->ForIsConditional -> correct (0.23) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L3#2 (0.20)
+    lvl:for_loop@L2#1 -> shown (0.47) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:for_loop@L2#0 -> shown (0.22) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:for_loop@L3#2 -> shown (0.15) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopOutputSameEachPass (0.60), mis:loop_body->ForLoopPartSkipped (0.25), mis:loop_body->LoopBodyStatementOutsideLoop (0.15)
+    mis:loop_body->LoopOutputSameEachPass -> correct (0.57) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.15) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:loop_body->LoopBodyStatementOutsideLoop -> correct (0.11) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L2#1 (0.50), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L2#2 (0.20)
+    lvl:loop_body@L2#1 -> shown (0.45) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_body@L2#0 -> shown (0.21) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_body@L2#2 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.60), mis:loop_variable->ForInitRepeats (0.20), mis:loop_variable->LoopUpdateChangesDirection (0.20)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.57) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:loop_variable->ForInitRepeats -> correct (0.16) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L2#0 (0.30), lvl:loop_variable@L1#1 (0.20)
+    lvl:loop_variable@L2#1 -> shown (0.45) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_variable@L2#0 -> shown (0.18) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_variable@L1#1 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  kept: mis:loop_body->LoopOutputSameEachPass [correct, tier 2, 0.57], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.57], lvl:for_loop@L2#1 [shown, tier 2, 0.47]
+  clause coverage: c1 <- err:for_loop->WrongIterationCount
+  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+--- depth 2: current concepts ['for_loop', 'loop_variable']
+  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.85), pre:for_loop->loop_scope (0.15)
+    pre:loop_control->for_loop -> confirmed (0.64) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> confirmed (0.75) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.75], pre:loop_control->for_loop [confirmed, tier 2, 0.64]
+  reached across pre:loop_variable->loop_control, entered next: loop_control
+  clause coverage: c1 <- err:for_loop->WrongIterationCount
+  not yet read: own edges of loop_control
+--- depth 3: current concepts ['loop_control', 'loop_variable', 'for_loop']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.25)
+    mis:loop_control->OffByOneBound -> correct (0.41) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.26) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    err:loop_control->WrongIterationCount -> correct (0.21) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
+    lvl:loop_control@L2#1 -> shown (0.42) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_control@L2#0 -> shown (0.18) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_control@L3#6 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.41], mis:loop_control->ForUpdateBeforeBody [correct, tier 2, 0.26]
+  clause coverage: c1 <- err:for_loop->WrongIterationCount
+  not yet read: pre:loop_control->increment_operators
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L3 via relation_to_neighbour "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  level loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  level loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  level loop_variable: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
