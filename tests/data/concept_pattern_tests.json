@@ -83,7 +83,8 @@
  },
  "string_literal": {
   "must_tag": [
-   "System.out.println(\"hi\");"
+   "System.out.println(\"hi\");",
+   "System.out.println(“hello”);"
   ],
   "must_not_tag": [
    "int x = 1;"
@@ -276,7 +277,8 @@
  },
  "string_concatenation": {
   "must_tag": [
-   "System.out.println(\"a\" + x);"
+   "System.out.println(\"a\" + x);",
+   "System.out.println(“hello” + 1 + 2);"
   ],
   "must_not_tag": [
    "System.out.println(\"a\");"
@@ -294,12 +296,16 @@
   "must_tag": [
    "char d = (char) (c + 1);",
    "char c = 'A';\nint n = c + 1;",
-   "char c = 'a';\nint d = c - 'a';"
+   "char c = 'a';\nint d = c - 'a';",
+   "int x = 'a' + 'b';",
+   "char c = 'a';\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nint d = c + 1;"
   ],
   "must_not_tag": [
    "char c = 'a';",
    "char c = 'A';\nSystem.out.println(c);",
-   "char c = 'A';\nString s = \"x\" + c;"
+   "char c = 'A';\nString s = \"x\" + c;",
+   "char c = 'a';\n// later we do c + 1 here\nSystem.out.println(c);",
+   "char c = 'a';\nSystem.out.println(\"c + 1\");"
   ]
  },
  "int": {
@@ -335,13 +341,16 @@
   "must_tag": [
    "int big = Integer.MAX_VALUE + 1;",
    "int big = 2147483647;\nbig = big + 1;",
-   "int big = Integer.MAX_VALUE;\nbig++;"
+   "int big = Integer.MAX_VALUE;\nbig++;",
+   "int x = 1000000 * 1000000;",
+   "int big = 2147483647;\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nint r = big + 1;"
   ],
   "must_not_tag": [
    "int x = 1;",
    "int m = Integer.MAX_VALUE;",
    "int big = 2147483647;\nSystem.out.println(big);",
-   "int x = 5;\nx = x + 1;"
+   "int x = 5;\nx = x + 1;",
+   "int big = 2147483647;\nbig = 5;\nint r = big + 1;"
   ]
  },
  "long_type": {
@@ -395,7 +404,8 @@
  },
  "division_by_zero": {
   "must_tag": [
-   "int x = 10 / 0;"
+   "int x = 10 / 0;",
+   "int z = 0;\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nSystem.out.println(i);\nint x = 10 / z;"
   ],
   "must_not_tag": [
    "int x = 10 / 2;"
@@ -835,10 +845,13 @@
  },
  "length_field": {
   "must_tag": [
-   "int n = a.length;"
+   "int n = a.length;",
+   "int[] a = {1, 2};\nint n = a.length();",
+   "int a[] = new int[3];\nint n = a.length();"
   ],
   "must_not_tag": [
-   "int n = s.length();"
+   "int n = s.length();",
+   "String s = \"hi\";\nint n = s.length();"
   ]
  },
  "args_length": {
@@ -1352,10 +1365,15 @@
  },
  "off_by_one_error": {
   "must_tag": [
-   "for (int i = 0; i <= a.length; i++) s += a[i];"
+   "for (int i = 0; i <= a.length; i++) s += a[i];",
+   "int[] a = new int[5];\nint n = a.length;\nfor (int i = 0; i <= n; i++) a[i] = i;",
+   "int[] a = new int[5];\nfor (int i = 0; i < a.length + 1; i++) a[i] = i;",
+   "int[] a = new int[5];\nfor (int i = 0; i <= 5; i++) a[i] = i;"
   ],
   "must_not_tag": [
-   "for (int i = 0; i < a.length; i++) s += a[i];"
+   "for (int i = 0; i < a.length; i++) s += a[i];",
+   "int[] a = new int[5];\nint n = a.length;\nfor (int i = 0; i <= n - 1; i++) a[i] = i;",
+   "int[] a = new int[5];\nfor (int i = 0; i < 5; i++) a[i] = i;"
   ]
  },
  "array_copy": {

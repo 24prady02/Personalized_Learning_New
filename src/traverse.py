@@ -290,7 +290,10 @@ def shadowed(kept: list[dict[str, Any]], all_held: list[dict[str, Any]], pre_in:
     on no words of its own, so it is a shadow of the specific one, not a second fault:
       * on a prerequisite (any number of prerequisite hops above the specific concept): its clauses are among the
         specific label's clauses and its confidence is no higher;
-      * on a generic concept, against a label on a non-generic concept: its clauses are among that label's clauses.
+      * on a generic concept, against a label on a non-generic concept: its clauses are among that label's clauses;
+      * the same misconception at a concept where the graph attaches it as context, against the concept where it is
+        primary (the concept whose rule it violates): its clauses are among the primary label's clauses. The graph
+        gives one misconception one primary concept; the context attachments are where it also shows.
     A shadow does not pose as a root cause and does not set its concept to L0. Only kept, non-shadow labels can cast
     a shadow (generic ones are tested first, then by rising confidence, so the specific finding is the one that stays)."""
     anc: dict[str, set[str]] = {}
@@ -309,11 +312,14 @@ def shadowed(kept: list[dict[str, Any]], all_held: list[dict[str, Any]], pre_in:
     def is_shadow(x: dict[str, Any], y: dict[str, Any]) -> bool:
         if x["edge"] == y["edge"] or not x.get("clauses") or not set(x["clauses"]) <= set(y.get("clauses") or []):
             return False
+        if x["target"] == y["target"] and x.get("role") != "primary" and y.get("role") == "primary":
+            return True
         if x["source"] in generic:
             return y["source"] not in generic
         return x["source"] in ancestors(y["source"]) and x["confidence"] <= y["confidence"]
 
-    accepted = sorted(kept, key=lambda c: (0 if c["source"] in generic else 1, c["confidence"], c["score"]))
+    accepted = sorted(kept, key=lambda c: (0 if c["source"] in generic else 1, 0 if c.get("role") == "primary" else -1,
+                                           c["confidence"], c["score"]))
     out: dict[str, str] = {}
     for x in list(accepted):
         y = next((k for k in accepted if k["edge"] != x["edge"] and is_shadow(x, k)), None)
@@ -605,6 +611,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
                             "label": label, "clauses": [i + 1 for i in ids], "quote": quote, "confidence": conf, "prune_score": pscore,
                             "score": round(score, 4), "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
+                    if is_mis:
+                        cand["role"] = e.get("role")   # primary: the concept whose rule the misconception violates; context otherwise
                     if is_way:
                         cand.update(level=e["level"], way=e.get("way"))
                     candidates.append(cand)
@@ -741,6 +749,10 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     log.append(f"  root-cause walk: held on {sorted(held_by_concept)}, broken at {sorted(broken_concepts)}"
                + (f" (consequences: {', '.join(c['edge'] for c in broken if c.get('consequence_of'))})" if any(c.get("consequence_of") for c in broken) else "")
                + f", prerequisites {dict(pre_in)}")
+    # Between candidate roots: the one with fewer prerequisites (further up the graph); at a genuine tie, the one
+    # whose held label the model gave the higher confidence; name order never decides.
+    held_conf = {c: max((h["confidence"] for h in held if h["source"] == c and h["kind"] == "misconception"), default=0.0)
+                 for c in held_by_concept}
     root = None
     for start in sorted(held_by_concept):
         best, seen, stack = start, {start}, [start]
@@ -754,8 +766,9 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     best = src
                 stack.append(src)
         cand = {"concept": best, "misconception": (held_by_concept.get(best) or [None])[0]}
-        if root is None or len(pre_in.get(cand["concept"], [])) < len(pre_in.get(root["concept"], [])):
-            root = cand
+        key = (len(pre_in.get(best, [])), -held_conf.get(best, 0.0))
+        if root is None or key < root_key:
+            root, root_key = cand, key
 
     # Levels by rule, from the evidence, no model call. A concept's level is L0 when it holds a misconception or an L0
     # way is shown (the L0 deciding question: does every rule the answer applies agree with the language rule?).

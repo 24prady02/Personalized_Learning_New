@@ -1,6 +1,7 @@
 """Preprocessing of a scenario's Java code before any pattern is matched.
 
-1. ``mask_java``: blank the inside of string / char literals and the text of comments (same length, newlines kept).
+1. ``normalize_text``: pasted look-alike characters (curly quotes, non-breaking spaces, Unicode minus) to ASCII (same length).
+   ``mask_java``: blank the inside of string literals and the text of comments (same length, newlines kept); char literals stay.
 2. ``split_statements``: cut the text at ``;`` ``{`` ``}`` at parenthesis depth 0 (a ``for (…; …; …)`` header stays whole).
 3. ``command_segments``: the ``javac …`` / ``java …`` shell segments in the text.
 4. ``Prepared``: all of the above computed once per program and shared by every concept's patterns.
@@ -13,10 +14,27 @@ import re
 
 _COMMAND_RE = re.compile(r"(?:^|[%$:;]\s*|\s)((?:javac|java)\s+[^;%\n]*)")
 
+# Characters a word processor or a web page puts into pasted code, each mapped to the ASCII character the
+# student meant. Every mapping is one character to one character, so offsets and line numbers do not move.
+_PASTE_CHARS = str.maketrans({
+    "“": '"', "”": '"', "„": '"', "‟": '"', "″": '"',   # curly / low / prime double quotes
+    "‘": "'", "’": "'", "‚": "'", "‛": "'", "′": "'",   # curly / low / prime single quotes
+    " ": " ", " ": " ", " ": " ", "　": " ",                  # non-breaking and wide spaces
+    "−": "-", "–": "-", "—": "-",                                  # minus sign, en dash, em dash
+    "×": "*", "∕": "/", "⁄": "/",                                  # multiplication sign, division slashes
+})
+
+
+def normalize_text(code: str) -> str:
+    """Return ``code`` with pasted look-alike characters (curly quotes, non-breaking spaces, Unicode minus and
+    dashes, multiplication and division signs) replaced by the ASCII character the student meant. Same length."""
+    return code.translate(_PASTE_CHARS)
+
 
 def mask_java(code: str) -> str:
     """Return a string of the same length as ``code`` with the inside of string
-    and char literals and the text of comments replaced by spaces.
+    literals and the text of comments replaced by spaces. Char literals (``'A'``,
+    ``'\\n'``) are kept as they are: they are code, not text.
 
     Quotes are kept. ``\\"``, ``\\'`` and ``\\\\`` inside literals are handled.
     Newlines are kept so line numbers stay valid.
@@ -28,17 +46,20 @@ def mask_java(code: str) -> str:
         ch = code[i]
         if ch == '"' or ch == "'":
             quote = ch
+            blank = quote == '"'
             i += 1
             while i < n and code[i] != quote:
                 if code[i] == "\\" and i + 1 < n:
-                    out[i] = " "
-                    if code[i + 1] != "\n":
-                        out[i + 1] = " "
+                    if blank:
+                        out[i] = " "
+                        if code[i + 1] != "\n":
+                            out[i + 1] = " "
                     i += 2
                     continue
                 if code[i] == "\n":  # unterminated literal: stop at end of line
                     break
-                out[i] = " "
+                if blank:
+                    out[i] = " "
                 i += 1
             i += 1  # closing quote (or past the newline)
             continue
@@ -99,7 +120,7 @@ class Prepared:
     """The code, its masked form, the statement splits and the command segments, computed once."""
 
     def __init__(self, code: str):
-        self.code = code
+        self.code = code = normalize_text(code)
         self.masked = mask_java(code)
         self._splits: dict[bool, list[tuple[int, str]]] = {}
         self.commands: list[tuple[int, str]] = []

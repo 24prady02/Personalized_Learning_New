@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-KG_PATH = ROOT / "data/raw/chapter1_kg.json"
+KG_PATH = ROOT / "data/raw/chapter1_kg_new.json"
 SCENARIOS_PATH = ROOT / "data/raw/scenarios_20.json"
 SCENARIOS_NOT_FROM_CODE_PATH = ROOT / "data/raw/scenarios_not_from_code.json"
 PROCESSED_DIR = ROOT / "data/processed"

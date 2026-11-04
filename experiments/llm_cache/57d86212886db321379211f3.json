@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 9;\nSystem.out.println(a[0] + \" \" + b[0]);\n\nQuestion: What does this program print, and why?\n\nStudent's answer, split into clauses:\nc1: It prints 1 9\nc2: The line b = a makes b a copy of a\nc3: so b is a separate array\nc4: Changing b[0] to 9 only changes b, and a[0] is still 1\n\nEdge: pre:array_initializer->indexing  (array_initializer -> indexing, prerequisite)\nRule (logic): The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 1, 4\nConfidence: 0.75"
+}

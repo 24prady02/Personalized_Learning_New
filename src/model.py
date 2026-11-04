@@ -37,6 +37,7 @@ def tag_concept(code: str, rd: dict[str, Any], prepared: "Prepared | None" = Non
     if rd.get("code_visible") is False:
         return []
     prep = prepared or Prepared(code)
+    code = prep.code  # the normalised text (pasted quotes and spaces mapped to ASCII); same length as the input
     t = code if rd.get("code_text") == "raw" else prep.masked
     hits: list[Hit] = []
 

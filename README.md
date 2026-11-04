@@ -36,7 +36,7 @@ README.md                                    this file
 requirements.txt                             pytest; matplotlib, networkx (figures); jupyter only for the notebook
 pytest.ini                                   testpaths = tests, pythonpath = src
 data/
-  raw/chapter1_kg.json                       knowledge graph v3.9.5-reader4 (173 concepts, 1896 edges, 296 misconception/error records, 865 level nodes)
+  raw/chapter1_kg_new.json                   knowledge graph v3.9.7 (173 concepts, 1939 edges, 296 misconception/error records, 865 level nodes)
   raw/scenarios_20.json                      S000 reference case + 10 scenarios whose gold concepts the code alone shows + 5 test scenarios T001-T005 written for Stage 2
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)

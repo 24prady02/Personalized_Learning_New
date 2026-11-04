@@ -11,7 +11,7 @@ This script does what a training script does for such a model:
 3. saves the bank as experiments/pattern_bank.json (the model "checkpoint": one entry per concept with its
    channel counts, generic flag and visibility) and a log in experiments/logs/train_log.txt.
 
-    python src/train.py [--kg data/raw/chapter1_kg.json] [--tests tests/data/concept_pattern_tests.json]
+    python src/train.py [--kg data/raw/chapter1_kg_new.json] [--tests tests/data/concept_pattern_tests.json]
 """
 from __future__ import annotations
 

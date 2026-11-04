@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9.5-reader5 (reader4 + two recall signals 2026-11-03, listed in reader.pattern_fixes_reader5)",
+ "version": "3.9.7 (3.9.6 + reader fixes 2026-11-04: windows, overflow guard, char_arithmetic on masked text, missing forms; listed in reader.pattern_fixes_reader7)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -10172,7 +10172,16 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
+    "signals": [
+     {
+      "name": "zero_divisor_in_variable",
+      "scope": "program",
+      "decisive": false,
+      "regex": "\\b(?:int|long)\\s+(?:\\w+\\s*=[^,;]*,\\s*)*(\\w+)\\s*=\\s*0\\s*[,;](?:(?!\\b\\1\\s*(?:!=\\s*0|=(?!=)))[\\s\\S]){0,4000}?[/%]\\s*\\b\\1\\b(?!\\s*[.\\[(])",
+      "note": "zero stored in an int variable, then used as divisor: ArithmeticException at run time",
+      "text": "masked"
+     }
+    ],
     "outcome": "run_error",
     "patterns_added_in": "3.9.5-reader2",
     "patterns_fixed_in": "3.9.5-reader4"
@@ -14911,7 +14920,7 @@
       "name": "bad_name_regex",
       "scope": "program",
       "decisive": true,
-      "regex": "(?<!final )\\b(?:int|double|char|boolean|long|String|float|short|byte)(?:\\[\\])*\\s+(?:[A-Z]\\w*|[a-z][a-z0-9]*_\\w+)\\s*[=;,]"
+      "regex": "(?<!final )\\b(?:int|double|char|boolean|long|String|float|short|byte)(?:\\[\\])*\\s+(?:[A-Z]\\w*|[a-z][a-z0-9]*_\\w+)(?=\\s*[=;,])"
      },
      {
       "name": "bad_class_name",
@@ -16959,7 +16968,7 @@
      "expressions"
     ],
     "code_patterns": [
-     "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "=\\s*[^=;]+;"
     ],
     "code_text": "masked",
@@ -20908,9 +20917,10 @@
     "code_patterns": [
      "'(?:\\\\.|[^'\\\\])'\\s*[+\\-]\\s*\\w",
      "\\w\\s*[+\\-]\\s*'(?:\\\\.|[^'\\\\])'",
-     "\\(\\s*char\\s*\\)\\s*\\(?\\s*\\w+\\s*[+\\-]"
+     "\\(\\s*char\\s*\\)\\s*\\(?\\s*\\w+\\s*[+\\-]",
+     "'(?:\\\\.|[^'\\\\])'\\s*[+\\-]\\s*'(?:\\\\.|[^'\\\\])'"
     ],
-    "code_text": "raw",
+    "code_text": "masked",
     "command_patterns": [],
     "operator_symbols": [],
     "java_types": [],
@@ -20921,29 +20931,29 @@
       "name": "char_to_int_cast",
       "scope": "program",
       "decisive": true,
-      "regex": "\\(\\s*int\\s*\\)\\s*\\(?\\s*'(?:\\\\.|[^'\\\\])'|\\bchar\\s+(\\w+)[\\s\\S]{0,800}?\\(\\s*int\\s*\\)\\s*\\(?\\s*\\b\\1\\b",
+      "regex": "\\(\\s*int\\s*\\)\\s*\\(?\\s*'(?:\\\\.|[^'\\\\])'|\\bchar\\s+(\\w+)[\\s\\S]{0,4000}?\\(\\s*int\\s*\\)\\s*\\(?\\s*\\b\\1\\b",
       "note": "(int) on a char",
-      "text": "raw"
+      "text": "masked"
      },
      {
       "name": "char_increment",
       "scope": "program",
       "decisive": true,
-      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|\\+=|-=)",
+      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,4000}?\\b\\1\\s*(?:\\+\\+|--|\\+=|-=)",
       "note": "++ / += on a char variable",
-      "text": "raw"
+      "text": "masked"
      },
      {
       "name": "char_variable_arithmetic",
       "scope": "program",
       "decisive": true,
-      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,800}?(?:\\b\\1\\s*[+\\-]\\s*[\\w'(]|(?:\\d+|'(?:\\\\.|[^'\\\\])')\\s*[+\\-]\\s*\\b\\1\\b)",
+      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,4000}?(?:\\b\\1\\s*[+\\-]\\s*[\\w'(]|(?:\\d+|'(?:\\\\.|[^'\\\\])')\\s*[+\\-]\\s*\\b\\1\\b)",
       "note": "a char variable used in + or - (c + 1, c - 'a', 1 + c); ++ and += are the char_increment signal",
-      "text": "raw"
+      "text": "masked"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
-    "patterns_fixed_in": "3.9.5-reader5"
+    "patterns_fixed_in": "3.9.7-reader7"
    }
   },
   {
@@ -21957,7 +21967,7 @@
      "subtracts"
     ],
     "code_patterns": [
-     "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]"
+     "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -22539,31 +22549,31 @@
       "name": "int_vars_two_decls_div",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?:(?P=a)\\s*/\\s*(?P=b)|(?P=b)\\s*/\\s*(?P=a))\\b"
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,2000}?\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,2000}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?:(?P=a)\\s*/\\s*(?P=b)|(?P=b)\\s*/\\s*(?P=a))\\b"
      },
      {
       "name": "int_vars_one_decl_div",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?,\\s*(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?:(?P=a)\\s*/\\s*(?P=b)|(?P=b)\\s*/\\s*(?P=a))\\b"
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?,\\s*(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,4000}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?:(?P=a)\\s*/\\s*(?P=b)|(?P=b)\\s*/\\s*(?P=a))\\b"
      },
      {
       "name": "int_var_div_literal",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=a)\\s*/\\s*\\d+(?![\\w.])"
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,4000}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=a)\\s*/\\s*\\d+(?![\\w.])"
      },
      {
       "name": "int_array_elem_div_int",
       "scope": "program",
       "decisive": true,
-      "regex": "\\bint\\s*\\[\\s*\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,800}?\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=arr)\\s*\\[[^\\]]+\\]\\s*/\\s*(?P=b)\\b"
+      "regex": "\\bint\\s*\\[\\s*\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,4000}?\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<b>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,4000}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=arr)\\s*\\[[^\\]]+\\]\\s*/\\s*(?P=b)\\b"
      },
      {
       "name": "int_array_elem_div_literal",
       "scope": "program",
       "decisive": true,
-      "regex": "\\bint\\s*\\[\\s*\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,800}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=arr)\\s*\\[[^\\]]+\\]\\s*/\\s*\\d+(?![\\w.])"
+      "regex": "\\bint\\s*\\[\\s*\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,2000}?(?<!\\(double\\) )(?<!\\(double\\))(?<!\\(float\\) )(?<!\\(float\\))\\b(?P=arr)\\s*\\[[^\\]]+\\]\\s*/\\s*\\d+(?![\\w.])"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -22937,7 +22947,8 @@
     ],
     "code_patterns": [
      "Integer\\.(?:MAX|MIN)_VALUE\\s*[+\\-*]|[+\\-*]\\s*Integer\\.(?:MAX|MIN)_VALUE|Math\\.abs\\s*\\(\\s*Integer\\.MIN_VALUE|-\\s*Integer\\.MIN_VALUE",
-     "\\b2147483647\\s*\\+|\\+\\s*2147483647\\b|\\b2147483647\\s*\\*|\\*\\s*2147483647\\b"
+     "\\b2147483647\\s*\\+|\\+\\s*2147483647\\b|\\b2147483647\\s*\\*|\\*\\s*2147483647\\b",
+     "\\b\\d{7,}\\s*\\*\\s*\\d{5,}\\b|\\b\\d{5,}\\s*\\*\\s*\\d{7,}\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -22950,12 +22961,12 @@
       "name": "int_limit_held_in_variable",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(\\w+)\\s*=\\s*(?:2147483647|-\\s*2147483648|Integer\\.(?:MAX|MIN)_VALUE)\\s*;[\\s\\S]{0,800}?(?:\\b\\1\\s*(?:[+\\-*]|\\+=|-=|\\*=)|[+\\-*]\\s*\\b\\1\\b)",
+      "regex": "\\b(\\w+)\\s*=\\s*(?:2147483647|-\\s*2147483648|Integer\\.(?:MAX|MIN)_VALUE)\\s*;(?:(?!\\b\\1\\s*=(?!=)(?![^;]*\\b\\1\\b))[\\s\\S]){0,4000}?(?:\\b\\1\\s*(?:[+\\-*]|\\+=|-=|\\*=)|[+\\-*]\\s*\\b\\1\\b)",
       "note": "the int limit stored in a variable, then that variable in + - * (big = big + 1; big++; big += 1)",
       "text": "masked"
      }
     ],
-    "patterns_fixed_in": "3.9.5-reader5"
+    "patterns_fixed_in": "3.9.7-reader7"
    }
   },
   {
@@ -23734,7 +23745,7 @@
      "modulus"
     ],
     "code_patterns": [
-     "[A-Za-z_0-9)\\]][ \\t]*%[ \\t]*[A-Za-z_0-9(]"
+     "[A-Za-z_0-9)\\]][ \\t]*%(?=[ \\t]*[A-Za-z_0-9(])"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -23747,7 +23758,7 @@
       "name": "remainder_expr",
       "scope": "statement",
       "decisive": true,
-      "regex": "(?<![=!<>+\\-*/%])=(?!=)[^;]*[\\w)\\]][ \\t]*%[ \\t]*[\\w(]"
+      "regex": "(?<![=!<>+\\-*/%])=(?!=)[^;]*[\\w)\\]][ \\t]*%(?=[ \\t]*[\\w(])"
      }
     ],
     "patterns_fixed_in": "3.9.5-reader4"
@@ -25326,7 +25337,16 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
+    "signals": [
+     {
+      "name": "double_variables_compared",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bdouble\\s+(?:\\w+\\s*=[^,;]*,\\s*)*(\\w+)\\s*=[^;]*\\d*\\.\\d+[^;]*;[\\s\\S]{0,4000}?\\b\\1\\s*(?:==|!=)",
+      "note": "a double computed from decimal literals and then compared with == or != (x = 0.1 + 0.2; x == 0.3)",
+      "text": "masked"
+     }
+    ],
     "patterns_added_in": "3.9.5-reader2",
     "patterns_fixed_in": "3.9.5-reader4"
    }
@@ -25745,7 +25765,16 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [
+     {
+      "name": "zero_divisor_in_variable",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(?:int|long)\\s+(?:\\w+\\s*=[^,;]*,\\s*)*(\\w+)\\s*=\\s*0\\s*[,;](?:(?!\\b\\1\\s*(?:!=\\s*0|=(?!=)))[\\s\\S]){0,4000}?[/%]\\s*\\b\\1\\b(?!\\s*[.\\[(])",
+      "note": "zero stored in an int variable, then that variable used as divisor (int z = 0; ... x / z); not when a z != 0 guard or a new assignment to z comes first",
+      "text": "masked"
+     }
+    ]
    }
   },
   {
@@ -29690,7 +29719,7 @@
     ],
     "code_patterns": [
      "\\b(?!out\\b)(?!System\\b)(?!StdOut\\b)[A-Za-z_]\\w*\\.[a-z]\\w*\\s*\\(",
-     "(?:^|[=(,+\\-*/\\s])(?!if\\b|for\\b|while\\b|switch\\b|return\\b|new\\b)[a-z]\\w*\\s*\\([^)]*\\)\\s*[;)+\\-*/,]"
+     "(?:^|[=(,+\\-*/\\s])(?!if\\b|for\\b|while\\b|switch\\b|return\\b|new\\b)[a-z]\\w*\\s*\\([^)]*\\)(?=\\s*[;)+\\-*/,])"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -31699,7 +31728,7 @@
      "conversion"
     ],
     "code_patterns": [
-     "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)\\s*[\\w(]",
+     "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])",
      "\\b(?:double|float|long)\\s+\\w+\\s*=\\s*-?\\d+\\s*;",
      "(?<![\\d.])\\d+\\s*[*/+\\-]\\s*\\d+\\.\\d",
      "\\b(?:Integer|Double|Long|Boolean)\\.parse\\w+\\s*\\(",
@@ -31716,7 +31745,7 @@
       "name": "int_into_double",
       "scope": "program",
       "decisive": false,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,4000}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,4000}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
       "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
      }
     ],
@@ -32257,7 +32286,7 @@
      "type cast"
     ],
     "code_patterns": [
-     "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]"
+     "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -33017,7 +33046,7 @@
       "name": "int_into_double",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,800}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,800}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
+      "regex": "\\b(?:int|long)\\s+(?:[A-Za-z_]\\w*\\s*(?:=[^,;]*)?,\\s*){0,8}(?P<a>[A-Za-z_]\\w*)\\s*(?:=[^,;]*)?[,;][\\s\\S]{0,4000}?\\b(?:double|float|long)(?:\\s*\\[\\s*\\])?\\s+(?P<d>[A-Za-z_]\\w*)(?:[\\s\\S]{0,4000}?\\b(?P=d))?(?:\\s*\\[[^\\]]+\\])?\\s*=(?![ \\t]*\\(\\s*(?:double|float)\\s*\\))[^;]*\\b(?P=a)\\b[^;]*;",
       "note": "an int/long variable is used, without a cast, in an expression assigned to a double/float variable or array element"
      }
     ],
@@ -40041,8 +40070,8 @@
     ],
     "code_patterns": [
      "\\bfor\\s*\\(\\s*(?:int|long|double|char)?\\s*[A-Za-z_]\\w*\\s*=",
-     "\\bwhile\\s*\\(\\s*([A-Za-z_]\\w*)\\s*(?:[<>]=?|!=)[^)]*\\)[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|[+\\-]=)",
-     "\\bdo\\s*\\{[\\s\\S]{0,800}?\\b(\\w+)\\s*(?:\\+\\+|--|[+\\-]=)[^}]*\\}\\s*while\\s*\\(\\s*\\1\\b"
+     "\\bwhile\\s*\\(\\s*([A-Za-z_]\\w*)\\s*(?:[<>]=?|!=)[^)]*\\)[\\s\\S]{0,4000}?\\b\\1\\s*(?:\\+\\+|--|[+\\-]=)",
+     "\\bdo\\s*\\{[\\s\\S]{0,4000}?\\b(\\w+)\\s*(?:\\+\\+|--|[+\\-]=)[^}]*\\}\\s*while\\s*\\(\\s*\\1\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -41955,7 +41984,7 @@
     "code_patterns": [
      "\\b(\\w+)\\s*=\\s*\\1\\s*(?:\\+\\+|--)",
      "\\w\\s*(?:\\+\\+|--)\\s*[+\\-*/%]\\s*\\w",
-     "[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+\\s*[+\\-*/%]",
+     "[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+(?=\\s*[+\\-*/%])",
      "\\[\\s*\\w+\\s*(?:\\+\\+|--)\\s*\\]",
      "print\\w*\\s*\\([^;]*(?:\\+\\+|--)"
     ],
@@ -44321,7 +44350,7 @@
     ],
     "code_patterns": [
      "\\b\\w+(?:\\s*\\[[^\\]]*\\])?\\s*(?:\\+=|\\*=)(?!\\s*1\\s*;)\\s*[^;]+;",
-     "\\b(\\w+)\\s*=\\s*\\1\\s*[+*](?!\\s*1\\s*;)\\s*[^;]+;"
+     "\\b(\\w+)\\s*=\\s*\\1\\s*[+*](?![+*=])(?!\\s*1\\s*;)\\s*[^;]+;"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -46138,7 +46167,7 @@
       "name": "flag_set_in_loop",
       "scope": "program",
       "decisive": true,
-      "regex": "\\bboolean\\s+(\\w+)\\s*=\\s*(?:true|false)\\s*;[\\s\\S]{0,800}?\\b(?:for|while)\\b[\\s\\S]{0,800}?\\b\\1\\s*=\\s*(?:true|false)"
+      "regex": "\\bboolean\\s+(\\w+)\\s*=\\s*(?:true|false)\\s*;[\\s\\S]{0,4000}?\\b(?:for|while)\\b[\\s\\S]{0,4000}?\\b\\1\\s*=\\s*(?:true|false)"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -51889,7 +51918,16 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": []
+    "signals": [
+     {
+      "name": "array_length_called_as_method",
+      "scope": "program",
+      "decisive": true,
+      "regex": "(?:\\]\\s*(\\w+)\\s*(?:=|;|,)|\\b(\\w+)\\s*\\[\\s*\\]\\s*=)[\\s\\S]{0,4000}?\\b(?:\\1|\\2)\\s*\\.\\s*length\\s*\\(\\s*\\)",
+      "note": "an array variable (declared int[] a or int a[]) followed by a.length(): the field called as a method"
+     }
+    ],
+    "patterns_fixed_in": "3.9.7-reader7"
    }
   },
   {
@@ -52624,7 +52662,8 @@
      "\\[\\s*\\w+\\.length\\s*(?:-\\s*\\d+\\s*)?\\]",
      "<=\\s*\\w+\\.length\\b",
      "\\bargs\\s*\\[\\s*\\d+\\s*\\]",
-     "\\w+\\s*<\\s*\\w+\\.length\\b"
+     "\\w+\\s*<\\s*\\w+\\.length\\b",
+     "<\\s*\\w+\\s*\\.\\s*length\\s*\\+\\s*1\\b"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -52633,7 +52672,8 @@
     "generic": false,
     "shown_by_declaration": false,
     "signals": [],
-    "patterns_added_in": "3.9.5-reader2"
+    "patterns_added_in": "3.9.5-reader2",
+    "patterns_fixed_in": "3.9.7-reader7"
    }
   },
   {
@@ -53371,7 +53411,7 @@
       "name": "array_printed_regex",
       "scope": "program",
       "decisive": true,
-      "regex": "\\b(?:int|double|boolean|char|long|String)\\s*\\[\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,800}?print(?:ln)?\\s*\\((?:[^;()]*\\+\\s*)?(?P=arr)\\s*\\)"
+      "regex": "\\b(?:int|double|boolean|char|long|String)\\s*\\[\\]\\s*(?P<arr>\\w+)[\\s\\S]{0,4000}?print(?:ln)?\\s*\\((?:[^;()]*\\+\\s*)?(?P=arr)\\s*\\)"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -56583,7 +56623,7 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "\\b(?:String|int|double|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{\\s*[\\\"']",
+     "\\b(?:String|int|double|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{(?=\\s*[\\\"'])",
      "\\w+\\s*\\[\\s*\\w+\\s*[%/]\\s*\\d+\\s*\\]"
     ],
     "code_text": "masked",
@@ -62301,7 +62341,16 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
+    "signals": [
+     {
+      "name": "named_sentinel",
+      "scope": "program",
+      "decisive": false,
+      "regex": "while\\s*\\(\\s*\\w+\\s*!=\\s*[A-Z][A-Z_0-9]*\\s*\\)[\\s\\S]{0,400}?(?:StdIn\\.read\\w*|\\.next\\w*)\\s*\\(",
+      "note": "the stop value held in a named constant (while (x != SENTINEL) ... readInt())",
+      "text": "masked"
+     }
+    ],
     "patterns_added_in": "3.9.5-reader2",
     "patterns_fixed_in": "3.9.5-reader4"
    }
@@ -75219,7 +75268,7 @@
       "name": "array_compared",
       "scope": "program",
       "decisive": false,
-      "regex": "(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\[\\]\\s*(\\w+)[\\s\\S]{0,800}?\\b\\1\\s*(?:==|!=)\\s*\\w+"
+      "regex": "(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\[\\]\\s*(\\w+)[\\s\\S]{0,2000}?\\b\\1\\s*(?:==|!=)\\s*\\w+"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -75464,7 +75513,7 @@
    "reader": {
     "aliases": [],
     "code_patterns": [
-     "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\]\\s*[+*]"
+     "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\](?=\\s*[+*])"
     ],
     "code_text": "masked",
     "command_patterns": [],
@@ -78508,10 +78557,31 @@
       "decisive": true,
       "regex": "\\bfor\\s*\\(\\s*(?:int\\s+)?(\\w+)\\s*=\\s*1\\s*;\\s*\\1\\s*<=\\s*\\w+\\s*;[^)]*\\)\\s*\\{?[^{}]*?\\w\\s*\\[\\s*\\1\\s*\\]",
       "note": "loop from 1 to n inclusive that indexes an array with the counter"
+     },
+     {
+      "name": "length_in_variable_then_le",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(\\w+)\\s*=\\s*\\w+\\s*\\.\\s*length\\s*;[\\s\\S]{0,4000}?\\bfor\\s*\\([^;]*;\\s*\\w+\\s*<=\\s*\\b\\1\\b(?!\\s*[-.])",
+      "note": "int n = a.length; ... for (...; i <= n; ...): the array length held in a variable and the loop run to it inclusive"
+     },
+     {
+      "name": "loop_past_end_plus_one",
+      "scope": "statement",
+      "decisive": true,
+      "regex": "\\bfor\\s*\\([^;]*;\\s*\\w+\\s*<\\s*\\w+\\s*\\.\\s*length\\s*\\+\\s*1\\b",
+      "note": "for (...; i < a.length + 1; ...): the same bound written with + 1"
+     },
+     {
+      "name": "size_literal_then_le",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bnew\\s+\\w+\\s*\\[\\s*(\\d+)\\s*\\][\\s\\S]{0,4000}?\\bfor\\s*\\([^;]*;\\s*\\w+\\s*<=\\s*\\1\\b(?!\\s*[-.])",
+      "note": "new int[5] ... for (...; i <= 5; ...): the size literal repeated as an inclusive bound"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
-    "patterns_fixed_in": "3.9.5-reader4"
+    "patterns_fixed_in": "3.9.7-reader7"
    }
   },
   {
@@ -79224,7 +79294,7 @@
       "name": "array_compared",
       "scope": "program",
       "decisive": false,
-      "regex": "(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\[\\]\\s*(\\w+)[\\s\\S]{0,800}?\\b\\1\\s*(?:==|!=)\\s*\\w+"
+      "regex": "(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\[\\]\\s*(\\w+)[\\s\\S]{0,2000}?\\b\\1\\s*(?:==|!=)\\s*\\w+"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
@@ -113260,13 +113330,14 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at assignment, the concept whose rule the misconception violates; kept here as context because assignment and expression are not on one prerequisite path"
   },
   {
    "source": "expression",
@@ -113296,14 +113367,15 @@
     "operator_precedence.R1",
     "operator_precedence.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at string_concatenation, the concept whose rule the misconception violates; kept here as context because string_concatenation and operator_precedence are not on one prerequisite path"
   },
   {
    "source": "string_concatenation",
@@ -113487,13 +113559,14 @@
     "string_type.R1",
     "string_type.R2"
    ],
-   "role": "context",
+   "role": "primary",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): the misconception had no primary attachment; primary at the concept whose rule it violates"
   },
   {
    "source": "string_type",
@@ -113505,12 +113578,13 @@
     "string_type.R1",
     "string_type.R2"
    ],
-   "role": "context",
+   "role": "primary",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): the misconception had no primary attachment; primary at the concept whose rule it violates"
   },
   {
    "source": "boolean_expression",
@@ -113730,14 +113804,15 @@
     "if_statement.R3",
     "if_statement.R4"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "EckertKautz2026",
     "SW-1e"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and while_loop are not on one prerequisite path"
   },
   {
    "source": "loop_control",
@@ -113912,13 +113987,14 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "misconception catalogue"
+   "evidence_type": "misconception catalogue",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at assignment, the concept whose rule the misconception violates; kept here as context because assignment and read_loop_idiom are not on one prerequisite path"
   },
   {
    "source": "command_line_args",
@@ -114042,7 +114118,7 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -114051,7 +114127,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "empirical study"
+   "evidence_type": "empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at off_by_one_error, the concept whose rule the misconception violates; kept here as context because off_by_one_error and simulation_loop are not on one prerequisite path"
   },
   {
    "source": "program_text",
@@ -117656,14 +117733,15 @@
    "violates_rule": [
     "println.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.1",
     "CSA",
     "TJ-2e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at println, the concept whose rule the misconception violates; kept here as context because println and standard_output are not on one prerequisite path"
   },
   {
    "source": "program_text",
@@ -117694,7 +117772,7 @@
    "violates_rule": [
     "statement.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "Jadud2006",
@@ -117702,7 +117780,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at statement, the concept whose rule the misconception violates; kept here as context because statement and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "variable",
@@ -117736,7 +117815,7 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -117746,7 +117825,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at assignment, the concept whose rule the misconception violates; kept here as context because assignment and expression are not on one prerequisite path"
   },
   {
    "source": "if_statement",
@@ -117758,7 +117838,7 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -117769,7 +117849,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at assignment, the concept whose rule the misconception violates; kept here as context because assignment and if_statement are not on one prerequisite path"
   },
   {
    "source": "comparison_operators",
@@ -117781,7 +117862,7 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -117792,7 +117873,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at assignment, the concept whose rule the misconception violates; kept here as context because assignment and comparison_operators are not on one prerequisite path"
   },
   {
    "source": "chained_assignment",
@@ -117843,13 +117925,14 @@
     "literal.R4",
     "literal.R5"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at literal, the concept whose rule the misconception violates; kept here as context because literal and long_type are not on one prerequisite path"
   },
   {
    "source": "int_literal_limit",
@@ -117882,13 +117965,14 @@
     "string_type.R1",
     "string_type.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at string_type, the concept whose rule the misconception violates; kept here as context because string_type and comparison_operators are not on one prerequisite path"
   },
   {
    "source": "method_call",
@@ -117900,13 +117984,14 @@
     "string_type.R1",
     "string_type.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at string_type, the concept whose rule the misconception violates; kept here as context because string_type and method_call are not on one prerequisite path"
   },
   {
    "source": "comparison_operators",
@@ -117970,14 +118055,15 @@
     "short_circuit.R1",
     "short_circuit.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "AltadmriBrown2015",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at short_circuit, the concept whose rule the misconception violates; kept here as context because short_circuit and control_flow are not on one prerequisite path"
   },
   {
    "source": "increment_operators",
@@ -118027,12 +118113,13 @@
     "loop_scope.R2",
     "loop_scope.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at loop_scope, the concept whose rule the misconception violates; kept here as context because loop_scope and accumulator_pattern are not on one prerequisite path"
   },
   {
    "source": "loop_variable",
@@ -118062,7 +118149,7 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -118074,7 +118161,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at off_by_one_error, the concept whose rule the misconception violates; kept here as context because off_by_one_error and array_traversal are not on one prerequisite path"
   },
   {
    "source": "boolean_flag_array",
@@ -118085,7 +118173,7 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -118097,7 +118185,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at off_by_one_error, the concept whose rule the misconception violates; kept here as context because off_by_one_error and boolean_flag_array are not on one prerequisite path"
   },
   {
    "source": "array_reversal",
@@ -118108,7 +118197,7 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -118120,7 +118209,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at off_by_one_error, the concept whose rule the misconception violates; kept here as context because off_by_one_error and array_reversal are not on one prerequisite path"
   },
   {
    "source": "array_bounds",
@@ -118131,7 +118221,7 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -118143,7 +118233,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at off_by_one_error, the concept whose rule the misconception violates; kept here as context because off_by_one_error and array_bounds are not on one prerequisite path"
   },
   {
    "source": "method_call",
@@ -118155,13 +118246,14 @@
     "length_field.R1",
     "length_field.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at length_field, the concept whose rule the misconception violates; kept here as context because length_field and method_call are not on one prerequisite path"
   },
   {
    "source": "array_creation",
@@ -118347,14 +118439,15 @@
    "violates_rule": [
     "integer_division.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at integer_division, the concept whose rule the misconception violates; kept here as context because integer_division and expression are not on one prerequisite path"
   },
   {
    "source": "type_conversion",
@@ -118365,14 +118458,15 @@
    "violates_rule": [
     "integer_division.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at integer_division, the concept whose rule the misconception violates; kept here as context because integer_division and type_conversion are not on one prerequisite path"
   },
   {
    "source": "type_conversion",
@@ -118633,7 +118727,7 @@
     "main_method.R1",
     "main_method.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.1",
@@ -118641,7 +118735,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at main_method, the concept whose rule the misconception violates; kept here as context because main_method and run_time_error are not on one prerequisite path"
   },
   {
    "source": "block",
@@ -118694,7 +118789,7 @@
    "violates_rule": [
     "block.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.1",
@@ -118704,7 +118799,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at block, the concept whose rule the misconception violates; kept here as context because block and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "string_literal",
@@ -118739,7 +118835,7 @@
     "literal.R2",
     "literal.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.1",
@@ -118748,7 +118844,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at string_literal, the concept whose rule the misconception violates; kept here as context because string_literal and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "identifier",
@@ -118783,7 +118880,7 @@
     "identifier.R2",
     "identifier.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.1",
@@ -118792,7 +118889,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at identifier, the concept whose rule the misconception violates; kept here as context because identifier and println are not on one prerequisite path"
   },
   {
    "source": "naming_convention",
@@ -118878,14 +118976,15 @@
    "violates_rule": [
     "integer_division.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at integer_division, the concept whose rule the misconception violates; kept here as context because integer_division and int are not on one prerequisite path"
   },
   {
    "source": "arithmetic_operators",
@@ -118913,13 +119012,14 @@
    "violates_rule": [
     "arithmetic_operators.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at arithmetic_operators, the concept whose rule the misconception violates; kept here as context because arithmetic_operators and exclusive_or are not on one prerequisite path"
   },
   {
    "source": "floating_point_precision",
@@ -119083,7 +119183,7 @@
    "violates_rule": [
     "explicit_cast.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
@@ -119092,7 +119192,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at explicit_cast, the concept whose rule the misconception violates; kept here as context because explicit_cast and math_library are not on one prerequisite path"
   },
   {
    "source": "math_round",
@@ -119103,7 +119204,7 @@
    "violates_rule": [
     "explicit_cast.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
@@ -119112,7 +119213,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at explicit_cast, the concept whose rule the misconception violates; kept here as context because explicit_cast and math_round are not on one prerequisite path"
   },
   {
    "source": "parsing",
@@ -119201,7 +119303,7 @@
    "violates_rule": [
     "method_call.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.2",
@@ -119209,7 +119311,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at method_call, the concept whose rule the misconception violates; kept here as context because method_call and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "if_statement",
@@ -119240,14 +119343,15 @@
     "if_statement.R1",
     "if_statement.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.3",
     "BrownAltadmri2017",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and for_loop are not on one prerequisite path"
   },
   {
    "source": "while_loop",
@@ -119259,14 +119363,15 @@
     "if_statement.R1",
     "if_statement.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.3",
     "BrownAltadmri2017",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and while_loop are not on one prerequisite path"
   },
   {
    "source": "logical_error",
@@ -119278,14 +119383,15 @@
     "if_statement.R1",
     "if_statement.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.3",
     "BrownAltadmri2017",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and logical_error are not on one prerequisite path"
   },
   {
    "source": "empty_statement",
@@ -119297,14 +119403,15 @@
     "if_statement.R1",
     "if_statement.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.3",
     "BrownAltadmri2017",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and empty_statement are not on one prerequisite path"
   },
   {
    "source": "accumulator_pattern",
@@ -119315,14 +119422,15 @@
    "violates_rule": [
     "loop_scope.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.3",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at loop_scope, the concept whose rule the misconception violates; kept here as context because loop_scope and accumulator_pattern are not on one prerequisite path"
   },
   {
    "source": "loop_scope",
@@ -119351,14 +119459,15 @@
    "violates_rule": [
     "loop_scope.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.3",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at loop_scope, the concept whose rule the misconception violates; kept here as context because loop_scope and logical_error are not on one prerequisite path"
   },
   {
    "source": "counter_pattern",
@@ -119369,14 +119478,15 @@
    "violates_rule": [
     "loop_scope.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.3",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at loop_scope, the concept whose rule the misconception violates; kept here as context because loop_scope and counter_pattern are not on one prerequisite path"
   },
   {
    "source": "break_statement",
@@ -119481,7 +119591,7 @@
    "violates_rule": [
     "if_statement.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "rule_dictionary",
    "sources": [
     "GJS",
@@ -119491,7 +119601,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)"
+   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and for_loop are not on one prerequisite path"
   },
   {
    "source": "while_loop",
@@ -119502,7 +119613,7 @@
    "violates_rule": [
     "if_statement.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "rule_dictionary",
    "sources": [
     "GJS",
@@ -119512,7 +119623,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)"
+   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and while_loop are not on one prerequisite path"
   },
   {
    "source": "block",
@@ -119523,7 +119635,7 @@
    "violates_rule": [
     "if_statement.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "rule_dictionary",
    "sources": [
     "GJS",
@@ -119533,7 +119645,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)"
+   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and block are not on one prerequisite path"
   },
   {
    "source": "control_flow",
@@ -119707,7 +119820,7 @@
    "violates_rule": [
     "array_exchange.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.4",
@@ -119715,7 +119828,8 @@
     "SW-1.2",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at array_exchange, the concept whose rule the misconception violates; kept here as context because array_exchange and variable_swap are not on one prerequisite path"
   },
   {
    "source": "shuffle",
@@ -120029,14 +120143,15 @@
     "frequency_counting.R1",
     "frequency_counting.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.6",
     "TverskyKahneman1971",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at frequency_counting, the concept whose rule the misconception violates; kept here as context because frequency_counting and monte_carlo_simulation are not on one prerequisite path"
   },
   {
    "source": "primitive_type",
@@ -120066,7 +120181,7 @@
    "violates_rule": [
     "primitive_type.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "OT-Datatypes",
@@ -120074,7 +120189,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at primitive_type, the concept whose rule the misconception violates; kept here as context because primitive_type and string_type are not on one prerequisite path"
   },
   {
    "source": "boolean",
@@ -120140,14 +120256,15 @@
    "violates_rule": [
     "array_default_values.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.4",
     "Kaczmarczyk2010",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at array_default_values, the concept whose rule the misconception violates; kept here as context because array_default_values and primitive_type are not on one prerequisite path"
   },
   {
    "source": "standard_audio",
@@ -120337,14 +120454,15 @@
    "violates_rule": [
     "string_conversion.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at string_conversion, the concept whose rule the misconception violates; kept here as context because string_conversion and operator_precedence are not on one prerequisite path"
   },
   {
    "source": "explicit_cast",
@@ -120458,12 +120576,13 @@
    "violates_rule": [
     "compound_assignment.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.3"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at compound_assignment, the concept whose rule the misconception violates; kept here as context because compound_assignment and infinite_loop are not on one prerequisite path"
   },
   {
    "source": "labeled_break",
@@ -120560,14 +120679,15 @@
    "violates_rule": [
     "args_length.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1.4",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at args_length, the concept whose rule the misconception violates; kept here as context because args_length and run_time_error are not on one prerequisite path"
   },
   {
    "source": "printing_array_reference",
@@ -120702,7 +120822,7 @@
    "violates_rule": [
     "sentinel_loop.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Seppala2015",
@@ -120710,7 +120830,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at sentinel_loop, the concept whose rule the misconception violates; kept here as context because sentinel_loop and division_by_zero are not on one prerequisite path"
   },
   {
    "source": "running_extreme",
@@ -120913,13 +121034,14 @@
    "violates_rule": [
     "loop_scope.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at loop_scope, the concept whose rule the misconception violates; kept here as context because loop_scope and block are not on one prerequisite path"
   },
   {
    "source": "logical_operators",
@@ -120946,12 +121068,13 @@
    "violates_rule": [
     "logical_operators.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at logical_operators, the concept whose rule the misconception violates; kept here as context because logical_operators and operator_precedence are not on one prerequisite path"
   },
   {
    "source": "boolean_expression",
@@ -121212,13 +121335,14 @@
    "violates_rule": [
     "while_loop.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at while_loop, the concept whose rule the misconception violates; kept here as context because while_loop and if_statement are not on one prerequisite path"
   },
   {
    "source": "boolean_expression",
@@ -121392,14 +121516,15 @@
    "violates_rule": [
     "else_if_chain.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "EckertKautz2026",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at else_if_chain, the concept whose rule the misconception violates; kept here as context because else_if_chain and nested_conditionals are not on one prerequisite path"
   },
   {
    "source": "indexing",
@@ -121659,14 +121784,15 @@
     "identifier.R2",
     "identifier.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at identifier, the concept whose rule the misconception violates; kept here as context because identifier and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "class_declaration",
@@ -121734,13 +121860,14 @@
     "comment.R1",
     "comment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at comment, the concept whose rule the misconception violates; kept here as context because comment and compile_time_error are not on one prerequisite path"
   },
   {
    "source": "comment",
@@ -121826,14 +121953,15 @@
     "literal.R4",
     "literal.R5"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at literal, the concept whose rule the misconception violates; kept here as context because literal and double are not on one prerequisite path"
   },
   {
    "source": "explicit_cast",
@@ -121862,14 +121990,15 @@
    "violates_rule": [
     "explicit_cast.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at explicit_cast, the concept whose rule the misconception violates; kept here as context because explicit_cast and operator_precedence are not on one prerequisite path"
   },
   {
    "source": "integer_division",
@@ -121933,13 +122062,14 @@
    "violates_rule": [
     "data_type.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at data_type, the concept whose rule the misconception violates; kept here as context because data_type and integer_division are not on one prerequisite path"
   },
   {
    "source": "declaration",
@@ -122189,7 +122319,7 @@
     "for_loop.R2",
     "for_loop.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "LI",
@@ -122197,7 +122327,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at for_loop, the concept whose rule the misconception violates; kept here as context because for_loop and empty_statement are not on one prerequisite path"
   },
   {
    "source": "if_else_statement",
@@ -127702,13 +127833,14 @@
    "type": "misconception",
    "logic": "assigning a reference copies the object",
    "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "Ma2007"
    ],
-   "evidence_type": "linked in v3.9 coverage audit"
+   "evidence_type": "linked in v3.9 coverage audit",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at array_aliasing, the concept whose rule the misconception violates; kept here as context because array_aliasing and array_copy are not on one prerequisite path"
   },
   {
    "source": "array_copy",
@@ -127729,13 +127861,14 @@
    "type": "misconception",
    "logic": "a reference variable holds the whole object, not a reference",
    "twin_logic": "A reference variable holds only a reference to the object, which is stored separately.",
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "Ma2007"
    ],
-   "evidence_type": "linked in v3.9 coverage audit"
+   "evidence_type": "linked in v3.9 coverage audit",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at variable, the concept whose rule the misconception violates; kept here as context because variable and primitive_vs_reference are not on one prerequisite path"
   },
   {
    "source": "primitive_vs_reference",
@@ -127772,12 +127905,13 @@
    "type": "error",
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019"
    ],
-   "evidence_type": "linked in v3.9 coverage audit"
+   "evidence_type": "linked in v3.9 coverage audit",
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at for_loop, the concept whose rule the misconception violates; kept here as context because for_loop and off_by_one_error are not on one prerequisite path"
   },
   {
    "source": "off_by_one_error",
@@ -288022,14 +288156,1905 @@
     "SW-1e"
    ],
    "evidence_type": "observed in a student answer (scenario S137); a candidate until a second coder or more student data confirms it"
+  },
+  {
+   "source": "for_loop",
+   "target": "loop_body",
+   "type": "prerequisite",
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 65,
+     "page": 55,
+     "quote": "for (<initialize>; <boolean expression>; <increment>) { <statements> }",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 59,
+     "page": 49,
+     "quote": "We often refer to the statement block in a loop as the body of the loop.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 115,
+     "page": 93,
+     "quote": "The for loop is often easier to read because it puts all the loop-related statements at the top of the loop. Doing so allows you to focus on the statements inside the loop body.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> loop_body: the book gives the for loop as an equivalent of the while loop with the same statement block.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "do_while_loop",
+   "target": "loop_body",
+   "type": "prerequisite",
+   "logic": "The block between do and while is the loop body; it runs first and is repeated while the condition holds.",
+   "sources": [
+    "JLS21-ch14",
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 81,
+     "page": 71,
+     "quote": "The meaning of this statement is the same as while (<boolean expression>) { <statements> } except that the first test of the condition is omitted.",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch14",
+     "section": "14.13",
+     "quote": "The do statement executes a Statement and an Expression repeatedly until the value of the Expression is false.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> loop_body.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no do-while loop"
+   }
+  },
+  {
+   "source": "for_loop",
+   "target": "break_statement",
+   "type": "prerequisite",
+   "logic": "break leaves the for loop at once, without running the rest of the body or the remaining passes.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "In some situations, we want to immediately exit a loop without letting it run to completion. Java provides the break statement for this purpose.",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "for (i = 2; i <= N/i; i++) if (N % i == 0) break;",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> break_statement; the book's own break example is a for loop.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e uses break only inside switch (pdf 98)"
+   }
+  },
+  {
+   "source": "while_loop",
+   "target": "continue_statement",
+   "type": "prerequisite",
+   "logic": "continue ends the current pass of the while loop and goes straight back to the loop test.",
+   "sources": [
+    "JLS21-ch14",
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.16",
+     "quote": "A continue statement may occur only in a while, do, or for statement; statements of these three kinds are called iteration statements.",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "Java also provides a way to skip to the next iteration of a loop: the continue statement.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of for_loop -> continue_statement.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no continue statement"
+   }
+  },
+  {
+   "source": "if_statement",
+   "target": "nested_conditionals",
+   "type": "prerequisite",
+   "logic": "An if statement can sit inside the body of another if; the inner one is tested only when the outer condition is true.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 68,
+     "page": 58,
+     "quote": "In particular, we can use one or more of them in the <body> of another to make compound statements.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 97,
+     "page": 75,
+     "quote": "In addition to chaining, you can also make complex decisions by nesting one conditional statement inside another.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of if_else_statement -> nested_conditionals (nested ifs need not have an else).",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "control_flow",
+   "target": "switch_statement",
+   "type": "prerequisite",
+   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
+   "sources": [
+    "JLS21-ch14",
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "The if and if-else statements allow one or two alternatives in directing the flow of control.",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "We could use a sequence or a chain of if-else statements, but the Java switch statement provides a direct solution.",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch14",
+     "section": "14.11",
+     "quote": "The switch statement transfers control to one of several statements or expressions, depending on the value of an expression.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "switch_statement sat alone in its piece: its only prerequisite was break_statement.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e uses \"flow of execution\" only for method calls (pdf 75); switch is taught as an alternative to else-if chains (pdf 97)"
+   }
+  },
+  {
+   "source": "switch_statement",
+   "target": "else_if_chain",
+   "type": "parallel",
+   "logic": "Both pick one of several alternatives. A switch compares one value with constant case labels and falls through without break; an else-if chain tests each condition in turn and runs only the first true branch.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 80,
+     "page": 70,
+     "quote": "We could use a sequence or a chain of if-else statements, but the Java switch statement provides a direct solution.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 97,
+     "page": 75,
+     "quote": "If you need to make a series of decisions, chaining else if blocks can get long and redundant.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 98,
+     "page": 76,
+     "quote": "Although switch statements appear longer than chained else if blocks",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of switch_statement ~ nested_conditionals.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "data_structure",
+   "target": "array_declaration",
+   "type": "prerequisite",
+   "logic": "An array is a data structure: one name for a sequence of values of the same type, organised by index.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 96,
+     "page": 86,
+     "quote": "data structure (a method for organizing data)",
+     "match": "exact"
+    }
+   ],
+   "book_note": "array_declaration had no prerequisite; in programs with a literal array it sat alone.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e does not name arrays a data structure in chapter 7"
+   }
+  },
+  {
+   "source": "array_declaration",
+   "target": "array_initializer",
+   "type": "prerequisite",
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "sources": [
+    "JLS21-ch10",
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 101,
+     "page": 91,
+     "quote": "When we have a small number of literal values that we want to keep in array, we can declare and initialize it by listing the values between curly braces, separated by commas.",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch10",
+     "section": "10.6",
+     "quote": "An array initializer is written as a comma-separated list of expressions, enclosed by braces { and }.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 131,
+     "page": 109,
+     "quote": "You can initialize an array with a comma-separated sequence of elements enclosed in braces, like this: int[] a = {1, 2, 3, 4};",
+     "match": "exact"
+    }
+   ],
+   "book_note": "array_initializer was reached only from array_creation (new), which a literal-initialised array does not use.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_declaration",
+   "target": "array_reference",
+   "type": "prerequisite",
+   "logic": "Declaring an array variable creates only a variable that holds a reference to an array; the array itself is a separate object.",
+   "sources": [
+    "JLS21-ch10",
+    "TJ-2e"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch10",
+     "section": "10.2",
+     "quote": "A variable of array type holds a reference to an object. Declaring a variable of array type does not create an array object or allocate any space for array components.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 131,
+     "page": 109,
+     "quote": "This statement creates an array variable, a, and makes it refer to an array with four elements.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_reference",
+   "target": "array_aliasing",
+   "type": "prerequisite",
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "sources": [
+    "JLS21-ch10",
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 107,
+     "page": 97,
+     "quote": "An assignment makes the names a and b refer to the same array.",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch10",
+     "section": "10.2",
+     "quote": "A variable of array type holds a reference to an object.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 133,
+     "page": 111,
+     "quote": "array variables contain references to arrays. When you make an assignment to an array variable, it simply copies the reference.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 134,
+     "page": 112,
+     "quote": "Because a and b are different names for the same thing, they are sometimes called aliases.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "array_aliasing was reached only from array_creation, so a literal-initialised array left it alone.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_initializer",
+   "target": "indexing",
+   "type": "prerequisite",
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "sources": [
+    "JLS21-ch10",
+    "TJ-2e"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch10",
+     "section": "10.6",
+     "quote": "The n'th variable initializer specifies the value of the n-1'th array component.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 131,
+     "page": 109,
+     "quote": "The [] operator selects elements from an array",
+     "match": "exact"
+    }
+   ],
+   "book_note": "indexing was reached only from array_creation.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_initializer",
+   "target": "length_field",
+   "type": "prerequisite",
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "sources": [
+    "JLS21-ch10",
+    "TJ-2e"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch10",
+     "section": "10.6",
+     "quote": "The length of the array to be constructed is equal to the number of variable initializers immediately enclosed by the braces of the array initializer.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 135,
+     "page": 113,
+     "quote": "int[] a = {1, 2, 3, 4, 5}; for (int i = 0; i < a.length; i++)",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 135,
+     "page": 113,
+     "quote": "All arrays have a built-in constant, length, that stores the number of elements.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "length_field was reached only from array_creation.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "length_field",
+   "target": "array_traversal",
+   "type": "prerequisite",
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 99,
+     "page": 89,
+     "quote": "Java's standard mechanism is to allow a program to refer to the length of an array a[] with the code a.length",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 117,
+     "page": 107,
+     "quote": "for (int i = 0; i < a.length; i++)",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 135,
+     "page": 113,
+     "quote": "Looping through the elements of an array is called a traversal: int[] a = {1, 2, 3, 4, 5}; for (int i = 0; i < a.length; i++)",
+     "match": "exact"
+    }
+   ],
+   "book_note": "length_field sat alone in traversal programs.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "length_field",
+   "target": "array_reversal",
+   "type": "prerequisite",
+   "logic": "Reversal pairs a[i] with a[a.length-1-i], counting back from the last index a.length-1.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 99,
+     "page": 89,
+     "quote": "Note that the last element of an array is always a[a.length-1].",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e reverses a String (pdf 120), not an array"
+   }
+  },
+  {
+   "source": "array_initializer",
+   "target": "lookup_table",
+   "type": "prerequisite",
+   "logic": "A lookup table is usually an array of fixed values written as a literal and read by index.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 101,
+     "page": 91,
+     "quote": "String[] suit = { \"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\" };",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 101,
+     "page": 91,
+     "quote": "uses the indices to pick strings out of the arrays",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 226,
+     "page": 204,
+     "quote": "String[] suits = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"};",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 226,
+     "page": 204,
+     "quote": "String s = ranks[this.rank] + \" of \" + suits[this.suit];",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_reference",
+   "target": "printing_array_reference",
+   "type": "prerequisite",
+   "logic": "Printing an array variable prints the reference it holds, not the elements.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 122,
+     "page": 112,
+     "quote": "If a[] is an array, why does System.out.println(a) print out a hexadecimal integer",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 132,
+     "page": 110,
+     "quote": "You can use println to display an array, but it probably doesn’t do what you would like.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "printing_array_reference had no prerequisite at all.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "println",
+   "target": "printing_array_reference",
+   "type": "prerequisite",
+   "logic": "println of an array variable prints the array's reference, not its elements.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 122,
+     "page": 112,
+     "quote": "If a[] is an array, why does System.out.println(a) print out a hexadecimal integer",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 132,
+     "page": 110,
+     "quote": "int[] a = {1, 2, 3, 4}; System.out.println(a); The output is something like this: [I@bf3f7e0",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_creation",
+   "target": "sampling_without_replacement",
+   "type": "prerequisite",
+   "logic": "Sampling without replacement first creates an array of all candidates (perm), then picks from the part not yet chosen.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 103,
+     "page": 93,
+     "quote": "we want to draw a random sample from a set such that each member of the set appears at most once in the sample.",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 104,
+     "page": 94,
+     "quote": "int[] perm = new int[N];",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e shuffles a deck (pdf 241) but has no sampling without replacement"
+   }
+  },
+  {
+   "source": "indexing",
+   "target": "space_time_tradeoff",
+   "type": "prerequisite",
+   "logic": "Saved values are read back by index, H[i], instead of being recomputed.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 105,
+     "page": 95,
+     "quote": "Then you can just use the code H[i] to refer to any of the values. Precomputing values in this way is an example of a space-time tradeoff",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no space-time tradeoff discussion for arrays"
+   }
+  },
+  {
+   "source": "arithmetic_operators",
+   "target": "remainder_operator",
+   "type": "prerequisite",
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
+   "sources": [
+    "JLS21-ch15",
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 31,
+     "page": 21,
+     "quote": "and remainder (%) for the int data type are built in to Java",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch15",
+     "section": "15.17.3",
+     "quote": "The binary % operator is said to yield the remainder of its operands from an implied division",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 69,
+     "page": 47,
+     "quote": "modulo: An operation that yields the remainder when one integer is divided by another. In Java, it is denoted with a percent sign: 5 % 2 is 1.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 65,
+     "page": 43,
+     "quote": "The Java language specification refers to % as the “remainder operator”.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "remainder_operator was reached only from integer_division, which a % on its own does not tag.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "integer_division",
+   "target": "explicit_cast",
+   "type": "prerequisite",
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 49,
+     "page": 39,
+     "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division.",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 177,
+     "page": 167,
+     "quote": "(double) freq[i] / T",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 64,
+     "page": 42,
+     "quote": "Like integer division, casting to an integer always rounds toward zero",
+     "match": "exact"
+    }
+   ],
+   "book_note": "integer_division and the cast concepts were in different pieces in every cast scenario.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "division_by_zero",
+   "target": "run_time_error",
+   "type": "prerequisite",
+   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "sources": [
+    "JLS21-ch4",
+    "TJ-2e"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch4",
+     "section": "4.2.2",
+     "quote": "The integer divide operator / (§15.17.2) and the integer remainder operator % (§15.17.3) can throw an ArithmeticException if the right-hand operand is zero.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 50,
+     "page": 28,
+     "quote": "if you accidentally divide by zero, you will get a message like this: Exception in thread \"main\" java.lang.ArithmeticException: / by zero",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "expression",
+   "target": "conditional_operator",
+   "type": "prerequisite",
+   "logic": "c ? a : b is an expression: the boolean c decides which of the two other expressions gives the value.",
+   "sources": [
+    "JLS21-ch15"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch15",
+     "section": "15.25",
+     "quote": "The conditional operator ? : uses the boolean value of one expression to decide which of two other expressions should be evaluated.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no ?: operator"
+   }
+  },
+  {
+   "source": "compound_assignment",
+   "target": "accumulator_pattern",
+   "type": "prerequisite",
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 66,
+     "page": 56,
+     "quote": "the compound assignment constructs are useful operations for any arithmetic operator in any primitive numeric type",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 67,
+     "page": 57,
+     "quote": "sum += i;",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 136,
+     "page": 114,
+     "quote": "total += array[i];",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 136,
+     "page": 114,
+     "quote": "A variable used this way is sometimes called an accumulator, because it “accumulates” the running total.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "accumulator_pattern and compound_assignment sat in separate pieces in sum += a[i].",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "increment_operators",
+   "target": "counter_pattern",
+   "type": "prerequisite",
+   "logic": "A counter is updated with count++, adding one on each pass that matches.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 66,
+     "page": 56,
+     "quote": "the following four statements all increment the value of i by 1 in Java: i = i + 1; i++; ++i; i += 1;",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 138,
+     "page": 116,
+     "quote": "int count = 0; for (int i = 0; i < a.length; i++) { if (a[i] >= low && a[i] < high) { count++; } }",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "counter_pattern",
+   "target": "frequency_counting",
+   "type": "prerequisite",
+   "logic": "Frequency counting keeps one counter per value in an array, freq[page]++.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 177,
+     "page": 167,
+     "quote": "freq[page]++;",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 138,
+     "page": 116,
+     "quote": "In statistics, a histogram is a set of counters that keeps track of the number of times each value appears.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 140,
+     "page": 118,
+     "quote": "uses it as an index to increment the corresponding element of counts",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "arithmetic_operators",
+   "target": "number_conversion",
+   "type": "prerequisite",
+   "logic": "Converting to binary works with powers of two, using / and % (or subtraction) on ints.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 73,
+     "page": 63,
+     "quote": "To compute the binary representation of N, we consider the powers of 2 less than or equal to N in decreasing order",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e converts to binary recursively (ch. 8), not with a loop of / and %"
+   }
+  },
+  {
+   "source": "empty_statement",
+   "target": "logical_error",
+   "type": "prerequisite",
+   "logic": "A ; right after an if or loop header is an empty statement, so the header controls nothing and the next line always runs: the program compiles but computes the wrong result.",
+   "sources": [
+    "JLS21-ch14",
+    "TJ-2e"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.6",
+     "quote": "An empty statement does nothing.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 95,
+     "page": 73,
+     "quote": "This code will compile, but the program will output \"x is even\" regardless of the value of x",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 50,
+     "page": 28,
+     "quote": "If your program has a logic error, it will compile and run without generating error messages",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "while_loop",
+   "target": "infinite_loop",
+   "type": "prerequisite",
+   "logic": "A while loop whose condition never becomes false never ends.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 82,
+     "page": 72,
+     "quote": "what if the loop-continuation condition in a while loop is always satisfied?",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 112,
+     "page": 90,
+     "quote": "The body of the loop should change the value of one or more variables so that, eventually, the condition becomes false and the loop terminates. Otherwise, the loop will repeat forever, which is called an infinite loop",
+     "match": "exact"
+    }
+   ],
+   "book_note": "infinite_loop was reached only from loop_control.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "while_loop",
+   "target": "sentinel_loop",
+   "type": "prerequisite",
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "sources": [
+    "JLS21-ch14"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.12",
+     "quote": "The while statement executes an Expression and a Statement repeatedly until the value of the Expression is false.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no sentinel loop"
+   }
+  },
+  {
+   "source": "loop_control",
+   "target": "labeled_break",
+   "type": "prerequisite",
+   "logic": "break with a label leaves the labelled outer loop, not only the innermost one.",
+   "sources": [
+    "JLS21-ch14"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.15",
+     "quote": "A break statement with label Identifier attempts to transfer control to the enclosing labeled statement (§14.7) that has the same Identifier as its label",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no labeled break"
+   }
+  },
+  {
+   "source": "standard_input",
+   "target": "filter",
+   "type": "prerequisite",
+   "logic": "A filter reads its data from standard input and writes what it keeps to standard output.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 145,
+     "page": 135,
+     "quote": "with the filter being used to throw away data outside the range of interest",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e reads input with Scanner; it has no filter programs"
+   }
+  },
+  {
+   "source": "run",
+   "target": "redirection",
+   "type": "prerequisite",
+   "logic": "Redirection is written on the command that runs a program, with < or >.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 142,
+     "page": 132,
+     "quote": "By adding a simple directive to the command that invokes a program, we can redirect its standard output to a file",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 324,
+     "page": 302,
+     "quote": "On the command line, < and > are redirection operators. The first one redirects the contents of test.in to System.in, as if it were entered from the keyboard.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "run sat alone in S052.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "run",
+   "target": "piping",
+   "type": "prerequisite",
+   "logic": "Piping joins the commands that run two programs, so one program's output becomes the other's input.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 143,
+     "page": 133,
+     "quote": "specifies that the standard output for RandomSeq and the standard input stream for Average are the same stream",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e covers redirection (pdf 324) but not piping"
+   }
+  },
+  {
+   "source": "api",
+   "target": "standard_drawing",
+   "type": "prerequisite",
+   "logic": "StdDraw is a library used through its API of static methods.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 133,
+     "page": 123,
+     "quote": "StdIn, StdDraw, and StdAudio",
+     "match": "exact"
+    }
+   ],
+   "book_note": "standard_drawing had no prerequisite.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "StdDraw is the SW-1e library; TJ-2e uses java.awt"
+   }
+  },
+  {
+   "source": "api",
+   "target": "standard_audio",
+   "type": "prerequisite",
+   "logic": "StdAudio is a library used through its API of static methods.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 133,
+     "page": 123,
+     "quote": "StdIn, StdDraw, and StdAudio",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "StdAudio is the SW-1e library"
+   }
+  },
+  {
+   "source": "standard_drawing",
+   "target": "function_plotting",
+   "type": "prerequisite",
+   "logic": "A function is plotted by drawing its sampled points and lines with StdDraw.",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 150,
+     "page": 140,
+     "quote": "Another important use of StdDraw is to plot experimental data or the values of a mathematical function.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "StdDraw is the SW-1e library"
+   }
+  },
+  {
+   "source": "standard_drawing",
+   "target": "mouse_interaction",
+   "type": "prerequisite",
+   "logic": "Mouse position and clicks are read through StdDraw methods such as StdDraw.mousePressed().",
+   "sources": [
+    "StdDraw-API"
+   ],
+   "evidence_type": "order_only",
+   "grounding": "order_only",
+   "book_support": [],
+   "book_note": "order_only: the uploaded chapter does not describe the mouse methods; they are in the StdDraw API (reference StdDraw-API).",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "order_only",
+    "action": "added",
+    "note": "order_only: the uploaded chapter does not describe the mouse methods; they are in the StdDraw API (reference StdDraw-API).; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "StdDraw is the SW-1e library"
+   }
+  },
+  {
+   "source": "two_dimensional_array",
+   "target": "input_graph",
+   "type": "prerequisite",
+   "logic": "The links read from input are counted in a two-dimensional array, counts[i][j].",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 174,
+     "page": 164,
+     "quote": "Read the links and accumulate counts so that counts[i][j] counts the links from i to j",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "SW-1e case study (1.6), not in TJ-2e"
+   }
+  },
+  {
+   "source": "two_dimensional_array",
+   "target": "power_method",
+   "type": "prerequisite",
+   "logic": "The power method multiplies the rank vector by the transition matrix, stored as a two-dimensional array p[i][j].",
+   "sources": [
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 182,
+     "page": 172,
+     "quote": "Multiplying this vector by the transition matrix gives the vector",
+     "match": "exact"
+    }
+   ],
+   "book_note": "",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: not in TJ-2e"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "SW-1e case study (1.6), not in TJ-2e"
+   }
+  },
+  {
+   "source": "while_loop",
+   "target": "loop_control",
+   "type": "prerequisite",
+   "logic": "A while loop has the same three control parts as a for loop, written in other places: the index set before the loop, the loop-continuation condition in the header, and the update as the last statement of the body.",
+   "sources": [
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 65,
+     "page": 55,
+     "quote": "use a while loop to test a loop continuation condition involving the index variable, where the last statement in the while loop increments the index variable",
+     "match": "exact"
+    },
+    {
+     "book": "SW-1e",
+     "pdf_page": 82,
+     "page": 72,
+     "quote": "what if the loop-continuation condition in a while loop is always satisfied?",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 114,
+     "page": 92,
+     "quote": "The loops we have written so far have three parts in common. They start by initializing a variable, they have a condition that depends on that variable, and they do something inside the loop to update that variable.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Direct edge kept under S9a: the existing path runs through loop_variable, which is absent from sentinel-style while loops (readloop).",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
+  },
+  {
+   "source": "array_bounds",
+   "target": "run_time_error",
+   "type": "prerequisite",
+   "logic": "An index outside 0 .. length-1 is not caught by the compiler; the access is checked when the program runs and stops it with ArrayIndexOutOfBoundsException.",
+   "sources": [
+    "JLS21-ch10",
+    "SW-1e",
+    "TJ-2e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 122,
+     "page": 112,
+     "quote": "Whenever a program attempts to index an array with an index that is not between zero and the array length minus one, Java will issue an ArrayIndexOutOfBoundsException",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch10",
+     "section": "10.4",
+     "quote": "All array accesses are checked at run time; an attempt to use an index that is less than zero or greater than or equal to the length of the array causes an ArrayIndexOutOfBoundsException to be thrown",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 132,
+     "page": 110,
+     "quote": "If the index is negative or greater than 3, the result is an ArrayIndexOutOfBoundsException.",
+     "match": "exact"
+    },
+    {
+     "book": "TJ-2e",
+     "pdf_page": 355,
+     "page": 333,
+     "quote": "ArrayIndexOutOfBoundsException: The index you are using to access an array is either negative or greater than array.length - 1.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of division_by_zero -> run_time_error: both are the book's examples of errors found only at run time.",
+   "revision": {
+    "version": "3.9.6",
+    "date": "2026-11-04",
+    "fix": 1,
+    "rule": "S9a reachable from co-occurring concepts"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e chapter 1 PDF / JLS SE 21 chapter PDFs; checked against Think Java 2e: confirmed"
+   },
+   "tj_check": {
+    "verdict": "confirmed",
+    "note": "second textbook (Think Java 2e) states the same link"
+   }
   }
  ],
  "counts": {
   "concepts": 173,
   "misconception_nodes": 255,
   "error_nodes": 41,
-  "prerequisite": 207,
-  "parallel": 34,
+  "prerequisite": 249,
+  "parallel": 35,
   "misconception": 476,
   "error": 93,
   "has_level": 865,
@@ -289524,6 +291549,186 @@
   "pattern_fixes_reader5": [
    "char_arithmetic signal char_variable_arithmetic added: a char variable in + or - was invisible (only literal operands, casts, ++ and += were read)",
    "overflow signal int_limit_held_in_variable added: the limit held in a variable and then used in arithmetic was invisible (only a literal next to the operator was read)"
+  ],
+  "pattern_fixes_reader6": [
+   "explicit_cast code_patterns: 'g|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]' -> 'ing|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])'",
+   "type_conversion code_patterns: 'long|float|char|short|byte)\\s*\\)\\s*[\\w(]' -> 'e|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])'",
+   "arithmetic_operators code_patterns: '[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]' -> '?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])'",
+   "remainder_operator code_patterns: 'A-Za-z_0-9)\\]][ \\t]*%[ \\t]*[A-Za-z_0-9(]' -> '[A-Za-z_0-9)\\]][ \\t]*%(?=[ \\t]*[A-Za-z_0-9(])'",
+   "method_call code_patterns: '|new\\b)[a-z]\\w*\\s*\\([^)]*\\)\\s*[;)+\\-*/,]' -> '\\b|new\\b)[a-z]\\w*\\s*\\([^)]*\\)(?=\\s*[;)+\\-*/,])'",
+   "side_effect_order code_patterns: '[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+\\s*[+\\-*/%]' -> '[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+(?=\\s*[+\\-*/%])'",
+   "lookup_table code_patterns: 'uble|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{\\s*[\\\"']' -> 'double|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{(?=\\s*[\\\"'])'",
+   "space_time_tradeoff code_patterns: 's*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\]\\s*[+*]' -> ']\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\](?=\\s*[+*])'",
+   "expression code_patterns: '<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]' -> '|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])'",
+   "remainder_operator signal remainder_expr: trailing class -> lookahead",
+   "naming_convention signal bad_name_regex: trailing class -> lookahead",
+   "accumulator_pattern code_patterns: 'x = x + ...' no longer matches 'i = i++;' (operator must not be ++ or **)",
+   "division_by_zero signal zero_divisor_in_variable: zero stored in an int variable, then that variable used as divisor (int z = 0; ... x / z); not when a z != 0 guard or a new assignment to z comes first",
+   "run_time_error signal zero_divisor_in_variable: zero stored in an int variable, then used as divisor: ArithmeticException at run time",
+   "floating_point_precision signal double_variables_compared: a double computed from decimal literals and then compared with == or != (x = 0.1 + 0.2; x == 0.3)",
+   "sentinel_loop signal named_sentinel: the stop value held in a named constant (while (x != SENTINEL) ... readInt())"
+  ],
+  "pattern_fixes_reader7": [
+   "declaration-to-use windows widened from 800 to 4000 characters (a whole Chapter 1 program): a declaration at the top of main and its use after a loop or two were more than 800 characters apart in an ordinary program. The three signals that pair every declaration with every later use (integer_division int_vars_two_decls_div and int_array_elem_div_literal, array_compared) use 2000, the limit at which they stay linear on a long program",
+   "overflow signal int_limit_held_in_variable: a plain reassignment of the variable before the arithmetic now stops the match (int big = 2147483647; big = 5; r = big + 1 is not overflow), unless the right side uses the variable itself (big = big + 1 is overflow), as zero_divisor_in_variable already guards",
+   "overflow code_patterns: a product of two int literals that cannot fit (seven or more digits times five or more, at least 10^10) added; only the MAX_VALUE forms were read",
+   "char_arithmetic: code_text and the three program signals moved from raw to masked text (mask_java now keeps char literals), so 'c + 1' inside a comment or a string no longer tags the concept; pattern for two char literals in + or - ('a' + 'b') added",
+   "off_by_one_error signals length_in_variable_then_le, loop_past_end_plus_one, size_literal_then_le added (the bound held in a variable, written as length + 1, or the size literal repeated with <=); array_bounds pattern for < a.length + 1 added",
+   "length_field signal array_length_called_as_method added: a.length() on an array variable was invisible, so the misconception ArrayHasLengthMethod could never be reached"
   ]
+ },
+ "revision_3_9_6": {
+  "date": "2026-11-04",
+  "design_rules_added": {
+   "S9a": "A concept that appears in a program with others is joined to them by a path: no concept sits alone in its piece. A direct edge that a longer path already implies is allowed when the intermediate concept does not appear in the programs where the two do (exception to S6d).",
+   "S9b": "If one construct has an edge to a shared part, every sibling construct with that part gets the same edge.",
+   "S9c": "A misconception attached to several concepts is either joined to them by prerequisite paths, or it is primary only at the concept whose rule it violates (and at attached concepts on a prerequisite path with that one); its other attachments are context.",
+   "S9d": "Every reader pattern that names a literal value also has a program-scope signal for the same value held in a variable.",
+   "S9e": "The text a pattern matches is exactly the construct; trailing anchors are lookaheads.",
+   "S9f": "Prerequisite depth reflects specificity only where one concept is a case of the other; genuine ties are left to the traversal code (label confidence), not to name order.",
+   "S9g": "Every edit is accepted only after all scenario subgraphs are rebuilt and piece counts and scores are compared before and after."
+  },
+  "sources": [
+   "SW-1e (uploaded chapter 1 PDF)",
+   "JLS SE 21 chapters 1-19 (uploaded PDFs)",
+   "TJ-2e (uploaded Think Java 2e PDF), second-book check of every new edge"
+  ],
+  "edges_added": [
+   "prerequisite for_loop -> loop_body (fix 2; book_passage)",
+   "prerequisite do_while_loop -> loop_body (fix 2; book_passage)",
+   "prerequisite for_loop -> break_statement (fix 2; book_passage)",
+   "prerequisite while_loop -> continue_statement (fix 2; book_passage)",
+   "prerequisite if_statement -> nested_conditionals (fix 2; book_passage)",
+   "prerequisite control_flow -> switch_statement (fix 1; book_passage)",
+   "parallel switch_statement -> else_if_chain (fix 2; book_passage)",
+   "prerequisite data_structure -> array_declaration (fix 1; book_passage)",
+   "prerequisite array_declaration -> array_initializer (fix 1; book_passage)",
+   "prerequisite array_declaration -> array_reference (fix 1; spec_passage)",
+   "prerequisite array_reference -> array_aliasing (fix 1; book_passage)",
+   "prerequisite array_initializer -> indexing (fix 1; spec_passage)",
+   "prerequisite array_initializer -> length_field (fix 1; spec_passage)",
+   "prerequisite length_field -> array_traversal (fix 1; book_passage)",
+   "prerequisite length_field -> array_reversal (fix 1; book_passage)",
+   "prerequisite array_initializer -> lookup_table (fix 1; book_passage)",
+   "prerequisite array_reference -> printing_array_reference (fix 1; book_passage)",
+   "prerequisite println -> printing_array_reference (fix 1; book_passage)",
+   "prerequisite array_creation -> sampling_without_replacement (fix 1; book_passage)",
+   "prerequisite indexing -> space_time_tradeoff (fix 1; book_passage)",
+   "prerequisite arithmetic_operators -> remainder_operator (fix 1; book_passage)",
+   "prerequisite integer_division -> explicit_cast (fix 1; book_passage)",
+   "prerequisite division_by_zero -> run_time_error (fix 1; spec_passage)",
+   "prerequisite expression -> conditional_operator (fix 1; spec_passage)",
+   "prerequisite compound_assignment -> accumulator_pattern (fix 1; book_passage)",
+   "prerequisite increment_operators -> counter_pattern (fix 1; book_passage)",
+   "prerequisite counter_pattern -> frequency_counting (fix 1; book_passage)",
+   "prerequisite arithmetic_operators -> number_conversion (fix 1; book_passage)",
+   "prerequisite empty_statement -> logical_error (fix 1; spec_passage)",
+   "prerequisite while_loop -> infinite_loop (fix 1; book_passage)",
+   "prerequisite while_loop -> sentinel_loop (fix 1; spec_passage)",
+   "prerequisite loop_control -> labeled_break (fix 1; spec_passage)",
+   "prerequisite standard_input -> filter (fix 1; book_passage)",
+   "prerequisite run -> redirection (fix 1; book_passage)",
+   "prerequisite run -> piping (fix 1; book_passage)",
+   "prerequisite api -> standard_drawing (fix 1; book_passage)",
+   "prerequisite api -> standard_audio (fix 1; book_passage)",
+   "prerequisite standard_drawing -> function_plotting (fix 1; book_passage)",
+   "prerequisite standard_drawing -> mouse_interaction (fix 1; order_only)",
+   "prerequisite two_dimensional_array -> input_graph (fix 1; book_passage)",
+   "prerequisite two_dimensional_array -> power_method (fix 1; book_passage)",
+   "prerequisite while_loop -> loop_control (fix 1; book_passage)",
+   "prerequisite array_bounds -> run_time_error (fix 1; book_passage)"
+  ],
+  "roles_changed": [
+   "PrintEqualsPrintln: standard_output primary -> context (primary kept at println)",
+   "StatementNeedsNoTerminator: compile_time_error primary -> context (primary kept at statement)",
+   "VariablesHoldExpressions: expression primary -> context (primary kept at assignment)",
+   "AssignCompares: if_statement primary -> context (primary kept at assignment)",
+   "AssignCompares: comparison_operators primary -> context (primary kept at assignment)",
+   "AssignmentNotExpression: expression primary -> context (primary kept at assignment)",
+   "AssignmentNotExpression: read_loop_idiom primary -> context (primary kept at assignment)",
+   "ArithmeticPlusPrecedes: operator_precedence primary -> context (primary kept at string_concatenation)",
+   "LargeIntegerLong: long_type primary -> context (primary kept at literal)",
+   "VariablesHoldObjects: primitive_vs_reference primary -> context (primary kept at variable)",
+   "EqualsComparesReferences: comparison_operators primary -> context (primary kept at string_type)",
+   "EqualsComparesReferences: method_call primary -> context (primary kept at string_type)",
+   "NullIsObject: string_type context -> primary (it had no primary)",
+   "ObjectsMustBeNamed: string_type context -> primary (it had no primary)",
+   "IfIsLoop: while_loop primary -> context (primary kept at if_statement)",
+   "NoShortCircuit: control_flow primary -> context (primary kept at short_circuit)",
+   "LoopBodyScopeImpliesLoopLifetime: accumulator_pattern primary -> context (primary kept at loop_scope)",
+   "OffByOneBound: simulation_loop primary -> context (primary kept at off_by_one_error)",
+   "OffByOneBound: array_traversal primary -> context (primary kept at off_by_one_error)",
+   "OffByOneBound: boolean_flag_array primary -> context (primary kept at off_by_one_error)",
+   "OffByOneBound: array_reversal primary -> context (primary kept at off_by_one_error)",
+   "OffByOneBound: array_bounds primary -> context (primary kept at off_by_one_error)",
+   "ArrayHasLengthMethod: method_call primary -> context (primary kept at length_field)",
+   "TargetTyping: expression primary -> context (primary kept at integer_division)",
+   "TargetTyping: type_conversion primary -> context (primary kept at integer_division)",
+   "MainWithoutStringArgs: run_time_error primary -> context (primary kept at main_method)",
+   "UnbalancedBraces: compile_time_error primary -> context (primary kept at block)",
+   "UnclosedStringLiteral: compile_time_error primary -> context (primary kept at string_literal)",
+   "IdentifierCaseInsensitive: println primary -> context (primary kept at identifier)",
+   "IntegerDivisionGivesFraction: int primary -> context (primary kept at integer_division)",
+   "CaretIsPower: exclusive_or primary -> context (primary kept at arithmetic_operators)",
+   "CastRounds: math_library primary -> context (primary kept at explicit_cast)",
+   "CastRounds: math_round primary -> context (primary kept at explicit_cast)",
+   "MathMethodWithoutClassName: compile_time_error primary -> context (primary kept at method_call)",
+   "SemicolonAfterIfHeader: for_loop primary -> context (primary kept at if_statement)",
+   "SemicolonAfterIfHeader: while_loop primary -> context (primary kept at if_statement)",
+   "SemicolonAfterIfHeader: logical_error primary -> context (primary kept at if_statement)",
+   "SemicolonAfterIfHeader: empty_statement primary -> context (primary kept at if_statement)",
+   "AccumulatorDeclaredInLoop: accumulator_pattern primary -> context (primary kept at loop_scope)",
+   "AccumulatorDeclaredInLoop: logical_error primary -> context (primary kept at loop_scope)",
+   "AccumulatorDeclaredInLoop: counter_pattern primary -> context (primary kept at loop_scope)",
+   "MissingBraces: for_loop primary -> context (primary kept at if_statement)",
+   "MissingBraces: while_loop primary -> context (primary kept at if_statement)",
+   "MissingBraces: block primary -> context (primary kept at if_statement)",
+   "SwapWithoutTemp: variable_swap primary -> context (primary kept at array_exchange)",
+   "FewTrialsAreExact: monte_carlo_simulation primary -> context (primary kept at frequency_counting)",
+   "StringIsPrimitive: string_type primary -> context (primary kept at primitive_type)",
+   "NewArrayHoldsGarbage: primitive_type primary -> context (primary kept at array_default_values)",
+   "StringPlusLeftToRight: operator_precedence primary -> context (primary kept at string_conversion)",
+   "CompoundAssignmentNoCast: infinite_loop primary -> context (primary kept at compound_assignment)",
+   "ArgsAlwaysPresent: run_time_error primary -> context (primary kept at args_length)",
+   "AverageWithoutZeroGuard: division_by_zero primary -> context (primary kept at sentinel_loop)",
+   "LocalVarOutsideScope: block primary -> context (primary kept at loop_scope)",
+   "BooleanPrecedence: operator_precedence primary -> context (primary kept at logical_operators)",
+   "WrongIterationCount: off_by_one_error primary -> context (primary kept at for_loop)",
+   "LoopForOneTimeTest: if_statement primary -> context (primary kept at while_loop)",
+   "MultipleElseIfBranchesRun: nested_conditionals primary -> context (primary kept at else_if_chain)",
+   "MisspelledIdentifier: compile_time_error primary -> context (primary kept at identifier)",
+   "UnclosedComment: compile_time_error primary -> context (primary kept at comment)",
+   "WholeNumberLiteralIsInt: double primary -> context (primary kept at literal)",
+   "CastAppliesToWholeExpression: operator_precedence primary -> context (primary kept at explicit_cast)",
+   "AllDoublesToAvoidDivision: integer_division primary -> context (primary kept at data_type)",
+   "SemicolonAfterLoopHeader: empty_statement primary -> context (primary kept at for_loop)",
+   "AssignmentCopiesObject: array_copy primary -> context (primary kept at array_aliasing)"
+  ],
+  "patterns_anchored": [
+   "explicit_cast code_patterns: 'g|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]' -> 'ing|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])'",
+   "type_conversion code_patterns: 'long|float|char|short|byte)\\s*\\)\\s*[\\w(]' -> 'e|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])'",
+   "arithmetic_operators code_patterns: '[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]' -> '?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])'",
+   "remainder_operator code_patterns: 'A-Za-z_0-9)\\]][ \\t]*%[ \\t]*[A-Za-z_0-9(]' -> '[A-Za-z_0-9)\\]][ \\t]*%(?=[ \\t]*[A-Za-z_0-9(])'",
+   "method_call code_patterns: '|new\\b)[a-z]\\w*\\s*\\([^)]*\\)\\s*[;)+\\-*/,]' -> '\\b|new\\b)[a-z]\\w*\\s*\\([^)]*\\)(?=\\s*[;)+\\-*/,])'",
+   "side_effect_order code_patterns: '[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+\\s*[+\\-*/%]' -> '[+\\-*/%=]\\s*(?:\\+\\+|--)\\s*\\w+(?=\\s*[+\\-*/%])'",
+   "lookup_table code_patterns: 'uble|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{\\s*[\\\"']' -> 'double|char)\\s*\\[\\]\\s*\\w+\\s*=\\s*\\{(?=\\s*[\\\"'])'",
+   "space_time_tradeoff code_patterns: 's*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\]\\s*[+*]' -> ']\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*-\\s*1\\s*\\](?=\\s*[+*])'",
+   "expression code_patterns: '<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]' -> '|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])'",
+   "remainder_operator signal remainder_expr: trailing class -> lookahead",
+   "naming_convention signal bad_name_regex: trailing class -> lookahead",
+   "accumulator_pattern code_patterns: 'x = x + ...' no longer matches 'i = i++;' (operator must not be ++ or **)"
+  ],
+  "signals_added": [
+   "division_by_zero signal zero_divisor_in_variable: zero stored in an int variable, then that variable used as divisor (int z = 0; ... x / z); not when a z != 0 guard or a new assignment to z comes first",
+   "run_time_error signal zero_divisor_in_variable: zero stored in an int variable, then used as divisor: ArithmeticException at run time",
+   "floating_point_precision signal double_variables_compared: a double computed from decimal literals and then compared with == or != (x = 0.1 + 0.2; x == 0.3)",
+   "sentinel_loop signal named_sentinel: the stop value held in a named constant (while (x != SENTINEL) ... readInt())"
+  ],
+  "tj2e_check": {
+   "confirmed": 23,
+   "not_in_tj2e": 20,
+   "contradicted": 0,
+   "method": "each new edge searched in the uploaded Think Java 2e PDF; quotes are verbatim and checked against the page text (printed page = pdf page - 22)"
+  }
  }
 }
