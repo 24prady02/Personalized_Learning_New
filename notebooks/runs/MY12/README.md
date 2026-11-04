@@ -24,24 +24,31 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | arithmetic_operators | False | pattern | 'c + 1' | 2 |
+| char | True | pattern | 'char' | 1 |
+| char | True | pattern | "'A'" | 1 |
+| char | True | type | 'char' | 1 |
+| char_arithmetic | False | signal | "char c = 'A';\nint n = c + 1" | 1 |
 | expression | True | pattern | 'c + 1' | 2 |
 | expression | True | pattern | "= ' ';" | 1 |
 | println | False | pattern | 'System.out.println(' | 3 |
 | statement | True | pattern | ';' | 1 |
 
-G: 4 concept nodes (2 generic), 2 concept edges, 22 misconception / error edges, 21 misconception / error nodes, 20 level nodes, 25 level-misconception links, 2 connected piece(s).
-Note: concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,expression | println,statement
+G: 6 concept nodes (3 generic), 3 concept edges, 24 misconception / error edges, 22 misconception / error nodes, 30 level nodes, 31 level-misconception links, 3 connected piece(s).
+Note: concept nodes form 3 pieces (the KG has no edge between them): arithmetic_operators,expression | char,char_arithmetic | println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
 | pre:arithmetic_operators->expression | prerequisite | An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
+| pre:char->char_arithmetic | prerequisite | Char arithmetic uses the numeric code stored for each char. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
 Misconception / error edges per concept (count), and level ways per concept (count):
 | concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
 |---|---|---|
 | arithmetic_operators | 3 | 18 |
+| char | 1 | 19 |
+| char_arithmetic | 1 | 14 |
 | expression | 8 | 19 |
 | println | 6 | 17 |
 | statement | 5 | 19 |
@@ -60,11 +67,11 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c2 | A letter is not a number |
 | c3 | so Java cannot add 1 to it, and this line gives a compile error |
 
-start: 2 tagged concepts, all used
+start: 3 tagged concepts, all used
 
-start concepts (2): arithmetic_operators, println
+start concepts (3): arithmetic_operators, char_arithmetic, println
 
-Start concepts: arithmetic_operators, println
+Start concepts: arithmetic_operators, char_arithmetic, println
 
 **Figure 3**
 
@@ -72,7 +79,7 @@ Start concepts: arithmetic_operators, println
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
-### Depth 1: current concepts 'arithmetic_operators', 'println'
+### Depth 1: current concepts 'arithmetic_operators', 'char_arithmetic', 'println'
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -175,6 +182,96 @@ Parsed labels:
 | lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L4#3 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L0#0 | not applied |  |  | 0.0 |  |  |
+
+#### char_arithmetic, misconceptions: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:char_arithmetic->CharNotNumeric \| wrong rule: char is not a numeric type \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:char_arithmetic->CharNotNumeric (Score: 1.0)}
+```
+Kept by pruning: mis:char_arithmetic->CharNotNumeric (1.00)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:char_arithmetic->CharNotNumeric \| wrong rule: char is not a numeric type \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+Model's reply:
+```
+mis:char_arithmetic->CharNotNumeric | held | clauses: 2, 3 | confidence: 0.95
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:char_arithmetic->CharNotNumeric | held | 1.0 | 0.95 | 0.95 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+
+#### char_arithmetic, level ways: 14 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:char_arithmetic@L0#0 \| level L0 way everyday_reading: In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give "a1". Java promotes each char to its int code, so 'a' + 1 is 98. |
+| lvl:char_arithmetic@L0#2 \| level L0 way inconsistent_trace: Points to LT (chars become int codes before the operator is applied). Applied unevenly, a student converts to codes in one step but keeps letters in another, e.g. printing 'b' + 'c' as "bc". (here mixing in: "char is not a numeric type") |
+| lvl:char_arithmetic@L1#0 \| level L1 way names_the_element: Char arithmetic: applying arithmetic or comparison operators to char values, which act on their Unicode codes. |
+| lvl:char_arithmetic@L1#1 \| level L1 way states_the_rule: char operands of arithmetic are promoted to int, so the result is an int. Casting an int to char gives the character with that code. ++, -- and comparisons work directly on chars. |
+| lvl:char_arithmetic@L2#0 \| level L2 way line_by_line_trace: Each char operand is replaced by its code (promoted to int) and the operation runs in int. A cast written outside the parentheses, as in (char) ('a' + 4), is applied last. |
+| lvl:char_arithmetic@L2#1 \| level L2 way output_prediction: 'b' + 'c' is the int 197. 'a' + 4 is 101. (char) ('a' + 4) is 'e'. 'A' < 'a' is true. |
+| lvl:char_arithmetic@L2#2 \| level L2 way one_step_execution: For char c = 'A', c++ sets c to 'B'. c = c + 1; is rejected, because the right side is an int. |
+| lvl:char_arithmetic@L3#0 \| level L3 way relation_to_neighbour: Char arithmetic uses each char's numeric code, so the result is an int, not a char, unless it is cast back. |
+| lvl:char_arithmetic@L3#1 \| level L3 way purpose_of_the_whole: Plans: shifting letters (Caesar cipher), turning a digit char into its value (c - '0'), looping over 'A'..'Z', and testing whether a char is in a range. |
+| lvl:char_arithmetic@L4#0 \| level L4 way predict_a_change: Adding or removing the (char) cast changes the output from a number to a letter. Changing 'a' + 4 to "a" + 4 makes it concatenation ("a4"). |
+| lvl:char_arithmetic@L4#1 \| level L4 way transfer_to_a_new_program: Use char arithmetic when the computation depends on character order or codes (alphabet loops, ciphers, digit values). To join characters into text, use String + or a String instead. |
+| lvl:char_arithmetic@L4#2 \| level L4 way diagnose_an_error: rule broken: Arithmetic on chars yields an int, which needs a cast to go back into a char. Kind: compile-time. Trigger class: char next = c + 1; or char d = 'a' + k;: 'possible lossy conversion from int to char'. |
+| lvl:char_arithmetic@L4#3 \| level L4 way diagnose_an_error: rule broken: Without a cast the int code is printed, not the letter. Kind: silent logic error. Trigger class: Printing c + 1 or 'a' + i when a letter was expected. |
+| lvl:char_arithmetic@L4#4 \| level L4 way diagnose_an_error: rule broken: A char compares by its code, not by the digit it shows. Kind: silent logic error. Trigger class: Comparing a char with an int as if it were a digit (seat <= 3 for seat = 'A'). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:char_arithmetic@L0#0 (Score: 0.7)}
+{lvl:char_arithmetic@L4#2 (Score: 0.2)}
+{lvl:char_arithmetic@L0#2 (Score: 0.1)}
+```
+Kept by pruning: lvl:char_arithmetic@L0#0 (0.70), lvl:char_arithmetic@L4#2 (0.20), lvl:char_arithmetic@L0#2 (0.10)
+
+Label prompt for level way lvl:char_arithmetic@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give "a1". Java promotes each char to its int code, so 'a' + 1 is 98.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:char_arithmetic@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: Arithmetic on chars yields an int, which needs a cast to go back into a char. Kind: compile-time. Trigger class: char next = c + 1; or char d = 'a' + k;: 'possible lossy conversion from int to char'.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:char_arithmetic@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT (chars become int codes before the operator is applied). Applied unevenly, a student converts to codes in one step but keeps letters in another, e.g. printing 'b' + 'c' as "bc". (here mixing in: "char is not a numeric type")
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.75
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:char_arithmetic@L0#0 | shown | 0.7000000000000001 | 0.9 | 0.63 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| lvl:char_arithmetic@L4#2 | not applied |  |  | 0.0 |  |  |
+| lvl:char_arithmetic@L0#2 | not applied |  |  | 0.0 |  |  |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -280,21 +377,43 @@ Parsed labels:
 | lvl:println@L0#0 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L4#3 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth:** nothing
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | c holds the letter A | not covered yet |
-| c2 | A letter is not a number | not covered yet |
-| c3 | so Java cannot add 1 to it, and this line gives a compile error | not covered yet |
+mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.63]
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:statement->println
+**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:char->char_arithmetic, pre:statement->println
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'arithmetic_operators', 'println'
+### Depth 2: current concepts 'char_arithmetic', 'arithmetic_operators', 'println'
+
+#### char_arithmetic, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:char->char_arithmetic \| rule: Char arithmetic uses the numeric code stored for each char. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:char->char_arithmetic (Score: 1.0)}
+```
+Kept by pruning: pre:char->char_arithmetic (1.00)
+
+Label prompt for concept edge pre:char->char_arithmetic (char -> char_arithmetic, prerequisite):
+> Char arithmetic uses the numeric code stored for each char.
+
+Model's reply:
+```
+Label: broken
+Clauses: 2, 3
+Confidence: 0.95
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:char->char_arithmetic | broken | 1.0 | 0.95 | 0.95 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 
 #### arithmetic_operators, concept edges: 1 edges offered
 Edges offered:
@@ -352,23 +471,113 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+pre:char->char_arithmetic [broken, tier 0, 0.95], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+
+reached across pre:char->char_arithmetic, entered next: char
 
 reached across pre:arithmetic_operators->expression, entered next: expression
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | c holds the letter A | not covered yet |
-| c2 | A letter is not a number | pre:arithmetic_operators->expression |
-| c3 | so Java cannot add 1 to it, and this line gives a compile error | pre:arithmetic_operators->expression |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of char, own edges of expression
 
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'expression', 'arithmetic_operators'
+### Depth 3: current concepts 'char', 'char_arithmetic', 'expression', 'arithmetic_operators'
+
+#### char, misconceptions: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:char->CharNotNumeric \| wrong rule: A char is only a letter, so c + k is an error. \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:char->CharNotNumeric (Score: 1.0)}
+```
+Kept by pruning: mis:char->CharNotNumeric (1.00)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:char->CharNotNumeric \| wrong rule: A char is only a letter, so c + k is an error. \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+Model's reply:
+```
+mis:char->CharNotNumeric | held | clauses: 2, 3 | confidence: 0.97
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:char->CharNotNumeric | held | 1.0 | 0.97 | 0.97 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+
+#### char, level ways: 19 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:char@L0#0 \| level L0 way everyday_reading: In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98. |
+| lvl:char@L0#2 \| level L0 way inconsistent_trace: Points to LT (a char in arithmetic becomes its int code). Applied unevenly, a student treats 'b' + 'c' as 197 in one exercise but prints it as "bc" in another. (here mixing in: "char is not a numeric type") |
+| lvl:char@L1#0 \| level L1 way names_the_element: char: the primitive type for a single 16-bit Unicode character, such as 'a', '%' or '\n'. |
+| lvl:char@L1#1 \| level L1 way states_the_rule: A char literal is exactly one character (or one escape sequence) in single quotes. Values range from '\u0000' to '\uffff' (0 to 65535), and char is an integral type. A char literal is one character in single quotes ('a'); a String literal is any sequence in double quotes ("a"), so 'a' and "a" have different types and 'ab' does not compile. |
+| lvl:char@L2#0 \| level L2 way line_by_line_trace: When a char meets an arithmetic operator, it is first promoted to int (its code) and the operation runs in int. Storing the result back in a char needs an explicit cast. |
+| lvl:char@L2#1 \| level L2 way output_prediction: System.out.println('b') prints b. 'b' + 'c' is the int 197. (char) ('a' + 4) is 'e'. |
+| lvl:char@L2#2 \| level L2 way one_step_execution: c++ on char c = 'A' makes c 'B', because increment works on chars directly. c = c + 1; does not compile, because the right side is an int. |
+| lvl:char@L3#0 \| level L3 way relation_to_neighbour: A char is stored as an unsigned 16-bit code, so in arithmetic it acts as an int ('a' + 1 is 98). Going from int to char needs a cast. |
+| lvl:char@L3#1 \| level L3 way relation_to_neighbour: A char widens automatically to double (its code), but a double needs a cast to become a char. A char never holds a fractional part. |
+| lvl:char@L3#2 \| level L3 way relation_to_neighbour: char and boolean are unrelated: there is no conversion or cast between them, and 'c' is never true or false. |
+| lvl:char@L3#3 \| level L3 way relation_to_neighbour: Char arithmetic works on each char's numeric code and yields an int. A cast turns the result back into a character. |
+| lvl:char@L3#4 \| level L3 way relation_to_neighbour: char is one of the eight primitive types: the unsigned 16-bit integral one, used for single characters. |
+| lvl:char@L3#5 \| level L3 way relation_to_neighbour: 'a' is a char (one 16-bit character code, a primitive); "a" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while "a" + "b" is "ab". |
+| lvl:char@L3#6 \| level L3 way purpose_of_the_whole: A char holds one character: processing text one character at a time (charAt), looping over 'A'..'Z', or shifting letters in a cipher. |
+| lvl:char@L4#0 \| level L4 way predict_a_change: Changing 'A' to "A" changes the type to String, so + concatenates instead of adding. Changing a char variable to int keeps the arithmetic, but println then prints numbers instead of letters. |
+| lvl:char@L4#1 \| level L4 way transfer_to_a_new_program: Use char for one character from a literal or from charAt, especially when the character's code matters (alphabet loops, ciphers). Use String for text of any length. |
+| lvl:char@L4#2 \| level L4 way diagnose_an_error: rule broken: A char literal holds exactly one character. Kind: compile-time. Trigger class: Several characters in single quotes ('ab') or a word in single quotes: 'unclosed character literal'. |
+| lvl:char@L4#3 \| level L4 way diagnose_an_error: rule broken: int arithmetic on chars yields an int, which cannot go into a char without a cast. Kind: compile-time. Trigger class: char c = 'a' + i; or c = c + 1; with variable i: 'possible lossy conversion from int to char'. |
+| lvl:char@L4#4 \| level L4 way diagnose_an_error: rule broken: A char compares by its code, not by the digit or letter it shows. Kind: silent logic error. Trigger class: Comparing a char with an int as if it were a digit (seat <= 3 for seat = 'A'), or printing c + 1 expecting a letter. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:char@L0#0 (Score: 0.6)}
+{lvl:char@L3#0 (Score: 0.25)}
+{lvl:char@L2#0 (Score: 0.15)}
+```
+Kept by pruning: lvl:char@L0#0 (0.60), lvl:char@L3#0 (0.25), lvl:char@L2#0 (0.15)
+
+Label prompt for level way lvl:char@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.93
+```
+
+Label prompt for level way lvl:char@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> A char is stored as an unsigned 16-bit code, so in arithmetic it acts as an int ('a' + 1 is 98). Going from int to char needs a cast.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.95
+```
+
+Label prompt for level way lvl:char@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> When a char meets an arithmetic operator, it is first promoted to int (its code) and the operation runs in int. Storing the result back in a char needs an explicit cast.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.95
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:char@L0#0 | shown | 0.6 | 0.93 | 0.56 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| lvl:char@L3#0 | not applied |  |  | 0.0 |  |  |
+| lvl:char@L2#0 | not applied |  |  | 0.0 |  |  |
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -480,48 +689,48 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:expression@L4#4 [shown, tier 2, 0.36]
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | c holds the letter A | not covered yet |
-| c2 | A letter is not a number | pre:arithmetic_operators->expression |
-| c3 | so Java cannot add 1 to it, and this line gives a compile error | pre:arithmetic_operators->expression |
-
-**No next nodes -> half_stop**
+mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
 
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+Held set after the one-fault rules: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at ['expression'], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+- char: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+- char_arithmetic: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 - expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 
-**Stop:** half_stop at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 0, cache hits 22
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
 
 ### Held misconceptions
-(none)
+| concept | misconception | kind | quote | score | shares_evidence_with |
+|---|---|---|---|---|---|
+| char_arithmetic | CharNotNumeric | misconception | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 |  |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:arithmetic_operators->expression | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.8 |  |
+| pre:char->char_arithmetic | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 | mis:char_arithmetic->CharNotNumeric |
+| pre:arithmetic_operators->expression | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.8 | mis:char_arithmetic->CharNotNumeric |
 
-### Root cause: none
+### Root cause: char_arithmetic / CharNotNumeric
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
+| char | L0 | everyday_reading |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
+| char_arithmetic | L0 | misconception | CharNotNumeric | level_mis_links | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
 | expression | L4 | diagnose_an_error |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
 
-### Overall level: L4
+### Overall level: L0
 
 Clause coverage (final):
 | clause | covered by |
 |---|---|
-| A letter is not a number | pre:arithmetic_operators->expression |
-| so Java cannot add 1 to it, and this line gives a compile error | pre:arithmetic_operators->expression |
+| A letter is not a number | mis:char_arithmetic->CharNotNumeric |
+| so Java cannot add 1 to it, and this line gives a compile error | mis:char_arithmetic->CharNotNumeric |
 
 Clauses no evidence explains: c holds the letter A
 
@@ -531,21 +740,31 @@ Clauses no evidence explains: c holds the letter A
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
+| 1 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 1.0 | 0.95 | 0.95 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| 1 | char_arithmetic | lvl:char_arithmetic@L0#0 | level | shown | 0.7000000000000001 | 0.9 | 0.63 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| 2 | char_arithmetic | pre:char->char_arithmetic | prerequisite | broken | 1.0 | 0.95 | 0.95 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.8 | 0.8 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| 3 | char | mis:char->CharNotNumeric | misconception | held | 1.0 | 0.97 | 0.97 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| 3 | char | lvl:char@L0#0 | level | shown | 0.6 | 0.93 | 0.558 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 | 3 | expression | lvl:expression@L4#4 | level | shown | 0.45 | 0.8 | 0.36 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
+| 1 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 0.95 | [2, 3] |
+| 1 | char_arithmetic | lvl:char_arithmetic@L0#0 | level | shown | 0.63 | [2, 3] |
+| 2 | char_arithmetic | pre:char->char_arithmetic | prerequisite | broken | 0.95 | [2, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.8 | [2, 3] |
+| 3 | char | mis:char->CharNotNumeric | misconception | held | 0.97 | [2, 3] |
+| 3 | char | lvl:char@L0#0 | level | shown | 0.558 | [2, 3] |
 | 3 | expression | lvl:expression@L4#4 | level | shown | 0.36 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
 clauses: c holds the letter A | A letter is not a number | so Java cannot add 1 to it, and this line gives a compile error
-start: 2 tagged concepts, all used
-start concepts (2): arithmetic_operators, println
---- depth 1: current concepts ['arithmetic_operators', 'println']
+start: 3 tagged concepts, all used
+start concepts (3): arithmetic_operators, char_arithmetic, println
+--- depth 1: current concepts ['arithmetic_operators', 'char_arithmetic', 'println']
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->CaretIsPower (0.10), mis:arithmetic_operators->RemainderIsSubtraction (0.10)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
@@ -554,6 +773,12 @@ start concepts (2): arithmetic_operators, println
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L4#3 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
+  char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
+    mis:char_arithmetic->CharNotNumeric -> held (0.95) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#0 (0.70), lvl:char_arithmetic@L4#2 (0.20), lvl:char_arithmetic@L0#2 (0.10)
+    lvl:char_arithmetic@L0#0 -> shown (0.63) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char_arithmetic@L4#2 -> not applied (0.00) ""
+    lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->IdentifierCaseInsensitive (0.30), mis:println->ParenthesesOnlyIfArgument (0.30)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
@@ -562,19 +787,28 @@ start concepts (2): arithmetic_operators, println
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L0#0 -> not applied (0.00) ""
     lvl:println@L4#3 -> not applied (0.00) ""
-  nothing kept at this depth
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
-  not yet read: pre:arithmetic_operators->expression, pre:statement->println
---- depth 2: current concepts ['arithmetic_operators', 'println']
+  kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.63]
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  not yet read: pre:arithmetic_operators->expression, pre:char->char_arithmetic, pre:statement->println
+--- depth 2: current concepts ['char_arithmetic', 'arithmetic_operators', 'println']
+  char_arithmetic (concept edges): 1 candidates -> kept pre:char->char_arithmetic (1.00)
+    pre:char->char_arithmetic -> broken (0.95) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> broken (0.80) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  kept: pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+  kept: pre:char->char_arithmetic [broken, tier 0, 0.95], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
+  reached across pre:char->char_arithmetic, entered next: char
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 uncovered; c2 <- pre:arithmetic_operators->expression; c3 <- pre:arithmetic_operators->expression
-  not yet read: own edges of expression
---- depth 3: current concepts ['expression', 'arithmetic_operators']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  not yet read: own edges of char, own edges of expression
+--- depth 3: current concepts ['char', 'char_arithmetic', 'expression', 'arithmetic_operators']
+  char (misconceptions): 1 candidates -> kept mis:char->CharNotNumeric (1.00)
+    mis:char->CharNotNumeric -> held (0.97) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.60), lvl:char@L3#0 (0.25), lvl:char@L2#0 (0.15)
+    lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char@L3#0 -> not applied (0.00) ""
+    lvl:char@L2#0 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
@@ -583,10 +817,13 @@ start concepts (2): arithmetic_operators, println
     lvl:expression@L4#4 -> shown (0.36) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> not applied (0.00) ""
-  kept: lvl:expression@L4#4 [shown, tier 2, 0.36]
-  clause coverage: c1 uncovered; c2 <- pre:arithmetic_operators->expression; c3 <- pre:arithmetic_operators->expression
-  no next nodes -> half_stop
-  root-cause walk: held on [], broken at ['expression'], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+  kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
+  shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
+  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level char: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  level char_arithmetic: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 ```
 
@@ -608,19 +845,64 @@ start concepts (2): arithmetic_operators, println
  ],
  "start_concepts": [
   "arithmetic_operators",
+  "char_arithmetic",
   "println"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "char_arithmetic",
+   "misconception": "CharNotNumeric",
+   "kind": "misconception",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "score": 0.95
+  }
+ ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "char",
+   "misconception": "CharNotNumeric",
+   "shadow_of": "mis:char_arithmetic->CharNotNumeric",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "score": 0.97
+  }
+ ],
  "broken_edges": [
+  {
+   "edge": "pre:char->char_arithmetic",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "score": 0.95,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
   {
    "edge": "pre:arithmetic_operators->expression",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "score": 0.8
+   "score": 0.8,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
   }
  ],
- "root_cause": null,
+ "root_cause": {
+  "concept": "char_arithmetic",
+  "misconception": "CharNotNumeric"
+ },
  "levels": {
+  "char": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "edge": "lvl:char@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CharNotNumeric",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "source": "level_mis_links"
+  },
   "expression": {
    "level": "L4",
    "way": "diagnose_an_error",
@@ -630,8 +912,65 @@ start concepts (2): arithmetic_operators, println
    "also_shown": []
   }
  },
- "overall_level": "L4",
+ "overall_level": "L0",
  "paths": [
+  {
+   "depth": 1,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 1,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "target": "char_arithmetic@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give \"a1\". Java promotes each char to its int code, so 'a' + 1 is 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
   {
    "depth": 2,
    "source": "arithmetic_operators",
@@ -648,7 +987,46 @@ start concepts (2): arithmetic_operators, println
    "prune_score": 1.0,
    "score": 0.8,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "char",
+   "edge": "mis:char->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A char is only a letter, so c + k is an error.",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 3,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -673,6 +1051,63 @@ start concepts (2): arithmetic_operators, println
  ],
  "evidence": [
   {
+   "depth": 1,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 1,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "target": "char_arithmetic@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give \"a1\". Java promotes each char to its int code, so 'a' + 1 is 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
    "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
@@ -688,7 +1123,46 @@ start concepts (2): arithmetic_operators, println
    "prune_score": 1.0,
    "score": 0.8,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "char",
+   "edge": "mis:char->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A char is only a letter, so c + k is an error.",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 3,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -712,19 +1186,19 @@ start concepts (2): arithmetic_operators, println
   }
  ],
  "clause_coverage": {
-  "A letter is not a number": "pre:arithmetic_operators->expression",
-  "so Java cannot add 1 to it, and this line gives a compile error": "pre:arithmetic_operators->expression"
+  "A letter is not a number": "mis:char_arithmetic->CharNotNumeric",
+  "so Java cannot add 1 to it, and this line gives a compile error": "mis:char_arithmetic->CharNotNumeric"
  },
  "unexplained_clauses": [
   "c holds the letter A"
  ],
- "stop_reason": "half_stop",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 22,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
-  "prune": 8,
-  "label": 14
+  "prune": 13,
+  "label": 23
  }
 }
 ```
