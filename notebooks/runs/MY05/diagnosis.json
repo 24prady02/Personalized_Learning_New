@@ -14,20 +14,65 @@
   "Java will give an error that a char and an int cannot be added"
  ],
  "start_concepts": [
+  "println",
   "arithmetic_operators",
-  "println"
+  "char"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "char_arithmetic",
+   "misconception": "CharNotNumeric",
+   "kind": "misconception",
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "score": 0.95
+  }
+ ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "char",
+   "misconception": "CharNotNumeric",
+   "shadow_of": "mis:char_arithmetic->CharNotNumeric",
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "score": 0.97
+  }
+ ],
  "broken_edges": [
+  {
+   "edge": "pre:char->char_arithmetic",
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "score": 0.95,
+   "consequence_of": "mis:char->CharNotNumeric"
+  },
   {
    "edge": "pre:arithmetic_operators->expression",
    "quote": "so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "score": 0.7
+   "score": 0.7,
+   "consequence_of": "mis:char->CharNotNumeric"
   }
  ],
- "root_cause": null,
+ "root_cause": {
+  "concept": "char_arithmetic",
+  "misconception": "CharNotNumeric"
+ },
  "levels": {
+  "char": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "edge": "lvl:char@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CharNotNumeric",
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "source": "level_mis_links"
+  },
   "expression": {
    "level": "L4",
    "way": "diagnose_an_error",
@@ -37,8 +82,69 @@
    "also_shown": []
   }
  },
- "overall_level": "L4",
+ "overall_level": "L0",
  "paths": [
+  {
+   "depth": 1,
+   "source": "char",
+   "edge": "mis:char->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A char is only a letter, so c + k is an error.",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 1,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "char",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char_arithmetic",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char->CharNotNumeric"
+  },
   {
    "depth": 2,
    "source": "arithmetic_operators",
@@ -55,7 +161,49 @@
    "prune_score": 1.0,
    "score": 0.7,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:char->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "target": "char_arithmetic@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give \"a1\". Java promotes each char to its int code, so 'a' + 1 is 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -82,6 +230,67 @@
  ],
  "evidence": [
   {
+   "depth": 1,
+   "source": "char",
+   "edge": "mis:char->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A char is only a letter, so c + k is an error.",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 1,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "char",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char_arithmetic",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char->CharNotNumeric"
+  },
+  {
    "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
@@ -97,7 +306,49 @@
    "prune_score": 1.0,
    "score": 0.7,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:char->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "target": "char_arithmetic@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give \"a1\". Java promotes each char to its int code, so 'a' + 1 is 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -123,18 +374,18 @@
   }
  ],
  "clause_coverage": {
-  "It does not compile": "lvl:expression@L4#4",
-  "c is a letter, not a number": "lvl:expression@L4#4",
-  "so you cannot add 1 to it": "pre:arithmetic_operators->expression",
-  "Java will give an error that a char and an int cannot be added": "pre:arithmetic_operators->expression"
+  "It does not compile": "mis:char->CharNotNumeric",
+  "c is a letter, not a number": "mis:char->CharNotNumeric",
+  "so you cannot add 1 to it": "mis:char->CharNotNumeric",
+  "Java will give an error that a char and an int cannot be added": "mis:char->CharNotNumeric"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 22,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
-  "prune": 8,
-  "label": 14
+  "prune": 13,
+  "label": 23
  }
 }
