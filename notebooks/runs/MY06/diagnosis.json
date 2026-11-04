@@ -41,6 +41,15 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:for_loop->ForLoopPartSkipped",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.1925
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:loop_body->accumulator_pattern",
@@ -78,6 +87,14 @@
    "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
    "source": "level_mis_links"
   },
+  "increment_operators": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "lvl:increment_operators@L3#4",
+   "source": "level_way",
+   "also_shown": []
+  },
   "loop_body": {
    "level": "L0",
    "way": "misconception",
@@ -88,13 +105,14 @@
    "source": "level_mis_links"
   },
   "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
    "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
-   "edge": "mis:loop_control->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+   "edge": "lvl:loop_control@L3#6",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
   },
   "loop_variable": {
    "level": "L3",
@@ -276,6 +294,42 @@
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#4",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "evidence": [
@@ -671,6 +725,42 @@
    "twin_logic": null,
    "level": "L3",
    "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#4",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -680,11 +770,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 48,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 27
+  "prune": 17,
+  "label": 31
  }
 }

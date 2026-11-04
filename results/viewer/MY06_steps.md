@@ -453,13 +453,6 @@ Parsed labels:
 
 mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime [held, tier 0, 0.34], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.21], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.19]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 1, then 3, then 6 | err:loop_control->WrongIterationCount |
-| c2 | sum starts at 0 and on every pass i is added to it | mis:loop_control->ForLoopPartSkipped |
-| c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | mis:loop_control->ForLoopPartSkipped |
-
 **Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_body->accumulator_pattern, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY06_figure04.png
@@ -580,13 +573,6 @@ pre:loop_body->accumulator_pattern [broken, tier 0, 0.70], pre:loop_control->for
 reached across pre:loop_body->accumulator_pattern, entered next: loop_body
 
 reached across pre:loop_variable->loop_control, entered next: loop_variable
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 1, then 3, then 6 | err:loop_control->WrongIterationCount |
-| c2 | sum starts at 0 and on every pass i is added to it | mis:loop_control->ForLoopPartSkipped |
-| c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | mis:loop_control->ForLoopPartSkipped |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_body, own edges of loop_variable
 
@@ -865,16 +851,121 @@ mis:loop_body->LoopBodyStatementOutsideLoop [held, tier 0, 0.54], pre:loop_contr
 
 reached across pre:loop_control->increment_operators, entered next: increment_operators
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 1, then 3, then 6 | err:loop_control->WrongIterationCount |
-| c2 | sum starts at 0 and on every pass i is added to it | mis:loop_control->ForLoopPartSkipped |
-| c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | mis:loop_control->ForLoopPartSkipped |
-
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of increment_operators
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY06_figure06.png
+
+### Depth 4: current concepts 'increment_operators'
+
+#### increment_operators, misconceptions: 5 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:increment_operators->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:increment_operators->IncrementByTwo \| wrong rule: i++ increases i by 2. \| right rule: i++ (and ++i) increases i by exactly 1. |
+| mis:increment_operators->PostIncrementAssignsLater \| wrong rule: i = i++ increases i by 1. \| right rule: i++ evaluates to the old value, so i = i++ stores the old value back. |
+| mis:increment_operators->PreIncrementBeforeLoop \| wrong rule: ++i in the for-update runs before the body each pass \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
+| mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:increment_operators->IdiomOverridesCode (0.40), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.30)
+```
+Kept by pruning: mis:increment_operators->IdiomOverridesCode (0.40), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.30)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:increment_operators->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:increment_operators->IncrementByTwo \| wrong rule: i++ increases i by 2. \| right rule: i++ (and ++i) increases i by exactly 1. |
+| mis:increment_operators->PreIncrementBeforeLoop \| wrong rule: ++i in the for-update runs before the body each pass \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
+Model's reply:
+```
+mis:increment_operators->IdiomOverridesCode | not applied | clauses: none | confidence: 0.9
+mis:increment_operators->IncrementByTwo | correct | clauses: 3 | confidence: 0.8
+mis:increment_operators->PreIncrementBeforeLoop | not applied | clauses: none | confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:increment_operators->IdiomOverridesCode | not applied |  |  | 0.0 |  |  |
+| mis:increment_operators->IncrementByTwo | correct | 0.3 | 0.8 | 0.24 | c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| mis:increment_operators->PreIncrementBeforeLoop | not applied |  |  | 0.0 |  |  |
+
+#### increment_operators, level ways: 16 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:increment_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields. |
+| lvl:increment_operators@L0#3 \| level L0 way inconsistent_trace: Applies the increment rule (LT) unevenly: uses the old value in one expression and the new value in another for the same i++, or performs the increment at the end of the loop body instead of where it is written. (here mixing in: "x = i++ and x = ++i store the same value in x") |
+| lvl:increment_operators@L1#0 \| level L1 way names_the_element: ++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtracts 1 from) a numeric variable. |
+| lvl:increment_operators@L1#1 \| level L1 way states_the_rule: ++ has the same effect as i = i + 1 and -- the same as i = i - 1; as statements i++ and ++i are the same, but in expressions ++i has the value after the increment and i++ the value before. |
+| lvl:increment_operators@L2#0 \| level L2 way line_by_line_trace: i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value. Both happen before the rest of the enclosing expression continues. |
+| lvl:increment_operators@L2#1 \| level L2 way output_prediction: With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5. |
+| lvl:increment_operators@L2#2 \| level L2 way one_step_execution: One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value. |
+| lvl:increment_operators@L3#0 \| level L3 way relation_to_neighbour: The usual for-loop update is i++ (shorthand for i = i + 1); as a stand-alone update statement ++i and i++ give the same loop. |
+| lvl:increment_operators@L3#1 \| level L3 way relation_to_neighbour: Inside a larger expression the result depends on which value (old or new) the increment yields and on left-to-right evaluation, e.g. j += j++ in Exercise 1.3.6. |
+| lvl:increment_operators@L3#2 \| level L3 way relation_to_neighbour: i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value. |
+| lvl:increment_operators@L3#3 \| level L3 way relation_to_neighbour: i++, ++i and i += 1 all add 1 to i; ++ and -- change a variable only by one and are normally used for integers, while i += k works for any amount and with any arithmetic operator (-=, *=, /=, %=). |
+| lvl:increment_operators@L3#4 \| level L3 way purpose_of_the_whole: Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop). |
+| lvl:increment_operators@L4#0 \| level L4 way predict_a_change: As a stand-alone statement, replacing i++ by ++i, i += 1 or i = i + 1 preserves behaviour; inside an expression (x = i++ vs x = ++i) the swap changes the value used by 1. |
+| lvl:increment_operators@L4#1 \| level L4 way transfer_to_a_new_program: Use i++ / i-- as stand-alone statements and in for-loop updates; avoid them inside larger expressions (x = ++i), as the book does, and use += for steps other than 1. |
+| lvl:increment_operators@L4#2 \| level L4 way diagnose_an_error: rule broken: i = i++ stores the old value back. Kind: silent logic error. Trigger class: Writing i = i++ to increment: i never changes, so a loop driven by it is infinite. |
+| lvl:increment_operators@L4#3 \| level L4 way diagnose_an_error: rule broken: ++ and -- apply only to a variable. Kind: compile-time. Trigger class: Applying ++ to a value that is not a variable, e.g. 5++ or (i + 1)++: compile-time error. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:increment_operators@L3#4 (Score: 0.4)}
+{lvl:increment_operators@L3#0 (Score: 0.35)}
+{lvl:increment_operators@L2#2 (Score: 0.25)}
+```
+Kept by pruning: lvl:increment_operators@L3#4 (0.40), lvl:increment_operators@L3#0 (0.35), lvl:increment_operators@L2#2 (0.25)
+
+Label prompt for level way lvl:increment_operators@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).
+
+Model's reply:
+```
+Label: shown
+Clauses: 3
+Confidence: 0.55
+```
+
+Label prompt for level way lvl:increment_operators@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> The usual for-loop update is i++ (shorthand for i = i + 1); as a stand-alone update statement ++i and i++ give the same loop.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.95
+```
+
+Label prompt for level way lvl:increment_operators@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:increment_operators@L3#4 | shown | 0.4 | 0.55 | 0.22 | c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| lvl:increment_operators@L3#0 | not applied |  |  | 0.0 |  |  |
+| lvl:increment_operators@L2#2 | not applied |  |  | 0.0 |  |  |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+mis:increment_operators->IncrementByTwo [correct, tier 2, 0.24], lvl:increment_operators@L3#4 [shown, tier 2, 0.22]
+
+**Graph check, not yet read (the walk may not stop while these remain):** pre:assignment->increment_operators
+
+Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY06_figure07.png
 
 Held set after the one-fault rules: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
 
@@ -882,11 +973,12 @@ Held set after the one-fault rules: mis:loop_body->LoopBodyStatementOutsideLoop,
 Root-cause walk: held on ['accumulator_pattern', 'for_loop', 'loop_body'], broken at [] (consequences: pre:loop_body->accumulator_pattern, pre:loop_control->for_loop), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - accumulator_pattern: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 - for_loop: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+- increment_operators: L3 via purpose_of_the_whole "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 - loop_body: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
-- loop_control: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+- loop_control: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 - loop_variable: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 
-**Stop:** max depth at depth 3; prompts {'prune': 15, 'label': 27}, fresh model calls 0, cache hits 42
+**Stop:** max depth at depth 4; prompts {'prune': 17, 'label': 31}, fresh model calls 0, cache hits 48
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -908,8 +1000,9 @@ Root-cause walk: held on ['accumulator_pattern', 'for_loop', 'loop_body'], broke
 |---|---|---|---|---|---|---|---|---|
 | accumulator_pattern | L0 | misconception | LoopBodyScopeImpliesLoopLifetime | level_mis_links | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value. |  |  |
 | for_loop | L0 | misconception | ForLoopPartSkipped | level_mis_links | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |  |  |
+| increment_operators | L3 | purpose_of_the_whole |  | level_way | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |  |  |  |
 | loop_body | L0 | misconception | LoopBodyStatementOutsideLoop | level_mis_links | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass. |  |  |
-| loop_control | L0 | misconception | ForLoopPartSkipped | level_mis_links | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |  |  |
+| loop_control | L3 | purpose_of_the_whole |  | level_way | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |  | L2 output_prediction |  |
 | loop_variable | L3 | purpose_of_the_whole |  | level_way | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |  | L2 output_prediction, L2 line_by_line_trace |  |
 
 ### Overall level: L0
@@ -921,7 +1014,7 @@ Clause coverage (final):
 | sum starts at 0 and on every pass i is added to it | mis:loop_control->ForLoopPartSkipped |
 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 | mis:loop_control->ForLoopPartSkipped |
 
-Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY06_figure07.png
+Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY06_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
@@ -947,6 +1040,8 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 3 | loop_variable | lvl:loop_variable@L2#0 | level | shown | 0.3 | 0.55 | 0.165 | [2, 3] | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.2 | 0.6 | 0.12 | [2, 3] | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| 4 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.3 | 0.8 | 0.24 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| 4 | increment_operators | lvl:increment_operators@L3#4 | level | shown | 0.4 | 0.55 | 0.22 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -960,6 +1055,8 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_body | mis:loop_body->LoopBodyStatementOutsideLoop | misconception | held | 0.54 | [2, 3] |
 | 3 | loop_control | pre:loop_control->increment_operators | prerequisite | confirmed | 0.55 | [3] |
 | 3 | loop_body | lvl:loop_body@L0#6 | level | shown | 0.35 | [1, 2, 3] |
+| 4 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.24 | [3] |
+| 4 | increment_operators | lvl:increment_operators@L3#4 | level | shown | 0.22 | [3] |
 
 ## 7. Raw traversal log
 ```
@@ -994,7 +1091,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
     lvl:for_loop@L0#11 -> not applied (0.00) ""
     lvl:for_loop@L2#2 -> not applied (0.00) ""
   kept: mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime [held, tier 0, 0.34], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.21], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.19]
-  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: pre:for_loop->loop_scope, pre:loop_body->accumulator_pattern, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['accumulator_pattern', 'for_loop', 'loop_control']
   accumulator_pattern (concept edges): 1 candidates -> kept pre:loop_body->accumulator_pattern (1.00)
@@ -1008,7 +1105,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
   kept: pre:loop_body->accumulator_pattern [broken, tier 0, 0.70], pre:loop_control->for_loop [broken, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.42]
   reached across pre:loop_body->accumulator_pattern, entered next: loop_body
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of loop_body, own edges of loop_variable
 --- depth 3: current concepts ['loop_body', 'accumulator_pattern', 'loop_control', 'for_loop', 'loop_variable']
   loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopBodyStatementOutsideLoop (0.60), mis:loop_body->StateChangeIgnoredAcrossPasses (0.25), mis:loop_body->LoopOutputSameEachPass (0.15)
@@ -1033,14 +1130,28 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
     lvl:loop_variable@L3#2 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   kept: mis:loop_body->LoopBodyStatementOutsideLoop [held, tier 0, 0.54], pre:loop_control->increment_operators [confirmed, tier 2, 0.55], lvl:loop_body@L0#6 [shown, tier 2, 0.35]
   reached across pre:loop_control->increment_operators, entered next: increment_operators
-  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of increment_operators
+--- depth 4: current concepts ['increment_operators'] (closing round: own edges only)
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.40), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.30)
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->IncrementByTwo -> correct (0.24) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L3#4 (0.40), lvl:increment_operators@L3#0 (0.35), lvl:increment_operators@L2#2 (0.25)
+    lvl:increment_operators@L3#4 -> shown (0.22) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L2#2 -> not applied (0.00) ""
+  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.24], lvl:increment_operators@L3#4 [shown, tier 2, 0.22]
+  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  not yet read: pre:assignment->increment_operators
   held: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
+  shadows: mis:loop_control->ForLoopPartSkipped (shadow of mis:for_loop->ForLoopPartSkipped)
   root-cause walk: held on ['accumulator_pattern', 'for_loop', 'loop_body'], broken at [] (consequences: pre:loop_body->accumulator_pattern, pre:loop_control->for_loop), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level accumulator_pattern: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   level for_loop: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level increment_operators: L3 via purpose_of_the_whole "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   level loop_body: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
-  level loop_control: L0 via misconception "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  level loop_control: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   level loop_variable: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 ```
 
@@ -1089,6 +1200,15 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:for_loop->ForLoopPartSkipped",
+   "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "score": 0.1925
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:loop_body->accumulator_pattern",
@@ -1126,6 +1246,14 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
    "source": "level_mis_links"
   },
+  "increment_operators": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "edge": "lvl:increment_operators@L3#4",
+   "source": "level_way",
+   "also_shown": []
+  },
   "loop_body": {
    "level": "L0",
    "way": "misconception",
@@ -1136,13 +1264,14 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    "source": "level_mis_links"
   },
   "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
    "quote": "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
-   "edge": "mis:loop_control->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+   "edge": "lvl:loop_control@L3#6",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
   },
   "loop_variable": {
    "level": "L3",
@@ -1324,6 +1453,42 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#4",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "evidence": [
@@ -1719,6 +1884,42 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    "twin_logic": null,
    "level": "L3",
    "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+  },
+  {
+   "depth": 4,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#4",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -1728,12 +1929,12 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 48,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 27
+  "prune": 17,
+  "label": 31
  }
 }
 ```
