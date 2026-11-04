@@ -1,0 +1,601 @@
+{
+ "scenario": "MY24",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "+ is worked out left to right",
+  "Once there is text, it is like gluing words together",
+  "so 5 and then 3 are stuck on as characters, giving Total: 53"
+ ],
+ "start_concepts": [
+  "println",
+  "string_concatenation",
+  "arithmetic_operators"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "arithmetic_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "edge": "lvl:arithmetic_operators@L3#3",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "edge": "lvl:expression@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "string_concatenation": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "edge": "lvl:string_concatenation@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
+  },
+  "string_conversion": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "edge": "lvl:string_conversion@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
+  }
+ },
+ "overall_level": "L3",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L3#3",
+   "target": "arithmetic_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.65,
+   "score": 0.5525,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.95,
+   "prune_score": 0.55,
+   "score": 0.5225,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L2#0",
+   "target": "string_concatenation@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "A chain of + is evaluated left to right, after any parenthesized parts. At each + the current operand types decide: two numbers are added, otherwise the values are concatenated.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "target": "arithmetic_operators",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L2#0",
+   "target": "string_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#2",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "With several operators, precedence and left associativity decide the grouping, and parentheses override both.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.95,
+   "prune_score": 0.55,
+   "score": 0.5225,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "+ is worked out left to right",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L2#0",
+   "target": "string_concatenation@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "A chain of + is evaluated left to right, after any parenthesized parts. At each + the current operand types decide: two numbers are added, otherwise the values are concatenated.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L3#2",
+   "target": "string_concatenation@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L2#1",
+   "target": "string_concatenation@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "The result is a String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + 2 + 3 is \"bc23\", and \"bc\" + (2+3) is \"bc5\".",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L3#3",
+   "target": "arithmetic_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.65,
+   "score": 0.5525,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#0",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "The left operand is evaluated fully, then the right operand, and then the operator is applied in the promoted type.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "target": "arithmetic_operators",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#2",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "With several operators, precedence and left associativity decide the grouping, and parentheses override both.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#0",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "Operands are evaluated left to right, each fully before its operator is applied. Precedence and parentheses decide the grouping, and a method's arguments are all evaluated before the method is called.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L2#0",
+   "target": "string_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L3#0",
+   "target": "string_conversion@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.65,
+   "prune_score": 0.3,
+   "score": 0.195,
+   "logic": "Conversion happens first, then concatenation: the non-String operand is turned into its characters before the two Strings are joined.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L2#1",
+   "target": "string_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.9,
+   "prune_score": 0.2,
+   "score": 0.18,
+   "logic": "A String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + (2+3) is \"bc5\", \"bc\" + 2 + 3 is \"bc23\", \"1234\" + 99 is \"123499\".",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "+ is worked out left to right": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "Once there is text, it is like gluing words together": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "so 5 and then 3 are stuck on as characters, giving Total: 53": "mis:string_concatenation->ArithmeticPlusPrecedes"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 25
+ }
+}

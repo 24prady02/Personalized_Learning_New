@@ -1,0 +1,5 @@
+{
+ "code": "System.out.println(\"Total: \" + 5 + 3);",
+ "question": "Explain how Java decides what \"Total: \" + 5 + 3 becomes.",
+ "answer": "+ is worked out left to right. Once there is text, it is like gluing words together, so 5 and then 3 are stuck on as characters, giving Total: 53"
+}

@@ -1,0 +1,68 @@
+clauses: + is worked out left to right | Once there is text, it is like gluing words together | so 5 and then 3 are stuck on as characters, giving Total: 53
+start: BM25 of the answer against each tagged concept: println 11.11 (hits 1), string_concatenation 8.26 (hits 1), arithmetic_operators 6.65 (hits 1), string_conversion 4.80 (hits 1)
+start: chosen println, string_concatenation, arithmetic_operators
+start concepts (3): println, string_concatenation, arithmetic_operators
+--- depth 1: current concepts ['println', 'string_concatenation', 'arithmetic_operators']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.15)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.45), lvl:println@L2#0 (0.35), lvl:println@L1#0 (0.20)
+    lvl:println@L2#1 -> not applied (0.00) ""
+    lvl:println@L2#0 -> not applied (0.00) ""
+    lvl:println@L1#0 -> not applied (0.00) ""
+  string_concatenation (misconceptions): 3 candidates -> kept mis:string_concatenation->ArithmeticPlusPrecedes (0.55), mis:string_concatenation->StringPlusLeftToRight (0.35), mis:string_concatenation->StringPlusStringifiesExpression (0.10)
+    mis:string_concatenation->ArithmeticPlusPrecedes -> correct (0.52) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    mis:string_concatenation->StringPlusLeftToRight -> correct (0.21) "+ is worked out left to right"
+    mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
+  string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#0 (0.45), lvl:string_concatenation@L3#2 (0.30), lvl:string_concatenation@L2#1 (0.25)
+    lvl:string_concatenation@L2#0 -> shown (0.41) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:string_concatenation@L3#2 -> shown (0.26) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:string_concatenation@L2#1 -> shown (0.23) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#3 (0.65), lvl:arithmetic_operators@L2#0 (0.20), lvl:arithmetic_operators@L1#1 (0.15)
+    lvl:arithmetic_operators@L3#3 -> shown (0.55) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:arithmetic_operators@L2#0 -> shown (0.15) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+  kept: lvl:arithmetic_operators@L3#3 [shown, tier 2, 0.55], mis:string_concatenation->ArithmeticPlusPrecedes [correct, tier 2, 0.52], lvl:string_concatenation@L2#0 [shown, tier 2, 0.41]
+  clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
+  not yet read: par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:statement->println, pre:string_concatenation->string_conversion, pre:string_literal->println
+--- depth 2: current concepts ['println', 'string_concatenation', 'arithmetic_operators']
+  println (concept edges): 2 candidates -> kept pre:string_literal->println (0.80), pre:statement->println (0.20)
+    pre:string_literal->println -> not applied (0.00) ""
+    pre:statement->println -> not applied (0.00) ""
+  string_concatenation (concept edges): 2 candidates -> kept par:string_concatenation~arithmetic_operators (0.60), pre:string_concatenation->string_conversion (0.40)
+    par:string_concatenation~arithmetic_operators -> confirmed (0.54) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    pre:string_concatenation->string_conversion -> confirmed (0.34) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.80) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.80], par:string_concatenation~arithmetic_operators [confirmed, tier 2, 0.54], pre:string_concatenation->string_conversion [confirmed, tier 2, 0.34]
+  reached across pre:arithmetic_operators->expression, entered next: expression
+  reached across pre:string_concatenation->string_conversion, entered next: string_conversion
+  clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
+  not yet read: own edges of expression, own edges of string_conversion
+--- depth 3: current concepts ['expression', 'arithmetic_operators', 'string_concatenation', 'string_conversion']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.20), mis:expression->NoAtomicExpression (0.20)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
+    lvl:expression@L3#2 -> shown (0.32) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:expression@L3#1 -> shown (0.28) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:expression@L2#0 -> shown (0.21) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
+    mis:string_conversion->StringPlusLeftToRight -> correct (0.90) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  string_conversion (level ways): 13 candidates -> kept lvl:string_conversion@L2#0 (0.50), lvl:string_conversion@L3#0 (0.30), lvl:string_conversion@L2#1 (0.20)
+    lvl:string_conversion@L2#0 -> shown (0.42) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:string_conversion@L3#0 -> shown (0.20) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:string_conversion@L2#1 -> shown (0.18) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  kept: mis:string_conversion->StringPlusLeftToRight [correct, tier 2, 0.90], lvl:string_conversion@L2#0 [shown, tier 2, 0.42], lvl:expression@L3#2 [shown, tier 2, 0.32]
+  clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level arithmetic_operators: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  level expression: L3 via relation_to_neighbour "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  level string_concatenation: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  level string_conversion: L3 via relation_to_neighbour "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
