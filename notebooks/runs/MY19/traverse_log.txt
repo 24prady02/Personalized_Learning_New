@@ -54,7 +54,8 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
   kept: mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
-  root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
+  shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
+  root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
   level arithmetic_operators: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
-  level expression: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  level expression: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
   level integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"

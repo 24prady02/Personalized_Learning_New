@@ -674,10 +674,12 @@ mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, t
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
+Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
 - arithmetic_operators: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
-- expression: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+- expression: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 - integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 
 **Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 0, cache hits 32
@@ -685,8 +687,12 @@ Root-cause walk: held on ['expression', 'integer_division'], broken at [] (conse
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| expression | TargetTyping | misconception | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.744 |  |
 | integer_division | TargetTyping | misconception | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.54 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| expression | TargetTyping | mis:integer_division->TargetTyping | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.744 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -695,13 +701,13 @@ Root-cause walk: held on ['expression', 'integer_division'], broken at [] (conse
 | pre:arithmetic_operators->integer_division | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.57 | mis:integer_division->TargetTyping |
 | pre:integer_division->remainder_operator | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.36 | mis:integer_division->TargetTyping |
 
-### Root cause: expression / TargetTyping
+### Root cause: integer_division / TargetTyping
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | arithmetic_operators | L0 | everyday_reading |  | level_way | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |  |  |  |
-| expression | L0 | misconception | TargetTyping | level_mis_links | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
+| expression | L0 | everyday_reading |  | level_way | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |  |  |  |
 | integer_division | L0 | misconception | TargetTyping | level_mis_links | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
 
 ### Overall level: L0
@@ -798,9 +804,10 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
   kept: mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
-  root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
+  shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
+  root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
   level arithmetic_operators: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
-  level expression: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  level expression: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
   level integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 ```
 
@@ -826,13 +833,6 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
  ],
  "held_misconceptions": [
   {
-   "concept": "expression",
-   "misconception": "TargetTyping",
-   "kind": "misconception",
-   "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
-   "score": 0.744
-  },
-  {
    "concept": "integer_division",
    "misconception": "TargetTyping",
    "kind": "misconception",
@@ -841,6 +841,15 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:integer_division->TargetTyping",
+   "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+   "score": 0.744
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:arithmetic_operators->expression",
@@ -862,7 +871,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
   }
  ],
  "root_cause": {
-  "concept": "expression",
+  "concept": "integer_division",
   "misconception": "TargetTyping"
  },
  "levels": {
@@ -871,16 +880,16 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
    "way": "everyday_reading",
    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
    "edge": "lvl:arithmetic_operators@L0#0",
-   "source": "level_way"
+   "source": "level_way",
+   "also_shown": []
   },
   "expression": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
-   "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
-   "edge": "mis:expression->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "source": "level_mis_links"
+   "way": "everyday_reading",
+   "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+   "edge": "lvl:expression@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "integer_division": {
    "level": "L0",
