@@ -381,6 +381,13 @@ Parsed labels:
 
 mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.63]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | c holds the letter A | not covered yet |
+| c2 | A letter is not a number | mis:char_arithmetic->CharNotNumeric |
+| c3 | so Java cannot add 1 to it, and this line gives a compile error | mis:char_arithmetic->CharNotNumeric |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:char->char_arithmetic, pre:statement->println
 
 **Figure 4 (the graph after depth 1)**
@@ -476,6 +483,13 @@ pre:char->char_arithmetic [broken, tier 0, 0.95], pre:arithmetic_operators->expr
 reached across pre:char->char_arithmetic, entered next: char
 
 reached across pre:arithmetic_operators->expression, entered next: expression
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | c holds the letter A | not covered yet |
+| c2 | A letter is not a number | mis:char_arithmetic->CharNotNumeric |
+| c3 | so Java cannot add 1 to it, and this line gives a compile error | mis:char_arithmetic->CharNotNumeric |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of char, own edges of expression
 
@@ -691,10 +705,19 @@ Parsed labels:
 
 mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | c holds the letter A | not covered yet |
+| c2 | A letter is not a number | mis:char_arithmetic->CharNotNumeric |
+| c3 | so Java cannot add 1 to it, and this line gives a compile error | mis:char_arithmetic->CharNotNumeric |
+
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
 Held set after the one-fault rules: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
@@ -708,6 +731,11 @@ Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:ch
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | char_arithmetic | CharNotNumeric | misconception | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| char | CharNotNumeric | mis:char_arithmetic->CharNotNumeric | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.97 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -788,7 +816,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:println@L0#0 -> not applied (0.00) ""
     lvl:println@L4#3 -> not applied (0.00) ""
   kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.63]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   not yet read: pre:arithmetic_operators->expression, pre:char->char_arithmetic, pre:statement->println
 --- depth 2: current concepts ['char_arithmetic', 'arithmetic_operators', 'println']
   char_arithmetic (concept edges): 1 candidates -> kept pre:char->char_arithmetic (1.00)
@@ -800,7 +828,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
   kept: pre:char->char_arithmetic [broken, tier 0, 0.95], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
   reached across pre:char->char_arithmetic, entered next: char
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   not yet read: own edges of char, own edges of expression
 --- depth 3: current concepts ['char', 'char_arithmetic', 'expression', 'arithmetic_operators']
   char (misconceptions): 1 candidates -> kept mis:char->CharNotNumeric (1.00)
@@ -818,7 +846,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
   shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
   root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}

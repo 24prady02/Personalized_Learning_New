@@ -25,7 +25,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:println@L0#0 -> not applied (0.00) ""
     lvl:println@L4#3 -> not applied (0.00) ""
   kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.63]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   not yet read: pre:arithmetic_operators->expression, pre:char->char_arithmetic, pre:statement->println
 --- depth 2: current concepts ['char_arithmetic', 'arithmetic_operators', 'println']
   char_arithmetic (concept edges): 1 candidates -> kept pre:char->char_arithmetic (1.00)
@@ -37,7 +37,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
   kept: pre:char->char_arithmetic [broken, tier 0, 0.95], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
   reached across pre:char->char_arithmetic, entered next: char
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   not yet read: own edges of char, own edges of expression
 --- depth 3: current concepts ['char', 'char_arithmetic', 'expression', 'arithmetic_operators']
   char (misconceptions): 1 candidates -> kept mis:char->CharNotNumeric (1.00)
@@ -55,7 +55,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
+  clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
   shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
   root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
