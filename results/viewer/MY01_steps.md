@@ -381,6 +381,13 @@ Parsed labels:
 
 mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.76], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.67], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.5 | mis:explicit_cast->CastAfterIntDivision |
+| c2 | The (double) cast turns the division into a decimal division | mis:explicit_cast->CastAfterIntDivision |
+| c3 | so 7 / 2 gives 3.5 and that is stored in avg | mis:explicit_cast->CastAfterIntDivision |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure04.png
@@ -476,6 +483,13 @@ pre:arithmetic_operators->integer_division [broken, tier 0, 0.95], pre:type_conv
 reached across pre:type_conversion->explicit_cast, entered next: type_conversion
 
 reached across pre:arithmetic_operators->expression, entered next: expression
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.5 | mis:explicit_cast->CastAfterIntDivision |
+| c2 | The (double) cast turns the division into a decimal division | mis:explicit_cast->CastAfterIntDivision |
+| c3 | so 7 / 2 gives 3.5 and that is stored in avg | mis:explicit_cast->CastAfterIntDivision |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of type_conversion
 
@@ -691,9 +705,18 @@ Parsed labels:
 
 mis:type_conversion->TargetTyping [held, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.68], lvl:expression@L0#0 [shown, tier 2, 0.40]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.5 | mis:explicit_cast->CastAfterIntDivision |
+| c2 | The (double) cast turns the division into a decimal division | mis:explicit_cast->CastAfterIntDivision |
+| c3 | so 7 / 2 gives 3.5 and that is stored in avg | mis:explicit_cast->CastAfterIntDivision |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:primitive_type->type_conversion
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY01_figure06.png
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
@@ -708,6 +731,12 @@ Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (co
 |---|---|---|---|---|---|
 | explicit_cast | CastAfterIntDivision | misconception | It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg | 0.76 |  |
 | integer_division | CastAfterIntDivision | misconception | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg | 0.665 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg | 0.8 |
+| expression | TargetTyping | mis:type_conversion->TargetTyping | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg | 0.68 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -791,7 +820,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.76], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.67], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['explicit_cast', 'integer_division', 'arithmetic_operators']
   explicit_cast (concept edges): 1 candidates -> kept pre:type_conversion->explicit_cast (1.00)
@@ -803,7 +832,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.95], pre:type_conversion->explicit_cast [broken, tier 0, 0.80], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
   reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: own edges of expression, own edges of type_conversion
 --- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'type_conversion', 'explicit_cast', 'expression']
   type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (1.00)
@@ -821,7 +850,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L3#2 -> not applied (0.00) ""
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.68], lvl:expression@L0#0 [shown, tier 2, 0.40]
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
   shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}

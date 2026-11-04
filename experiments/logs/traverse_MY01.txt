@@ -25,7 +25,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.76], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.67], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['explicit_cast', 'integer_division', 'arithmetic_operators']
   explicit_cast (concept edges): 1 candidates -> kept pre:type_conversion->explicit_cast (1.00)
@@ -37,7 +37,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.95], pre:type_conversion->explicit_cast [broken, tier 0, 0.80], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
   reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: own edges of expression, own edges of type_conversion
 --- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'type_conversion', 'explicit_cast', 'expression']
   type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (1.00)
@@ -55,7 +55,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L3#2 -> not applied (0.00) ""
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.68], lvl:expression@L0#0 [shown, tier 2, 0.40]
-  clause coverage (rule edges): c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
   shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
