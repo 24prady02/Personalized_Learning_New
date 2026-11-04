@@ -29,7 +29,7 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:for_loop@L2#2 -> not applied (0.00) ""
     lvl:for_loop@L2#0 -> not applied (0.00) ""
   kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.41], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.32], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.28]
-  clause coverage (rule edges): c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
   not yet read: pre:assignment->increment_operators, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['increment_operators', 'loop_control', 'for_loop']
   increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.60), pre:loop_control->increment_operators (0.40)
@@ -43,7 +43,7 @@ start concepts (3): loop_control, increment_operators, for_loop
   kept: pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.34]
   reached across pre:assignment->increment_operators, entered next: assignment
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage (rule edges): c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
   not yet read: own edges of assignment, own edges of loop_variable
 --- depth 3: current concepts ['assignment', 'increment_operators', 'for_loop', 'loop_control', 'loop_variable']
   assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
@@ -65,7 +65,7 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:loop_variable@L1#1 -> not applied (0.00) ""
     lvl:loop_variable@L2#0 -> not applied (0.00) ""
   kept: mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [shown, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.28]
-  clause coverage (rule edges): c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
   not yet read: par:assignment~comparison_operators
   held: mis:increment_operators->IncrementByTwo, mis:loop_variable->ForInitRepeats, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody
   shadows: mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
