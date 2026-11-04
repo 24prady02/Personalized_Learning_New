@@ -14,12 +14,40 @@
  ],
  "start_concepts": [
   "arithmetic_operators",
+  "overflow",
   "println"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "overflow",
+   "misconception": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "score": 0.9215
+  }
+ ],
  "error_evidence": [],
- "broken_edges": [],
- "root_cause": null,
+ "shadowed": [
+  {
+   "concept": "int",
+   "misconception": "IntOverflowWidensAutomatically",
+   "shadow_of": "mis:overflow->IntOverflowWidensAutomatically",
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "score": 0.9215
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:int->overflow",
+   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "score": 0.93,
+   "consequence_of": "mis:overflow->IntOverflowWidensAutomatically"
+  }
+ ],
+ "root_cause": {
+  "concept": "overflow",
+  "misconception": "IntOverflowWidensAutomatically"
+ },
  "levels": {
   "arithmetic_operators": {
    "level": "L2",
@@ -34,7 +62,25 @@
    "way": "everyday_reading",
    "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
    "edge": "lvl:expression@L0#0",
-   "source": "level_way"
+   "source": "level_way",
+   "also_shown": []
+  },
+  "int": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "edge": "lvl:int@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "overflow": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IntOverflowWidensAutomatically",
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "edge": "mis:overflow->IntOverflowWidensAutomatically",
+   "rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.",
+   "source": "level_mis_links"
   },
   "println": {
    "level": "L2",
@@ -49,6 +95,46 @@
  },
  "overall_level": "L0",
  "paths": [
+  {
+   "depth": 1,
+   "source": "overflow",
+   "edge": "mis:overflow->IntOverflowWidensAutomatically",
+   "target": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.97,
+   "prune_score": 0.95,
+   "score": 0.9215,
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "depth": 1,
+   "source": "overflow",
+   "edge": "lvl:overflow@L0#0",
+   "target": "overflow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Everyday arithmetic assumes a bigger result just takes more digits. A Java int keeps only 32 bits, so a result that is too large wraps silently to a wrong (often negative) value.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
   {
    "depth": 1,
    "source": "println",
@@ -69,42 +155,23 @@
    "way": "output_prediction"
   },
   {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L2#0",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
+   "depth": 2,
+   "source": "overflow",
+   "edge": "pre:int->overflow",
+   "target": "int",
+   "kind": "prerequisite",
+   "label": "broken",
    "clauses": [
-    1
+    2,
+    3
    ],
-   "quote": "It prints 2147483648",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.",
+   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.93,
+   "prune_score": 1.0,
+   "score": 0.93,
+   "logic": "Overflow happens because an int has a fixed 32-bit range.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L2#2",
-   "target": "arithmetic_operators@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big",
-   "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "An arithmetic operator never changes its operands. Each variable is replaced by its value, and only an assignment (or ++ or op=) stores the result.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
+   "consequence_of": "mis:overflow->IntOverflowWidensAutomatically"
   },
   {
    "depth": 2,
@@ -122,6 +189,46 @@
    "score": 0.6,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
    "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "int",
+   "edge": "mis:int->IntOverflowWidensAutomatically",
+   "target": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.97,
+   "prune_score": 0.95,
+   "score": 0.9215,
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "depth": 3,
+   "source": "int",
+   "edge": "lvl:int@L0#0",
+   "target": "int@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -143,40 +250,6 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->AssignmentIsEquation",
-   "target": "AssignmentIsEquation",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2
-   ],
-   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
-   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->VariablesHoldExpressions",
-   "target": "VariablesHoldExpressions",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2
-   ],
-   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "= stores the expression itself, not its computed value",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   }
  ],
  "evidence": [
@@ -201,6 +274,46 @@
   },
   {
    "depth": 1,
+   "source": "overflow",
+   "edge": "mis:overflow->IntOverflowWidensAutomatically",
+   "target": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.97,
+   "prune_score": 0.95,
+   "score": 0.9215,
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "depth": 1,
+   "source": "overflow",
+   "edge": "lvl:overflow@L0#0",
+   "target": "overflow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Everyday arithmetic assumes a bigger result just takes more digits. A Java int keeps only 32 bits, so a result that is too large wraps silently to a wrong (often negative) value.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
    "source": "println",
    "edge": "lvl:println@L2#1",
    "target": "println@L2",
@@ -239,6 +352,25 @@
   },
   {
    "depth": 2,
+   "source": "overflow",
+   "edge": "pre:int->overflow",
+   "target": "int",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.93,
+   "prune_score": 1.0,
+   "score": 0.93,
+   "logic": "Overflow happens because an int has a fixed 32-bit range.",
+   "twin_logic": null,
+   "consequence_of": "mis:overflow->IntOverflowWidensAutomatically"
+  },
+  {
+   "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
    "target": "expression",
@@ -253,6 +385,46 @@
    "score": 0.6,
    "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
    "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "int",
+   "edge": "mis:int->IntOverflowWidensAutomatically",
+   "target": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.97,
+   "prune_score": 0.95,
+   "score": 0.9215,
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "depth": 3,
+   "source": "int",
+   "edge": "lvl:int@L0#0",
+   "target": "int@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 3,
@@ -311,17 +483,17 @@
   }
  ],
  "clause_coverage": {
-  "It prints 2147483648": "lvl:println@L2#1",
+  "It prints 2147483648": "mis:overflow->IntOverflowWidensAutomatically",
   "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big": "lvl:arithmetic_operators@L2#2",
-  "because it makes room for it automatically": "lvl:expression@L0#0"
+  "because it makes room for it automatically": "mis:overflow->IntOverflowWidensAutomatically"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 22,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
-  "prune": 8,
-  "label": 14
+  "prune": 13,
+  "label": 23
  }
 }

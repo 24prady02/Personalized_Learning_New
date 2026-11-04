@@ -37,6 +37,41 @@
    "generic": true
   },
   {
+   "id": "int",
+   "why": "code",
+   "hits": [
+    {
+     "channel": "pattern",
+     "name": "\\bint\\b",
+     "decisive": false,
+     "match": "int",
+     "line": 1
+    },
+    {
+     "channel": "type",
+     "name": "int",
+     "decisive": false,
+     "match": "int",
+     "line": 1
+    }
+   ],
+   "generic": true
+  },
+  {
+   "id": "overflow",
+   "why": "code",
+   "hits": [
+    {
+     "channel": "signal",
+     "name": "int_limit_held_in_variable",
+     "decisive": true,
+     "match": "big = 2147483647;\nbig = big +",
+     "line": 1
+    }
+   ],
+   "generic": false
+  },
+  {
    "id": "println",
    "why": "code",
    "hits": [
@@ -75,6 +110,14 @@
    "grounding": "book_passage"
   },
   {
+   "id": "pre:int->overflow",
+   "type": "prerequisite",
+   "source": "int",
+   "target": "overflow",
+   "logic": "Overflow happens because an int has a fixed 32-bit range.",
+   "grounding": "book_passage"
+  },
+  {
    "id": "pre:statement->println",
    "type": "prerequisite",
    "source": "statement",
@@ -84,6 +127,12 @@
   }
  ],
  "misconceptions": [
+  {
+   "id": "AbsAlwaysNonNegative",
+   "kind": "misconception",
+   "wrong_belief": "Math.abs always returns a non-negative number.",
+   "correct_rule": "Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative."
+  },
   {
    "id": "ArithmeticOnNumericStrings",
    "kind": "misconception",
@@ -125,6 +174,18 @@
    "kind": "misconception",
    "wrong_belief": "System.out.Println and System.out.println name the same method.",
    "correct_rule": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
+  },
+  {
+   "id": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "wrong_belief": "An int result that is too large is automatically stored as a bigger number.",
+   "correct_rule": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "id": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "wrong_belief": "10 / 3 evaluates to 3.333....",
+   "correct_rule": "Dividing two ints gives an int: the fractional part is discarded."
   },
   {
    "id": "NoAtomicExpression",
@@ -330,6 +391,42 @@
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
   {
+   "id": "mis:int->IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "source": "int",
+   "target": "IntOverflowWidensAutomatically",
+   "role": "primary",
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "id": "mis:int->IntegerDivisionGivesFraction",
+   "type": "misconception",
+   "source": "int",
+   "target": "IntegerDivisionGivesFraction",
+   "role": "primary",
+   "logic": "10 / 3 evaluates to 3.333....",
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "id": "mis:overflow->AbsAlwaysNonNegative",
+   "type": "misconception",
+   "source": "overflow",
+   "target": "AbsAlwaysNonNegative",
+   "role": "context",
+   "logic": "Math.abs always returns a non-negative number.",
+   "twin_logic": "Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative."
+  },
+  {
+   "id": "mis:overflow->IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "source": "overflow",
+   "target": "IntOverflowWidensAutomatically",
+   "role": "primary",
+   "logic": "An int result that is too large is automatically stored as a bigger number.",
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
    "id": "mis:println->IdentifierCaseInsensitive",
    "type": "misconception",
    "source": "println",
@@ -490,6 +587,86 @@
    "level": "L4",
    "name": "Extended abstract (concrete-operational reversibility and conservation)",
    "criterion": "L4 for expression: the answer reasons beyond the given code by these rules.",
+   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
+  },
+  {
+   "id": "int@L0",
+   "concept": "int",
+   "level": "L0",
+   "name": "Prestructural / sensorimotor",
+   "criterion": "L0 for int: the answer holds a rule that contradicts Java.",
+   "deciding_question": "Does every rule the answer applies to int agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
+  },
+  {
+   "id": "int@L1",
+   "concept": "int",
+   "level": "L1",
+   "name": "Unistructural / atom x text surface",
+   "criterion": "L1 for int: the answer states one correct rule without applying it.",
+   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
+  },
+  {
+   "id": "int@L2",
+   "concept": "int",
+   "level": "L2",
+   "name": "Multistructural / block x execution / preoperational",
+   "criterion": "L2 for int: the answer applies these rules to every part of the code, in order.",
+   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
+  },
+  {
+   "id": "int@L3",
+   "concept": "int",
+   "level": "L3",
+   "name": "Relational / relations x function (concrete operational begins)",
+   "criterion": "L3 for int: the answer relates the parts by these rules.",
+   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
+  },
+  {
+   "id": "int@L4",
+   "concept": "int",
+   "level": "L4",
+   "name": "Extended abstract (concrete-operational reversibility and conservation)",
+   "criterion": "L4 for int: the answer reasons beyond the given code by these rules.",
+   "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
+  },
+  {
+   "id": "overflow@L0",
+   "concept": "overflow",
+   "level": "L0",
+   "name": "Prestructural / sensorimotor",
+   "criterion": "L0 for overflow: the answer holds a rule that contradicts Java.",
+   "deciding_question": "Does every rule the answer applies to overflow agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0."
+  },
+  {
+   "id": "overflow@L1",
+   "concept": "overflow",
+   "level": "L1",
+   "name": "Unistructural / atom x text surface",
+   "criterion": "L1 for overflow: the answer states one correct rule without applying it.",
+   "deciding_question": "Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1."
+  },
+  {
+   "id": "overflow@L2",
+   "concept": "overflow",
+   "level": "L2",
+   "name": "Multistructural / block x execution / preoperational",
+   "criterion": "L2 for overflow: the answer applies these rules to every part of the code, in order.",
+   "deciding_question": "Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled."
+  },
+  {
+   "id": "overflow@L3",
+   "concept": "overflow",
+   "level": "L3",
+   "name": "Relational / relations x function (concrete operational begins)",
+   "criterion": "L3 for overflow: the answer relates the parts by these rules.",
+   "deciding_question": "Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?"
+  },
+  {
+   "id": "overflow@L4",
+   "concept": "overflow",
+   "level": "L4",
+   "name": "Extended abstract (concrete-operational reversibility and conservation)",
+   "criterion": "L4 for overflow: the answer reasons beyond the given code by these rules.",
    "deciding_question": "Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3."
   },
   {
@@ -2782,6 +2959,1920 @@
      "rule_source_status": "verified",
      "error_kind": "run-time exception",
      "trigger_class": "Any int / or % whose right operand evaluates to 0: ArithmeticException.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    }
+   ]
+  },
+  {
+   "id": "lvl:int->int@L0",
+   "type": "has_level",
+   "source": "int",
+   "target": "int@L0",
+   "level": "L0",
+   "logic": "int -> L0 (Prestructural): the answer holds a rule that contradicts Java (4 ways).",
+   "ways": [
+    {
+     "way": "everyday_reading",
+     "rule_type": "E",
+     "rule_type_name": "folk-meaning rule",
+     "edge_logic": "In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.",
+     "exact_rule": "In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.",
+     "boundary": "Any correct, programming-specific statement about int makes the answer L1 or higher.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Pea1986",
+      "Lister2006",
+      "Jimoyiannis2011",
+      "Chen2020",
+      "EckertKautz2026"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "These bounds derive from the fact that integers are represented in binary with 32 binary digits",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 49,
+       "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.",
+     "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 49,
+       "page": 39,
+       "section": "1.2",
+       "quote": "Why does 10/3 give 3 and not 3.333333333?",
+       "match": "exact",
+       "support": "exercise_or_QA"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "IntegerDivisionGivesFraction"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
+     "literature_content": [
+      {
+       "kind": "example",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 3,
+       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
+       "code": "f = (9/5)*c + 32;  // should be 9.0/5.0",
+       "note": "Integer division: runs without message, wrong for every input."
+      },
+      {
+       "kind": "error",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 7,
+       "quote": "Integer division*",
+       "note": "Most common computation error; Ettles18: 6 min, 72%."
+      },
+      {
+       "kind": "boundary_rule",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 3,
+       "quote": "That error may cause incorrect output, but the student doesn't know that the 9/5 (should be 9.0/5.0) or even that code line is the problem, and thus may try many different things, spending a lot of time and leading to struggle.",
+       "note": "Silent logic errors need the student to locate the line and the rule; this is the L4 diagnosis."
+      }
+     ],
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 49,
+       "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 44,
+       "quote": "The problem is that Java performs integer division when the operands are integers.",
+       "check": "exact"
+      },
+      {
+       "type": "paper",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 3,
+       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.",
+     "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner. This situation is known as overflow.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "IntOverflowWidensAutomatically"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "The integer operators do not indicate overflow or underflow in any way.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "the lack of such checking is one reason such types are called primitive data types.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "inconsistent_trace",
+     "rule_type": "T",
+     "rule_type_name": "uneven-application rule",
+     "edge_logic": "Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")",
+     "exact_rule": "Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")",
+     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 49,
+       "page": 39,
+       "section": "1.2",
+       "quote": "Why does 10/3 give 3 and not 3.333333333?",
+       "match": "exact",
+       "support": "exercise_or_QA"
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "linked_misconception": [
+      "IntegerDivisionGivesFraction"
+     ],
+     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
+     "literature_content": [
+      {
+       "kind": "example",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 3,
+       "quote": "some common logic errors are much harder to find and fix, such as performing integer division when intending for floating-point division, as in f = (9/5)*c + 32 (in Java, C, C++, etc.).",
+       "code": "f = (9/5)*c + 32;  // should be 9.0/5.0",
+       "note": "Integer division: runs without message, wrong for every input."
+      },
+      {
+       "kind": "error",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 7,
+       "quote": "Integer division*",
+       "note": "Most common computation error; Ettles18: 6 min, 72%."
+      },
+      {
+       "kind": "boundary_rule",
+       "paper": "LogicErrorsSurvey",
+       "pdf_page": 3,
+       "quote": "That error may cause incorrect output, but the student doesn't know that the 9/5 (should be 9.0/5.0) or even that code line is the problem, and thus may try many different things, spending a lot of time and leading to struggle.",
+       "note": "Silent logic errors need the student to locate the line and the rule; this is the L4 diagnosis."
+      }
+     ],
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:int->int@L1",
+   "type": "has_level",
+   "source": "int",
+   "target": "int@L1",
+   "level": "L1",
+   "logic": "int -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
+   "ways": [
+    {
+     "way": "names_the_element",
+     "rule_type": "N",
+     "rule_type_name": "identity rule",
+     "edge_logic": "int: Java's 32-bit signed integer primitive type.",
+     "exact_rule": "int: Java's 32-bit signed integer primitive type.",
+     "boundary": "Covering every part of the code in order is L2.",
+     "correctness": "correct",
+     "filled_from": "concept description",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Jimoyiannis2011",
+      "TeagueLister2014"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "The integral types are byte, short, int, and long, whose values are 8-bit, 16-bit, 32-bit and 64-bit signed two's-complement integers, respectively, and char, whose values are 16-bit unsigned integers representing UTF-16 code units",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    },
+    {
+     "way": "states_the_rule",
+     "rule_type": "S",
+     "rule_type_name": "declarative rule",
+     "edge_logic": "int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.",
+     "exact_rule": "int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed.",
+     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Pea1986"
+     ],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "For int, from -2147483648 to 2147483647, inclusive",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "and produce an int result, with one significant exception-division or remainder by zero is not allowed.",
+       "check": "interleaved"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "the value of a / b is the number of times b goes into a with the fractional part discarded",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:int->int@L2",
+   "type": "has_level",
+   "source": "int",
+   "target": "int@L2",
+   "level": "L2",
+   "logic": "int -> L2 (Multistructural): the answer applies the rules of int to every part of the code, in order (3 ways).",
+   "ways": [
+    {
+     "way": "line_by_line_trace",
+     "rule_type": "LT",
+     "rule_type_name": "operational sequencing rule",
+     "edge_logic": "An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.",
+     "exact_rule": "An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.",
+     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Smith2025",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "TeagueLister2014",
+      "Chen2020"
+     ],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "Otherwise, the operation is carried out using 32-bit precision, and the result of the numerical operator is of type int.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 27,
+       "quote": "For arithmetic operations, multiplication and division are performed before addition and subtraction, so that a-b*c and a-(b*c) represent the same sequence of operations.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "output_prediction",
+     "rule_type": "OP",
+     "rule_type_name": "evaluation / result rule",
+     "edge_logic": "The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.",
+     "exact_rule": "The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.",
+     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Lister2004",
+      "TeagueLister2014",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "For example, the value of 17 / 3 is 5, and the value of 17 % 3 is 2.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "1 / 0 run-time error",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "one_step_execution",
+     "rule_type": "OS",
+     "rule_type_name": "state-transition rule",
+     "edge_logic": "An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around.",
+     "exact_rule": "An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around.",
+     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:int->int@L3",
+   "type": "has_level",
+   "source": "int",
+   "target": "int@L3",
+   "level": "L3",
+   "logic": "int -> L3 (Relational): the answer relates the parts (8 ways).",
+   "ways": [
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.",
+     "exact_rule": "int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 49,
+       "page": 39,
+       "section": "1.2",
+       "quote": "Since both 10 and 3 are integer literals, Java sees no need for type conversion and uses integer division. You should write 10.0/3.0 if you mean the numbers to be double literals.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "double"
+     ],
+     "edge": "int -parallel-> double",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 45,
+       "quote": "Java performs floating-point division when one or more operands are double values.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 64,
+       "quote": "Like integer division, casting to an integer always rounds toward zero",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.",
+     "exact_rule": "int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 24,
+       "page": 14,
+       "section": "1.2",
+       "quote": "Of the eight primitive types, we most often use these: int for integers; double for real numbers; and boolean for true-false values.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "boolean"
+     ],
+     "edge": "int -parallel-> boolean",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 36,
+       "quote": "The most important operators of this kind are the comparison operators ==, !=, <, <=, >, and >=, which all are defined for each primitive numeric type and produce a boolean result.",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "Only boolean and Boolean expressions can be used in control flow statements and as the first operand of the conditional operator ? :.",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.",
+     "exact_rule": "In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 44,
+       "page": 34,
+       "section": "1.2",
+       "quote": "The boolean type is for computing with the logical values true and false; the char type is the set of character values that we type; and the other six are numeric types, for computing with numbers.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "char"
+     ],
+     "edge": "int -parallel-> char",
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch5",
+       "quote": "In a numeric arithmetic context or a numeric array context, the promoted type is int, and any expressions that are not of type int undergo widening primitive conversion to int.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 118,
+       "quote": "This example uses a type cast to convert each integer (in the range) to the corresponding character.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "Because int has a fixed 32-bit range, results outside it wrap around silently.",
+     "exact_rule": "Because int has a fixed 32-bit range, results outside it wrap around silently.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner. This situation is known as overflow.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "overflow"
+     ],
+     "edge": "int -prerequisite-> overflow",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "These bounds derive from the fact that integers are represented in binary with 32 binary digits",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "The integer operators do not indicate overflow or underflow in any way.",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "If either operand is long, the operation is 64-bit and the result is long. Storing a long into an int needs a cast.",
+     "exact_rule": "If either operand is long, the operation is 64-bit and the result is long. Storing a long into an int needs a cast.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 33,
+       "page": 23,
+       "section": "1.2",
+       "quote": "The long, short, and byte types are the same as int except that they use 64, 16, and 8 bits respectively, so the range of allowed values is accordingly different.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "long_type"
+     ],
+     "edge": "int -prerequisite-> long_type",
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "If an integer operator other than a shift operator has at least one operand of type long, then the operation is carried out using 64-bit precision, and the result of the numerical operator is of type long.",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "An int literal must lie in int's range, so larger digit strings need an L (long) literal.",
+     "exact_rule": "An int literal must lie in int's range, so larger digit strings need an L (long) literal.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "Sequences of the characters 0 through 9, possibly with a plus or minus sign at the beginning (that, when interpreted as decimal numbers, fall within the defined range), are integer literal values.",
+       "match": "interleaved"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "int_literal_limit"
+     ],
+     "edge": "int -prerequisite-> int_literal_limit",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "(that, when interpreted as decimal numbers, fall within the defined range), are integer literal values.",
+       "check": "interleaved"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "int is the 32-bit integral primitive type, and the default type for integer literals and arithmetic.",
+     "exact_rule": "int is the 32-bit integral primitive type, and the default type for integer literals and arithmetic.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 24,
+       "page": 14,
+       "section": "1.2",
+       "quote": "Of the eight primitive types, we most often use these: int for integers; double for real numbers; and boolean for true-false values.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "primitive_type"
+     ],
+     "edge": "primitive_type -prerequisite-> int",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 44,
+       "quote": "Java has eight primitive data types: boolean, char, byte, short, int, long, float, and double.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "purpose_of_the_whole",
+     "rule_type": "P",
+     "rule_type_name": "plan / role rule",
+     "edge_logic": "int is used for counting and indexing: counters, loop steppers, array indices, sizes, and exact whole quantities (cents).",
+     "exact_rule": "int is used for counting and indexing: counters, loop steppers, array indices, sizes, and exact whole quantities (cents).",
+     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
+     "correctness": "correct or error",
+     "filled_from": "book program",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Fowler2021",
+      "Smith2025",
+      "TeagueLister2014",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 358,
+       "quote": "More generally, use integers for countable things and floating-point numbers for measurable things.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "We use ints frequently because they naturally arise",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:int->int@L4",
+   "type": "has_level",
+   "source": "int",
+   "target": "int@L4",
+   "level": "L4",
+   "logic": "int -> L4 (Extended abstract): the answer reasons beyond the given code (5 ways).",
+   "ways": [
+    {
+     "way": "predict_a_change",
+     "rule_type": "C",
+     "rule_type_name": "conservation rule",
+     "edge_logic": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).",
+     "exact_rule": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).",
+     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
+     "correctness": "correct",
+     "filled_from": "book rule / misconception node",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2011",
+      "Lister2004",
+      "VrachnosJimoyiannis2017"
+     ],
+     "linked_misconception": [
+      "IntegerDivisionGivesFraction"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 48,
+       "quote": "So in the expression minute * 100 / 60, the multiplication happens first; if the value of minute is 59, we get 5900 / 60, which yields 98.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 48,
+       "quote": "If these same operations had gone from right to left, the result would have been 59 * 1, which is incorrect.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 45,
+       "quote": "Java performs floating-point division when one or more operands are double values.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "transfer_to_a_new_program",
+     "rule_type": "X",
+     "rule_type_name": "applicability rule",
+     "edge_logic": "Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.",
+     "exact_rule": "Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.",
+     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "An int is an integer (natural number) between -2147483648"
+      }
+     ],
+     "framework": [
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Lister2011",
+      "PradhanNewar2024",
+      "Lister2004"
+     ],
+     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "a safe strategy is using the int type when you know the values to be less than ten digits and the long type when you think the values might get to be ten digits or more.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 358,
+       "quote": "More generally, use integers for countable things and floating-point numbers for measurable things.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 177,
+       "quote": "BigInteger is a Java class that can represent arbitrarily large integers.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.",
+     "exact_rule": "rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch15",
+       "quote": "An integer division (§15.17.2) or integer remainder (§15.17.3) operator throws an ArithmeticException if the value of the right-hand operand expression is zero.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 50,
+       "quote": "if you accidentally divide by zero, you will get a message like this",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "run-time exception",
+     "trigger_class": "Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped, often negative, value.",
+     "exact_rule": "rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped, often negative, value.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "it is fine to use the int type for small numbers, but when values run into the billions, you cannot.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "silent logic error",
+     "trigger_class": "Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped, often negative, value.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: A double cannot be stored in an int without a cast. Kind: compile-time. Trigger class: int x = 1.1; or int avg = sum / 2.0;: 'possible lossy conversion from double to int'.",
+     "exact_rule": "rule broken: A double cannot be stored in an int without a cast. Kind: compile-time. Trigger class: int x = 1.1; or int avg = sum / 2.0;: 'possible lossy conversion from double to int'.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 45,
+       "quote": "The following is illegal because the variable on the left is an int and the value on the right is a double",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "compile-time",
+     "trigger_class": "int x = 1.1; or int avg = sum / 2.0;: 'possible lossy conversion from double to int'.",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    }
+   ]
+  },
+  {
+   "id": "lvl:overflow->overflow@L0",
+   "type": "has_level",
+   "source": "overflow",
+   "target": "overflow@L0",
+   "level": "L0",
+   "logic": "overflow -> L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).",
+   "ways": [
+    {
+     "way": "everyday_reading",
+     "rule_type": "E",
+     "rule_type_name": "folk-meaning rule",
+     "edge_logic": "Everyday arithmetic assumes a bigger result just takes more digits. A Java int keeps only 32 bits, so a result that is too large wraps silently to a wrong (often negative) value.",
+     "exact_rule": "Everyday arithmetic assumes a bigger result just takes more digits. A Java int keeps only 32 bits, so a result that is too large wraps silently to a wrong (often negative) value.",
+     "boundary": "Any correct, programming-specific statement about overflow makes the answer L1 or higher.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Pea1986",
+      "Lister2006",
+      "Jimoyiannis2011",
+      "Chen2020",
+      "EckertKautz2026"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "Why do int values sometime become negative when they get large?",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "the lack of such checking is one reason such types are called primitive data types.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "misconception",
+     "rule_type": "M",
+     "rule_type_name": "wrong rule / right rule",
+     "edge_logic": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.",
+     "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.",
+     "boundary": "A single slip in an otherwise rule-correct trace is L2 with an error. Style or strategy breaches are not language misconceptions, and beliefs about a library are tagged scope=library.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner. This situation is known as overflow.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "ProgMiscon2021",
+      "Lister2006",
+      "Ahadi2014",
+      "Jimoyiannis2011",
+      "EckertKautz2026"
+     ],
+     "linked_misconception": [
+      "IntOverflowWidensAutomatically"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes some answers driven by a misconception as unistructural or multistructural, not prestructural.",
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "The integer operators do not indicate overflow or underflow in any way.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "the lack of such checking is one reason such types are called primitive data types.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    },
+    {
+     "way": "inconsistent_trace",
+     "rule_type": "T",
+     "rule_type_name": "uneven-application rule",
+     "edge_logic": "Points to LT (each int operation wraps as soon as it leaves the range). Applied unevenly, a student wraps one step but writes a + 1 for a = Integer.MAX_VALUE as 2147483648. (here mixing in: \"An int result that is too large is automatically stored as a bigger number\")",
+     "exact_rule": "Points to LT (each int operation wraps as soon as it leaves the range). Applied unevenly, a student wraps one step but writes a + 1 for a = Integer.MAX_VALUE as 2147483648. (here mixing in: \"An int result that is too large is automatically stored as a bigger number\")",
+     "boundary": "A bookkeeping slip under one consistent, correct rule is L2 with an error, not L0.",
+     "correctness": "correct",
+     "filled_from": "misconception node",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner. This situation is known as overflow.",
+       "match": "exact",
+       "support": "states_correct_rule"
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "linked_misconception": [
+      "IntOverflowWidensAutomatically"
+     ],
+     "literature_disagreement": "Lister 2006 codes by technique: an error inside a systematic hand trace is still multistructural.",
+     "scope": "language",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 50,
+       "quote": "int a = 2147483647 (or equivalently, Integer.MAX_VALUE)",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "No: the answer follows a rule that contradicts Java (the rule stated for this way), or switches between the right and a wrong rule.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "not applicable (L0 is decided by the rule used, not by scope)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:overflow->overflow@L1",
+   "type": "has_level",
+   "source": "overflow",
+   "target": "overflow@L1",
+   "level": "L1",
+   "logic": "overflow -> L1 (Unistructural): the answer states one correct rule without applying it (2 ways).",
+   "ways": [
+    {
+     "way": "names_the_element",
+     "rule_type": "N",
+     "rule_type_name": "identity rule",
+     "edge_logic": "Overflow: the situation where an integer result is too large or too small for its type's fixed bits and is truncated, wrapping around.",
+     "exact_rule": "Overflow: the situation where an integer result is too large or too small for its type's fixed bits and is truncated, wrapping around.",
+     "boundary": "Covering every part of the code in order is L2.",
+     "correctness": "correct",
+     "filled_from": "concept description",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Jimoyiannis2011",
+      "TeagueLister2014"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "This situation is known as overflow.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    },
+    {
+     "way": "states_the_rule",
+     "rule_type": "S",
+     "rule_type_name": "declarative rule",
+     "edge_logic": "int and long arithmetic is done in 32-bit and 64-bit two's complement. An out-of-range result keeps only its low-order bits, and no error or exception is raised.",
+     "exact_rule": "int and long arithmetic is done in 32-bit and 64-bit two's complement. An out-of-range result keeps only its low-order bits, and no error or exception is raised.",
+     "boundary": "Applying the rule to this code's values is L2. Stating a rule that the language disproves is L0.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Pea1986"
+     ],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "The integer operators do not indicate overflow or underflow in any way.",
+       "check": "web-fetched"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "one part of the code only (a name or a rule)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:overflow->overflow@L2",
+   "type": "has_level",
+   "source": "overflow",
+   "target": "overflow@L2",
+   "level": "L2",
+   "logic": "overflow -> L2 (Multistructural): the answer applies the rules of overflow to every part of the code, in order (3 ways).",
+   "ways": [
+    {
+     "way": "line_by_line_trace",
+     "rule_type": "LT",
+     "rule_type_name": "operational sequencing rule",
+     "edge_logic": "Overflow happens in the single operation whose result leaves the range, before any later widening. With int a and b, long x = a * b; overflows in 32-bit int arithmetic before the result is converted to long.",
+     "exact_rule": "Overflow happens in the single operation whose result leaves the range, before any later widening. With int a and b, long x = a * b; overflows in 32-bit int arithmetic before the result is converted to long.",
+     "boundary": "One segment stating the purpose of the whole is L3. A word-for-word transliteration with no interpretation is L0 (Chen score 0).",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Smith2025",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "TeagueLister2014",
+      "Chen2020"
+     ],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "Otherwise, the operation is carried out using 32-bit precision, and the result of the numerical operator is of type int.",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "output_prediction",
+     "rule_type": "OP",
+     "rule_type_name": "evaluation / result rule",
+     "edge_logic": "Integer.MAX_VALUE + 1 is -2147483648, 2 * Integer.MAX_VALUE is -2, and Math.abs(-2147483648) is -2147483648.",
+     "exact_rule": "Integer.MAX_VALUE + 1 is -2147483648, 2 * Integer.MAX_VALUE is -2, and Math.abs(-2147483648) is -2147483648.",
+     "boundary": "A bare correct output is not levelled: it may be a guess, or hide a misconception. A prediction justified by the code's purpose is L3.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Lister2004",
+      "TeagueLister2014",
+      "EckertKautz2026",
+      "Jimoyiannis2011"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 codes a correct output justified with a value table as relational.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 50,
+       "quote": "int a = 2147483647 (or equivalently, Integer.MAX_VALUE)",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "What is the value of Math.abs(-2147483648)?",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "This strange (but true) result is a typical example of the effects of integer overflow.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    },
+    {
+     "way": "one_step_execution",
+     "rule_type": "OS",
+     "rule_type_name": "state-transition rule",
+     "edge_logic": "The variable receives the wrapped value and nothing signals the error, so later statements carry on with it.",
+     "exact_rule": "The variable receives the wrapped value and nothing signals the error, so later statements carry on with it.",
+     "boundary": "This counts as L2 only when that single step is the whole fragment asked about. Describing one or two lines of a longer fragment is L1.",
+     "correctness": "correct or error",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "It seems wrong that Java should just let ints overflow and give bad values. Shouldn't Java automatically check for overflow?",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "the lack of such checking is one reason such types are called primitive data types.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "every part of the code, step by step (not high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:overflow->overflow@L3",
+   "type": "has_level",
+   "source": "overflow",
+   "target": "overflow@L3",
+   "level": "L3",
+   "logic": "overflow -> L3 (Relational): the answer relates the parts (4 ways).",
+   "ways": [
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "Overflow is possible because int has a fixed 32-bit range, -2^31 to 2^31 - 1.",
+     "exact_rule": "Overflow is possible because int has a fixed 32-bit range, -2^31 to 2^31 - 1.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner. This situation is known as overflow.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "int"
+     ],
+     "edge": "int -prerequisite-> overflow",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "These bounds derive from the fact that integers are represented in binary with 32 binary digits",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "Integer.MAX_VALUE and Integer.MIN_VALUE mark the edges of the range. Testing a > Integer.MAX_VALUE - b before computing a + b avoids overflow.",
+     "exact_rule": "Integer.MAX_VALUE and Integer.MIN_VALUE mark the edges of the range. Testing a > Integer.MAX_VALUE - b before computing a + b avoids overflow.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 64,
+       "page": 54,
+       "section": "1.3",
+       "quote": "A better version of PROGRAM 1.3.3 would use this value to test for overflow and print an error message if the user types too large a value",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "integer_constants"
+     ],
+     "edge": "overflow -prerequisite-> integer_constants",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 50,
+       "quote": "int a = 2147483647 (or equivalently, Integer.MAX_VALUE)",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 173,
+       "quote": "For example, Integer.MIN_VALUE is -2147483648, and Integer.MAX_VALUE is 2147483647.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "relation_to_neighbour",
+     "rule_type": "R",
+     "rule_type_name": "composition rule",
+     "edge_logic": "Both come from finite representations: an int result too large for 32 bits wraps around silently (overflow), while a double keeps about 15 significant digits so most results are approximations (5.0/3.0 is 1.6666666666666667). Neither raises an error.",
+     "exact_rule": "Both come from finite representations: an int result too large for 32 bits wraps around silently (overflow), while a double keeps about 15 significant digits so most results are approximations (5.0/3.0 is 1.6666666666666667). Neither raises an error.",
+     "boundary": "Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.",
+     "correctness": "correct or error",
+     "filled_from": "prerequisite / parallel edge",
+     "book_source": [
+      {
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "page": 21,
+       "section": "1.2",
+       "quote": "This situation is known as overflow.",
+       "match": "exact"
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "TeagueLister2014",
+      "Lister2004",
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017"
+     ],
+     "requires_concept": [
+      "floating_point_precision"
+     ],
+     "edge": "overflow -parallel-> floating_point_precision",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 31,
+       "quote": "This situation is known as overflow.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 34,
+       "quote": "When working with floating point numbers, one of the first things that you will encounter is the issue of precision: 5.0/2.0 is 2.5 but 5.0/3.0 is 1.6666666666666667.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    },
+    {
+     "way": "purpose_of_the_whole",
+     "rule_type": "P",
+     "rule_type_name": "plan / role rule",
+     "edge_logic": "Knowing about overflow lets you guard against it: use long for products, factorials and large sums, or check against MAX_VALUE before computing.",
+     "exact_rule": "Knowing about overflow lets you guard against it: use long for products, factorials and large sums, or check against MAX_VALUE before computing.",
+     "boundary": "Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.",
+     "correctness": "correct or error",
+     "filled_from": "book program",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Lister2006",
+      "Chen2020",
+      "Fowler2021",
+      "Smith2025",
+      "TeagueLister2014",
+      "Jimoyiannis2011"
+     ],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "a safe strategy is using the int type when you know the values to be less than ten digits and the long type when you think the values might get to be ten digits or more.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes, or a single slip under the right rule (then the level stands, flagged as an error).",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "the parts related into one whole: a relation or the purpose (high-level)"
+    }
+   ]
+  },
+  {
+   "id": "lvl:overflow->overflow@L4",
+   "type": "has_level",
+   "source": "overflow",
+   "target": "overflow@L4",
+   "level": "L4",
+   "logic": "overflow -> L4 (Extended abstract): the answer reasons beyond the given code (4 ways).",
+   "ways": [
+    {
+     "way": "predict_a_change",
+     "rule_type": "C",
+     "rule_type_name": "conservation rule",
+     "edge_logic": "Changing int to long moves the overflow point (to about 9.2e18) but does not remove it. Dividing before multiplying can avoid overflow at the cost of truncation. Casting a result that has already overflowed does not repair it.",
+     "exact_rule": "Changing int to long moves the overflow point (to about 9.2e18) but does not remove it. Dividing before multiplying can avoid overflow at the cost of truncation. Casting a result that has already overflowed does not repair it.",
+     "boundary": "Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.",
+     "correctness": "correct",
+     "filled_from": "book rule / misconception node",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "TeagueLister2014",
+      "Lister2011",
+      "Lister2004",
+      "VrachnosJimoyiannis2017"
+     ],
+     "linked_misconception": [
+      "IntOverflowWidensAutomatically"
+     ],
+     "literature_disagreement": "Jimoyiannis 2011 and Vrachnos & Jimoyiannis 2017 code modification of given code as relational, not extended abstract.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 33,
+       "quote": "The long, short, and byte types are the same as int except that they use 64, 16, and 8 bits respectively, so the range of allowed values is accordingly different.",
+       "check": "exact"
+      },
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "For long, from -9223372036854775808 to 9223372036854775807, inclusive",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "transfer_to_a_new_program",
+     "rule_type": "X",
+     "rule_type_name": "applicability rule",
+     "edge_logic": "Think about overflow whenever values can reach the billions. Use long (or a long operand, such as 1000L) for those, BigInteger for unbounded integers, and plain int for small counts and indices.",
+     "exact_rule": "Think about overflow whenever values can reach the billions. Use long (or a long operand, such as 1000L) for those, BigInteger for unbounded integers, and plain int for small counts and indices.",
+     "boundary": "Reproducing or slightly varying a familiar program is L1 to L3.",
+     "correctness": "correct",
+     "filled_from": "book rule",
+     "book_source": [
+      {
+       "source": "SW-1e",
+       "page": 21,
+       "pdf_page": 31,
+       "quote": "if the result is too large to fit into int's 32-bit representation, then it will be truncated in a well-defined manner."
+      }
+     ],
+     "framework": [
+      "Jimoyiannis2011",
+      "VrachnosJimoyiannis2017",
+      "Lister2011",
+      "PradhanNewar2024",
+      "Lister2004"
+     ],
+     "literature_disagreement": "Pradhan Newar 2024 find that writing is not the top skill: with the mean threshold, writing is a prerequisite to explaining.",
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "it is fine to use the int type for small numbers, but when values run into the billions, you cannot.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "TJ-2e",
+       "pdf_page": 177,
+       "quote": "BigInteger is a Java class that can represent arbitrarily large integers.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: int results are limited to 32 bits, and overflow is not reported. Kind: silent logic error. Trigger class: Values that reach into the billions: factorials above 12!, large products or powers, sums of many large values, Math.abs(Integer.MIN_VALUE).",
+     "exact_rule": "rule broken: int results are limited to 32 bits, and overflow is not reported. Kind: silent logic error. Trigger class: Values that reach into the billions: factorials above 12!, large products or powers, sums of many large values, Math.abs(Integer.MIN_VALUE).",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "This strange (but true) result is a typical example of the effects of integer overflow.",
+       "check": "exact"
+      },
+      {
+       "type": "book",
+       "book": "SW-1e",
+       "pdf_page": 46,
+       "quote": "it is fine to use the int type for small numbers, but when values run into the billions, you cannot.",
+       "check": "exact"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "silent logic error",
+     "trigger_class": "Values that reach into the billions: factorials above 12!, large products or powers, sums of many large values, Math.abs(Integer.MIN_VALUE).",
+     "check_correct": "Yes: the answer agrees with the rule stated for this way.",
+     "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
+     "check_high_level": "beyond the given code: a change, an input class, or a new program"
+    },
+    {
+     "way": "diagnose_an_error",
+     "rule_type": "D",
+     "rule_type_name": "error rule",
+     "edge_logic": "rule broken: An all-int expression is computed in int even when its result is stored in a long. Kind: silent logic error. Trigger class: long total = a * b; or long ms = days * 24 * 60 * 60 * 1000; with int operands.",
+     "exact_rule": "rule broken: An all-int expression is computed in int even when its result is stored in a long. Kind: silent logic error. Trigger class: long total = a * b; or long ms = days * 24 * 60 * 60 * 1000; with int operands.",
+     "boundary": "Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.",
+     "correctness": "correct",
+     "filled_from": "13-type rule research (lr)",
+     "framework": [
+      "Lister2006",
+      "AltadmriBrown2015",
+      "BrownAltadmri2017",
+      "LogicErrorsSurvey",
+      "EckertKautz2026"
+     ],
+     "literature_disagreement": "Lister 2011 places hypothesis-driven debugging at formal operational. Ahadi 2014 places patch-and-repatch at preoperational.",
+     "linked_error": [],
+     "rule_sources": [
+      {
+       "type": "web",
+       "site": "JLS21-ch4",
+       "quote": "Otherwise, the operation is carried out using 32-bit precision, and the result of the numerical operator is of type int.",
+       "check": "web-fetched"
+      }
+     ],
+     "rule_source_status": "verified",
+     "error_kind": "silent logic error",
+     "trigger_class": "long total = a * b; or long ms = days * 24 * 60 * 60 * 1000; with int operands.",
      "check_correct": "Yes: the answer agrees with the rule stated for this way.",
      "check_unambiguous": "The answer can be read in only one way. If it allows two readings it is a borderline answer: it is not levelled on this way and needs a second reading or a follow-up question (Fowler et al. 2025).",
      "check_high_level": "beyond the given code: a change, an input class, or a new program"
@@ -5321,6 +7412,62 @@
    "exact_rule": "Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value."
   },
   {
+   "level_node": "int@L0",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "level_node": "int@L0",
+   "misconception": "IntOverflowWidensAutomatically",
+   "way": "misconception",
+   "way_index": 2,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "level_node": "int@L0",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "inconsistent_trace",
+   "way_index": 3,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")"
+  },
+  {
+   "level_node": "int@L4",
+   "misconception": "IntegerDivisionGivesFraction",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0)."
+  },
+  {
+   "level_node": "overflow@L0",
+   "misconception": "IntOverflowWidensAutomatically",
+   "way": "misconception",
+   "way_index": 1,
+   "rule_type": "M",
+   "exact_rule": "wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "level_node": "overflow@L0",
+   "misconception": "IntOverflowWidensAutomatically",
+   "way": "inconsistent_trace",
+   "way_index": 2,
+   "rule_type": "T",
+   "exact_rule": "Points to LT (each int operation wraps as soon as it leaves the range). Applied unevenly, a student wraps one step but writes a + 1 for a = Integer.MAX_VALUE as 2147483648. (here mixing in: \"An int result that is too large is automatically stored as a bigger number\")"
+  },
+  {
+   "level_node": "overflow@L4",
+   "misconception": "IntOverflowWidensAutomatically",
+   "way": "predict_a_change",
+   "way_index": 0,
+   "rule_type": "C",
+   "exact_rule": "Changing int to long moves the overflow point (to about 9.2e18) but does not remove it. Dividing before multiplying can avoid overflow at the cost of truncation. Casting a result that has already overflowed does not repair it."
+  },
+  {
    "level_node": "println@L0",
    "misconception": "PrintEqualsPrintln",
    "way": "misconception",
@@ -5423,24 +7570,28 @@
    "expression"
   ],
   [
+   "int",
+   "overflow"
+  ],
+  [
    "println",
    "statement"
   ]
  ],
  "counts": {
-  "tagged": 4,
-  "concepts": 4,
-  "generic": 2,
+  "tagged": 6,
+  "concepts": 6,
+  "generic": 3,
   "from_hop": 0,
-  "concept_edges": 2,
-  "misconceptions": 21,
-  "mis_edges": 22,
-  "levels": 20,
-  "level_edges": 20,
-  "level_mis_links": 25,
-  "components": 2
+  "concept_edges": 3,
+  "misconceptions": 24,
+  "mis_edges": 26,
+  "levels": 30,
+  "level_edges": 30,
+  "level_mis_links": 32,
+  "components": 3
  },
  "warnings": [
-  "concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,expression | println,statement"
+  "concept nodes form 3 pieces (the KG has no edge between them): arithmetic_operators,expression | int,overflow | println,statement"
  ]
 }

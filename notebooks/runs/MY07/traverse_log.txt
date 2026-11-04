@@ -1,7 +1,7 @@
 clauses: It prints 2147483648 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big | because it makes room for it automatically
-start: 2 tagged concepts, all used
-start concepts (2): arithmetic_operators, println
---- depth 1: current concepts ['arithmetic_operators', 'println']
+start: 3 tagged concepts, all used
+start concepts (3): arithmetic_operators, overflow, println
+--- depth 1: current concepts ['arithmetic_operators', 'overflow', 'println']
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.34), mis:arithmetic_operators->RemainderIsSubtraction (0.33), mis:arithmetic_operators->CaretIsPower (0.33)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
@@ -10,6 +10,13 @@ start concepts (2): arithmetic_operators, println
     lvl:arithmetic_operators@L4#5 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#2 -> shown (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+  overflow (misconceptions): 2 candidates -> kept mis:overflow->IntOverflowWidensAutomatically (0.95), mis:overflow->AbsAlwaysNonNegative (0.05)
+    mis:overflow->IntOverflowWidensAutomatically -> held (0.92) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+    mis:overflow->AbsAlwaysNonNegative -> not applied (0.00) ""
+  overflow (level ways): 15 candidates -> kept lvl:overflow@L0#0 (0.60), lvl:overflow@L2#1 (0.25), lvl:overflow@L0#2 (0.15)
+    lvl:overflow@L0#0 -> shown (0.54) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+    lvl:overflow@L2#1 -> not applied (0.00) ""
+    lvl:overflow@L0#2 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.20)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
@@ -18,19 +25,29 @@ start concepts (2): arithmetic_operators, println
     lvl:println@L2#1 -> shown (0.27) "It prints 2147483648"
     lvl:println@L3#3 -> not applied (0.00) ""
     lvl:println@L2#0 -> shown (0.12) "It prints 2147483648"
-  kept: lvl:println@L2#1 [shown, tier 2, 0.27], lvl:println@L2#0 [shown, tier 2, 0.12], lvl:arithmetic_operators@L2#2 [shown, tier 2, 0.09]
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 uncovered
-  not yet read: pre:arithmetic_operators->expression, pre:statement->println
---- depth 2: current concepts ['arithmetic_operators', 'println']
+  kept: mis:overflow->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:overflow@L0#0 [shown, tier 2, 0.54], lvl:println@L2#1 [shown, tier 2, 0.27]
+  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  not yet read: pre:arithmetic_operators->expression, pre:int->overflow, pre:statement->println
+--- depth 2: current concepts ['overflow', 'arithmetic_operators', 'println']
+  overflow (concept edges): 1 candidates -> kept pre:int->overflow (1.00)
+    pre:int->overflow -> broken (0.93) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> confirmed (0.60) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
+  kept: pre:int->overflow [broken, tier 0, 0.93], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
+  reached across pre:int->overflow, entered next: int
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 uncovered
-  not yet read: own edges of expression
---- depth 3: current concepts ['expression', 'arithmetic_operators']
+  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  not yet read: own edges of expression, own edges of int
+--- depth 3: current concepts ['int', 'overflow', 'expression', 'arithmetic_operators']
+  int (misconceptions): 2 candidates -> kept mis:int->IntOverflowWidensAutomatically (0.95), mis:int->IntegerDivisionGivesFraction (0.05)
+    mis:int->IntOverflowWidensAutomatically -> held (0.92) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+    mis:int->IntegerDivisionGivesFraction -> not applied (0.00) ""
+  int (level ways): 20 candidates -> kept lvl:int@L0#0 (0.50), lvl:int@L2#2 (0.25), lvl:int@L3#3 (0.25)
+    lvl:int@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+    lvl:int@L2#2 -> not applied (0.00) ""
+    lvl:int@L3#3 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->AssignmentIsEquation -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
@@ -39,9 +56,13 @@ start concepts (2): arithmetic_operators, println
     lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:expression@L2#1 -> not applied (0.00) ""
     lvl:expression@L3#1 -> not applied (0.00) ""
-  kept: lvl:expression@L0#0 [shown, tier 2, 0.42], mis:expression->AssignmentIsEquation [correct, tier 2, 0.12], mis:expression->VariablesHoldExpressions [correct, tier 2, 0.12]
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:arithmetic_operators@L2#2; c3 <- lvl:expression@L0#0
-  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement']}
+  kept: mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
+  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  held: mis:overflow->IntOverflowWidensAutomatically; filed at the dependent concept: mis:int->IntOverflowWidensAutomatically
+  shadows: mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
+  root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->overflow), prerequisites {'expression': ['arithmetic_operators'], 'overflow': ['int'], 'println': ['statement']}
   level arithmetic_operators: L2 via one_step_execution "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
   level expression: L0 via everyday_reading "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+  level int: L0 via everyday_reading "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
+  level overflow: L0 via misconception "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
   level println: L2 via output_prediction "It prints 2147483648"
