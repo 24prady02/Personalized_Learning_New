@@ -704,7 +704,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 | loop_control | L3 | purpose_of_the_whole |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 output_prediction, L2 line_by_line_trace |  |
 | loop_variable | L2 | output_prediction |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 line_by_line_trace, L1 states_the_rule |  |
 
-### Overall level: L2
+### Overall level: L3
 
 Clause coverage (final):
 | clause | covered by |
@@ -841,6 +841,7 @@ start concepts (3): for_loop, loop_body, loop_variable
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -889,7 +890,7 @@ start concepts (3): for_loop, loop_body, loop_variable
    ]
   }
  },
- "overall_level": "L2",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,

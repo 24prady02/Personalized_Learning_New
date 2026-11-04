@@ -17,6 +17,7 @@
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -65,7 +66,7 @@
    ]
   }
  },
- "overall_level": "L2",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,
