@@ -390,6 +390,16 @@ Parsed labels:
 
 mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints -4 and then 1 | not covered yet |
+| c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
+| c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
+| c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
+| c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
+| c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (2.34)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
@@ -592,6 +602,16 @@ pre:integer_division->remainder_operator [confirmed, tier 2, 0.75], pre:arithmet
 
 reached across pre:arithmetic_operators->expression, entered next: expression
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints -4 and then 1 | not covered yet |
+| c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
+| c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
+| c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
+| c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
+| c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, pre:statement->println
 
 **Figure 5 (the graph after depth 2)**
@@ -740,6 +760,16 @@ pre:statement->println [confirmed, tier 2, 0.70], lvl:expression@L3#1 [shown, ti
 
 reached across pre:statement->println, entered next: statement
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints -4 and then 1 | pre:statement->println |
+| c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
+| c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
+| c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
+| c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
+| c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
 **Figure 6 (the graph after depth 3)**
@@ -856,10 +886,22 @@ Parsed labels:
 
 mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.36], lvl:statement@L3#3 [shown, tier 2, 0.22], lvl:statement@L2#2 [shown, tier 2, 0.18]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints -4 and then 1 | pre:statement->println |
+| c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
+| c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
+| c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
+| c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
+| c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
+
 **Figure 7 (the graph after depth 4)**
 
 ![Figure 7](figure07.png)
 Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
@@ -876,6 +918,11 @@ Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'e
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | remainder_operator | NegativeRemainderSign | misconception | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | 0.873 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| integer_division | NegativeRemainderSign | mis:remainder_operator->NegativeRemainderSign | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | 0.7275 |
 
 ### Broken concept edges
 (none)
@@ -979,7 +1026,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     lvl:integer_division@L3#0 -> shown (0.26) "because -4 * 2 + 1 = -7"
     lvl:integer_division@L1#1 -> not applied (0.00) ""
   kept: mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   uncovered clauses bring in: println (2.34)
   not yet read: own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
 --- depth 2: current concepts ['remainder_operator', 'integer_division', 'arithmetic_operators', 'println']
@@ -999,7 +1046,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     lvl:println@L3#4 -> not applied (0.00) ""
   kept: pre:integer_division->remainder_operator [confirmed, tier 2, 0.75], pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60]
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   not yet read: own edges of expression, pre:statement->println
 --- depth 3: current concepts ['integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println']
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.20), mis:expression->VariablesHoldExpressions (0.20)
@@ -1014,7 +1061,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     pre:statement->println -> confirmed (0.70) "It prints -4 and then 1"
   kept: pre:statement->println [confirmed, tier 2, 0.70], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
   reached across pre:statement->println, entered next: statement
-  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   not yet read: own edges of statement
 --- depth 4: current concepts ['statement'] (closing round: own edges only)
   statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.60), mis:statement->ComputerFillsInIntent (0.20), mis:statement->ProgramLooksAhead (0.20)
@@ -1026,7 +1073,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     lvl:statement@L2#0 -> shown (0.17) "It prints -4 and then 1"
     lvl:statement@L2#2 -> shown (0.18) "It prints -4 and then 1"
   kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.36], lvl:statement@L3#3 [shown, tier 2, 0.22], lvl:statement@L2#2 [shown, tier 2, 0.18]
-  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   held: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
   shadows: mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
   root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
