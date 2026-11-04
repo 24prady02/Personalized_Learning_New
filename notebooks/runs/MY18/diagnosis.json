@@ -32,16 +32,39 @@
    "kind": "misconception",
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "score": 0.57
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "OffByOneBound",
+   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.552
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "IdiomOverridesCode",
+   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "quote": "because both go through the whole array; so it visits each element once",
+   "score": 0.1875
   },
   {
    "concept": "for_loop",
    "misconception": "IdiomOverridesCode",
-   "kind": "misconception",
+   "shadow_of": "mis:array_traversal->OffByOneBound",
    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "score": 0.54
+  },
+  {
+   "concept": "indexing",
+   "misconception": "ArrayRangeInclusive",
+   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.63
   }
  ],
- "error_evidence": [],
  "broken_edges": [
   {
    "edge": "pre:for_loop->array_traversal",
@@ -64,13 +87,13 @@
   {
    "edge": "pre:loop_control->for_loop",
    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "score": 0.6,
+   "score": 0.1125,
    "consequence_of": "mis:array_traversal->OffByOneBound"
   }
  ],
  "root_cause": {
-  "concept": "for_loop",
-  "misconception": "IdiomOverridesCode"
+  "concept": "array_traversal",
+  "misconception": "OffByOneBound"
  },
  "levels": {
   "array_traversal": {
@@ -82,33 +105,16 @@
    "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "source": "level_mis_links"
   },
-  "for_loop": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "IdiomOverridesCode",
-   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "edge": "mis:for_loop->IdiomOverridesCode",
-   "rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
-   "source": "level_mis_links"
-  },
-  "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "OffByOneBound",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "edge": "mis:loop_control->OffByOneBound",
-   "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "source": "level_mis_links",
-   "also_held": [
-    "IdiomOverridesCode"
-   ]
-  },
   "loop_variable": {
-   "level": "L0",
-   "way": "everyday_reading",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "edge": "lvl:loop_variable@L0#0",
-   "source": "level_way"
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "i goes from 0 to a.length",
+   "edge": "lvl:loop_variable@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L0 everyday_reading"
+   ]
   },
   "off_by_one_error": {
    "level": "L0",
@@ -181,6 +187,25 @@
    "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
   },
   {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "because both go through the whole array; so it visits each element once",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "shares_evidence_with": "mis:loop_control->OffByOneBound"
+  },
+  {
    "depth": 2,
    "source": "array_traversal",
    "edge": "pre:for_loop->array_traversal",
@@ -240,6 +265,26 @@
    "consequence_of": "mis:array_traversal->OffByOneBound"
   },
   {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
+  },
+  {
    "depth": 3,
    "source": "off_by_one_error",
    "edge": "mis:off_by_one_error->OffByOneBound",
@@ -261,26 +306,6 @@
   },
   {
    "depth": 3,
-   "source": "for_loop",
-   "edge": "pre:loop_control->for_loop",
-   "target": "loop_control",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3,
-    4
-   ],
-   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "confidence": 0.75,
-   "prune_score": 0.8,
-   "score": 0.6,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null,
-   "consequence_of": "mis:array_traversal->OffByOneBound"
-  },
-  {
-   "depth": 3,
    "source": "array_traversal",
    "edge": "pre:indexing->array_traversal",
    "target": "indexing",
@@ -296,6 +321,45 @@
    "score": 0.6,
    "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
    "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "off_by_one_error",
+   "edge": "lvl:off_by_one_error@L0#2",
+   "target": "off_by_one_error@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Applies the bound rule unevenly: writes i < a.length in one loop and i <= a.length in the next one over the same array. (here mixing in: \"< vs <= and 0..n vs 0..n-1 are interchangeable\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
   }
  ],
  "evidence": [
@@ -375,7 +439,8 @@
    "prune_score": 0.25,
    "score": 0.1875,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "shares_evidence_with": "mis:loop_control->OffByOneBound"
   },
   {
    "depth": 1,
@@ -489,25 +554,6 @@
    "confidence": 0.75,
    "prune_score": 0.15,
    "score": 0.1125,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "for_loop",
-   "edge": "pre:loop_control->for_loop",
-   "target": "loop_control",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3,
-    4
-   ],
-   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "confidence": 0.75,
-   "prune_score": 0.8,
-   "score": 0.6,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null,
    "consequence_of": "mis:array_traversal->OffByOneBound"
@@ -667,6 +713,25 @@
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
   }
  ],
  "clause_coverage": {
@@ -677,11 +742,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 46,
+ "llm_cache_hits": 51,
  "llm_calls_by_step": {
-  "prune": 16,
-  "label": 30
+  "prune": 18,
+  "label": 33
  }
 }

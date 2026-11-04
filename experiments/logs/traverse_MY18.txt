@@ -28,7 +28,7 @@ start concepts (3): array_traversal, loop_control, for_loop
     lvl:for_loop@L4#5 -> not applied (0.00) ""
     lvl:for_loop@L4#0 -> not applied (0.00) ""
     lvl:for_loop@L3#2 -> not applied (0.00) ""
-  kept: mis:array_traversal->OffByOneBound [held, tier 0, 0.57], mis:loop_control->OffByOneBound [held, tier 0, 0.55], mis:for_loop->IdiomOverridesCode [held, tier 0, 0.54]
+  kept: mis:array_traversal->OffByOneBound [held, tier 0, 0.57], mis:loop_control->OffByOneBound [held, tier 0, 0.55], mis:for_loop->IdiomOverridesCode [held, tier 0, 0.54], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.19]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control
 --- depth 2: current concepts ['array_traversal', 'loop_control', 'for_loop']
@@ -41,14 +41,13 @@ start concepts (3): array_traversal, loop_control, for_loop
     pre:loop_control->for_loop -> broken (0.11) "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
-  kept: pre:for_loop->array_traversal [broken, tier 0, 0.70], pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:loop_variable->loop_control [broken, tier 0, 0.19]
+  kept: pre:for_loop->array_traversal [broken, tier 0, 0.70], pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:loop_variable->loop_control [broken, tier 0, 0.19], pre:loop_control->for_loop [broken, tier 0, 0.11]
   reached across pre:loop_control->off_by_one_error, entered next: off_by_one_error
   reached across pre:loop_variable->loop_control, entered next: loop_variable
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of loop_variable, own edges of off_by_one_error
 --- depth 3: current concepts ['for_loop', 'array_traversal', 'off_by_one_error', 'loop_control', 'loop_variable']
-  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.80), pre:for_loop->loop_scope (0.20)
-    pre:loop_control->for_loop -> broken (0.60) "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
   array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
     pre:indexing->array_traversal -> confirmed (0.60) "i goes from 0 to a.length; so it visits each element once"
@@ -70,14 +69,25 @@ start concepts (3): array_traversal, loop_control, for_loop
     lvl:loop_variable@L2#1 -> shown (0.27) "i goes from 0 to a.length"
     lvl:loop_variable@L0#0 -> shown (0.18) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
     lvl:loop_variable@L3#0 -> shown (0.14) "i goes from 0 to a.length"
-  kept: mis:off_by_one_error->OffByOneBound [held, tier 0, 0.71], pre:loop_control->for_loop [broken, tier 0, 0.60], pre:indexing->array_traversal [confirmed, tier 2, 0.60]
+  kept: mis:off_by_one_error->OffByOneBound [held, tier 0, 0.71], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#2 [shown, tier 2, 0.35]
   reached across pre:indexing->array_traversal, entered next: indexing
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of indexing, pre:indexing->off_by_one_error
-  held: mis:off_by_one_error->OffByOneBound, mis:array_traversal->OffByOneBound, mis:for_loop->IdiomOverridesCode; filed at the dependent concept: mis:loop_control->OffByOneBound
-  root-cause walk: held on ['array_traversal', 'for_loop', 'off_by_one_error'], broken at [] (consequences: pre:for_loop->array_traversal, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+--- depth 4: current concepts ['indexing'] (closing round: own edges only)
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayRangeInclusive (0.70), mis:indexing->ArrayIndexStartsAtOne (0.15), mis:indexing->ArrayUseScansAllCells (0.15)
+    mis:indexing->ArrayRangeInclusive -> held (0.63) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+    mis:indexing->ArrayIndexStartsAtOne -> not applied (0.00) ""
+    mis:indexing->ArrayUseScansAllCells -> not applied (0.00) ""
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L4#2 (0.40), lvl:indexing@L3#6 (0.35), lvl:indexing@L1#1 (0.25)
+    lvl:indexing@L4#2 -> not applied (0.00) ""
+    lvl:indexing@L3#6 -> not applied (0.00) ""
+    lvl:indexing@L1#1 -> not applied (0.00) ""
+  kept: mis:indexing->ArrayRangeInclusive [held, tier 0, 0.63]
+  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
+  not yet read: pre:indexing->array_bounds, pre:indexing->off_by_one_error
+  held: mis:off_by_one_error->OffByOneBound, mis:indexing->ArrayRangeInclusive, mis:array_traversal->OffByOneBound, mis:for_loop->IdiomOverridesCode; filed at the dependent concept: mis:loop_control->OffByOneBound, mis:loop_control->IdiomOverridesCode
+  shadows: mis:for_loop->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound), mis:indexing->ArrayRangeInclusive (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->OffByOneBound (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound)
+  root-cause walk: held on ['array_traversal', 'off_by_one_error'], broken at [] (consequences: pre:for_loop->array_traversal, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level array_traversal: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
-  level for_loop: L0 via misconception "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
-  level loop_control: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
-  level loop_variable: L0 via everyday_reading "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+  level loop_variable: L3 via relation_to_neighbour "i goes from 0 to a.length"
   level off_by_one_error: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
