@@ -17,10 +17,29 @@
   "arithmetic_operators",
   "running_extreme"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "explicit_cast",
+   "misconception": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "score": 0.54
+  }
+ ],
  "error_evidence": [],
- "broken_edges": [],
- "root_cause": null,
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:type_conversion->explicit_cast",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "score": 0.6375,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
+  }
+ ],
+ "root_cause": {
+  "concept": "explicit_cast",
+  "misconception": "CastAppliesToWholeExpression"
+ },
  "levels": {
   "accumulator_pattern": {
    "level": "L3",
@@ -52,13 +71,34 @@
     "L2 output_prediction"
    ]
   },
-  "expression": {
+  "explicit_cast": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAppliesToWholeExpression",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "rule": "wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5, so the expression is 2 / 0.15 (a double); write (int) (2.5 / 0.15) to cast the quotient.",
+   "source": "level_mis_links"
+  },
+  "for_loop": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "edge": "lvl:expression@L3#1",
+   "quote": "sum adds every element, giving 22",
+   "edge": "lvl:for_loop@L3#2",
    "source": "level_way",
-   "also_shown": []
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "loop_body": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "edge": "lvl:loop_body@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
+   ]
   },
   "running_extreme": {
    "level": "L2",
@@ -72,7 +112,7 @@
    ]
   }
  },
- "overall_level": "L2",
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
@@ -131,6 +171,23 @@
   },
   {
    "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "target": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "depth": 2,
    "source": "running_extreme",
    "edge": "pre:array_traversal->running_extreme",
    "target": "array_traversal",
@@ -165,21 +222,22 @@
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "arithmetic_operators",
-   "edge": "pre:arithmetic_operators->expression",
-   "target": "expression",
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
-    1
+    3
    ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.6,
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.75,
    "prune_score": 0.85,
-   "score": 0.51,
-   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "score": 0.6375,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
   },
   {
    "depth": 3,
@@ -200,8 +258,26 @@
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->TargetTyping",
+   "source": "for_loop",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "array_traversal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
@@ -209,17 +285,35 @@
     3
    ],
    "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "depth": 3,
-   "source": "array_traversal",
-   "edge": "lvl:array_traversal@L3#8",
-   "target": "array_traversal@L3",
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#0",
+   "target": "loop_body@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -227,13 +321,13 @@
     2
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "Plan/role: the index is a stepper, and the loop carries out a Soloway-style plan (accumulate/sum with a gatherer, count, search, find the extreme, copy) once for each element.",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
    "twin_logic": null,
    "level": "L3",
-   "way": "purpose_of_the_whole"
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -478,6 +572,169 @@
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "target": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.6,
+   "prune_score": 0.30000000000000004,
+   "score": 0.18,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "lvl:explicit_cast@L0#0",
+   "target": "explicit_cast@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->LoopCountIsStatementCount",
+   "target": "LoopCountIsStatementCount",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "The repeat count of a counted loop says how many of the body statements are executed.",
+   "twin_logic": "The repeat count is how many times the whole body runs; every pass runs all body statements."
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#2",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.75,
+   "prune_score": 0.85,
+   "score": 0.6375,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
+  },
+  {
    "depth": 3,
    "source": "array_traversal",
    "edge": "mis:array_traversal->OffByOneBound",
@@ -590,8 +847,61 @@
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->TargetTyping",
+   "source": "for_loop",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "array_traversal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.55,
+   "prune_score": 0.20000000000000004,
+   "score": 0.11,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
@@ -599,30 +909,86 @@
     3
    ],
    "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->IfInLoopUnchecked",
+   "target": "IfInLoopUnchecked",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "An if inside a loop body runs its branch on every pass without testing its condition.",
+   "twin_logic": "The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#0",
+   "target": "loop_body@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3
+    1,
+    2
    ],
-   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#3",
+   "target": "loop_body@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -632,11 +998,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 74,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 27
+  "prune": 25,
+  "label": 49
  }
 }

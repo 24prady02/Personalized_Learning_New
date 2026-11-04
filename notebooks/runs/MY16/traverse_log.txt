@@ -25,9 +25,10 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     lvl:running_extreme@L2#0 -> shown (0.24) "max starts at 4 and keeps the biggest, 9"
     lvl:running_extreme@L1#0 -> shown (0.23) "max starts at 4 and keeps the biggest, 9"
   kept: mis:running_extreme->ExtremeStartsAtZero [correct, tier 2, 0.60], mis:accumulator_pattern->StateChangeIgnoredAcrossPasses [correct, tier 2, 0.42], lvl:accumulator_pattern@L2#1 [shown, tier 2, 0.38]
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
---- depth 2: current concepts ['accumulator_pattern', 'arithmetic_operators', 'running_extreme']
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 uncovered
+  uncovered clauses bring in: explicit_cast (15.86), for_loop (14.92), loop_control (14.39)
+  not yet read: own edges of explicit_cast, own edges of for_loop, own edges of loop_control, par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
+--- depth 2: current concepts ['accumulator_pattern', 'arithmetic_operators', 'running_extreme', 'explicit_cast', 'for_loop', 'loop_control']
   accumulator_pattern (concept edges): 2 candidates -> kept par:running_extreme~accumulator_pattern (0.60), pre:loop_body->accumulator_pattern (0.40)
     par:running_extreme~accumulator_pattern -> confirmed (0.51) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
     pre:loop_body->accumulator_pattern -> confirmed (0.36) "sum adds every element, giving 22"
@@ -36,12 +37,38 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
   running_extreme (concept edges): 1 candidates -> kept pre:array_traversal->running_extreme (1.00)
     pre:array_traversal->running_extreme -> confirmed (0.85) "max starts at 4 and keeps the biggest, 9"
-  kept: pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51], pre:arithmetic_operators->expression [confirmed, tier 2, 0.51]
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAppliesToWholeExpression (0.60), mis:explicit_cast->CastAfterIntDivision (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+    mis:explicit_cast->CastAppliesToWholeExpression -> held (0.54) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:explicit_cast->CastAfterIntDivision -> correct (0.18) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
+  explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L0#0 (0.50), lvl:explicit_cast@L2#1 (0.30), lvl:explicit_cast@L2#0 (0.20)
+    lvl:explicit_cast@L0#0 -> shown (0.42) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    lvl:explicit_cast@L2#1 -> not applied (0.00) ""
+    lvl:explicit_cast@L2#0 -> not applied (0.00) ""
+  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.40), mis:for_loop->LoopCountIsStatementCount (0.35), mis:for_loop->IdiomOverridesCode (0.25)
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    mis:for_loop->LoopCountIsStatementCount -> correct (0.21) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
+    lvl:for_loop@L2#1 -> shown (0.32) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:for_loop@L3#2 -> shown (0.21) "sum adds every element, giving 22"
+    lvl:for_loop@L2#0 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.40), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.25)
+    mis:loop_control->OffByOneBound -> correct (0.24) "sum adds every element, giving 22"
+    err:loop_control->WrongIterationCount -> correct (0.21) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#0 (0.20)
+    lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#6 -> not applied (0.00) ""
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+  kept: mis:explicit_cast->CastAppliesToWholeExpression [held, tier 0, 0.54], pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51]
   reached across pre:array_traversal->running_extreme, entered next: array_traversal
-  reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: own edges of array_traversal, own edges of expression
---- depth 3: current concepts ['array_traversal', 'running_extreme', 'accumulator_pattern', 'expression', 'arithmetic_operators']
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: own edges of array_traversal, pre:explicit_cast->compound_assignment, pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:type_conversion->explicit_cast
+--- depth 3: current concepts ['explicit_cast', 'array_traversal', 'running_extreme', 'accumulator_pattern', 'for_loop', 'loop_control']
+  explicit_cast (concept edges): 2 candidates -> kept pre:type_conversion->explicit_cast (0.85), pre:explicit_cast->compound_assignment (0.15)
+    pre:type_conversion->explicit_cast -> broken (0.64) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    pre:explicit_cast->compound_assignment -> not applied (0.00) ""
   array_traversal (misconceptions): 6 candidates -> kept err:array_traversal->EarlyReturnInLoop (0.40), mis:array_traversal->OffByOneBound (0.30), mis:array_traversal->ElementBoundToOldIndex (0.30)
     err:array_traversal->EarlyReturnInLoop -> not applied (0.00) ""
     mis:array_traversal->OffByOneBound -> correct (0.18) "sum adds every element, giving 22"
@@ -52,23 +79,43 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     lvl:array_traversal@L3#6 -> shown (0.15) "max starts at 4 and keeps the biggest, 9"
   accumulator_pattern (concept edges): 1 candidates -> kept pre:loop_body->accumulator_pattern (1.00)
     pre:loop_body->accumulator_pattern -> confirmed (0.90) "sum adds every element, giving 22"
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->AssignmentIsEquation (0.30), mis:expression->VariablesHoldExpressions (0.20)
-    mis:expression->TargetTyping -> correct (0.35) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
-  expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.50), lvl:expression@L3#1 (0.30), lvl:expression@L0#2 (0.20)
-    lvl:expression@L3#2 -> not applied (0.00) ""
-    lvl:expression@L3#1 -> shown (0.21) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-    lvl:expression@L0#2 -> not applied (0.00) ""
-  arithmetic_operators (concept edges): 1 candidates -> kept par:string_concatenation~arithmetic_operators (1.00)
-    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
-  kept: pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], mis:expression->TargetTyping [correct, tier 2, 0.35], lvl:array_traversal@L3#8 [shown, tier 2, 0.34]
+  for_loop (concept edges): 3 candidates -> kept pre:for_loop->array_traversal (0.70), pre:loop_control->for_loop (0.20), pre:for_loop->loop_scope (0.10)
+    pre:for_loop->array_traversal -> confirmed (0.60) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    pre:loop_control->for_loop -> confirmed (0.11) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_variable->loop_control -> not applied (0.00) ""
+    pre:loop_control->increment_operators -> confirmed (0.17) "sum adds every element, giving 22"
+  kept: pre:type_conversion->explicit_cast [broken, tier 0, 0.64], pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], pre:for_loop->array_traversal [confirmed, tier 2, 0.59]
+  reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   reached across pre:loop_body->accumulator_pattern, entered next: loop_body
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: own edges of loop_body, pre:expression->comparison_operators, pre:for_loop->array_traversal, pre:indexing->array_traversal
-  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: own edges of loop_body, own edges of type_conversion, pre:indexing->array_traversal
+--- depth 4: current concepts ['type_conversion', 'loop_body'] (closing round: own edges only)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+    mis:type_conversion->TargetTyping -> correct (0.48) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
+  type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.45), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L4#3 (0.20)
+    lvl:type_conversion@L2#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3 -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->IfInLoopUnchecked (0.35), mis:loop_body->StatementAfterLoopInBody (0.20)
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.38) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:loop_body->IfInLoopUnchecked -> correct (0.21) "max starts at 4 and keeps the biggest, 9"
+    mis:loop_body->StatementAfterLoopInBody -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.45), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L3#3 (0.25)
+    lvl:loop_body@L3#0 -> shown (0.27) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L3#3 -> shown (0.15) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+  kept: mis:type_conversion->TargetTyping [correct, tier 2, 0.48], mis:loop_body->StateChangeIgnoredAcrossPasses [correct, tier 2, 0.38], lvl:loop_body@L3#0 [shown, tier 2, 0.27]
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: pre:indexing->array_traversal, pre:primitive_type->type_conversion
+  root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
   level accumulator_pattern: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level arithmetic_operators: L2 via output_prediction "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
   level array_traversal: L3 via purpose_of_the_whole "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-  level expression: L3 via relation_to_neighbour "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+  level explicit_cast: L0 via misconception "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+  level for_loop: L3 via relation_to_neighbour "sum adds every element, giving 22"
+  level loop_body: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level running_extreme: L2 via output_prediction "max starts at 4 and keeps the biggest, 9"

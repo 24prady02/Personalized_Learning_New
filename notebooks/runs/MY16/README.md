@@ -474,14 +474,16 @@ mis:running_extreme->ExtremeStartsAtZero [correct, tier 2, 0.60], mis:accumulato
 |---|---|---|
 | c1 | sum adds every element, giving 22 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
 | c2 | max starts at 4 and keeps the biggest, 9 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
-| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | lvl:arithmetic_operators@L2#1 |
+| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | not covered yet |
 
-**Graph check, not yet read (the walk may not stop while these remain):** par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
+**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** explicit_cast (15.86), for_loop (14.92), loop_control (14.39)
+
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of explicit_cast, own edges of for_loop, own edges of loop_control, par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'accumulator_pattern', 'arithmetic_operators', 'running_extreme'
+### Depth 2: current concepts 'accumulator_pattern', 'arithmetic_operators', 'running_extreme', 'explicit_cast', 'for_loop', 'loop_control'
 
 #### accumulator_pattern, concept edges: 2 edges offered
 Edges offered:
@@ -591,27 +593,408 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:array_traversal->running_extreme | confirmed | 1.0 | 0.85 | 0.85 | c2 | max starts at 4 and keeps the biggest, 9 |
 
+#### explicit_cast, misconceptions: 6 edges offered
+Edges offered:
+| edge |
+|---|
+| err:explicit_cast->RoundReturnsInt \| wrong rule: Writes int n = Math.round(x); because Math.round gives an int. \| right rule: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x); |
+| mis:explicit_cast->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
+| mis:explicit_cast->CastAppliesToWholeExpression \| wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. \| right rule: The cast applies only to what comes right after it, here 2.5. |
+| mis:explicit_cast->CastParsesString \| wrong rule: (int) args[0] converts the text "34" into the number 34. \| right rule: A String argument that represents a number must be converted with a method such as Integer.parseInt. |
+| mis:explicit_cast->CastRounds \| wrong rule: (int) 2.7 evaluates to 3. \| right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer. |
+| mis:explicit_cast->LaterDoubleLiteralFixesDivision \| wrong rule: Changing a later literal to 100.0 fixes an earlier int division. \| right rule: The int division happens first; the double must be in the division itself. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:explicit_cast->CastAppliesToWholeExpression (0.60), mis:explicit_cast->CastAfterIntDivision (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+```
+Kept by pruning: mis:explicit_cast->CastAppliesToWholeExpression (0.60), mis:explicit_cast->CastAfterIntDivision (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:explicit_cast->CastAppliesToWholeExpression \| wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. \| right rule: The cast applies only to what comes right after it, here 2.5. |
+| mis:explicit_cast->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
+| mis:explicit_cast->LaterDoubleLiteralFixesDivision \| wrong rule: Changing a later literal to 100.0 fixes an earlier int division. \| right rule: The int division happens first; the double must be in the division itself. |
+Model's reply:
+```
+mis:explicit_cast->CastAppliesToWholeExpression | held | clauses: 3 | confidence: 0.9
+mis:explicit_cast->CastAfterIntDivision | correct | clauses: 3 | confidence: 0.6
+mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:explicit_cast->CastAppliesToWholeExpression | held | 0.6000000000000001 | 0.9 | 0.54 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| mis:explicit_cast->CastAfterIntDivision | correct | 0.30000000000000004 | 0.6 | 0.18 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied |  |  | 0.0 |  |  |
+
+#### explicit_cast, level ways: 19 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:explicit_cast@L0#0 \| level L0 way everyday_reading: Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it. |
+| lvl:explicit_cast@L0#4 \| level L0 way inconsistent_trace: Points to LT (the cast is a unary operator applied to the operand right after it, before * and /). Applied unevenly: in one line the student casts only the first operand, and in another applies the same cast to the whole expression. (here mixing in: "(int) 2.7 evaluates to 3") |
+| lvl:explicit_cast@L1#0 \| level L1 way names_the_element: A cast is a unary operator, written (type) expression, that converts a value of one primitive type to another, used when the conversion may lose information. |
+| lvl:explicit_cast@L1#1 \| level L1 way states_the_rule: (T) e converts the value of e to type T; a double-to-int cast discards the fraction by rounding toward zero; a cast is required for narrowing conversions; it has higher precedence than arithmetic; casts between boolean and numbers, or from String to int, are not allowed. |
+| lvl:explicit_cast@L2#0 \| level L2 way line_by_line_trace: Evaluate the operand immediately to the right of the cast (a parenthesized expression is evaluated completely first), convert that value, then continue with the remaining operators of the expression. |
+| lvl:explicit_cast@L2#1 \| level L2 way output_prediction: (int) 2.71828 is int 2; (int) -2.7 is -2; (int) 11 * 0.3 is double 3.3; (int) (11 * 0.3) is int 3; (double) 3 / 5 is 0.6 but (double) (3 / 5) is 0.0; (char) ('a' + 4) is 'e'. |
+| lvl:explicit_cast@L2#2 \| level L2 way one_step_execution: A cast yields a new value and changes nothing else: neither the type nor the value of the variable being cast changes (after int x = (int) pi; pi is still 3.14159). |
+| lvl:explicit_cast@L3#0 \| level L3 way relation_to_neighbour: A cast is the explicit conversion between primitive types, needed exactly where automatic conversion is refused because information may be lost. |
+| lvl:explicit_cast@L3#1 \| level L3 way relation_to_neighbour: To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0. |
+| lvl:explicit_cast@L3#2 \| level L3 way relation_to_neighbour: x op= e contains an implicit cast back to the type of x, so with int x, x += 0.5 compiles (x = (int) (x + 0.5)) while x = x + 0.5 is a compile-time error. |
+| lvl:explicit_cast@L3#3 \| level L3 way relation_to_neighbour: Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero. |
+| lvl:explicit_cast@L3#4 \| level L3 way relation_to_neighbour: (int) 2.71828 truncates toward zero and gives 2; Math.round(2.71828) rounds to the nearest integer and gives 3, as a long that needs (int) to become an int. |
+| lvl:explicit_cast@L3#5 \| level L3 way purpose_of_the_whole: Used to discard information on purpose: truncating a scaled random number to an index, taking the integer part, converting between char and int codes ((char) ('a' + k)), or forcing real division with (double) sum / n. |
+| lvl:explicit_cast@L4#0 \| level L4 way predict_a_change: Moving the parentheses changes when truncation happens ((int) (a * b) vs (int) a * b); removing a cast from a narrowing assignment turns it into a compile-time error; int to double to int restores the value, but double to int to double loses the fraction. |
+| lvl:explicit_cast@L4#1 \| level L4 way transfer_to_a_new_program: Use a cast when you intend to truncate or narrow (random indices, integer parts, char codes); use Math.round to round, Integer.parseInt for Strings, and put a double into the division itself rather than casting its int result. |
+| lvl:explicit_cast@L4#2 \| level L4 way diagnose_an_error: rule broken: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);. Kind: compile-time. Trigger class: int n = Math.round(x); with double x. |
+| lvl:explicit_cast@L4#3 \| level L4 way diagnose_an_error: rule broken: A cast applies only to the value right after it. Kind: compile-time. Trigger class: int n = (int) 11 * 0.3; the product is still a double (possible loss of precision); in a double context the same mistake is a silent logic error ((int) pi * 20.0 gives 60.0). |
+| lvl:explicit_cast@L4#4 \| level L4 way diagnose_an_error: rule broken: Casts require compatible types. Kind: compile-time. Trigger class: (int) "3" or (int) args[0] on a String, or a cast between boolean and a number. |
+| lvl:explicit_cast@L4#5 \| level L4 way diagnose_an_error: rule broken: A narrowing cast may lose magnitude, not just the fraction. Kind: silent logic error. Trigger class: Casting a value outside the target range, e.g. (int) of a long above 2147483647 or of a huge double. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:explicit_cast@L0#0 (Score: 0.5)}
+{lvl:explicit_cast@L2#1 (Score: 0.3)}
+{lvl:explicit_cast@L2#0 (Score: 0.2)}
+```
+Kept by pruning: lvl:explicit_cast@L0#0 (0.50), lvl:explicit_cast@L2#1 (0.30), lvl:explicit_cast@L2#0 (0.20)
+
+Label prompt for level way lvl:explicit_cast@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:explicit_cast@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> (int) 2.71828 is int 2; (int) -2.7 is -2; (int) 11 * 0.3 is double 3.3; (int) (11 * 0.3) is int 3; (double) 3 / 5 is 0.6 but (double) (3 / 5) is 0.0; (char) ('a' + 4) is 'e'.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:explicit_cast@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Evaluate the operand immediately to the right of the cast (a parenthesized expression is evaluated completely first), convert that value, then continue with the remaining operators of the expression.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:explicit_cast@L0#0 | shown | 0.5 | 0.85 | 0.42 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| lvl:explicit_cast@L2#1 | not applied |  |  | 0.0 |  |  |
+| lvl:explicit_cast@L2#0 | not applied |  |  | 0.0 |  |  |
+
+#### for_loop, misconceptions: 21 edges offered
+Edges offered:
+| edge |
+|---|
+| err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
+| err:for_loop->ForCommaSeparators \| wrong rule: Writes for (int i = 0, i < n, i++). \| right rule: The three parts of a for header are separated by semicolons; commas only separate several statements inside the init or the update part. |
+| err:for_loop->SemicolonAfterIfHeader \| wrong rule: if (x > 0); System.out.println("positive"); prints only for positive x. \| right rule: The ; ends the if with an empty statement, so the next line always runs. |
+| err:for_loop->SemicolonAfterLoopHeader \| wrong rule: Puts a ; right after for (...) or while (...). \| right rule: A ; right after the loop header is a null (empty) loop body, so the statements written after it are not repeated by the loop. |
+| err:for_loop->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:for_loop->DoubleLoopIndexCount \| wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. \| right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect. |
+| mis:for_loop->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
+| mis:for_loop->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
+| mis:for_loop->ForIsConditional \| wrong rule: The body of a for statement executes at most once. \| right rule: The body of a for statement runs once for every pass on which the condition is true, which can be many times. |
+| mis:for_loop->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:for_loop->ForUpdateBeforeBody \| wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. \| right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |
+| mis:for_loop->ForWhileNotInterchangeable \| wrong rule: Some loops can only be written with for, others only with while. \| right rule: Any for loop can be rewritten as a while loop and vice versa; for just packages init, test and update. |
+| mis:for_loop->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:for_loop->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
+| mis:for_loop->LoopHeaderIsEquations \| wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. \| right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated. |
+| mis:for_loop->LoopImpliedByOneTest \| wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. \| right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop. |
+| mis:for_loop->LoopStepAlwaysOne \| wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). \| right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |
+| mis:for_loop->MissingBraces \| wrong rule: Omits braces around a single-statement body of if, for or while. \| right rule: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later. |
+| mis:for_loop->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+| mis:for_loop->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
+| mis:for_loop->SingleIterationInsteadOfLoop \| wrong rule: A task that must be repeated is written once, without a loop, as if one pass were enough. \| right rule: A step that must happen several times (or an unknown number of times) needs a loop such as while or for; code without a loop runs once. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+err:for_loop->WrongIterationCount (0.40), mis:for_loop->LoopCountIsStatementCount (0.35), mis:for_loop->IdiomOverridesCode (0.25)
+```
+Kept by pruning: err:for_loop->WrongIterationCount (0.40), mis:for_loop->LoopCountIsStatementCount (0.35), mis:for_loop->IdiomOverridesCode (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| err:for_loop->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:for_loop->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
+| mis:for_loop->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+Model's reply:
+```
+mis:for_loop->WrongIterationCount | correct | clauses: 1 | confidence: 0.75
+mis:for_loop->LoopCountIsStatementCount | correct | clauses: 1, 2 | confidence: 0.6
+mis:for_loop->IdiomOverridesCode | not applied | clauses: none | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| err:for_loop->WrongIterationCount | not applied |  |  | 0.0 |  |  |
+| mis:for_loop->LoopCountIsStatementCount | correct | 0.35 | 0.6 | 0.21 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| mis:for_loop->IdiomOverridesCode | not applied |  |  | 0.0 |  |  |
+
+#### for_loop, level ways: 24 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:for_loop@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time. |
+| lvl:for_loop@L0#11 \| level L0 way inconsistent_trace: Applies the for sequencing rule (LT) unevenly: updates before the body on the first pass only, re-runs the init after a pass, or skips the test on some passes. (here mixing in: "The body of a for statement executes at most once") |
+| lvl:for_loop@L1#0 \| level L1 way names_the_element: The for statement is a loop that packages an initialization, a loop-continuation condition and an increment in its header around a body. |
+| lvl:for_loop@L1#1 \| level L1 way states_the_rule: Syntax: for (<initialize>; <boolean expression>; <increment>) { <statements> }, with the three parts separated by semicolons; it is, with only a few exceptions, equivalent to <initialize>; while (<boolean expression>) { <statements> <increment>; }. |
+| lvl:for_loop@L2#0 \| level L2 way line_by_line_trace: Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update. |
+| lvl:for_loop@L2#1 \| level L2 way output_prediction: A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,. |
+| lvl:for_loop@L2#2 \| level L2 way one_step_execution: One pass: the test reads the loop variable; the body applies its changes once; the update then changes the loop variable by its rule; the initializer changes state only once, before the first test. |
+| lvl:for_loop@L3#0 \| level L3 way relation_to_neighbour: The for header is exactly the three loop-control slots; the body runs after the test and before the update on each pass. |
+| lvl:for_loop@L3#1 \| level L3 way relation_to_neighbour: A for may be the body of another for: the inner for runs its complete set of passes for every single pass of the outer one. |
+| lvl:for_loop@L3#2 \| level L3 way relation_to_neighbour: for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element. |
+| lvl:for_loop@L3#3 \| level L3 way relation_to_neighbour: A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body. |
+| lvl:for_loop@L3#4 \| level L3 way relation_to_neighbour: In a for loop, continue skips the rest of the body and transfers control directly to the increment, then the next test; this is one of the few places where the for/while equivalence fails. |
+| lvl:for_loop@L3#5 \| level L3 way relation_to_neighbour: A variable declared in the for header is in scope only in the header and the body, so it cannot be used after the loop. |
+| lvl:for_loop@L3#6 \| level L3 way relation_to_neighbour: A fencepost loop is a for loop that handles one item (the first or last) outside the loop so that separators come out n-1 times for n items. |
+| lvl:for_loop@L3#7 \| level L3 way relation_to_neighbour: A flag search loop is a for loop that sets a boolean flag when some pass finds the target and leaves it set afterwards; the flag must be declared before the loop. |
+| lvl:for_loop@L3#8 \| level L3 way purpose_of_the_whole: Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number). |
+| lvl:for_loop@L4#0 \| level L4 way predict_a_change: Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass). |
+| lvl:for_loop@L4#1 \| level L4 way diagnose_an_error: rule broken: The three parts of a for header are separated by semicolons; commas only separate several statements inside the init or the update. Kind: compile-time. Trigger class: Writing for (int i = 0, i < n, i++): the compiler parses the commas as more declarators in the init and reports a syntax error. |
+| lvl:for_loop@L4#2 \| level L4 way diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after the loop ends; while (cond); with a cond that the empty body cannot change hangs forever (infinite loop) when cond starts true. |
+| lvl:for_loop@L4#3 \| level L4 way transfer_to_a_new_program: Use for when there is an initialization, an increment and a continuation test and the loop variable is not needed after the loop; use while when the loop variable is needed later or the number of passes depends on what happens in the body. |
+| lvl:for_loop@L4#4 \| level L4 way diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a statement or block: that statement runs for every input, whatever cond is (it compiles without error). |
+| lvl:for_loop@L4#5 \| level L4 way diagnose_an_error: rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values). |
+| lvl:for_loop@L4#6 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
+| lvl:for_loop@L4#7 \| level L4 way diagnose_an_error: rule broken: A variable declared in the for initializer exists only inside the for statement. Kind: compile-time. Trigger class: Reading i after for (int i = 0; ...) {...}: 'cannot find symbol'. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:for_loop@L2#1 (Score: 0.4)}
+{lvl:for_loop@L3#2 (Score: 0.35)}
+{lvl:for_loop@L2#0 (Score: 0.25)}
+```
+Kept by pruning: lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
+
+Label prompt for level way lvl:for_loop@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:for_loop@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:for_loop@L2#1 | shown | 0.4 | 0.8 | 0.32 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| lvl:for_loop@L3#2 | shown | 0.35 | 0.6 | 0.21 | c1 | sum adds every element, giving 22 |
+| lvl:for_loop@L2#0 | not applied |  |  | 0.0 |  |  |
+
+#### loop_control, misconceptions: 11 edges offered
+Edges offered:
+| edge |
+|---|
+| err:loop_control->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:loop_control->DoubleLoopIndexCount \| wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. \| right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect. |
+| mis:loop_control->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:loop_control->ForUpdateBeforeBody \| wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. \| right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |
+| mis:loop_control->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:loop_control->InfiniteLoopUnnoticed \| wrong rule: A while loop always stops on its own, even if nothing in its body can make the condition false. \| right rule: A while loop stops only when its condition is false at a check, so if no pass changes the variables in the condition, it never stops. |
+| mis:loop_control->LoopHeaderIsEquations \| wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. \| right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated. |
+| mis:loop_control->LoopStepAlwaysOne \| wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). \| right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |
+| mis:loop_control->LoopUpdateChangesDirection \| wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. \| right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update. |
+| mis:loop_control->OffByOneBound \| wrong rule: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. \| right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n. |
+| mis:loop_control->PreIncrementBeforeLoop \| wrong rule: With ++i in the update of for (int i = s; i < n; ++i), i is increased before the body runs, so the first pass uses s + 1. \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:loop_control->OffByOneBound (0.40), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.25)
+```
+Kept by pruning: mis:loop_control->OffByOneBound (0.40), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:loop_control->OffByOneBound \| wrong rule: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. \| right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n. |
+| err:loop_control->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:loop_control->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+Model's reply:
+```
+mis:loop_control->OffByOneBound | correct | clauses: 1 | confidence: 0.6
+err:loop_control->WrongIterationCount | correct | clauses: 1, 2 | confidence: 0.6
+mis:loop_control->IdiomOverridesCode | not applied | clauses: none | confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:loop_control->OffByOneBound | correct | 0.4 | 0.6 | 0.24 | c1 | sum adds every element, giving 22 |
+| err:loop_control->WrongIterationCount | correct | 0.35 | 0.6 | 0.21 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| mis:loop_control->IdiomOverridesCode | not applied |  |  | 0.0 |  |  |
+
+#### loop_control, level ways: 19 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:loop_control@L0#0 \| level L0 way everyday_reading: Folk meaning: in mathematics i = 0, i < n and i = i + 1 are equations or constraints that hold at the same time (and i = i + 1 is nonsense). In Java they are three actions run at different moments: init once, test before each pass, update after each pass. |
+| lvl:loop_control@L0#3 \| level L0 way inconsistent_trace: Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: "++i in the for-update runs before the body each pass") |
+| lvl:loop_control@L1#0 \| level L1 way names_the_element: Loop control is the init / continuation condition / increment scheme on an index variable that decides how many passes a loop makes and with which values. |
+| lvl:loop_control@L1#1 \| level L1 way states_the_rule: Initialize an index variable, test a loop-continuation condition on it before each pass, and increment it as the last action of each pass; for (<initialize>; <boolean expression>; <increment>) packages the three. Choosing the loop: for when the passes are counted by an index, while when the loop runs until a condition changes, do-while when the body must run at least once; any one can be rewritten as another, so choose the clearest. |
+| lvl:loop_control@L2#0 \| level L2 way line_by_line_trace: init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit. |
+| lvl:loop_control@L2#1 \| level L2 way output_prediction: The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value. |
+| lvl:loop_control@L2#2 \| level L2 way one_step_execution: One update changes only the loop variable, by exactly the rule written (i++ adds 1, i = i - 4 subtracts 4); one test reads it and returns true or false without changing it. |
+| lvl:loop_control@L3#0 \| level L3 way relation_to_neighbour: All three control parts act on the loop variable: the init sets it, the condition tests it, the update changes it. |
+| lvl:loop_control@L3#1 \| level L3 way relation_to_neighbour: The for header is exactly the three control slots, separated by semicolons; the body runs after the test and before the update. |
+| lvl:loop_control@L3#2 \| level L3 way relation_to_neighbour: The update i = i + 1 is usually written i++ (or i += k for other steps); as a whole update statement ++i and i++ are equivalent. |
+| lvl:loop_control@L3#3 \| level L3 way relation_to_neighbour: A loop is infinite when the update never moves the variable toward making the condition false (e.g. condition i > 3 with update i = i + 1). |
+| lvl:loop_control@L3#4 \| level L3 way relation_to_neighbour: The continuation condition fixes the number of iterations, so a sharper bound (i <= n/i instead of i < n) can make a program dramatically faster. |
+| lvl:loop_control@L3#5 \| level L3 way relation_to_neighbour: The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few. |
+| lvl:loop_control@L3#6 \| level L3 way purpose_of_the_whole: Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance. |
+| lvl:loop_control@L4#0 \| level L4 way predict_a_change: Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted). |
+| lvl:loop_control@L4#1 \| level L4 way diagnose_an_error: rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values). |
+| lvl:loop_control@L4#2 \| level L4 way transfer_to_a_new_program: Use explicit init/test/update control when the passes are counted or follow a fixed step; when the number of passes depends on data computed in the body, control the loop by that data (a while condition) instead. |
+| lvl:loop_control@L4#3 \| level L4 way diagnose_an_error: rule broken: The update must move the loop variable toward making the condition false. Kind: silent logic error. Trigger class: An update in the wrong direction or a condition that the update cannot falsify (e.g. i > 3 with i++, or i != 10 with i += 3): infinite loop. |
+| lvl:loop_control@L4#4 \| level L4 way diagnose_an_error: rule broken: Do not control a loop by an equality test on double values. Kind: silent logic error. Trigger class: for (double x = 0.0; x < 1.0; x += 0.1): after ten additions x is 0.9999999999999999, so the loop makes 11 passes instead of the intended 10. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:loop_control@L2#1 (Score: 0.5)}
+{lvl:loop_control@L3#6 (Score: 0.3)}
+{lvl:loop_control@L2#0 (Score: 0.2)}
+```
+Kept by pruning: lvl:loop_control@L2#1 (0.50), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#0 (0.20)
+
+Label prompt for level way lvl:loop_control@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:loop_control@L3#6 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.65
+```
+
+Label prompt for level way lvl:loop_control@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:loop_control@L2#1 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_control@L3#6 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_control@L2#0 | not applied |  |  | 0.0 |  |  |
+
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51], pre:arithmetic_operators->expression [confirmed, tier 2, 0.51]
+mis:explicit_cast->CastAppliesToWholeExpression [held, tier 0, 0.54], pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51]
 
 reached across pre:array_traversal->running_extreme, entered next: array_traversal
-
-reached across pre:arithmetic_operators->expression, entered next: expression
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | sum adds every element, giving 22 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
 | c2 | max starts at 4 and keeps the biggest, 9 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
-| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | lvl:arithmetic_operators@L2#1 |
+| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | mis:explicit_cast->CastAppliesToWholeExpression |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_traversal, own edges of expression
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_traversal, pre:explicit_cast->compound_assignment, pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:type_conversion->explicit_cast
 
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'array_traversal', 'running_extreme', 'accumulator_pattern', 'expression', 'arithmetic_operators'
+### Depth 3: current concepts 'explicit_cast', 'array_traversal', 'running_extreme', 'accumulator_pattern', 'for_loop', 'loop_control'
+
+#### explicit_cast, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:explicit_cast->compound_assignment \| rule: x op= e means x = (T)(x op e), where T is the type of x, so the result is cast back to the type of x. |
+| pre:type_conversion->explicit_cast \| rule: A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:type_conversion->explicit_cast (Score: 0.85)}
+{pre:explicit_cast->compound_assignment (Score: 0.15)}
+```
+Kept by pruning: pre:type_conversion->explicit_cast (0.85), pre:explicit_cast->compound_assignment (0.15)
+
+Label prompt for concept edge pre:type_conversion->explicit_cast (type_conversion -> explicit_cast, prerequisite):
+> A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).
+
+Model's reply:
+```
+Label: broken
+Clauses: 3
+Confidence: 0.75
+```
+
+Label prompt for concept edge pre:explicit_cast->compound_assignment (explicit_cast -> compound_assignment, prerequisite):
+> x op= e means x = (T)(x op e), where T is the type of x, so the result is cast back to the type of x.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:type_conversion->explicit_cast | broken | 0.85 | 0.75 | 0.64 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| pre:explicit_cast->compound_assignment | not applied |  |  | 0.0 |  |  |
 
 #### array_traversal, misconceptions: 6 edges offered
 Edges offered:
@@ -750,145 +1133,104 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:loop_body->accumulator_pattern | confirmed | 1.0 | 0.9 | 0.9 | c1 | sum adds every element, giving 22 |
 
-#### expression, misconceptions: 8 edges offered
+#### for_loop, concept edges: 3 edges offered
 Edges offered:
 | edge |
 |---|
-| err:expression->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
-| mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
-| mis:expression->AssignmentNotExpression \| wrong rule: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. \| right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v. |
-| mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
-| mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
-| mis:expression->ParenthesesOnlyIfArgument \| wrong rule: () are optional on a no-argument call like println \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
+| pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.50), mis:expression->AssignmentIsEquation (0.30), mis:expression->VariablesHoldExpressions (0.20)
+{pre:for_loop->array_traversal (Score: 0.7)}
+{pre:loop_control->for_loop (Score: 0.2)}
+{pre:for_loop->loop_scope (Score: 0.1)}
 ```
-Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->AssignmentIsEquation (0.30), mis:expression->VariablesHoldExpressions (0.20)
+Kept by pruning: pre:for_loop->array_traversal (0.70), pre:loop_control->for_loop (0.20), pre:for_loop->loop_scope (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-| mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
-| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
-Model's reply:
-```
-mis:expression->TargetTyping | correct | clauses: 3 | confidence: 0.7
-mis:expression->AssignmentIsEquation | not applied | clauses: none | confidence: 0.9
-mis:expression->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:expression->TargetTyping | correct | 0.5 | 0.7 | 0.35 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
-| mis:expression->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
-| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
-
-#### expression, level ways: 19 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:expression@L0#0 \| level L0 way everyday_reading: In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3. |
-| lvl:expression@L0#2 \| level L0 way inconsistent_trace: Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: "a single literal or variable "isn't an expression"") |
-| lvl:expression@L1#0 \| level L1 way names_the_element: Expression: a literal, a variable, or a sequence of operations (operators, method calls) on them that produces one value. |
-| lvl:expression@L1#1 \| level L1 way states_the_rule: Each operand of an operator can itself be any expression, and a parenthesized expression has the same value as the expression inside. Every expression has a type, determined by its operators and operands. |
-| lvl:expression@L2#0 \| level L2 way line_by_line_trace: Operands are evaluated left to right, each fully before its operator is applied. Precedence and parentheses decide the grouping, and a method's arguments are all evaluated before the method is called. |
-| lvl:expression@L2#1 \| level L2 way output_prediction: An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719. |
-| lvl:expression@L2#2 \| level L2 way one_step_execution: Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it. |
-| lvl:expression@L3#0 \| level L3 way relation_to_neighbour: A variable name inside an expression contributes the variable's value at the moment of evaluation. |
-| lvl:expression@L3#1 \| level L3 way relation_to_neighbour: Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not). |
-| lvl:expression@L3#2 \| level L3 way relation_to_neighbour: With several operators, precedence and left associativity decide the grouping, and parentheses override both. |
-| lvl:expression@L3#3 \| level L3 way relation_to_neighbour: A comparison takes numeric expressions and yields a boolean expression, and it has lower precedence than arithmetic, so a + b < c compares the sum. |
-| lvl:expression@L3#4 \| level L3 way relation_to_neighbour: A method call is an expression usable wherever a value of its return type is, and its arguments are expressions evaluated before the call. |
-| lvl:expression@L3#5 \| level L3 way purpose_of_the_whole: Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value. |
-| lvl:expression@L4#0 \| level L4 way predict_a_change: Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value. |
-| lvl:expression@L4#1 \| level L4 way transfer_to_a_new_program: Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious. |
-| lvl:expression@L4#2 \| level L4 way diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a; a + b = c;): 'unexpected type, required: variable'. |
-| lvl:expression@L4#3 \| level L4 way diagnose_an_error: rule broken: Only assignments, increments, method calls and object creation can stand alone as statements. Kind: compile-time. Trigger class: A bare expression line such as x + 1; or a == b;: 'not a statement'. |
-| lvl:expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings ("Hello" - 1) or comparing booleans with <: 'bad operand types'. |
-| lvl:expression@L4#5 \| level L4 way diagnose_an_error: rule broken: An int division or remainder by zero cannot be evaluated. Kind: run-time exception. Trigger class: Any int / or % whose right operand evaluates to 0: ArithmeticException. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:expression@L3#2 (Score: 0.5)}
-{lvl:expression@L3#1 (Score: 0.3)}
-{lvl:expression@L0#2 (Score: 0.2)}
-```
-Kept by pruning: lvl:expression@L3#2 (0.50), lvl:expression@L3#1 (0.30), lvl:expression@L0#2 (0.20)
-
-Label prompt for level way lvl:expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+Label prompt for concept edge pre:for_loop->array_traversal (for_loop -> array_traversal, prerequisite):
+> for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: confirmed
+Clauses: 1, 2
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+> The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.7
+Label: confirmed
+Clauses: 1, 2
+Confidence: 0.55
 ```
 
-Label prompt for level way lvl:expression@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: "a single literal or variable "isn't an expression"")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.6
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L3#1 | shown | 0.3 | 0.7 | 0.21 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
-| lvl:expression@L0#2 | not applied |  |  | 0.0 |  |  |
-
-#### arithmetic_operators, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| par:string_concatenation~arithmetic_operators \| rule: + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123". |
-| pre:arithmetic_operators->expression \| rule: An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{par:string_concatenation~arithmetic_operators (Score: 1.0)}
-```
-Kept by pruning: par:string_concatenation~arithmetic_operators (1.00)
-
-Label prompt for concept edge par:string_concatenation~arithmetic_operators (string_concatenation -> arithmetic_operators, parallel):
-> + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
+> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
 
 Model's reply:
 ```
 Label: not applied
 Clauses: none
-Confidence: 0.8
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| par:string_concatenation~arithmetic_operators | not applied |  |  | 0.0 |  |  |
+| pre:for_loop->array_traversal | confirmed | 0.7000000000000001 | 0.85 | 0.6 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| pre:loop_control->for_loop | confirmed | 0.20000000000000004 | 0.55 | 0.11 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
+
+#### loop_control, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
+| pre:loop_control->increment_operators \| rule: The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
+| pre:loop_variable->loop_control \| rule: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+```
+Kept by pruning: pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+
+Label prompt for concept edge pre:loop_variable->loop_control (loop_variable -> loop_control, prerequisite):
+> The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for concept edge pre:loop_control->increment_operators (loop_control -> increment_operators, prerequisite):
+> The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1
+Confidence: 0.55
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:loop_variable->loop_control | not applied |  |  | 0.0 |  |  |
+| pre:loop_control->increment_operators | confirmed | 0.3 | 0.55 | 0.17 | c1 | sum adds every element, giving 22 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], mis:expression->TargetTyping [correct, tier 2, 0.35], lvl:array_traversal@L3#8 [shown, tier 2, 0.34]
+pre:type_conversion->explicit_cast [broken, tier 0, 0.64], pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], pre:for_loop->array_traversal [confirmed, tier 2, 0.59]
+
+reached across pre:type_conversion->explicit_cast, entered next: type_conversion
 
 reached across pre:loop_body->accumulator_pattern, entered next: loop_body
 
@@ -897,30 +1239,265 @@ reached across pre:loop_body->accumulator_pattern, entered next: loop_body
 |---|---|---|
 | c1 | sum adds every element, giving 22 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
 | c2 | max starts at 4 and keeps the biggest, 9 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
-| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | lvl:arithmetic_operators@L2#1 |
+| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | mis:explicit_cast->CastAppliesToWholeExpression |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_body, pre:expression->comparison_operators, pre:for_loop->array_traversal, pre:indexing->array_traversal
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_body, own edges of type_conversion, pre:indexing->array_traversal
 
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+### Depth 4: current concepts 'type_conversion', 'loop_body'
+
+#### type_conversion, misconceptions: 3 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:type_conversion->TargetTyping (Score: 0.8)}
+{mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.1)}
+{mis:type_conversion->NoCastIfSameSize (Score: 0.1)}
+```
+Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+Model's reply:
+```
+mis:type_conversion->TargetTyping | correct | clauses: 3 | confidence: 0.6
+mis:type_conversion->NarrowingAssignmentAllowed | not applied | clauses: none | confidence: 0.9
+mis:type_conversion->NoCastIfSameSize | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:type_conversion->TargetTyping | correct | 0.8 | 0.6 | 0.48 | c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| mis:type_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
+| mis:type_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
+
+#### type_conversion, level ways: 18 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:type_conversion@L0#0 \| level L0 way everyday_reading: Folk meaning: a number is a number, so 3, 3.0 and "3" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +. |
+| lvl:type_conversion@L0#3 \| level L0 way inconsistent_trace: Points to LT (each subexpression is computed in its own type, and conversion happens only where the types meet). Applied unevenly: the student promotes before an int division on one line (treating 9/5 as 1.8) but not on another, or casts the whole expression on one pass and only the first operand on the next. (here mixing in: "If a variable is at least as big as a value, no cast is needed to assign the value") |
+| lvl:type_conversion@L1#0 \| level L1 way names_the_element: Type conversion is changing a value of one type into a value of another type: automatic promotion (widening), an explicit cast, an explicit conversion method (Integer.parseInt, Double.parseDouble, Math.round), or automatic conversion to String. |
+| lvl:type_conversion@L1#1 \| level L1 way states_the_rule: Java converts automatically to a type with a larger range (promotion) because no information is lost; a conversion that might lose information (double to int) requires an explicit cast or is a compile-time error; Strings and numbers convert only via methods or string conversion. |
+| lvl:type_conversion@L2#0 \| level L2 way line_by_line_trace: Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the variable's type (widening allowed, narrowing rejected at compile time). |
+| lvl:type_conversion@L2#1 \| level L2 way output_prediction: Typical results: "1234" + 99 is the String "123499"; Integer.parseInt("123") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3. |
+| lvl:type_conversion@L2#2 \| level L2 way one_step_execution: A conversion produces a new value and never changes the source variable or its declared type: after int x = (int) pi; x is 3 and pi still holds 3.14159. |
+| lvl:type_conversion@L3#0 \| level L3 way relation_to_neighbour: Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type. |
+| lvl:type_conversion@L3#1 \| level L3 way relation_to_neighbour: Parsing methods are explicit type conversion from String to a number: a method takes an argument of one type and produces a result of another. |
+| lvl:type_conversion@L3#2 \| level L3 way relation_to_neighbour: A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2. |
+| lvl:type_conversion@L3#3 \| level L3 way relation_to_neighbour: Widening (promotion) is the automatic kind of conversion, applied at operators and assignments when the target type has a larger range. |
+| lvl:type_conversion@L3#4 \| level L3 way purpose_of_the_whole: Adapts data between parts of a program: command-line text to numbers, int counts to double for an average ((double) sum / n), doubles to int indices or counts. |
+| lvl:type_conversion@L4#0 \| level L4 way predict_a_change: Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly. |
+| lvl:type_conversion@L4#1 \| level L4 way transfer_to_a_new_program: Rely on automatic promotion when mixing int with double; write a cast only when you intend to drop information; use parse methods for text input and string conversion for output; paying attention to types avoids subtle bugs. |
+| lvl:type_conversion@L4#2 \| level L4 way diagnose_an_error: rule broken: A conversion that may lose information needs an explicit cast. Kind: compile-time. Trigger class: Assigning or passing a double (or long) expression to an int, e.g. int n = 11 * 0.3; (possible loss of precision). |
+| lvl:type_conversion@L4#3 \| level L4 way diagnose_an_error: rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32. |
+| lvl:type_conversion@L4#4 \| level L4 way diagnose_an_error: rule broken: Casts work only between compatible types; a String is converted with a parse method. Kind: compile-time. Trigger class: (int) str with a String str, or (int) flag with a boolean. |
+| lvl:type_conversion@L4#5 \| level L4 way diagnose_an_error: rule broken: A parse method accepts only a valid textual representation of the number. Kind: run-time exception. Trigger class: Integer.parseInt of text that is not an integer in digits ("five", "12.2", ""). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:type_conversion@L2#0 (Score: 0.45)}
+{lvl:type_conversion@L4#0 (Score: 0.35)}
+{lvl:type_conversion@L4#3 (Score: 0.2)}
+```
+Kept by pruning: lvl:type_conversion@L2#0 (0.45), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L4#3 (0.20)
+
+Label prompt for level way lvl:type_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the variable's type (widening allowed, narrowing rejected at compile time).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:type_conversion@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+> Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:type_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:type_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:type_conversion@L4#0 | not applied |  |  | 0.0 |  |  |
+| lvl:type_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
+
+#### loop_body, misconceptions: 12 edges offered
+Edges offered:
+| edge |
+|---|
+| err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
+| mis:loop_body->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
+| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
+| mis:loop_body->LoopBodyAlwaysOnce \| wrong rule: The loop body always runs at least once, even if the condition is false at the start. \| right rule: A while or for body runs zero times when the condition is false at the start. |
+| mis:loop_body->LoopBodyStatementOutsideLoop \| wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. \| right rule: Every statement inside the loop braces is part of the body and runs on every pass. |
+| mis:loop_body->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
+| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_body->LoopRunsStatementsSeparately \| wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. \| right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ... |
+| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
+| mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
+| mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->IfInLoopUnchecked (0.35), mis:loop_body->StatementAfterLoopInBody (0.20)
+```
+Kept by pruning: mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->IfInLoopUnchecked (0.35), mis:loop_body->StatementAfterLoopInBody (0.20)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
+| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
+| mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
+Model's reply:
+```
+mis:loop_body->StateChangeIgnoredAcrossPasses | correct | clauses: 1, 2 | confidence: 0.85
+mis:loop_body->IfInLoopUnchecked | correct | clauses: 2 | confidence: 0.6
+mis:loop_body->StatementAfterLoopInBody | not applied | clauses: none | confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:loop_body->StateChangeIgnoredAcrossPasses | correct | 0.45 | 0.85 | 0.38 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| mis:loop_body->IfInLoopUnchecked | correct | 0.35 | 0.6 | 0.21 | c2 | max starts at 4 and keeps the biggest, 9 |
+| mis:loop_body->StatementAfterLoopInBody | not applied |  |  | 0.0 |  |  |
+
+#### loop_body, level ways: 14 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
+| lvl:loop_body@L0#6 \| level L0 way inconsistent_trace: Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start") |
+| lvl:loop_body@L1#0 \| level L1 way names_the_element: The loop body is the statement block that a loop repeats on each pass. |
+| lvl:loop_body@L1#1 \| level L1 way states_the_rule: The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated. |
+| lvl:loop_body@L2#0 \| level L2 way line_by_line_trace: On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one. |
+| lvl:loop_body@L2#1 \| level L2 way output_prediction: The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes. |
+| lvl:loop_body@L2#2 \| level L2 way one_step_execution: One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass. |
+| lvl:loop_body@L3#0 \| level L3 way relation_to_neighbour: The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop. |
+| lvl:loop_body@L3#1 \| level L3 way relation_to_neighbour: count++ sits inside the body, often under an if, so it runs once on each pass that matches; the counter is declared before the loop. |
+| lvl:loop_body@L3#2 \| level L3 way relation_to_neighbour: The body is what the while repeats; the condition is tested only between complete executions of it. |
+| lvl:loop_body@L3#3 \| level L3 way purpose_of_the_whole: Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term). |
+| lvl:loop_body@L4#0 \| level L4 way predict_a_change: Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use). |
+| lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
+| lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:loop_body@L3#0 (Score: 0.45)}
+{lvl:loop_body@L2#0 (Score: 0.3)}
+{lvl:loop_body@L3#3 (Score: 0.25)}
+```
+Kept by pruning: lvl:loop_body@L3#0 (0.45), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L3#3 (0.25)
+
+Label prompt for level way lvl:loop_body@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:loop_body@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.75
+```
+
+Label prompt for level way lvl:loop_body@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:loop_body@L3#0 | shown | 0.45 | 0.6 | 0.27 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| lvl:loop_body@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_body@L3#3 | shown | 0.25 | 0.6 | 0.15 | c1, c2 | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+mis:type_conversion->TargetTyping [correct, tier 2, 0.48], mis:loop_body->StateChangeIgnoredAcrossPasses [correct, tier 2, 0.38], lvl:loop_body@L3#0 [shown, tier 2, 0.27]
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | sum adds every element, giving 22 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
+| c2 | max starts at 4 and keeps the biggest, 9 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
+| c3 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | mis:explicit_cast->CastAppliesToWholeExpression |
+
+**Graph check, not yet read (the walk may not stop while these remain):** pre:indexing->array_traversal, pre:primitive_type->type_conversion
+
+**Figure 7 (the graph after depth 4)**
+
+![Figure 7](figure07.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
+Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
 - accumulator_pattern: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
 - arithmetic_operators: L2 via output_prediction "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
 - array_traversal: L3 via purpose_of_the_whole "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-- expression: L3 via relation_to_neighbour "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+- explicit_cast: L0 via misconception "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+- for_loop: L3 via relation_to_neighbour "sum adds every element, giving 22"
+- loop_body: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
 - running_extreme: L2 via output_prediction "max starts at 4 and keeps the biggest, 9"
 
-**Stop:** max depth at depth 3; prompts {'prune': 15, 'label': 27}, fresh model calls 0, cache hits 42
+**Stop:** max depth at depth 4; prompts {'prune': 25, 'label': 49}, fresh model calls 0, cache hits 74
 
 ### Held misconceptions
-(none)
+| concept | misconception | kind | quote | score | shares_evidence_with |
+|---|---|---|---|---|---|
+| explicit_cast | CastAppliesToWholeExpression | misconception | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | 0.54 |  |
 
 ### Broken concept edges
-(none)
+| edge | quote | score | consequence_of |
+|---|---|---|---|
+| pre:type_conversion->explicit_cast | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | 0.6375 | mis:explicit_cast->CastAppliesToWholeExpression |
 
-### Root cause: none
+### Root cause: explicit_cast / CastAppliesToWholeExpression
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
@@ -928,10 +1505,12 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 | accumulator_pattern | L3 | relation_to_neighbour |  | level_way | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |  | L2 output_prediction, L2 line_by_line_trace |  |
 | arithmetic_operators | L2 | output_prediction |  | level_way | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |  |  |  |
 | array_traversal | L3 | purpose_of_the_whole |  | level_way | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| expression | L3 | relation_to_neighbour |  | level_way | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |  |  |  |
+| explicit_cast | L0 | misconception | CastAppliesToWholeExpression | level_mis_links | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5, so the expression is 2 / 0.15 (a double); write (int) (2.5 / 0.15) to cast the quotient. |  |  |
+| for_loop | L3 | relation_to_neighbour |  | level_way | sum adds every element, giving 22 |  | L2 output_prediction |  |
+| loop_body | L3 | relation_to_neighbour |  | level_way | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |  | L3 purpose_of_the_whole |  |
 | running_extreme | L2 | output_prediction |  | level_way | max starts at 4 and keeps the biggest, 9 |  | L2 line_by_line_trace, L1 names_the_element |  |
 
-### Overall level: L2
+### Overall level: L0
 
 Clause coverage (final):
 | clause | covered by |
@@ -940,9 +1519,9 @@ Clause coverage (final):
 | max starts at 4 and keeps the biggest, 9 | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses |
 | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 | lvl:arithmetic_operators@L2#1 |
 
-**Figure 7 (final picture)**
+**Figure 8 (final picture)**
 
-![Figure 7](figure07.png)
+![Figure 8](figure08.png)
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
@@ -959,14 +1538,29 @@ Clause coverage (final):
 | 2 | accumulator_pattern | pre:loop_body->accumulator_pattern | prerequisite | confirmed | 0.4 | 0.9 | 0.36 | [1] | sum adds every element, giving 22 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.85 | 0.6 | 0.51 | [1] | sum adds every element, giving 22 |
 | 2 | running_extreme | pre:array_traversal->running_extreme | prerequisite | confirmed | 1.0 | 0.85 | 0.85 | [2] | max starts at 4 and keeps the biggest, 9 |
+| 2 | explicit_cast | mis:explicit_cast->CastAppliesToWholeExpression | misconception | held | 0.6000000000000001 | 0.9 | 0.54 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| 2 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | correct | 0.30000000000000004 | 0.6 | 0.18 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| 2 | explicit_cast | lvl:explicit_cast@L0#0 | level | shown | 0.5 | 0.85 | 0.425 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| 2 | for_loop | mis:for_loop->LoopCountIsStatementCount | misconception | correct | 0.35 | 0.6 | 0.21 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 2 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.4 | 0.8 | 0.32 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 2 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.35 | 0.6 | 0.21 | [1] | sum adds every element, giving 22 |
+| 2 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.4 | 0.6 | 0.24 | [1] | sum adds every element, giving 22 |
+| 2 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.35 | 0.6 | 0.21 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | broken | 0.85 | 0.75 | 0.6375 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
 | 3 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.3 | 0.6 | 0.18 | [1] | sum adds every element, giving 22 |
 | 3 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.3 | 0.55 | 0.165 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
 | 3 | array_traversal | lvl:array_traversal@L3#8 | level | shown | 0.4 | 0.85 | 0.34 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
 | 3 | array_traversal | lvl:array_traversal@L2#1 | level | shown | 0.35 | 0.85 | 0.2975 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
 | 3 | array_traversal | lvl:array_traversal@L3#6 | level | shown | 0.25 | 0.6 | 0.15 | [2] | max starts at 4 and keeps the biggest, 9 |
 | 3 | accumulator_pattern | pre:loop_body->accumulator_pattern | prerequisite | confirmed | 1.0 | 0.9 | 0.9 | [1] | sum adds every element, giving 22 |
-| 3 | expression | mis:expression->TargetTyping | misconception | correct | 0.5 | 0.7 | 0.35 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.3 | 0.7 | 0.21 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| 3 | for_loop | pre:for_loop->array_traversal | prerequisite | confirmed | 0.7000000000000001 | 0.85 | 0.595 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 3 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.20000000000000004 | 0.55 | 0.11 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 3 | loop_control | pre:loop_control->increment_operators | prerequisite | confirmed | 0.3 | 0.55 | 0.165 | [1] | sum adds every element, giving 22 |
+| 4 | type_conversion | mis:type_conversion->TargetTyping | misconception | correct | 0.8 | 0.6 | 0.48 | [3] | For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0 |
+| 4 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.45 | 0.85 | 0.3825 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 4 | loop_body | mis:loop_body->IfInLoopUnchecked | misconception | correct | 0.35 | 0.6 | 0.21 | [2] | max starts at 4 and keeps the biggest, 9 |
+| 4 | loop_body | lvl:loop_body@L3#0 | level | shown | 0.45 | 0.6 | 0.27 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
+| 4 | loop_body | lvl:loop_body@L3#3 | level | shown | 0.25 | 0.6 | 0.15 | [1, 2] | sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -974,12 +1568,15 @@ Clause coverage (final):
 | 1 | running_extreme | mis:running_extreme->ExtremeStartsAtZero | misconception | correct | 0.6 | [2] |
 | 1 | accumulator_pattern | mis:accumulator_pattern->StateChangeIgnoredAcrossPasses | misconception | correct | 0.425 | [1, 2] |
 | 1 | accumulator_pattern | lvl:accumulator_pattern@L2#1 | level | shown | 0.3825 | [1, 2] |
+| 2 | explicit_cast | mis:explicit_cast->CastAppliesToWholeExpression | misconception | held | 0.54 | [3] |
 | 2 | running_extreme | pre:array_traversal->running_extreme | prerequisite | confirmed | 0.85 | [2] |
 | 2 | accumulator_pattern | par:running_extreme~accumulator_pattern | parallel | confirmed | 0.51 | [1, 2] |
-| 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.51 | [1] |
+| 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | broken | 0.6375 | [3] |
 | 3 | accumulator_pattern | pre:loop_body->accumulator_pattern | prerequisite | confirmed | 0.9 | [1] |
-| 3 | expression | mis:expression->TargetTyping | misconception | correct | 0.35 | [3] |
-| 3 | array_traversal | lvl:array_traversal@L3#8 | level | shown | 0.34 | [1, 2] |
+| 3 | for_loop | pre:for_loop->array_traversal | prerequisite | confirmed | 0.595 | [1, 2] |
+| 4 | type_conversion | mis:type_conversion->TargetTyping | misconception | correct | 0.48 | [3] |
+| 4 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.3825 | [1, 2] |
+| 4 | loop_body | lvl:loop_body@L3#0 | level | shown | 0.27 | [1, 2] |
 
 ## 7. Raw traversal log
 ```
@@ -1010,9 +1607,10 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     lvl:running_extreme@L2#0 -> shown (0.24) "max starts at 4 and keeps the biggest, 9"
     lvl:running_extreme@L1#0 -> shown (0.23) "max starts at 4 and keeps the biggest, 9"
   kept: mis:running_extreme->ExtremeStartsAtZero [correct, tier 2, 0.60], mis:accumulator_pattern->StateChangeIgnoredAcrossPasses [correct, tier 2, 0.42], lvl:accumulator_pattern@L2#1 [shown, tier 2, 0.38]
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
---- depth 2: current concepts ['accumulator_pattern', 'arithmetic_operators', 'running_extreme']
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 uncovered
+  uncovered clauses bring in: explicit_cast (15.86), for_loop (14.92), loop_control (14.39)
+  not yet read: own edges of explicit_cast, own edges of for_loop, own edges of loop_control, par:running_extreme~accumulator_pattern, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:array_traversal->running_extreme, pre:loop_body->accumulator_pattern
+--- depth 2: current concepts ['accumulator_pattern', 'arithmetic_operators', 'running_extreme', 'explicit_cast', 'for_loop', 'loop_control']
   accumulator_pattern (concept edges): 2 candidates -> kept par:running_extreme~accumulator_pattern (0.60), pre:loop_body->accumulator_pattern (0.40)
     par:running_extreme~accumulator_pattern -> confirmed (0.51) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
     pre:loop_body->accumulator_pattern -> confirmed (0.36) "sum adds every element, giving 22"
@@ -1021,12 +1619,38 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
   running_extreme (concept edges): 1 candidates -> kept pre:array_traversal->running_extreme (1.00)
     pre:array_traversal->running_extreme -> confirmed (0.85) "max starts at 4 and keeps the biggest, 9"
-  kept: pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51], pre:arithmetic_operators->expression [confirmed, tier 2, 0.51]
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAppliesToWholeExpression (0.60), mis:explicit_cast->CastAfterIntDivision (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+    mis:explicit_cast->CastAppliesToWholeExpression -> held (0.54) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:explicit_cast->CastAfterIntDivision -> correct (0.18) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
+  explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L0#0 (0.50), lvl:explicit_cast@L2#1 (0.30), lvl:explicit_cast@L2#0 (0.20)
+    lvl:explicit_cast@L0#0 -> shown (0.42) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    lvl:explicit_cast@L2#1 -> not applied (0.00) ""
+    lvl:explicit_cast@L2#0 -> not applied (0.00) ""
+  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.40), mis:for_loop->LoopCountIsStatementCount (0.35), mis:for_loop->IdiomOverridesCode (0.25)
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    mis:for_loop->LoopCountIsStatementCount -> correct (0.21) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
+    lvl:for_loop@L2#1 -> shown (0.32) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:for_loop@L3#2 -> shown (0.21) "sum adds every element, giving 22"
+    lvl:for_loop@L2#0 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.40), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.25)
+    mis:loop_control->OffByOneBound -> correct (0.24) "sum adds every element, giving 22"
+    err:loop_control->WrongIterationCount -> correct (0.21) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#0 (0.20)
+    lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#6 -> not applied (0.00) ""
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+  kept: mis:explicit_cast->CastAppliesToWholeExpression [held, tier 0, 0.54], pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], par:running_extreme~accumulator_pattern [confirmed, tier 2, 0.51]
   reached across pre:array_traversal->running_extreme, entered next: array_traversal
-  reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: own edges of array_traversal, own edges of expression
---- depth 3: current concepts ['array_traversal', 'running_extreme', 'accumulator_pattern', 'expression', 'arithmetic_operators']
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: own edges of array_traversal, pre:explicit_cast->compound_assignment, pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:type_conversion->explicit_cast
+--- depth 3: current concepts ['explicit_cast', 'array_traversal', 'running_extreme', 'accumulator_pattern', 'for_loop', 'loop_control']
+  explicit_cast (concept edges): 2 candidates -> kept pre:type_conversion->explicit_cast (0.85), pre:explicit_cast->compound_assignment (0.15)
+    pre:type_conversion->explicit_cast -> broken (0.64) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    pre:explicit_cast->compound_assignment -> not applied (0.00) ""
   array_traversal (misconceptions): 6 candidates -> kept err:array_traversal->EarlyReturnInLoop (0.40), mis:array_traversal->OffByOneBound (0.30), mis:array_traversal->ElementBoundToOldIndex (0.30)
     err:array_traversal->EarlyReturnInLoop -> not applied (0.00) ""
     mis:array_traversal->OffByOneBound -> correct (0.18) "sum adds every element, giving 22"
@@ -1037,25 +1661,45 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     lvl:array_traversal@L3#6 -> shown (0.15) "max starts at 4 and keeps the biggest, 9"
   accumulator_pattern (concept edges): 1 candidates -> kept pre:loop_body->accumulator_pattern (1.00)
     pre:loop_body->accumulator_pattern -> confirmed (0.90) "sum adds every element, giving 22"
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->AssignmentIsEquation (0.30), mis:expression->VariablesHoldExpressions (0.20)
-    mis:expression->TargetTyping -> correct (0.35) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
-  expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.50), lvl:expression@L3#1 (0.30), lvl:expression@L0#2 (0.20)
-    lvl:expression@L3#2 -> not applied (0.00) ""
-    lvl:expression@L3#1 -> shown (0.21) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-    lvl:expression@L0#2 -> not applied (0.00) ""
-  arithmetic_operators (concept edges): 1 candidates -> kept par:string_concatenation~arithmetic_operators (1.00)
-    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
-  kept: pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], mis:expression->TargetTyping [correct, tier 2, 0.35], lvl:array_traversal@L3#8 [shown, tier 2, 0.34]
+  for_loop (concept edges): 3 candidates -> kept pre:for_loop->array_traversal (0.70), pre:loop_control->for_loop (0.20), pre:for_loop->loop_scope (0.10)
+    pre:for_loop->array_traversal -> confirmed (0.60) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    pre:loop_control->for_loop -> confirmed (0.11) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_variable->loop_control -> not applied (0.00) ""
+    pre:loop_control->increment_operators -> confirmed (0.17) "sum adds every element, giving 22"
+  kept: pre:type_conversion->explicit_cast [broken, tier 0, 0.64], pre:loop_body->accumulator_pattern [confirmed, tier 2, 0.90], pre:for_loop->array_traversal [confirmed, tier 2, 0.59]
+  reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   reached across pre:loop_body->accumulator_pattern, entered next: loop_body
-  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- lvl:arithmetic_operators@L2#1
-  not yet read: own edges of loop_body, pre:expression->comparison_operators, pre:for_loop->array_traversal, pre:indexing->array_traversal
-  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: own edges of loop_body, own edges of type_conversion, pre:indexing->array_traversal
+--- depth 4: current concepts ['type_conversion', 'loop_body'] (closing round: own edges only)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+    mis:type_conversion->TargetTyping -> correct (0.48) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
+  type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.45), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L4#3 (0.20)
+    lvl:type_conversion@L2#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3 -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->IfInLoopUnchecked (0.35), mis:loop_body->StatementAfterLoopInBody (0.20)
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.38) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    mis:loop_body->IfInLoopUnchecked -> correct (0.21) "max starts at 4 and keeps the biggest, 9"
+    mis:loop_body->StatementAfterLoopInBody -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.45), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L3#3 (0.25)
+    lvl:loop_body@L3#0 -> shown (0.27) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L3#3 -> shown (0.15) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+  kept: mis:type_conversion->TargetTyping [correct, tier 2, 0.48], mis:loop_body->StateChangeIgnoredAcrossPasses [correct, tier 2, 0.38], lvl:loop_body@L3#0 [shown, tier 2, 0.27]
+  clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
+  not yet read: pre:indexing->array_traversal, pre:primitive_type->type_conversion
+  root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
   level accumulator_pattern: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level arithmetic_operators: L2 via output_prediction "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
   level array_traversal: L3 via purpose_of_the_whole "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-  level expression: L3 via relation_to_neighbour "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+  level explicit_cast: L0 via misconception "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+  level for_loop: L3 via relation_to_neighbour "sum adds every element, giving 22"
+  level loop_body: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level running_extreme: L2 via output_prediction "max starts at 4 and keeps the biggest, 9"
 ```
 
@@ -1080,10 +1724,29 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   "arithmetic_operators",
   "running_extreme"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "explicit_cast",
+   "misconception": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "score": 0.54
+  }
+ ],
  "error_evidence": [],
- "broken_edges": [],
- "root_cause": null,
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:type_conversion->explicit_cast",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "score": 0.6375,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
+  }
+ ],
+ "root_cause": {
+  "concept": "explicit_cast",
+  "misconception": "CastAppliesToWholeExpression"
+ },
  "levels": {
   "accumulator_pattern": {
    "level": "L3",
@@ -1115,13 +1778,34 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     "L2 output_prediction"
    ]
   },
-  "expression": {
+  "explicit_cast": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAppliesToWholeExpression",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "rule": "wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5, so the expression is 2 / 0.15 (a double); write (int) (2.5 / 0.15) to cast the quotient.",
+   "source": "level_mis_links"
+  },
+  "for_loop": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "edge": "lvl:expression@L3#1",
+   "quote": "sum adds every element, giving 22",
+   "edge": "lvl:for_loop@L3#2",
    "source": "level_way",
-   "also_shown": []
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "loop_body": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "edge": "lvl:loop_body@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
+   ]
   },
   "running_extreme": {
    "level": "L2",
@@ -1135,7 +1819,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
    ]
   }
  },
- "overall_level": "L2",
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
@@ -1194,6 +1878,23 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   },
   {
    "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "target": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "depth": 2,
    "source": "running_extreme",
    "edge": "pre:array_traversal->running_extreme",
    "target": "array_traversal",
@@ -1228,21 +1929,22 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "arithmetic_operators",
-   "edge": "pre:arithmetic_operators->expression",
-   "target": "expression",
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
-    1
+    3
    ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.6,
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.75,
    "prune_score": 0.85,
-   "score": 0.51,
-   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "score": 0.6375,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
   },
   {
    "depth": 3,
@@ -1263,8 +1965,26 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->TargetTyping",
+   "source": "for_loop",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "array_traversal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
@@ -1272,17 +1992,35 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     3
    ],
    "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "depth": 3,
-   "source": "array_traversal",
-   "edge": "lvl:array_traversal@L3#8",
-   "target": "array_traversal@L3",
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#0",
+   "target": "loop_body@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -1290,13 +2028,13 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     2
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "Plan/role: the index is a stepper, and the loop carries out a Soloway-style plan (accumulate/sum with a gatherer, count, search, find the extreme, copy) once for each element.",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
    "twin_logic": null,
    "level": "L3",
-   "way": "purpose_of_the_whole"
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1541,6 +2279,169 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAppliesToWholeExpression",
+   "target": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.9,
+   "prune_score": 0.6000000000000001,
+   "score": 0.54,
+   "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.6,
+   "prune_score": 0.30000000000000004,
+   "score": 0.18,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "depth": 2,
+   "source": "explicit_cast",
+   "edge": "lvl:explicit_cast@L0#0",
+   "target": "explicit_cast@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->LoopCountIsStatementCount",
+   "target": "LoopCountIsStatementCount",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "The repeat count of a counted loop says how many of the body statements are executed.",
+   "twin_logic": "The repeat count is how many times the whole body runs; every pass runs all body statements."
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#2",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+  },
+  {
+   "depth": 3,
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.75,
+   "prune_score": 0.85,
+   "score": 0.6375,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAppliesToWholeExpression"
+  },
+  {
    "depth": 3,
    "source": "array_traversal",
    "edge": "mis:array_traversal->OffByOneBound",
@@ -1653,8 +2554,61 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "mis:expression->TargetTyping",
+   "source": "for_loop",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "array_traversal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.7000000000000001,
+   "score": 0.595,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.55,
+   "prune_score": 0.20000000000000004,
+   "score": 0.11,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
    "target": "TargetTyping",
    "kind": "misconception",
    "label": "correct",
@@ -1662,30 +2616,86 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     3
    ],
    "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
   {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "mis:loop_body->IfInLoopUnchecked",
+   "target": "IfInLoopUnchecked",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "An if inside a loop body runs its branch on every pass without testing its condition.",
+   "twin_logic": "The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#0",
+   "target": "loop_body@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3
+    1,
+    2
    ],
-   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L3#3",
+   "target": "loop_body@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -1695,12 +2705,12 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 74,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 27
+  "prune": 25,
+  "label": 49
  }
 }
 ```
