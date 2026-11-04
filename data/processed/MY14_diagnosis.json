@@ -33,6 +33,15 @@
    "quote": "so i goes 0, 1, 2 and; so on up to 9"
   }
  ],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "LoopStepAlwaysOne",
+   "shadow_of": "mis:for_loop->LoopStepAlwaysOne",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "score": 0.57
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:loop_variable->loop_control",
@@ -58,15 +67,6 @@
    "misconception": "LoopStepAlwaysOne",
    "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
    "edge": "mis:for_loop->LoopStepAlwaysOne",
-   "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
-   "source": "level_mis_links"
-  },
-  "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "LoopStepAlwaysOne",
-   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
-   "edge": "mis:loop_control->LoopStepAlwaysOne",
    "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
    "source": "level_mis_links"
   },

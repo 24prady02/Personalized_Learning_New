@@ -440,13 +440,6 @@ Parsed labels:
 
 mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | A for loop moves i on by one each pass | mis:loop_control->LoopStepAlwaysOne |
-| c2 | so i goes 0, 1, 2 and | mis:loop_control->LoopStepAlwaysOne |
-| c3 | so on up to 9 | mis:loop_control->LoopStepAlwaysOne |
-
 **Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY14_figure04.png
@@ -525,13 +518,6 @@ Parsed labels:
 
 pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | A for loop moves i on by one each pass | mis:loop_control->LoopStepAlwaysOne |
-| c2 | so i goes 0, 1, 2 and | mis:loop_control->LoopStepAlwaysOne |
-| c3 | so on up to 9 | mis:loop_control->LoopStepAlwaysOne |
-
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY14_figure05.png
 
 Held set after the one-fault rules: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
@@ -539,7 +525,6 @@ Held set after the one-fault rules: mis:for_loop->LoopStepAlwaysOne; filed at th
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
-- loop_control: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
 - loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"
 
 **Stop:** sufficient at depth 2; prompts {'prune': 8, 'label': 15}, fresh model calls 0, cache hits 23
@@ -566,7 +551,6 @@ Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_vari
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | for_loop | L0 | misconception | LoopStepAlwaysOne | level_mis_links | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 | wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |  |  |
-| loop_control | L0 | misconception | LoopStepAlwaysOne | level_mis_links | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 | wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |  |  |
 | loop_variable | L2 | output_prediction |  | level_way | so i goes 0, 1, 2 and; so on up to 9 |  | L2 one_step_execution |  |
 
 ### Overall level: L0
@@ -633,7 +617,7 @@ start concepts (3): loop_control, for_loop, loop_variable
     lvl:loop_variable@L0#5 -> not applied (0.00) ""
     lvl:loop_variable@L2#2 -> shown (0.17) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
   kept: mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
-  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  clause coverage (rule edges): c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
   not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 --- depth 2: current concepts ['loop_control', 'for_loop', 'loop_variable']
   loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.65), pre:loop_control->for_loop (0.35)
@@ -642,11 +626,11 @@ start concepts (3): loop_control, for_loop, loop_variable
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
   kept: pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
-  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  clause coverage (rule edges): c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
   held: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
+  shadows: mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
   root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
-  level loop_control: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
   level loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"
 ```
 
@@ -687,6 +671,15 @@ start concepts (3): loop_control, for_loop, loop_variable
    "quote": "so i goes 0, 1, 2 and; so on up to 9"
   }
  ],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "LoopStepAlwaysOne",
+   "shadow_of": "mis:for_loop->LoopStepAlwaysOne",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
+   "score": 0.57
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:loop_variable->loop_control",
@@ -712,15 +705,6 @@ start concepts (3): loop_control, for_loop, loop_variable
    "misconception": "LoopStepAlwaysOne",
    "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
    "edge": "mis:for_loop->LoopStepAlwaysOne",
-   "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
-   "source": "level_mis_links"
-  },
-  "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "LoopStepAlwaysOne",
-   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9",
-   "edge": "mis:loop_control->LoopStepAlwaysOne",
    "rule": "wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
    "source": "level_mis_links"
   },
