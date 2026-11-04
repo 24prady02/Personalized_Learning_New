@@ -381,18 +381,13 @@ Parsed labels:
 
 mis:integer_division->TargetTyping [held, tier 0, 0.64], lvl:integer_division@L0#4 [shown, tier 2, 0.48], lvl:println@L2#1 [shown, tier 2, 0.30]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 3.0 | lvl:println@L2#1 |
-| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
-| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
+**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** expression (0.29), type_conversion (0.29), widening_conversion (0.28)
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of type_conversion, own edges of widening_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure04.png
 
-### Depth 2: current concepts 'integer_division', 'println', 'arithmetic_operators'
+### Depth 2: current concepts 'integer_division', 'println', 'arithmetic_operators', 'expression', 'type_conversion', 'widening_conversion'
 
 #### integer_division, concept edges: 1 edges offered
 Edges offered:
@@ -475,25 +470,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:arithmetic_operators->expression | broken | 1.0 | 0.8 | 0.8 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
-
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
-
-pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
-
-reached across pre:arithmetic_operators->expression, entered next: expression
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 3.0 | lvl:println@L2#1 |
-| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
-| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression
-
-Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure05.png
-
-### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'expression'
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -603,31 +579,387 @@ Parsed labels:
 | lvl:expression@L1#1 | not applied |  |  | 0.0 |  |  |
 | lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
 
+#### type_conversion, misconceptions: 3 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:type_conversion->TargetTyping (Score: 0.9)}
+{mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.06)}
+{mis:type_conversion->NoCastIfSameSize (Score: 0.04)}
+```
+Kept by pruning: mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.06), mis:type_conversion->NoCastIfSameSize (0.04)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+Model's reply:
+```
+mis:type_conversion->TargetTyping | held | clauses: 2, 3 | confidence: 0.92
+mis:type_conversion->NarrowingAssignmentAllowed | not applied | clauses: none | confidence: 0.9
+mis:type_conversion->NoCastIfSameSize | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:type_conversion->TargetTyping | held | 0.9 | 0.92 | 0.83 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| mis:type_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
+| mis:type_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
+
+#### type_conversion, level ways: 18 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:type_conversion@L0#0 \| level L0 way everyday_reading: Folk meaning: a number is a number, so 3, 3.0 and "3" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +. |
+| lvl:type_conversion@L0#3 \| level L0 way inconsistent_trace: Points to LT (each subexpression is computed in its own type, and conversion happens only where the types meet). Applied unevenly: the student promotes before an int division on one line (treating 9/5 as 1.8) but not on another, or casts the whole expression on one pass and only the first operand on the next. (here mixing in: "If a variable is at least as big as a value, no cast is needed to assign the value") |
+| lvl:type_conversion@L1#0 \| level L1 way names_the_element: Type conversion is changing a value of one type into a value of another type: automatic promotion (widening), an explicit cast, an explicit conversion method (Integer.parseInt, Double.parseDouble, Math.round), or automatic conversion to String. |
+| lvl:type_conversion@L1#1 \| level L1 way states_the_rule: Java converts automatically to a type with a larger range (promotion) because no information is lost; a conversion that might lose information (double to int) requires an explicit cast or is a compile-time error; Strings and numbers convert only via methods or string conversion. |
+| lvl:type_conversion@L2#0 \| level L2 way line_by_line_trace: Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the variable's type (widening allowed, narrowing rejected at compile time). |
+| lvl:type_conversion@L2#1 \| level L2 way output_prediction: Typical results: "1234" + 99 is the String "123499"; Integer.parseInt("123") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3. |
+| lvl:type_conversion@L2#2 \| level L2 way one_step_execution: A conversion produces a new value and never changes the source variable or its declared type: after int x = (int) pi; x is 3 and pi still holds 3.14159. |
+| lvl:type_conversion@L3#0 \| level L3 way relation_to_neighbour: Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type. |
+| lvl:type_conversion@L3#1 \| level L3 way relation_to_neighbour: Parsing methods are explicit type conversion from String to a number: a method takes an argument of one type and produces a result of another. |
+| lvl:type_conversion@L3#2 \| level L3 way relation_to_neighbour: A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2. |
+| lvl:type_conversion@L3#3 \| level L3 way relation_to_neighbour: Widening (promotion) is the automatic kind of conversion, applied at operators and assignments when the target type has a larger range. |
+| lvl:type_conversion@L3#4 \| level L3 way purpose_of_the_whole: Adapts data between parts of a program: command-line text to numbers, int counts to double for an average ((double) sum / n), doubles to int indices or counts. |
+| lvl:type_conversion@L4#0 \| level L4 way predict_a_change: Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly. |
+| lvl:type_conversion@L4#1 \| level L4 way transfer_to_a_new_program: Rely on automatic promotion when mixing int with double; write a cast only when you intend to drop information; use parse methods for text input and string conversion for output; paying attention to types avoids subtle bugs. |
+| lvl:type_conversion@L4#2 \| level L4 way diagnose_an_error: rule broken: A conversion that may lose information needs an explicit cast. Kind: compile-time. Trigger class: Assigning or passing a double (or long) expression to an int, e.g. int n = 11 * 0.3; (possible loss of precision). |
+| lvl:type_conversion@L4#3 \| level L4 way diagnose_an_error: rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32. |
+| lvl:type_conversion@L4#4 \| level L4 way diagnose_an_error: rule broken: Casts work only between compatible types; a String is converted with a parse method. Kind: compile-time. Trigger class: (int) str with a String str, or (int) flag with a boolean. |
+| lvl:type_conversion@L4#5 \| level L4 way diagnose_an_error: rule broken: A parse method accepts only a valid textual representation of the number. Kind: run-time exception. Trigger class: Integer.parseInt of text that is not an integer in digits ("five", "12.2", ""). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:type_conversion@L0#0 (Score: 0.6)}
+{lvl:type_conversion@L4#3 (Score: 0.25)}
+{lvl:type_conversion@L2#0 (Score: 0.15)}
+```
+Kept by pruning: lvl:type_conversion@L0#0 (0.60), lvl:type_conversion@L4#3 (0.25), lvl:type_conversion@L2#0 (0.15)
+
+Label prompt for level way lvl:type_conversion@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: a number is a number, so 3, 3.0 and "3" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:type_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.92
+```
+
+Label prompt for level way lvl:type_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the variable's type (widening allowed, narrowing rejected at compile time).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:type_conversion@L0#0 | shown | 0.6 | 0.85 | 0.51 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| lvl:type_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
+| lvl:type_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
+
+#### widening_conversion, misconceptions: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:widening_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:widening_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:widening_conversion->NarrowingAssignmentAllowed (Score: 0.6)}
+{mis:widening_conversion->NoCastIfSameSize (Score: 0.4)}
+```
+Kept by pruning: mis:widening_conversion->NarrowingAssignmentAllowed (0.60), mis:widening_conversion->NoCastIfSameSize (0.40)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:widening_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:widening_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+Model's reply:
+```
+mis:widening_conversion->NarrowingAssignmentAllowed | not applied | clauses: none | confidence: 0.9
+mis:widening_conversion->NoCastIfSameSize | not applied | clauses: none | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:widening_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
+| mis:widening_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
+
+#### widening_conversion, level ways: 14 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:widening_conversion@L0#0 \| level L0 way everyday_reading: Folk meaning: like containers, a bigger box holds a smaller thing, and a smaller box holds a big thing if it happens to fit (3.0 fits in an int). Java rule: the compiler decides by types, not values: int to long or double is automatic, but double to int is never automatic, even for 3.0. |
+| lvl:widening_conversion@L0#3 \| level L0 way inconsistent_trace: Points to LT (promotion happens at each operator, at the moment an int operand meets a double). Applied unevenly: the student promotes the whole expression up front on one line (so b*b - 4*c is done in double) but per operator on another. (here mixing in: "If a variable is at least as big as a value, no cast is needed to assign the value") |
+| lvl:widening_conversion@L1#0 \| level L1 way names_the_element: Widening conversion (promotion) is the automatic conversion of a value to a type with a larger range, e.g. int to long or double, char to int. |
+| lvl:widening_conversion@L1#1 \| level L1 way states_the_rule: A value of a numeric type can be used wherever a type with a larger range is expected and is converted automatically; the magnitude is preserved (int to double is exact), though long to double may lose low-order precision. |
+| lvl:widening_conversion@L2#0 \| level L2 way line_by_line_trace: At a binary operator, if one operand is double the other is widened to double just before that operation; in an assignment or method argument, the value is widened to the target type after it has been computed. |
+| lvl:widening_conversion@L2#1 \| level L2 way output_prediction: The widened value has the larger type and the same magnitude: double d = 5; gives 5.0; 11 * 0.3 is double 3.3; 'a' + 1 is int 98; (x < 3.1) with int x = 3 is true. |
+| lvl:widening_conversion@L2#2 \| level L2 way one_step_execution: Widening creates the converted value for the target; the source variable keeps its type and value (after double d = n; n is still an int). |
+| lvl:widening_conversion@L3#0 \| level L3 way relation_to_neighbour: Widening is the automatic branch of type conversion; every other direction needs an explicit cast or method. |
+| lvl:widening_conversion@L3#1 \| level L3 way relation_to_neighbour: Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero. |
+| lvl:widening_conversion@L3#2 \| level L3 way purpose_of_the_whole: Lets int data feed double formulas and library methods without explicit casts, e.g. Math.sqrt(25) or an int count in a double expression. |
+| lvl:widening_conversion@L4#0 \| level L4 way predict_a_change: Widening an int to double and casting back restores the original int (reversible); widening a large long to double may not be reversible; widening an int quotient after the division cannot restore the lost fraction. |
+| lvl:widening_conversion@L4#1 \| level L4 way transfer_to_a_new_program: Rely on widening when mixing int and double in formulas or passing ints to double methods; do not expect it to fix an int division already performed; when a narrowing is intended, write the cast explicitly. |
+| lvl:widening_conversion@L4#2 \| level L4 way diagnose_an_error: rule broken: Only widening is automatic; narrowing needs a cast. Kind: compile-time. Trigger class: A double (or long) value assigned or passed where an int is expected. |
+| lvl:widening_conversion@L4#3 \| level L4 way diagnose_an_error: rule broken: Widening applies to the value after the operation that produced it. Kind: silent logic error. Trigger class: Expecting double d = a / b; with int a, b to keep the fraction (gives the truncated quotient as a double). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:widening_conversion@L4#3 (Score: 0.5)}
+{lvl:widening_conversion@L2#0 (Score: 0.3)}
+{lvl:widening_conversion@L4#1 (Score: 0.2)}
+```
+Kept by pruning: lvl:widening_conversion@L4#3 (0.50), lvl:widening_conversion@L2#0 (0.30), lvl:widening_conversion@L4#1 (0.20)
+
+Label prompt for level way lvl:widening_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: Widening applies to the value after the operation that produced it. Kind: silent logic error. Trigger class: Expecting double d = a / b; with int a, b to keep the fraction (gives the truncated quotient as a double).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:widening_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> At a binary operator, if one operand is double the other is widened to double just before that operation; in an assignment or method argument, the value is widened to the target type after it has been computed.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:widening_conversion@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+> Rely on widening when mixing int and double in formulas or passing ints to double methods; do not expect it to fix an int division already performed; when a narrowing is intended, write the cast explicitly.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.92
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:widening_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
+| lvl:widening_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:widening_conversion@L4#1 | not applied |  |  | 0.0 |  |  |
+
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:expression->TargetTyping [held, tier 0, 0.76]
+pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 3.0 | lvl:println@L2#1 |
-| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
-| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
+**Graph check, not yet read (the walk may not stop while these remain):** pre:primitive_type->type_conversion, pre:type_conversion->widening_conversion
+
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure05.png
+
+### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'type_conversion', 'expression', 'widening_conversion'
+
+#### type_conversion, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:primitive_type->type_conversion \| rule: Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction. |
+| pre:type_conversion->widening_conversion \| rule: Widening is the automatic kind of type conversion. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:primitive_type->type_conversion (Score: 0.6)}
+{pre:type_conversion->widening_conversion (Score: 0.4)}
+```
+Kept by pruning: pre:primitive_type->type_conversion (0.60), pre:type_conversion->widening_conversion (0.40)
+
+Label prompt for concept edge pre:primitive_type->type_conversion (primitive_type -> type_conversion, prerequisite):
+> Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.
+
+Model's reply:
+```
+Label: broken
+Clauses: 2, 3
+Confidence: 0.65
+```
+
+Label prompt for concept edge pre:type_conversion->widening_conversion (type_conversion -> widening_conversion, prerequisite):
+> Widening is the automatic kind of type conversion.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 2, 3
+Confidence: 0.55
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:primitive_type->type_conversion | broken | 0.6 | 0.65 | 0.39 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| pre:type_conversion->widening_conversion | confirmed | 0.4 | 0.55 | 0.22 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+pre:primitive_type->type_conversion [broken, tier 0, 0.39], pre:type_conversion->widening_conversion [confirmed, tier 2, 0.22]
+
+reached across pre:primitive_type->type_conversion, entered next: primitive_type
+
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of primitive_type
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure06.png
 
+### Depth 4: current concepts 'primitive_type'
+
+#### primitive_type, misconceptions: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:primitive_type->NewArrayHoldsGarbage \| wrong rule: The slots of a new int[n] hold unpredictable values until assigned. \| right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types. |
+| mis:primitive_type->StringIsPrimitive \| wrong rule: String is a primitive type like int. \| right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:primitive_type->StringIsPrimitive (Score: 0.6)}
+{mis:primitive_type->NewArrayHoldsGarbage (Score: 0.4)}
+```
+Kept by pruning: mis:primitive_type->StringIsPrimitive (0.60), mis:primitive_type->NewArrayHoldsGarbage (0.40)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:primitive_type->StringIsPrimitive \| wrong rule: String is a primitive type like int. \| right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +). |
+| mis:primitive_type->NewArrayHoldsGarbage \| wrong rule: The slots of a new int[n] hold unpredictable values until assigned. \| right rule: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types. |
+Model's reply:
+```
+mis:primitive_type->StringIsPrimitive | not applied | clauses: none | confidence: 0.95
+mis:primitive_type->NewArrayHoldsGarbage | not applied | clauses: none | confidence: 0.97
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:primitive_type->StringIsPrimitive | not applied |  |  | 0.0 |  |  |
+| mis:primitive_type->NewArrayHoldsGarbage | not applied |  |  | 0.0 |  |  |
+
+#### primitive_type, level ways: 21 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:primitive_type@L0#0 \| level L0 way everyday_reading: In English 'primitive' means crude or old-fashioned, which suggests these are a lesser type or that anything simple-looking (String) is primitive. In Java a primitive type is one of eight types predefined by the language and named by a keyword. It holds a plain value of fixed size, so it has no methods and no overflow checking. |
+| lvl:primitive_type@L0#2 \| level L0 way inconsistent_trace: Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: "String is a primitive type like int") |
+| lvl:primitive_type@L1#0 \| level L1 way names_the_element: Primitive type: one of Java's eight built-in data types (boolean, char, byte, short, int, long, float, double). Its values are simple values, not objects. |
+| lvl:primitive_type@L1#1 \| level L1 way states_the_rule: byte, short, int and long are 8/16/32/64-bit signed two's-complement integers. char is 16-bit unsigned. float and double are IEEE 754 32-bit and 64-bit. boolean has exactly the values true and false. The other four primitive types are byte and short (smaller integers), long (64-bit integers) and float (32-bit floating point). |
+| lvl:primitive_type@L2#0 \| level L2 way line_by_line_trace: In an expression over primitives, the left operand is evaluated, then the right one. Both are then promoted to a common type (at least int, or long or double if either operand has that type), and the operator is applied in that type. |
+| lvl:primitive_type@L2#1 \| level L2 way output_prediction: The result is a primitive value whose type comes from promotion: byte, short, char and int combinations give int, any long operand gives long, and any double operand gives double (e.g. 'a' + 1 is int 98, 1 + 2L is long 3, 1 + 2.0 is double 3.0). |
+| lvl:primitive_type@L2#2 \| level L2 way one_step_execution: Assigning to a primitive variable copies the value into it. After int b = a; a = 3;, b still holds the old value because nothing is shared (unlike array references). |
+| lvl:primitive_type@L3#0 \| level L3 way relation_to_neighbour: How a literal is written fixes its primitive type (1234 int, 3.14 double, true boolean, 'c' char), and it must fit the primitive type of the variable it initializes. |
+| lvl:primitive_type@L3#1 \| level L3 way relation_to_neighbour: Between numeric primitive types, widening (int to double) happens automatically, while narrowing (double to int) needs a cast that drops information. boolean converts to no numeric type. |
+| lvl:primitive_type@L3#2 \| level L3 way relation_to_neighbour: Each primitive type is a data type: a fixed set of values plus the operators defined for them. |
+| lvl:primitive_type@L3#3 \| level L3 way relation_to_neighbour: int is the 32-bit signed integral primitive. Arithmetic on byte, short and char is also carried out in int. |
+| lvl:primitive_type@L3#4 \| level L3 way relation_to_neighbour: double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point. |
+| lvl:primitive_type@L3#5 \| level L3 way relation_to_neighbour: boolean is the primitive with only true and false. It does not mix with numeric primitives: it cannot be cast to them, and only booleans may be used as conditions. |
+| lvl:primitive_type@L3#6 \| level L3 way relation_to_neighbour: char is an integral primitive (16-bit unsigned UTF-16 code unit), so a char takes part in arithmetic as its numeric code. |
+| lvl:primitive_type@L3#7 \| level L3 way relation_to_neighbour: A variable of a primitive type stores the value itself in its own memory. |
+| lvl:primitive_type@L3#8 \| level L3 way purpose_of_the_whole: Primitive types hold the single numbers, characters and truth values that every computation is built from. You pick the one that matches the quantity: int for counts, double for measurements, boolean for conditions, char for one character. |
+| lvl:primitive_type@L4#0 \| level L4 way predict_a_change: Switching one primitive type for another changes range and precision. int to long removes overflow up to about 9.2e18. int to double keeps fractions but stops being exact for very large integers. Changing a type to boolean breaks every arithmetic use. |
+| lvl:primitive_type@L4#1 \| level L4 way transfer_to_a_new_program: Use a primitive type for a single numeric, character or true/false value. Use String for text, arrays for collections, BigInteger for integers beyond long, and int cents rather than double when money must be exact. |
+| lvl:primitive_type@L4#2 \| level L4 way diagnose_an_error: rule broken: A narrowing primitive conversion needs an explicit cast. Kind: compile-time. Trigger class: Storing a double or long value in an int (or an int in a char) without a cast: 'possible lossy conversion'. |
+| lvl:primitive_type@L4#3 \| level L4 way diagnose_an_error: rule broken: Integer primitives have fixed ranges and integer operators do not report overflow. Kind: silent logic error. Trigger class: Any int or long result outside the type's range (large products, factorials): the stored value has wrapped around. |
+| lvl:primitive_type@L4#4 \| level L4 way diagnose_an_error: rule broken: Primitive type names are lowercase keywords. Kind: compile-time. Trigger class: Writing Int, Double or Boolean where int, double or boolean was meant, or string for String: 'cannot find symbol' or a type mismatch. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:primitive_type@L2#0 (Score: 0.4)}
+{lvl:primitive_type@L3#4 (Score: 0.35)}
+{lvl:primitive_type@L2#1 (Score: 0.25)}
+```
+Kept by pruning: lvl:primitive_type@L2#0 (0.40), lvl:primitive_type@L3#4 (0.35), lvl:primitive_type@L2#1 (0.25)
+
+Label prompt for level way lvl:primitive_type@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> In an expression over primitives, the left operand is evaluated, then the right one. Both are then promoted to a common type (at least int, or long or double if either operand has that type), and the operator is applied in that type.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:primitive_type@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:primitive_type@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> The result is a primitive value whose type comes from promotion: byte, short, char and int combinations give int, any long operand gives long, and any double operand gives double (e.g. 'a' + 1 is int 98, 1 + 2L is long 3, 1 + 2.0 is double 3.0).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:primitive_type@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:primitive_type@L3#4 | not applied |  |  | 0.0 |  |  |
+| lvl:primitive_type@L2#1 | not applied |  |  | 0.0 |  |  |
+
+**Kept on a path at this depth:** nothing
+
+**No next nodes -> half_stop**
+
+Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure07.png
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
-- expression: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+Root-cause walk: held on ['integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
 - integer_division: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
 - println: L2 via output_prediction "It prints 3.0"
+- type_conversion: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 18}, fresh model calls 0, cache hits 29
+**Stop:** half_stop at depth 4; prompts {'prune': 18, 'label': 32}, fresh model calls 0, cache hits 50
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| expression | TargetTyping | misconception | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.76 |  |
+| type_conversion | TargetTyping | misconception | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.828 |  |
 | integer_division | TargetTyping | misconception | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.644 |  |
 
 ### Broken concept edges
@@ -635,15 +967,16 @@ Root-cause walk: held on ['expression', 'integer_division'], broken at [] (conse
 |---|---|---|---|
 | pre:arithmetic_operators->integer_division | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.85 | mis:integer_division->TargetTyping |
 | pre:arithmetic_operators->expression | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.8 | mis:integer_division->TargetTyping |
+| pre:primitive_type->type_conversion | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.39 | mis:integer_division->TargetTyping |
 
-### Root cause: expression / TargetTyping
+### Root cause: integer_division / TargetTyping
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| expression | L0 | misconception | TargetTyping | level_mis_links | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
 | integer_division | L0 | misconception | TargetTyping | level_mis_links | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
 | println | L2 | output_prediction |  | level_way | It prints 3.0 |  |  |  |
+| type_conversion | L0 | misconception | TargetTyping | level_mis_links | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0). |  |  |
 
 ### Overall level: L0
 
@@ -654,7 +987,7 @@ Clause coverage (final):
 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
 
-Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure07.png
+Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
@@ -664,7 +997,11 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | println | lvl:println@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1] | It prints 3.0 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 1.0 | 0.85 | 0.85 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.8 | 0.8 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
-| 3 | expression | mis:expression->TargetTyping | misconception | held | 0.8 | 0.95 | 0.76 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 2 | expression | mis:expression->TargetTyping | misconception | held | 0.8 | 0.95 | 0.76 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.9 | 0.92 | 0.828 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 2 | type_conversion | lvl:type_conversion@L0#0 | level | shown | 0.6 | 0.85 | 0.51 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.6 | 0.65 | 0.39 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 3 | type_conversion | pre:type_conversion->widening_conversion | prerequisite | confirmed | 0.4 | 0.55 | 0.22 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -673,8 +1010,11 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.48 | [2, 3] |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.3 | [1] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.85 | [2, 3] |
+| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.828 | [2, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.8 | [2, 3] |
-| 3 | expression | mis:expression->TargetTyping | misconception | held | 0.76 | [2, 3] |
+| 2 | expression | mis:expression->TargetTyping | misconception | held | 0.76 | [2, 3] |
+| 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.39 | [2, 3] |
+| 3 | type_conversion | pre:type_conversion->widening_conversion | prerequisite | confirmed | 0.22 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -706,20 +1046,16 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   kept: mis:integer_division->TargetTyping [held, tier 0, 0.64], lvl:integer_division@L0#4 [shown, tier 2, 0.48], lvl:println@L2#1 [shown, tier 2, 0.30]
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
-  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
---- depth 2: current concepts ['integer_division', 'println', 'arithmetic_operators']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  uncovered clauses bring in: expression (0.29), type_conversion (0.29), widening_conversion (0.28)
+  not yet read: own edges of expression, own edges of type_conversion, own edges of widening_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
+--- depth 2: current concepts ['integer_division', 'println', 'arithmetic_operators', 'expression', 'type_conversion', 'widening_conversion']
   integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
     pre:arithmetic_operators->integer_division -> broken (0.85) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> broken (0.80) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
-  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], pre:arithmetic_operators->expression [broken, tier 0, 0.80]
-  reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
-  not yet read: own edges of expression
---- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression']
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
     mis:expression->TargetTyping -> held (0.76) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
@@ -728,12 +1064,48 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L1#1 -> not applied (0.00) ""
     lvl:expression@L2#1 -> not applied (0.00) ""
-  kept: mis:expression->TargetTyping [held, tier 0, 0.76]
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
-  root-cause walk: held on ['expression', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
-  level expression: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.06), mis:type_conversion->NoCastIfSameSize (0.04)
+    mis:type_conversion->TargetTyping -> held (0.83) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
+  type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L0#0 (0.60), lvl:type_conversion@L4#3 (0.25), lvl:type_conversion@L2#0 (0.15)
+    lvl:type_conversion@L0#0 -> shown (0.51) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    lvl:type_conversion@L4#3 -> not applied (0.00) ""
+    lvl:type_conversion@L2#0 -> not applied (0.00) ""
+  widening_conversion (misconceptions): 2 candidates -> kept mis:widening_conversion->NarrowingAssignmentAllowed (0.60), mis:widening_conversion->NoCastIfSameSize (0.40)
+    mis:widening_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:widening_conversion->NoCastIfSameSize -> not applied (0.00) ""
+  widening_conversion (level ways): 14 candidates -> kept lvl:widening_conversion@L4#3 (0.50), lvl:widening_conversion@L2#0 (0.30), lvl:widening_conversion@L4#1 (0.20)
+    lvl:widening_conversion@L4#3 -> not applied (0.00) ""
+    lvl:widening_conversion@L2#0 -> not applied (0.00) ""
+    lvl:widening_conversion@L4#1 -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  not yet read: pre:primitive_type->type_conversion, pre:type_conversion->widening_conversion
+--- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'type_conversion', 'expression', 'widening_conversion']
+  type_conversion (concept edges): 2 candidates -> kept pre:primitive_type->type_conversion (0.60), pre:type_conversion->widening_conversion (0.40)
+    pre:primitive_type->type_conversion -> broken (0.39) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    pre:type_conversion->widening_conversion -> confirmed (0.22) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  kept: pre:primitive_type->type_conversion [broken, tier 0, 0.39], pre:type_conversion->widening_conversion [confirmed, tier 2, 0.22]
+  reached across pre:primitive_type->type_conversion, entered next: primitive_type
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  not yet read: own edges of primitive_type
+--- depth 4: current concepts ['primitive_type'] (closing round: own edges only)
+  primitive_type (misconceptions): 2 candidates -> kept mis:primitive_type->StringIsPrimitive (0.60), mis:primitive_type->NewArrayHoldsGarbage (0.40)
+    mis:primitive_type->StringIsPrimitive -> not applied (0.00) ""
+    mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
+  primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L2#0 (0.40), lvl:primitive_type@L3#4 (0.35), lvl:primitive_type@L2#1 (0.25)
+    lvl:primitive_type@L2#0 -> not applied (0.00) ""
+    lvl:primitive_type@L3#4 -> not applied (0.00) ""
+    lvl:primitive_type@L2#1 -> not applied (0.00) ""
+  nothing kept at this depth
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  no next nodes -> half_stop
+  shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
+  root-cause walk: held on ['integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
   level integer_division: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
   level println: L2 via output_prediction "It prints 3.0"
+  level type_conversion: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
 ```
 
 ## 8. Full diagnosis JSON
@@ -759,11 +1131,11 @@ start concepts (3): integer_division, println, arithmetic_operators
  ],
  "held_misconceptions": [
   {
-   "concept": "expression",
+   "concept": "type_conversion",
    "misconception": "TargetTyping",
    "kind": "misconception",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "score": 0.76
+   "score": 0.828
   },
   {
    "concept": "integer_division",
@@ -774,6 +1146,15 @@ start concepts (3): integer_division, println, arithmetic_operators
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:integer_division->TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.76
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:arithmetic_operators->integer_division",
@@ -786,22 +1167,19 @@ start concepts (3): integer_division, println, arithmetic_operators
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "score": 0.8,
    "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "edge": "pre:primitive_type->type_conversion",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.39,
+   "consequence_of": "mis:integer_division->TargetTyping"
   }
  ],
  "root_cause": {
-  "concept": "expression",
+  "concept": "integer_division",
   "misconception": "TargetTyping"
  },
  "levels": {
-  "expression": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
-   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "edge": "mis:expression->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "source": "level_mis_links"
-  },
   "integer_division": {
    "level": "L0",
    "way": "misconception",
@@ -818,6 +1196,15 @@ start concepts (3): integer_division, println, arithmetic_operators
    "edge": "lvl:println@L2#1",
    "source": "level_way",
    "also_shown": []
+  },
+  "type_conversion": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "edge": "mis:type_conversion->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
+   "source": "level_mis_links"
   }
  },
  "overall_level": "L0",
@@ -900,6 +1287,24 @@ start concepts (3): integer_division, println, arithmetic_operators
   },
   {
    "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.9,
+   "score": 0.828,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
    "target": "expression",
@@ -918,7 +1323,7 @@ start concepts (3): integer_division, println, arithmetic_operators
    "consequence_of": "mis:integer_division->TargetTyping"
   },
   {
-   "depth": 3,
+   "depth": 2,
    "source": "expression",
    "edge": "mis:expression->TargetTyping",
    "target": "TargetTyping",
@@ -934,6 +1339,43 @@ start concepts (3): integer_division, println, arithmetic_operators
    "score": 0.76,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.65,
+   "prune_score": 0.6,
+   "score": 0.39,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:type_conversion->widening_conversion",
+   "target": "widening_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Widening is the automatic kind of type conversion.",
+   "twin_logic": null
   }
  ],
  "evidence": [
@@ -1033,7 +1475,7 @@ start concepts (3): integer_division, println, arithmetic_operators
    "consequence_of": "mis:integer_division->TargetTyping"
   },
   {
-   "depth": 3,
+   "depth": 2,
    "source": "expression",
    "edge": "mis:expression->TargetTyping",
    "target": "TargetTyping",
@@ -1049,6 +1491,81 @@ start concepts (3): integer_division, println, arithmetic_operators
    "score": 0.76,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.9,
+   "score": 0.828,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L0#0",
+   "target": "type_conversion@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: a number is a number, so 3, 3.0 and \"3\" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.65,
+   "prune_score": 0.6,
+   "score": 0.39,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:type_conversion->widening_conversion",
+   "target": "widening_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Widening is the automatic kind of type conversion.",
+   "twin_logic": null
   }
  ],
  "clause_coverage": {
@@ -1057,13 +1574,13 @@ start concepts (3): integer_division, println, arithmetic_operators
   "so it does the division a / b with decimals and gets 3.0": "mis:integer_division->TargetTyping"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
- "depth_reached": 3,
+ "stop_reason": "half_stop",
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 29,
+ "llm_cache_hits": 50,
  "llm_calls_by_step": {
-  "prune": 11,
-  "label": 18
+  "prune": 18,
+  "label": 32
  }
 }
 ```

@@ -19,11 +19,11 @@
  ],
  "held_misconceptions": [
   {
-   "concept": "expression",
+   "concept": "type_conversion",
    "misconception": "TargetTyping",
    "kind": "misconception",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "score": 0.76
+   "score": 0.828
   },
   {
    "concept": "integer_division",
@@ -34,6 +34,15 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "expression",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:integer_division->TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.76
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:arithmetic_operators->integer_division",
@@ -46,22 +55,19 @@
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "score": 0.8,
    "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "edge": "pre:primitive_type->type_conversion",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "score": 0.39,
+   "consequence_of": "mis:integer_division->TargetTyping"
   }
  ],
  "root_cause": {
-  "concept": "expression",
+  "concept": "integer_division",
   "misconception": "TargetTyping"
  },
  "levels": {
-  "expression": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "TargetTyping",
-   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "edge": "mis:expression->TargetTyping",
-   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "source": "level_mis_links"
-  },
   "integer_division": {
    "level": "L0",
    "way": "misconception",
@@ -78,6 +84,15 @@
    "edge": "lvl:println@L2#1",
    "source": "level_way",
    "also_shown": []
+  },
+  "type_conversion": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "TargetTyping",
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "edge": "mis:type_conversion->TargetTyping",
+   "rule": "wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by its operands, so double d = a / b; with int a and b still divides as ints and only then widens the result (1 / 3 gives 0.0).",
+   "source": "level_mis_links"
   }
  },
  "overall_level": "L0",
@@ -160,6 +175,24 @@
   },
   {
    "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.9,
+   "score": 0.828,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
    "target": "expression",
@@ -178,7 +211,7 @@
    "consequence_of": "mis:integer_division->TargetTyping"
   },
   {
-   "depth": 3,
+   "depth": 2,
    "source": "expression",
    "edge": "mis:expression->TargetTyping",
    "target": "TargetTyping",
@@ -194,6 +227,43 @@
    "score": 0.76,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.65,
+   "prune_score": 0.6,
+   "score": 0.39,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:type_conversion->widening_conversion",
+   "target": "widening_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Widening is the automatic kind of type conversion.",
+   "twin_logic": null
   }
  ],
  "evidence": [
@@ -293,7 +363,7 @@
    "consequence_of": "mis:integer_division->TargetTyping"
   },
   {
-   "depth": 3,
+   "depth": 2,
    "source": "expression",
    "edge": "mis:expression->TargetTyping",
    "target": "TargetTyping",
@@ -309,6 +379,81 @@
    "score": 0.76,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.9,
+   "score": 0.828,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L0#0",
+   "target": "type_conversion@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: a number is a number, so 3, 3.0 and \"3\" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.65,
+   "prune_score": 0.6,
+   "score": 0.39,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->TargetTyping"
+  },
+  {
+   "depth": 3,
+   "source": "type_conversion",
+   "edge": "pre:type_conversion->widening_conversion",
+   "target": "widening_conversion",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "Widening is the automatic kind of type conversion.",
+   "twin_logic": null
   }
  ],
  "clause_coverage": {
@@ -317,12 +462,12 @@
   "so it does the division a / b with decimals and gets 3.0": "mis:integer_division->TargetTyping"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
- "depth_reached": 3,
+ "stop_reason": "half_stop",
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 29,
+ "llm_cache_hits": 50,
  "llm_calls_by_step": {
-  "prune": 11,
-  "label": 18
+  "prune": 18,
+  "label": 32
  }
 }
