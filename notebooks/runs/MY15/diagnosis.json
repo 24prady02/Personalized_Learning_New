@@ -38,7 +38,7 @@
    "misconception": "ForUpdateBeforeBody",
    "kind": "misconception",
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
-   "score": 0.315
+   "score": 0.36
   },
   {
    "concept": "increment_operators",
@@ -60,6 +60,12 @@
   }
  ],
  "broken_edges": [
+  {
+   "edge": "pre:for_loop->loop_body",
+   "quote": "Then i++ runs before the body and adds 2",
+   "score": 0.595,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
   {
    "edge": "pre:assignment->increment_operators",
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
@@ -150,7 +156,8 @@
    "prune_score": 0.45,
    "score": 0.4275,
    "logic": "i++ increases i by 2.",
-   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -169,7 +176,8 @@
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -186,7 +194,8 @@
    "prune_score": 0.4,
    "score": 0.38,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -201,10 +210,11 @@
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -224,7 +234,26 @@
    "score": 0.28,
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "role": "primary",
    "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2
+   ],
+   "quote": "Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
    "depth": 2,
@@ -317,7 +346,8 @@
    "prune_score": 0.45,
    "score": 0.414,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -356,7 +386,8 @@
    "prune_score": 0.5,
    "score": 0.275,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
-   "twin_logic": "Each assignment or read replaces the variable's current value."
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
   }
  ],
  "evidence": [
@@ -377,7 +408,8 @@
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -417,7 +449,8 @@
    "prune_score": 0.45,
    "score": 0.4275,
    "logic": "i++ increases i by 2.",
-   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -437,6 +470,7 @@
    "score": 0.28,
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "role": "primary",
    "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   },
   {
@@ -474,7 +508,8 @@
    "prune_score": 0.4,
    "score": 0.38,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -489,10 +524,11 @@
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -591,6 +627,24 @@
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2
+   ],
+   "quote": "Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
    "depth": 3,
    "source": "assignment",
    "edge": "mis:assignment->VariableKeepsOldValue",
@@ -606,7 +660,8 @@
    "prune_score": 0.5,
    "score": 0.275,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
-   "twin_logic": "Each assignment or read replaces the variable's current value."
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -623,7 +678,8 @@
    "prune_score": 0.2,
    "score": 0.1,
    "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
-   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost."
+   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -640,7 +696,8 @@
    "prune_score": 0.45,
    "score": 0.414,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -658,7 +715,8 @@
    "prune_score": 0.35,
    "score": 0.21,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -692,9 +750,9 @@
  "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 40,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 26
+  "prune": 16,
+  "label": 31
  }
 }

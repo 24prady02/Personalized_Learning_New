@@ -1,6 +1,6 @@
 clauses: Each pass starts by setting i = 1 again | Then i++ runs before the body and adds 2 | so i is 3 | So every pass prints the same thing, 3
 start: generic concepts whose tagging text occurs in the answer: assignment
-start: BM25 of the answer against each tagged concept: loop_control 20.31 (hits 1), increment_operators 19.15 (hits 1), for_loop 18.83 (hits 1), loop_variable 18.66 (hits 1), loop_body 15.24 (hits 1), assignment 12.30 (hits 1), loop_scope 10.73 (hits 1), control_flow 6.06 (hits 1), comparison_operators 4.76 (hits 1), print 4.33 (hits 2), boolean_expression 3.71 (hits 1)
+start: BM25 of the answer against each tagged concept: loop_control 20.35 (hits 1), increment_operators 19.18 (hits 1), for_loop 18.89 (hits 1), loop_variable 18.72 (hits 1), loop_body 15.11 (hits 1), assignment 12.34 (hits 1), loop_scope 10.75 (hits 1), control_flow 6.08 (hits 1), comparison_operators 4.78 (hits 1), print 4.34 (hits 2), boolean_expression 3.72 (hits 1)
 start: chosen loop_control, increment_operators, for_loop
 start concepts (3): loop_control, increment_operators, for_loop
 --- depth 1: current concepts ['loop_control', 'increment_operators', 'for_loop']
@@ -20,17 +20,17 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:increment_operators@L0#0 -> shown (0.47) "Then i++ runs before the body and adds 2; so i is 3"
     lvl:increment_operators@L0#3 -> not applied (0.00) ""
     lvl:increment_operators@L2#2 -> not applied (0.00) ""
-  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ForInitRepeats (0.40), mis:for_loop->ForUpdateBeforeBody (0.35), mis:for_loop->LoopStepAlwaysOne (0.25)
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ForInitRepeats (0.40), mis:for_loop->ForUpdateBeforeBody (0.40), mis:for_loop->LoopStepAlwaysOne (0.20)
     mis:for_loop->ForInitRepeats -> held (0.38) "Each pass starts by setting i = 1 again"
-    mis:for_loop->ForUpdateBeforeBody -> held (0.32) "Then i++ runs before the body and adds 2; so i is 3"
+    mis:for_loop->ForUpdateBeforeBody -> held (0.36) "Then i++ runs before the body and adds 2; so i is 3"
     mis:for_loop->LoopStepAlwaysOne -> not applied (0.00) ""
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L0#11 (0.60), lvl:for_loop@L2#2 (0.25), lvl:for_loop@L2#0 (0.15)
     lvl:for_loop@L0#11 -> shown (0.51) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
     lvl:for_loop@L2#2 -> not applied (0.00) ""
     lvl:for_loop@L2#0 -> not applied (0.00) ""
-  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.41], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.32], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.28]
+  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.41], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.36], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.28]
   clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
-  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['increment_operators', 'loop_control', 'for_loop']
   increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.60), pre:loop_control->increment_operators (0.40)
     pre:assignment->increment_operators -> broken (0.54) "Then i++ runs before the body and adds 2; so i is 3"
@@ -38,14 +38,26 @@ start concepts (3): loop_control, increment_operators, for_loop
   loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.40)
     pre:loop_control->for_loop -> broken (0.54) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
     pre:loop_variable->loop_control -> broken (0.34) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.70), pre:for_loop->loop_scope (0.30)
+    pre:for_loop->loop_body -> broken (0.59) "Then i++ runs before the body and adds 2"
     pre:for_loop->loop_scope -> not applied (0.00) ""
-  kept: pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.34]
+  kept: pre:for_loop->loop_body [broken, tier 0, 0.59], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.34]
+  reached across pre:for_loop->loop_body, entered next: loop_body
   reached across pre:assignment->increment_operators, entered next: assignment
   reached across pre:loop_variable->loop_control, entered next: loop_variable
   clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
-  not yet read: own edges of assignment, own edges of loop_variable
---- depth 3: current concepts ['assignment', 'increment_operators', 'for_loop', 'loop_control', 'loop_variable']
+  not yet read: own edges of assignment, own edges of loop_body, own edges of loop_variable
+--- depth 3: current concepts ['loop_body', 'for_loop', 'assignment', 'increment_operators', 'loop_control', 'loop_variable']
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopOutputSameEachPass (0.50), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
+    mis:loop_body->LoopOutputSameEachPass -> not applied (0.00) ""
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#1 (0.20)
+    lvl:loop_body@L0#6 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L2#1 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
   assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
     mis:assignment->VariableKeepsOldValue -> correct (0.28) "Each pass starts by setting i = 1 again; so i is 3"
     mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
@@ -54,8 +66,6 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:assignment@L3#6 -> not applied (0.00) ""
     lvl:assignment@L3#9 -> not applied (0.00) ""
     lvl:assignment@L0#9 -> not applied (0.00) ""
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
-    pre:for_loop->loop_scope -> not applied (0.00) ""
   loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->ForInitRepeats (0.45), mis:loop_variable->LoopOutputSameEachPass (0.35), mis:loop_variable->LoopVariableLifetimeScope (0.20)
     mis:loop_variable->ForInitRepeats -> held (0.41) "Each pass starts by setting i = 1 again"
     mis:loop_variable->LoopOutputSameEachPass -> correct (0.21) "so i is 3; So every pass prints the same thing, 3"
@@ -69,7 +79,7 @@ start concepts (3): loop_control, increment_operators, for_loop
   not yet read: par:assignment~comparison_operators
   held: mis:increment_operators->IncrementByTwo, mis:loop_variable->ForInitRepeats, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody
   shadows: mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
-  root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
+  root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:for_loop->loop_body, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
   level for_loop: L0 via misconception "Each pass starts by setting i = 1 again"
   level increment_operators: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3"
   level loop_control: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"

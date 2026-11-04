@@ -63,9 +63,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "i <= 3",
+     "match": "i <=",
      "line": 1
     },
     {
@@ -230,6 +230,14 @@
    "target": "comparison_operators",
    "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
    "grounding": "order_only"
+  },
+  {
+   "id": "pre:for_loop->loop_body",
+   "type": "prerequisite",
+   "source": "for_loop",
+   "target": "loop_body",
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "grounding": "book_passage"
   },
   {
    "id": "pre:for_loop->loop_scope",
@@ -882,7 +890,7 @@
    "type": "error",
    "source": "for_loop",
    "target": "SemicolonAfterIfHeader",
-   "role": "primary",
+   "role": "context",
    "logic": "if (x > 0); System.out.println(\"positive\"); prints only for positive x.",
    "twin_logic": "The ; ends the if with an empty statement, so the next line always runs."
   },
@@ -1125,7 +1133,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -1161,7 +1169,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "EqualsComparesReferences",
-   "role": "primary",
+   "role": "context",
    "logic": ".equals() compares references, not contents",
    "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
   },
@@ -1242,7 +1250,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "NoShortCircuit",
-   "role": "primary",
+   "role": "context",
    "logic": "logical AND/OR always evaluate both sides (Java short-circuits them)",
    "twin_logic": "In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
   },
@@ -1296,7 +1304,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -1332,7 +1340,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -1341,7 +1349,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -1458,7 +1466,7 @@
    "type": "misconception",
    "source": "for_loop",
    "target": "MissingBraces",
-   "role": "primary",
+   "role": "context",
    "logic": "Omits braces around a single-statement body of if, for or while.",
    "twin_logic": "Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
   },
@@ -22156,6 +22164,7 @@
    "expression",
    "for_loop",
    "increment_operators",
+   "loop_body",
    "loop_control",
    "loop_scope",
    "loop_variable"
@@ -22164,9 +22173,6 @@
    "control_flow",
    "print",
    "statement"
-  ],
-  [
-   "loop_body"
   ]
  ],
  "counts": {
@@ -22174,15 +22180,15 @@
   "concepts": 13,
   "generic": 3,
   "from_hop": 0,
-  "concept_edges": 10,
+  "concept_edges": 11,
   "misconceptions": 87,
   "mis_edges": 119,
   "levels": 65,
   "level_edges": 65,
   "level_mis_links": 124,
-  "components": 3
+  "components": 2
  },
  "warnings": [
-  "concept nodes form 3 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_control,loop_scope,loop_variable | control_flow,print,statement | loop_body"
+  "concept nodes form 2 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_scope,loop_variable | control_flow,print,statement"
  ]
 }
