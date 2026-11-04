@@ -29,7 +29,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
     lvl:for_loop@L0#11 -> not applied (0.00) ""
     lvl:for_loop@L2#2 -> not applied (0.00) ""
   kept: mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime [held, tier 0, 0.34], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.21], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.19]
-  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: pre:for_loop->loop_scope, pre:loop_body->accumulator_pattern, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['accumulator_pattern', 'for_loop', 'loop_control']
   accumulator_pattern (concept edges): 1 candidates -> kept pre:loop_body->accumulator_pattern (1.00)
@@ -43,7 +43,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
   kept: pre:loop_body->accumulator_pattern [broken, tier 0, 0.70], pre:loop_control->for_loop [broken, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.42]
   reached across pre:loop_body->accumulator_pattern, entered next: loop_body
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of loop_body, own edges of loop_variable
 --- depth 3: current concepts ['loop_body', 'accumulator_pattern', 'loop_control', 'for_loop', 'loop_variable']
   loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopBodyStatementOutsideLoop (0.60), mis:loop_body->StateChangeIgnoredAcrossPasses (0.25), mis:loop_body->LoopOutputSameEachPass (0.15)
@@ -68,7 +68,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
     lvl:loop_variable@L3#2 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   kept: mis:loop_body->LoopBodyStatementOutsideLoop [held, tier 0, 0.54], pre:loop_control->increment_operators [confirmed, tier 2, 0.55], lvl:loop_body@L0#6 [shown, tier 2, 0.35]
   reached across pre:loop_control->increment_operators, entered next: increment_operators
-  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of increment_operators
 --- depth 4: current concepts ['increment_operators'] (closing round: own edges only)
   increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.40), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.30)
@@ -80,7 +80,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
     lvl:increment_operators@L3#0 -> not applied (0.00) ""
     lvl:increment_operators@L2#2 -> not applied (0.00) ""
   kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.24], lvl:increment_operators@L3#4 [shown, tier 2, 0.22]
-  clause coverage (rule edges): c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: pre:assignment->increment_operators
   held: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:loop_control->ForLoopPartSkipped (shadow of mis:for_loop->ForLoopPartSkipped)
