@@ -666,7 +666,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         # labelled held or correct, a concept edge labelled confirmed or broken; kept or not). A shown level way does
         # not count here: it says how the student reads the code, not which rule the clause applies.
         covered = covered_clauses(evidence, clauses, rules_only=True)
-        log.append("  clause coverage (rule edges): " + "; ".join(
+        log.append("  clause coverage: " + "; ".join(
             f"c{i + 1} <- {covered[i]}" if i in covered else f"c{i + 1} uncovered" for i in range(len(clauses))))
         # Uncovered clauses bring in concepts the walk has not entered yet (no LLM): the clauses the evidence does not
         # explain are matched by BM25 against the concepts of the pool not yet visited, and the best N are entered as

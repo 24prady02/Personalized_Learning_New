@@ -224,6 +224,10 @@ def main(sid: str) -> Path:
         elif line.startswith("  held:"):
             depth_figure()
             w("\nHeld set after the one-fault rules: " + line.split(":", 1)[1].strip() + "\n")
+        elif line.startswith("  shadows:"):
+            depth_figure()
+            w("\nShadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific "
+              "concept is one wrong sentence read twice; it marks no root cause and sets no level): " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  level "):
             w("- " + line.strip()[6:] + "\n")
         i += 1
@@ -231,6 +235,9 @@ def main(sid: str) -> Path:
     w(f"\n**Stop:** {d['stop_reason']} at depth {d['depth_reached']}; prompts {d['llm_calls_by_step']}, fresh model calls {d['llm_calls']}, cache hits {d.get('llm_cache_hits', '')}\n")
     w("\n### Held misconceptions\n")
     w(table(d["held_misconceptions"], ["concept", "misconception", "kind", "quote", "score", "shares_evidence_with"]))
+    if d.get("shadowed"):
+        w("\n### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)\n"
+          + table(d["shadowed"], ["concept", "misconception", "shadow_of", "quote", "score"]))
     if d.get("error_evidence"):
         w("\n### Errors kept as evidence\n" + table(d["error_evidence"], ["concept", "error", "quote"]))
     w("\n### Broken concept edges\n" + table(d["broken_edges"], ["edge", "quote", "score", "consequence_of"]))
