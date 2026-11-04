@@ -17,6 +17,7 @@
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -52,6 +53,16 @@
    "source": "level_way",
    "also_shown": [
     "L1 states_the_rule"
+   ]
+  },
+  "type_conversion": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:type_conversion@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
    ]
   }
  },
@@ -213,6 +224,44 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L2#1",
+   "target": "type_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Typical results: \"1234\" + 99 is the String \"123499\"; Integer.parseInt(\"123\") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L3#2",
+   "target": "type_conversion@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -446,6 +495,44 @@
    "score": 0.8,
    "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L2#1",
+   "target": "type_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Typical results: \"1234\" + 99 is the String \"123499\"; Integer.parseInt(\"123\") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L3#2",
+   "target": "type_conversion@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -453,11 +540,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 25
+  "prune": 16,
+  "label": 29
  }
 }

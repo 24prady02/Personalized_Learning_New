@@ -405,7 +405,7 @@ mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], lvl:math_random@L2#
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | n is a whole number from 1 to 6, for example 4 | lvl:arithmetic_operators@L2#1 |
+| c1 | n is a whole number from 1 to 6, for example 4 | mis:explicit_cast->CastRounds |
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:explicit_cast->math_random, pre:math_library->math_random, pre:type_conversion->explicit_cast
 
@@ -520,7 +520,7 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | n is a whole number from 1 to 6, for example 4 | lvl:arithmetic_operators@L2#1 |
+| c1 | n is a whole number from 1 to 6, for example 4 | mis:explicit_cast->CastRounds |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of math_library
 
@@ -781,21 +781,142 @@ reached across pre:type_conversion->explicit_cast, entered next: type_conversion
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | n is a whole number from 1 to 6, for example 4 | lvl:arithmetic_operators@L2#1 |
+| c1 | n is a whole number from 1 to 6, for example 4 | mis:explicit_cast->CastRounds |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of type_conversion, pre:expression->method_call, pre:method_call->math_library
 
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
+### Depth 4: current concepts 'type_conversion'
+
+#### type_conversion, misconceptions: 3 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.45)}
+{mis:type_conversion->NoCastIfSameSize (Score: 0.3)}
+{mis:type_conversion->TargetTyping (Score: 0.25)}
+```
+Kept by pruning: mis:type_conversion->NarrowingAssignmentAllowed (0.45), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:type_conversion->NarrowingAssignmentAllowed \| wrong rule: A double value can be stored in an int variable like an int in a double. \| right rule: int to double is automatic; double to int needs a cast. |
+| mis:type_conversion->NoCastIfSameSize \| wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. \| right rule: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error. |
+| mis:type_conversion->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+Model's reply:
+```
+mis:type_conversion->NarrowingAssignmentAllowed | not applied | clauses: none | confidence: 0.85
+mis:type_conversion->NoCastIfSameSize | not applied | clauses: none | confidence: 0.9
+mis:type_conversion->TargetTyping | not applied | clauses: none | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:type_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
+| mis:type_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
+| mis:type_conversion->TargetTyping | not applied |  |  | 0.0 |  |  |
+
+#### type_conversion, level ways: 18 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:type_conversion@L0#0 \| level L0 way everyday_reading: Folk meaning: a number is a number, so 3, 3.0 and "3" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +. |
+| lvl:type_conversion@L0#3 \| level L0 way inconsistent_trace: Points to LT (each subexpression is computed in its own type, and conversion happens only where the types meet). Applied unevenly: the student promotes before an int division on one line (treating 9/5 as 1.8) but not on another, or casts the whole expression on one pass and only the first operand on the next. (here mixing in: "If a variable is at least as big as a value, no cast is needed to assign the value") |
+| lvl:type_conversion@L1#0 \| level L1 way names_the_element: Type conversion is changing a value of one type into a value of another type: automatic promotion (widening), an explicit cast, an explicit conversion method (Integer.parseInt, Double.parseDouble, Math.round), or automatic conversion to String. |
+| lvl:type_conversion@L1#1 \| level L1 way states_the_rule: Java converts automatically to a type with a larger range (promotion) because no information is lost; a conversion that might lose information (double to int) requires an explicit cast or is a compile-time error; Strings and numbers convert only via methods or string conversion. |
+| lvl:type_conversion@L2#0 \| level L2 way line_by_line_trace: Innermost subexpressions are evaluated in their own types first; at each binary operator the narrower operand is promoted; a cast converts the single value right after it; at an assignment the final value is converted to the variable's type (widening allowed, narrowing rejected at compile time). |
+| lvl:type_conversion@L2#1 \| level L2 way output_prediction: Typical results: "1234" + 99 is the String "123499"; Integer.parseInt("123") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3. |
+| lvl:type_conversion@L2#2 \| level L2 way one_step_execution: A conversion produces a new value and never changes the source variable or its declared type: after int x = (int) pi; x is 3 and pi still holds 3.14159. |
+| lvl:type_conversion@L3#0 \| level L3 way relation_to_neighbour: Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type. |
+| lvl:type_conversion@L3#1 \| level L3 way relation_to_neighbour: Parsing methods are explicit type conversion from String to a number: a method takes an argument of one type and produces a result of another. |
+| lvl:type_conversion@L3#2 \| level L3 way relation_to_neighbour: A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2. |
+| lvl:type_conversion@L3#3 \| level L3 way relation_to_neighbour: Widening (promotion) is the automatic kind of conversion, applied at operators and assignments when the target type has a larger range. |
+| lvl:type_conversion@L3#4 \| level L3 way purpose_of_the_whole: Adapts data between parts of a program: command-line text to numbers, int counts to double for an average ((double) sum / n), doubles to int indices or counts. |
+| lvl:type_conversion@L4#0 \| level L4 way predict_a_change: Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly. |
+| lvl:type_conversion@L4#1 \| level L4 way transfer_to_a_new_program: Rely on automatic promotion when mixing int with double; write a cast only when you intend to drop information; use parse methods for text input and string conversion for output; paying attention to types avoids subtle bugs. |
+| lvl:type_conversion@L4#2 \| level L4 way diagnose_an_error: rule broken: A conversion that may lose information needs an explicit cast. Kind: compile-time. Trigger class: Assigning or passing a double (or long) expression to an int, e.g. int n = 11 * 0.3; (possible loss of precision). |
+| lvl:type_conversion@L4#3 \| level L4 way diagnose_an_error: rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32. |
+| lvl:type_conversion@L4#4 \| level L4 way diagnose_an_error: rule broken: Casts work only between compatible types; a String is converted with a parse method. Kind: compile-time. Trigger class: (int) str with a String str, or (int) flag with a boolean. |
+| lvl:type_conversion@L4#5 \| level L4 way diagnose_an_error: rule broken: A parse method accepts only a valid textual representation of the number. Kind: run-time exception. Trigger class: Integer.parseInt of text that is not an integer in digits ("five", "12.2", ""). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:type_conversion@L2#1 (Score: 0.4)}
+{lvl:type_conversion@L3#2 (Score: 0.35)}
+{lvl:type_conversion@L3#0 (Score: 0.25)}
+```
+Kept by pruning: lvl:type_conversion@L2#1 (0.40), lvl:type_conversion@L3#2 (0.35), lvl:type_conversion@L3#0 (0.25)
+
+Label prompt for level way lvl:type_conversion@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Typical results: "1234" + 99 is the String "123499"; Integer.parseInt("123") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:type_conversion@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:type_conversion@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:type_conversion@L2#1 | shown | 0.4 | 0.6 | 0.24 | c1 | n is a whole number from 1 to 6, for example 4 |
+| lvl:type_conversion@L3#2 | shown | 0.35 | 0.6 | 0.21 | c1 | n is a whole number from 1 to 6, for example 4 |
+| lvl:type_conversion@L3#0 | not applied |  |  | 0.0 |  |  |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+lvl:type_conversion@L2#1 [shown, tier 2, 0.24], lvl:type_conversion@L3#2 [shown, tier 2, 0.21]
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | n is a whole number from 1 to 6, for example 4 | mis:explicit_cast->CastRounds |
+
+**Graph check, not yet read (the walk may not stop while these remain):** pre:expression->method_call, pre:method_call->math_library, pre:primitive_type->type_conversion
+
+**Figure 7 (the graph after depth 4)**
+
+![Figure 7](figure07.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'math_random': ['explicit_cast', 'math_library'], 'method_call': ['expression'], 'api': ['method_call'], 'math_library': ['method_call'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
 - arithmetic_operators: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
+- type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
 
-**Stop:** max depth at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 0, cache hits 39
+**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 0, cache hits 45
 
 ### Held misconceptions
 (none)
@@ -812,6 +933,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 | explicit_cast | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  |  |  |
 | expression | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  |  |  |
 | math_random | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  | L1 states_the_rule |  |
+| type_conversion | L3 | relation_to_neighbour |  | level_way | n is a whole number from 1 to 6, for example 4 |  | L2 output_prediction |  |
 
 ### Overall level: L2
 
@@ -820,9 +942,9 @@ Clause coverage (final):
 |---|---|
 | n is a whole number from 1 to 6, for example 4 | lvl:arithmetic_operators@L2#1 |
 
-**Figure 7 (final picture)**
+**Figure 8 (final picture)**
 
-![Figure 7](figure07.png)
+![Figure 8](figure08.png)
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
@@ -839,6 +961,8 @@ Clause coverage (final):
 | 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.9 | 0.75 | 0.675 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.5 | 0.75 | 0.375 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 1.0 | 0.8 | 0.8 | [1] | n is a whole number from 1 to 6, for example 4 |
+| 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | n is a whole number from 1 to 6, for example 4 |
+| 4 | type_conversion | lvl:type_conversion@L3#2 | level | shown | 0.35 | 0.6 | 0.21 | [1] | n is a whole number from 1 to 6, for example 4 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -852,6 +976,8 @@ Clause coverage (final):
 | 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 0.8 | [1] |
 | 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.675 | [1] |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.375 | [1] |
+| 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.24 | [1] |
+| 4 | type_conversion | lvl:type_conversion@L3#2 | level | shown | 0.21 | [1] |
 
 ## 7. Raw traversal log
 ```
@@ -884,7 +1010,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:math_random@L4#0 -> not applied (0.00) ""
     lvl:math_random@L1#1 -> shown (0.09) "n is a whole number from 1 to 6, for example 4"
   kept: mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], lvl:math_random@L2#1 [shown, tier 2, 0.54], mis:explicit_cast->CastRounds [correct, tier 2, 0.48]
-  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: pre:arithmetic_operators->expression, pre:explicit_cast->math_random, pre:math_library->math_random, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['arithmetic_operators', 'explicit_cast', 'math_random']
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
@@ -897,7 +1023,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   kept: pre:math_library->math_random [confirmed, tier 2, 0.80], pre:arithmetic_operators->expression [confirmed, tier 2, 0.75], pre:explicit_cast->math_random [confirmed, tier 2, 0.51]
   reached across pre:math_library->math_random, entered next: math_library
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: own edges of expression, own edges of math_library
 --- depth 3: current concepts ['math_library', 'math_random', 'expression', 'arithmetic_operators', 'explicit_cast']
   math_library (misconceptions): 4 candidates -> kept mis:math_library->CastRounds (0.90), err:math_library->MathMethodWithoutClassName (0.05), err:math_library->WrongArgumentType (0.05)
@@ -920,13 +1046,26 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     pre:type_conversion->explicit_cast -> confirmed (0.80) "n is a whole number from 1 to 6, for example 4"
   kept: pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.68], lvl:expression@L2#1 [shown, tier 2, 0.38]
   reached across pre:type_conversion->explicit_cast, entered next: type_conversion
-  clause coverage: c1 <- lvl:arithmetic_operators@L2#1
+  clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: own edges of type_conversion, pre:expression->method_call, pre:method_call->math_library
+--- depth 4: current concepts ['type_conversion'] (closing round: own edges only)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->NarrowingAssignmentAllowed (0.45), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.25)
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
+    mis:type_conversion->TargetTyping -> not applied (0.00) ""
+  type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#1 (0.40), lvl:type_conversion@L3#2 (0.35), lvl:type_conversion@L3#0 (0.25)
+    lvl:type_conversion@L2#1 -> shown (0.24) "n is a whole number from 1 to 6, for example 4"
+    lvl:type_conversion@L3#2 -> shown (0.21) "n is a whole number from 1 to 6, for example 4"
+    lvl:type_conversion@L3#0 -> not applied (0.00) ""
+  kept: lvl:type_conversion@L2#1 [shown, tier 2, 0.24], lvl:type_conversion@L3#2 [shown, tier 2, 0.21]
+  clause coverage: c1 <- mis:explicit_cast->CastRounds
+  not yet read: pre:expression->method_call, pre:method_call->math_library, pre:primitive_type->type_conversion
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'math_random': ['explicit_cast', 'math_library'], 'method_call': ['expression'], 'api': ['method_call'], 'math_library': ['method_call'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
   level arithmetic_operators: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
+  level type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
 ```
 
 ## 8. Full diagnosis JSON
@@ -950,6 +1089,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -985,6 +1125,16 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "source": "level_way",
    "also_shown": [
     "L1 states_the_rule"
+   ]
+  },
+  "type_conversion": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "edge": "lvl:type_conversion@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
    ]
   }
  },
@@ -1146,6 +1296,44 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L2#1",
+   "target": "type_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Typical results: \"1234\" + 99 is the String \"123499\"; Integer.parseInt(\"123\") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L3#2",
+   "target": "type_conversion@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1379,6 +1567,44 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "score": 0.8,
    "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L2#1",
+   "target": "type_conversion@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Typical results: \"1234\" + 99 is the String \"123499\"; Integer.parseInt(\"123\") is int 123; (int) 2.71828 is int 2; Math.round(2.71828) is long 3; 11 * 0.3 is double 3.3; 11 * (int) 0.3 is int 0; (int) (11 * 0.3) is int 3.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L3#2",
+   "target": "type_conversion@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1386,12 +1612,12 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 25
+  "prune": 16,
+  "label": 29
  }
 }
 ```
