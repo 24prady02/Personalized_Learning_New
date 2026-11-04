@@ -20,6 +20,7 @@
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -45,6 +46,17 @@
     "L2 output_prediction"
    ]
   },
+  "indexing": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "edge": "lvl:indexing@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 states_the_rule"
+   ]
+  },
   "loop_control": {
    "level": "L4",
    "way": "predict_a_change",
@@ -67,7 +79,7 @@
    ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L4",
  "paths": [
   {
    "depth": 1,
@@ -237,6 +249,62 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#1",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0]."
   }
  ],
  "evidence": [
@@ -685,6 +753,121 @@
    "score": 0.9,
    "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->IndexIsValue",
+   "target": "IndexIsValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "i and a[i] are the same thing, so the position is the stored value.",
+   "twin_logic": "i is a position; a[i] is the value stored at that position."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#1",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L1#1",
+   "target": "indexing@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L2#1",
+   "target": "indexing@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "clause_coverage": {
@@ -695,11 +878,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 25
+  "prune": 16,
+  "label": 29
  }
 }

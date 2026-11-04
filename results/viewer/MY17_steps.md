@@ -494,7 +494,7 @@ lvl:array_traversal@L2#1 [shown, tier 2, 0.41], mis:array_traversal->OffByOneBou
 |---|---|---|
 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum | mis:array_traversal->OffByOneBound |
 | c2 | so it prints Total: 12 | mis:array_traversal->OffByOneBound |
-| c3 | With 8 added, a.length becomes 4 | lvl:array_traversal@L4#0 |
+| c3 | With 8 added, a.length becomes 4 | err:for_loop->WrongIterationCount |
 | c4 | so the loop runs once more and prints Total: 20, with no other change to the code | mis:array_traversal->OffByOneBound |
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
@@ -634,7 +634,7 @@ reached across pre:loop_variable->loop_control, entered next: loop_variable
 |---|---|---|
 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum | mis:array_traversal->OffByOneBound |
 | c2 | so it prints Total: 12 | mis:array_traversal->OffByOneBound |
-| c3 | With 8 added, a.length becomes 4 | lvl:array_traversal@L4#0 |
+| c3 | With 8 added, a.length becomes 4 | err:for_loop->WrongIterationCount |
 | c4 | so the loop runs once more and prints Total: 20, with no other change to the code | mis:array_traversal->OffByOneBound |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_variable
@@ -841,21 +841,150 @@ reached across pre:indexing->array_traversal, entered next: indexing
 |---|---|---|
 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum | mis:array_traversal->OffByOneBound |
 | c2 | so it prints Total: 12 | mis:array_traversal->OffByOneBound |
-| c3 | With 8 added, a.length becomes 4 | lvl:array_traversal@L4#0 |
+| c3 | With 8 added, a.length becomes 4 | err:for_loop->WrongIterationCount |
 | c4 | so the loop runs once more and prints Total: 20, with no other change to the code | mis:array_traversal->OffByOneBound |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of indexing
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY17_figure06.png
 
+### Depth 4: current concepts 'indexing'
+
+#### indexing, misconceptions: 8 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:indexing->ArrayAccessWithParentheses \| wrong rule: a(i) accesses element i of an array. \| right rule: Array elements are accessed with square brackets, a[i]. |
+| mis:indexing->ArrayElementNotVariable \| wrong rule: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. \| right rule: Each element a[i] is a variable of the element type and can be used anywhere a variable of that type can, including as an index. |
+| mis:indexing->ArrayIndexStartsAtOne \| wrong rule: The first element of a is a[1]. \| right rule: Numbering begins with 0; the first element is a[0]. |
+| mis:indexing->ArrayRangeInclusive \| wrong rule: new int[n] has slots 0 to n, inclusive. \| right rule: The slots are 0 to n - 1. |
+| mis:indexing->ArrayUseScansAllCells \| wrong rule: Using an array means every cell must be scanned. \| right rule: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs. |
+| mis:indexing->ElementBoundToOldIndex \| wrong rule: After i changes, X[i] still refers to the element at the old value of i. \| right rule: a[i] is evaluated with the current value of i each time it is used. |
+| mis:indexing->ElementNameIsWholeArray \| wrong rule: X[i] names the whole array, not one element. \| right rule: The array is a; a[i] is the single element at index i. |
+| mis:indexing->IndexIsValue \| wrong rule: i and a[i] are the same thing, so the position is the stored value. \| right rule: i is a position; a[i] is the value stored at that position. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:indexing->ArrayRangeInclusive (0.40), mis:indexing->ArrayIndexStartsAtOne (0.35), mis:indexing->IndexIsValue (0.25)
+```
+Kept by pruning: mis:indexing->ArrayRangeInclusive (0.40), mis:indexing->ArrayIndexStartsAtOne (0.35), mis:indexing->IndexIsValue (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:indexing->ArrayRangeInclusive \| wrong rule: new int[n] has slots 0 to n, inclusive. \| right rule: The slots are 0 to n - 1. |
+| mis:indexing->ArrayIndexStartsAtOne \| wrong rule: The first element of a is a[1]. \| right rule: Numbering begins with 0; the first element is a[0]. |
+| mis:indexing->IndexIsValue \| wrong rule: i and a[i] are the same thing, so the position is the stored value. \| right rule: i is a position; a[i] is the value stored at that position. |
+Model's reply:
+```
+mis:indexing->ArrayRangeInclusive | correct | clauses: 1, 3, 4 | confidence: 0.85
+mis:indexing->ArrayIndexStartsAtOne | correct | clauses: 1, 2 | confidence: 0.85
+mis:indexing->IndexIsValue | correct | clauses: 1, 2, 4 | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:indexing->ArrayRangeInclusive | correct | 0.4 | 0.85 | 0.34 | c1, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| mis:indexing->ArrayIndexStartsAtOne | correct | 0.35 | 0.85 | 0.3 | c1, c2 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12 |
+| mis:indexing->IndexIsValue | correct | 0.25 | 0.85 | 0.21 | c1, c2, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+
+#### indexing, level ways: 21 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:indexing@L0#0 \| level L0 way everyday_reading: Folk meaning: everyday counting starts at 1 (first = number 1), maths subscripts a_1..a_n run from 1, and f(i) with parentheses means 'apply to i'. Java rule: a[i] uses square brackets and is 0-origin, so the first element is a[0] and the last is a[a.length-1]. |
+| lvl:indexing@L0#8 \| level L0 way inconsistent_trace: Points to LT: in a[i], a is evaluated, then i with its current value, then the bounds check, then the element is read or written. Inconsistent application: i is updated on one line, but a later a[i] is traced with the old i. (here mixing in: "i and a[i] are the same thing, so the position is the stored value") |
+| lvl:indexing@L1#0 \| level L1 way names_the_element: Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to. |
+| lvl:indexing@L1#1 \| level L1 way states_the_rule: Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException. |
+| lvl:indexing@L2#0 \| level L2 way line_by_line_trace: Sequencing: the array reference is evaluated before the index; the index expression is fully evaluated with current variable values; the bounds are checked; then the element is fetched or, on the left of =, becomes the target. In a[i] = a[j], the target a[i] is located before a[j] is read. |
+| lvl:indexing@L2#1 \| level L2 way output_prediction: Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14. |
+| lvl:indexing@L2#2 \| level L2 way one_step_execution: State transition: reading a[i] changes nothing. a[i] = v changes only element i (i, a and all other elements are unchanged), and a[i]++ adds 1 to that one element. |
+| lvl:indexing@L3#0 \| level L3 way relation_to_neighbour: An element can be indexed only after the array is created, and the n given to new sets the valid indices 0..n-1. |
+| lvl:indexing@L3#1 \| level L3 way relation_to_neighbour: A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass. |
+| lvl:indexing@L3#2 \| level L3 way relation_to_neighbour: Every index value is checked against 0 and a.length at run time; any other value throws. |
+| lvl:indexing@L3#3 \| level L3 way relation_to_neighbour: a[i] on a 2-D array yields row i (itself a 1-D array), and a[i][j] then indexes into that row. |
+| lvl:indexing@L3#4 \| level L3 way relation_to_neighbour: The exchange reads and writes elements only through their indices: t = a[i]; a[i] = a[j]; a[j] = t. |
+| lvl:indexing@L3#5 \| level L3 way relation_to_neighbour: A lookup table uses a data value as the index (months[m]), so the data must lie in 0..length-1. |
+| lvl:indexing@L3#6 \| level L3 way relation_to_neighbour: Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors. |
+| lvl:indexing@L3#7 \| level L3 way purpose_of_the_whole: Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs. |
+| lvl:indexing@L4#0 \| level L4 way predict_a_change: Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. Changing what is stored never changes the positions. |
+| lvl:indexing@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler. |
+| lvl:indexing@L4#2 \| level L4 way diagnose_an_error: rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException) |
+| lvl:indexing@L4#3 \| level L4 way diagnose_an_error: rule broken: The index must have type int (after promotion); long or double indices are rejected. Kind: compile-time. Trigger class: a[1.5], a[x] with double x, or a[n] with long n (incompatible types: possible lossy conversion) |
+| lvl:indexing@L4#4 \| level L4 way diagnose_an_error: rule broken: Elements are selected with brackets, not parentheses. Kind: compile-time. Trigger class: a(i) is written for a[i] (cannot find symbol: method a) |
+| lvl:indexing@L4#5 \| level L4 way diagnose_an_error: rule broken: An index is a position, not the stored value. Kind: silent logic error. Trigger class: code uses i where a[i] is meant (or a[i] where i is meant), e.g. returning i as the maximum value or comparing positions instead of contents |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:indexing@L3#1 (Score: 0.5)}
+{lvl:indexing@L1#1 (Score: 0.25)}
+{lvl:indexing@L2#1 (Score: 0.25)}
+```
+Kept by pruning: lvl:indexing@L3#1 (0.50), lvl:indexing@L1#1 (0.25), lvl:indexing@L2#1 (0.25)
+
+Label prompt for level way lvl:indexing@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:indexing@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+> Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:indexing@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2, 4
+Confidence: 0.75
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:indexing@L3#1 | shown | 0.5 | 0.8 | 0.4 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| lvl:indexing@L1#1 | shown | 0.25 | 0.7 | 0.17 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| lvl:indexing@L2#1 | shown | 0.25 | 0.75 | 0.19 | c1, c2, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+lvl:indexing@L3#1 [shown, tier 2, 0.40], mis:indexing->ArrayRangeInclusive [correct, tier 2, 0.34], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.30]
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum | mis:array_traversal->OffByOneBound |
+| c2 | so it prints Total: 12 | mis:array_traversal->OffByOneBound |
+| c3 | With 8 added, a.length becomes 4 | err:for_loop->WrongIterationCount |
+| c4 | so the loop runs once more and prints Total: 20, with no other change to the code | mis:array_traversal->OffByOneBound |
+
+**Graph check, not yet read (the walk may not stop while these remain):** pre:indexing->array_bounds
+
+Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY17_figure07.png
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
 - array_traversal: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 - for_loop: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+- indexing: L3 via relation_to_neighbour "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
 - loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 - loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
 
-**Stop:** max depth at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 0, cache hits 39
+**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 0, cache hits 45
 
 ### Held misconceptions
 (none)
@@ -870,10 +999,11 @@ Root-cause walk: held on [], broken at [], prerequisites {'compound_assignment':
 |---|---|---|---|---|---|---|---|---|
 | array_traversal | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
 | for_loop | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
+| indexing | L3 | relation_to_neighbour |  | level_way | The loop visits each index from 0 to a.length - 1 and adds that element to sum |  | L2 output_prediction, L1 states_the_rule |  |
 | loop_control | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
 | loop_variable | L3 | purpose_of_the_whole |  | level_way | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |  | L2 output_prediction |  |
 
-### Overall level: L3
+### Overall level: L4
 
 Clause coverage (final):
 | clause | covered by |
@@ -883,7 +1013,7 @@ Clause coverage (final):
 | With 8 added, a.length becomes 4 | lvl:array_traversal@L4#0 |
 | so the loop runs once more and prints Total: 20, with no other change to the code | mis:array_traversal->OffByOneBound |
 
-Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY17_figure07.png
+Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY17_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
@@ -911,6 +1041,12 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.4 | 0.7 | 0.28 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.9 | 0.9 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 4 | indexing | mis:indexing->ArrayRangeInclusive | misconception | correct | 0.4 | 0.85 | 0.34 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 4 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | correct | 0.35 | 0.85 | 0.2975 | [1, 2] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12 |
+| 4 | indexing | mis:indexing->IndexIsValue | misconception | correct | 0.25 | 0.85 | 0.2125 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 4 | indexing | lvl:indexing@L3#1 | level | shown | 0.5 | 0.8 | 0.4 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| 4 | indexing | lvl:indexing@L1#1 | level | shown | 0.25 | 0.7 | 0.175 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| 4 | indexing | lvl:indexing@L2#1 | level | shown | 0.25 | 0.75 | 0.1875 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -924,6 +1060,9 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.9 | [1, 4] |
 | 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.425 | [1, 2] |
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.28 | [1, 4] |
+| 4 | indexing | lvl:indexing@L3#1 | level | shown | 0.4 | [1] |
+| 4 | indexing | mis:indexing->ArrayRangeInclusive | misconception | correct | 0.34 | [1, 3, 4] |
+| 4 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | correct | 0.2975 | [1, 2] |
 
 ## 7. Raw traversal log
 ```
@@ -957,7 +1096,7 @@ start concepts (3): array_traversal, for_loop, loop_control
     lvl:loop_control@L3#5 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_control@L4#0 -> shown (0.17) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   kept: lvl:array_traversal@L2#1 [shown, tier 2, 0.41], mis:array_traversal->OffByOneBound [correct, tier 2, 0.38], mis:loop_control->OffByOneBound [correct, tier 2, 0.38]
-  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- lvl:array_traversal@L4#0; c4 <- mis:array_traversal->OffByOneBound
+  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- err:for_loop->WrongIterationCount; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['array_traversal', 'for_loop', 'loop_control']
   array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.60), pre:indexing->array_traversal (0.40)
@@ -971,7 +1110,7 @@ start concepts (3): array_traversal, for_loop, loop_control
     pre:loop_control->increment_operators -> not applied (0.00) ""
   kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.60], pre:for_loop->array_traversal [confirmed, tier 2, 0.56], pre:loop_control->for_loop [confirmed, tier 2, 0.51]
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- lvl:array_traversal@L4#0; c4 <- mis:array_traversal->OffByOneBound
+  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- err:for_loop->WrongIterationCount; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of loop_variable
 --- depth 3: current concepts ['loop_variable', 'loop_control', 'for_loop', 'array_traversal']
   loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLimitsValues (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
@@ -990,11 +1129,24 @@ start concepts (3): array_traversal, for_loop, loop_control
     pre:indexing->array_traversal -> confirmed (0.90) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
   kept: pre:indexing->array_traversal [confirmed, tier 2, 0.90], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.42], lvl:loop_variable@L2#1 [shown, tier 2, 0.28]
   reached across pre:indexing->array_traversal, entered next: indexing
-  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- lvl:array_traversal@L4#0; c4 <- mis:array_traversal->OffByOneBound
+  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- err:for_loop->WrongIterationCount; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of indexing
+--- depth 4: current concepts ['indexing'] (closing round: own edges only)
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayRangeInclusive (0.40), mis:indexing->ArrayIndexStartsAtOne (0.35), mis:indexing->IndexIsValue (0.25)
+    mis:indexing->ArrayRangeInclusive -> correct (0.34) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    mis:indexing->ArrayIndexStartsAtOne -> correct (0.30) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12"
+    mis:indexing->IndexIsValue -> correct (0.21) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L3#1 (0.50), lvl:indexing@L1#1 (0.25), lvl:indexing@L2#1 (0.25)
+    lvl:indexing@L3#1 -> shown (0.40) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
+    lvl:indexing@L1#1 -> shown (0.17) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
+    lvl:indexing@L2#1 -> shown (0.19) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+  kept: lvl:indexing@L3#1 [shown, tier 2, 0.40], mis:indexing->ArrayRangeInclusive [correct, tier 2, 0.34], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.30]
+  clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- err:for_loop->WrongIterationCount; c4 <- mis:array_traversal->OffByOneBound
+  not yet read: pre:indexing->array_bounds
   root-cause walk: held on [], broken at [], prerequisites {'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
   level array_traversal: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level for_loop: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+  level indexing: L3 via relation_to_neighbour "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
   level loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
 ```
@@ -1023,6 +1175,7 @@ start concepts (3): array_traversal, for_loop, loop_control
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -1048,6 +1201,17 @@ start concepts (3): array_traversal, for_loop, loop_control
     "L2 output_prediction"
    ]
   },
+  "indexing": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "edge": "lvl:indexing@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L1 states_the_rule"
+   ]
+  },
   "loop_control": {
    "level": "L4",
    "way": "predict_a_change",
@@ -1070,7 +1234,7 @@ start concepts (3): array_traversal, for_loop, loop_control
    ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L4",
  "paths": [
   {
    "depth": 1,
@@ -1240,6 +1404,62 @@ start concepts (3): array_traversal, for_loop, loop_control
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#1",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0]."
   }
  ],
  "evidence": [
@@ -1688,6 +1908,121 @@ start concepts (3): array_traversal, for_loop, loop_control
    "score": 0.9,
    "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "mis:indexing->IndexIsValue",
+   "target": "IndexIsValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "i and a[i] are the same thing, so the position is the stored value.",
+   "twin_logic": "i is a position; a[i] is the value stored at that position."
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#1",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L1#1",
+   "target": "indexing@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 4,
+   "source": "indexing",
+   "edge": "lvl:indexing@L2#1",
+   "target": "indexing@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    4
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "clause_coverage": {
@@ -1698,12 +2033,12 @@ start concepts (3): array_traversal, for_loop, loop_control
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 3,
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 25
+  "prune": 16,
+  "label": 29
  }
 }
 ```
