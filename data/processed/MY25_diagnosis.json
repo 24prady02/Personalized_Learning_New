@@ -26,6 +26,7 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [
   {
    "edge": "pre:statement->control_flow",
