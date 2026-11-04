@@ -913,6 +913,7 @@ start concepts (3): println, string_concatenation, arithmetic_operators
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {

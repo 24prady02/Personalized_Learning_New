@@ -19,6 +19,7 @@
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
