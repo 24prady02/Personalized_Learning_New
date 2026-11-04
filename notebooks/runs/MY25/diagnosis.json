@@ -1,0 +1,507 @@
+{
+ "scenario": "MY25",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "The program runs every line from top to bottom",
+  "so the println inside the if runs too, and then done is printed"
+ ],
+ "start_concepts": [
+  "if_statement",
+  "control_flow",
+  "println"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "if_statement",
+   "misconception": "ThenAlwaysExecutes",
+   "kind": "misconception",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "score": 0.644
+  }
+ ],
+ "error_evidence": [],
+ "broken_edges": [
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "score": 0.85,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "edge": "pre:control_flow->if_statement",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "score": 0.6175,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "edge": "pre:boolean_expression->if_statement",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "score": 0.3325,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  }
+ ],
+ "root_cause": {
+  "concept": "if_statement",
+  "misconception": "ThenAlwaysExecutes"
+ },
+ "levels": {
+  "if_statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ThenAlwaysExecutes",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "rule": "wrong rule: The then branch always runs. Right rule: The then branch runs only when the condition is true.",
+   "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The program runs every line from top to bottom",
+   "edge": "lvl:statement@L3#4",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "target": "ThenAlwaysExecutes",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.92,
+   "prune_score": 0.7,
+   "score": 0.644,
+   "logic": "The then branch always runs.",
+   "twin_logic": "The then branch runs only when the condition is true."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.65,
+   "prune_score": 0.5,
+   "score": 0.325,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:control_flow->if_statement",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.95,
+   "prune_score": 0.65,
+   "score": 0.6175,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:boolean_expression->if_statement",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.95,
+   "prune_score": 0.35,
+   "score": 0.3325,
+   "logic": "An if runs its block only when its boolean expression evaluates to true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.55,
+   "prune_score": 0.7000000000000001,
+   "score": 0.385,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "target": "ThenAlwaysExecutes",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.92,
+   "prune_score": 0.7,
+   "score": 0.644,
+   "logic": "The then branch always runs.",
+   "twin_logic": "The then branch runs only when the condition is true."
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.65,
+   "prune_score": 0.5,
+   "score": 0.325,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:control_flow->if_statement",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.95,
+   "prune_score": 0.65,
+   "score": 0.6175,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:boolean_expression->if_statement",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.95,
+   "prune_score": 0.35,
+   "score": 0.3325,
+   "logic": "An if runs its block only when its boolean expression evaluates to true.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:if_statement->ThenAlwaysExecutes"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.55,
+   "prune_score": 0.8,
+   "score": 0.44,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.55,
+   "prune_score": 0.7000000000000001,
+   "score": 0.385,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "The program runs every line from top to bottom",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "clause_coverage": {
+  "The program runs every line from top to bottom": "mis:if_statement->ThenAlwaysExecutes",
+  "so the println inside the if runs too, and then done is printed": "mis:if_statement->ThenAlwaysExecutes"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 25
+ }
+}

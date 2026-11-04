@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint x = 4;\nif (x > 5) {\n    System.out.println(\"big\");\n}\nSystem.out.println(\"done\");\n\nQuestion: Explain which lines run and why.\n\nStudent's answer, split into clauses:\nc1: The program runs every line from top to bottom\nc2: so the println inside the if runs too, and then done is printed\n\nConcept: if_statement\nWay: inconsistent trace\nWhat an answer that shows this way does: Applies the if rule (LT) unevenly: tests the condition on some visits but not others (e.g. runs the branch on every loop pass without testing), runs the branch after a false test, or re-checks the condition after the branch has run. (here mixing in: \"an if body repeats while its condition holds\")\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not shown\nClauses: none\nConfidence: 0.7"
+}

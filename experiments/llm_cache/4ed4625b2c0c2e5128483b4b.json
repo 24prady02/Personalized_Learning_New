@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint x = 4;\nif (x > 5) {\n    System.out.println(\"big\");\n}\nSystem.out.println(\"done\");\n\nQuestion: Explain which lines run and why.\n\nStudent's answer, split into clauses:\nc1: The program runs every line from top to bottom\nc2: so the println inside the if runs too, and then done is printed\n\nEdge: pre:control_flow->if_statement  (control_flow -> if_statement, prerequisite)\nRule (logic): An if changes the default top-to-bottom flow by running a block only when its condition is true.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nClauses: 1, 2\nConfidence: 0.95"
+}
