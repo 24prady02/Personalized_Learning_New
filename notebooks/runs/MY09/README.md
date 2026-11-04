@@ -986,7 +986,7 @@ Parsed labels:
 **Figure 7 (the graph after depth 4)**
 
 ![Figure 7](figure07.png)
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
