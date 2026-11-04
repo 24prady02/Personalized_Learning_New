@@ -476,6 +476,17 @@ Parsed labels:
 
 mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->OffByOneBound [correct, tier 2, 0.36]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 8 | not covered yet |
+| c2 | max starts as the first element, 3 | mis:indexing->ArrayIndexStartsAtOne |
+| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | mis:indexing->IndexIsValue |
+| c4 | so after 8 it never changes | not covered yet |
+| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
+| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
+| c7 | For any array, this code prints its largest element | not covered yet |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** for_loop (10.88), control_flow (10.57), array_declaration (9.85)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of array_declaration, own edges of control_flow, own edges of for_loop, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
@@ -959,6 +970,17 @@ reached across pre:indexing->array_bounds, entered next: array_bounds
 
 reached across pre:loop_variable->loop_control, entered next: loop_variable
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 8 | mis:control_flow->ProgramEndsAfterLoop |
+| c2 | max starts as the first element, 3 | mis:indexing->ArrayIndexStartsAtOne |
+| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | mis:indexing->IndexIsValue |
+| c4 | so after 8 it never changes | pre:array_traversal->running_extreme |
+| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
+| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
+| c7 | For any array, this code prints its largest element | pre:array_traversal->running_extreme |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of array_bounds, own edges of loop_variable, pre:control_flow->if_statement, pre:for_loop->loop_scope, pre:statement->control_flow
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY08_figure05.png
@@ -1315,6 +1337,17 @@ Parsed labels:
 
 pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.77], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 8 | mis:control_flow->ProgramEndsAfterLoop |
+| c2 | max starts as the first element, 3 | mis:indexing->ArrayIndexStartsAtOne |
+| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | mis:indexing->IndexIsValue |
+| c4 | so after 8 it never changes | pre:array_traversal->running_extreme |
+| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
+| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
+| c7 | For any array, this code prints its largest element | pre:array_traversal->running_extreme |
+
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY08_figure06.png
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
@@ -1461,7 +1494,7 @@ start concepts (3): array_traversal, indexing, loop_control
     lvl:loop_control@L3#6 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:loop_control@L2#1 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   kept: mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->OffByOneBound [correct, tier 2, 0.36]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 uncovered; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 uncovered
+  clause coverage: c1 uncovered; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 uncovered; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 uncovered
   uncovered clauses bring in: for_loop (10.88), control_flow (10.57), array_declaration (9.85)
   not yet read: own edges of array_declaration, own edges of control_flow, own edges of for_loop, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['array_traversal', 'indexing', 'loop_control', 'for_loop', 'control_flow', 'array_declaration']
@@ -1502,7 +1535,7 @@ start concepts (3): array_traversal, indexing, loop_control
   kept: pre:indexing->array_bounds [confirmed, tier 2, 0.90], mis:array_declaration->ElementNameIsWholeArray [correct, tier 2, 0.51], pre:loop_variable->loop_control [confirmed, tier 2, 0.44]
   reached across pre:indexing->array_bounds, entered next: array_bounds
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage (rule edges): c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
+  clause coverage: c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
   not yet read: own edges of array_bounds, own edges of loop_variable, pre:control_flow->if_statement, pre:for_loop->loop_scope, pre:statement->control_flow
 --- depth 3: current concepts ['array_bounds', 'indexing', 'loop_variable', 'loop_control', 'for_loop', 'control_flow']
   array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OffByOneBound (0.80), mis:array_bounds->OutOfBoundsElementsAreNull (0.20)
@@ -1532,7 +1565,7 @@ start concepts (3): array_traversal, indexing, loop_control
     pre:control_flow->if_statement -> confirmed (0.54) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
     pre:statement->control_flow -> confirmed (0.28) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
   kept: pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.77], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
-  clause coverage (rule edges): c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
+  clause coverage: c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
   root-cause walk: held on [], broken at [], prerequisites {'running_extreme': ['array_traversal'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level array_bounds: L3 via relation_to_neighbour "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level array_traversal: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
