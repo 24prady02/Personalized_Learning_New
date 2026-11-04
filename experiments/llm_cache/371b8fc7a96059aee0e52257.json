@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nchar c = 'A';\nint n = c + 1;\nSystem.out.println(n);\n\nQuestion: What does this program print, and why?\n\nStudent's answer, split into clauses:\nc1: It does not compile\nc2: c is a letter, not a number\nc3: so you cannot add 1 to it\nc4: Java will give an error that a char and an int cannot be added\n\nEdge: pre:char->char_arithmetic  (char -> char_arithmetic, prerequisite)\nRule (logic): Char arithmetic uses the numeric code stored for each char.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nClauses: 2, 3, 4\nConfidence: 0.95"
+}

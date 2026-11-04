@@ -99,11 +99,11 @@ def run_files(sid: str) -> list[str]:
 
 def upload_run(sid: str, build_page: bool = True, extra: tuple[str, ...] = ()) -> str:
     """Commit and push one run. Returns the git output to show."""
-    diag = json.loads((PROCESSED_DIR / f"{sid}_diagnosis.json").read_text(encoding="utf-8"))
     if build_page:
         import demo
         sc = json.loads((PROCESSED_DIR / f"{sid}_input.json").read_text(encoding="utf-8"))
-        demo.run(sid, sc, open_browser=False, verbose=False)        # every prompt is cached: no new Claude call
+        demo.run(sid, sc, open_browser=False, verbose=False)        # the whole pipeline again (prompts cached: no new Claude call)
+    diag = json.loads((PROCESSED_DIR / f"{sid}_diagnosis.json").read_text(encoding="utf-8"))
     run_notebook(sid)
     scenario_folder(sid)
     held = ", ".join(h["misconception"] for h in diag.get("held_misconceptions", [])) or "none"

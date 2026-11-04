@@ -281,12 +281,62 @@ def filed_at_dependent(held: list[dict[str, Any]], pre_in: dict[str, list[str]])
     return out
 
 
-def covered_clauses(evidence: list[dict[str, Any]], clauses: list[str]) -> dict[int, str]:
+def shadowed(kept: list[dict[str, Any]], all_held: list[dict[str, Any]], pre_in: dict[str, list[str]], generic: set[str]) -> dict[str, str]:
+    """Reconcile held misconception labels across concepts: edge id -> the edge it is a shadow of.
+
+    Each concept is labelled on its own against the same clauses, so one wrong sentence lights up the misconception
+    that states the student's claim at the specific concept and, beside it, a broader one on a prerequisite of that
+    concept or on a generic concept (expression, statement) that names no rule of its own. The broader label rests
+    on no words of its own, so it is a shadow of the specific one, not a second fault:
+      * on a prerequisite (any number of prerequisite hops above the specific concept): its clauses are among the
+        specific label's clauses and its confidence is no higher;
+      * on a generic concept, against a label on a non-generic concept: its clauses are among that label's clauses.
+    A shadow does not pose as a root cause and does not set its concept to L0. Only kept, non-shadow labels can cast
+    a shadow (generic ones are tested first, then by rising confidence, so the specific finding is the one that stays)."""
+    anc: dict[str, set[str]] = {}
+
+    def ancestors(c: str) -> set[str]:
+        if c not in anc:
+            seen, stack = set(), list(pre_in.get(c, []))
+            while stack:
+                x = stack.pop()
+                if x not in seen:
+                    seen.add(x)
+                    stack.extend(pre_in.get(x, []))
+            anc[c] = seen
+        return anc[c]
+
+    def is_shadow(x: dict[str, Any], y: dict[str, Any]) -> bool:
+        if x["edge"] == y["edge"] or not x.get("clauses") or not set(x["clauses"]) <= set(y.get("clauses") or []):
+            return False
+        if x["source"] in generic:
+            return y["source"] not in generic
+        return x["source"] in ancestors(y["source"]) and x["confidence"] <= y["confidence"]
+
+    accepted = sorted(kept, key=lambda c: (0 if c["source"] in generic else 1, c["confidence"], c["score"]))
+    out: dict[str, str] = {}
+    for x in list(accepted):
+        y = next((k for k in accepted if k["edge"] != x["edge"] and is_shadow(x, k)), None)
+        if y is not None:
+            out[x["edge"]] = y["edge"]
+            accepted.remove(x)
+    for x in all_held:
+        if x["edge"] not in out and not any(k["edge"] == x["edge"] for k in accepted):
+            y = next((k for k in accepted if is_shadow(x, k)), None)
+            if y is not None:
+                out[x["edge"]] = y["edge"]
+    return out
+
+
+def covered_clauses(evidence: list[dict[str, Any]], clauses: list[str], rules_only: bool = False) -> dict[int, str]:
     """Clause index -> id of the first evidence edge that covers it. An edge labelled with clause numbers covers
     exactly those clauses; an edge with a free quote (older records) covers a clause when the normalised quote is
-    contained in the normalised clause or the clause in the quote."""
+    contained in the normalised clause or the clause in the quote. With ``rules_only`` a level way does not count:
+    it says how the student reads the code, not which rule the clause applies, so the walk goes on looking."""
     covered: dict[int, str] = {}
     for c in evidence:
+        if rules_only and c.get("kind") == "level":
+            continue
         if c.get("clauses"):
             for k in c["clauses"]:
                 covered.setdefault(k - 1, c["edge"])
@@ -474,11 +524,18 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     stop_reason = "max depth"
     depth_reached = 0
 
-    for depth in range(1, D + 1):
+    for depth in range(1, D + 2):
+        if depth > D:
+            # one closing round past the depth cap: a concept the walk entered at the last depth still gets its own
+            # edges (misconceptions, level ways) read, so no entered concept is left without a reading. Nothing new is
+            # entered in this round.
+            current = [c for c in current if starts_at.get(c) == depth]
+            if not current:
+                break
         depth_reached = depth
         candidates: list[dict[str, Any]] = []
         offered: set[str] = set()   # edges put to the prune step at this depth (an edge is offered once, not from each end)
-        log.append(f"--- depth {depth}: current concepts {current}")
+        log.append(f"--- depth {depth}: current concepts {current}" + (" (closing round: own edges only)" if depth > D else ""))
         for concept in current:
             # 3a edge search. A concept entering as a start concept (depth 1, or later when the uncovered clauses bring
             # it in): its misconception / error edges and its level ways, as two families (each pruned to N on its own,
@@ -560,7 +617,11 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         for c in sorted(candidates, key=lambda c: -c["score"]):
             if c["label"] != "not applied" and c["score"] > 0:
                 best_by_edge.setdefault(c["edge"], c)
-        kept_now = sorted(best_by_edge.values(), key=lambda c: (tier(c), -c["score"]))[:N]
+        # a diagnosis finding (tier 0) is never cut by the beam: every held misconception / broken edge is kept, and
+        # the rest fill the N slots
+        ranked_now = sorted(best_by_edge.values(), key=lambda c: (tier(c), -c["score"]))
+        kept_now = [c for c in ranked_now if tier(c) == 0]
+        kept_now += [c for c in ranked_now if tier(c) != 0][:max(0, N - len(kept_now))]
         if kept_now:
             paths.extend(kept_now)
             used.update(c["edge"] for c in kept_now)
@@ -601,15 +662,17 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                     pending.append(e["id"])
                     if concept not in nxt:
                         nxt.append(concept)
-        # Clause coverage, no LLM: every clause is covered by some verified evidence edge (kept or not)
-        covered = covered_clauses(evidence, clauses)
-        log.append("  clause coverage: " + "; ".join(
+        # Clause coverage, no LLM: every clause is covered by some verified rule edge (a misconception / error edge
+        # labelled held or correct, a concept edge labelled confirmed or broken; kept or not). A shown level way does
+        # not count here: it says how the student reads the code, not which rule the clause applies.
+        covered = covered_clauses(evidence, clauses, rules_only=True)
+        log.append("  clause coverage (rule edges): " + "; ".join(
             f"c{i + 1} <- {covered[i]}" if i in covered else f"c{i + 1} uncovered" for i in range(len(clauses))))
         # Uncovered clauses bring in concepts the walk has not entered yet (no LLM): the clauses the evidence does not
         # explain are matched by BM25 against the concepts of the pool not yet visited, and the best N are entered as
         # start concepts (their own edges are read at the next depth). This has its own cap: it never competes with
-        # the concepts that are only waiting to read their concept edges.
-        if len(covered) < len(clauses):
+        # the concepts that are only waiting to read their concept edges. Not in the closing round (nothing new enters).
+        if len(covered) < len(clauses) and depth <= D:
             unseen = [c for c in pool if c not in starts_at and c not in nxt]
             if unseen:
                 text = " ".join(cl for i, cl in enumerate(clauses) if i not in covered)
@@ -649,6 +712,16 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             c["edge"] + (f" (same words as {c['shares_evidence_with']})" if c.get("shares_evidence_with") else "") for c in held)
             + ("; filed at the dependent concept: " + ", ".join(e for e in before if e not in {c["edge"] for c in held})
                if len(held) != len(before) else ""))
+    # Reconcile across concepts: a held label on a prerequisite or a generic concept that rests on the clauses of a
+    # stronger label at the specific concept is a shadow of that label (one wrong sentence, read twice), not a fault
+    # of its own. Shadows stay in the output, marked, but mark no root cause and set no level.
+    generic_ids = {c for c in g.concepts if g.concepts[c].get("generic")}
+    all_held_mis = [c for c in evidence if c["kind"] == "misconception" and c["label"] == "held"]
+    shadow = shadowed([c for c in held if c["kind"] == "misconception"], all_held_mis, pre_in, generic_ids)
+    shadows = [c for c in all_held_mis if c["edge"] in shadow]
+    if shadow:
+        held = [c for c in held if c["edge"] not in shadow]
+        log.append("  shadows: " + ", ".join(f"{e} (shadow of {s})" for e, s in shadow.items()))
     broken = [c for c in paths if c["label"] == "broken"]
     held_by_concept: dict[str, list[str]] = defaultdict(list)
     for c in held:
@@ -691,7 +764,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     held_mis_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
     shown_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for c in evidence:
-        if c["kind"] == "misconception" and c["label"] == "held":
+        if c["kind"] == "misconception" and c["label"] == "held" and c["edge"] not in shadow:
             held_mis_ev[c["source"]].append(c)
         elif c["kind"] == "level" and c["label"] == "shown":
             shown_ev[c["source"]].append(c)
@@ -715,22 +788,28 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             others = [c["target"] for c in held_here if c["target"] != m["target"]]
             if others:
                 levels[concept]["also_held"] = others
-        elif l0_ways:
+        elif l0_ways and len(l0_ways) == len(ways_here):
+            # an L0 way alone: the student reads this concept as everyday language and shows nothing above it
             w = l0_ways[0]
-            levels[concept] = {"level": "L0", "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way"}
-        elif ways_here:
-            w = ways_here[0]
-            levels[concept] = {"level": w["level"], "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way",
+            levels[concept] = {"level": "L0", "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way",
                                "also_shown": [f"{c['level']} {c['way']}" for c in ways_here[1:]]}
+        elif ways_here:
+            # the levels are cumulative: a way shown at L2 has passed L0, so an L0 way shown beside it is the weaker
+            # reading of the same words and is listed under also_shown, not taken as the level
+            w = next(c for c in ways_here if c["level"] != "L0")
+            levels[concept] = {"level": w["level"], "way": w["way"], "quote": w["quote"], "edge": w["edge"], "source": "level_way",
+                               "also_shown": [f"{c['level']} {c['way']}" for c in ways_here if c is not w]}
         else:
             continue
         log.append(f"  level {concept}: {levels[concept]['level']} via {levels[concept]['way']} \"{levels[concept]['quote']}\"")
 
     if root:
         overall = levels.get(root["concept"], {}).get("level")
-    else:  # no error found: the student stands at the lowest level reached on any concept the answer touched
-        got = [v["level"] for v in levels.values() if v.get("level")]
-        overall = min(got) if got else None
+    else:
+        # no error found: the student stands at the level reached on at least half of the concepts the answer touched
+        # (the upper median); a single weaker concept keeps its own row and does not set the overall on its own
+        got = sorted((v["level"] for v in levels.values() if v.get("level")), reverse=True)
+        overall = got[(len(got) - 1) // 2] if got else None
     covered = covered_clauses(evidence, clauses)
     unexplained = [cl for i, cl in enumerate(clauses) if i not in covered]
 
@@ -742,6 +821,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         "held_misconceptions": [{"concept": c["source"], "misconception": c["target"], "kind": c["kind"], "quote": c["quote"], "score": c["score"],
                                  **({"shares_evidence_with": c["shares_evidence_with"]} if c.get("shares_evidence_with") else {})} for c in held],
         "error_evidence": [{"concept": c["source"], "error": c["target"], "quote": c["quote"]} for c in evidence_errors],
+        "shadowed": [{"concept": c["source"], "misconception": c["target"], "shadow_of": shadow[c["edge"]], "quote": c["quote"], "score": c["score"]} for c in shadows],
         "broken_edges": [{"edge": c["edge"], "quote": c["quote"], "score": c["score"],
                           **({"consequence_of": c["consequence_of"]} if c.get("consequence_of") else {})} for c in broken],
         "root_cause": root,

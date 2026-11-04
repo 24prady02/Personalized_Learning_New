@@ -143,8 +143,13 @@ def test_level_by_rule_highest_shown_way_and_l0_when_a_misconception_is_held():
     labels["mis:C->MisC"] = ("held", "It prints 0")
     d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
     assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["misconception"] == "MisC" and d["overall_level"] == "L0"
-    # an L0 way shown (everyday reading) with no misconception -> L0 too
+    # an L0 way shown (everyday reading) beside an L3 way: the levels are cumulative, so the L3 way stands and the
+    # L0 way is the weaker reading, listed under also_shown
     labels = {"lvl:C@L0#1": ("shown", "x is unset"), "lvl:C@L3#0": ("shown", "It prints 0")}
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["level"] == "L3" and d["levels"]["C"]["also_shown"] == ["L0 everyday_reading"]
+    # an L0 way shown on its own, nothing above it -> L0
+    labels = {"lvl:C@L0#1": ("shown", "x is unset")}
     d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
     assert d["levels"]["C"]["level"] == "L0" and d["levels"]["C"]["way"] == "everyday_reading"
 

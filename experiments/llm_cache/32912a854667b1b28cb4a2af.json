@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint a = 2, b = 3;\nSystem.out.println(\"Sum: \" + a + b);\n\nQuestion: What does this print? Explain.\n\nStudent's answer, split into clauses:\nc1: It prints Sum: 5\nc2: The plus adds a and b first, 2 + 3 is 5, and then the 5 is joined to the text\n\nConcept: string_conversion\nWay: inconsistent trace\nWhat an answer that shows this way does: Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not shown\nClauses: none\nConfidence: 0.6"
+}

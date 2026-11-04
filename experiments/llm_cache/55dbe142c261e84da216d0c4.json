@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint s = 7, c = 2;\ndouble avg = (double) (s / c);\nSystem.out.println(avg);\n\nQuestion: Explain the order in which Java works out (double) (s / c).\n\nStudent's answer, split into clauses:\nc1: In double avg = (double)\nc2: s / c\nc3: the cast comes first\nc4: so the division is a decimal one\nc5: so 7 / 2 is 3.5\n\nConcept: primitive_type\nWay: inconsistent trace\nWhat an answer that shows this way does: Points to LT (each operation is done in its type's fixed size). Applied unevenly, a student truncates and wraps int results on one line but treats another int intermediate as an unbounded real number, e.g. tracing 59 / 60 * 100 as 98. (here mixing in: \"String is a primitive type like int\")\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not shown\nClauses: none\nConfidence: 0.8"
+}

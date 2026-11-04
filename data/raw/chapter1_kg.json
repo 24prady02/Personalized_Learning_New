@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9.5-reader4 (reader3 + pattern fixes and recall additions 2026-10-30, listed in reader.pattern_fixes_reader4)",
+ "version": "3.9.5-reader5 (reader4 + two recall signals 2026-11-03, listed in reader.pattern_fixes_reader5)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -20932,10 +20932,18 @@
       "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,800}?\\b\\1\\s*(?:\\+\\+|--|\\+=|-=)",
       "note": "++ / += on a char variable",
       "text": "raw"
+     },
+     {
+      "name": "char_variable_arithmetic",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\bchar\\s+(\\w+)\\s*(?:=[^;]*)?;[\\s\\S]{0,800}?(?:\\b\\1\\s*[+\\-]\\s*[\\w'(]|(?:\\d+|'(?:\\\\.|[^'\\\\])')\\s*[+\\-]\\s*\\b\\1\\b)",
+      "note": "a char variable used in + or - (c + 1, c - 'a', 1 + c); ++ and += are the char_increment signal",
+      "text": "raw"
      }
     ],
     "patterns_added_in": "3.9.5-reader2",
-    "patterns_fixed_in": "3.9.5-reader4"
+    "patterns_fixed_in": "3.9.5-reader5"
    }
   },
   {
@@ -22937,8 +22945,17 @@
     "java_types": [],
     "generic": false,
     "shown_by_declaration": false,
-    "signals": [],
-    "patterns_fixed_in": "3.9.5-reader4"
+    "signals": [
+     {
+      "name": "int_limit_held_in_variable",
+      "scope": "program",
+      "decisive": true,
+      "regex": "\\b(\\w+)\\s*=\\s*(?:2147483647|-\\s*2147483648|Integer\\.(?:MAX|MIN)_VALUE)\\s*;[\\s\\S]{0,800}?(?:\\b\\1\\s*(?:[+\\-*]|\\+=|-=|\\*=)|[+\\-*]\\s*\\b\\1\\b)",
+      "note": "the int limit stored in a variable, then that variable in + - * (big = big + 1; big++; big += 1)",
+      "text": "masked"
+     }
+    ],
+    "patterns_fixed_in": "3.9.5-reader5"
    }
   },
   {
@@ -289503,6 +289520,10 @@
    "de_morgan P+: ['!\\\\s*\\\\w+\\\\s*(?:&&|\\\\|\\\\|)\\\\s*!\\\\s*\\\\w+']  [the expanded form !a && !b]",
    "sampling_without_replacement P+: ['\\\\bperm(?:utation)?\\\\w*\\\\b']  [a permutation array named perm]",
    "function_plotting P+: ['\\\\w\\\\s*\\\\[[^\\\\]]+\\\\]\\\\s*=\\\\s*[^;]*Math\\\\.(?:sin|cos|exp|log|sqrt|pow)']  [filling an array with function values]"
+  ],
+  "pattern_fixes_reader5": [
+   "char_arithmetic signal char_variable_arithmetic added: a char variable in + or - was invisible (only literal operands, casts, ++ and += were read)",
+   "overflow signal int_limit_held_in_variable added: the limit held in a variable and then used in arithmetic was invisible (only a literal next to the operator was read)"
   ]
  }
 }

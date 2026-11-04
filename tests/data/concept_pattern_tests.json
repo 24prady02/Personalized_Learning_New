@@ -292,10 +292,14 @@
  },
  "char_arithmetic": {
   "must_tag": [
-   "char d = (char) (c + 1);"
+   "char d = (char) (c + 1);",
+   "char c = 'A';\nint n = c + 1;",
+   "char c = 'a';\nint d = c - 'a';"
   ],
   "must_not_tag": [
-   "char c = 'a';"
+   "char c = 'a';",
+   "char c = 'A';\nSystem.out.println(c);",
+   "char c = 'A';\nString s = \"x\" + c;"
   ]
  },
  "int": {
@@ -329,11 +333,15 @@
  },
  "overflow": {
   "must_tag": [
-   "int big = Integer.MAX_VALUE + 1;"
+   "int big = Integer.MAX_VALUE + 1;",
+   "int big = 2147483647;\nbig = big + 1;",
+   "int big = Integer.MAX_VALUE;\nbig++;"
   ],
   "must_not_tag": [
    "int x = 1;",
-   "int m = Integer.MAX_VALUE;"
+   "int m = Integer.MAX_VALUE;",
+   "int big = 2147483647;\nSystem.out.println(big);",
+   "int x = 5;\nx = x + 1;"
   ]
  },
  "long_type": {
