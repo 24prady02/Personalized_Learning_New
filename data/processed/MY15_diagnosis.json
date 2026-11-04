@@ -27,21 +27,38 @@
    "score": 0.4275
   },
   {
-   "concept": "loop_control",
-   "misconception": "ForUpdateBeforeBody",
-   "kind": "misconception",
-   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
-   "score": 0.405
-  },
-  {
    "concept": "for_loop",
    "misconception": "ForInitRepeats",
    "kind": "misconception",
    "quote": "Each pass starts by setting i = 1 again",
    "score": 0.38
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "score": 0.315
+  },
+  {
+   "concept": "increment_operators",
+   "misconception": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "score": 0.28,
+   "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "loop_variable",
+   "misconception": "ForInitRepeats",
+   "shadow_of": "mis:for_loop->ForInitRepeats",
+   "quote": "Each pass starts by setting i = 1 again",
+   "score": 0.414
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:assignment->increment_operators",
@@ -64,13 +81,13 @@
   {
    "edge": "pre:loop_variable->loop_control",
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
-   "score": 0.85,
+   "score": 0.34,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   }
  ],
  "root_cause": {
-  "concept": "loop_control",
-  "misconception": "ForUpdateBeforeBody"
+  "concept": "for_loop",
+  "misconception": "ForInitRepeats"
  },
  "levels": {
   "for_loop": {
@@ -105,6 +122,14 @@
    "edge": "mis:loop_control->ForUpdateBeforeBody",
    "rule": "wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value.",
    "source": "level_mis_links"
+  },
+  "loop_variable": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3",
+   "edge": "lvl:loop_variable@L0#5",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -164,6 +189,44 @@
    "twin_logic": "The initialization runs exactly once, before the first condition test."
   },
   {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.9,
+   "prune_score": 0.35,
+   "score": 0.315,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PreIncrementBeforeLoop",
+   "target": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "++i in the for-update runs before the body each pass",
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
+  },
+  {
    "depth": 2,
    "source": "increment_operators",
    "edge": "pre:assignment->increment_operators",
@@ -221,7 +284,7 @@
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
-   "depth": 3,
+   "depth": 2,
    "source": "loop_control",
    "edge": "pre:loop_variable->loop_control",
    "target": "loop_variable",
@@ -233,11 +296,49 @@
    ],
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.92,
+   "prune_score": 0.45,
+   "score": 0.414,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#5",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    4
+   ],
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
   },
   {
    "depth": 3,
@@ -256,23 +357,6 @@
    "score": 0.275,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value."
-  },
-  {
-   "depth": 3,
-   "source": "assignment",
-   "edge": "mis:assignment->AssignmentAddsToTarget",
-   "target": "AssignmentAddsToTarget",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "Each pass starts by setting i = 1 again",
-   "confidence": 0.5,
-   "prune_score": 0.2,
-   "score": 0.1,
-   "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
-   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost."
   }
  ],
  "evidence": [
@@ -352,7 +436,8 @@
    "prune_score": 0.4,
    "score": 0.28,
    "logic": "++i in the for-update runs before the body each pass",
-   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   },
   {
    "depth": 1,
@@ -502,7 +587,8 @@
    "prune_score": 0.4,
    "score": 0.34,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
    "depth": 3,
@@ -541,22 +627,59 @@
   },
   {
    "depth": 3,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
-   "kind": "prerequisite",
-   "label": "broken",
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.92,
+   "prune_score": 0.45,
+   "score": 0.414,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "so i is 3; So every pass prints the same thing, 3",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#5",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
     1,
-    2
+    2,
+    4
    ],
-   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")",
    "twin_logic": null,
-   "consequence_of": "mis:increment_operators->IncrementByTwo"
+   "level": "L0",
+   "way": "inconsistent_trace"
   }
  ],
  "clause_coverage": {
@@ -569,9 +692,9 @@
  "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_cache_hits": 40,
  "llm_calls_by_step": {
-  "prune": 13,
-  "label": 23
+  "prune": 14,
+  "label": 26
  }
 }
