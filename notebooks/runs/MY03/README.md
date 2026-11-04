@@ -412,6 +412,14 @@ Parsed labels:
 
 mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_aliasing@L0#0 [shown, tier 2, 0.45], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.30]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 1 9 | mis:array_aliasing->AssignmentCopiesObject |
+| c2 | The line b = a makes b a copy of a | mis:array_aliasing->AssignmentCopiesObject |
+| c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
+| c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:string_concatenation->string_conversion
 
 **Figure 4 (the graph after depth 1)**
@@ -451,6 +459,14 @@ Parsed labels:
 pre:string_concatenation->string_conversion [confirmed, tier 2, 0.60]
 
 reached across pre:string_concatenation->string_conversion, entered next: string_conversion
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 1 9 | mis:array_aliasing->AssignmentCopiesObject |
+| c2 | The line b = a makes b a copy of a | mis:array_aliasing->AssignmentCopiesObject |
+| c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
+| c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of string_conversion
 
@@ -552,6 +568,14 @@ Parsed labels:
 
 lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 1 9 | mis:array_aliasing->AssignmentCopiesObject |
+| c2 | The line b = a makes b a copy of a | mis:array_aliasing->AssignmentCopiesObject |
+| c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
+| c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
+
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
@@ -648,14 +672,14 @@ start concepts (3): array_aliasing, indexing, string_concatenation
     lvl:string_concatenation@L2#0 -> not applied (0.00) ""
     lvl:string_concatenation@L3#1 -> shown (0.11) "It prints 1 9"
   kept: mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_aliasing@L0#0 [shown, tier 2, 0.45], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.30]
-  clause coverage (rule edges): c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
   not yet read: pre:string_concatenation->string_conversion
 --- depth 2: current concepts ['array_aliasing', 'string_concatenation']
   string_concatenation (concept edges): 1 candidates -> kept pre:string_concatenation->string_conversion (1.00)
     pre:string_concatenation->string_conversion -> confirmed (0.60) "It prints 1 9"
   kept: pre:string_concatenation->string_conversion [confirmed, tier 2, 0.60]
   reached across pre:string_concatenation->string_conversion, entered next: string_conversion
-  clause coverage (rule edges): c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
   not yet read: own edges of string_conversion
 --- depth 3: current concepts ['string_conversion', 'string_concatenation']
   string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
@@ -665,7 +689,7 @@ start concepts (3): array_aliasing, indexing, string_concatenation
     lvl:string_conversion@L3#1 -> not applied (0.00) ""
     lvl:string_conversion@L2#0 -> shown (0.11) "It prints 1 9"
   kept: lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
-  clause coverage (rule edges): c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
   root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primitive_vs_reference': ['array_reference', 'primitive_type'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
   level array_aliasing: L0 via misconception "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
   level indexing: L2 via one_step_execution "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
