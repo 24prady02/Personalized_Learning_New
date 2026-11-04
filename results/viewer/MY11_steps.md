@@ -455,6 +455,13 @@ Parsed labels:
 
 mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.40], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | Three lines | not covered yet |
+| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
+| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** control_flow (1.83), println (1.53)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of control_flow, own edges of println, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
@@ -803,6 +810,13 @@ reached across pre:for_loop->nested_loops, entered next: nested_loops
 
 reached across pre:for_loop->loop_scope, entered next: loop_scope
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | Three lines | not covered yet |
+| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
+| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_scope, own edges of nested_loops, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure05.png
@@ -1130,6 +1144,13 @@ pre:statement->control_flow [broken, tier 0, 0.80], mis:nested_loops->NestedLoop
 
 reached across pre:statement->control_flow, entered next: statement
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | Three lines | pre:statement->println |
+| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
+| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure06.png
@@ -1245,9 +1266,18 @@ Parsed labels:
 
 lvl:statement@L3#4 [shown, tier 2, 0.15]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | Three lines | pre:statement->println |
+| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
+| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
+
 Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure07.png
 
 Held set after the one-fault rules: mis:nested_loops->NestedLoopsSequential, mis:loop_scope->ForVariableScopeBeyondLoop, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:nested_loops->NestedLoopsSequential)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope, pre:statement->control_flow, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
@@ -1266,6 +1296,12 @@ Root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequen
 |---|---|---|---|---|---|
 | nested_loops | NestedLoopsSequential | misconception | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.57 |  |
 | loop_scope | ForVariableScopeBeyondLoop | misconception | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.36 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| for_loop | ForLoopPartSkipped | mis:loop_scope->ForVariableScopeBeyondLoop | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.18 |
+| loop_control | ForLoopPartSkipped | mis:nested_loops->NestedLoopsSequential | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.4 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -1378,7 +1414,7 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:string_concatenation@L3#3 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     lvl:string_concatenation@L3#1 -> shown (0.15) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.40], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  clause coverage: c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   uncovered clauses bring in: control_flow (1.83), println (1.53)
   not yet read: own edges of control_flow, own edges of println, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
 --- depth 2: current concepts ['loop_control', 'for_loop', 'string_concatenation', 'control_flow', 'println']
@@ -1410,7 +1446,7 @@ start concepts (3): for_loop, loop_control, string_concatenation
   kept: pre:for_loop->nested_loops [broken, tier 0, 0.78], pre:loop_control->for_loop [broken, tier 0, 0.51], pre:for_loop->loop_scope [broken, tier 0, 0.09]
   reached across pre:for_loop->nested_loops, entered next: nested_loops
   reached across pre:for_loop->loop_scope, entered next: loop_scope
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  clause coverage: c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   not yet read: own edges of loop_scope, own edges of nested_loops, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 --- depth 3: current concepts ['nested_loops', 'for_loop', 'loop_control', 'loop_scope', 'control_flow', 'println']
   nested_loops (misconceptions): 8 candidates -> kept mis:nested_loops->NestedLoopsSequential (0.60), mis:nested_loops->InnerCounterOverwritesOuter (0.25), mis:nested_loops->OuterLoopIgnored (0.15)
@@ -1439,7 +1475,7 @@ start concepts (3): for_loop, loop_control, string_concatenation
     pre:string_literal->println -> confirmed (0.12) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: pre:statement->control_flow [broken, tier 0, 0.80], mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], pre:statement->println [broken, tier 0, 0.48], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36]
   reached across pre:statement->control_flow, entered next: statement
-  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  clause coverage: c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   not yet read: own edges of statement
 --- depth 4: current concepts ['statement'] (closing round: own edges only)
   statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.70), mis:statement->ProgramLooksAhead (0.20), mis:statement->WhitespaceIsSignificant (0.10)
@@ -1451,7 +1487,7 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:statement@L0#0 -> not applied (0.00) ""
     lvl:statement@L3#4 -> shown (0.15) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: lvl:statement@L3#4 [shown, tier 2, 0.15]
-  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  clause coverage: c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   held: mis:nested_loops->NestedLoopsSequential, mis:loop_scope->ForVariableScopeBeyondLoop, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:nested_loops->NestedLoopsSequential)
   root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope, pre:statement->control_flow, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
