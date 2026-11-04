@@ -476,24 +476,13 @@ Parsed labels:
 
 mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->OffByOneBound [correct, tier 2, 0.36]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 8 | not covered yet |
-| c2 | max starts as the first element, 3 | lvl:array_traversal@L3#6 |
-| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | lvl:array_traversal@L3#6 |
-| c4 | so after 8 it never changes | lvl:array_traversal@L3#6 |
-| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
-| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
-| c7 | For any array, this code prints its largest element | lvl:array_traversal@L3#6 |
+**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** for_loop (10.88), control_flow (10.57), array_declaration (9.85)
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (2.44), loop_variable (2.18), loop_body (1.77)
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_body, own edges of loop_variable, own edges of println, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_declaration, own edges of control_flow, own edges of for_loop, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY08_figure04.png
 
-### Depth 2: current concepts 'array_traversal', 'indexing', 'loop_control', 'println', 'loop_variable', 'loop_body'
+### Depth 2: current concepts 'array_traversal', 'indexing', 'loop_control', 'for_loop', 'control_flow', 'array_declaration'
 
 #### array_traversal, concept edges: 3 edges offered
 Edges offered:
@@ -629,342 +618,352 @@ Parsed labels:
 | pre:loop_control->for_loop | confirmed | 0.4 | 0.7 | 0.28 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | pre:loop_control->increment_operators | not applied |  |  | 0.0 |  |  |
 
-#### println, misconceptions: 6 edges offered
+#### for_loop, misconceptions: 21 edges offered
 Edges offered:
 | edge |
 |---|
-| err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
-| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
-| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+| err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
+| err:for_loop->ForCommaSeparators \| wrong rule: Writes for (int i = 0, i < n, i++). \| right rule: The three parts of a for header are separated by semicolons; commas only separate several statements inside the init or the update part. |
+| err:for_loop->SemicolonAfterIfHeader \| wrong rule: if (x > 0); System.out.println("positive"); prints only for positive x. \| right rule: The ; ends the if with an empty statement, so the next line always runs. |
+| err:for_loop->SemicolonAfterLoopHeader \| wrong rule: Puts a ; right after for (...) or while (...). \| right rule: A ; right after the loop header is a null (empty) loop body, so the statements written after it are not repeated by the loop. |
+| err:for_loop->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:for_loop->DoubleLoopIndexCount \| wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. \| right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect. |
+| mis:for_loop->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
+| mis:for_loop->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
+| mis:for_loop->ForIsConditional \| wrong rule: The body of a for statement executes at most once. \| right rule: The body of a for statement runs once for every pass on which the condition is true, which can be many times. |
+| mis:for_loop->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:for_loop->ForUpdateBeforeBody \| wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. \| right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |
+| mis:for_loop->ForWhileNotInterchangeable \| wrong rule: Some loops can only be written with for, others only with while. \| right rule: Any for loop can be rewritten as a while loop and vice versa; for just packages init, test and update. |
+| mis:for_loop->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:for_loop->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
+| mis:for_loop->LoopHeaderIsEquations \| wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. \| right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated. |
+| mis:for_loop->LoopImpliedByOneTest \| wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. \| right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop. |
+| mis:for_loop->LoopStepAlwaysOne \| wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). \| right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |
+| mis:for_loop->MissingBraces \| wrong rule: Omits braces around a single-statement body of if, for or while. \| right rule: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later. |
+| mis:for_loop->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+| mis:for_loop->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
+| mis:for_loop->SingleIterationInsteadOfLoop \| wrong rule: A task that must be repeated is written once, without a loop, as if one pass were enough. \| right rule: A step that must happen several times (or an unknown number of times) needs a loop such as while or for; code without a loop runs once. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.35), mis:println->PrintEqualsPrintln (0.25)
+mis:for_loop->IdiomOverridesCode (0.45), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ForIsConditional (0.25)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.35), mis:println->PrintEqualsPrintln (0.25)
+Kept by pruning: mis:for_loop->IdiomOverridesCode (0.45), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ForIsConditional (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
+| mis:for_loop->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| err:for_loop->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
+| mis:for_loop->ForIsConditional \| wrong rule: The body of a for statement executes at most once. \| right rule: The body of a for statement runs once for every pass on which the condition is true, which can be many times. |
 Model's reply:
 ```
-mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.92
-mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.93
-mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.93
+mis:for_loop->IdiomOverridesCode | correct | clauses: 5, 6 | confidence: 0.85
+err:for_loop->WrongIterationCount | correct | clauses: 3, 6 | confidence: 0.8
+mis:for_loop->ForIsConditional | correct | clauses: 3 | confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
-| mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
+| mis:for_loop->IdiomOverridesCode | correct | 0.45 | 0.85 | 0.38 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| err:for_loop->WrongIterationCount | correct | 0.3 | 0.8 | 0.24 | c3, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| mis:for_loop->ForIsConditional | correct | 0.25 | 0.85 | 0.21 | c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
 
-#### println, level ways: 17 edges offered
+#### for_loop, level ways: 24 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
-| lvl:println@L0#3 \| level L0 way inconsistent_trace: Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: "print and println behave the same (no newline difference)") |
-| lvl:println@L1#0 \| level L1 way names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line'). |
-| lvl:println@L1#1 \| level L1 way states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string. |
-| lvl:println@L2#0 \| level L2 way line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line. |
-| lvl:println@L2#1 \| level L2 way output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines. |
-| lvl:println@L2#2 \| level L2 way one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned. |
-| lvl:println@L3#0 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence. |
-| lvl:println@L3#1 \| level L3 way relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line. |
-| lvl:println@L3#2 \| level L3 way relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line. |
-| lvl:println@L3#3 \| level L3 way relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n. |
-| lvl:println@L3#4 \| level L3 way purpose_of_the_whole: Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print. |
-| lvl:println@L4#0 \| level L4 way predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same. |
-| lvl:println@L4#1 \| level L4 way transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting. |
-| lvl:println@L4#2 \| level L4 way diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt |
-| lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
-| lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
+| lvl:for_loop@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time. |
+| lvl:for_loop@L0#11 \| level L0 way inconsistent_trace: Applies the for sequencing rule (LT) unevenly: updates before the body on the first pass only, re-runs the init after a pass, or skips the test on some passes. (here mixing in: "The body of a for statement executes at most once") |
+| lvl:for_loop@L1#0 \| level L1 way names_the_element: The for statement is a loop that packages an initialization, a loop-continuation condition and an increment in its header around a body. |
+| lvl:for_loop@L1#1 \| level L1 way states_the_rule: Syntax: for (<initialize>; <boolean expression>; <increment>) { <statements> }, with the three parts separated by semicolons; it is, with only a few exceptions, equivalent to <initialize>; while (<boolean expression>) { <statements> <increment>; }. |
+| lvl:for_loop@L2#0 \| level L2 way line_by_line_trace: Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update. |
+| lvl:for_loop@L2#1 \| level L2 way output_prediction: A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,. |
+| lvl:for_loop@L2#2 \| level L2 way one_step_execution: One pass: the test reads the loop variable; the body applies its changes once; the update then changes the loop variable by its rule; the initializer changes state only once, before the first test. |
+| lvl:for_loop@L3#0 \| level L3 way relation_to_neighbour: The for header is exactly the three loop-control slots; the body runs after the test and before the update on each pass. |
+| lvl:for_loop@L3#1 \| level L3 way relation_to_neighbour: A for may be the body of another for: the inner for runs its complete set of passes for every single pass of the outer one. |
+| lvl:for_loop@L3#2 \| level L3 way relation_to_neighbour: for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element. |
+| lvl:for_loop@L3#3 \| level L3 way relation_to_neighbour: A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body. |
+| lvl:for_loop@L3#4 \| level L3 way relation_to_neighbour: In a for loop, continue skips the rest of the body and transfers control directly to the increment, then the next test; this is one of the few places where the for/while equivalence fails. |
+| lvl:for_loop@L3#5 \| level L3 way relation_to_neighbour: A variable declared in the for header is in scope only in the header and the body, so it cannot be used after the loop. |
+| lvl:for_loop@L3#6 \| level L3 way relation_to_neighbour: A fencepost loop is a for loop that handles one item (the first or last) outside the loop so that separators come out n-1 times for n items. |
+| lvl:for_loop@L3#7 \| level L3 way relation_to_neighbour: A flag search loop is a for loop that sets a boolean flag when some pass finds the target and leaves it set afterwards; the flag must be declared before the loop. |
+| lvl:for_loop@L3#8 \| level L3 way purpose_of_the_whole: Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number). |
+| lvl:for_loop@L4#0 \| level L4 way predict_a_change: Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass). |
+| lvl:for_loop@L4#1 \| level L4 way diagnose_an_error: rule broken: The three parts of a for header are separated by semicolons; commas only separate several statements inside the init or the update. Kind: compile-time. Trigger class: Writing for (int i = 0, i < n, i++): the compiler parses the commas as more declarators in the init and reports a syntax error. |
+| lvl:for_loop@L4#2 \| level L4 way diagnose_an_error: rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after the loop ends; while (cond); with a cond that the empty body cannot change hangs forever (infinite loop) when cond starts true. |
+| lvl:for_loop@L4#3 \| level L4 way transfer_to_a_new_program: Use for when there is an initialization, an increment and a continuation test and the loop variable is not needed after the loop; use while when the loop variable is needed later or the number of passes depends on what happens in the body. |
+| lvl:for_loop@L4#4 \| level L4 way diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a statement or block: that statement runs for every input, whatever cond is (it compiles without error). |
+| lvl:for_loop@L4#5 \| level L4 way diagnose_an_error: rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values). |
+| lvl:for_loop@L4#6 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
+| lvl:for_loop@L4#7 \| level L4 way diagnose_an_error: rule broken: A variable declared in the for initializer exists only inside the for statement. Kind: compile-time. Trigger class: Reading i after for (int i = 0; ...) {...}: 'cannot find symbol'. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:println@L2#1 (Score: 0.5)}
-{lvl:println@L3#4 (Score: 0.3)}
-{lvl:println@L3#0 (Score: 0.2)}
+{lvl:for_loop@L3#2 (Score: 0.5)}
+{lvl:for_loop@L4#5 (Score: 0.25)}
+{lvl:for_loop@L3#8 (Score: 0.25)}
 ```
-Kept by pruning: lvl:println@L2#1 (0.50), lvl:println@L3#4 (0.30), lvl:println@L3#0 (0.20)
+Kept by pruning: lvl:for_loop@L3#2 (0.50), lvl:for_loop@L4#5 (0.25), lvl:for_loop@L3#8 (0.25)
 
-Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.6
-```
-
-Label prompt for level way lvl:println@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.85
-```
-
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.75
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:println@L2#1 | shown | 0.5 | 0.6 | 0.3 | c1 | It prints 8 |
-| lvl:println@L3#4 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
-
-#### loop_variable, misconceptions: 7 edges offered
-Edges offered:
-| edge |
-|---|
-| mis:loop_variable->BodyChangeIgnoredByCondition \| wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. \| right rule: The condition is tested with the current value of the variable, including changes made in the body. |
-| mis:loop_variable->DoubleLoopIndexCount \| wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. \| right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect. |
-| mis:loop_variable->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
-| mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
-| mis:loop_variable->LoopUpdateChangesDirection \| wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. \| right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update. |
-| mis:loop_variable->LoopVariableLifetimeScope \| wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. \| right rule: The for variable i is created once by the init, and the update changes that same variable on every pass. |
-| mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
-```
-Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
-| mis:loop_variable->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
-| mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
-Model's reply:
-```
-mis:loop_variable->LoopOutputSameEachPass | correct | clauses: 3, 4 | confidence: 0.8
-mis:loop_variable->ForInitRepeats | correct | clauses: 3, 5 | confidence: 0.6
-mis:loop_variable->LoopVariableLimitsValues | correct | clauses: 1, 7 | confidence: 0.65
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:loop_variable->LoopOutputSameEachPass | correct | 0.45 | 0.8 | 0.36 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| mis:loop_variable->ForInitRepeats | correct | 0.3 | 0.6 | 0.18 | c3, c5 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1 |
-| mis:loop_variable->LoopVariableLimitsValues | correct | 0.25 | 0.65 | 0.16 | c1, c7 | It prints 8; For any array, this code prints its largest element |
-
-#### loop_variable, level ways: 13 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:loop_variable@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths a variable like the i in a sum ranges over all its values at once, and 'i from 1 to 10' is a set. A Java loop variable is one storage location holding one value at a time, changed step by step by the update. |
-| lvl:loop_variable@L0#5 \| level L0 way inconsistent_trace: Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same") |
-| lvl:loop_variable@L1#0 \| level L1 way names_the_element: A loop variable (loop-control counter, index) is a variable that is initialized, tested and updated in order to control a loop. |
-| lvl:loop_variable@L1#1 \| level L1 way states_the_rule: The loop variable is set once by the initialization, tested by the continuation condition before each pass and updated (usually incremented) at the end of each pass; declared in a for header, it is not available after the loop. |
-| lvl:loop_variable@L2#0 \| level L2 way line_by_line_trace: Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update. |
-| lvl:loop_variable@L2#1 \| level L2 way output_prediction: Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11). |
-| lvl:loop_variable@L2#2 \| level L2 way one_step_execution: One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees. |
-| lvl:loop_variable@L3#0 \| level L3 way relation_to_neighbour: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
-| lvl:loop_variable@L3#1 \| level L3 way relation_to_neighbour: In a while loop the loop variable is declared and initialized before the loop and updated inside the body, so it remains available after the loop. |
-| lvl:loop_variable@L3#2 \| level L3 way purpose_of_the_whole: Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index. |
-| lvl:loop_variable@L4#0 \| level L4 way predict_a_change: Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count. |
-| lvl:loop_variable@L4#1 \| level L4 way transfer_to_a_new_program: Use a dedicated loop variable (int) when passes are counted or indexed; do not use a double loop variable, and do not reuse it for other roles inside the body. |
-| lvl:loop_variable@L4#2 \| level L4 way diagnose_an_error: rule broken: Update the loop variable only in the update part (or in one place in a while body). Kind: silent logic error. Trigger class: An extra i++ in the body (or modifying i elsewhere): passes are skipped or repeated, and the loop may overshoot an != bound and never end. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:loop_variable@L3#0 (Score: 0.4)}
-{lvl:loop_variable@L3#2 (Score: 0.35)}
-{lvl:loop_variable@L2#1 (Score: 0.25)}
-```
-Kept by pruning: lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
-
-Label prompt for level way lvl:loop_variable@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 5, 6
-Confidence: 0.6
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_variable@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.
+Label prompt for level way lvl:for_loop@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:for_loop@L3#8 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 5, 6
-Confidence: 0.85
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_variable@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:for_loop@L3#2 | shown | 0.5 | 0.8 | 0.4 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:for_loop@L4#5 | not applied |  |  | 0.0 |  |  |
+| lvl:for_loop@L3#8 | shown | 0.25 | 0.8 | 0.2 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+
+#### control_flow, misconceptions: 11 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
+| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
+| mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
+| mis:control_flow->IfConditionWatched \| wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). \| right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch. |
+| mis:control_flow->IfWaitsForCondition \| wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. \| right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it. |
+| mis:control_flow->LoopImpliedByOneTest \| wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. \| right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop. |
+| mis:control_flow->NoShortCircuit \| wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them) \| right rule: In p && q, q is evaluated only when p is true; in p \|\| q, q is evaluated only when p is false. |
+| mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+| mis:control_flow->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
+| mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseConditionRestartsProgram (0.30), mis:control_flow->IfConditionWatched (0.30)
+```
+Kept by pruning: mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseConditionRestartsProgram (0.30), mis:control_flow->IfConditionWatched (0.30)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
+| mis:control_flow->IfConditionWatched \| wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). \| right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch. |
+Model's reply:
+```
+mis:control_flow->ProgramEndsAfterLoop | correct | clauses: 1 | confidence: 0.85
+mis:control_flow->FalseConditionRestartsProgram | correct | clauses: 3, 4 | confidence: 0.75
+mis:control_flow->IfConditionWatched | not applied | clauses: none | confidence: 0.65
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:control_flow->ProgramEndsAfterLoop | correct | 0.4 | 0.85 | 0.34 | c1 | It prints 8 |
+| mis:control_flow->FalseConditionRestartsProgram | correct | 0.3 | 0.75 | 0.22 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| mis:control_flow->IfConditionWatched | not applied |  |  | 0.0 |  |  |
+
+#### control_flow, level ways: 15 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
+| lvl:control_flow@L0#3 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order") |
+| lvl:control_flow@L1#0 \| level L1 way names_the_element: Control flow is the order in which a program's statements are executed (statement sequencing); conditionals and loops are the statements that change it. |
+| lvl:control_flow@L1#1 \| level L1 way states_the_rule: Without control statements every statement executes once, in the order given; a block executes its statements in order from first to last; if/if-else choose between one or two alternatives and loops repeat statements depending on a condition. |
+| lvl:control_flow@L2#0 \| level L2 way line_by_line_trace: Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it. |
+| lvl:control_flow@L2#1 \| level L2 way output_prediction: The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop. |
+| lvl:control_flow@L2#2 \| level L2 way one_step_execution: One step executes the single statement at the current control point using the current values, updates at most the variables it assigns, and moves the control point to the next statement (or, for an if/loop test, to the chosen branch, back to the test, or past the statement). |
+| lvl:control_flow@L3#0 \| level L3 way relation_to_neighbour: Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest. |
+| lvl:control_flow@L3#1 \| level L3 way relation_to_neighbour: An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement. |
+| lvl:control_flow@L3#2 \| level L3 way relation_to_neighbour: A flowchart draws control flow: each path through the diagram is a possible path of execution, with a decision box for each if or loop test. |
+| lvl:control_flow@L3#3 \| level L3 way purpose_of_the_whole: Plan: control flow lets one program do different things for different inputs (selection) and do a thing many times (repetition), so a short program can specify a potentially unlimited number of executed statements. |
+| lvl:control_flow@L4#0 \| level L4 way predict_a_change: Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n). |
+| lvl:control_flow@L4#1 \| level L4 way transfer_to_a_new_program: Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop. |
+| lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
+| lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:control_flow@L2#0 (Score: 0.45)}
+{lvl:control_flow@L2#1 (Score: 0.3)}
+{lvl:control_flow@L3#1 (Score: 0.25)}
+```
+Kept by pruning: lvl:control_flow@L2#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L3#1 (0.25)
+
+Label prompt for level way lvl:control_flow@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 5, 6
+Clauses: 2, 3, 4, 5, 6
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:control_flow@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2, 3, 4
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:control_flow@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3, 4
 Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:loop_variable@L3#0 | shown | 0.4 | 0.6 | 0.24 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| lvl:loop_variable@L3#2 | shown | 0.35 | 0.85 | 0.3 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| lvl:loop_variable@L2#1 | shown | 0.25 | 0.7 | 0.17 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:control_flow@L2#0 | shown | 0.45 | 0.7 | 0.32 | c2, c3, c4, c5, c6 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:control_flow@L2#1 | shown | 0.3 | 0.85 | 0.26 | c1, c2, c3, c4 | It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| lvl:control_flow@L3#1 | shown | 0.25 | 0.7 | 0.17 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
 
-#### loop_body, misconceptions: 12 edges offered
+#### array_declaration, misconceptions: 4 edges offered
 Edges offered:
 | edge |
 |---|
-| err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
-| mis:loop_body->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
-| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
-| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
-| mis:loop_body->LoopBodyAlwaysOnce \| wrong rule: The loop body always runs at least once, even if the condition is false at the start. \| right rule: A while or for body runs zero times when the condition is false at the start. |
-| mis:loop_body->LoopBodyStatementOutsideLoop \| wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. \| right rule: Every statement inside the loop braces is part of the body and runs on every pass. |
-| mis:loop_body->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
-| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
-| mis:loop_body->LoopRunsStatementsSeparately \| wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. \| right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ... |
-| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
-| mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
-| mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
+| mis:array_declaration->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
+| mis:array_declaration->ArrayElementsUntyped \| wrong rule: An array can hold elements of any type. \| right rule: All elements of an array have the declared element type. |
+| mis:array_declaration->DeclarationCreatesArray \| wrong rule: int[] a; already makes an array that can be indexed. \| right rule: The declaration only names the array; until new (or an initializer) creates it, using a[i] gives a 'variable might not have been initialized' compile-time error. |
+| mis:array_declaration->ElementNameIsWholeArray \| wrong rule: X[i] names the whole array, not one element. \| right rule: The array is a; a[i] is the single element at index i. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_body->IfInLoopUnchecked (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.35), mis:loop_body->ForLoopPartSkipped (0.25)
+{mis:array_declaration->ElementNameIsWholeArray (Score: 0.6)}
+{mis:array_declaration->ArrayBracketCountIsLength (Score: 0.25)}
+{mis:array_declaration->ArrayElementsUntyped (Score: 0.15)}
 ```
-Kept by pruning: mis:loop_body->IfInLoopUnchecked (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.35), mis:loop_body->ForLoopPartSkipped (0.25)
+Kept by pruning: mis:array_declaration->ElementNameIsWholeArray (0.60), mis:array_declaration->ArrayBracketCountIsLength (0.25), mis:array_declaration->ArrayElementsUntyped (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
-| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
-| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:array_declaration->ElementNameIsWholeArray \| wrong rule: X[i] names the whole array, not one element. \| right rule: The array is a; a[i] is the single element at index i. |
+| mis:array_declaration->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
+| mis:array_declaration->ArrayElementsUntyped \| wrong rule: An array can hold elements of any type. \| right rule: All elements of an array have the declared element type. |
 Model's reply:
 ```
-mis:loop_body->IfInLoopUnchecked | correct | clauses: 3, 4 | confidence: 0.9
-mis:loop_body->StateChangeIgnoredAcrossPasses | correct | clauses: 3, 4, 7 | confidence: 0.85
-mis:loop_body->ForLoopPartSkipped | correct | clauses: 3, 5, 6 | confidence: 0.75
+mis:array_declaration->ElementNameIsWholeArray | correct | clauses: 2, 3 | confidence: 0.85
+mis:array_declaration->ArrayBracketCountIsLength | not applied | clauses: none | confidence: 0.85
+mis:array_declaration->ArrayElementsUntyped | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_body->IfInLoopUnchecked | correct | 0.4 | 0.9 | 0.36 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| mis:loop_body->StateChangeIgnoredAcrossPasses | correct | 0.35 | 0.85 | 0.3 | c3, c4, c7 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element |
-| mis:loop_body->ForLoopPartSkipped | correct | 0.25 | 0.75 | 0.19 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| mis:array_declaration->ElementNameIsWholeArray | correct | 0.6 | 0.85 | 0.51 | c2, c3 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
+| mis:array_declaration->ArrayBracketCountIsLength | not applied |  |  | 0.0 |  |  |
+| mis:array_declaration->ArrayElementsUntyped | not applied |  |  | 0.0 |  |  |
 
-#### loop_body, level ways: 14 edges offered
+#### array_declaration, level ways: 13 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
-| lvl:loop_body@L0#6 \| level L0 way inconsistent_trace: Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start") |
-| lvl:loop_body@L1#0 \| level L1 way names_the_element: The loop body is the statement block that a loop repeats on each pass. |
-| lvl:loop_body@L1#1 \| level L1 way states_the_rule: The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated. |
-| lvl:loop_body@L2#0 \| level L2 way line_by_line_trace: On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one. |
-| lvl:loop_body@L2#1 \| level L2 way output_prediction: The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes. |
-| lvl:loop_body@L2#2 \| level L2 way one_step_execution: One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass. |
-| lvl:loop_body@L3#0 \| level L3 way relation_to_neighbour: The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop. |
-| lvl:loop_body@L3#1 \| level L3 way relation_to_neighbour: count++ sits inside the body, often under an if, so it runs once on each pass that matches; the counter is declared before the loop. |
-| lvl:loop_body@L3#2 \| level L3 way relation_to_neighbour: The body is what the while repeats; the condition is tested only between complete executions of it. |
-| lvl:loop_body@L3#3 \| level L3 way purpose_of_the_whole: Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term). |
-| lvl:loop_body@L4#0 \| level L4 way predict_a_change: Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use). |
-| lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
-| lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
+| lvl:array_declaration@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths and English, writing 'int[] a' reads as 'a is an array of ints', as if naming a list brings it into existence. Java rule: the declaration only creates a variable that can hold a reference to an int array; no array object or element space exists until new or an initializer creates one. |
+| lvl:array_declaration@L0#4 \| level L0 way inconsistent_trace: Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: "int[] a; already makes an array that can be indexed") |
+| lvl:array_declaration@L1#0 \| level L1 way names_the_element: Identity: a local variable declaration whose type is T[]; it introduces a name for a reference to an array whose elements have type T. |
+| lvl:array_declaration@L1#1 \| level L1 way states_the_rule: Declarative: 'T[] name;' declares an array variable of element type T (the C-style 'T name[]' is also legal); the length is not part of the type, so 'int[5] a;' is illegal. |
+| lvl:array_declaration@L2#0 \| level L2 way line_by_line_trace: Sequencing: 'double[] a;' only adds the variable a. In 'double[] a = new double[N];' the right side runs first (N is evaluated, the array is allocated and filled with defaults), and then the reference is stored in a. |
+| lvl:array_declaration@L2#1 \| level L2 way output_prediction: Result: a declaration produces no value and no output. A declared but unassigned local array variable cannot be read at all, so any use of a or a[i] before an assignment is rejected at compile time. |
+| lvl:array_declaration@L2#2 \| level L2 way one_step_execution: State transition: after 'int[] a;' the state gains a variable a with no value (not definitely assigned). No array object and no element variables exist yet. |
+| lvl:array_declaration@L3#0 \| level L3 way relation_to_neighbour: Composition: the declaration fixes the name and element type, and the creation must match it. 'double[] a = new double[N];' is legal, but 'double[] a = new int[N];' is a compile-time type error, because int[] does not convert to double[]. |
+| lvl:array_declaration@L3#1 \| level L3 way purpose_of_the_whole: Plan/role: give one name to a whole sequence of same-type values, so a program reaches any of N values as a[i] instead of declaring N separate variables a0, a1, ... |
+| lvl:array_declaration@L4#0 \| level L4 way predict_a_change: Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time. |
+| lvl:array_declaration@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: declare an array when a program must hold many values of one type and reach them by position. Do not use one for a single value, for values of different types, or for a collection that must grow as values arrive (a resizing structure such as ArrayList fits that case). |
+| lvl:array_declaration@L4#2 \| level L4 way diagnose_an_error: rule broken: An array variable must refer to a created array before it is used (definite assignment). Kind: compile-time. Trigger class: a[i] is read or written after 'int[] a;' with no 'a = new int[n]' or initializer on every path to that use |
+| lvl:array_declaration@L4#3 \| level L4 way diagnose_an_error: rule broken: All elements have the declared element type. Kind: compile-time. Trigger class: a value or array of a different type is stored, e.g. 'int[] a = new double[5];' or 'a[0] = 2.5;' for an int[] a (incompatible types / possible lossy conversion) |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:loop_body@L3#3 (Score: 0.45)}
-{lvl:loop_body@L2#0 (Score: 0.35)}
-{lvl:loop_body@L4#2 (Score: 0.2)}
+{lvl:array_declaration@L3#1 (Score: 0.5)}
+{lvl:array_declaration@L2#0 (Score: 0.25)}
+{lvl:array_declaration@L4#1 (Score: 0.25)}
 ```
-Kept by pruning: lvl:loop_body@L3#3 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L4#2 (0.20)
+Kept by pruning: lvl:array_declaration@L3#1 (0.50), lvl:array_declaration@L2#0 (0.25), lvl:array_declaration@L4#1 (0.25)
 
-Label prompt for level way lvl:loop_body@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).
+Label prompt for level way lvl:array_declaration@L3#1 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Plan/role: give one name to a whole sequence of same-type values, so a program reaches any of N values as a[i] instead of declaring N separate variables a0, a1, ...
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:array_declaration@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Sequencing: 'double[] a;' only adds the variable a. In 'double[] a = new double[N];' the right side runs first (N is evaluated, the array is allocated and filled with defaults), and then the reference is stored in a.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:loop_body@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.
+Label prompt for level way lvl:array_declaration@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+> Applicability: declare an array when a program must hold many values of one type and reach them by position. Do not use one for a single value, for values of different types, or for a collection that must grow as values arrive (a resizing structure such as ArrayList fits that case).
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3, 4
-Confidence: 0.65
-```
-
-Label prompt for level way lvl:loop_body@L4#2 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
-> Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body.
-
-Model's reply:
-```
-Label: shown
-Clauses: 2, 3, 6, 7
-Confidence: 0.55
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:loop_body@L3#3 | shown | 0.45 | 0.85 | 0.38 | c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
-| lvl:loop_body@L2#0 | shown | 0.35 | 0.65 | 0.23 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| lvl:loop_body@L4#2 | shown | 0.2 | 0.55 | 0.11 | c2, c3, c6, c7 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element |
+| lvl:array_declaration@L3#1 | not applied |  |  | 0.0 |  |  |
+| lvl:array_declaration@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:array_declaration@L4#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:indexing->array_bounds [confirmed, tier 2, 0.90], pre:loop_variable->loop_control [confirmed, tier 2, 0.44], pre:array_traversal->running_extreme [confirmed, tier 2, 0.38]
+pre:indexing->array_bounds [confirmed, tier 2, 0.90], mis:array_declaration->ElementNameIsWholeArray [correct, tier 2, 0.51], pre:loop_variable->loop_control [confirmed, tier 2, 0.44]
 
 reached across pre:indexing->array_bounds, entered next: array_bounds
 
-reached across pre:array_traversal->running_extreme, entered next: running_extreme
+reached across pre:loop_variable->loop_control, entered next: loop_variable
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 8 | lvl:println@L2#1 |
-| c2 | max starts as the first element, 3 | lvl:array_traversal@L3#6 |
-| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | lvl:array_traversal@L3#6 |
-| c4 | so after 8 it never changes | lvl:array_traversal@L3#6 |
-| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
-| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
-| c7 | For any array, this code prints its largest element | lvl:array_traversal@L3#6 |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_bounds, own edges of running_extreme, pre:statement->println
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_bounds, own edges of loop_variable, pre:control_flow->if_statement, pre:for_loop->loop_scope, pre:statement->control_flow
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY08_figure05.png
 
-### Depth 3: current concepts 'array_bounds', 'indexing', 'loop_variable', 'loop_control', 'running_extreme', 'array_traversal', 'println'
+### Depth 3: current concepts 'array_bounds', 'indexing', 'loop_variable', 'loop_control', 'for_loop', 'control_flow'
 
 #### array_bounds, misconceptions: 2 edges offered
 Edges offered:
@@ -1089,6 +1088,107 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:indexing->array_traversal | confirmed | 1.0 | 0.85 | 0.85 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
+#### loop_variable, misconceptions: 7 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:loop_variable->BodyChangeIgnoredByCondition \| wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. \| right rule: The condition is tested with the current value of the variable, including changes made in the body. |
+| mis:loop_variable->DoubleLoopIndexCount \| wrong rule: for (double x = 0.0; x <= 1.0; x += 0.1) runs exactly 11 times. \| right rule: Using a double as a for-loop index is legal but bad practice: the number of iterations depends on an equality test between double values, which may not give the result you expect. |
+| mis:loop_variable->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
+| mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_variable->LoopUpdateChangesDirection \| wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. \| right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update. |
+| mis:loop_variable->LoopVariableLifetimeScope \| wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. \| right rule: The for variable i is created once by the init, and the update changes that same variable on every pass. |
+| mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
+```
+Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_variable->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
+| mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
+Model's reply:
+```
+mis:loop_variable->LoopOutputSameEachPass | correct | clauses: 3, 4 | confidence: 0.8
+mis:loop_variable->ForInitRepeats | correct | clauses: 3, 5 | confidence: 0.6
+mis:loop_variable->LoopVariableLimitsValues | correct | clauses: 1, 7 | confidence: 0.65
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:loop_variable->LoopOutputSameEachPass | correct | 0.45 | 0.8 | 0.36 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| mis:loop_variable->ForInitRepeats | correct | 0.3 | 0.6 | 0.18 | c3, c5 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1 |
+| mis:loop_variable->LoopVariableLimitsValues | correct | 0.25 | 0.65 | 0.16 | c1, c7 | It prints 8; For any array, this code prints its largest element |
+
+#### loop_variable, level ways: 13 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:loop_variable@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths a variable like the i in a sum ranges over all its values at once, and 'i from 1 to 10' is a set. A Java loop variable is one storage location holding one value at a time, changed step by step by the update. |
+| lvl:loop_variable@L0#5 \| level L0 way inconsistent_trace: Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same") |
+| lvl:loop_variable@L1#0 \| level L1 way names_the_element: A loop variable (loop-control counter, index) is a variable that is initialized, tested and updated in order to control a loop. |
+| lvl:loop_variable@L1#1 \| level L1 way states_the_rule: The loop variable is set once by the initialization, tested by the continuation condition before each pass and updated (usually incremented) at the end of each pass; declared in a for header, it is not available after the loop. |
+| lvl:loop_variable@L2#0 \| level L2 way line_by_line_trace: Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update. |
+| lvl:loop_variable@L2#1 \| level L2 way output_prediction: Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11). |
+| lvl:loop_variable@L2#2 \| level L2 way one_step_execution: One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees. |
+| lvl:loop_variable@L3#0 \| level L3 way relation_to_neighbour: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
+| lvl:loop_variable@L3#1 \| level L3 way relation_to_neighbour: In a while loop the loop variable is declared and initialized before the loop and updated inside the body, so it remains available after the loop. |
+| lvl:loop_variable@L3#2 \| level L3 way purpose_of_the_whole: Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index. |
+| lvl:loop_variable@L4#0 \| level L4 way predict_a_change: Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count. |
+| lvl:loop_variable@L4#1 \| level L4 way transfer_to_a_new_program: Use a dedicated loop variable (int) when passes are counted or indexed; do not use a double loop variable, and do not reuse it for other roles inside the body. |
+| lvl:loop_variable@L4#2 \| level L4 way diagnose_an_error: rule broken: Update the loop variable only in the update part (or in one place in a while body). Kind: silent logic error. Trigger class: An extra i++ in the body (or modifying i elsewhere): passes are skipped or repeated, and the loop may overshoot an != bound and never end. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:loop_variable@L3#0 (Score: 0.4)}
+{lvl:loop_variable@L3#2 (Score: 0.35)}
+{lvl:loop_variable@L2#1 (Score: 0.25)}
+```
+Kept by pruning: lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
+
+Label prompt for level way lvl:loop_variable@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+
+Model's reply:
+```
+Label: shown
+Clauses: 5, 6
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:loop_variable@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3, 5, 6
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:loop_variable@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).
+
+Model's reply:
+```
+Label: shown
+Clauses: 5, 6
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:loop_variable@L3#0 | shown | 0.4 | 0.6 | 0.24 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:loop_variable@L3#2 | shown | 0.35 | 0.85 | 0.3 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:loop_variable@L2#1 | shown | 0.25 | 0.7 | 0.17 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+
 #### loop_control, concept edges: 2 edges offered
 Edges offered:
 | edge |
@@ -1130,109 +1230,20 @@ Parsed labels:
 | pre:loop_control->for_loop | confirmed | 0.85 | 0.7 | 0.59 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | pre:loop_control->increment_operators | not applied |  |  | 0.0 |  |  |
 
-#### running_extreme, misconceptions: 1 edges offered
+#### for_loop, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
-| mis:running_extreme->ExtremeStartsAtZero \| wrong rule: The running maximum can always start at 0. \| right rule: Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{mis:running_extreme->ExtremeStartsAtZero (Score: 1.0)}
-```
-Kept by pruning: mis:running_extreme->ExtremeStartsAtZero (1.00)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:running_extreme->ExtremeStartsAtZero \| wrong rule: The running maximum can always start at 0. \| right rule: Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it. |
-Model's reply:
-```
-mis:running_extreme->ExtremeStartsAtZero | correct | clauses: 2, 7 | confidence: 0.6
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:running_extreme->ExtremeStartsAtZero | correct | 1.0 | 0.6 | 0.6 | c2, c7 | max starts as the first element, 3; For any array, this code prints its largest element |
-
-#### running_extreme, level ways: 14 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:running_extreme@L0#0 \| level L0 way everyday_reading: Folk meaning: 'the biggest so far' starts from nothing, i.e. 0, because everyday quantities are positive. Rule: the running maximum must start at a value no data can be below (Double.NEGATIVE_INFINITY, Integer.MIN_VALUE) or at the first element, so that the first value read replaces it. |
-| lvl:running_extreme@L0#2 \| level L0 way inconsistent_trace: Points to LT: on each pass, compare a[i] with max and assign max = a[i] only if a[i] is larger. Inconsistent application: max is overwritten without the comparison on some passes, or compared with a stale value. (here mixing in: "The running maximum can always start at 0") |
-| lvl:running_extreme@L1#0 \| level L1 way names_the_element: Identity: a running maximum (or minimum), a variable holding the largest (smallest) value seen so far in a pass over the data; Sajaniemi's most-wanted holder. |
-| lvl:running_extreme@L1#1 \| level L1 way states_the_rule: Declarative: double max = Double.NEGATIVE_INFINITY; for (int i = 0; i < N; i++) if (a[i] > max) max = a[i];. |
-| lvl:running_extreme@L2#0 \| level L2 way line_by_line_trace: Sequencing: initialize max before the loop; in each pass evaluate a[i] > max, and if it is true assign max = a[i]; read max only after the loop ends. |
-| lvl:running_extreme@L2#1 \| level L2 way output_prediction: Result: the largest element (of the element type). For an empty array (or no input) max stays at its start value: NEGATIVE_INFINITY, or MIN_VALUE for int. |
-| lvl:running_extreme@L2#2 \| level L2 way one_step_execution: State transition: one pass changes max only when a[i] > max; otherwise nothing changes. |
-| lvl:running_extreme@L3#0 \| level L3 way relation_to_neighbour: The maximum is found in one traversal, keeping the largest value seen so far, starting from Double.NEGATIVE_INFINITY. |
-| lvl:running_extreme@L3#1 \| level L3 way relation_to_neighbour: Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value. |
-| lvl:running_extreme@L3#2 \| level L3 way purpose_of_the_whole: Plan/role: most-wanted holder (Sajaniemi). It finds the extreme in one pass with constant extra memory; the same plan tracks the minimum with <. |
-| lvl:running_extreme@L4#0 \| level L4 way predict_a_change: Conservation: replacing > by >= keeps the maximum value but changes which tied position is the last one recorded. Remembering the index of the extreme instead of its value conserves the specification. |
-| lvl:running_extreme@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: use a running extreme when only the max or min (or its position) is needed, in a single pass. For further facts such as how many items equal the maximum, keep the data (an array) and make a second pass. |
-| lvl:running_extreme@L4#2 \| level L4 way diagnose_an_error: rule broken: The start value must not exceed every possible data value. Kind: silent logic error. Trigger class: max starts at 0 (or Double.MIN_VALUE, which is the smallest positive double) and all data are negative, so the result is the start value |
-| lvl:running_extreme@L4#3 \| level L4 way diagnose_an_error: rule broken: Update only when the new value beats the current extreme. Kind: silent logic error. Trigger class: the comparison is reversed (a[i] < max), so the minimum is found, or max = a[i] is unconditional, so the last value is found |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:running_extreme@L2#0 (Score: 0.4)}
-{lvl:running_extreme@L2#1 (Score: 0.35)}
-{lvl:running_extreme@L2#2 (Score: 0.25)}
-```
-Kept by pruning: lvl:running_extreme@L2#0 (0.40), lvl:running_extreme@L2#1 (0.35), lvl:running_extreme@L2#2 (0.25)
-
-Label prompt for level way lvl:running_extreme@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Sequencing: initialize max before the loop; in each pass evaluate a[i] > max, and if it is true assign max = a[i]; read max only after the loop ends.
-
-Model's reply:
-```
-Label: shown
-Clauses: 2, 3, 4
-Confidence: 0.85
-```
-
-Label prompt for level way lvl:running_extreme@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Result: the largest element (of the element type). For an empty array (or no input) max stays at its start value: NEGATIVE_INFINITY, or MIN_VALUE for int.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1, 4, 7
-Confidence: 0.9
-```
-
-Label prompt for level way lvl:running_extreme@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
-> State transition: one pass changes max only when a[i] > max; otherwise nothing changes.
-
-Model's reply:
-```
-Label: shown
-Clauses: 3, 4
-Confidence: 0.85
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:running_extreme@L2#0 | shown | 0.4 | 0.85 | 0.34 | c2, c3, c4 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| lvl:running_extreme@L2#1 | shown | 0.35 | 0.9 | 0.32 | c1, c4, c7 | It prints 8; so after 8 it never changes; For any array, this code prints its largest element |
-| lvl:running_extreme@L2#2 | shown | 0.25 | 0.85 | 0.21 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-
-#### array_traversal, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:array_traversal->running_extreme \| rule: The running maximum is found by traversing the array once, keeping the largest value seen so far (starting from Double.NEGATIVE_INFINITY). |
 | pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
-| pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
+| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-pre:for_loop->array_traversal (1.00)
+{pre:for_loop->array_traversal (Score: 0.9)}
+{pre:for_loop->loop_scope (Score: 0.1)}
 ```
-Kept by pruning: pre:for_loop->array_traversal (1.00)
+Kept by pruning: pre:for_loop->array_traversal (0.90), pre:for_loop->loop_scope (0.10)
 
 Label prompt for concept edge pre:for_loop->array_traversal (for_loop -> array_traversal, prerequisite):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.
@@ -1244,56 +1255,65 @@ Clauses: 3, 5, 6
 Confidence: 0.85
 ```
 
+Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
+> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.85
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:for_loop->array_traversal | confirmed | 1.0 | 0.85 | 0.85 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| pre:for_loop->array_traversal | confirmed | 0.9 | 0.85 | 0.77 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
 
-#### println, concept edges: 1 edges offered
+#### control_flow, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
-| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
+| pre:control_flow->if_statement \| rule: An if changes the default top-to-bottom flow by running a block only when its condition is true. |
+| pre:statement->control_flow \| rule: Control flow is the order in which statements run. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:statement->println (Score: 1.0)}
+{pre:control_flow->if_statement (Score: 0.6)}
+{pre:statement->control_flow (Score: 0.4)}
 ```
-Kept by pruning: pre:statement->println (1.00)
+Kept by pruning: pre:control_flow->if_statement (0.60), pre:statement->control_flow (0.40)
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
-> System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
+Label prompt for concept edge pre:control_flow->if_statement (control_flow -> if_statement, prerequisite):
+> An if changes the default top-to-bottom flow by running a block only when its condition is true.
 
 Model's reply:
 ```
 Label: confirmed
-Clauses: 1, 4
-Confidence: 0.6
+Clauses: 3, 4
+Confidence: 0.9
+```
+
+Label prompt for concept edge pre:statement->control_flow (statement -> control_flow, prerequisite):
+> Control flow is the order in which statements run.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 2, 3, 4
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:statement->println | confirmed | 1.0 | 0.6 | 0.6 | c1, c4 | It prints 8; so after 8 it never changes |
+| pre:control_flow->if_statement | confirmed | 0.6 | 0.9 | 0.54 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| pre:statement->control_flow | confirmed | 0.4 | 0.7 | 0.28 | c2, c3, c4 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.85], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
-
-reached across pre:for_loop->array_traversal, entered next: for_loop
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints 8 | lvl:println@L2#1 |
-| c2 | max starts as the first element, 3 | lvl:array_traversal@L3#6 |
-| c3 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | lvl:array_traversal@L3#6 |
-| c4 | so after 8 it never changes | lvl:array_traversal@L3#6 |
-| c5 | The loop starts at i = 1 | mis:array_traversal->IdiomOverridesCode |
-| c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end | mis:array_traversal->OffByOneBound |
-| c7 | For any array, this code prints its largest element | lvl:array_traversal@L3#6 |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of for_loop
+pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.77], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY08_figure06.png
 
@@ -1301,14 +1321,13 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 Root-cause walk: held on [], broken at [], prerequisites {'running_extreme': ['array_traversal'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - array_bounds: L3 via relation_to_neighbour "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - array_traversal: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
+- control_flow: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+- for_loop: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - indexing: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-- loop_body: L4 via transfer_to_a_new_program "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element"
 - loop_control: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - loop_variable: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-- println: L2 via output_prediction "It prints 8"
-- running_extreme: L2 via line_by_line_trace "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
 
-**Stop:** max depth at depth 3; prompts {'prune': 23, 'label': 44}, fresh model calls 0, cache hits 67
+**Stop:** sufficient at depth 3; prompts {'prune': 23, 'label': 46}, fresh model calls 0, cache hits 69
 
 ### Held misconceptions
 (none)
@@ -1323,19 +1342,18 @@ Root-cause walk: held on [], broken at [], prerequisites {'running_extreme': ['a
 |---|---|---|---|---|---|---|---|---|
 | array_bounds | L3 | relation_to_neighbour |  | level_way | because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour |  |
 | array_traversal | L3 | purpose_of_the_whole |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |  | L3 relation_to_neighbour, L3 relation_to_neighbour |  |
+| control_flow | L3 | relation_to_neighbour |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |  | L2 line_by_line_trace, L2 output_prediction |  |
+| for_loop | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 purpose_of_the_whole |  |
 | indexing | L3 | relation_to_neighbour |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| loop_body | L4 | transfer_to_a_new_program |  | level_way | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element |  | L3 purpose_of_the_whole, L2 line_by_line_trace |  |
 | loop_control | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 purpose_of_the_whole, L2 output_prediction |  |
 | loop_variable | L3 | purpose_of_the_whole |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| println | L2 | output_prediction |  | level_way | It prints 8 |  |  |  |
-| running_extreme | L2 | line_by_line_trace |  | level_way | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |  | L2 output_prediction, L2 one_step_execution |  |
 
-### Overall level: L2
+### Overall level: L3
 
 Clause coverage (final):
 | clause | covered by |
 |---|---|
-| It prints 8 | lvl:println@L2#1 |
+| It prints 8 | mis:control_flow->ProgramEndsAfterLoop |
 | max starts as the first element, 3 | lvl:array_traversal@L3#6 |
 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value | lvl:array_traversal@L3#6 |
 | so after 8 it never changes | lvl:array_traversal@L3#6 |
@@ -1371,30 +1389,31 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | indexing | pre:indexing->array_bounds | prerequisite | confirmed | 1.0 | 0.9 | 0.9 | [6, 2] | because a[0] is already in max, and i < a.length stops at the last index without going past the end; max starts as the first element, 3 |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.55 | 0.8 | 0.44 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.4 | 0.7 | 0.28 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | println | lvl:println@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1] | It prints 8 |
-| 2 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.45 | 0.8 | 0.36 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 2 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.3 | 0.6 | 0.18 | [3, 5] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1 |
-| 2 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.25 | 0.65 | 0.1625 | [1, 7] | It prints 8; For any array, this code prints its largest element |
-| 2 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.35 | 0.85 | 0.2975 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | loop_body | mis:loop_body->IfInLoopUnchecked | misconception | correct | 0.4 | 0.9 | 0.36 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 2 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.35 | 0.85 | 0.2975 | [3, 4, 7] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element |
-| 2 | loop_body | mis:loop_body->ForLoopPartSkipped | misconception | correct | 0.25 | 0.75 | 0.1875 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | loop_body | lvl:loop_body@L3#3 | level | shown | 0.45 | 0.85 | 0.3825 | [3] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
-| 2 | loop_body | lvl:loop_body@L2#0 | level | shown | 0.35 | 0.65 | 0.2275 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 2 | loop_body | lvl:loop_body@L4#2 | level | shown | 0.2 | 0.55 | 0.11 | [2, 3, 6, 7] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element |
+| 2 | for_loop | mis:for_loop->IdiomOverridesCode | misconception | correct | 0.45 | 0.85 | 0.3825 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.3 | 0.8 | 0.24 | [3, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.25 | 0.85 | 0.2125 | [3] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
+| 2 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.5 | 0.8 | 0.4 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | for_loop | lvl:for_loop@L3#8 | level | shown | 0.25 | 0.8 | 0.2 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | control_flow | mis:control_flow->ProgramEndsAfterLoop | misconception | correct | 0.4 | 0.85 | 0.34 | [1] | It prints 8 |
+| 2 | control_flow | mis:control_flow->FalseConditionRestartsProgram | misconception | correct | 0.3 | 0.75 | 0.225 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 2 | control_flow | lvl:control_flow@L2#0 | level | shown | 0.45 | 0.7 | 0.315 | [2, 3, 4, 5, 6] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.3 | 0.85 | 0.255 | [1, 2, 3, 4] | It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 2 | control_flow | lvl:control_flow@L3#1 | level | shown | 0.25 | 0.7 | 0.175 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 2 | array_declaration | mis:array_declaration->ElementNameIsWholeArray | misconception | correct | 0.6 | 0.85 | 0.51 | [2, 3] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
 | 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.8 | 0.85 | 0.68 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.4 | 0.85 | 0.34 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | array_bounds | lvl:array_bounds@L3#1 | level | shown | 0.25 | 0.65 | 0.1625 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | indexing | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.85 | 0.85 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.45 | 0.8 | 0.36 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 3 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.3 | 0.6 | 0.18 | [3, 5] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1 |
+| 3 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.25 | 0.65 | 0.1625 | [1, 7] | It prints 8; For any array, this code prints its largest element |
+| 3 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.35 | 0.85 | 0.2975 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.85 | 0.7 | 0.595 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 3 | running_extreme | mis:running_extreme->ExtremeStartsAtZero | misconception | correct | 1.0 | 0.6 | 0.6 | [2, 7] | max starts as the first element, 3; For any array, this code prints its largest element |
-| 3 | running_extreme | lvl:running_extreme@L2#0 | level | shown | 0.4 | 0.85 | 0.34 | [2, 3, 4] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 3 | running_extreme | lvl:running_extreme@L2#1 | level | shown | 0.35 | 0.9 | 0.315 | [1, 4, 7] | It prints 8; so after 8 it never changes; For any array, this code prints its largest element |
-| 3 | running_extreme | lvl:running_extreme@L2#2 | level | shown | 0.25 | 0.85 | 0.2125 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 3 | array_traversal | pre:for_loop->array_traversal | prerequisite | confirmed | 1.0 | 0.85 | 0.85 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 3 | println | pre:statement->println | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [1, 4] | It prints 8; so after 8 it never changes |
+| 3 | for_loop | pre:for_loop->array_traversal | prerequisite | confirmed | 0.9 | 0.85 | 0.765 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 3 | control_flow | pre:control_flow->if_statement | prerequisite | confirmed | 0.6 | 0.9 | 0.54 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 3 | control_flow | pre:statement->control_flow | prerequisite | confirmed | 0.4 | 0.7 | 0.28 | [2, 3, 4] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -1403,10 +1422,10 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.36 | [6] |
 | 1 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.36 | [6] |
 | 2 | indexing | pre:indexing->array_bounds | prerequisite | confirmed | 0.9 | [6, 2] |
+| 2 | array_declaration | mis:array_declaration->ElementNameIsWholeArray | misconception | correct | 0.51 | [2, 3] |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.44 | [5, 6] |
-| 2 | array_traversal | pre:array_traversal->running_extreme | prerequisite | confirmed | 0.3825 | [2, 3, 4, 7] |
 | 3 | indexing | pre:indexing->array_traversal | prerequisite | confirmed | 0.85 | [3, 5, 6] |
-| 3 | array_traversal | pre:for_loop->array_traversal | prerequisite | confirmed | 0.85 | [3, 5, 6] |
+| 3 | for_loop | pre:for_loop->array_traversal | prerequisite | confirmed | 0.765 | [3, 5, 6] |
 | 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.68 | [6] |
 
 ## 7. Raw traversal log
@@ -1442,10 +1461,10 @@ start concepts (3): array_traversal, indexing, loop_control
     lvl:loop_control@L3#6 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:loop_control@L2#1 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   kept: mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->OffByOneBound [correct, tier 2, 0.36]
-  clause coverage: c1 uncovered; c2 <- lvl:array_traversal@L3#6; c3 <- lvl:array_traversal@L3#6; c4 <- lvl:array_traversal@L3#6; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- lvl:array_traversal@L3#6
-  uncovered clauses bring in: println (2.44), loop_variable (2.18), loop_body (1.77)
-  not yet read: own edges of loop_body, own edges of loop_variable, own edges of println, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
---- depth 2: current concepts ['array_traversal', 'indexing', 'loop_control', 'println', 'loop_variable', 'loop_body']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 uncovered; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 uncovered
+  uncovered clauses bring in: for_loop (10.88), control_flow (10.57), array_declaration (9.85)
+  not yet read: own edges of array_declaration, own edges of control_flow, own edges of for_loop, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['array_traversal', 'indexing', 'loop_control', 'for_loop', 'control_flow', 'array_declaration']
   array_traversal (concept edges): 3 candidates -> kept pre:array_traversal->running_extreme (0.45), pre:for_loop->array_traversal (0.35), pre:indexing->array_traversal (0.20)
     pre:array_traversal->running_extreme -> confirmed (0.38) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element"
     pre:for_loop->array_traversal -> confirmed (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
@@ -1456,36 +1475,36 @@ start concepts (3): array_traversal, indexing, loop_control
     pre:loop_variable->loop_control -> confirmed (0.44) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     pre:loop_control->for_loop -> confirmed (0.28) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     pre:loop_control->increment_operators -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.35), mis:println->PrintEqualsPrintln (0.25)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
-    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#4 (0.30), lvl:println@L3#0 (0.20)
-    lvl:println@L2#1 -> shown (0.30) "It prints 8"
-    lvl:println@L3#4 -> not applied (0.00) ""
-    lvl:println@L3#0 -> not applied (0.00) ""
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.36) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    mis:loop_variable->ForInitRepeats -> correct (0.18) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1"
-    mis:loop_variable->LoopVariableLimitsValues -> correct (0.16) "It prints 8; For any array, this code prints its largest element"
-  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
-    lvl:loop_variable@L3#0 -> shown (0.24) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    lvl:loop_variable@L3#2 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    lvl:loop_variable@L2#1 -> shown (0.17) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->IfInLoopUnchecked (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.35), mis:loop_body->ForLoopPartSkipped (0.25)
-    mis:loop_body->IfInLoopUnchecked -> correct (0.36) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element"
-    mis:loop_body->ForLoopPartSkipped -> correct (0.19) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#3 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L4#2 (0.20)
-    lvl:loop_body@L3#3 -> shown (0.38) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value"
-    lvl:loop_body@L2#0 -> shown (0.23) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    lvl:loop_body@L4#2 -> shown (0.11) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element"
-  kept: pre:indexing->array_bounds [confirmed, tier 2, 0.90], pre:loop_variable->loop_control [confirmed, tier 2, 0.44], pre:array_traversal->running_extreme [confirmed, tier 2, 0.38]
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->IdiomOverridesCode (0.45), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ForIsConditional (0.25)
+    mis:for_loop->IdiomOverridesCode -> correct (0.38) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    err:for_loop->WrongIterationCount -> correct (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    mis:for_loop->ForIsConditional -> correct (0.21) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#2 (0.50), lvl:for_loop@L4#5 (0.25), lvl:for_loop@L3#8 (0.25)
+    lvl:for_loop@L3#2 -> shown (0.40) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L3#8 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseConditionRestartsProgram (0.30), mis:control_flow->IfConditionWatched (0.30)
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.34) "It prints 8"
+    mis:control_flow->FalseConditionRestartsProgram -> correct (0.22) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    mis:control_flow->IfConditionWatched -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L3#1 (0.25)
+    lvl:control_flow@L2#0 -> shown (0.32) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:control_flow@L2#1 -> shown (0.26) "It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    lvl:control_flow@L3#1 -> shown (0.17) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+  array_declaration (misconceptions): 4 candidates -> kept mis:array_declaration->ElementNameIsWholeArray (0.60), mis:array_declaration->ArrayBracketCountIsLength (0.25), mis:array_declaration->ArrayElementsUntyped (0.15)
+    mis:array_declaration->ElementNameIsWholeArray -> correct (0.51) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value"
+    mis:array_declaration->ArrayBracketCountIsLength -> not applied (0.00) ""
+    mis:array_declaration->ArrayElementsUntyped -> not applied (0.00) ""
+  array_declaration (level ways): 13 candidates -> kept lvl:array_declaration@L3#1 (0.50), lvl:array_declaration@L2#0 (0.25), lvl:array_declaration@L4#1 (0.25)
+    lvl:array_declaration@L3#1 -> not applied (0.00) ""
+    lvl:array_declaration@L2#0 -> not applied (0.00) ""
+    lvl:array_declaration@L4#1 -> not applied (0.00) ""
+  kept: pre:indexing->array_bounds [confirmed, tier 2, 0.90], mis:array_declaration->ElementNameIsWholeArray [correct, tier 2, 0.51], pre:loop_variable->loop_control [confirmed, tier 2, 0.44]
   reached across pre:indexing->array_bounds, entered next: array_bounds
-  reached across pre:array_traversal->running_extreme, entered next: running_extreme
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:array_traversal@L3#6; c3 <- lvl:array_traversal@L3#6; c4 <- lvl:array_traversal@L3#6; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- lvl:array_traversal@L3#6
-  not yet read: own edges of array_bounds, own edges of running_extreme, pre:statement->println
---- depth 3: current concepts ['array_bounds', 'indexing', 'loop_variable', 'loop_control', 'running_extreme', 'array_traversal', 'println']
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage (rule edges): c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
+  not yet read: own edges of array_bounds, own edges of loop_variable, pre:control_flow->if_statement, pre:for_loop->loop_scope, pre:statement->control_flow
+--- depth 3: current concepts ['array_bounds', 'indexing', 'loop_variable', 'loop_control', 'for_loop', 'control_flow']
   array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OffByOneBound (0.80), mis:array_bounds->OutOfBoundsElementsAreNull (0.20)
     mis:array_bounds->OffByOneBound -> correct (0.68) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
@@ -1495,32 +1514,33 @@ start concepts (3): array_traversal, indexing, loop_control
     lvl:array_bounds@L3#1 -> shown (0.16) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   indexing (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
     pre:indexing->array_traversal -> confirmed (0.85) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.36) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    mis:loop_variable->ForInitRepeats -> correct (0.18) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1"
+    mis:loop_variable->LoopVariableLimitsValues -> correct (0.16) "It prints 8; For any array, this code prints its largest element"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
+    lvl:loop_variable@L3#0 -> shown (0.24) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:loop_variable@L3#2 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:loop_variable@L2#1 -> shown (0.17) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.85), pre:loop_control->increment_operators (0.15)
     pre:loop_control->for_loop -> confirmed (0.59) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     pre:loop_control->increment_operators -> not applied (0.00) ""
-  running_extreme (misconceptions): 1 candidates -> kept mis:running_extreme->ExtremeStartsAtZero (1.00)
-    mis:running_extreme->ExtremeStartsAtZero -> correct (0.60) "max starts as the first element, 3; For any array, this code prints its largest element"
-  running_extreme (level ways): 14 candidates -> kept lvl:running_extreme@L2#0 (0.40), lvl:running_extreme@L2#1 (0.35), lvl:running_extreme@L2#2 (0.25)
-    lvl:running_extreme@L2#0 -> shown (0.34) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    lvl:running_extreme@L2#1 -> shown (0.32) "It prints 8; so after 8 it never changes; For any array, this code prints its largest element"
-    lvl:running_extreme@L2#2 -> shown (0.21) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-  array_traversal (concept edges): 1 candidates -> kept pre:for_loop->array_traversal (1.00)
-    pre:for_loop->array_traversal -> confirmed (0.85) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
-    pre:statement->println -> confirmed (0.60) "It prints 8; so after 8 it never changes"
-  kept: pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.85], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
-  reached across pre:for_loop->array_traversal, entered next: for_loop
-  clause coverage: c1 <- lvl:println@L2#1; c2 <- lvl:array_traversal@L3#6; c3 <- lvl:array_traversal@L3#6; c4 <- lvl:array_traversal@L3#6; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- lvl:array_traversal@L3#6
-  not yet read: own edges of for_loop
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.90), pre:for_loop->loop_scope (0.10)
+    pre:for_loop->array_traversal -> confirmed (0.77) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  control_flow (concept edges): 2 candidates -> kept pre:control_flow->if_statement (0.60), pre:statement->control_flow (0.40)
+    pre:control_flow->if_statement -> confirmed (0.54) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    pre:statement->control_flow -> confirmed (0.28) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+  kept: pre:indexing->array_traversal [confirmed, tier 2, 0.85], pre:for_loop->array_traversal [confirmed, tier 2, 0.77], mis:array_bounds->OffByOneBound [correct, tier 2, 0.68]
+  clause coverage (rule edges): c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->IndexIsValue; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->OffByOneBound; c7 <- pre:array_traversal->running_extreme
   root-cause walk: held on [], broken at [], prerequisites {'running_extreme': ['array_traversal'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level array_bounds: L3 via relation_to_neighbour "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level array_traversal: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
+  level control_flow: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+  level for_loop: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level indexing: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  level loop_body: L4 via transfer_to_a_new_program "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element"
   level loop_control: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level loop_variable: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  level println: L2 via output_prediction "It prints 8"
-  level running_extreme: L2 via line_by_line_trace "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1550,6 +1570,7 @@ start concepts (3): array_traversal, indexing, loop_control
  ],
  "held_misconceptions": [],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": null,
  "levels": {
@@ -1574,6 +1595,27 @@ start concepts (3): array_traversal, indexing, loop_control
     "L3 relation_to_neighbour"
    ]
   },
+  "control_flow": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "edge": "lvl:control_flow@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
+  },
+  "for_loop": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "edge": "lvl:for_loop@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
+   ]
+  },
   "indexing": {
    "level": "L3",
    "way": "relation_to_neighbour",
@@ -1583,17 +1625,6 @@ start concepts (3): array_traversal, indexing, loop_control
    "also_shown": [
     "L3 relation_to_neighbour",
     "L2 output_prediction"
-   ]
-  },
-  "loop_body": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element",
-   "edge": "lvl:loop_body@L4#2",
-   "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole",
-    "L2 line_by_line_trace"
    ]
   },
   "loop_control": {
@@ -1617,28 +1648,9 @@ start concepts (3): array_traversal, indexing, loop_control
     "L3 relation_to_neighbour",
     "L2 output_prediction"
    ]
-  },
-  "println": {
-   "level": "L2",
-   "way": "output_prediction",
-   "quote": "It prints 8",
-   "edge": "lvl:println@L2#1",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "running_extreme": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "edge": "lvl:running_extreme@L2#0",
-   "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction",
-    "L2 one_step_execution"
-   ]
   }
  },
- "overall_level": "L2",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,
@@ -1712,6 +1724,24 @@ start concepts (3): array_traversal, indexing, loop_control
   },
   {
    "depth": 2,
+   "source": "array_declaration",
+   "edge": "mis:array_declaration->ElementNameIsWholeArray",
+   "target": "ElementNameIsWholeArray",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "X[i] names the whole array, not one element.",
+   "twin_logic": "The array is a; a[i] is the single element at index i."
+  },
+  {
+   "depth": 2,
    "source": "loop_control",
    "edge": "pre:loop_variable->loop_control",
    "target": "loop_variable",
@@ -1726,26 +1756,6 @@ start concepts (3): array_traversal, indexing, loop_control
    "prune_score": 0.55,
    "score": 0.44,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "array_traversal",
-   "edge": "pre:array_traversal->running_extreme",
-   "target": "running_extreme",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2,
-    3,
-    4,
-    7
-   ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element",
-   "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "The running maximum is found by traversing the array once, keeping the largest value seen so far (starting from Double.NEGATIVE_INFINITY).",
    "twin_logic": null
   },
   {
@@ -1769,9 +1779,9 @@ start concepts (3): array_traversal, indexing, loop_control
   },
   {
    "depth": 3,
-   "source": "array_traversal",
+   "source": "for_loop",
    "edge": "pre:for_loop->array_traversal",
-   "target": "for_loop",
+   "target": "array_traversal",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
@@ -1781,8 +1791,8 @@ start concepts (3): array_traversal, indexing, loop_control
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.9,
+   "score": 0.765,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null
   },
@@ -2248,82 +2258,62 @@ start concepts (3): array_traversal, indexing, loop_control
   },
   {
    "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L2#1",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints 8",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopOutputSameEachPass",
-   "target": "LoopOutputSameEachPass",
+   "source": "for_loop",
+   "edge": "mis:for_loop->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    3,
-    4
+    5,
+    6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.8,
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
    "prune_score": 0.45,
-   "score": 0.36,
-   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "score": 0.3825,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
   },
   {
    "depth": 2,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->ForInitRepeats",
-   "target": "ForInitRepeats",
-   "kind": "misconception",
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
    "label": "correct",
    "clauses": [
     3,
-    5
+    6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1",
-   "confidence": 0.6,
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "score": 0.24,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
   {
    "depth": 2,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopVariableLimitsValues",
-   "target": "LoopVariableLimitsValues",
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    1,
-    7
+    3
    ],
-   "quote": "It prints 8; For any array, this code prints its largest element",
-   "confidence": 0.65,
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
+   "confidence": 0.85,
    "prune_score": 0.25,
-   "score": 0.1625,
-   "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
-   "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it."
+   "score": 0.2125,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times."
   },
   {
    "depth": 2,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#0",
-   "target": "loop_variable@L3",
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#2",
+   "target": "for_loop@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -2331,19 +2321,19 @@ start concepts (3): array_traversal, indexing, loop_control
     6
    ],
    "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#2",
-   "target": "loop_variable@L3",
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#8",
+   "target": "for_loop@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -2352,39 +2342,36 @@ start concepts (3): array_traversal, indexing, loop_control
     6
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
-   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
    "twin_logic": null,
    "level": "L3",
    "way": "purpose_of_the_whole"
   },
   {
    "depth": 2,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L2#1",
-   "target": "loop_variable@L2",
-   "kind": "level",
-   "label": "shown",
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
-    5,
-    6
+    1
    ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
+   "quote": "It prints 8",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
   },
   {
    "depth": 2,
-   "source": "loop_body",
-   "edge": "mis:loop_body->IfInLoopUnchecked",
-   "target": "IfInLoopUnchecked",
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseConditionRestartsProgram",
+   "target": "FalseConditionRestartsProgram",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
@@ -2392,110 +2379,94 @@ start concepts (3): array_traversal, indexing, loop_control
     4
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "An if inside a loop body runs its branch on every pass without testing its condition.",
-   "twin_logic": "The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+   "confidence": 0.75,
+   "prune_score": 0.3,
+   "score": 0.225,
+   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
+   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement."
   },
   {
    "depth": 2,
-   "source": "loop_body",
-   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
-   "target": "StateChangeIgnoredAcrossPasses",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
+    2,
     3,
     4,
-    7
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element",
-   "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
-   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
-   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
-  },
-  {
-   "depth": 2,
-   "source": "loop_body",
-   "edge": "mis:loop_body->ForLoopPartSkipped",
-   "target": "ForLoopPartSkipped",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
     5,
     6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.75,
-   "prune_score": 0.25,
-   "score": 0.1875,
-   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
-   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
-  },
-  {
-   "depth": 2,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L3#3",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
-   "confidence": 0.85,
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.7,
    "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 2,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L2#0",
-   "target": "loop_body@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.65,
-   "prune_score": 0.35,
-   "score": 0.2275,
-   "logic": "On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.",
+   "score": 0.315,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
   },
   {
    "depth": 2,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L4#2",
-   "target": "loop_body@L4",
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3,
-    6,
-    7
+    4
    ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body.",
+   "quote": "It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
    "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L3#1",
+   "target": "control_flow@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "array_declaration",
+   "edge": "mis:array_declaration->ElementNameIsWholeArray",
+   "target": "ElementNameIsWholeArray",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "X[i] names the whole array, not one element.",
+   "twin_logic": "The array is a; a[i] is the single element at index i."
   },
   {
    "depth": 3,
@@ -2573,6 +2544,121 @@ start concepts (3): array_traversal, indexing, loop_control
   },
   {
    "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    5
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopVariableLimitsValues",
+   "target": "LoopVariableLimitsValues",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    7
+   ],
+   "quote": "It prints 8; For any array, this code prints its largest element",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
+   "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it."
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#0",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#2",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
    "source": "loop_control",
    "edge": "pre:loop_control->for_loop",
    "target": "for_loop",
@@ -2592,89 +2678,9 @@ start concepts (3): array_traversal, indexing, loop_control
   },
   {
    "depth": 3,
-   "source": "running_extreme",
-   "edge": "mis:running_extreme->ExtremeStartsAtZero",
-   "target": "ExtremeStartsAtZero",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    7
-   ],
-   "quote": "max starts as the first element, 3; For any array, this code prints its largest element",
-   "confidence": 0.6,
-   "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "The running maximum can always start at 0.",
-   "twin_logic": "Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it."
-  },
-  {
-   "depth": 3,
-   "source": "running_extreme",
-   "edge": "lvl:running_extreme@L2#0",
-   "target": "running_extreme@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3,
-    4
-   ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "Sequencing: initialize max before the loop; in each pass evaluate a[i] > max, and if it is true assign max = a[i]; read max only after the loop ends.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 3,
-   "source": "running_extreme",
-   "edge": "lvl:running_extreme@L2#1",
-   "target": "running_extreme@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    4,
-    7
-   ],
-   "quote": "It prints 8; so after 8 it never changes; For any array, this code prints its largest element",
-   "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
-   "logic": "Result: the largest element (of the element type). For an empty array (or no input) max stays at its start value: NEGATIVE_INFINITY, or MIN_VALUE for int.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 3,
-   "source": "running_extreme",
-   "edge": "lvl:running_extreme@L2#2",
-   "target": "running_extreme@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.85,
-   "prune_score": 0.25,
-   "score": 0.2125,
-   "logic": "State transition: one pass changes max only when a[i] > max; otherwise nothing changes.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
-  },
-  {
-   "depth": 3,
-   "source": "array_traversal",
+   "source": "for_loop",
    "edge": "pre:for_loop->array_traversal",
-   "target": "for_loop",
+   "target": "array_traversal",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
@@ -2684,32 +2690,51 @@ start concepts (3): array_traversal, indexing, loop_control
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.9,
+   "score": 0.765,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null
   },
   {
    "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
+   "source": "control_flow",
+   "edge": "pre:control_flow->if_statement",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
    "target": "statement",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1,
+    2,
+    3,
     4
    ],
-   "quote": "It prints 8; so after 8 it never changes",
-   "confidence": 0.6,
-   "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Control flow is the order in which statements run.",
    "twin_logic": null
   }
  ],
  "clause_coverage": {
-  "It prints 8": "lvl:println@L2#1",
+  "It prints 8": "mis:control_flow->ProgramEndsAfterLoop",
   "max starts as the first element, 3": "lvl:array_traversal@L3#6",
   "The loop then looks at every later element and, whenever one is bigger than max, max takes its value": "lvl:array_traversal@L3#6",
   "so after 8 it never changes": "lvl:array_traversal@L3#6",
@@ -2718,13 +2743,13 @@ start concepts (3): array_traversal, indexing, loop_control
   "For any array, this code prints its largest element": "lvl:array_traversal@L3#6"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
+ "stop_reason": "sufficient",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 67,
+ "llm_cache_hits": 69,
  "llm_calls_by_step": {
   "prune": 23,
-  "label": 44
+  "label": 46
  }
 }
 ```
