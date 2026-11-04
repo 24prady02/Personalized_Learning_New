@@ -385,6 +385,13 @@ Parsed labels:
 
 mis:overflow->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:overflow@L0#0 [shown, tier 2, 0.54], lvl:println@L2#1 [shown, tier 2, 0.27]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 2147483648 | mis:overflow->IntOverflowWidensAutomatically |
+| c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big | mis:overflow->IntOverflowWidensAutomatically |
+| c3 | because it makes room for it automatically | mis:overflow->IntOverflowWidensAutomatically |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:int->overflow, pre:statement->println
 
 **Figure 4 (the graph after depth 1)**
@@ -480,6 +487,13 @@ pre:int->overflow [broken, tier 0, 0.93], pre:arithmetic_operators->expression [
 reached across pre:int->overflow, entered next: int
 
 reached across pre:arithmetic_operators->expression, entered next: expression
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 2147483648 | mis:overflow->IntOverflowWidensAutomatically |
+| c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big | mis:overflow->IntOverflowWidensAutomatically |
+| c3 | because it makes room for it automatically | mis:overflow->IntOverflowWidensAutomatically |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of int
 
@@ -701,10 +715,19 @@ Parsed labels:
 
 mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 2147483648 | mis:overflow->IntOverflowWidensAutomatically |
+| c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big | mis:overflow->IntOverflowWidensAutomatically |
+| c3 | because it makes room for it automatically | mis:overflow->IntOverflowWidensAutomatically |
+
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
 Held set after the one-fault rules: mis:overflow->IntOverflowWidensAutomatically; filed at the dependent concept: mis:int->IntOverflowWidensAutomatically
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->overflow), prerequisites {'expression': ['arithmetic_operators'], 'overflow': ['int'], 'println': ['statement']}
@@ -720,6 +743,11 @@ Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->over
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | overflow | IntOverflowWidensAutomatically | misconception | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically | 0.9215 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| int | IntOverflowWidensAutomatically | mis:overflow->IntOverflowWidensAutomatically | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically | 0.9215 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -807,7 +835,7 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:println@L3#3 -> not applied (0.00) ""
     lvl:println@L2#0 -> shown (0.12) "It prints 2147483648"
   kept: mis:overflow->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:overflow@L0#0 [shown, tier 2, 0.54], lvl:println@L2#1 [shown, tier 2, 0.27]
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   not yet read: pre:arithmetic_operators->expression, pre:int->overflow, pre:statement->println
 --- depth 2: current concepts ['overflow', 'arithmetic_operators', 'println']
   overflow (concept edges): 1 candidates -> kept pre:int->overflow (1.00)
@@ -819,7 +847,7 @@ start concepts (3): arithmetic_operators, overflow, println
   kept: pre:int->overflow [broken, tier 0, 0.93], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
   reached across pre:int->overflow, entered next: int
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   not yet read: own edges of expression, own edges of int
 --- depth 3: current concepts ['int', 'overflow', 'expression', 'arithmetic_operators']
   int (misconceptions): 2 candidates -> kept mis:int->IntOverflowWidensAutomatically (0.95), mis:int->IntegerDivisionGivesFraction (0.05)
@@ -838,7 +866,7 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:expression@L2#1 -> not applied (0.00) ""
     lvl:expression@L3#1 -> not applied (0.00) ""
   kept: mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   held: mis:overflow->IntOverflowWidensAutomatically; filed at the dependent concept: mis:int->IntOverflowWidensAutomatically
   shadows: mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
   root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->overflow), prerequisites {'expression': ['arithmetic_operators'], 'overflow': ['int'], 'println': ['statement']}

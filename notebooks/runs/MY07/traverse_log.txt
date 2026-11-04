@@ -26,7 +26,7 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:println@L3#3 -> not applied (0.00) ""
     lvl:println@L2#0 -> shown (0.12) "It prints 2147483648"
   kept: mis:overflow->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:overflow@L0#0 [shown, tier 2, 0.54], lvl:println@L2#1 [shown, tier 2, 0.27]
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   not yet read: pre:arithmetic_operators->expression, pre:int->overflow, pre:statement->println
 --- depth 2: current concepts ['overflow', 'arithmetic_operators', 'println']
   overflow (concept edges): 1 candidates -> kept pre:int->overflow (1.00)
@@ -38,7 +38,7 @@ start concepts (3): arithmetic_operators, overflow, println
   kept: pre:int->overflow [broken, tier 0, 0.93], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
   reached across pre:int->overflow, entered next: int
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   not yet read: own edges of expression, own edges of int
 --- depth 3: current concepts ['int', 'overflow', 'expression', 'arithmetic_operators']
   int (misconceptions): 2 candidates -> kept mis:int->IntOverflowWidensAutomatically (0.95), mis:int->IntegerDivisionGivesFraction (0.05)
@@ -57,7 +57,7 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:expression@L2#1 -> not applied (0.00) ""
     lvl:expression@L3#1 -> not applied (0.00) ""
   kept: mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
-  clause coverage (rule edges): c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
+  clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
   held: mis:overflow->IntOverflowWidensAutomatically; filed at the dependent concept: mis:int->IntOverflowWidensAutomatically
   shadows: mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
   root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->overflow), prerequisites {'expression': ['arithmetic_operators'], 'overflow': ['int'], 'println': ['statement']}
