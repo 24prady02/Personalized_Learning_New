@@ -28,9 +28,10 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:string_concatenation@L3#3 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     lvl:string_concatenation@L3#1 -> shown (0.15) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.40], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
---- depth 2: current concepts ['loop_control', 'for_loop', 'string_concatenation']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  uncovered clauses bring in: control_flow (1.83), println (1.53)
+  not yet read: own edges of control_flow, own edges of println, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
+--- depth 2: current concepts ['loop_control', 'for_loop', 'string_concatenation', 'control_flow', 'println']
   loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.30), pre:loop_control->increment_operators (0.10)
     pre:loop_control->for_loop -> broken (0.51) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     pre:loop_variable->loop_control -> confirmed (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
@@ -40,12 +41,28 @@ start concepts (3): for_loop, loop_control, string_concatenation
     pre:for_loop->loop_scope -> broken (0.09) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   string_concatenation (concept edges): 1 candidates -> kept pre:string_concatenation->string_conversion (1.00)
     pre:string_concatenation->string_conversion -> confirmed (0.60) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.50), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->ProgramEndsAfterLoop (0.20)
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:control_flow->FalseLoopRepeatsNextCode -> not applied (0.00) ""
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.11) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#3 (0.50), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#1 (0.20)
+    lvl:control_flow@L0#3 -> shown (0.35) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:control_flow@L0#0 -> shown (0.21) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:control_flow@L2#1 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#4 (0.20)
+    lvl:println@L2#1 -> shown (0.30) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#0 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#4 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: pre:for_loop->nested_loops [broken, tier 0, 0.78], pre:loop_control->for_loop [broken, tier 0, 0.51], pre:for_loop->loop_scope [broken, tier 0, 0.09]
   reached across pre:for_loop->nested_loops, entered next: nested_loops
   reached across pre:for_loop->loop_scope, entered next: loop_scope
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: own edges of loop_scope, own edges of nested_loops
---- depth 3: current concepts ['nested_loops', 'for_loop', 'loop_control', 'loop_scope']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  not yet read: own edges of loop_scope, own edges of nested_loops, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+--- depth 3: current concepts ['nested_loops', 'for_loop', 'loop_control', 'loop_scope', 'control_flow', 'println']
   nested_loops (misconceptions): 8 candidates -> kept mis:nested_loops->NestedLoopsSequential (0.60), mis:nested_loops->InnerCounterOverwritesOuter (0.25), mis:nested_loops->OuterLoopIgnored (0.15)
     mis:nested_loops->NestedLoopsSequential -> held (0.57) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     mis:nested_loops->InnerCounterOverwritesOuter -> not applied (0.00) ""
@@ -65,14 +82,33 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:loop_scope@L0#0 -> shown (0.27) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     lvl:loop_scope@L4#3 -> not applied (0.00) ""
     lvl:loop_scope@L0#5 -> not applied (0.00) ""
-  kept: mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.48]
-  reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: own edges of loop_variable
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.80) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  println (concept edges): 2 candidates -> kept pre:statement->println (0.80), pre:string_literal->println (0.20)
+    pre:statement->println -> broken (0.48) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    pre:string_literal->println -> confirmed (0.12) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  kept: pre:statement->control_flow [broken, tier 0, 0.80], mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], pre:statement->println [broken, tier 0, 0.48], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36]
+  reached across pre:statement->control_flow, entered next: statement
+  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  not yet read: own edges of statement
+--- depth 4: current concepts ['statement'] (closing round: own edges only)
+  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.70), mis:statement->ProgramLooksAhead (0.20), mis:statement->WhitespaceIsSignificant (0.10)
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+    mis:statement->WhitespaceIsSignificant -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.25), lvl:statement@L3#4 (0.25)
+    lvl:statement@L0#2 -> not applied (0.00) ""
+    lvl:statement@L0#0 -> not applied (0.00) ""
+    lvl:statement@L3#4 -> shown (0.15) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  kept: lvl:statement@L3#4 [shown, tier 2, 0.15]
+  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   held: mis:nested_loops->NestedLoopsSequential, mis:loop_scope->ForVariableScopeBeyondLoop, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
-  root-cause walk: held on ['for_loop', 'loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-  level for_loop: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level loop_control: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  shadows: mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:nested_loops->NestedLoopsSequential)
+  root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope, pre:statement->control_flow, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level control_flow: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"

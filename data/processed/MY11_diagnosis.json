@@ -31,16 +31,25 @@
    "kind": "misconception",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.36
-  },
-  {
-   "concept": "for_loop",
-   "misconception": "ForLoopPartSkipped",
-   "kind": "misconception",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.18
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "for_loop",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:loop_scope->ForVariableScopeBeyondLoop",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.18
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:nested_loops->NestedLoopsSequential",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.4
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:for_loop->nested_loops",
@@ -59,30 +68,43 @@
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.09,
    "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.8,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "edge": "pre:statement->println",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.48,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
   }
  ],
  "root_cause": {
-  "concept": "for_loop",
-  "misconception": "ForLoopPartSkipped"
+  "concept": "loop_scope",
+  "misconception": "ForVariableScopeBeyondLoop"
  },
  "levels": {
-  "for_loop": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "mis:for_loop->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+  "control_flow": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:control_flow@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace",
+    "L0 everyday_reading"
+   ]
   },
   "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "mis:loop_control->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:loop_control@L2#1",
+   "source": "level_way",
+   "also_shown": []
   },
   "loop_scope": {
    "level": "L0",
@@ -101,6 +123,25 @@
    "edge": "mis:nested_loops->NestedLoopsSequential",
    "rule": "wrong rule: The outer loop runs completely, then the inner loop runs completely. Right rule: The inner loop runs all its passes during each single pass of the outer loop.",
    "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole",
+    "L2 output_prediction"
+   ]
+  },
+  "statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:statement@L3#4",
+   "source": "level_way",
+   "also_shown": []
   },
   "string_concatenation": {
    "level": "L3",
@@ -230,6 +271,25 @@
   },
   {
    "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
    "source": "nested_loops",
    "edge": "mis:nested_loops->NestedLoopsSequential",
    "target": "NestedLoopsSequential",
@@ -245,6 +305,25 @@
    "score": 0.57,
    "logic": "The outer loop runs completely, then the inner loop runs completely.",
    "twin_logic": "The inner loop runs all its passes during each single pass of the outer loop."
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -265,21 +344,24 @@
    "twin_logic": "i declared in the for header exists only inside the loop, so using it after the loop does not compile."
   },
   {
-   "depth": 3,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
+    2,
     3
    ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -469,6 +551,143 @@
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#3",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#4",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
    "depth": 3,
    "source": "nested_loops",
    "edge": "mis:nested_loops->NestedLoopsSequential",
@@ -579,6 +798,81 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:string_literal->println",
+   "target": "string_literal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -587,12 +881,12 @@
   "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3": "mis:for_loop->ForLoopPartSkipped"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
- "depth_reached": 3,
+ "stop_reason": "sufficient",
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 65,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 28
+  "prune": 22,
+  "label": 43
  }
 }

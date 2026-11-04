@@ -455,18 +455,13 @@ Parsed labels:
 
 mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.40], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | Three lines | lvl:loop_control@L2#1 |
-| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
-| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
+**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** control_flow (1.83), println (1.53)
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of control_flow, own edges of println, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure04.png
 
-### Depth 2: current concepts 'loop_control', 'for_loop', 'string_concatenation'
+### Depth 2: current concepts 'loop_control', 'for_loop', 'string_concatenation', 'control_flow', 'println'
 
 #### loop_control, concept edges: 3 edges offered
 Edges offered:
@@ -589,6 +584,217 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:string_concatenation->string_conversion | confirmed | 1.0 | 0.6 | 0.6 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
+#### control_flow, misconceptions: 11 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
+| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
+| mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
+| mis:control_flow->IfConditionWatched \| wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). \| right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch. |
+| mis:control_flow->IfWaitsForCondition \| wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. \| right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it. |
+| mis:control_flow->LoopImpliedByOneTest \| wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. \| right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop. |
+| mis:control_flow->NoShortCircuit \| wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them) \| right rule: In p && q, q is evaluated only when p is true; in p \|\| q, q is evaluated only when p is false. |
+| mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+| mis:control_flow->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
+| mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:control_flow->StatementsRunInAnyOrder (0.50), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->ProgramEndsAfterLoop (0.20)
+```
+Kept by pruning: mis:control_flow->StatementsRunInAnyOrder (0.50), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->ProgramEndsAfterLoop (0.20)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
+| mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
+Model's reply:
+```
+mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.6
+mis:control_flow->FalseLoopRepeatsNextCode | not applied | clauses: none | confidence: 0.6
+mis:control_flow->ProgramEndsAfterLoop | correct | clauses: 2, 3 | confidence: 0.55
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
+| mis:control_flow->FalseLoopRepeatsNextCode | not applied |  |  | 0.0 |  |  |
+| mis:control_flow->ProgramEndsAfterLoop | correct | 0.2 | 0.55 | 0.11 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
+#### control_flow, level ways: 15 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
+| lvl:control_flow@L0#3 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order") |
+| lvl:control_flow@L1#0 \| level L1 way names_the_element: Control flow is the order in which a program's statements are executed (statement sequencing); conditionals and loops are the statements that change it. |
+| lvl:control_flow@L1#1 \| level L1 way states_the_rule: Without control statements every statement executes once, in the order given; a block executes its statements in order from first to last; if/if-else choose between one or two alternatives and loops repeat statements depending on a condition. |
+| lvl:control_flow@L2#0 \| level L2 way line_by_line_trace: Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it. |
+| lvl:control_flow@L2#1 \| level L2 way output_prediction: The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop. |
+| lvl:control_flow@L2#2 \| level L2 way one_step_execution: One step executes the single statement at the current control point using the current values, updates at most the variables it assigns, and moves the control point to the next statement (or, for an if/loop test, to the chosen branch, back to the test, or past the statement). |
+| lvl:control_flow@L3#0 \| level L3 way relation_to_neighbour: Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest. |
+| lvl:control_flow@L3#1 \| level L3 way relation_to_neighbour: An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement. |
+| lvl:control_flow@L3#2 \| level L3 way relation_to_neighbour: A flowchart draws control flow: each path through the diagram is a possible path of execution, with a decision box for each if or loop test. |
+| lvl:control_flow@L3#3 \| level L3 way purpose_of_the_whole: Plan: control flow lets one program do different things for different inputs (selection) and do a thing many times (repetition), so a short program can specify a potentially unlimited number of executed statements. |
+| lvl:control_flow@L4#0 \| level L4 way predict_a_change: Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n). |
+| lvl:control_flow@L4#1 \| level L4 way transfer_to_a_new_program: Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop. |
+| lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
+| lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:control_flow@L0#3 (Score: 0.5)}
+{lvl:control_flow@L0#0 (Score: 0.3)}
+{lvl:control_flow@L2#1 (Score: 0.2)}
+```
+Kept by pruning: lvl:control_flow@L0#3 (0.50), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#1 (0.20)
+
+Label prompt for level way lvl:control_flow@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order")
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:control_flow@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:control_flow@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 3
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:control_flow@L0#3 | shown | 0.5 | 0.7 | 0.35 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| lvl:control_flow@L0#0 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| lvl:control_flow@L2#1 | shown | 0.2 | 0.6 | 0.12 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
+#### println, misconceptions: 6 edges offered
+Edges offered:
+| edge |
+|---|
+| err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
+| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
+| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
+| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
+| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
+| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
+```
+Kept by pruning: mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
+| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
+| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+Model's reply:
+```
+mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.85
+mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.85
+mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
+
+#### println, level ways: 17 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
+| lvl:println@L0#3 \| level L0 way inconsistent_trace: Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: "print and println behave the same (no newline difference)") |
+| lvl:println@L1#0 \| level L1 way names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line'). |
+| lvl:println@L1#1 \| level L1 way states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string. |
+| lvl:println@L2#0 \| level L2 way line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line. |
+| lvl:println@L2#1 \| level L2 way output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines. |
+| lvl:println@L2#2 \| level L2 way one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned. |
+| lvl:println@L3#0 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence. |
+| lvl:println@L3#1 \| level L3 way relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line. |
+| lvl:println@L3#2 \| level L3 way relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line. |
+| lvl:println@L3#3 \| level L3 way relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n. |
+| lvl:println@L3#4 \| level L3 way purpose_of_the_whole: Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print. |
+| lvl:println@L4#0 \| level L4 way predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same. |
+| lvl:println@L4#1 \| level L4 way transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting. |
+| lvl:println@L4#2 \| level L4 way diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt |
+| lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
+| lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:println@L2#1 (Score: 0.5)}
+{lvl:println@L3#0 (Score: 0.3)}
+{lvl:println@L3#4 (Score: 0.2)}
+```
+Kept by pruning: lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#4 (0.20)
+
+Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 3
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:println@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 3
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:println@L2#1 | shown | 0.5 | 0.6 | 0.3 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| lvl:println@L3#0 | shown | 0.3 | 0.6 | 0.18 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| lvl:println@L3#4 | shown | 0.2 | 0.6 | 0.12 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
 pre:for_loop->nested_loops [broken, tier 0, 0.78], pre:loop_control->for_loop [broken, tier 0, 0.51], pre:for_loop->loop_scope [broken, tier 0, 0.09]
@@ -597,18 +803,11 @@ reached across pre:for_loop->nested_loops, entered next: nested_loops
 
 reached across pre:for_loop->loop_scope, entered next: loop_scope
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | Three lines | lvl:loop_control@L2#1 |
-| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
-| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_scope, own edges of nested_loops
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_scope, own edges of nested_loops, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure05.png
 
-### Depth 3: current concepts 'nested_loops', 'for_loop', 'loop_control', 'loop_scope'
+### Depth 3: current concepts 'nested_loops', 'for_loop', 'loop_control', 'loop_scope', 'control_flow', 'println'
 
 #### nested_loops, misconceptions: 8 edges offered
 Edges offered:
@@ -858,41 +1057,215 @@ Parsed labels:
 | lvl:loop_scope@L4#3 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_scope@L0#5 | not applied |  |  | 0.0 |  |  |
 
+#### control_flow, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:statement->control_flow \| rule: Control flow is the order in which statements run. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:statement->control_flow (Score: 1.0)}
+```
+Kept by pruning: pre:statement->control_flow (1.00)
+
+Label prompt for concept edge pre:statement->control_flow (statement -> control_flow, prerequisite):
+> Control flow is the order in which statements run.
+
+Model's reply:
+```
+Label: broken
+Clauses: 2, 3
+Confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:statement->control_flow | broken | 1.0 | 0.8 | 0.8 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
+#### println, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
+| pre:string_literal->println \| rule: println("s") outputs exactly the characters between the quotes and then ends the line. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:statement->println (Score: 0.8)}
+{pre:string_literal->println (Score: 0.2)}
+```
+Kept by pruning: pre:statement->println (0.80), pre:string_literal->println (0.20)
+
+Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
+> System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
+
+Model's reply:
+```
+Label: broken
+Clauses: 1, 3
+Confidence: 0.6
+```
+
+Label prompt for concept edge pre:string_literal->println (string_literal -> println, prerequisite):
+> println("s") outputs exactly the characters between the quotes and then ends the line.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 3
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:statement->println | broken | 0.8 | 0.6 | 0.48 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| pre:string_literal->println | confirmed | 0.2 | 0.6 | 0.12 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.48]
+pre:statement->control_flow [broken, tier 0, 0.80], mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], pre:statement->println [broken, tier 0, 0.48], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36]
 
-reached across pre:loop_variable->loop_control, entered next: loop_variable
+reached across pre:statement->control_flow, entered next: statement
 
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | Three lines | lvl:loop_control@L2#1 |
-| c2 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
-| c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_variable
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure06.png
+
+### Depth 4: current concepts 'statement'
+
+#### statement, misconceptions: 5 edges offered
+Edges offered:
+| edge |
+|---|
+| err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
+| mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
+| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:statement->StatementsRunInAnyOrder (0.70), mis:statement->ProgramLooksAhead (0.20), mis:statement->WhitespaceIsSignificant (0.10)
+```
+Kept by pruning: mis:statement->StatementsRunInAnyOrder (0.70), mis:statement->ProgramLooksAhead (0.20), mis:statement->WhitespaceIsSignificant (0.10)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
+Model's reply:
+```
+mis:statement->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.7
+mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.85
+mis:statement->WhitespaceIsSignificant | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:statement->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
+| mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
+| mis:statement->WhitespaceIsSignificant | not applied |  |  | 0.0 |  |  |
+
+#### statement, level ways: 19 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
+| lvl:statement@L0#2 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command") |
+| lvl:statement@L1#0 \| level L1 way names_the_element: A statement is one step of a program (a declaration, assignment, method call such as System.out.println(...), or control statement), ended by a semicolon when it is a simple statement. |
+| lvl:statement@L1#1 \| level L1 way states_the_rule: A method body is a sequence of statements enclosed in braces and each followed by a semicolon; statements are executed for their effect and have no value; an expression statement evaluates its expression and discards any value. |
+| lvl:statement@L2#0 \| level L2 way line_by_line_trace: Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts. |
+| lvl:statement@L2#1 \| level L2 way output_prediction: A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow. |
+| lvl:statement@L2#2 \| level L2 way one_step_execution: Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement. |
+| lvl:statement@L3#0 \| level L3 way relation_to_neighbour: Statements live in main's body; running the program executes main's statements in order. |
+| lvl:statement@L3#1 \| level L3 way relation_to_neighbour: A block groups a sequence of statements in braces; the body of main() is such a block. |
+| lvl:statement@L3#2 \| level L3 way relation_to_neighbour: System.out.print(s); is a statement, so its output appears exactly at its place in the sequence, with no newline. |
+| lvl:statement@L3#3 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines. |
+| lvl:statement@L3#4 \| level L3 way relation_to_neighbour: Control flow is the order in which statements run; without control statements it is straight-line, each once in order. |
+| lvl:statement@L3#5 \| level L3 way relation_to_neighbour: A lone ; is the empty statement, which does nothing; it can fill a for-loop part or, by accident, end an if or loop header. |
+| lvl:statement@L3#6 \| level L3 way relation_to_neighbour: An algorithm becomes a program as a sequence of statements, executed once each in the order given. |
+| lvl:statement@L3#7 \| level L3 way purpose_of_the_whole: Purpose: a statement is the unit of action; a program is characterized by its sequence of statements, each doing one step of the algorithm. |
+| lvl:statement@L4#0 \| level L4 way predict_a_change: Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it. |
+| lvl:statement@L4#1 \| level L4 way diagnose_an_error: rule broken: Each simple statement must end with ;. Kind: compile-time. Trigger class: omitting the ; at the end of a statement: javac reports ';' expected (often at the end of that line or the next) |
+| lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
+| lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:statement@L0#2 (Score: 0.5)}
+{lvl:statement@L0#0 (Score: 0.25)}
+{lvl:statement@L3#4 (Score: 0.25)}
+```
+Kept by pruning: lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.25), lvl:statement@L3#4 (0.25)
+
+Label prompt for level way lvl:statement@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command")
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:statement@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:statement@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> Control flow is the order in which statements run; without control statements it is straight-line, each once in order.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:statement@L0#2 | not applied |  |  | 0.0 |  |  |
+| lvl:statement@L0#0 | not applied |  |  | 0.0 |  |  |
+| lvl:statement@L3#4 | shown | 0.25 | 0.6 | 0.15 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+lvl:statement@L3#4 [shown, tier 2, 0.15]
+
+Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure07.png
 
 Held set after the one-fault rules: mis:nested_loops->NestedLoopsSequential, mis:loop_scope->ForVariableScopeBeyondLoop, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['for_loop', 'loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-- for_loop: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-- loop_control: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+Root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope, pre:statement->control_flow, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+- control_flow: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+- loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 - loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 - nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+- println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+- statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 - string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 
-**Stop:** max depth at depth 3; prompts {'prune': 14, 'label': 28}, fresh model calls 0, cache hits 42
+**Stop:** sufficient at depth 4; prompts {'prune': 22, 'label': 43}, fresh model calls 0, cache hits 65
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | nested_loops | NestedLoopsSequential | misconception | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.57 |  |
 | loop_scope | ForVariableScopeBeyondLoop | misconception | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.36 |  |
-| for_loop | ForLoopPartSkipped | misconception | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.18 |  |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -900,16 +1273,20 @@ Root-cause walk: held on ['for_loop', 'loop_scope', 'nested_loops'], broken at [
 | pre:for_loop->nested_loops | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.782 | mis:loop_control->ForLoopPartSkipped |
 | pre:loop_control->for_loop | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.51 | mis:loop_control->ForLoopPartSkipped |
 | pre:for_loop->loop_scope | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.09 | mis:loop_control->ForLoopPartSkipped |
+| pre:statement->control_flow | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.8 | mis:loop_control->ForLoopPartSkipped |
+| pre:statement->println | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | 0.48 | mis:loop_control->ForLoopPartSkipped |
 
-### Root cause: for_loop / ForLoopPartSkipped
+### Root cause: loop_scope / ForVariableScopeBeyondLoop
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| for_loop | L0 | misconception | ForLoopPartSkipped | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |  |  |
-| loop_control | L0 | misconception | ForLoopPartSkipped | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |  |  |
+| control_flow | L2 | output_prediction |  | level_way | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  | L0 inconsistent_trace, L0 everyday_reading |  |
+| loop_control | L2 | output_prediction |  | level_way | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  |  |  |
 | loop_scope | L0 | misconception | ForVariableScopeBeyondLoop | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: i declared in the for header can still be used after the loop has ended. Right rule: i declared in the for header exists only inside the loop, so using it after the loop does not compile. |  |  |
 | nested_loops | L0 | misconception | NestedLoopsSequential | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: The outer loop runs completely, then the inner loop runs completely. Right rule: The inner loop runs all its passes during each single pass of the outer loop. |  |  |
+| println | L3 | relation_to_neighbour |  | level_way | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  | L3 purpose_of_the_whole, L2 output_prediction |  |
+| statement | L3 | relation_to_neighbour |  | level_way | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  |  |  |
 | string_concatenation | L3 | purpose_of_the_whole |  | level_way | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  | L3 relation_to_neighbour |  |
 
 ### Overall level: L0
@@ -921,7 +1298,7 @@ Clause coverage (final):
 | The outer loop finishes first | mis:for_loop->ForLoopPartSkipped |
 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | mis:for_loop->ForLoopPartSkipped |
 
-Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure07.png
+Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY11_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
@@ -936,12 +1313,23 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | for_loop | pre:for_loop->nested_loops | prerequisite | broken | 0.85 | 0.92 | 0.782 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | for_loop | pre:for_loop->loop_scope | prerequisite | broken | 0.15 | 0.6 | 0.09 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | string_concatenation | pre:string_concatenation->string_conversion | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | control_flow | mis:control_flow->ProgramEndsAfterLoop | misconception | correct | 0.2 | 0.55 | 0.11 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | control_flow | lvl:control_flow@L0#3 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | control_flow | lvl:control_flow@L0#0 | level | shown | 0.3 | 0.7 | 0.21 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | println | lvl:println@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | println | lvl:println@L3#0 | level | shown | 0.3 | 0.6 | 0.18 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 2 | println | lvl:println@L3#4 | level | shown | 0.2 | 0.6 | 0.12 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | mis:nested_loops->NestedLoopsSequential | misconception | held | 0.6 | 0.95 | 0.57 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | lvl:nested_loops@L0#7 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | lvl:nested_loops@L0#0 | level | shown | 0.3 | 0.9 | 0.27 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.8 | 0.6 | 0.48 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | loop_scope | mis:loop_scope->ForVariableScopeBeyondLoop | misconception | held | 0.6 | 0.6 | 0.36 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | loop_scope | lvl:loop_scope@L0#0 | level | shown | 0.45 | 0.6 | 0.27 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 3 | control_flow | pre:statement->control_flow | prerequisite | broken | 1.0 | 0.8 | 0.8 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 3 | println | pre:statement->println | prerequisite | broken | 0.8 | 0.6 | 0.48 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 3 | println | pre:string_literal->println | prerequisite | confirmed | 0.2 | 0.6 | 0.12 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| 4 | statement | lvl:statement@L3#4 | level | shown | 0.25 | 0.6 | 0.15 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -952,9 +1340,11 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | for_loop | pre:for_loop->nested_loops | prerequisite | broken | 0.782 | [2, 3] |
 | 2 | loop_control | pre:loop_control->for_loop | prerequisite | broken | 0.51 | [2, 3] |
 | 2 | for_loop | pre:for_loop->loop_scope | prerequisite | broken | 0.09 | [2, 3] |
+| 3 | control_flow | pre:statement->control_flow | prerequisite | broken | 0.8 | [2, 3] |
 | 3 | nested_loops | mis:nested_loops->NestedLoopsSequential | misconception | held | 0.57 | [2, 3] |
+| 3 | println | pre:statement->println | prerequisite | broken | 0.48 | [1, 3] |
 | 3 | loop_scope | mis:loop_scope->ForVariableScopeBeyondLoop | misconception | held | 0.36 | [2, 3] |
-| 3 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.48 | [3] |
+| 4 | statement | lvl:statement@L3#4 | level | shown | 0.15 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -988,9 +1378,10 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:string_concatenation@L3#3 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     lvl:string_concatenation@L3#1 -> shown (0.15) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.40], mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
---- depth 2: current concepts ['loop_control', 'for_loop', 'string_concatenation']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  uncovered clauses bring in: control_flow (1.83), println (1.53)
+  not yet read: own edges of control_flow, own edges of println, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:string_concatenation->string_conversion
+--- depth 2: current concepts ['loop_control', 'for_loop', 'string_concatenation', 'control_flow', 'println']
   loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.30), pre:loop_control->increment_operators (0.10)
     pre:loop_control->for_loop -> broken (0.51) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     pre:loop_variable->loop_control -> confirmed (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
@@ -1000,12 +1391,28 @@ start concepts (3): for_loop, loop_control, string_concatenation
     pre:for_loop->loop_scope -> broken (0.09) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   string_concatenation (concept edges): 1 candidates -> kept pre:string_concatenation->string_conversion (1.00)
     pre:string_concatenation->string_conversion -> confirmed (0.60) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.50), mis:control_flow->FalseLoopRepeatsNextCode (0.30), mis:control_flow->ProgramEndsAfterLoop (0.20)
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:control_flow->FalseLoopRepeatsNextCode -> not applied (0.00) ""
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.11) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#3 (0.50), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#1 (0.20)
+    lvl:control_flow@L0#3 -> shown (0.35) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:control_flow@L0#0 -> shown (0.21) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:control_flow@L2#1 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#4 (0.20)
+    lvl:println@L2#1 -> shown (0.30) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#0 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#4 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   kept: pre:for_loop->nested_loops [broken, tier 0, 0.78], pre:loop_control->for_loop [broken, tier 0, 0.51], pre:for_loop->loop_scope [broken, tier 0, 0.09]
   reached across pre:for_loop->nested_loops, entered next: nested_loops
   reached across pre:for_loop->loop_scope, entered next: loop_scope
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: own edges of loop_scope, own edges of nested_loops
---- depth 3: current concepts ['nested_loops', 'for_loop', 'loop_control', 'loop_scope']
+  clause coverage (rule edges): c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  not yet read: own edges of loop_scope, own edges of nested_loops, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
+--- depth 3: current concepts ['nested_loops', 'for_loop', 'loop_control', 'loop_scope', 'control_flow', 'println']
   nested_loops (misconceptions): 8 candidates -> kept mis:nested_loops->NestedLoopsSequential (0.60), mis:nested_loops->InnerCounterOverwritesOuter (0.25), mis:nested_loops->OuterLoopIgnored (0.15)
     mis:nested_loops->NestedLoopsSequential -> held (0.57) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     mis:nested_loops->InnerCounterOverwritesOuter -> not applied (0.00) ""
@@ -1025,16 +1432,35 @@ start concepts (3): for_loop, loop_control, string_concatenation
     lvl:loop_scope@L0#0 -> shown (0.27) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
     lvl:loop_scope@L4#3 -> not applied (0.00) ""
     lvl:loop_scope@L0#5 -> not applied (0.00) ""
-  kept: mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36], pre:loop_variable->loop_control [confirmed, tier 2, 0.48]
-  reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage: c1 <- lvl:loop_control@L2#1; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
-  not yet read: own edges of loop_variable
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.80) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  println (concept edges): 2 candidates -> kept pre:statement->println (0.80), pre:string_literal->println (0.20)
+    pre:statement->println -> broken (0.48) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    pre:string_literal->println -> confirmed (0.12) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  kept: pre:statement->control_flow [broken, tier 0, 0.80], mis:nested_loops->NestedLoopsSequential [held, tier 0, 0.57], pre:statement->println [broken, tier 0, 0.48], mis:loop_scope->ForVariableScopeBeyondLoop [held, tier 0, 0.36]
+  reached across pre:statement->control_flow, entered next: statement
+  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
+  not yet read: own edges of statement
+--- depth 4: current concepts ['statement'] (closing round: own edges only)
+  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.70), mis:statement->ProgramLooksAhead (0.20), mis:statement->WhitespaceIsSignificant (0.10)
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+    mis:statement->WhitespaceIsSignificant -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.25), lvl:statement@L3#4 (0.25)
+    lvl:statement@L0#2 -> not applied (0.00) ""
+    lvl:statement@L0#0 -> not applied (0.00) ""
+    lvl:statement@L3#4 -> shown (0.15) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  kept: lvl:statement@L3#4 [shown, tier 2, 0.15]
+  clause coverage (rule edges): c1 <- pre:statement->println; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   held: mis:nested_loops->NestedLoopsSequential, mis:loop_scope->ForVariableScopeBeyondLoop, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
-  root-cause walk: held on ['for_loop', 'loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-  level for_loop: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level loop_control: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  shadows: mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:nested_loops->NestedLoopsSequential)
+  root-cause walk: held on ['loop_scope', 'nested_loops'], broken at [] (consequences: pre:for_loop->nested_loops, pre:loop_control->for_loop, pre:for_loop->loop_scope, pre:statement->control_flow, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level control_flow: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 ```
 
@@ -1073,16 +1499,25 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "kind": "misconception",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.36
-  },
-  {
-   "concept": "for_loop",
-   "misconception": "ForLoopPartSkipped",
-   "kind": "misconception",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.18
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "for_loop",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:loop_scope->ForVariableScopeBeyondLoop",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.18
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "ForLoopPartSkipped",
+   "shadow_of": "mis:nested_loops->NestedLoopsSequential",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.4
+  }
+ ],
  "broken_edges": [
   {
    "edge": "pre:for_loop->nested_loops",
@@ -1101,30 +1536,43 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.09,
    "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.8,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "edge": "pre:statement->println",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.48,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
   }
  ],
  "root_cause": {
-  "concept": "for_loop",
-  "misconception": "ForLoopPartSkipped"
+  "concept": "loop_scope",
+  "misconception": "ForVariableScopeBeyondLoop"
  },
  "levels": {
-  "for_loop": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "mis:for_loop->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+  "control_flow": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:control_flow@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace",
+    "L0 everyday_reading"
+   ]
   },
   "loop_control": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ForLoopPartSkipped",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "mis:loop_control->ForLoopPartSkipped",
-   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "source": "level_mis_links"
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:loop_control@L2#1",
+   "source": "level_way",
+   "also_shown": []
   },
   "loop_scope": {
    "level": "L0",
@@ -1143,6 +1591,25 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "edge": "mis:nested_loops->NestedLoopsSequential",
    "rule": "wrong rule: The outer loop runs completely, then the inner loop runs completely. Right rule: The inner loop runs all its passes during each single pass of the outer loop.",
    "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole",
+    "L2 output_prediction"
+   ]
+  },
+  "statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:statement@L3#4",
+   "source": "level_way",
+   "also_shown": []
   },
   "string_concatenation": {
    "level": "L3",
@@ -1272,6 +1739,25 @@ start concepts (3): for_loop, loop_control, string_concatenation
   },
   {
    "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
    "source": "nested_loops",
    "edge": "mis:nested_loops->NestedLoopsSequential",
    "target": "NestedLoopsSequential",
@@ -1287,6 +1773,25 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "score": 0.57,
    "logic": "The outer loop runs completely, then the inner loop runs completely.",
    "twin_logic": "The inner loop runs all its passes during each single pass of the outer loop."
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -1307,21 +1812,24 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "twin_logic": "i declared in the for header exists only inside the loop, so using it after the loop does not compile."
   },
   {
-   "depth": 3,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
+    2,
     3
    ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1511,6 +2019,143 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#3",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: \"Statements in a program can run in any order\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#4",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
    "depth": 3,
    "source": "nested_loops",
    "edge": "mis:nested_loops->NestedLoopsSequential",
@@ -1621,6 +2266,81 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:string_literal->println",
+   "target": "string_literal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1629,13 +2349,13 @@ start concepts (3): for_loop, loop_control, string_concatenation
   "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3": "mis:for_loop->ForLoopPartSkipped"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
- "depth_reached": 3,
+ "stop_reason": "sufficient",
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 42,
+ "llm_cache_hits": 65,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 28
+  "prune": 22,
+  "label": 43
  }
 }
 ```
