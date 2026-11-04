@@ -440,6 +440,13 @@ Parsed labels:
 
 mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | A for loop moves i on by one each pass | mis:loop_control->LoopStepAlwaysOne |
+| c2 | so i goes 0, 1, 2 and | mis:loop_control->LoopStepAlwaysOne |
+| c3 | so on up to 9 | mis:loop_control->LoopStepAlwaysOne |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY14_figure04.png
@@ -518,9 +525,18 @@ Parsed labels:
 
 pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | A for loop moves i on by one each pass | mis:loop_control->LoopStepAlwaysOne |
+| c2 | so i goes 0, 1, 2 and | mis:loop_control->LoopStepAlwaysOne |
+| c3 | so on up to 9 | mis:loop_control->LoopStepAlwaysOne |
+
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY14_figure05.png
 
 Held set after the one-fault rules: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
@@ -533,6 +549,11 @@ Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_vari
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | for_loop | LoopStepAlwaysOne | misconception | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 | 0.57 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| loop_control | LoopStepAlwaysOne | mis:for_loop->LoopStepAlwaysOne | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 | 0.57 |
 
 ### Errors kept as evidence
 | concept | error | quote |
@@ -617,7 +638,7 @@ start concepts (3): loop_control, for_loop, loop_variable
     lvl:loop_variable@L0#5 -> not applied (0.00) ""
     lvl:loop_variable@L2#2 -> shown (0.17) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
   kept: mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
-  clause coverage (rule edges): c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
   not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 --- depth 2: current concepts ['loop_control', 'for_loop', 'loop_variable']
   loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.65), pre:loop_control->for_loop (0.35)
@@ -626,7 +647,7 @@ start concepts (3): loop_control, for_loop, loop_variable
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
   kept: pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
-  clause coverage (rule edges): c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
+  clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
   held: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
   shadows: mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
   root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
