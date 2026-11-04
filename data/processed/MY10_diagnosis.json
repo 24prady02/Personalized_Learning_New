@@ -35,6 +35,7 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [],
  "broken_edges": [
   {
    "edge": "pre:for_loop->array_traversal",
@@ -101,7 +102,8 @@
    "way": "everyday_reading",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "edge": "lvl:off_by_one_error@L0#0",
-   "source": "level_way"
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
