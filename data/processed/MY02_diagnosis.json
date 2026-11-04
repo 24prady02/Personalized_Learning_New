@@ -30,6 +30,15 @@
   }
  ],
  "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "integer_division",
+   "misconception": "NegativeRemainderSign",
+   "shadow_of": "mis:remainder_operator->NegativeRemainderSign",
+   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
+   "score": 0.7275
+  }
+ ],
  "broken_edges": [],
  "root_cause": {
   "concept": "remainder_operator",
@@ -45,20 +54,23 @@
    "also_shown": []
   },
   "expression": {
-   "level": "L0",
-   "way": "everyday_reading",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "edge": "lvl:expression@L0#0",
-   "source": "level_way"
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
+   "edge": "lvl:expression@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L0 everyday_reading"
+   ]
   },
   "integer_division": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "NegativeRemainderSign",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "edge": "mis:integer_division->NegativeRemainderSign",
-   "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
-   "source": "level_mis_links"
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "because -4 * 2 + 1 = -7",
+   "edge": "lvl:integer_division@L3#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "println": {
    "level": "L3",
@@ -78,6 +90,17 @@
    "edge": "mis:remainder_operator->NegativeRemainderSign",
    "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
    "source": "level_mis_links"
+  },
+  "statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "It prints -4 and then 1",
+   "edge": "lvl:statement@L3#3",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
+   ]
   }
  },
  "overall_level": "L0",
@@ -250,6 +273,61 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#3",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#2",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
   }
  ],
  "evidence": [
@@ -597,6 +675,80 @@
    "score": 0.7,
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom."
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L3#3",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#2",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "It prints -4 and then 1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
   }
  ],
  "clause_coverage": {
@@ -608,12 +760,12 @@
   "because -4 * 2 + 1 = -7": "lvl:remainder_operator@L0#0"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
- "depth_reached": 3,
+ "stop_reason": "sufficient",
+ "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 38,
+ "llm_cache_hits": 44,
  "llm_calls_by_step": {
-  "prune": 14,
-  "label": 24
+  "prune": 16,
+  "label": 28
  }
 }
