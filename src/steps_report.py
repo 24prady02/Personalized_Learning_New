@@ -226,8 +226,9 @@ def main(sid: str) -> Path:
             w("\nHeld set after the one-fault rules: " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  shadows:"):
             depth_figure()
-            w("\nShadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific "
-              "concept is one wrong sentence read twice; it marks no root cause and sets no level): " + line.split(":", 1)[1].strip() + "\n")
+            w("\nShadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception "
+              "as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; "
+              "it marks no root cause and sets no level): " + line.split(":", 1)[1].strip() + "\n")
         elif line.startswith("  level "):
             w("- " + line.strip()[6:] + "\n")
         i += 1
