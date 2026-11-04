@@ -400,6 +400,15 @@ Parsed labels:
 
 mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.69], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | In double avg = (double) | not covered yet |
+| c2 | s / c | not covered yet |
+| c3 | the cast comes first | mis:explicit_cast->CastAfterIntDivision |
+| c4 | so the division is a decimal one | mis:explicit_cast->CastAfterIntDivision |
+| c5 | so 7 / 2 is 3.5 | mis:explicit_cast->CastAfterIntDivision |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** expression (3.78), type_conversion (3.72), println (3.01)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of println, own edges of type_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
@@ -810,6 +819,15 @@ Parsed labels:
 
 pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.26]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | In double avg = (double) | not covered yet |
+| c2 | s / c | not covered yet |
+| c3 | the cast comes first | mis:explicit_cast->CastAfterIntDivision |
+| c4 | so the division is a decimal one | mis:explicit_cast->CastAfterIntDivision |
+| c5 | so 7 / 2 is 3.5 | mis:explicit_cast->CastAfterIntDivision |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** statement (2.17)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of statement, pre:primitive_type->type_conversion, pre:statement->println
@@ -996,6 +1014,15 @@ pre:primitive_type->type_conversion [broken, tier 0, 0.18]
 
 reached across pre:primitive_type->type_conversion, entered next: primitive_type
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | In double avg = (double) | not covered yet |
+| c2 | s / c | not covered yet |
+| c3 | the cast comes first | mis:explicit_cast->CastAfterIntDivision |
+| c4 | so the division is a decimal one | mis:explicit_cast->CastAfterIntDivision |
+| c5 | so 7 / 2 is 3.5 | mis:explicit_cast->CastAfterIntDivision |
+
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of primitive_type
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY13_figure06.png
@@ -1108,9 +1135,20 @@ Parsed labels:
 
 lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | In double avg = (double) | not covered yet |
+| c2 | s / c | not covered yet |
+| c3 | the cast comes first | mis:explicit_cast->CastAfterIntDivision |
+| c4 | so the division is a decimal one | mis:explicit_cast->CastAfterIntDivision |
+| c5 | so 7 / 2 is 3.5 | mis:explicit_cast->CastAfterIntDivision |
+
 **No next nodes -> half_stop**
 
 Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY13_figure07.png
+
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
@@ -1127,6 +1165,12 @@ Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (co
 |---|---|---|---|---|---|
 | explicit_cast | CastAfterIntDivision | misconception | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.69 |  |
 | integer_division | CastAfterIntDivision | misconception | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.651 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| expression | OutsideInMethodNesting | mis:type_conversion->TargetTyping | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.2625 |
+| type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.48 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -1221,7 +1265,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.69], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
-  clause coverage (rule edges): c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   uncovered clauses bring in: expression (3.78), type_conversion (3.72), println (3.01)
   not yet read: own edges of expression, own edges of println, own edges of type_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['explicit_cast', 'integer_division', 'arithmetic_operators', 'expression', 'type_conversion', 'println']
@@ -1256,7 +1300,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:println@L2#0 -> not applied (0.00) ""
     lvl:println@L2#2 -> not applied (0.00) ""
   kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.26]
-  clause coverage (rule edges): c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   uncovered clauses bring in: statement (2.17)
   not yet read: own edges of statement, pre:primitive_type->type_conversion, pre:statement->println
 --- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression', 'type_conversion', 'println', 'statement']
@@ -1275,7 +1319,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:statement@L1#0 -> not applied (0.00) ""
   kept: pre:primitive_type->type_conversion [broken, tier 0, 0.18]
   reached across pre:primitive_type->type_conversion, entered next: primitive_type
-  clause coverage (rule edges): c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   not yet read: own edges of primitive_type
 --- depth 4: current concepts ['primitive_type'] (closing round: own edges only)
   primitive_type (misconceptions): 2 candidates -> kept mis:primitive_type->StringIsPrimitive (0.50), mis:primitive_type->NewArrayHoldsGarbage (0.50)
@@ -1286,7 +1330,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:primitive_type@L3#4 -> shown (0.18) "so the division is a decimal one; so 7 / 2 is 3.5"
     lvl:primitive_type@L2#0 -> not applied (0.00) ""
   kept: lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
-  clause coverage (rule edges): c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
+  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   no next nodes -> half_stop
   shadows: mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
