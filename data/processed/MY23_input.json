@@ -1,0 +1,5 @@
+{
+ "code": "int sum = 7, count = 2;\ndouble avg = (double) (sum / count);\nSystem.out.println(avg);",
+ "question": "Explain what the (double) does in this line.",
+ "answer": "“The (double) turns the whole division into a decimal division — so sum / count keeps its fraction and avg is 3.5."
+}
