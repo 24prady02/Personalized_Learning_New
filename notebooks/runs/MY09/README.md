@@ -387,6 +387,13 @@ Parsed labels:
 
 mis:integer_division->TargetTyping [held, tier 0, 0.64], lvl:integer_division@L0#4 [shown, tier 2, 0.48], lvl:println@L2#1 [shown, tier 2, 0.30]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.0 | not covered yet |
+| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
+| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
+
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** expression (0.29), type_conversion (0.29), widening_conversion (0.28)
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of type_conversion, own edges of widening_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
@@ -789,6 +796,13 @@ Parsed labels:
 
 pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.0 | not covered yet |
+| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
+| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
+
 **Graph check, not yet read (the walk may not stop while these remain):** pre:primitive_type->type_conversion, pre:type_conversion->widening_conversion
 
 **Figure 5 (the graph after depth 2)**
@@ -841,6 +855,13 @@ Parsed labels:
 pre:primitive_type->type_conversion [broken, tier 0, 0.39], pre:type_conversion->widening_conversion [confirmed, tier 2, 0.22]
 
 reached across pre:primitive_type->type_conversion, entered next: primitive_type
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.0 | not covered yet |
+| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
+| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of primitive_type
 
@@ -953,11 +974,20 @@ Parsed labels:
 
 **Kept on a path at this depth:** nothing
 
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It prints 3.0 | not covered yet |
+| c2 | Because d is a double, Java knows the result should have decimals | mis:integer_division->TargetTyping |
+| c3 | so it does the division a / b with decimals and gets 3.0 | mis:integer_division->TargetTyping |
+
 **No next nodes -> half_stop**
 
 **Figure 7 (the graph after depth 4)**
 
 ![Figure 7](figure07.png)
+Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
+
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
 - integer_division: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
@@ -971,6 +1001,11 @@ Root-cause walk: held on ['integer_division', 'type_conversion'], broken at [] (
 |---|---|---|---|---|---|
 | type_conversion | TargetTyping | misconception | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.828 |  |
 | integer_division | TargetTyping | misconception | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.644 |  |
+
+### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+| concept | misconception | shadow_of | quote | score |
+|---|---|---|---|---|
+| expression | TargetTyping | mis:integer_division->TargetTyping | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.76 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -1057,7 +1092,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   kept: mis:integer_division->TargetTyping [held, tier 0, 0.64], lvl:integer_division@L0#4 [shown, tier 2, 0.48], lvl:println@L2#1 [shown, tier 2, 0.30]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   uncovered clauses bring in: expression (0.29), type_conversion (0.29), widening_conversion (0.28)
   not yet read: own edges of expression, own edges of type_conversion, own edges of widening_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:statement->println
 --- depth 2: current concepts ['integer_division', 'println', 'arithmetic_operators', 'expression', 'type_conversion', 'widening_conversion']
@@ -1091,7 +1126,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:widening_conversion@L2#0 -> not applied (0.00) ""
     lvl:widening_conversion@L4#1 -> not applied (0.00) ""
   kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   not yet read: pre:primitive_type->type_conversion, pre:type_conversion->widening_conversion
 --- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'type_conversion', 'expression', 'widening_conversion']
   type_conversion (concept edges): 2 candidates -> kept pre:primitive_type->type_conversion (0.60), pre:type_conversion->widening_conversion (0.40)
@@ -1099,7 +1134,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     pre:type_conversion->widening_conversion -> confirmed (0.22) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
   kept: pre:primitive_type->type_conversion [broken, tier 0, 0.39], pre:type_conversion->widening_conversion [confirmed, tier 2, 0.22]
   reached across pre:primitive_type->type_conversion, entered next: primitive_type
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   not yet read: own edges of primitive_type
 --- depth 4: current concepts ['primitive_type'] (closing round: own edges only)
   primitive_type (misconceptions): 2 candidates -> kept mis:primitive_type->StringIsPrimitive (0.60), mis:primitive_type->NewArrayHoldsGarbage (0.40)
@@ -1110,7 +1145,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:primitive_type@L3#4 -> not applied (0.00) ""
     lvl:primitive_type@L2#1 -> not applied (0.00) ""
   nothing kept at this depth
-  clause coverage (rule edges): c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
+  clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   no next nodes -> half_stop
   shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
   root-cause walk: held on ['integer_division', 'type_conversion'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
