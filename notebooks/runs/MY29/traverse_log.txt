@@ -1,0 +1,69 @@
+clauses: 3.5 | The cast makes it a double division | so you get the decimal part
+start: BM25 of the answer against each tagged concept: explicit_cast 7.80 (hits 1), integer_division 6.80 (hits 1), type_conversion 3.01 (hits 1), println 2.85 (hits 1), arithmetic_operators 2.45 (hits 1)
+start: chosen explicit_cast, integer_division, type_conversion
+start concepts (3): explicit_cast, integer_division, type_conversion
+--- depth 1: current concepts ['explicit_cast', 'integer_division', 'type_conversion']
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.70), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.20), mis:explicit_cast->CastAppliesToWholeExpression (0.10)
+    mis:explicit_cast->CastAfterIntDivision -> held (0.67) "3.5; The cast makes it a double division; so you get the decimal part"
+    mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
+    mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
+  explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L2#1 (0.40), lvl:explicit_cast@L0#0 (0.35), lvl:explicit_cast@L2#0 (0.25)
+    lvl:explicit_cast@L2#1 -> not applied (0.00) ""
+    lvl:explicit_cast@L0#0 -> shown (0.21) "3.5; The cast makes it a double division"
+    lvl:explicit_cast@L2#0 -> not applied (0.00) ""
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->TargetTyping (0.25), mis:integer_division->IntegerDivisionGivesFraction (0.15)
+    mis:integer_division->CastAfterIntDivision -> held (0.57) "3.5; The cast makes it a double division; so you get the decimal part"
+    mis:integer_division->TargetTyping -> not applied (0.00) ""
+    mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.60), lvl:integer_division@L2#0 (0.25), lvl:integer_division@L4#0 (0.15)
+    lvl:integer_division@L0#4 -> shown (0.51) "3.5; The cast makes it a double division; so you get the decimal part"
+    lvl:integer_division@L2#0 -> not applied (0.00) ""
+    lvl:integer_division@L4#0 -> not applied (0.00) ""
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+    mis:type_conversion->TargetTyping -> held (0.64) "3.5; The cast makes it a double division; so you get the decimal part"
+    mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
+    mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
+  type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L4#3 (0.40), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L0#0 (0.25)
+    lvl:type_conversion@L4#3 -> not applied (0.00) ""
+    lvl:type_conversion@L4#0 -> not applied (0.00) ""
+    lvl:type_conversion@L0#0 -> shown (0.18) "3.5; The cast makes it a double division; so you get the decimal part"
+  kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.67], mis:type_conversion->TargetTyping [held, tier 0, 0.64], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.57]
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  not yet read: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:primitive_type->type_conversion, pre:type_conversion->explicit_cast
+--- depth 2: current concepts ['explicit_cast', 'type_conversion', 'integer_division']
+  explicit_cast (concept edges): 2 candidates -> kept pre:integer_division->explicit_cast (0.80), pre:type_conversion->explicit_cast (0.20)
+    pre:integer_division->explicit_cast -> broken (0.76) "3.5; The cast makes it a double division; so you get the decimal part"
+    pre:type_conversion->explicit_cast -> broken (0.15) "3.5; The cast makes it a double division; so you get the decimal part"
+  type_conversion (concept edges): 1 candidates -> kept pre:primitive_type->type_conversion (1.00)
+    pre:primitive_type->type_conversion -> broken (0.70) "3.5; The cast makes it a double division; so you get the decimal part"
+  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
+    pre:arithmetic_operators->integer_division -> broken (0.90) "3.5; The cast makes it a double division; so you get the decimal part"
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:integer_division->explicit_cast [broken, tier 0, 0.76], pre:primitive_type->type_conversion [broken, tier 0, 0.70], pre:type_conversion->explicit_cast [broken, tier 0, 0.15]
+  reached across pre:arithmetic_operators->integer_division, entered next: arithmetic_operators
+  reached across pre:primitive_type->type_conversion, entered next: primitive_type
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  not yet read: own edges of arithmetic_operators, own edges of primitive_type
+--- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'explicit_cast', 'primitive_type', 'type_conversion']
+  arithmetic_operators (misconceptions): 3 candidates -> kept 
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#1 (0.40), lvl:arithmetic_operators@L4#0 (0.35), lvl:arithmetic_operators@L2#0 (0.25)
+    lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#0 -> shown (0.21) "The cast makes it a double division; so you get the decimal part"
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+  primitive_type (misconceptions): 2 candidates -> kept mis:primitive_type->StringIsPrimitive (0.50), mis:primitive_type->NewArrayHoldsGarbage (0.50)
+    mis:primitive_type->StringIsPrimitive -> not applied (0.00) ""
+    mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
+  primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L0#2 (0.50), lvl:primitive_type@L3#4 (0.30), lvl:primitive_type@L2#0 (0.20)
+    lvl:primitive_type@L0#2 -> not applied (0.00) ""
+    lvl:primitive_type@L3#4 -> shown (0.18) "The cast makes it a double division; so you get the decimal part"
+    lvl:primitive_type@L2#0 -> not applied (0.00) ""
+  kept: lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.21], lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
+  clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
+  not yet read: pre:arithmetic_operators->expression
+  held: mis:explicit_cast->CastAfterIntDivision, mis:type_conversion->TargetTyping; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
+  shadows: mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
+  root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:primitive_type->type_conversion, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
+  level arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
+  level explicit_cast: L0 via misconception "3.5; The cast makes it a double division; so you get the decimal part"
+  level integer_division: L0 via inconsistent_trace "3.5; The cast makes it a double division; so you get the decimal part"
+  level primitive_type: L3 via relation_to_neighbour "The cast makes it a double division; so you get the decimal part"
+  level type_conversion: L0 via everyday_reading "3.5; The cast makes it a double division; so you get the decimal part"
