@@ -7,7 +7,7 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]",
+     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])",
      "decisive": false,
      "match": "a / b",
      "line": 3
@@ -21,9 +21,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "a / b",
+     "match": "a /",
      "line": 3
     },
     {
@@ -70,9 +70,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]][ \\t]*%[ \\t]*[A-Za-z_0-9(]",
+     "name": "[A-Za-z_0-9)\\]][ \\t]*%(?=[ \\t]*[A-Za-z_0-9(])",
      "decisive": false,
-     "match": "a % b",
+     "match": "a %",
      "line": 4
     }
    ],
@@ -108,6 +108,14 @@
    "source": "arithmetic_operators",
    "target": "integer_division",
    "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:arithmetic_operators->remainder_operator",
+   "type": "prerequisite",
+   "source": "arithmetic_operators",
+   "target": "remainder_operator",
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "grounding": "book_passage"
   },
   {
@@ -360,7 +368,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -396,7 +404,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -405,7 +413,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -414,7 +422,7 @@
    "type": "misconception",
    "source": "integer_division",
    "target": "AllDoublesToAvoidDivision",
-   "role": "primary",
+   "role": "context",
    "logic": "Making every variable a double is the right fix for integer division.",
    "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
   },
@@ -468,7 +476,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -7645,7 +7653,7 @@
   "concepts": 6,
   "generic": 2,
   "from_hop": 0,
-  "concept_edges": 4,
+  "concept_edges": 5,
   "misconceptions": 27,
   "mis_edges": 31,
   "levels": 30,

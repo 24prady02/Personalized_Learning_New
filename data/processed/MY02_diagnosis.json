@@ -123,7 +123,8 @@
    "prune_score": 0.9,
    "score": 0.873,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -143,7 +144,8 @@
    "prune_score": 0.75,
    "score": 0.7275,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -161,24 +163,8 @@
    "prune_score": 1.0,
    "score": 0.75,
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
-  },
-  {
-   "depth": 2,
-   "source": "remainder_operator",
-   "edge": "pre:integer_division->remainder_operator",
-   "target": "integer_division",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
-   "twin_logic": null
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "role": "context"
   },
   {
    "depth": 2,
@@ -219,6 +205,23 @@
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "remainder_operator",
+   "edge": "pre:integer_division->remainder_operator",
+   "target": "integer_division",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    6
+   ],
+   "quote": "because -4 * 2 + 1 = -7",
+   "confidence": 0.75,
+   "prune_score": 0.7,
+   "score": 0.525,
+   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
+   "twin_logic": null
+  },
+  {
    "depth": 3,
    "source": "println",
    "edge": "pre:statement->println",
@@ -233,6 +236,24 @@
    "prune_score": 1.0,
    "score": 0.7,
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "remainder_operator",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
   },
   {
@@ -256,25 +277,6 @@
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L0#0",
-   "target": "expression@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "confidence": 0.65,
-   "prune_score": 0.3,
-   "score": 0.195,
-   "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
    "depth": 4,
    "source": "statement",
    "edge": "mis:statement->StatementsRunInAnyOrder",
@@ -289,7 +291,8 @@
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 4,
@@ -349,7 +352,8 @@
    "prune_score": 0.9,
    "score": 0.873,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -427,7 +431,8 @@
    "prune_score": 1.0,
    "score": 0.75,
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -466,7 +471,8 @@
    "prune_score": 0.75,
    "score": 0.7275,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -484,7 +490,8 @@
    "prune_score": 0.2,
    "score": 0.15,
    "logic": "10 / 3 evaluates to 3.333....",
-   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -517,9 +524,27 @@
    ],
    "quote": "because -4 * 2 + 1 = -7",
    "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
+   "prune_score": 0.7,
+   "score": 0.525,
    "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "remainder_operator",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
   },
   {
@@ -661,6 +686,24 @@
   },
   {
    "depth": 3,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "remainder_operator",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
    "source": "println",
    "edge": "pre:statement->println",
    "target": "statement",
@@ -691,7 +734,8 @@
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 4,
@@ -763,9 +807,9 @@
  "stop_reason": "sufficient",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
-  "prune": 16,
-  "label": 28
+  "prune": 17,
+  "label": 30
  }
 }

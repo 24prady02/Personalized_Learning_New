@@ -26,14 +26,14 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | arithmetic_operators | False | pattern | 'a / b' | 3 |
-| expression | True | pattern | 'a / b' | 3 |
+| expression | True | pattern | 'a /' | 3 |
 | expression | True | pattern | '= -7;' | 1 |
 | integer_division | False | signal | 'int a = -7;\nint b = 2;\nSystem.out.println(a / b' | 1 |
 | println | False | pattern | 'System.out.println(' | 3 |
-| remainder_operator | False | pattern | 'a % b' | 4 |
+| remainder_operator | False | pattern | 'a %' | 4 |
 | statement | True | pattern | ';' | 1 |
 
-G: 6 concept nodes (2 generic), 4 concept edges, 31 misconception / error edges, 27 misconception / error nodes, 30 level nodes, 37 level-misconception links, 2 connected piece(s).
+G: 6 concept nodes (2 generic), 5 concept edges, 31 misconception / error edges, 27 misconception / error nodes, 30 level nodes, 37 level-misconception links, 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,expression,integer_division,remainder_operator | println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
@@ -41,6 +41,7 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 |---|---|---|
 | pre:arithmetic_operators->expression | prerequisite | An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
 | pre:arithmetic_operators->integer_division | prerequisite | For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
+| pre:arithmetic_operators->remainder_operator | prerequisite | % is one of the int arithmetic operators; it gives the remainder of the division. |
 | pre:integer_division->remainder_operator | prerequisite | % is the companion of integer division: a = (a / b) * b + a % b. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
@@ -71,7 +72,7 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c5 | so -7 % 2 is 1 |
 | c6 | because -4 * 2 + 1 = -7 |
 
-start: BM25 of the answer against each tagged concept: remainder_operator 22.32 (hits 1), arithmetic_operators 16.99 (hits 1), integer_division 15.68 (hits 1), println 10.56 (hits 1)
+start: BM25 of the answer against each tagged concept: remainder_operator 22.91 (hits 1), arithmetic_operators 17.88 (hits 1), integer_division 15.86 (hits 1), println 9.12 (hits 1)
 
 start: chosen remainder_operator, arithmetic_operators, integer_division
 
@@ -402,24 +403,26 @@ mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_
 
 **Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (2.34)
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
 ### Depth 2: current concepts 'remainder_operator', 'integer_division', 'arithmetic_operators', 'println'
 
-#### remainder_operator, concept edges: 1 edges offered
+#### remainder_operator, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:arithmetic_operators->remainder_operator \| rule: % is one of the int arithmetic operators; it gives the remainder of the division. |
 | pre:integer_division->remainder_operator \| rule: % is the companion of integer division: a = (a / b) * b + a % b. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:integer_division->remainder_operator (Score: 1.0)}
+{pre:integer_division->remainder_operator (Score: 0.7)}
+{pre:arithmetic_operators->remainder_operator (Score: 0.3)}
 ```
-Kept by pruning: pre:integer_division->remainder_operator (1.00)
+Kept by pruning: pre:integer_division->remainder_operator (0.70), pre:arithmetic_operators->remainder_operator (0.30)
 
 Label prompt for concept edge pre:integer_division->remainder_operator (integer_division -> remainder_operator, prerequisite):
 > % is the companion of integer division: a = (a / b) * b + a % b.
@@ -431,10 +434,21 @@ Clauses: 6
 Confidence: 0.75
 ```
 
+Label prompt for concept edge pre:arithmetic_operators->remainder_operator (arithmetic_operators -> remainder_operator, prerequisite):
+> % is one of the int arithmetic operators; it gives the remainder of the division.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 5, 6
+Confidence: 0.6
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:integer_division->remainder_operator | confirmed | 1.0 | 0.75 | 0.75 | c6 | because -4 * 2 + 1 = -7 |
+| pre:integer_division->remainder_operator | confirmed | 0.7 | 0.75 | 0.52 | c6 | because -4 * 2 + 1 = -7 |
+| pre:arithmetic_operators->remainder_operator | confirmed | 0.3 | 0.6 | 0.18 | c5, c6 | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 
 #### integer_division, concept edges: 1 edges offered
 Edges offered:
@@ -470,6 +484,7 @@ Edges offered:
 |---|
 | pre:arithmetic_operators->expression \| rule: An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
 | pre:arithmetic_operators->integer_division \| rule: For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
+| pre:arithmetic_operators->remainder_operator \| rule: % is one of the int arithmetic operators; it gives the remainder of the division. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
@@ -505,21 +520,21 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), err:println->PrintWithoutFinalNewline (0.20)
+mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
 ```
-Kept by pruning: mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), err:println->PrintWithoutFinalNewline (0.20)
+Kept by pruning: mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
 | mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
+| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 Model's reply:
 ```
 mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.9
-mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.9
-err:println->PrintWithoutFinalNewline | not applied | clauses: none | confidence: 0.95
+mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.85
+mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
@@ -527,7 +542,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
-| err:println->PrintWithoutFinalNewline | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
 
 #### println, level ways: 17 edges offered
 Edges offered:
@@ -598,7 +613,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:integer_division->remainder_operator [confirmed, tier 2, 0.75], pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60]
+pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60], pre:integer_division->remainder_operator [confirmed, tier 2, 0.53]
 
 reached across pre:arithmetic_operators->expression, entered next: expression
 
@@ -617,7 +632,7 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println'
+### Depth 3: current concepts 'expression', 'arithmetic_operators', 'integer_division', 'remainder_operator', 'println'
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -634,29 +649,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.20), mis:expression->VariablesHoldExpressions (0.20)
+mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.20), mis:expression->VariablesHoldExpressions (0.20)
+Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
 | mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
-| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 Model's reply:
 ```
 mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.85
-mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.95
-mis:expression->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.95
+mis:expression->OutsideInMethodNesting | not applied | clauses: none | confidence: 0.9
+mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
+| mis:expression->OutsideInMethodNesting | not applied |  |  | 0.0 |  |  |
 | mis:expression->NoAtomicExpression | not applied |  |  | 0.0 |  |  |
-| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -727,6 +742,35 @@ Parsed labels:
 | lvl:expression@L0#0 | shown | 0.3 | 0.65 | 0.2 | c2 | -7 / 2 is -3.5, and integer division rounds down |
 | lvl:expression@L2#1 | shown | 0.25 | 0.7 | 0.17 | c1, c2, c3, c5 | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |
 
+#### arithmetic_operators, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:arithmetic_operators->expression \| rule: An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
+| pre:arithmetic_operators->integer_division \| rule: For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
+| pre:arithmetic_operators->remainder_operator \| rule: % is one of the int arithmetic operators; it gives the remainder of the division. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:arithmetic_operators->expression (Score: 1.0)}
+```
+Kept by pruning: pre:arithmetic_operators->remainder_operator (1.00)
+
+Label prompt for concept edge pre:arithmetic_operators->remainder_operator (arithmetic_operators -> remainder_operator, prerequisite):
+> % is one of the int arithmetic operators; it gives the remainder of the division.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 5, 6
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:arithmetic_operators->remainder_operator | confirmed | 1.0 | 0.6 | 0.6 | c5, c6 | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
+
 #### println, concept edges: 1 edges offered
 Edges offered:
 | edge |
@@ -756,7 +800,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:statement->println [confirmed, tier 2, 0.70], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+pre:statement->println [confirmed, tier 2, 0.70], pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27]
 
 reached across pre:statement->println, entered next: statement
 
@@ -901,10 +945,10 @@ mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.36], lvl:statement@L3
 ![Figure 7](figure07.png)
 Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
 
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
+Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
 - arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
 - expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
 - integer_division: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
@@ -912,7 +956,7 @@ Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'e
 - remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
 - statement: L3 via relation_to_neighbour "It prints -4 and then 1"
 
-**Stop:** sufficient at depth 4; prompts {'prune': 16, 'label': 28}, fresh model calls 0, cache hits 44
+**Stop:** sufficient at depth 4; prompts {'prune': 17, 'label': 30}, fresh model calls 0, cache hits 47
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -966,7 +1010,8 @@ Clause coverage (final):
 | 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.75 | 0.97 | 0.7275 | [2, 3, 4, 5] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 |
 | 1 | integer_division | mis:integer_division->IntegerDivisionGivesFraction | misconception | correct | 0.2 | 0.75 | 0.15 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
 | 1 | integer_division | lvl:integer_division@L3#0 | level | shown | 0.3 | 0.85 | 0.255 | [6] | because -4 * 2 + 1 = -7 |
-| 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 1.0 | 0.75 | 0.75 | [6] | because -4 * 2 + 1 = -7 |
+| 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.7 | 0.75 | 0.525 | [6] | because -4 * 2 + 1 = -7 |
+| 2 | remainder_operator | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.3 | 0.6 | 0.18 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 5, 6] | so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [2, 5, 6] | -7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | println | lvl:println@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | It prints -4 and then 1 |
@@ -974,6 +1019,7 @@ Clause coverage (final):
 | 3 | expression | lvl:expression@L3#1 | level | shown | 0.45 | 0.6 | 0.27 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.3 | 0.65 | 0.195 | [2] | -7 / 2 is -3.5, and integer division rounds down |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2, 3, 5] | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |
+| 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 3 | println | pre:statement->println | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1] | It prints -4 and then 1 |
 | 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.6 | 0.6 | 0.36 | [1] | It prints -4 and then 1 |
 | 4 | statement | lvl:statement@L3#3 | level | shown | 0.4 | 0.55 | 0.22 | [1] | It prints -4 and then 1 |
@@ -986,12 +1032,12 @@ Clause coverage (final):
 | 1 | remainder_operator | mis:remainder_operator->NegativeRemainderSign | misconception | held | 0.873 | [2, 3, 4, 5] |
 | 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.7275 | [2, 3, 4, 5] |
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 0.75 | [5, 6] |
-| 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.75 | [6] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.7 | [2, 5, 6] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 0.6 | [3, 5, 6] |
+| 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.525 | [6] |
 | 3 | println | pre:statement->println | prerequisite | confirmed | 0.7 | [1] |
+| 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.6 | [5, 6] |
 | 3 | expression | lvl:expression@L3#1 | level | shown | 0.27 | [2, 3] |
-| 3 | expression | lvl:expression@L0#0 | level | shown | 0.195 | [2] |
 | 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.36 | [1] |
 | 4 | statement | lvl:statement@L3#3 | level | shown | 0.22 | [1] |
 | 4 | statement | lvl:statement@L2#2 | level | shown | 0.18 | [1] |
@@ -999,7 +1045,7 @@ Clause coverage (final):
 ## 7. Raw traversal log
 ```
 clauses: It prints -4 and then 1 | -7 / 2 is -3.5, and integer division rounds down | so it becomes -4 | A remainder is never negative | so -7 % 2 is 1 | because -4 * 2 + 1 = -7
-start: BM25 of the answer against each tagged concept: remainder_operator 22.32 (hits 1), arithmetic_operators 16.99 (hits 1), integer_division 15.68 (hits 1), println 10.56 (hits 1)
+start: BM25 of the answer against each tagged concept: remainder_operator 22.91 (hits 1), arithmetic_operators 17.88 (hits 1), integer_division 15.86 (hits 1), println 9.12 (hits 1)
 start: chosen remainder_operator, arithmetic_operators, integer_division
 start concepts (3): remainder_operator, arithmetic_operators, integer_division
 --- depth 1: current concepts ['remainder_operator', 'arithmetic_operators', 'integer_division']
@@ -1028,38 +1074,41 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   kept: mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
   clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   uncovered clauses bring in: println (2.34)
-  not yet read: own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->remainder_operator
+  not yet read: own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
 --- depth 2: current concepts ['remainder_operator', 'integer_division', 'arithmetic_operators', 'println']
-  remainder_operator (concept edges): 1 candidates -> kept pre:integer_division->remainder_operator (1.00)
-    pre:integer_division->remainder_operator -> confirmed (0.75) "because -4 * 2 + 1 = -7"
+  remainder_operator (concept edges): 2 candidates -> kept pre:integer_division->remainder_operator (0.70), pre:arithmetic_operators->remainder_operator (0.30)
+    pre:integer_division->remainder_operator -> confirmed (0.52) "because -4 * 2 + 1 = -7"
+    pre:arithmetic_operators->remainder_operator -> confirmed (0.18) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
     pre:arithmetic_operators->integer_division -> confirmed (0.60) "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> confirmed (0.70) "-7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), err:println->PrintWithoutFinalNewline (0.20)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
-    err:println->PrintWithoutFinalNewline -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#4 (0.25)
     lvl:println@L2#1 -> shown (0.24) "It prints -4 and then 1"
     lvl:println@L3#0 -> shown (0.24) "It prints -4 and then 1"
     lvl:println@L3#4 -> not applied (0.00) ""
-  kept: pre:integer_division->remainder_operator [confirmed, tier 2, 0.75], pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60]
+  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60], pre:integer_division->remainder_operator [confirmed, tier 2, 0.53]
   reached across pre:arithmetic_operators->expression, entered next: expression
   clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   not yet read: own edges of expression, pre:statement->println
---- depth 3: current concepts ['integer_division', 'remainder_operator', 'expression', 'arithmetic_operators', 'println']
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.20), mis:expression->VariablesHoldExpressions (0.20)
+--- depth 3: current concepts ['expression', 'arithmetic_operators', 'integer_division', 'remainder_operator', 'println']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.45), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.25)
     lvl:expression@L3#1 -> shown (0.27) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
     lvl:expression@L0#0 -> shown (0.20) "-7 / 2 is -3.5, and integer division rounds down"
     lvl:expression@L2#1 -> shown (0.17) "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
+  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->remainder_operator (1.00)
+    pre:arithmetic_operators->remainder_operator -> confirmed (0.60) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> confirmed (0.70) "It prints -4 and then 1"
-  kept: pre:statement->println [confirmed, tier 2, 0.70], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+  kept: pre:statement->println [confirmed, tier 2, 0.70], pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27]
   reached across pre:statement->println, entered next: statement
   clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   not yet read: own edges of statement
@@ -1076,7 +1125,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   held: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
   shadows: mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
-  root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['integer_division'], 'println': ['statement']}
+  root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
   level arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
   level expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
   level integer_division: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
@@ -1212,7 +1261,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.9,
    "score": 0.873,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1232,7 +1282,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.75,
    "score": 0.7275,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1250,24 +1301,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 1.0,
    "score": 0.75,
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
-  },
-  {
-   "depth": 2,
-   "source": "remainder_operator",
-   "edge": "pre:integer_division->remainder_operator",
-   "target": "integer_division",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
-   "twin_logic": null
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "role": "context"
   },
   {
    "depth": 2,
@@ -1308,6 +1343,23 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "twin_logic": null
   },
   {
+   "depth": 2,
+   "source": "remainder_operator",
+   "edge": "pre:integer_division->remainder_operator",
+   "target": "integer_division",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    6
+   ],
+   "quote": "because -4 * 2 + 1 = -7",
+   "confidence": 0.75,
+   "prune_score": 0.7,
+   "score": 0.525,
+   "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
+   "twin_logic": null
+  },
+  {
    "depth": 3,
    "source": "println",
    "edge": "pre:statement->println",
@@ -1322,6 +1374,24 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 1.0,
    "score": 0.7,
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "remainder_operator",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
   },
   {
@@ -1345,25 +1415,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L0#0",
-   "target": "expression@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down",
-   "confidence": 0.65,
-   "prune_score": 0.3,
-   "score": 0.195,
-   "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
    "depth": 4,
    "source": "statement",
    "edge": "mis:statement->StatementsRunInAnyOrder",
@@ -1378,7 +1429,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 4,
@@ -1438,7 +1490,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.9,
    "score": 0.873,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1516,7 +1569,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 1.0,
    "score": 0.75,
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
-   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+   "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1555,7 +1609,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.75,
    "score": 0.7275,
    "logic": "a % b is never negative, and integer division of a negative number rounds down.",
-   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+   "twin_logic": "a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1573,7 +1628,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.2,
    "score": 0.15,
    "logic": "10 / 3 evaluates to 3.333....",
-   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded."
+   "twin_logic": "Dividing two ints gives an int: the fractional part is discarded.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1606,9 +1662,27 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    ],
    "quote": "because -4 * 2 + 1 = -7",
    "confidence": 0.75,
-   "prune_score": 1.0,
-   "score": 0.75,
+   "prune_score": 0.7,
+   "score": 0.525,
    "logic": "% is the companion of integer division: a = (a / b) * b + a % b.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "remainder_operator",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
   },
   {
@@ -1750,6 +1824,24 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   },
   {
    "depth": 3,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->remainder_operator",
+   "target": "remainder_operator",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
    "source": "println",
    "edge": "pre:statement->println",
    "target": "statement",
@@ -1780,7 +1872,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 4,
@@ -1852,10 +1945,10 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
  "stop_reason": "sufficient",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
-  "prune": 16,
-  "label": 28
+  "prune": 17,
+  "label": 30
  }
 }
 ```
