@@ -18,8 +18,8 @@
  ],
  "start_concepts": [
   "array_traversal",
-  "indexing",
-  "loop_control"
+  "loop_control",
+  "indexing"
  ],
  "held_misconceptions": [],
  "error_evidence": [],
@@ -36,6 +36,14 @@
    "also_shown": [
     "L3 relation_to_neighbour"
    ]
+  },
+  "array_initializer": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "max starts as the first element, 3",
+   "edge": "lvl:array_initializer@L2#1",
+   "source": "level_way",
+   "also_shown": []
   },
   "array_traversal": {
    "level": "L3",
@@ -121,24 +129,27 @@
    "prune_score": 0.4,
    "score": 0.368,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
    "source": "array_traversal",
-   "edge": "mis:array_traversal->OffByOneBound",
-   "target": "OffByOneBound",
+   "edge": "mis:array_traversal->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
+    5,
     6
    ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.9,
    "prune_score": 0.4,
    "score": 0.36,
-   "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -155,7 +166,8 @@
    "prune_score": 0.4,
    "score": 0.36,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -170,28 +182,10 @@
    ],
    "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end; max starts as the first element, 3",
    "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "array_declaration",
-   "edge": "mis:array_declaration->ElementNameIsWholeArray",
-   "target": "ElementNameIsWholeArray",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
-   "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
-   "logic": "X[i] names the whole array, not one element.",
-   "twin_logic": "The array is a; a[i] is the single element at index i."
   },
   {
    "depth": 2,
@@ -209,6 +203,24 @@
    "prune_score": 0.55,
    "score": 0.44,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    6
+   ],
+   "quote": "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
@@ -232,25 +244,6 @@
   },
   {
    "depth": 3,
-   "source": "for_loop",
-   "edge": "pre:for_loop->array_traversal",
-   "target": "array_traversal",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    5,
-    6
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.9,
-   "score": 0.765,
-   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
    "source": "array_bounds",
    "edge": "mis:array_bounds->OffByOneBound",
    "target": "OffByOneBound",
@@ -261,30 +254,33 @@
    ],
    "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 0.8,
-   "score": 0.68,
+   "prune_score": 0.85,
+   "score": 0.7225,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.7,
+   "prune_score": 0.85,
+   "score": 0.595,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
   }
  ],
  "evidence": [
-  {
-   "depth": 1,
-   "source": "array_traversal",
-   "edge": "mis:array_traversal->OffByOneBound",
-   "target": "OffByOneBound",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    6
-   ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
-  },
   {
    "depth": 1,
    "source": "array_traversal",
@@ -298,10 +294,48 @@
    ],
    "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "array_traversal",
+   "edge": "mis:array_traversal->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    6
+   ],
+   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.9,
    "prune_score": 0.35,
    "score": 0.315,
-   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "array_traversal",
+   "edge": "err:array_traversal->EarlyReturnInLoop",
+   "target": "EarlyReturnInLoop",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3,
+    7
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Leaves a traversal loop with return before every element has been processed.",
+   "twin_logic": "A result that depends on all elements is known only after the loop ends.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -368,120 +402,6 @@
   },
   {
    "depth": 1,
-   "source": "indexing",
-   "edge": "mis:indexing->ArrayIndexStartsAtOne",
-   "target": "ArrayIndexStartsAtOne",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    6
-   ],
-   "quote": "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.92,
-   "prune_score": 0.4,
-   "score": 0.368,
-   "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "mis:indexing->ArrayRangeInclusive",
-   "target": "ArrayRangeInclusive",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    6
-   ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
-   "logic": "new int[n] has slots 0 to n, inclusive.",
-   "twin_logic": "The slots are 0 to n - 1."
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "mis:indexing->IndexIsValue",
-   "target": "IndexIsValue",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3,
-    6
-   ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "i and a[i] are the same thing, so the position is the stored value.",
-   "twin_logic": "i is a position; a[i] is the value stored at that position."
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "lvl:indexing@L3#1",
-   "target": "indexing@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    5,
-    6
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.75,
-   "prune_score": 0.4,
-   "score": 0.3,
-   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "lvl:indexing@L3#6",
-   "target": "indexing@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    5,
-    6
-   ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
-   "prune_score": 0.35,
-   "score": 0.28,
-   "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "lvl:indexing@L2#1",
-   "target": "indexing@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "max starts as the first element, 3",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 1,
    "source": "loop_control",
    "edge": "mis:loop_control->OffByOneBound",
    "target": "OffByOneBound",
@@ -495,7 +415,8 @@
    "prune_score": 0.4,
    "score": 0.36,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -514,7 +435,8 @@
    "prune_score": 0.35,
    "score": 0.2975,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -532,7 +454,8 @@
    "prune_score": 0.25,
    "score": 0.2,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -597,6 +520,123 @@
    "way": "output_prediction"
   },
   {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    6
+   ],
+   "quote": "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.92,
+   "prune_score": 0.4,
+   "score": 0.368,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    6
+   ],
+   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->IndexIsValue",
+   "target": "IndexIsValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3,
+    6
+   ],
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "i and a[i] are the same thing, so the position is the stored value.",
+   "twin_logic": "i is a position; a[i] is the value stored at that position.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#1",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L3#6",
+   "target": "indexing@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L2#1",
+   "target": "indexing@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "max starts as the first element, 3",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
    "depth": 2,
    "source": "array_traversal",
    "edge": "pre:array_traversal->running_extreme",
@@ -619,6 +659,25 @@
   {
    "depth": 2,
    "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
    "edge": "pre:for_loop->array_traversal",
    "target": "for_loop",
    "kind": "prerequisite",
@@ -630,46 +689,9 @@
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
+   "prune_score": 0.25,
+   "score": 0.2125,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "array_traversal",
-   "edge": "pre:indexing->array_traversal",
-   "target": "indexing",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    5,
-    6
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.2,
-   "score": 0.17,
-   "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:indexing->array_bounds",
-   "target": "array_bounds",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    6,
-    2
-   ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end; max starts as the first element, 3",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null
   },
   {
@@ -711,97 +733,39 @@
   },
   {
    "depth": 2,
-   "source": "for_loop",
-   "edge": "mis:for_loop->IdiomOverridesCode",
-   "target": "IdiomOverridesCode",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "confirmed",
    "clauses": [
-    5,
+    2,
     6
    ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
-  },
-  {
-   "depth": 2,
-   "source": "for_loop",
-   "edge": "err:for_loop->WrongIterationCount",
-   "target": "WrongIterationCount",
-   "kind": "error",
-   "label": "correct",
-   "clauses": [
-    3,
-    6
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
-   "prune_score": 0.3,
-   "score": 0.24,
-   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
-  },
-  {
-   "depth": 2,
-   "source": "for_loop",
-   "edge": "mis:for_loop->ForIsConditional",
-   "target": "ForIsConditional",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
-   "confidence": 0.85,
-   "prune_score": 0.25,
-   "score": 0.2125,
-   "logic": "The body of a for statement executes at most once.",
-   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times."
-  },
-  {
-   "depth": 2,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#2",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    5,
-    6
-   ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
    "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "score": 0.425,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null
   },
   {
    "depth": 2,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#8",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
+   "source": "indexing",
+   "edge": "pre:indexing->array_bounds",
+   "target": "array_bounds",
+   "kind": "prerequisite",
+   "label": "confirmed",
    "clauses": [
-    3,
-    5,
-    6
+    6,
+    2
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
+   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end; max starts as the first element, 3",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
+   "twin_logic": null
   },
   {
    "depth": 2,
@@ -818,13 +782,14 @@
    "prune_score": 0.4,
    "score": 0.34,
    "logic": "When a loop finishes the program ends, so code after the loop never runs.",
-   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop."
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
   },
   {
    "depth": 2,
    "source": "control_flow",
-   "edge": "mis:control_flow->FalseConditionRestartsProgram",
-   "target": "FalseConditionRestartsProgram",
+   "edge": "mis:control_flow->IfConditionWatched",
+   "target": "IfConditionWatched",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
@@ -832,11 +797,31 @@
     4
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.75,
+   "confidence": 0.7,
    "prune_score": 0.3,
-   "score": 0.225,
-   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
-   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement."
+   "score": 0.21,
+   "logic": "An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever).",
+   "twin_logic": "An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->CodeAfterIfSkipped",
+   "target": "CodeAfterIfSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "When the then branch runs, the code after the if is skipped.",
+   "twin_logic": "After the if finishes, execution continues with the next statement either way.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -905,21 +890,219 @@
   },
   {
    "depth": 2,
-   "source": "array_declaration",
-   "edge": "mis:array_declaration->ElementNameIsWholeArray",
-   "target": "ElementNameIsWholeArray",
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    2,
-    3
+    3,
+    4
    ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value",
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    5
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopVariableLimitsValues",
+   "target": "LoopVariableLimitsValues",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    7
+   ],
+   "quote": "It prints 8; For any array, this code prints its largest element",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
+   "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#0",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#2",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
-   "logic": "X[i] names the whole array, not one element.",
-   "twin_logic": "The array is a; a[i] is the single element at index i."
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#2",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    5,
+    6
+   ],
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#8",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   },
   {
    "depth": 3,
@@ -933,10 +1116,11 @@
    ],
    "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.85,
-   "prune_score": 0.8,
-   "score": 0.68,
+   "prune_score": 0.85,
+   "score": 0.7225,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -997,121 +1181,6 @@
   },
   {
    "depth": 3,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopOutputSameEachPass",
-   "target": "LoopOutputSameEachPass",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.8,
-   "prune_score": 0.45,
-   "score": 0.36,
-   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->ForInitRepeats",
-   "target": "ForInitRepeats",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    5
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "mis:loop_variable->LoopVariableLimitsValues",
-   "target": "LoopVariableLimitsValues",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1,
-    7
-   ],
-   "quote": "It prints 8; For any array, this code prints its largest element",
-   "confidence": 0.65,
-   "prune_score": 0.25,
-   "score": 0.1625,
-   "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
-   "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it."
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#0",
-   "target": "loop_variable@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    5,
-    6
-   ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#2",
-   "target": "loop_variable@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    5,
-    6
-   ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
-   "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L2#1",
-   "target": "loop_variable@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    5,
-    6
-   ],
-   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 3,
    "source": "loop_control",
    "edge": "pre:loop_control->for_loop",
    "target": "for_loop",
@@ -1131,22 +1200,42 @@
   },
   {
    "depth": 3,
-   "source": "for_loop",
-   "edge": "pre:for_loop->array_traversal",
-   "target": "array_traversal",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "source": "array_initializer",
+   "edge": "mis:array_initializer->ArrayBracketCountIsLength",
+   "target": "ArrayBracketCountIsLength",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
-    3,
-    5,
+    1,
+    4,
     6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
-   "prune_score": 0.9,
-   "score": 0.765,
-   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
-   "twin_logic": null
+   "quote": "It prints 8; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The number of brackets in an array type or initializer is the array's length.",
+   "twin_logic": "Brackets give the number of dimensions; the length is set at creation.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "max starts as the first element, 3",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 3,
@@ -1184,24 +1273,61 @@
    "score": 0.28,
    "logic": "Control flow is the order in which statements run.",
    "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "array_traversal",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    5,
+    6
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.85,
+   "prune_score": 0.55,
+   "score": 0.4675,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
   }
  ],
  "clause_coverage": {
   "It prints 8": "mis:control_flow->ProgramEndsAfterLoop",
   "max starts as the first element, 3": "lvl:array_traversal@L3#6",
-  "The loop then looks at every later element and, whenever one is bigger than max, max takes its value": "lvl:array_traversal@L3#6",
+  "The loop then looks at every later element and, whenever one is bigger than max, max takes its value": "err:array_traversal->EarlyReturnInLoop",
   "so after 8 it never changes": "lvl:array_traversal@L3#6",
   "The loop starts at i = 1": "mis:array_traversal->IdiomOverridesCode",
-  "because a[0] is already in max, and i < a.length stops at the last index without going past the end": "mis:array_traversal->OffByOneBound",
-  "For any array, this code prints its largest element": "lvl:array_traversal@L3#6"
+  "because a[0] is already in max, and i < a.length stops at the last index without going past the end": "mis:array_traversal->IdiomOverridesCode",
+  "For any array, this code prints its largest element": "err:array_traversal->EarlyReturnInLoop"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 69,
+ "llm_cache_hits": 71,
  "llm_calls_by_step": {
   "prune": 23,
-  "label": 46
+  "label": 48
  }
 }
