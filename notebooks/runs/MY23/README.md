@@ -24,23 +24,24 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | arithmetic_operators | False | pattern | 'm / c' | 2 |
-| explicit_cast | False | pattern | '(double) (' | 2 |
-| expression | True | pattern | 'm / c' | 2 |
+| explicit_cast | False | pattern | '(double)' | 2 |
+| expression | True | pattern | 'm /' | 2 |
 | expression | True | pattern | '= 2;' | 1 |
 | integer_division | False | signal | 'int sum = 7, count = 2;\ndouble avg = (double) (sum / count' | 1 |
 | primitive_type | True | pattern | 'int' | 1 |
 | println | False | pattern | 'System.out.println(' | 3 |
 | statement | True | pattern | ';' | 1 |
-| type_conversion | False | pattern | '(double) (' | 2 |
+| type_conversion | False | pattern | '(double)' | 2 |
 
-G: 8 concept nodes (3 generic), 5 concept edges, 39 misconception / error edges, 34 misconception / error nodes, 40 level nodes, 49 level-misconception links, 3 connected piece(s).
-Note: concept nodes form 3 pieces (the KG has no edge between them): arithmetic_operators,expression,integer_division | explicit_cast,primitive_type,type_conversion | println,statement
+G: 8 concept nodes (3 generic), 6 concept edges, 39 misconception / error edges, 34 misconception / error nodes, 40 level nodes, 49 level-misconception links, 2 connected piece(s).
+Note: concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,explicit_cast,expression,integer_division,primitive_type,type_conversion | println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
 | pre:arithmetic_operators->expression | prerequisite | An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
 | pre:arithmetic_operators->integer_division | prerequisite | For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
+| pre:integer_division->explicit_cast | prerequisite | To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late. |
 | pre:primitive_type->type_conversion | prerequisite | Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 | pre:type_conversion->explicit_cast | prerequisite | A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2). |
@@ -70,7 +71,7 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c1 | The (double) turns the whole division into a decimal division — |
 | c2 | so sum / count keeps its fraction and avg is 3.5 |
 
-start: BM25 of the answer against each tagged concept: integer_division 10.25 (hits 1), explicit_cast 7.79 (hits 1), arithmetic_operators 5.73 (hits 1), type_conversion 5.21 (hits 1), println 4.87 (hits 1)
+start: BM25 of the answer against each tagged concept: integer_division 9.51 (hits 1), explicit_cast 8.50 (hits 1), arithmetic_operators 5.41 (hits 1), type_conversion 4.54 (hits 1), println 4.51 (hits 1)
 
 start: chosen integer_division, explicit_cast, arithmetic_operators
 
@@ -407,24 +408,36 @@ mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], mis:explicit_ca
 | c1 | The (double) turns the whole division into a decimal division — | mis:integer_division->CastAfterIntDivision |
 | c2 | so sum / count keeps its fraction and avg is 3.5 | mis:integer_division->CastAfterIntDivision |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
+**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:type_conversion->explicit_cast
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
 ### Depth 2: current concepts 'integer_division', 'explicit_cast', 'arithmetic_operators'
 
-#### integer_division, concept edges: 1 edges offered
+#### integer_division, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
 | pre:arithmetic_operators->integer_division \| rule: For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
+| pre:integer_division->explicit_cast \| rule: To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:arithmetic_operators->integer_division (Score: 1.0)}
+{pre:integer_division->explicit_cast (Score: 0.8)}
+{pre:arithmetic_operators->integer_division (Score: 0.2)}
 ```
-Kept by pruning: pre:arithmetic_operators->integer_division (1.00)
+Kept by pruning: pre:integer_division->explicit_cast (0.80), pre:arithmetic_operators->integer_division (0.20)
+
+Label prompt for concept edge pre:integer_division->explicit_cast (integer_division -> explicit_cast, prerequisite):
+> To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.
+
+Model's reply:
+```
+Label: broken
+Clauses: 1, 2
+Confidence: 0.95
+```
 
 Label prompt for concept edge pre:arithmetic_operators->integer_division (arithmetic_operators -> integer_division, prerequisite):
 > For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.
@@ -439,17 +452,19 @@ Confidence: 0.92
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:arithmetic_operators->integer_division | broken | 1.0 | 0.92 | 0.92 | c2 | so sum / count keeps its fraction and avg is 3.5 |
+| pre:integer_division->explicit_cast | broken | 0.8 | 0.95 | 0.76 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| pre:arithmetic_operators->integer_division | broken | 0.2 | 0.92 | 0.18 | c2 | so sum / count keeps its fraction and avg is 3.5 |
 
 #### explicit_cast, concept edges: 1 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:integer_division->explicit_cast \| rule: To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late. |
 | pre:type_conversion->explicit_cast \| rule: A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2). |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:type_conversion->explicit_cast (Score: 1.0)}
+pre:type_conversion->explicit_cast (1.00)
 ```
 Kept by pruning: pre:type_conversion->explicit_cast (1.00)
 
@@ -498,7 +513,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:arithmetic_operators->integer_division [broken, tier 0, 0.92], pre:arithmetic_operators->expression [broken, tier 0, 0.75], pre:type_conversion->explicit_cast [broken, tier 0, 0.70]
+pre:integer_division->explicit_cast [broken, tier 0, 0.76], pre:arithmetic_operators->expression [broken, tier 0, 0.75], pre:type_conversion->explicit_cast [broken, tier 0, 0.70], pre:arithmetic_operators->integer_division [broken, tier 0, 0.18]
 
 reached across pre:arithmetic_operators->expression, entered next: expression
 
@@ -515,7 +530,7 @@ reached across pre:type_conversion->explicit_cast, entered next: type_conversion
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'expression', 'type_conversion', 'explicit_cast'
+### Depth 3: current concepts 'explicit_cast', 'integer_division', 'expression', 'arithmetic_operators', 'type_conversion'
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -744,21 +759,22 @@ mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTy
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+Held set after the one-fault rules: mis:type_conversion->TargetTyping, mis:expression->TargetTyping, mis:explicit_cast->CastAfterIntDivision; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
+
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast, pre:arithmetic_operators->integer_division), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
 - explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 - expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
 - integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 - type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 
-**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 24}, fresh model calls 4, cache hits 33
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| integer_division | CastAfterIntDivision | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.651 |  |
 | explicit_cast | CastAfterIntDivision | misconception | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.552 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
@@ -770,9 +786,10 @@ Root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (co
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:arithmetic_operators->integer_division | so sum / count keeps its fraction and avg is 3.5 | 0.92 | mis:integer_division->CastAfterIntDivision |
+| pre:integer_division->explicit_cast | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.76 | mis:integer_division->CastAfterIntDivision |
 | pre:arithmetic_operators->expression | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.75 | mis:integer_division->CastAfterIntDivision |
 | pre:type_conversion->explicit_cast | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.7 | mis:integer_division->CastAfterIntDivision |
+| pre:arithmetic_operators->integer_division | so sum / count keeps its fraction and avg is 3.5 | 0.184 | mis:integer_division->CastAfterIntDivision |
 
 ### Root cause: explicit_cast / CastAfterIntDivision
 
@@ -802,7 +819,8 @@ Clause coverage (final):
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.6 | 0.92 | 0.552 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 1 | explicit_cast | lvl:explicit_cast@L0#0 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
-| 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 1.0 | 0.92 | 0.92 | [2] | so sum / count keeps its fraction and avg is 3.5 |
+| 2 | integer_division | pre:integer_division->explicit_cast | prerequisite | broken | 0.8 | 0.95 | 0.76 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.2 | 0.92 | 0.184 | [2] | so sum / count keeps its fraction and avg is 3.5 |
 | 2 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | broken | 1.0 | 0.7 | 0.7 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.75 | 0.75 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 3 | expression | mis:expression->TargetTyping | misconception | held | 0.7000000000000001 | 0.85 | 0.595 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
@@ -816,9 +834,10 @@ Clause coverage (final):
 | 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.651 | [1, 2] |
 | 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.552 | [1, 2] |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.425 | [1, 2] |
-| 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.92 | [2] |
+| 2 | integer_division | pre:integer_division->explicit_cast | prerequisite | broken | 0.76 | [1, 2] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.75 | [1, 2] |
 | 2 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | broken | 0.7 | [1, 2] |
+| 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.184 | [2] |
 | 3 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.68 | [1, 2] |
 | 3 | expression | mis:expression->TargetTyping | misconception | held | 0.595 | [1, 2] |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.28 | [2] |
@@ -826,7 +845,7 @@ Clause coverage (final):
 ## 7. Raw traversal log
 ```
 clauses: The (double) turns the whole division into a decimal division — | so sum / count keeps its fraction and avg is 3.5
-start: BM25 of the answer against each tagged concept: integer_division 10.25 (hits 1), explicit_cast 7.79 (hits 1), arithmetic_operators 5.73 (hits 1), type_conversion 5.21 (hits 1), println 4.87 (hits 1)
+start: BM25 of the answer against each tagged concept: integer_division 9.51 (hits 1), explicit_cast 8.50 (hits 1), arithmetic_operators 5.41 (hits 1), type_conversion 4.54 (hits 1), println 4.51 (hits 1)
 start: chosen integer_division, explicit_cast, arithmetic_operators
 start concepts (3): integer_division, explicit_cast, arithmetic_operators
 --- depth 1: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
@@ -856,20 +875,21 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
   kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
-  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:type_conversion->explicit_cast
+  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
-  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
-    pre:arithmetic_operators->integer_division -> broken (0.92) "so sum / count keeps its fraction and avg is 3.5"
+  integer_division (concept edges): 2 candidates -> kept pre:integer_division->explicit_cast (0.80), pre:arithmetic_operators->integer_division (0.20)
+    pre:integer_division->explicit_cast -> broken (0.76) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+    pre:arithmetic_operators->integer_division -> broken (0.18) "so sum / count keeps its fraction and avg is 3.5"
   explicit_cast (concept edges): 1 candidates -> kept pre:type_conversion->explicit_cast (1.00)
     pre:type_conversion->explicit_cast -> broken (0.70) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> broken (0.75) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.92], pre:arithmetic_operators->expression [broken, tier 0, 0.75], pre:type_conversion->explicit_cast [broken, tier 0, 0.70]
+  kept: pre:integer_division->explicit_cast [broken, tier 0, 0.76], pre:arithmetic_operators->expression [broken, tier 0, 0.75], pre:type_conversion->explicit_cast [broken, tier 0, 0.70], pre:arithmetic_operators->integer_division [broken, tier 0, 0.18]
   reached across pre:arithmetic_operators->expression, entered next: expression
   reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: own edges of expression, own edges of type_conversion
---- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression', 'type_conversion', 'explicit_cast']
+--- depth 3: current concepts ['explicit_cast', 'integer_division', 'expression', 'arithmetic_operators', 'type_conversion']
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.70), mis:expression->OutsideInMethodNesting (0.20), mis:expression->VariablesHoldExpressions (0.10)
     mis:expression->TargetTyping -> held (0.60) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
@@ -889,8 +909,9 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
+  held: mis:type_conversion->TargetTyping, mis:expression->TargetTyping, mis:explicit_cast->CastAfterIntDivision; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
   shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
-  root-cause walk: held on ['explicit_cast', 'integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
+  root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast, pre:arithmetic_operators->integer_division), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
   level explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   level expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
   level integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
@@ -919,13 +940,6 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
  ],
  "held_misconceptions": [
   {
-   "concept": "integer_division",
-   "misconception": "CastAfterIntDivision",
-   "kind": "misconception",
-   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.651
-  },
-  {
    "concept": "explicit_cast",
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
@@ -952,9 +966,9 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
  ],
  "broken_edges": [
   {
-   "edge": "pre:arithmetic_operators->integer_division",
-   "quote": "so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.92,
+   "edge": "pre:integer_division->explicit_cast",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.76,
    "consequence_of": "mis:integer_division->CastAfterIntDivision"
   },
   {
@@ -967,6 +981,12 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "edge": "pre:type_conversion->explicit_cast",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "score": 0.7,
+   "consequence_of": "mis:integer_division->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.184,
    "consequence_of": "mis:integer_division->CastAfterIntDivision"
   }
  ],
@@ -1028,7 +1048,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1046,7 +1067,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.6,
    "score": 0.552,
    "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1071,18 +1093,19 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   {
    "depth": 2,
    "source": "integer_division",
-   "edge": "pre:arithmetic_operators->integer_division",
-   "target": "arithmetic_operators",
+   "edge": "pre:integer_division->explicit_cast",
+   "target": "explicit_cast",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
+    1,
     2
    ],
-   "quote": "so sum / count keeps its fraction and avg is 3.5",
-   "confidence": 0.92,
-   "prune_score": 1.0,
-   "score": 0.92,
-   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
    "twin_logic": null,
    "consequence_of": "mis:integer_division->CastAfterIntDivision"
   },
@@ -1125,6 +1148,24 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "consequence_of": "mis:integer_division->CastAfterIntDivision"
   },
   {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2
+   ],
+   "quote": "so sum / count keeps its fraction and avg is 3.5",
+   "confidence": 0.92,
+   "prune_score": 0.2,
+   "score": 0.184,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->CastAfterIntDivision"
+  },
+  {
    "depth": 3,
    "source": "type_conversion",
    "edge": "mis:type_conversion->TargetTyping",
@@ -1140,7 +1181,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.8,
    "score": 0.68,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1158,7 +1200,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.7000000000000001,
    "score": 0.595,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1197,7 +1240,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1235,7 +1279,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.6,
    "score": 0.552,
    "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1260,6 +1305,25 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   {
    "depth": 2,
    "source": "integer_division",
+   "edge": "pre:integer_division->explicit_cast",
+   "target": "explicit_cast",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
+   "twin_logic": null,
+   "consequence_of": "mis:integer_division->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
    "edge": "pre:arithmetic_operators->integer_division",
    "target": "arithmetic_operators",
    "kind": "prerequisite",
@@ -1269,8 +1333,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.92,
-   "prune_score": 1.0,
-   "score": 0.92,
+   "prune_score": 0.2,
+   "score": 0.184,
    "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
    "twin_logic": null,
    "consequence_of": "mis:integer_division->CastAfterIntDivision"
@@ -1329,7 +1393,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.7000000000000001,
    "score": 0.595,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1366,7 +1431,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "prune_score": 0.8,
    "score": 0.68,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1396,11 +1462,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_calls": 4,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 13,
-  "label": 23
+  "label": 24
  }
 }
 ```
