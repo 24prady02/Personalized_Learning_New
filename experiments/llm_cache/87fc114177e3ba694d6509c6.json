@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint[] a = {1, 2, 3, 4};\nfor (int i = 0; i < a.length; i++) {\n    int t = a[i];\n    a[i] = a[a.length - 1 - i];\n    a[a.length - 1 - i] = t;\n}\nfor (int i = 0; i < a.length; i++) {\n    System.out.print(a[i] + \" \");\n}\n\nQuestion: The programmer wanted to reverse the array. What does this print, and what is wrong?\n\nStudent's answer, split into clauses:\nc1: 1 2 3 4, unchanged\nc2: Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back\nc3: The loop should only run while i < a.length / 2\n\nEdge: pre:array_exchange->array_reversal  (array_exchange -> array_reversal, prerequisite)\nRule (logic): Reversal exchanges a[i] with a[N-1-i] for each i in the first half of the array.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 2, 3\nConfidence: 0.95"
+}

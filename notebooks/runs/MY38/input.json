@@ -1,0 +1,5 @@
+{
+ "code": "int[] a = {1, 2, 3, 4};\nfor (int i = 0; i < a.length; i++) {\n    int t = a[i];\n    a[i] = a[a.length - 1 - i];\n    a[a.length - 1 - i] = t;\n}\nfor (int i = 0; i < a.length; i++) {\n    System.out.print(a[i] + \" \");\n}",
+ "question": "The programmer wanted to reverse the array. What does this print, and what is wrong?",
+ "answer": "1 2 3 4, unchanged. Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back. The loop should only run while i < a.length / 2"
+}
