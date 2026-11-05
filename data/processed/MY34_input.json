@@ -1,0 +1,5 @@
+{
+ "code": "int N = 91;\nint i;\nfor (i = 2; i <= N / i; i++) {\n    if (N % i == 0) break;\n}\nSystem.out.println(i);",
+ "question": "What is printed? Explain what the break does.",
+ "answer": "I’m not sure what number, but break is the statement that ends the loop early."
+}

@@ -1,0 +1,233 @@
+{
+ "scenario": "MY34",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "Im not sure what number, but break is the statement that ends the loop early"
+ ],
+ "start_concepts": [
+  "for_loop",
+  "break_statement",
+  "loop_variable"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "break_statement": {
+   "level": "L1",
+   "way": "names_the_element",
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "edge": "lvl:break_statement@L1#0",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule"
+   ]
+  }
+ },
+ "overall_level": "L1",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "lvl:break_statement@L1#0",
+   "target": "break_statement@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "mis:break_statement->BreakIgnored",
+   "target": "BreakIgnored",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "break has no effect; the loop body just carries on.",
+   "twin_logic": "break leaves the innermost loop at once; the rest of the body and later passes do not run.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "mis:break_statement->BreakIsContinue",
+   "target": "BreakIsContinue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "break starts the next iteration of the loop.",
+   "twin_logic": "break exits the loop immediately; continue skips to the next iteration of the loop.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->break_statement",
+   "target": "break_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.7,
+   "prune_score": 0.8,
+   "score": 0.56,
+   "logic": "break leaves the for loop at once, without running the rest of the body or the remaining passes.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "mis:break_statement->BreakIgnored",
+   "target": "BreakIgnored",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "break has no effect; the loop body just carries on.",
+   "twin_logic": "break leaves the innermost loop at once; the rest of the body and later passes do not run.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "mis:break_statement->BreakEndsProgram",
+   "target": "BreakEndsProgram",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "break ends the whole program.",
+   "twin_logic": "break ends only the innermost loop (or switch); execution continues after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "mis:break_statement->BreakIsContinue",
+   "target": "BreakIsContinue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "break starts the next iteration of the loop.",
+   "twin_logic": "break exits the loop immediately; continue skips to the next iteration of the loop.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "lvl:break_statement@L1#0",
+   "target": "break_statement@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "break_statement",
+   "edge": "lvl:break_statement@L1#1",
+   "target": "break_statement@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "`break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->break_statement",
+   "target": "break_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "Im not sure what number, but break is the statement that ends the loop early",
+   "confidence": 0.7,
+   "prune_score": 0.8,
+   "score": 0.56,
+   "logic": "break leaves the for loop at once, without running the rest of the body or the remaining passes.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "Im not sure what number, but break is the statement that ends the loop early": "mis:break_statement->BreakIgnored"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 2,
+ "llm_calls": 0,
+ "llm_cache_hits": 24,
+ "llm_calls_by_step": {
+  "prune": 8,
+  "label": 16
+ }
+}

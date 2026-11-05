@@ -1,0 +1,43 @@
+clauses: Im not sure what number, but break is the statement that ends the loop early
+start: BM25 of the answer against each tagged concept: for_loop 10.44 (hits 1), break_statement 9.21 (hits 1), loop_variable 7.56 (hits 1), loop_control 6.78 (hits 1), if_statement 6.48 (hits 1), loop_body 6.03 (hits 1), control_flow 5.83 (hits 2), increment_operators 5.60 (hits 1), println 3.97 (hits 1), naming_convention 3.71 (hits 1), loop_performance 3.45 (hits 1), comparison_operators 3.05 (hits 1), arithmetic_operators 2.55 (hits 1), boolean_expression 2.25 (hits 2), remainder_operator 2.08 (hits 1), integer_division 1.99 (hits 1)
+start: chosen for_loop, break_statement, loop_variable
+start concepts (3): for_loop, break_statement, loop_variable
+--- depth 1: current concepts ['for_loop', 'break_statement', 'loop_variable']
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ReturnDoesNotExitLoop (0.50), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ProgramEndsAfterLoop (0.20)
+    mis:for_loop->ReturnDoesNotExitLoop -> not applied (0.00) ""
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    mis:for_loop->ProgramEndsAfterLoop -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L1#0 (0.50), lvl:for_loop@L2#1 (0.30), lvl:for_loop@L2#0 (0.20)
+    lvl:for_loop@L1#0 -> not applied (0.00) ""
+    lvl:for_loop@L2#1 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> not applied (0.00) ""
+  break_statement (misconceptions): 4 candidates -> kept mis:break_statement->BreakIgnored (0.40), mis:break_statement->BreakEndsProgram (0.30), mis:break_statement->BreakIsContinue (0.30)
+    mis:break_statement->BreakIgnored -> correct (0.36) "Im not sure what number, but break is the statement that ends the loop early"
+    mis:break_statement->BreakEndsProgram -> correct (0.21) "Im not sure what number, but break is the statement that ends the loop early"
+    mis:break_statement->BreakIsContinue -> correct (0.26) "Im not sure what number, but break is the statement that ends the loop early"
+  break_statement (level ways): 19 candidates -> kept lvl:break_statement@L1#0 (0.60), lvl:break_statement@L1#1 (0.25), lvl:break_statement@L2#1 (0.15)
+    lvl:break_statement@L1#0 -> shown (0.51) "Im not sure what number, but break is the statement that ends the loop early"
+    lvl:break_statement@L1#1 -> shown (0.19) "Im not sure what number, but break is the statement that ends the loop early"
+    lvl:break_statement@L2#1 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) ""
+    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L1#0 (0.30), lvl:loop_variable@L3#1 (0.20)
+    lvl:loop_variable@L2#1 -> not applied (0.00) ""
+    lvl:loop_variable@L1#0 -> not applied (0.00) ""
+    lvl:loop_variable@L3#1 -> not applied (0.00) ""
+  kept: lvl:break_statement@L1#0 [shown, tier 2, 0.51], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], mis:break_statement->BreakIsContinue [correct, tier 2, 0.26]
+  clause coverage: c1 <- mis:break_statement->BreakIgnored
+  not yet read: pre:for_loop->break_statement, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_variable->loop_control
+--- depth 2: current concepts ['for_loop', 'break_statement', 'loop_variable']
+  for_loop (concept edges): 3 candidates -> kept pre:for_loop->break_statement (0.80), pre:for_loop->loop_body (0.10), pre:loop_control->for_loop (0.10)
+    pre:for_loop->break_statement -> confirmed (0.56) "Im not sure what number, but break is the statement that ends the loop early"
+    pre:for_loop->loop_body -> not applied (0.00) ""
+    pre:loop_control->for_loop -> not applied (0.00) ""
+  loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> not applied (0.00) ""
+  kept: pre:for_loop->break_statement [confirmed, tier 2, 0.56]
+  clause coverage: c1 <- mis:break_statement->BreakIgnored
+  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators', 'variable'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'break_statement': ['for_loop'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_performance': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement'], 'assignment': ['variable'], 'naming_convention': ['variable']}
+  level break_statement: L1 via names_the_element "Im not sure what number, but break is the statement that ends the loop early"

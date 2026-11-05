@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint N = 91;\nint i;\nfor (i = 2; i <= N / i; i++) {\n    if (N % i == 0) break;\n}\nSystem.out.println(i);\n\nQuestion: What is printed? Explain what the break does.\n\nStudent's answer, split into clauses:\nc1: Im not sure what number, but break is the statement that ends the loop early\n\nEdge: pre:for_loop->break_statement  (for_loop -> break_statement, prerequisite)\nRule (logic): break leaves the for loop at once, without running the rest of the body or the remaining passes.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 1\nConfidence: 0.7"
+}
