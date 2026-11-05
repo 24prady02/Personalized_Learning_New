@@ -7,7 +7,7 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]",
+     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])",
      "decisive": false,
      "match": "s / c",
      "line": 2
@@ -21,9 +21,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]",
+     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])",
      "decisive": false,
-     "match": "(double) (",
+     "match": "(double)",
      "line": 2
     }
    ],
@@ -35,9 +35,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "s / c",
+     "match": "s /",
      "line": 2
     },
     {
@@ -112,9 +112,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)\\s*[\\w(]",
+     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])",
      "decisive": false,
-     "match": "(double) (",
+     "match": "(double)",
      "line": 2
     }
    ],
@@ -136,6 +136,14 @@
    "source": "arithmetic_operators",
    "target": "integer_division",
    "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:integer_division->explicit_cast",
+   "type": "prerequisite",
+   "source": "integer_division",
+   "target": "explicit_cast",
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
    "grounding": "book_passage"
   },
   {
@@ -492,7 +500,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -528,7 +536,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -537,7 +545,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -546,7 +554,7 @@
    "type": "misconception",
    "source": "integer_division",
    "target": "AllDoublesToAvoidDivision",
-   "role": "primary",
+   "role": "context",
    "logic": "Making every variable a double is the right fix for integer division.",
    "twin_logic": "Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type."
   },
@@ -600,7 +608,7 @@
    "type": "misconception",
    "source": "primitive_type",
    "target": "NewArrayHoldsGarbage",
-   "role": "primary",
+   "role": "context",
    "logic": "The slots of a new int[n] hold unpredictable values until assigned.",
    "twin_logic": "new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
   },
@@ -618,7 +626,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -717,7 +725,7 @@
    "type": "misconception",
    "source": "type_conversion",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   }
@@ -10437,11 +10445,9 @@
  "components": [
   [
    "arithmetic_operators",
-   "expression",
-   "integer_division"
-  ],
-  [
    "explicit_cast",
+   "expression",
+   "integer_division",
    "primitive_type",
    "type_conversion"
   ],
@@ -10455,15 +10461,15 @@
   "concepts": 8,
   "generic": 3,
   "from_hop": 0,
-  "concept_edges": 5,
+  "concept_edges": 6,
   "misconceptions": 34,
   "mis_edges": 39,
   "levels": 40,
   "level_edges": 40,
   "level_mis_links": 49,
-  "components": 3
+  "components": 2
  },
  "warnings": [
-  "concept nodes form 3 pieces (the KG has no edge between them): arithmetic_operators,expression,integer_division | explicit_cast,primitive_type,type_conversion | println,statement"
+  "concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,explicit_cast,expression,integer_division,primitive_type,type_conversion | println,statement"
  ]
 }
