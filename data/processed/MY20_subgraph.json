@@ -21,7 +21,7 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]",
+     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])",
      "decisive": false,
      "match": ") * 6",
      "line": 1
@@ -35,9 +35,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]",
+     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])",
      "decisive": false,
-     "match": "(int) (",
+     "match": "(int)",
      "line": 1
     }
    ],
@@ -49,9 +49,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": ") * 6",
+     "match": ") *",
      "line": 1
     },
     {
@@ -154,9 +154,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)\\s*[\\w(]",
+     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])",
      "decisive": false,
-     "match": "(int) (",
+     "match": "(int)",
      "line": 1
     }
    ],
@@ -659,7 +659,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -695,7 +695,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -704,7 +704,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -722,7 +722,7 @@
    "type": "misconception",
    "source": "math_library",
    "target": "CastRounds",
-   "role": "primary",
+   "role": "context",
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
   },
@@ -758,7 +758,7 @@
    "type": "misconception",
    "source": "method_call",
    "target": "ArrayHasLengthMethod",
-   "role": "primary",
+   "role": "context",
    "logic": "you call length() instead of using the length field",
    "twin_logic": "An array's size is the field a.length, written without parentheses."
   },
@@ -767,7 +767,7 @@
    "type": "misconception",
    "source": "method_call",
    "target": "EqualsComparesReferences",
-   "role": "primary",
+   "role": "context",
    "logic": ".equals() compares references, not contents",
    "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
   },
@@ -812,7 +812,7 @@
    "type": "misconception",
    "source": "primitive_type",
    "target": "NewArrayHoldsGarbage",
-   "role": "primary",
+   "role": "context",
    "logic": "The slots of a new int[n] hold unpredictable values until assigned.",
    "twin_logic": "new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
   },
@@ -830,7 +830,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -929,7 +929,7 @@
    "type": "misconception",
    "source": "type_conversion",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   }

@@ -51,7 +51,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:math_library@L3#1 -> not applied (0.00) ""
     lvl:math_library@L3#3 -> not applied (0.00) ""
     lvl:math_library@L2#2 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.45), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""

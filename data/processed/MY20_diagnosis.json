@@ -83,7 +83,8 @@
    "prune_score": 0.85,
    "score": 0.7225,
    "logic": "Math.random() can return exactly 1.0.",
-   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -119,7 +120,8 @@
    "prune_score": 0.6000000000000001,
    "score": 0.48,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -204,7 +206,8 @@
    "prune_score": 0.9,
    "score": 0.675,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -299,7 +302,8 @@
    "prune_score": 0.6000000000000001,
    "score": 0.48,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -335,7 +339,8 @@
    "prune_score": 0.85,
    "score": 0.7225,
    "logic": "Math.random() can return exactly 1.0.",
-   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -458,7 +463,8 @@
    "prune_score": 0.9,
    "score": 0.675,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -541,8 +547,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 45,
+ "llm_calls": 1,
+ "llm_cache_hits": 44,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29

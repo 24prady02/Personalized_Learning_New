@@ -23,8 +23,8 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 |---|---|---|---|---|
 | api | False | pattern | 'Math.random(' | 1 |
 | arithmetic_operators | False | pattern | ') * 6' | 1 |
-| explicit_cast | False | pattern | '(int) (' | 1 |
-| expression | True | pattern | ') * 6' | 1 |
+| explicit_cast | False | pattern | '(int)' | 1 |
+| expression | True | pattern | ') *' | 1 |
 | expression | True | pattern | '= (int) (Math.random() * 6) + 1;' | 1 |
 | math_library | False | pattern | 'Math.random' | 1 |
 | math_random | False | pattern | 'Math.random(' | 1 |
@@ -32,7 +32,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | primitive_type | True | pattern | 'int' | 1 |
 | println | False | pattern | 'System.out.println(' | 2 |
 | statement | True | pattern | ';' | 1 |
-| type_conversion | False | pattern | '(int) (' | 1 |
+| type_conversion | False | pattern | '(int)' | 1 |
 
 G: 11 concept nodes (3 generic), 9 concept edges, 49 misconception / error edges, 42 misconception / error nodes, 55 level nodes, 56 level-misconception links, 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): api,arithmetic_operators,explicit_cast,expression,math_library,math_random,method_call,primitive_type,type_conversion | println,statement
@@ -651,9 +651,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->VariablesHoldExpressions (0.45), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.20)
+mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
 ```
-Kept by pruning: mis:expression->VariablesHoldExpressions (0.45), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.20)
+Kept by pruning: mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -916,7 +916,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 - math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
 
-**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 0, cache hits 45
+**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 1, cache hits 44
 
 ### Held misconceptions
 (none)
@@ -1034,7 +1034,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:math_library@L3#1 -> not applied (0.00) ""
     lvl:math_library@L3#3 -> not applied (0.00) ""
     lvl:math_library@L2#2 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.45), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
@@ -1155,7 +1155,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.85,
    "score": 0.7225,
    "logic": "Math.random() can return exactly 1.0.",
-   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1191,7 +1192,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.6000000000000001,
    "score": 0.48,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -1276,7 +1278,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.9,
    "score": 0.675,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1371,7 +1374,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.6000000000000001,
    "score": 0.48,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1407,7 +1411,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.85,
    "score": 0.7225,
    "logic": "Math.random() can return exactly 1.0.",
-   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+   "twin_logic": "Math.random() returns a value in [0, 1): 0 is possible, 1 is not.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1530,7 +1535,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "prune_score": 0.9,
    "score": 0.675,
    "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1613,8 +1619,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 45,
+ "llm_calls": 1,
+ "llm_cache_hits": 44,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29

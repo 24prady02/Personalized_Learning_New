@@ -25,8 +25,8 @@ System.out.println(n);
 |---|---|---|---|---|
 | api | False | pattern | 'Math.random(' | 1 |
 | arithmetic_operators | False | pattern | ') * 6' | 1 |
-| explicit_cast | False | pattern | '(int) (' | 1 |
-| expression | True | pattern | ') * 6' | 1 |
+| explicit_cast | False | pattern | '(int)' | 1 |
+| expression | True | pattern | ') *' | 1 |
 | expression | True | pattern | '= (int) (Math.random() * 6) + 1;' | 1 |
 | math_library | False | pattern | 'Math.random' | 1 |
 | math_random | False | pattern | 'Math.random(' | 1 |
@@ -34,7 +34,7 @@ System.out.println(n);
 | primitive_type | True | pattern | 'int' | 1 |
 | println | False | pattern | 'System.out.println(' | 2 |
 | statement | True | pattern | ';' | 1 |
-| type_conversion | False | pattern | '(int) (' | 1 |</p>
+| type_conversion | False | pattern | '(int)' | 1 |</p>
 <p>G: 11 concept nodes (3 generic), 9 concept edges, 49 misconception / error edges, 42 misconception / error nodes, 55 level nodes, 56 level-misconception links, 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): api,arithmetic_operators,explicit_cast,expression,math_library,math_random,method_call,primitive_type,type_conversion | println,statement</p>
 <p>Concept edges of G (the links the walk can read; <code>pre:</code> = prerequisite A -&gt; B, <code>par:</code> = parallel):
@@ -556,9 +556,9 @@ Confidence: 0.7
 | mis:expression-&gt;TargetTyping | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. | right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 | mis:expression-&gt;VariablesHoldExpressions | wrong rule: = stores the expression itself, not its computed value | right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |</p>
 <p>Prune: the model's reply (edge id and score; the kept edges sum to 1):</p>
-<pre><code>mis:expression-&gt;VariablesHoldExpressions (0.45), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.20)
+<pre><code>mis:expression-&gt;VariablesHoldExpressions (0.40), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.25)
 </code></pre>
-<p>Kept by pruning: mis:expression-&gt;VariablesHoldExpressions (0.45), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.20)</p>
+<p>Kept by pruning: mis:expression-&gt;VariablesHoldExpressions (0.40), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.25)</p>
 <p>Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
@@ -779,7 +779,7 @@ Confidence: 0.7
 - expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"</p>
-<p><strong>Stop:</strong> max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 0, cache hits 45</p>
+<p><strong>Stop:</strong> max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 1, cache hits 44</p>
 <h3>Held misconceptions</h3>
 <p>(none)</p>
 <h3>Broken concept edges</h3>
@@ -1233,7 +1233,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:math_library@L3#1 -&gt; not applied (0.00) &quot;&quot;
     lvl:math_library@L3#3 -&gt; not applied (0.00) &quot;&quot;
     lvl:math_library@L2#2 -&gt; not applied (0.00) &quot;&quot;
-  expression (misconceptions): 8 candidates -&gt; kept mis:expression-&gt;VariablesHoldExpressions (0.45), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.20)
+  expression (misconceptions): 8 candidates -&gt; kept mis:expression-&gt;VariablesHoldExpressions (0.40), mis:expression-&gt;TargetTyping (0.35), mis:expression-&gt;AssignmentIsEquation (0.25)
     mis:expression-&gt;VariablesHoldExpressions -&gt; not applied (0.00) &quot;&quot;
     mis:expression-&gt;TargetTyping -&gt; not applied (0.00) &quot;&quot;
     mis:expression-&gt;AssignmentIsEquation -&gt; not applied (0.00) &quot;&quot;
@@ -1352,7 +1352,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.85,
    &quot;score&quot;: 0.7225,
    &quot;logic&quot;: &quot;Math.random() can return exactly 1.0.&quot;,
-   &quot;twin_logic&quot;: &quot;Math.random() returns a value in [0, 1): 0 is possible, 1 is not.&quot;
+   &quot;twin_logic&quot;: &quot;Math.random() returns a value in [0, 1): 0 is possible, 1 is not.&quot;,
+   &quot;role&quot;: &quot;primary&quot;
   },
   {
    &quot;depth&quot;: 1,
@@ -1388,7 +1389,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.6000000000000001,
    &quot;score&quot;: 0.48,
    &quot;logic&quot;: &quot;(int) 2.7 evaluates to 3.&quot;,
-   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;
+   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;,
+   &quot;role&quot;: &quot;primary&quot;
   },
   {
    &quot;depth&quot;: 2,
@@ -1473,7 +1475,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.9,
    &quot;score&quot;: 0.675,
    &quot;logic&quot;: &quot;(int) 2.7 evaluates to 3.&quot;,
-   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;
+   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;,
+   &quot;role&quot;: &quot;context&quot;
   },
   {
    &quot;depth&quot;: 3,
@@ -1568,7 +1571,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.6000000000000001,
    &quot;score&quot;: 0.48,
    &quot;logic&quot;: &quot;(int) 2.7 evaluates to 3.&quot;,
-   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;
+   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;,
+   &quot;role&quot;: &quot;primary&quot;
   },
   {
    &quot;depth&quot;: 1,
@@ -1604,7 +1608,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.85,
    &quot;score&quot;: 0.7225,
    &quot;logic&quot;: &quot;Math.random() can return exactly 1.0.&quot;,
-   &quot;twin_logic&quot;: &quot;Math.random() returns a value in [0, 1): 0 is possible, 1 is not.&quot;
+   &quot;twin_logic&quot;: &quot;Math.random() returns a value in [0, 1): 0 is possible, 1 is not.&quot;,
+   &quot;role&quot;: &quot;primary&quot;
   },
   {
    &quot;depth&quot;: 1,
@@ -1727,7 +1732,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    &quot;prune_score&quot;: 0.9,
    &quot;score&quot;: 0.675,
    &quot;logic&quot;: &quot;(int) 2.7 evaluates to 3.&quot;,
-   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;
+   &quot;twin_logic&quot;: &quot;A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.&quot;,
+   &quot;role&quot;: &quot;context&quot;
   },
   {
    &quot;depth&quot;: 3,
@@ -1810,8 +1816,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  &quot;unexplained_clauses&quot;: [],
  &quot;stop_reason&quot;: &quot;max depth&quot;,
  &quot;depth_reached&quot;: 4,
- &quot;llm_calls&quot;: 0,
- &quot;llm_cache_hits&quot;: 45,
+ &quot;llm_calls&quot;: 1,
+ &quot;llm_cache_hits&quot;: 44,
  &quot;llm_calls_by_step&quot;: {
   &quot;prune&quot;: 16,
   &quot;label&quot;: 29
