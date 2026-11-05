@@ -1,0 +1,5 @@
+{
+ "code": "int day = 2;\nswitch (day) {\n    case 1: System.out.println(\"Mon\");\n    case 2: System.out.println(\"Tue\");\n    case 3: System.out.println(\"Wed\");\n            break;\n    default: System.out.println(\"?\");\n}",
+ "question": "What is printed? Explain step by step what happens after case 2 matches.",
+ "answer": "Tue, then Wed. Case 2 has no break, so it carries on into case 3 and stops at the break there. Mon and ? are never reached."
+}
