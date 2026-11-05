@@ -20,7 +20,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | arithmetic_operators | False | pattern | '5 + 3' | 1 |
-| expression | True | pattern | '5 + 3' | 1 |
+| expression | True | pattern | '5 +' | 1 |
 | println | False | pattern | 'System.out.println(' | 1 |
 | statement | True | pattern | ';' | 1 |
 | string_concatenation | False | pattern | '"Total: " +' | 1 |
@@ -93,9 +93,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.15)
+mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.15)
+Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -551,29 +551,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.20), mis:expression->NoAtomicExpression (0.20)
+mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.20), mis:expression->NoAtomicExpression (0.20)
+Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-| mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
 | mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
+| mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
 Model's reply:
 ```
-mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.7
-mis:expression->OutsideInMethodNesting | not applied | clauses: none | confidence: 0.9
-mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.9
+mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.85
+mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.85
+mis:expression->OutsideInMethodNesting | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
-| mis:expression->OutsideInMethodNesting | not applied |  |  | 0.0 |  |  |
 | mis:expression->NoAtomicExpression | not applied |  |  | 0.0 |  |  |
+| mis:expression->OutsideInMethodNesting | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -754,7 +754,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 - string_concatenation: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 - string_conversion: L3 via relation_to_neighbour "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 0, cache hits 38
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 3, cache hits 35
 
 ### Held misconceptions
 (none)
@@ -825,7 +825,7 @@ start: BM25 of the answer against each tagged concept: println 11.11 (hits 1), s
 start: chosen println, string_concatenation, arithmetic_operators
 start concepts (3): println, string_concatenation, arithmetic_operators
 --- depth 1: current concepts ['println', 'string_concatenation', 'arithmetic_operators']
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.15)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
@@ -867,10 +867,10 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   not yet read: own edges of expression, own edges of string_conversion
 --- depth 3: current concepts ['expression', 'arithmetic_operators', 'string_concatenation', 'string_conversion']
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.20), mis:expression->NoAtomicExpression (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
+    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
     lvl:expression@L3#2 -> shown (0.32) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:expression@L3#1 -> shown (0.28) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
@@ -1001,7 +1001,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "prune_score": 0.55,
    "score": 0.5225,
    "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
-   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1096,7 +1097,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "prune_score": 1.0,
    "score": 0.9,
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
-   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1158,7 +1160,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "prune_score": 0.55,
    "score": 0.5225,
    "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
-   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1175,7 +1178,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "prune_score": 0.35,
    "score": 0.21,
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
-   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1414,7 +1418,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "prune_score": 1.0,
    "score": 0.9,
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
-   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1487,8 +1492,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 38,
+ "llm_calls": 3,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25

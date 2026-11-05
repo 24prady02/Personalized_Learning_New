@@ -3,7 +3,7 @@ start: BM25 of the answer against each tagged concept: println 11.11 (hits 1), s
 start: chosen println, string_concatenation, arithmetic_operators
 start concepts (3): println, string_concatenation, arithmetic_operators
 --- depth 1: current concepts ['println', 'string_concatenation', 'arithmetic_operators']
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.15)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
@@ -45,10 +45,10 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   not yet read: own edges of expression, own edges of string_conversion
 --- depth 3: current concepts ['expression', 'arithmetic_operators', 'string_concatenation', 'string_conversion']
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.20), mis:expression->NoAtomicExpression (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
+    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
     lvl:expression@L3#2 -> shown (0.32) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:expression@L3#1 -> shown (0.28) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
