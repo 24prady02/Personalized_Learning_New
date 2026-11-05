@@ -71,6 +71,16 @@
     "L2 output_prediction"
    ]
   },
+  "compound_assignment": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "sum adds every element, giving 22",
+   "edge": "lvl:compound_assignment@L3#3",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
   "explicit_cast": {
    "level": "L0",
    "way": "misconception",
@@ -80,6 +90,14 @@
    "rule": "wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5, so the expression is 2 / 0.15 (a double); write (int) (2.5 / 0.15) to cast the quotient.",
    "source": "level_mis_links"
   },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "edge": "lvl:expression@L3#1",
+   "source": "level_way",
+   "also_shown": []
+  },
   "for_loop": {
    "level": "L3",
    "way": "relation_to_neighbour",
@@ -88,16 +106,6 @@
    "source": "level_way",
    "also_shown": [
     "L2 output_prediction"
-   ]
-  },
-  "loop_body": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "edge": "lvl:loop_body@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole"
    ]
   },
   "running_extreme": {
@@ -129,7 +137,8 @@
    "prune_score": 1.0,
    "score": 0.6,
    "logic": "The running maximum can always start at 0.",
-   "twin_logic": "Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it."
+   "twin_logic": "Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -147,7 +156,8 @@
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
-   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -184,7 +194,8 @@
    "prune_score": 0.6000000000000001,
    "score": 0.54,
    "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
-   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -205,20 +216,19 @@
   },
   {
    "depth": 2,
-   "source": "accumulator_pattern",
-   "edge": "par:running_extreme~accumulator_pattern",
-   "target": "running_extreme",
-   "kind": "parallel",
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1,
-    2
+    1
    ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.85,
-   "prune_score": 0.6,
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.6,
+   "prune_score": 0.85,
    "score": 0.51,
-   "logic": "Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value.",
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
    "twin_logic": null
   },
   {
@@ -241,27 +251,10 @@
   },
   {
    "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "pre:loop_body->accumulator_pattern",
-   "target": "loop_body",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "for_loop",
-   "edge": "pre:for_loop->array_traversal",
-   "target": "array_traversal",
-   "kind": "prerequisite",
+   "source": "running_extreme",
+   "edge": "par:running_extreme~accumulator_pattern",
+   "target": "accumulator_pattern",
+   "kind": "parallel",
    "label": "confirmed",
    "clauses": [
     1,
@@ -269,9 +262,26 @@
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
    "confidence": 0.85,
-   "prune_score": 0.7000000000000001,
-   "score": 0.595,
-   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "compound_assignment",
+   "edge": "pre:compound_assignment->accumulator_pattern",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.85,
+   "prune_score": 0.6000000000000001,
+   "score": 0.51,
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
    "twin_logic": null
   },
   {
@@ -289,45 +299,8 @@
    "prune_score": 0.8,
    "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
-   "target": "StateChangeIgnoredAcrossPasses",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
-   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L3#0",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   }
  ],
  "evidence": [
@@ -347,7 +320,8 @@
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
-   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -443,7 +417,8 @@
    "prune_score": 1.0,
    "score": 0.6,
    "logic": "The running maximum can always start at 0.",
-   "twin_logic": "Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it."
+   "twin_logic": "Start the running maximum at the most negative possible value (Double.NEGATIVE_INFINITY, or the smallest int), so that the first value read replaces it.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -515,8 +490,8 @@
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
    "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value.",
    "twin_logic": null
   },
@@ -532,9 +507,26 @@
    ],
    "quote": "sum adds every element, giving 22",
    "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
+   "prune_score": 0.3,
+   "score": 0.27,
    "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "accumulator_pattern",
+   "edge": "pre:compound_assignment->accumulator_pattern",
+   "target": "compound_assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
    "twin_logic": null
   },
   {
@@ -586,7 +578,8 @@
    "prune_score": 0.6000000000000001,
    "score": 0.54,
    "logic": "(int) 2.5 / 0.15 casts the whole quotient to int.",
-   "twin_logic": "The cast applies only to what comes right after it, here 2.5."
+   "twin_logic": "The cast applies only to what comes right after it, here 2.5.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -603,7 +596,8 @@
    "prune_score": 0.30000000000000004,
    "score": 0.18,
    "logic": "(double) (3 / 5) is 0.6.",
-   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -626,6 +620,63 @@
   },
   {
    "depth": 2,
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L3#3",
+   "target": "compound_assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L2#1",
+   "target": "compound_assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.55,
+   "prune_score": 0.25,
+   "score": 0.1375,
+   "logic": "The new value of x is (T)(old x op e) and is also the expression's value: each starting from int x = 7: x += 3 gives 10, x /= 2 gives 3, and x += 0.5 gives 7 (7.5 truncated) instead of a compile error.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
    "source": "for_loop",
    "edge": "mis:for_loop->LoopCountIsStatementCount",
    "target": "LoopCountIsStatementCount",
@@ -636,11 +687,30 @@
     2
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.35,
+   "confidence": 0.7,
+   "prune_score": 0.3,
    "score": 0.21,
    "logic": "The repeat count of a counted loop says how many of the body statements are executed.",
-   "twin_logic": "The repeat count is how many times the whole body runs; every pass runs all body statements."
+   "twin_logic": "The repeat count is how many times the whole body runs; every pass runs all body statements.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
   },
   {
    "depth": 2,
@@ -682,41 +752,6 @@
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "mis:loop_control->OffByOneBound",
-   "target": "OffByOneBound",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
-  },
-  {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "err:loop_control->WrongIterationCount",
-   "target": "WrongIterationCount",
-   "kind": "error",
-   "label": "correct",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
-  },
-  {
    "depth": 3,
    "source": "explicit_cast",
    "edge": "pre:type_conversion->explicit_cast",
@@ -742,32 +777,16 @@
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    1
-   ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
-  },
-  {
-   "depth": 3,
-   "source": "array_traversal",
-   "edge": "mis:array_traversal->ElementBoundToOldIndex",
-   "target": "ElementBoundToOldIndex",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
     1,
     2
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.55,
+   "confidence": 0.6,
    "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "After i changes, X[i] still refers to the element at the old value of i.",
-   "twin_logic": "a[i] is evaluated with the current value of i each time it is used."
+   "score": 0.18,
+   "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -830,19 +849,108 @@
   },
   {
    "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "pre:loop_body->accumulator_pattern",
-   "target": "loop_body",
+   "source": "running_extreme",
+   "edge": "par:running_extreme~accumulator_pattern",
+   "target": "accumulator_pattern",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.7,
+   "prune_score": 0.6,
+   "score": 0.42,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "compound_assignment",
+   "edge": "pre:compound_assignment->accumulator_pattern",
+   "target": "accumulator_pattern",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
     1
    ],
    "quote": "sum adds every element, giving 22",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "The accumulator update sum += x sits inside the body, so it runs once on every pass.",
+   "confidence": 0.85,
+   "prune_score": 0.6000000000000001,
+   "score": 0.51,
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "compound_assignment",
+   "edge": "pre:assignment->compound_assignment",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.7,
+   "prune_score": 0.30000000000000004,
+   "score": 0.21,
+   "logic": "x op= e is shorthand for the assignment x = x op e.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "compound_assignment",
+   "edge": "par:increment_operators~compound_assignment",
+   "target": "increment_operators",
+   "kind": "parallel",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "sum adds every element, giving 22",
+   "confidence": 0.55,
+   "prune_score": 0.10000000000000002,
+   "score": 0.055,
+   "logic": "i++, ++i and i += 1 all add 1 to i; ++ and -- change a variable only by one and are normally used for integers, while i += k works for any amount and with any arithmetic operator (-=, *=, /=, %=).",
    "twin_logic": null
   },
   {
@@ -858,9 +966,27 @@
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
    "confidence": 0.85,
-   "prune_score": 0.7000000000000001,
-   "score": 0.595,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "twin_logic": null
   },
   {
@@ -876,26 +1002,9 @@
    ],
    "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
    "confidence": 0.55,
-   "prune_score": 0.20000000000000004,
-   "score": 0.11,
+   "prune_score": 0.15,
+   "score": 0.0825,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "loop_control",
-   "edge": "pre:loop_control->increment_operators",
-   "target": "increment_operators",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "sum adds every element, giving 22",
-   "confidence": 0.55,
-   "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
    "twin_logic": null
   },
   {
@@ -913,82 +1022,8 @@
    "prune_score": 0.8,
    "score": 0.48,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
-   "target": "StateChangeIgnoredAcrossPasses",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
-   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "mis:loop_body->IfInLoopUnchecked",
-   "target": "IfInLoopUnchecked",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2
-   ],
-   "quote": "max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "An if inside a loop body runs its branch on every pass without testing its condition.",
-   "twin_logic": "The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L3#0",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "loop_body",
-   "edge": "lvl:loop_body@L3#3",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   }
  ],
  "clause_coverage": {
@@ -999,10 +1034,10 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 74,
+ "llm_calls": 19,
+ "llm_cache_hits": 59,
  "llm_calls_by_step": {
-  "prune": 25,
-  "label": 49
+  "prune": 26,
+  "label": 52
  }
 }

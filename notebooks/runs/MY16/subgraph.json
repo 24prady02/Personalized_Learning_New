@@ -21,7 +21,7 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))[ \\t]*[A-Za-z_0-9(]",
+     "name": "[A-Za-z_0-9)\\]][ \\t]*(?:[*/%]|\\+(?!\\+)|-(?!-))\\s*[A-Za-z_0-9(]|[A-Za-z_0-9)\\]]\\s*(?:[*/]|\\+(?!\\+)|-(?!-))(?=[ \\t]*[A-Za-z_0-9(])",
      "decisive": false,
      "match": "m / a",
      "line": 7
@@ -203,9 +203,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)\\s*[A-Za-z_0-9(]",
+     "name": "\\(\\s*(?:int|double|boolean|char|long|String|float|short|byte)\\s*\\)(?=\\s*[A-Za-z_0-9(])",
      "decisive": false,
-     "match": "(double) s",
+     "match": "(double)",
      "line": 7
     }
    ],
@@ -217,9 +217,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "i < a",
+     "match": "i <",
      "line": 3
     },
     {
@@ -476,9 +476,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)\\s*[\\w(]",
+     "name": "\\(\\s*(?:int|double|long|float|char|short|byte)\\s*\\)(?=\\s*[\\w(])",
      "decisive": false,
-     "match": "(double) s",
+     "match": "(double)",
      "line": 7
     }
    ],
@@ -527,6 +527,30 @@
    "grounding": "book_passage"
   },
   {
+   "id": "pre:array_declaration->array_initializer",
+   "type": "prerequisite",
+   "source": "array_declaration",
+   "target": "array_initializer",
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:array_initializer->indexing",
+   "type": "prerequisite",
+   "source": "array_initializer",
+   "target": "indexing",
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "grounding": "spec_passage"
+  },
+  {
+   "id": "pre:array_initializer->length_field",
+   "type": "prerequisite",
+   "source": "array_initializer",
+   "target": "length_field",
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "grounding": "spec_passage"
+  },
+  {
    "id": "pre:array_traversal->running_extreme",
    "type": "prerequisite",
    "source": "array_traversal",
@@ -567,11 +591,27 @@
    "grounding": "book_passage"
   },
   {
+   "id": "pre:compound_assignment->accumulator_pattern",
+   "type": "prerequisite",
+   "source": "compound_assignment",
+   "target": "accumulator_pattern",
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
+   "grounding": "book_passage"
+  },
+  {
    "id": "pre:control_flow->if_statement",
    "type": "prerequisite",
    "source": "control_flow",
    "target": "if_statement",
    "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:data_structure->array_declaration",
+   "type": "prerequisite",
+   "source": "data_structure",
+   "target": "array_declaration",
+   "logic": "An array is a data structure: one name for a sequence of values of the same type, organised by index.",
    "grounding": "book_passage"
   },
   {
@@ -615,6 +655,14 @@
    "grounding": "book_passage"
   },
   {
+   "id": "pre:for_loop->loop_body",
+   "type": "prerequisite",
+   "source": "for_loop",
+   "target": "loop_body",
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "grounding": "book_passage"
+  },
+  {
    "id": "pre:for_loop->loop_scope",
    "type": "prerequisite",
    "source": "for_loop",
@@ -636,6 +684,14 @@
    "source": "indexing",
    "target": "array_traversal",
    "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:length_field->array_traversal",
+   "type": "prerequisite",
+   "source": "length_field",
+   "target": "array_traversal",
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
    "grounding": "book_passage"
   },
   {
@@ -1573,7 +1629,7 @@
    "type": "error",
    "source": "accumulator_pattern",
    "target": "AccumulatorDeclaredInLoop",
-   "role": "primary",
+   "role": "context",
    "logic": "Declaring sum inside the loop body keeps a running total across passes.",
    "twin_logic": "The accumulator must be declared and initialised before the loop."
   },
@@ -1672,7 +1728,7 @@
    "type": "error",
    "source": "for_loop",
    "target": "SemicolonAfterIfHeader",
-   "role": "primary",
+   "role": "context",
    "logic": "if (x > 0); System.out.println(\"positive\"); prints only for positive x.",
    "twin_logic": "The ; ends the if with an empty statement, so the next line always runs."
   },
@@ -1798,7 +1854,7 @@
    "type": "misconception",
    "source": "accumulator_pattern",
    "target": "LoopBodyScopeImpliesLoopLifetime",
-   "role": "primary",
+   "role": "context",
    "logic": "a variable declared in the loop body lives across all iterations",
    "twin_logic": "A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
   },
@@ -1852,7 +1908,7 @@
    "type": "misconception",
    "source": "array_bounds",
    "target": "OffByOneBound",
-   "role": "primary",
+   "role": "context",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -1951,7 +2007,7 @@
    "type": "misconception",
    "source": "array_traversal",
    "target": "OffByOneBound",
-   "role": "primary",
+   "role": "context",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -2140,7 +2196,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -2176,7 +2232,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "EqualsComparesReferences",
-   "role": "primary",
+   "role": "context",
    "logic": ".equals() compares references, not contents",
    "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
   },
@@ -2275,7 +2331,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "NoShortCircuit",
-   "role": "primary",
+   "role": "context",
    "logic": "logical AND/OR always evaluate both sides (Java short-circuits them)",
    "twin_logic": "In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
   },
@@ -2392,7 +2448,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -2428,7 +2484,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -2437,7 +2493,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -2554,7 +2610,7 @@
    "type": "misconception",
    "source": "for_loop",
    "target": "MissingBraces",
-   "role": "primary",
+   "role": "context",
    "logic": "Omits braces around a single-statement body of if, for or while.",
    "twin_logic": "Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
   },
@@ -2590,7 +2646,7 @@
    "type": "misconception",
    "source": "if_statement",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -2689,7 +2745,7 @@
    "type": "misconception",
    "source": "if_statement",
    "target": "LoopForOneTimeTest",
-   "role": "primary",
+   "role": "context",
    "logic": "Uses a loop where a condition needs to be tested only once.",
    "twin_logic": "A test made once is an if; a loop repeats."
   },
@@ -3184,7 +3240,7 @@
    "type": "misconception",
    "source": "primitive_type",
    "target": "NewArrayHoldsGarbage",
-   "role": "primary",
+   "role": "context",
    "logic": "The slots of a new int[n] hold unpredictable values until assigned.",
    "twin_logic": "new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
   },
@@ -3202,7 +3258,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -3355,7 +3411,7 @@
    "type": "misconception",
    "source": "type_conversion",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   }
@@ -45710,6 +45766,8 @@
    "accumulator_pattern",
    "arithmetic_operators",
    "array_bounds",
+   "array_declaration",
+   "array_initializer",
    "array_traversal",
    "assignment",
    "boolean_expression",
@@ -45724,6 +45782,7 @@
    "if_statement",
    "increment_operators",
    "indexing",
+   "length_field",
    "loop_body",
    "loop_control",
    "loop_scope",
@@ -45736,15 +45795,6 @@
    "string_conversion",
    "string_literal",
    "type_conversion"
-  ],
-  [
-   "array_declaration"
-  ],
-  [
-   "array_initializer"
-  ],
-  [
-   "length_field"
   ]
  ],
  "counts": {
@@ -45752,15 +45802,13 @@
   "concepts": 32,
   "generic": 6,
   "from_hop": 0,
-  "concept_edges": 29,
+  "concept_edges": 36,
   "misconceptions": 141,
   "mis_edges": 199,
   "levels": 160,
   "level_edges": 160,
   "level_mis_links": 225,
-  "components": 4
+  "components": 1
  },
- "warnings": [
-  "concept nodes form 4 pieces (the KG has no edge between them): accumulator_pattern,arithmetic_operators,array_bounds,array_traversal,assignment,boolean_expression,comparison_operators,compound_assignment,control_flow,data_structure,data_type,explicit_cast,expression,for_loop,if_statement,increment_operators,indexing,loop_body,loop_control,loop_scope,loop_variable,primitive_type,println,running_extreme,statement,string_concatenation,string_conversion,string_literal,type_conversion | array_declaration | array_initializer | length_field"
- ]
+ "warnings": []
 }
