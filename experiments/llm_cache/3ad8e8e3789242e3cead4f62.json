@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint total = 50;\nint count = 0;\nSystem.out.println(total / count);\n\nQuestion: Will this compile? What happens when you run it? Explain your reasoning\n\nStudent's answer, split into clauses:\nc1: It wont compile\nc2: Dividing by zero isnt allowed\nc3: so the compiler stops you before it runs\nc4: Actual: it compiles, then crashes at run time with ArithmeticException: / by zero\n\nEdge: pre:arithmetic_operators->division_by_zero  (arithmetic_operators -> division_by_zero, prerequisite)\nRule (logic): Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nClauses: 1, 3\nConfidence: 0.9"
+}
