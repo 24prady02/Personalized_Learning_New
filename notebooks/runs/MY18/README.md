@@ -36,7 +36,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | control_flow | False | pattern | 'for (' | 2 |
 | data_structure | False | pattern | 'int[]' | 1 |
 | data_type | True | pattern | 'int' | 1 |
-| expression | True | pattern | 'i <= a' | 2 |
+| expression | True | pattern | 'i <=' | 2 |
 | expression | True | pattern | '= {5, 10, 15};' | 1 |
 | for_loop | False | pattern | 'for (' | 2 |
 | increment_operators | False | pattern | '++' | 2 |
@@ -51,22 +51,29 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | run_time_error | False | pattern | '<= a.length' | 2 |
 | statement | True | pattern | ';' | 1 |
 
-G: 23 concept nodes (4 generic), 16 concept edges, 159 misconception / error edges, 116 misconception / error nodes, 115 level nodes, 173 level-misconception links, 8 connected piece(s).
-Note: concept nodes form 8 pieces (the KG has no edge between them): array_bounds,array_traversal,assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,indexing,loop_control,loop_scope,loop_variable,off_by_one_error | array_declaration | array_initializer | control_flow,println,statement | data_structure,data_type | length_field | loop_body | run_time_error
+G: 23 concept nodes (4 generic), 23 concept edges, 159 misconception / error edges, 116 misconception / error nodes, 115 level nodes, 173 level-misconception links, 2 connected piece(s).
+Note: concept nodes form 2 pieces (the KG has no edge between them): array_bounds,array_declaration,array_initializer,array_traversal,assignment,boolean_expression,comparison_operators,data_structure,data_type,expression,for_loop,increment_operators,indexing,length_field,loop_body,loop_control,loop_scope,loop_variable,off_by_one_error,run_time_error | control_flow,println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
+| pre:array_bounds->run_time_error | prerequisite | An index outside 0 .. length-1 is not caught by the compiler; the access is checked when the program runs and stops it with ArrayIndexOutOfBoundsException. |
+| pre:array_declaration->array_initializer | prerequisite | int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing | prerequisite | The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+| pre:array_initializer->length_field | prerequisite | An array made from a literal has as many elements as values listed, and a.length gives that number. |
 | pre:assignment->increment_operators | prerequisite | i++ is shorthand for the assignment i = i + 1. |
 | pre:comparison_operators->boolean_expression | prerequisite | A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
+| pre:data_structure->array_declaration | prerequisite | An array is a data structure: one name for a sequence of values of the same type, organised by index. |
 | pre:data_type->data_structure | prerequisite | A data structure organizes many values of a data type; the array holds a sequence of values of one type. |
 | pre:expression->comparison_operators | prerequisite | Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
 | pre:for_loop->array_traversal | prerequisite | for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:for_loop->loop_body | prerequisite | The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope | prerequisite | A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:indexing->array_bounds | prerequisite | Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used. |
 | pre:indexing->array_traversal | prerequisite | A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
 | pre:indexing->off_by_one_error | prerequisite | Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors. |
+| pre:length_field->array_traversal | prerequisite | A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
 | pre:loop_control->for_loop | prerequisite | The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 | pre:loop_control->increment_operators | prerequisite | The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
 | pre:loop_control->off_by_one_error | prerequisite | The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few. |
@@ -118,7 +125,7 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 
 start: generic concepts whose tagging text occurs in the answer: assignment
 
-start: BM25 of the answer against each tagged concept: array_traversal 23.04 (hits 2), loop_control 19.09 (hits 1), for_loop 16.66 (hits 1), indexing 15.82 (hits 1), off_by_one_error 15.13 (hits 1), increment_operators 13.80 (hits 1), array_declaration 12.67 (hits 1), array_bounds 12.56 (hits 1), control_flow 12.43 (hits 1), boolean_expression 11.76 (hits 1), loop_variable 10.77 (hits 1), assignment 9.97 (hits 1), array_initializer 9.74 (hits 1), loop_body 8.95 (hits 1), comparison_operators 7.49 (hits 1), loop_scope 6.80 (hits 1), length_field 4.82 (hits 1), run_time_error 4.73 (hits 1), println 4.37 (hits 1), data_structure 1.30 (hits 1)
+start: BM25 of the answer against each tagged concept: array_traversal 22.33 (hits 2), loop_control 17.93 (hits 1), for_loop 15.39 (hits 1), indexing 14.08 (hits 1), off_by_one_error 13.89 (hits 1), increment_operators 12.70 (hits 1), control_flow 11.84 (hits 1), array_declaration 11.75 (hits 1), array_bounds 11.65 (hits 1), array_initializer 11.22 (hits 1), length_field 11.12 (hits 1), boolean_expression 10.87 (hits 1), loop_variable 9.71 (hits 1), assignment 9.31 (hits 1), loop_body 8.10 (hits 1), comparison_operators 7.00 (hits 1), loop_scope 5.79 (hits 1), run_time_error 4.52 (hits 1), println 3.84 (hits 1), data_structure 1.63 (hits 1)
 
 start: chosen array_traversal, loop_control, for_loop
 
@@ -492,26 +499,38 @@ mis:array_traversal->OffByOneBound [held, tier 0, 0.57], mis:loop_control->OffBy
 | c3 | because both go through the whole array | mis:array_traversal->OffByOneBound |
 | c4 | so it visits each element once | mis:array_traversal->OffByOneBound |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control
+**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->array_traversal, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
 ### Depth 2: current concepts 'array_traversal', 'loop_control', 'for_loop'
 
-#### array_traversal, concept edges: 2 edges offered
+#### array_traversal, concept edges: 3 edges offered
 Edges offered:
 | edge |
 |---|
 | pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
 | pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
+| pre:length_field->array_traversal \| rule: A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:for_loop->array_traversal (Score: 0.75)}
-{pre:indexing->array_traversal (Score: 0.25)}
+{pre:length_field->array_traversal (Score: 0.5)}
+{pre:for_loop->array_traversal (Score: 0.4)}
+{pre:indexing->array_traversal (Score: 0.1)}
 ```
-Kept by pruning: pre:for_loop->array_traversal (0.75), pre:indexing->array_traversal (0.25)
+Kept by pruning: pre:length_field->array_traversal (0.50), pre:for_loop->array_traversal (0.40), pre:indexing->array_traversal (0.10)
+
+Label prompt for concept edge pre:length_field->array_traversal (length_field -> array_traversal, prerequisite):
+> A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.
+
+Model's reply:
+```
+Label: broken
+Clauses: 1, 2, 3
+Confidence: 0.93
+```
 
 Label prompt for concept edge pre:for_loop->array_traversal (for_loop -> array_traversal, prerequisite):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.
@@ -536,8 +555,9 @@ Confidence: 0.6
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:for_loop->array_traversal | broken | 0.75 | 0.93 | 0.7 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
-| pre:indexing->array_traversal | confirmed | 0.25 | 0.6 | 0.15 | c1, c4 | i goes from 0 to a.length; so it visits each element once |
+| pre:length_field->array_traversal | broken | 0.5 | 0.93 | 0.47 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| pre:for_loop->array_traversal | broken | 0.4 | 0.93 | 0.37 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| pre:indexing->array_traversal | confirmed | 0.1 | 0.6 | 0.06 | c1, c4 | i goes from 0 to a.length; so it visits each element once |
 
 #### loop_control, concept edges: 4 edges offered
 Edges offered:
@@ -593,19 +613,30 @@ Parsed labels:
 | pre:loop_variable->loop_control | broken | 0.25 | 0.75 | 0.19 | c2, c3 | Using <= or < makes no difference here; because both go through the whole array |
 | pre:loop_control->for_loop | broken | 0.15 | 0.75 | 0.11 | c2, c3, c4 | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
 
-#### for_loop, concept edges: 1 edges offered
+#### for_loop, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
 | pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-pre:for_loop->loop_scope (1.00)
+pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
 ```
-Kept by pruning: pre:for_loop->loop_scope (1.00)
+Kept by pruning: pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+
+Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+> The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.6
+```
 
 Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
 > A variable declared in the for header exists only from its declaration to the end of the for statement's block.
@@ -620,13 +651,16 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
+| pre:for_loop->loop_body | not applied |  |  | 0.0 |  |  |
 | pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:for_loop->array_traversal [broken, tier 0, 0.70], pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:loop_variable->loop_control [broken, tier 0, 0.19], pre:loop_control->for_loop [broken, tier 0, 0.11]
+pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:length_field->array_traversal [broken, tier 0, 0.47], pre:for_loop->array_traversal [broken, tier 0, 0.37], pre:loop_variable->loop_control [broken, tier 0, 0.19], pre:loop_control->for_loop [broken, tier 0, 0.11]
 
 reached across pre:loop_control->off_by_one_error, entered next: off_by_one_error
+
+reached across pre:length_field->array_traversal, entered next: length_field
 
 reached across pre:loop_variable->loop_control, entered next: loop_variable
 
@@ -638,69 +672,12 @@ reached across pre:loop_variable->loop_control, entered next: loop_variable
 | c3 | because both go through the whole array | mis:array_traversal->OffByOneBound |
 | c4 | so it visits each element once | mis:array_traversal->OffByOneBound |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_variable, own edges of off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of length_field, own edges of loop_variable, own edges of off_by_one_error
 
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'for_loop', 'array_traversal', 'off_by_one_error', 'loop_control', 'loop_variable'
-
-#### for_loop, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
-| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
-| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-pre:for_loop->loop_scope (1.00)
-```
-Kept by pruning: pre:for_loop->loop_scope (1.00)
-
-Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
-> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
-
-#### array_traversal, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
-| pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-pre:indexing->array_traversal (1.00)
-```
-Kept by pruning: pre:indexing->array_traversal (1.00)
-
-Label prompt for concept edge pre:indexing->array_traversal (indexing -> array_traversal, prerequisite):
-> A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.
-
-Model's reply:
-```
-Label: confirmed
-Clauses: 1, 4
-Confidence: 0.6
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:indexing->array_traversal | confirmed | 1.0 | 0.6 | 0.6 | c1, c4 | i goes from 0 to a.length; so it visits each element once |
+### Depth 3: current concepts 'off_by_one_error', 'loop_control', 'length_field', 'array_traversal', 'for_loop', 'loop_variable'
 
 #### off_by_one_error, misconceptions: 4 edges offered
 Edges offered:
@@ -833,6 +810,172 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:loop_control->increment_operators | not applied |  |  | 0.0 |  |  |
 
+#### length_field, misconceptions: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:length_field->ArrayHasLengthMethod \| wrong rule: The size of an array is found by calling a.length(). \| right rule: An array's size is the field a.length, written without parentheses. |
+| mis:length_field->ArrayLengthCannotBeZero \| wrong rule: An array cannot have length 0. \| right rule: new int[0] is a legal array of length 0. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:length_field->ArrayHasLengthMethod (Score: 0.9)}
+{mis:length_field->ArrayLengthCannotBeZero (Score: 0.1)}
+```
+Kept by pruning: mis:length_field->ArrayHasLengthMethod (0.90), mis:length_field->ArrayLengthCannotBeZero (0.10)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:length_field->ArrayHasLengthMethod \| wrong rule: The size of an array is found by calling a.length(). \| right rule: An array's size is the field a.length, written without parentheses. |
+| mis:length_field->ArrayLengthCannotBeZero \| wrong rule: An array cannot have length 0. \| right rule: new int[0] is a legal array of length 0. |
+Model's reply:
+```
+mis:length_field->ArrayHasLengthMethod | not applied | clauses: none | confidence: 0.7
+mis:length_field->ArrayLengthCannotBeZero | not applied | clauses: none | confidence: 0.95
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:length_field->ArrayHasLengthMethod | not applied |  |  | 0.0 |  |  |
+| mis:length_field->ArrayLengthCannotBeZero | not applied |  |  | 0.0 |  |  |
+
+#### length_field, level ways: 15 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:length_field@L0#0 \| level L0 way everyday_reading: Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1. |
+| lvl:length_field@L0#2 \| level L0 way inconsistent_trace: Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: "you call length() instead of using the length field") |
+| lvl:length_field@L1#0 \| level L1 way names_the_element: Identity: a.length is the public final instance field that every array has, holding its number of elements. |
+| lvl:length_field@L1#1 \| level L1 way states_the_rule: Declarative: the length of array a is written a.length (no parentheses); it equals the size given at creation, may be zero, cannot be assigned, and the last element is a[a.length-1]. |
+| lvl:length_field@L2#0 \| level L2 way line_by_line_trace: Sequencing: a is evaluated first (a null a throws NullPointerException), then the length field of the array a refers to now is read. In 'for (int i = 0; i < a.length; i++)' it is re-read at each test. |
+| lvl:length_field@L2#1 \| level L2 way output_prediction: Result: an int >= 0 equal to the number of elements: new double[8].length is 8, {1, 2, 3}.length is 3, and the last element is a[a.length-1]. |
+| lvl:length_field@L2#2 \| level L2 way one_step_execution: State transition: reading a.length changes nothing. Assigning 'a.length = 5' is impossible (a final field), so only making a refer to a different array changes the value later read as a.length. |
+| lvl:length_field@L3#0 \| level L3 way relation_to_neighbour: The n given to new becomes a.length and stays fixed for that array object. |
+| lvl:length_field@L3#1 \| level L3 way relation_to_neighbour: args is an ordinary String[], so args.length is its length field and counts the command-line arguments (0 when none are typed). |
+| lvl:length_field@L3#2 \| level L3 way purpose_of_the_whole: Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element. |
+| lvl:length_field@L4#0 \| level L4 way predict_a_change: Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length. |
+| lvl:length_field@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: use a.length wherever code must follow the array's real size (loop bounds, last element, copying); use a[i].length for each row of a possibly ragged 2-D array; use s.length() for Strings. |
+| lvl:length_field@L4#2 \| level L4 way diagnose_an_error: rule broken: length is a field, not a method. Kind: compile-time. Trigger class: a.length() is written for an array (cannot find symbol: method length()) |
+| lvl:length_field@L4#3 \| level L4 way diagnose_an_error: rule broken: length is final and cannot be assigned. Kind: compile-time. Trigger class: 'a.length = n;' (cannot assign a value to final variable length) |
+| lvl:length_field@L4#4 \| level L4 way diagnose_an_error: rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException) |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:length_field@L0#2 (Score: 0.45)}
+{lvl:length_field@L4#4 (Score: 0.35)}
+{lvl:length_field@L0#0 (Score: 0.2)}
+```
+Kept by pruning: lvl:length_field@L0#2 (0.45), lvl:length_field@L4#4 (0.35), lvl:length_field@L0#0 (0.20)
+
+Label prompt for level way lvl:length_field@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: "you call length() instead of using the length field")
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2, 3
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:length_field@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException)
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.95
+```
+
+Label prompt for level way lvl:length_field@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2, 3
+Confidence: 0.72
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:length_field@L0#2 | shown | 0.45 | 0.7 | 0.32 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| lvl:length_field@L4#4 | not applied |  |  | 0.0 |  |  |
+| lvl:length_field@L0#0 | shown | 0.2 | 0.72 | 0.14 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+
+#### array_traversal, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
+| pre:length_field->array_traversal \| rule: A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:indexing->array_traversal (1.00)
+```
+Kept by pruning: pre:indexing->array_traversal (1.00)
+
+Label prompt for concept edge pre:indexing->array_traversal (indexing -> array_traversal, prerequisite):
+> A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1, 4
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:indexing->array_traversal | confirmed | 1.0 | 0.6 | 0.6 | c1, c4 | i goes from 0 to a.length; so it visits each element once |
+
+#### for_loop, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
+| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+```
+Kept by pruning: pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+
+Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+> The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.6
+```
+
+Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
+> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:for_loop->loop_body | not applied |  |  | 0.0 |  |  |
+| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
+
 #### loop_variable, misconceptions: 7 edges offered
 Edges offered:
 | edge |
@@ -948,7 +1091,7 @@ reached across pre:indexing->array_traversal, entered next: indexing
 | c3 | because both go through the whole array | mis:array_traversal->OffByOneBound |
 | c4 | so it visits each element once | mis:array_traversal->OffByOneBound |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of indexing, pre:indexing->off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of indexing, pre:array_initializer->length_field, pre:indexing->off_by_one_error
 
 **Figure 6 (the graph after depth 3)**
 
@@ -1077,51 +1220,54 @@ mis:indexing->ArrayRangeInclusive [held, tier 0, 0.63]
 | c3 | because both go through the whole array | mis:array_traversal->OffByOneBound |
 | c4 | so it visits each element once | mis:array_traversal->OffByOneBound |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:indexing->array_bounds, pre:indexing->off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** pre:array_initializer->indexing, pre:array_initializer->length_field, pre:indexing->array_bounds, pre:indexing->off_by_one_error
 
 **Figure 7 (the graph after depth 4)**
 
 ![Figure 7](figure07.png)
 Held set after the one-fault rules: mis:off_by_one_error->OffByOneBound, mis:indexing->ArrayRangeInclusive, mis:array_traversal->OffByOneBound, mis:for_loop->IdiomOverridesCode; filed at the dependent concept: mis:loop_control->OffByOneBound, mis:loop_control->IdiomOverridesCode
 
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:for_loop->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound), mis:indexing->ArrayRangeInclusive (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->OffByOneBound (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:for_loop->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound), mis:array_traversal->OffByOneBound (shadow of mis:off_by_one_error->OffByOneBound), mis:indexing->ArrayRangeInclusive (shadow of mis:off_by_one_error->OffByOneBound), mis:loop_control->OffByOneBound (shadow of mis:off_by_one_error->OffByOneBound), mis:loop_control->IdiomOverridesCode (shadow of mis:off_by_one_error->OffByOneBound)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['array_traversal', 'off_by_one_error'], broken at [] (consequences: pre:for_loop->array_traversal, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-- array_traversal: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+Root-cause walk: held on ['off_by_one_error'], broken at [] (consequences: pre:loop_control->off_by_one_error, pre:length_field->array_traversal, pre:for_loop->array_traversal, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+- array_traversal: L0 via everyday_reading "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+- length_field: L0 via inconsistent_trace "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
 - loop_variable: L3 via relation_to_neighbour "i goes from 0 to a.length"
 - off_by_one_error: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
 
-**Stop:** max depth at depth 4; prompts {'prune': 18, 'label': 33}, fresh model calls 0, cache hits 51
+**Stop:** max depth at depth 4; prompts {'prune': 20, 'label': 40}, fresh model calls 0, cache hits 60
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | off_by_one_error | OffByOneBound | misconception | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.7125 |  |
-| array_traversal | OffByOneBound | misconception | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.57 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| loop_control | OffByOneBound | mis:array_traversal->OffByOneBound | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.552 |
-| loop_control | IdiomOverridesCode | mis:array_traversal->OffByOneBound | because both go through the whole array; so it visits each element once | 0.1875 |
+| array_traversal | OffByOneBound | mis:off_by_one_error->OffByOneBound | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.57 |
+| loop_control | OffByOneBound | mis:off_by_one_error->OffByOneBound | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.552 |
+| loop_control | IdiomOverridesCode | mis:off_by_one_error->OffByOneBound | because both go through the whole array; so it visits each element once | 0.1875 |
 | for_loop | IdiomOverridesCode | mis:array_traversal->OffByOneBound | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.54 |
-| indexing | ArrayRangeInclusive | mis:array_traversal->OffByOneBound | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.63 |
+| indexing | ArrayRangeInclusive | mis:off_by_one_error->OffByOneBound | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.63 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:for_loop->array_traversal | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.6975 | mis:array_traversal->OffByOneBound |
 | pre:loop_control->off_by_one_error | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.552 | mis:array_traversal->OffByOneBound |
+| pre:length_field->array_traversal | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.465 | mis:array_traversal->OffByOneBound |
+| pre:for_loop->array_traversal | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | 0.372 | mis:array_traversal->OffByOneBound |
 | pre:loop_variable->loop_control | Using <= or < makes no difference here; because both go through the whole array | 0.1875 | mis:array_traversal->OffByOneBound |
 | pre:loop_control->for_loop | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | 0.1125 | mis:array_traversal->OffByOneBound |
 
-### Root cause: array_traversal / OffByOneBound
+### Root cause: off_by_one_error / OffByOneBound
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| array_traversal | L0 | misconception | OffByOneBound | level_mis_links | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n. |  |  |
+| array_traversal | L0 | everyday_reading |  | level_way | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |  |  |  |
+| length_field | L0 | inconsistent_trace |  | level_way | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |  | L0 everyday_reading |  |
 | loop_variable | L3 | relation_to_neighbour |  | level_way | i goes from 0 to a.length |  | L2 output_prediction, L0 everyday_reading |  |
 | off_by_one_error | L0 | misconception | OffByOneBound | level_mis_links | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | wrong rule: < and <= (and 0..n versus 0..n-1) are interchangeable in a loop bound. Right rule: i < N runs N times from 0 and i <= N runs N+1 times; with an array of length N only i < N stays inside the indices 0..N-1. |  |  |
 
@@ -1146,15 +1292,18 @@ Clause coverage (final):
 | 1 | loop_control | mis:loop_control->OffByOneBound | misconception | held | 0.6 | 0.92 | 0.552 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
 | 1 | loop_control | mis:loop_control->IdiomOverridesCode | misconception | held | 0.25 | 0.75 | 0.1875 | [3, 4] | because both go through the whole array; so it visits each element once |
 | 1 | for_loop | mis:for_loop->IdiomOverridesCode | misconception | held | 0.6000000000000001 | 0.9 | 0.54 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
-| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.75 | 0.93 | 0.6975 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
-| 2 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.25 | 0.6 | 0.15 | [1, 4] | i goes from 0 to a.length; so it visits each element once |
+| 2 | array_traversal | pre:length_field->array_traversal | prerequisite | broken | 0.5 | 0.93 | 0.465 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.4 | 0.93 | 0.372 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| 2 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.1 | 0.6 | 0.06 | [1, 4] | i goes from 0 to a.length; so it visits each element once |
 | 2 | loop_control | pre:loop_control->off_by_one_error | prerequisite | broken | 0.6 | 0.92 | 0.552 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.25 | 0.75 | 0.1875 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
 | 2 | loop_control | pre:loop_control->for_loop | prerequisite | broken | 0.15 | 0.75 | 0.1125 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
-| 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [1, 4] | i goes from 0 to a.length; so it visits each element once |
 | 3 | off_by_one_error | mis:off_by_one_error->OffByOneBound | misconception | held | 0.75 | 0.95 | 0.7125 | [1, 2, 3, 4] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
 | 3 | off_by_one_error | lvl:off_by_one_error@L0#2 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
 | 3 | off_by_one_error | lvl:off_by_one_error@L0#0 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| 3 | length_field | lvl:length_field@L0#2 | level | shown | 0.45 | 0.7 | 0.315 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| 3 | length_field | lvl:length_field@L0#0 | level | shown | 0.2 | 0.72 | 0.144 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [1, 4] | i goes from 0 to a.length; so it visits each element once |
 | 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.4 | 0.6 | 0.24 | [1, 4] | i goes from 0 to a.length; so it visits each element once |
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.45 | 0.6 | 0.27 | [1] | i goes from 0 to a.length |
 | 3 | loop_variable | lvl:loop_variable@L0#0 | level | shown | 0.3 | 0.6 | 0.18 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
@@ -1168,8 +1317,9 @@ Clause coverage (final):
 | 1 | loop_control | mis:loop_control->OffByOneBound | misconception | held | 0.552 | [1, 2, 3] |
 | 1 | for_loop | mis:for_loop->IdiomOverridesCode | misconception | held | 0.54 | [2, 3, 4] |
 | 1 | loop_control | mis:loop_control->IdiomOverridesCode | misconception | held | 0.1875 | [3, 4] |
-| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.6975 | [1, 2, 3] |
 | 2 | loop_control | pre:loop_control->off_by_one_error | prerequisite | broken | 0.552 | [2, 3, 4] |
+| 2 | array_traversal | pre:length_field->array_traversal | prerequisite | broken | 0.465 | [1, 2, 3] |
+| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.372 | [1, 2, 3] |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.1875 | [2, 3] |
 | 2 | loop_control | pre:loop_control->for_loop | prerequisite | broken | 0.1125 | [2, 3, 4] |
 | 3 | off_by_one_error | mis:off_by_one_error->OffByOneBound | misconception | held | 0.7125 | [1, 2, 3, 4] |
@@ -1181,7 +1331,7 @@ Clause coverage (final):
 ```
 clauses: i goes from 0 to a.length | Using <= or < makes no difference here | because both go through the whole array | so it visits each element once
 start: generic concepts whose tagging text occurs in the answer: assignment
-start: BM25 of the answer against each tagged concept: array_traversal 23.04 (hits 2), loop_control 19.09 (hits 1), for_loop 16.66 (hits 1), indexing 15.82 (hits 1), off_by_one_error 15.13 (hits 1), increment_operators 13.80 (hits 1), array_declaration 12.67 (hits 1), array_bounds 12.56 (hits 1), control_flow 12.43 (hits 1), boolean_expression 11.76 (hits 1), loop_variable 10.77 (hits 1), assignment 9.97 (hits 1), array_initializer 9.74 (hits 1), loop_body 8.95 (hits 1), comparison_operators 7.49 (hits 1), loop_scope 6.80 (hits 1), length_field 4.82 (hits 1), run_time_error 4.73 (hits 1), println 4.37 (hits 1), data_structure 1.30 (hits 1)
+start: BM25 of the answer against each tagged concept: array_traversal 22.33 (hits 2), loop_control 17.93 (hits 1), for_loop 15.39 (hits 1), indexing 14.08 (hits 1), off_by_one_error 13.89 (hits 1), increment_operators 12.70 (hits 1), control_flow 11.84 (hits 1), array_declaration 11.75 (hits 1), array_bounds 11.65 (hits 1), array_initializer 11.22 (hits 1), length_field 11.12 (hits 1), boolean_expression 10.87 (hits 1), loop_variable 9.71 (hits 1), assignment 9.31 (hits 1), loop_body 8.10 (hits 1), comparison_operators 7.00 (hits 1), loop_scope 5.79 (hits 1), run_time_error 4.52 (hits 1), println 3.84 (hits 1), data_structure 1.63 (hits 1)
 start: chosen array_traversal, loop_control, for_loop
 start concepts (3): array_traversal, loop_control, for_loop
 --- depth 1: current concepts ['array_traversal', 'loop_control', 'for_loop']
@@ -1211,27 +1361,26 @@ start concepts (3): array_traversal, loop_control, for_loop
     lvl:for_loop@L3#2 -> not applied (0.00) ""
   kept: mis:array_traversal->OffByOneBound [held, tier 0, 0.57], mis:loop_control->OffByOneBound [held, tier 0, 0.55], mis:for_loop->IdiomOverridesCode [held, tier 0, 0.54], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.19]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
-  not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control
+  not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control
 --- depth 2: current concepts ['array_traversal', 'loop_control', 'for_loop']
-  array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.75), pre:indexing->array_traversal (0.25)
-    pre:for_loop->array_traversal -> broken (0.70) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
-    pre:indexing->array_traversal -> confirmed (0.15) "i goes from 0 to a.length; so it visits each element once"
+  array_traversal (concept edges): 3 candidates -> kept pre:length_field->array_traversal (0.50), pre:for_loop->array_traversal (0.40), pre:indexing->array_traversal (0.10)
+    pre:length_field->array_traversal -> broken (0.47) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+    pre:for_loop->array_traversal -> broken (0.37) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+    pre:indexing->array_traversal -> confirmed (0.06) "i goes from 0 to a.length; so it visits each element once"
   loop_control (concept edges): 4 candidates -> kept pre:loop_control->off_by_one_error (0.60), pre:loop_variable->loop_control (0.25), pre:loop_control->for_loop (0.15)
     pre:loop_control->off_by_one_error -> broken (0.55) "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
     pre:loop_variable->loop_control -> broken (0.19) "Using <= or < makes no difference here; because both go through the whole array"
     pre:loop_control->for_loop -> broken (0.11) "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+    pre:for_loop->loop_body -> not applied (0.00) ""
     pre:for_loop->loop_scope -> not applied (0.00) ""
-  kept: pre:for_loop->array_traversal [broken, tier 0, 0.70], pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:loop_variable->loop_control [broken, tier 0, 0.19], pre:loop_control->for_loop [broken, tier 0, 0.11]
+  kept: pre:loop_control->off_by_one_error [broken, tier 0, 0.55], pre:length_field->array_traversal [broken, tier 0, 0.47], pre:for_loop->array_traversal [broken, tier 0, 0.37], pre:loop_variable->loop_control [broken, tier 0, 0.19], pre:loop_control->for_loop [broken, tier 0, 0.11]
   reached across pre:loop_control->off_by_one_error, entered next: off_by_one_error
+  reached across pre:length_field->array_traversal, entered next: length_field
   reached across pre:loop_variable->loop_control, entered next: loop_variable
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
-  not yet read: own edges of loop_variable, own edges of off_by_one_error
---- depth 3: current concepts ['for_loop', 'array_traversal', 'off_by_one_error', 'loop_control', 'loop_variable']
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
-    pre:for_loop->loop_scope -> not applied (0.00) ""
-  array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
-    pre:indexing->array_traversal -> confirmed (0.60) "i goes from 0 to a.length; so it visits each element once"
+  not yet read: own edges of length_field, own edges of loop_variable, own edges of off_by_one_error
+--- depth 3: current concepts ['off_by_one_error', 'loop_control', 'length_field', 'array_traversal', 'for_loop', 'loop_variable']
   off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.75), err:off_by_one_error->WrongIterationCount (0.20), err:off_by_one_error->FencepostExtraSeparator (0.05)
     mis:off_by_one_error->OffByOneBound -> held (0.71) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
     err:off_by_one_error->WrongIterationCount -> not applied (0.00) ""
@@ -1242,6 +1391,18 @@ start concepts (3): array_traversal, loop_control, for_loop
     lvl:off_by_one_error@L0#0 -> shown (0.17) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
     pre:loop_control->increment_operators -> not applied (0.00) ""
+  length_field (misconceptions): 2 candidates -> kept mis:length_field->ArrayHasLengthMethod (0.90), mis:length_field->ArrayLengthCannotBeZero (0.10)
+    mis:length_field->ArrayHasLengthMethod -> not applied (0.00) ""
+    mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
+  length_field (level ways): 15 candidates -> kept lvl:length_field@L0#2 (0.45), lvl:length_field@L4#4 (0.35), lvl:length_field@L0#0 (0.20)
+    lvl:length_field@L0#2 -> shown (0.32) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+    lvl:length_field@L4#4 -> not applied (0.00) ""
+    lvl:length_field@L0#0 -> shown (0.14) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+  array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
+    pre:indexing->array_traversal -> confirmed (0.60) "i goes from 0 to a.length; so it visits each element once"
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+    pre:for_loop->loop_body -> not applied (0.00) ""
+    pre:for_loop->loop_scope -> not applied (0.00) ""
   loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopUpdateChangesDirection (0.35), mis:loop_variable->ForInitRepeats (0.25)
     mis:loop_variable->LoopOutputSameEachPass -> correct (0.24) "i goes from 0 to a.length; so it visits each element once"
     mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
@@ -1253,7 +1414,7 @@ start concepts (3): array_traversal, loop_control, for_loop
   kept: mis:off_by_one_error->OffByOneBound [held, tier 0, 0.71], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#2 [shown, tier 2, 0.35]
   reached across pre:indexing->array_traversal, entered next: indexing
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
-  not yet read: own edges of indexing, pre:indexing->off_by_one_error
+  not yet read: own edges of indexing, pre:array_initializer->length_field, pre:indexing->off_by_one_error
 --- depth 4: current concepts ['indexing'] (closing round: own edges only)
   indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayRangeInclusive (0.70), mis:indexing->ArrayIndexStartsAtOne (0.15), mis:indexing->ArrayUseScansAllCells (0.15)
     mis:indexing->ArrayRangeInclusive -> held (0.63) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
@@ -1265,11 +1426,12 @@ start concepts (3): array_traversal, loop_control, for_loop
     lvl:indexing@L1#1 -> not applied (0.00) ""
   kept: mis:indexing->ArrayRangeInclusive [held, tier 0, 0.63]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
-  not yet read: pre:indexing->array_bounds, pre:indexing->off_by_one_error
+  not yet read: pre:array_initializer->indexing, pre:array_initializer->length_field, pre:indexing->array_bounds, pre:indexing->off_by_one_error
   held: mis:off_by_one_error->OffByOneBound, mis:indexing->ArrayRangeInclusive, mis:array_traversal->OffByOneBound, mis:for_loop->IdiomOverridesCode; filed at the dependent concept: mis:loop_control->OffByOneBound, mis:loop_control->IdiomOverridesCode
-  shadows: mis:for_loop->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound), mis:indexing->ArrayRangeInclusive (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->OffByOneBound (shadow of mis:array_traversal->OffByOneBound), mis:loop_control->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound)
-  root-cause walk: held on ['array_traversal', 'off_by_one_error'], broken at [] (consequences: pre:for_loop->array_traversal, pre:loop_control->off_by_one_error, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-  level array_traversal: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+  shadows: mis:for_loop->IdiomOverridesCode (shadow of mis:array_traversal->OffByOneBound), mis:array_traversal->OffByOneBound (shadow of mis:off_by_one_error->OffByOneBound), mis:indexing->ArrayRangeInclusive (shadow of mis:off_by_one_error->OffByOneBound), mis:loop_control->OffByOneBound (shadow of mis:off_by_one_error->OffByOneBound), mis:loop_control->IdiomOverridesCode (shadow of mis:off_by_one_error->OffByOneBound)
+  root-cause walk: held on ['off_by_one_error'], broken at [] (consequences: pre:loop_control->off_by_one_error, pre:length_field->array_traversal, pre:for_loop->array_traversal, pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level array_traversal: L0 via everyday_reading "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+  level length_field: L0 via inconsistent_trace "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   level loop_variable: L3 via relation_to_neighbour "i goes from 0 to a.length"
   level off_by_one_error: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
 ```
@@ -1303,28 +1465,28 @@ start concepts (3): array_traversal, loop_control, for_loop
    "kind": "misconception",
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "score": 0.7125
-  },
-  {
-   "concept": "array_traversal",
-   "misconception": "OffByOneBound",
-   "kind": "misconception",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "score": 0.57
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
+   "concept": "array_traversal",
+   "misconception": "OffByOneBound",
+   "shadow_of": "mis:off_by_one_error->OffByOneBound",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+   "score": 0.57
+  },
+  {
    "concept": "loop_control",
    "misconception": "OffByOneBound",
-   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "shadow_of": "mis:off_by_one_error->OffByOneBound",
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
    "score": 0.552
   },
   {
    "concept": "loop_control",
    "misconception": "IdiomOverridesCode",
-   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "shadow_of": "mis:off_by_one_error->OffByOneBound",
    "quote": "because both go through the whole array; so it visits each element once",
    "score": 0.1875
   },
@@ -1338,22 +1500,28 @@ start concepts (3): array_traversal, loop_control, for_loop
   {
    "concept": "indexing",
    "misconception": "ArrayRangeInclusive",
-   "shadow_of": "mis:array_traversal->OffByOneBound",
+   "shadow_of": "mis:off_by_one_error->OffByOneBound",
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
    "score": 0.63
   }
  ],
  "broken_edges": [
   {
-   "edge": "pre:for_loop->array_traversal",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "score": 0.6975,
-   "consequence_of": "mis:array_traversal->OffByOneBound"
-  },
-  {
    "edge": "pre:loop_control->off_by_one_error",
    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "score": 0.552,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
+  },
+  {
+   "edge": "pre:length_field->array_traversal",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.465,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
+  },
+  {
+   "edge": "pre:for_loop->array_traversal",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.372,
    "consequence_of": "mis:array_traversal->OffByOneBound"
   },
   {
@@ -1370,18 +1538,27 @@ start concepts (3): array_traversal, loop_control, for_loop
   }
  ],
  "root_cause": {
-  "concept": "array_traversal",
+  "concept": "off_by_one_error",
   "misconception": "OffByOneBound"
  },
  "levels": {
   "array_traversal": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "OffByOneBound",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "edge": "mis:array_traversal->OffByOneBound",
-   "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "source": "level_mis_links"
+   "way": "everyday_reading",
+   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+   "edge": "lvl:array_traversal@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "length_field": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "edge": "lvl:length_field@L0#2",
+   "source": "level_way",
+   "also_shown": [
+    "L0 everyday_reading"
+   ]
   },
   "loop_variable": {
    "level": "L3",
@@ -1424,7 +1601,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6000000000000001,
    "score": 0.57,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1443,7 +1621,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6,
    "score": 0.552,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1462,7 +1641,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6000000000000001,
    "score": 0.54,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1481,27 +1661,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "score": 0.1875,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
    "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context",
    "shares_evidence_with": "mis:loop_control->OffByOneBound"
-  },
-  {
-   "depth": 2,
-   "source": "array_traversal",
-   "edge": "pre:for_loop->array_traversal",
-   "target": "for_loop",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    2,
-    3
-   ],
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "confidence": 0.93,
-   "prune_score": 0.75,
-   "score": 0.6975,
-   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
-   "twin_logic": null,
-   "consequence_of": "mis:array_traversal->OffByOneBound"
   },
   {
    "depth": 2,
@@ -1520,6 +1681,46 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6,
    "score": 0.552,
    "logic": "The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:for_loop->array_traversal",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.93,
+   "prune_score": 0.4,
+   "score": 0.372,
+   "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null,
    "consequence_of": "mis:array_traversal->OffByOneBound"
   },
@@ -1580,7 +1781,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.75,
    "score": 0.7125,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1637,7 +1839,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.7,
    "score": 0.63,
    "logic": "new int[n] has slots 0 to n, inclusive.",
-   "twin_logic": "The slots are 0 to n - 1."
+   "twin_logic": "The slots are 0 to n - 1.",
+   "role": "primary"
   }
  ],
  "evidence": [
@@ -1659,7 +1862,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6000000000000001,
    "score": 0.57,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1699,7 +1903,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6,
    "score": 0.552,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1718,6 +1923,7 @@ start concepts (3): array_traversal, loop_control, for_loop
    "score": 0.1875,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
    "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context",
    "shares_evidence_with": "mis:loop_control->OffByOneBound"
   },
   {
@@ -1737,7 +1943,28 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.6000000000000001,
    "score": 0.54,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_traversal->OffByOneBound"
   },
   {
    "depth": 2,
@@ -1753,8 +1980,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    ],
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
    "confidence": 0.93,
-   "prune_score": 0.75,
-   "score": 0.6975,
+   "prune_score": 0.4,
+   "score": 0.372,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null,
    "consequence_of": "mis:array_traversal->OffByOneBound"
@@ -1772,8 +1999,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    ],
    "quote": "i goes from 0 to a.length; so it visits each element once",
    "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
+   "prune_score": 0.1,
+   "score": 0.06,
    "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
    "twin_logic": null
   },
@@ -1838,24 +2065,6 @@ start concepts (3): array_traversal, loop_control, for_loop
   },
   {
    "depth": 3,
-   "source": "array_traversal",
-   "edge": "pre:indexing->array_traversal",
-   "target": "indexing",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1,
-    4
-   ],
-   "quote": "i goes from 0 to a.length; so it visits each element once",
-   "confidence": 0.6,
-   "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
    "source": "off_by_one_error",
    "edge": "mis:off_by_one_error->OffByOneBound",
    "target": "OffByOneBound",
@@ -1872,7 +2081,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.75,
    "score": 0.7125,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1917,6 +2127,66 @@ start concepts (3): array_traversal, loop_control, for_loop
   },
   {
    "depth": 3,
+   "source": "length_field",
+   "edge": "lvl:length_field@L0#2",
+   "target": "length_field@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: \"you call length() instead of using the length field\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "length_field",
+   "edge": "lvl:length_field@L0#0",
+   "target": "length_field@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "confidence": 0.72,
+   "prune_score": 0.2,
+   "score": 0.144,
+   "logic": "Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "array_traversal",
+   "edge": "pre:indexing->array_traversal",
+   "target": "indexing",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "i goes from 0 to a.length; so it visits each element once",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
    "source": "loop_variable",
    "edge": "mis:loop_variable->LoopOutputSameEachPass",
    "target": "LoopOutputSameEachPass",
@@ -1931,7 +2201,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.4,
    "score": 0.24,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -2009,7 +2280,8 @@ start concepts (3): array_traversal, loop_control, for_loop
    "prune_score": 0.7,
    "score": 0.63,
    "logic": "new int[n] has slots 0 to n, inclusive.",
-   "twin_logic": "The slots are 0 to n - 1."
+   "twin_logic": "The slots are 0 to n - 1.",
+   "role": "primary"
   }
  ],
  "clause_coverage": {
@@ -2022,10 +2294,10 @@ start concepts (3): array_traversal, loop_control, for_loop
  "stop_reason": "max depth",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 51,
+ "llm_cache_hits": 60,
  "llm_calls_by_step": {
-  "prune": 18,
-  "label": 33
+  "prune": 20,
+  "label": 40
  }
 }
 ```

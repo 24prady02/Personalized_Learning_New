@@ -154,9 +154,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "i <= a",
+     "match": "i <=",
      "line": 2
     },
     {
@@ -348,6 +348,38 @@
    "grounding": "book_passage"
   },
   {
+   "id": "pre:array_bounds->run_time_error",
+   "type": "prerequisite",
+   "source": "array_bounds",
+   "target": "run_time_error",
+   "logic": "An index outside 0 .. length-1 is not caught by the compiler; the access is checked when the program runs and stops it with ArrayIndexOutOfBoundsException.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:array_declaration->array_initializer",
+   "type": "prerequisite",
+   "source": "array_declaration",
+   "target": "array_initializer",
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:array_initializer->indexing",
+   "type": "prerequisite",
+   "source": "array_initializer",
+   "target": "indexing",
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "grounding": "spec_passage"
+  },
+  {
+   "id": "pre:array_initializer->length_field",
+   "type": "prerequisite",
+   "source": "array_initializer",
+   "target": "length_field",
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "grounding": "spec_passage"
+  },
+  {
    "id": "pre:assignment->increment_operators",
    "type": "prerequisite",
    "source": "assignment",
@@ -361,6 +393,14 @@
    "source": "comparison_operators",
    "target": "boolean_expression",
    "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:data_structure->array_declaration",
+   "type": "prerequisite",
+   "source": "data_structure",
+   "target": "array_declaration",
+   "logic": "An array is a data structure: one name for a sequence of values of the same type, organised by index.",
    "grounding": "book_passage"
   },
   {
@@ -385,6 +425,14 @@
    "source": "for_loop",
    "target": "array_traversal",
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:for_loop->loop_body",
+   "type": "prerequisite",
+   "source": "for_loop",
+   "target": "loop_body",
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "grounding": "book_passage"
   },
   {
@@ -417,6 +465,14 @@
    "source": "indexing",
    "target": "off_by_one_error",
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:length_field->array_traversal",
+   "type": "prerequisite",
+   "source": "length_field",
+   "target": "array_traversal",
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
    "grounding": "book_passage"
   },
   {
@@ -1253,7 +1309,7 @@
    "type": "error",
    "source": "for_loop",
    "target": "SemicolonAfterIfHeader",
-   "role": "primary",
+   "role": "context",
    "logic": "if (x > 0); System.out.println(\"positive\"); prints only for positive x.",
    "twin_logic": "The ; ends the if with an empty statement, so the next line always runs."
   },
@@ -1316,7 +1372,7 @@
    "type": "error",
    "source": "off_by_one_error",
    "target": "WrongIterationCount",
-   "role": "primary",
+   "role": "context",
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -1334,7 +1390,7 @@
    "type": "error",
    "source": "run_time_error",
    "target": "ArgsAlwaysPresent",
-   "role": "primary",
+   "role": "context",
    "logic": "args[0] can always be read.",
    "twin_logic": "If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
   },
@@ -1352,7 +1408,7 @@
    "type": "error",
    "source": "run_time_error",
    "target": "MainWithoutStringArgs",
-   "role": "primary",
+   "role": "context",
    "logic": "public static void main() is an acceptable entry point.",
    "twin_logic": "main is written public static void main(String[] args); these keywords and the args parameter are required."
   },
@@ -1379,7 +1435,7 @@
    "type": "misconception",
    "source": "array_bounds",
    "target": "OffByOneBound",
-   "role": "primary",
+   "role": "context",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -1478,7 +1534,7 @@
    "type": "misconception",
    "source": "array_traversal",
    "target": "OffByOneBound",
-   "role": "primary",
+   "role": "context",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -1667,7 +1723,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -1703,7 +1759,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "EqualsComparesReferences",
-   "role": "primary",
+   "role": "context",
    "logic": ".equals() compares references, not contents",
    "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
   },
@@ -1784,7 +1840,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "NoShortCircuit",
-   "role": "primary",
+   "role": "context",
    "logic": "logical AND/OR always evaluate both sides (Java short-circuits them)",
    "twin_logic": "In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
   },
@@ -1856,7 +1912,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -1892,7 +1948,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -1901,7 +1957,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -2018,7 +2074,7 @@
    "type": "misconception",
    "source": "for_loop",
    "target": "MissingBraces",
-   "role": "primary",
+   "role": "context",
    "logic": "Omits braces around a single-statement body of if, for or while.",
    "twin_logic": "Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
   },
@@ -2495,7 +2551,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -34330,42 +34386,30 @@
  "components": [
   [
    "array_bounds",
+   "array_declaration",
+   "array_initializer",
    "array_traversal",
    "assignment",
    "boolean_expression",
    "comparison_operators",
+   "data_structure",
+   "data_type",
    "expression",
    "for_loop",
    "increment_operators",
    "indexing",
+   "length_field",
+   "loop_body",
    "loop_control",
    "loop_scope",
    "loop_variable",
-   "off_by_one_error"
-  ],
-  [
-   "array_declaration"
-  ],
-  [
-   "array_initializer"
+   "off_by_one_error",
+   "run_time_error"
   ],
   [
    "control_flow",
    "println",
    "statement"
-  ],
-  [
-   "data_structure",
-   "data_type"
-  ],
-  [
-   "length_field"
-  ],
-  [
-   "loop_body"
-  ],
-  [
-   "run_time_error"
   ]
  ],
  "counts": {
@@ -34373,15 +34417,15 @@
   "concepts": 23,
   "generic": 4,
   "from_hop": 0,
-  "concept_edges": 16,
+  "concept_edges": 23,
   "misconceptions": 116,
   "mis_edges": 159,
   "levels": 115,
   "level_edges": 115,
   "level_mis_links": 173,
-  "components": 8
+  "components": 2
  },
  "warnings": [
-  "concept nodes form 8 pieces (the KG has no edge between them): array_bounds,array_traversal,assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,indexing,loop_control,loop_scope,loop_variable,off_by_one_error | array_declaration | array_initializer | control_flow,println,statement | data_structure,data_type | length_field | loop_body | run_time_error"
+  "concept nodes form 2 pieces (the KG has no edge between them): array_bounds,array_declaration,array_initializer,array_traversal,assignment,boolean_expression,comparison_operators,data_structure,data_type,expression,for_loop,increment_operators,indexing,length_field,loop_body,loop_control,loop_scope,loop_variable,off_by_one_error,run_time_error | control_flow,println,statement"
  ]
 }
