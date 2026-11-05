@@ -1,0 +1,740 @@
+{
+ "scenario": "MY36",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "0",
+  "Nothing was added",
+  "so sum and count are both 0, and 0 divided by 0 is just 0"
+ ],
+ "start_concepts": [
+  "sentinel_loop",
+  "division_by_zero",
+  "compound_assignment"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "sentinel_loop",
+   "misconception": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.744
+  },
+  {
+   "concept": "division_by_zero",
+   "misconception": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.51
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.57
+  },
+  {
+   "edge": "pre:division_by_zero->run_time_error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.38
+  }
+ ],
+ "root_cause": {
+  "concept": "division_by_zero",
+  "misconception": "AverageWithoutZeroGuard"
+ },
+ "levels": {
+  "accumulator_pattern": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:accumulator_pattern@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L2 output_prediction"
+   ]
+  },
+  "compound_assignment": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "Nothing was added",
+   "edge": "lvl:compound_assignment@L3#3",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "sentinel_loop": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:sentinel_loop@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  },
+  "while_loop": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:while_loop@L4#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
+   ]
+  }
+ },
+ "overall_level": null,
+ "paths": [
+  {
+   "depth": 1,
+   "source": "sentinel_loop",
+   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.93,
+   "prune_score": 0.8,
+   "score": 0.744,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "division_by_zero",
+   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.85,
+   "prune_score": 0.6000000000000001,
+   "score": 0.51,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L3#3",
+   "target": "compound_assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:division_by_zero->run_time_error",
+   "target": "run_time_error",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:accumulator_pattern->sentinel_loop",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Sum and count are accumulators.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L3#2",
+   "target": "accumulator_pattern@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#0",
+   "target": "accumulator_pattern@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#2",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L4#0",
+   "target": "while_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "sentinel_loop",
+   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.93,
+   "prune_score": 0.8,
+   "score": 0.744,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "sentinel_loop",
+   "edge": "mis:sentinel_loop->SentinelProcessed",
+   "target": "SentinelProcessed",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.85,
+   "prune_score": 0.15,
+   "score": 0.1275,
+   "logic": "The sentinel value (e.g. 999999) is added to the total like the other values.",
+   "twin_logic": "The loop stops at the sentinel without processing it.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "sentinel_loop",
+   "edge": "lvl:sentinel_loop@L2#2",
+   "target": "sentinel_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "One pass reads one value. If it is the sentinel, the loop ends with sum and count unchanged; otherwise the (valid) value updates sum and count.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "sentinel_loop",
+   "edge": "lvl:sentinel_loop@L3#1",
+   "target": "sentinel_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "sum (a gatherer) and count must change only for values that are not the sentinel and pass the filter. The average is computed once, after the loop.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "division_by_zero",
+   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.85,
+   "prune_score": 0.6000000000000001,
+   "score": 0.51,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L3#3",
+   "target": "compound_assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:accumulator_pattern->sentinel_loop",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Sum and count are accumulators.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:division_by_zero->run_time_error",
+   "target": "run_time_error",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "compound_assignment",
+   "edge": "pre:compound_assignment->accumulator_pattern",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L3#2",
+   "target": "accumulator_pattern@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#0",
+   "target": "accumulator_pattern@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#1",
+   "target": "accumulator_pattern@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "err:while_loop->LoopIgnoresCodeBefore",
+   "target": "LoopIgnoresCodeBefore",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs.",
+   "twin_logic": "A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#2",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L4#0",
+   "target": "while_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#0",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "1. Evaluate the condition. 2. If false, skip the body and continue after the loop. 3. If true, execute the whole body, then go back to step 1.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "clause_coverage": {
+  "0": "err:sentinel_loop->AverageWithoutZeroGuard",
+  "Nothing was added": "mis:sentinel_loop->SentinelProcessed",
+  "so sum and count are both 0, and 0 divided by 0 is just 0": "err:sentinel_loop->AverageWithoutZeroGuard"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 4,
+ "llm_calls": 0,
+ "llm_cache_hits": 54,
+ "llm_calls_by_step": {
+  "prune": 18,
+  "label": 36
+ }
+}
