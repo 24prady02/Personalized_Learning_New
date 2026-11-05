@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\ndouble a = 0.1 + 0.2;\nif (a == 0.3) {\n    System.out.println(\"equal\");\n} else {\n    System.out.println(\"not equal\");\n}\n\nQuestion: What is printed? Explain what the (double) does here.\n\nStudent's answer, split into clauses:\nc1: 3.5\nc2: The cast makes it a double division\nc3: so you get the decimal part\n\nEdge: pre:double->floating_point_precision  (double -> floating_point_precision, prerequisite)\nRule (logic): A double approximates real numbers, so its arithmetic is not exact.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not applied\nClauses: none\nConfidence: 0.75"
+}
