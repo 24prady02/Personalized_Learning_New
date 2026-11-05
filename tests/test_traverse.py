@@ -193,6 +193,22 @@ def test_same_misconception_at_both_ends_of_a_prerequisite_edge_is_filed_at_the_
     # without a prerequisite edge between the two concepts both findings stay
     two = [{"kind": "misconception", "source": "B", "target": "M", "score": 1}, {"kind": "misconception", "source": "C", "target": "M", "score": 1}]
     assert len(traverse.filed_at_dependent(two, {})) == 2 and len(traverse.filed_at_dependent(two, {"C": ["B"]})) == 1
+    # the graph's roles decide first: primary at the prerequisite end B, context at the dependent end C -> filed at B
+    roles = [{**two[0], "role": "primary"}, {**two[1], "role": "context"}]
+    assert [c["source"] for c in traverse.filed_at_dependent(roles, {"C": ["B"]})] == ["B"]
+    assert [c["source"] for c in traverse.filed_at_dependent(roles, {})] == ["B"]
+    # primary at the dependent end: filed there, as before
+    roles = [{**two[0], "role": "context"}, {**two[1], "role": "primary"}]
+    assert [c["source"] for c in traverse.filed_at_dependent(roles, {"C": ["B"]})] == ["C"]
+    # both ends primary (or no roles): the dependent-end rule decides
+    both = [{**two[0], "role": "primary"}, {**two[1], "role": "primary"}]
+    assert [c["source"] for c in traverse.filed_at_dependent(both, {"C": ["B"]})] == ["C"]
+    # the same through the whole walk: B primary, C context, MisC held at both from the same words -> filed at B
+    tiny2 = copy.deepcopy(tiny)
+    next(e for e in tiny2["mis_edges"] if e["id"] == "mis:C->MisC")["role"] = "context"
+    d = traverse.traverse(tiny2, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert [(h["concept"], h["misconception"]) for h in d["held_misconceptions"]] == [("B", "MisC")]
+    assert d["root_cause"] == {"concept": "B", "misconception": "MisC"}
 
 
 def test_a_broken_edge_on_the_words_of_a_held_misconception_is_its_consequence_not_a_root():

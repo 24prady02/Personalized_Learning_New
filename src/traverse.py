@@ -270,14 +270,25 @@ def mark_shared_evidence(held: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def filed_at_dependent(held: list[dict[str, Any]], pre_in: dict[str, list[str]]) -> list[dict[str, Any]]:
-    """The same misconception held at both ends of a prerequisite edge is one fault seen twice. It is filed at the
-    dependent concept (the target of the edge), so the prerequisite end does not pose as a root cause of its own."""
+    """The same misconception held at both ends of a prerequisite edge is one fault seen twice. Where the graph marks
+    one end primary (the concept whose rule the misconception violates) and the other context, it is filed at the
+    primary end, whichever way the prerequisite edge runs. Where the roles do not decide (both the same, or none) it
+    is filed at the dependent concept (the target of the edge), so the prerequisite end does not pose as a root
+    cause of its own."""
     out = []
     for c in held:
         twins = [k for k in held if k["kind"] == c["kind"] == "misconception" and k["target"] == c["target"] and k["source"] != c["source"]]
-        if any(c["source"] in pre_in.get(k["source"], []) for k in twins):
-            continue
-        out.append(c)
+        drop = False
+        for k in twins:
+            roles = (c.get("role"), k.get("role"))
+            if roles[0] != roles[1] and "primary" in roles:
+                drop = roles[1] == "primary"
+            else:
+                drop = c["source"] in pre_in.get(k["source"], [])
+            if drop:
+                break
+        if not drop:
+            out.append(c)
     return out
 
 
