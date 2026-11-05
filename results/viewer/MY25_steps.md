@@ -28,7 +28,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | boolean_expression | False | pattern | 'if (' | 2 |
 | comparison_operators | False | pattern | 'if (x >' | 2 |
 | control_flow | False | pattern | 'if (' | 2 |
-| expression | True | pattern | 'x > 5' | 2 |
+| expression | True | pattern | 'x >' | 2 |
 | expression | True | pattern | '= 4;' | 1 |
 | if_statement | False | pattern | 'if (' | 2 |
 | println | False | pattern | 'System.out.println(' | 3 |
@@ -117,29 +117,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:if_statement->ThenAlwaysExecutes (0.70), mis:if_statement->BranchChosenByIntent (0.15), mis:if_statement->CodeAfterIfSkipped (0.15)
+mis:if_statement->ThenAlwaysExecutes (0.60), mis:if_statement->CodeAfterIfSkipped (0.20), mis:if_statement->ProgramLooksAhead (0.20)
 ```
-Kept by pruning: mis:if_statement->ThenAlwaysExecutes (0.70), mis:if_statement->BranchChosenByIntent (0.15), mis:if_statement->CodeAfterIfSkipped (0.15)
+Kept by pruning: mis:if_statement->ThenAlwaysExecutes (0.60), mis:if_statement->CodeAfterIfSkipped (0.20), mis:if_statement->ProgramLooksAhead (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:if_statement->ThenAlwaysExecutes \| wrong rule: The then branch always runs. \| right rule: The then branch runs only when the condition is true. |
-| mis:if_statement->BranchChosenByIntent \| wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. \| right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs. |
 | mis:if_statement->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
+| mis:if_statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
 Model's reply:
 ```
-mis:if_statement->ThenAlwaysExecutes | held | clauses: 1, 2 | confidence: 0.92
-mis:if_statement->BranchChosenByIntent | not applied | clauses: none | confidence: 0.8
+mis:if_statement->ThenAlwaysExecutes | held | clauses: 1, 2 | confidence: 0.9
 mis:if_statement->CodeAfterIfSkipped | correct | clauses: 2 | confidence: 0.8
+mis:if_statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:if_statement->ThenAlwaysExecutes | held | 0.7 | 0.92 | 0.64 | c1, c2 | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
-| mis:if_statement->BranchChosenByIntent | not applied |  |  | 0.0 |  |  |
-| mis:if_statement->CodeAfterIfSkipped | correct | 0.15 | 0.8 | 0.12 | c2 | so the println inside the if runs too, and then done is printed |
+| mis:if_statement->ThenAlwaysExecutes | held | 0.6 | 0.9 | 0.54 | c1, c2 | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
+| mis:if_statement->CodeAfterIfSkipped | correct | 0.2 | 0.8 | 0.16 | c2 | so the println inside the if runs too, and then done is printed |
+| mis:if_statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
 
 #### if_statement, level ways: 19 edges offered
 Edges offered:
@@ -228,29 +228,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:control_flow->FalseConditionRestartsProgram (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->CodeAfterIfSkipped (0.20)
+mis:control_flow->StatementsRunInAnyOrder (0.45), mis:control_flow->FalseConditionRestartsProgram (0.35), mis:control_flow->CodeAfterIfSkipped (0.20)
 ```
-Kept by pruning: mis:control_flow->FalseConditionRestartsProgram (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->CodeAfterIfSkipped (0.20)
+Kept by pruning: mis:control_flow->StatementsRunInAnyOrder (0.45), mis:control_flow->FalseConditionRestartsProgram (0.35), mis:control_flow->CodeAfterIfSkipped (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
 | mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
 | mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
 Model's reply:
 ```
-mis:control_flow->FalseConditionRestartsProgram | not applied | clauses: none | confidence: 0.85
-mis:control_flow->StatementsRunInAnyOrder | correct | clauses: 1 | confidence: 0.7
-mis:control_flow->CodeAfterIfSkipped | correct | clauses: 2 | confidence: 0.75
+mis:control_flow->StatementsRunInAnyOrder | correct | clauses: 1 | confidence: 0.6
+mis:control_flow->FalseConditionRestartsProgram | not applied | clauses: none | confidence: 0.75
+mis:control_flow->CodeAfterIfSkipped | correct | clauses: 2 | confidence: 0.8
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
+| mis:control_flow->StatementsRunInAnyOrder | correct | 0.45 | 0.6 | 0.27 | c1 | The program runs every line from top to bottom |
 | mis:control_flow->FalseConditionRestartsProgram | not applied |  |  | 0.0 |  |  |
-| mis:control_flow->StatementsRunInAnyOrder | correct | 0.3 | 0.7 | 0.21 | c1 | The program runs every line from top to bottom |
-| mis:control_flow->CodeAfterIfSkipped | correct | 0.2 | 0.75 | 0.15 | c2 | so the println inside the if runs too, and then done is printed |
+| mis:control_flow->CodeAfterIfSkipped | correct | 0.2 | 0.8 | 0.16 | c2 | so the println inside the if runs too, and then done is printed |
 
 #### control_flow, level ways: 15 edges offered
 Edges offered:
@@ -330,9 +330,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
+mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
+Kept by pruning: mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -423,7 +423,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.64], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21]
+mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.54], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.27]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -800,12 +800,12 @@ Root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:state
 - println: L3 via relation_to_neighbour "so the println inside the if runs too, and then done is printed"
 - statement: L3 via relation_to_neighbour "The program runs every line from top to bottom"
 
-**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 0, cache hits 38
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 5, cache hits 33
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| if_statement | ThenAlwaysExecutes | misconception | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed | 0.644 |  |
+| if_statement | ThenAlwaysExecutes | misconception | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed | 0.54 |  |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -836,10 +836,10 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | held | 0.7 | 0.92 | 0.644 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
-| 1 | if_statement | mis:if_statement->CodeAfterIfSkipped | misconception | correct | 0.15 | 0.8 | 0.12 | [2] | so the println inside the if runs too, and then done is printed |
-| 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.3 | 0.7 | 0.21 | [1] | The program runs every line from top to bottom |
-| 1 | control_flow | mis:control_flow->CodeAfterIfSkipped | misconception | correct | 0.2 | 0.75 | 0.15 | [2] | so the println inside the if runs too, and then done is printed |
+| 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | held | 0.6 | 0.9 | 0.54 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
+| 1 | if_statement | mis:if_statement->CodeAfterIfSkipped | misconception | correct | 0.2 | 0.8 | 0.16 | [2] | so the println inside the if runs too, and then done is printed |
+| 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.45 | 0.6 | 0.27 | [1] | The program runs every line from top to bottom |
+| 1 | control_flow | mis:control_flow->CodeAfterIfSkipped | misconception | correct | 0.2 | 0.8 | 0.16 | [2] | so the println inside the if runs too, and then done is printed |
 | 1 | println | lvl:println@L3#0 | level | shown | 0.5 | 0.65 | 0.325 | [2] | so the println inside the if runs too, and then done is printed |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.3 | 0.6 | 0.18 | [2] | so the println inside the if runs too, and then done is printed |
 | 2 | if_statement | pre:control_flow->if_statement | prerequisite | broken | 0.65 | 0.95 | 0.6175 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
@@ -853,9 +853,9 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | held | 0.644 | [1, 2] |
+| 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | held | 0.54 | [1, 2] |
 | 1 | println | lvl:println@L3#0 | level | shown | 0.325 | [2] |
-| 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.21 | [1] |
+| 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.27 | [1] |
 | 2 | control_flow | pre:statement->control_flow | prerequisite | broken | 0.85 | [1, 2] |
 | 2 | if_statement | pre:control_flow->if_statement | prerequisite | broken | 0.6175 | [1, 2] |
 | 2 | if_statement | pre:boolean_expression->if_statement | prerequisite | broken | 0.3325 | [1, 2] |
@@ -870,23 +870,23 @@ start: BM25 of the answer against each tagged concept: if_statement 13.31 (hits 
 start: chosen if_statement, control_flow, println
 start concepts (3): if_statement, control_flow, println
 --- depth 1: current concepts ['if_statement', 'control_flow', 'println']
-  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->ThenAlwaysExecutes (0.70), mis:if_statement->BranchChosenByIntent (0.15), mis:if_statement->CodeAfterIfSkipped (0.15)
-    mis:if_statement->ThenAlwaysExecutes -> held (0.64) "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
-    mis:if_statement->BranchChosenByIntent -> not applied (0.00) ""
-    mis:if_statement->CodeAfterIfSkipped -> correct (0.12) "so the println inside the if runs too, and then done is printed"
+  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->ThenAlwaysExecutes (0.60), mis:if_statement->CodeAfterIfSkipped (0.20), mis:if_statement->ProgramLooksAhead (0.20)
+    mis:if_statement->ThenAlwaysExecutes -> held (0.54) "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
+    mis:if_statement->CodeAfterIfSkipped -> correct (0.16) "so the println inside the if runs too, and then done is printed"
+    mis:if_statement->ProgramLooksAhead -> not applied (0.00) ""
   if_statement (level ways): 19 candidates -> kept lvl:if_statement@L0#14 (0.60), lvl:if_statement@L2#0 (0.25), lvl:if_statement@L3#2 (0.15)
     lvl:if_statement@L0#14 -> not applied (0.00) ""
     lvl:if_statement@L2#0 -> not applied (0.00) ""
     lvl:if_statement@L3#2 -> not applied (0.00) ""
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseConditionRestartsProgram (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->CodeAfterIfSkipped (0.20)
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.45), mis:control_flow->FalseConditionRestartsProgram (0.35), mis:control_flow->CodeAfterIfSkipped (0.20)
+    mis:control_flow->StatementsRunInAnyOrder -> correct (0.27) "The program runs every line from top to bottom"
     mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
-    mis:control_flow->StatementsRunInAnyOrder -> correct (0.21) "The program runs every line from top to bottom"
-    mis:control_flow->CodeAfterIfSkipped -> correct (0.15) "so the println inside the if runs too, and then done is printed"
+    mis:control_flow->CodeAfterIfSkipped -> correct (0.16) "so the println inside the if runs too, and then done is printed"
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L3#1 (0.45), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L1#1 (0.25)
     lvl:control_flow@L3#1 -> not applied (0.00) ""
     lvl:control_flow@L2#0 -> not applied (0.00) ""
     lvl:control_flow@L1#1 -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
@@ -894,7 +894,7 @@ start concepts (3): if_statement, control_flow, println
     lvl:println@L3#0 -> shown (0.33) "so the println inside the if runs too, and then done is printed"
     lvl:println@L2#1 -> shown (0.18) "so the println inside the if runs too, and then done is printed"
     lvl:println@L2#0 -> not applied (0.00) ""
-  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.64], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21]
+  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.54], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.27]
   clause coverage: c1 <- mis:if_statement->ThenAlwaysExecutes; c2 <- mis:if_statement->ThenAlwaysExecutes
   not yet read: pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['if_statement', 'control_flow', 'println']
@@ -963,7 +963,7 @@ start concepts (3): if_statement, control_flow, println
    "misconception": "ThenAlwaysExecutes",
    "kind": "misconception",
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "score": 0.644
+   "score": 0.54
   }
  ],
  "error_evidence": [],
@@ -1037,11 +1037,12 @@ start concepts (3): if_statement, control_flow, println
     2
    ],
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "confidence": 0.92,
-   "prune_score": 0.7,
-   "score": 0.644,
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
    "logic": "The then branch always runs.",
-   "twin_logic": "The then branch runs only when the condition is true."
+   "twin_logic": "The then branch runs only when the condition is true.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1073,11 +1074,12 @@ start concepts (3): if_statement, control_flow, println
     1
    ],
    "quote": "The program runs every line from top to bottom",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -1151,7 +1153,8 @@ start concepts (3): if_statement, control_flow, println
    "prune_score": 0.7000000000000001,
    "score": 0.385,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1206,11 +1209,12 @@ start concepts (3): if_statement, control_flow, println
     2
    ],
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "confidence": 0.92,
-   "prune_score": 0.7,
-   "score": 0.644,
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
    "logic": "The then branch always runs.",
-   "twin_logic": "The then branch runs only when the condition is true."
+   "twin_logic": "The then branch runs only when the condition is true.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1224,10 +1228,11 @@ start concepts (3): if_statement, control_flow, println
    ],
    "quote": "so the println inside the if runs too, and then done is printed",
    "confidence": 0.8,
-   "prune_score": 0.15,
-   "score": 0.12,
+   "prune_score": 0.2,
+   "score": 0.16,
    "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+   "twin_logic": "After the if finishes, execution continues with the next statement either way.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1240,11 +1245,12 @@ start concepts (3): if_statement, control_flow, println
     1
    ],
    "quote": "The program runs every line from top to bottom",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1257,11 +1263,12 @@ start concepts (3): if_statement, control_flow, println
     2
    ],
    "quote": "so the println inside the if runs too, and then done is printed",
-   "confidence": 0.75,
+   "confidence": 0.8,
    "prune_score": 0.2,
-   "score": 0.15,
+   "score": 0.16,
    "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+   "twin_logic": "After the if finishes, execution continues with the next statement either way.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1391,7 +1398,8 @@ start concepts (3): if_statement, control_flow, println
    "prune_score": 0.7000000000000001,
    "score": 0.385,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1440,8 +1448,8 @@ start concepts (3): if_statement, control_flow, println
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 38,
+ "llm_calls": 5,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25

@@ -63,9 +63,9 @@
    "hits": [
     {
      "channel": "pattern",
-     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)\\s*[A-Za-z_0-9(!'\\\"]",
+     "name": "[A-Za-z_0-9)\\]]\\s*(?:[+\\-*/%]|[<>]=?|==|!=|&&|\\|\\|)(?=\\s*[A-Za-z_0-9(!'\\\"])",
      "decisive": false,
-     "match": "x > 5",
+     "match": "x >",
      "line": 2
     },
     {
@@ -908,7 +908,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -944,7 +944,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "EqualsComparesReferences",
-   "role": "primary",
+   "role": "context",
    "logic": ".equals() compares references, not contents",
    "twin_logic": "s.equals(t) checks whether the two Strings contain the same characters."
   },
@@ -1025,7 +1025,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "NoShortCircuit",
-   "role": "primary",
+   "role": "context",
    "logic": "logical AND/OR always evaluate both sides (Java short-circuits them)",
    "twin_logic": "In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
   },
@@ -1079,7 +1079,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "AssignmentNotExpression",
-   "role": "primary",
+   "role": "context",
    "logic": "An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed.",
    "twin_logic": "An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
   },
@@ -1115,7 +1115,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "TargetTyping",
-   "role": "primary",
+   "role": "context",
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints."
   },
@@ -1124,7 +1124,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "VariablesHoldExpressions",
-   "role": "primary",
+   "role": "context",
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
   },
@@ -1133,7 +1133,7 @@
    "type": "misconception",
    "source": "if_statement",
    "target": "AssignCompares",
-   "role": "primary",
+   "role": "context",
    "logic": "= compares two values instead of assigning",
    "twin_logic": "x = y copies the value of y into x; x == y is what compares them."
   },
@@ -1232,7 +1232,7 @@
    "type": "misconception",
    "source": "if_statement",
    "target": "LoopForOneTimeTest",
-   "role": "primary",
+   "role": "context",
    "logic": "Uses a loop where a condition needs to be tested only once.",
    "twin_logic": "A test made once is an if; a loop repeats."
   },
@@ -1304,7 +1304,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },

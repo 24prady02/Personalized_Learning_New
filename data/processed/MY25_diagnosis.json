@@ -22,7 +22,7 @@
    "misconception": "ThenAlwaysExecutes",
    "kind": "misconception",
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "score": 0.644
+   "score": 0.54
   }
  ],
  "error_evidence": [],
@@ -96,11 +96,12 @@
     2
    ],
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "confidence": 0.92,
-   "prune_score": 0.7,
-   "score": 0.644,
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
    "logic": "The then branch always runs.",
-   "twin_logic": "The then branch runs only when the condition is true."
+   "twin_logic": "The then branch runs only when the condition is true.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -132,11 +133,12 @@
     1
    ],
    "quote": "The program runs every line from top to bottom",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -210,7 +212,8 @@
    "prune_score": 0.7000000000000001,
    "score": 0.385,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -265,11 +268,12 @@
     2
    ],
    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
-   "confidence": 0.92,
-   "prune_score": 0.7,
-   "score": 0.644,
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
    "logic": "The then branch always runs.",
-   "twin_logic": "The then branch runs only when the condition is true."
+   "twin_logic": "The then branch runs only when the condition is true.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -283,10 +287,11 @@
    ],
    "quote": "so the println inside the if runs too, and then done is printed",
    "confidence": 0.8,
-   "prune_score": 0.15,
-   "score": 0.12,
+   "prune_score": 0.2,
+   "score": 0.16,
    "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+   "twin_logic": "After the if finishes, execution continues with the next statement either way.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -299,11 +304,12 @@
     1
    ],
    "quote": "The program runs every line from top to bottom",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -316,11 +322,12 @@
     2
    ],
    "quote": "so the println inside the if runs too, and then done is printed",
-   "confidence": 0.75,
+   "confidence": 0.8,
    "prune_score": 0.2,
-   "score": 0.15,
+   "score": 0.16,
    "logic": "When the then branch runs, the code after the if is skipped.",
-   "twin_logic": "After the if finishes, execution continues with the next statement either way."
+   "twin_logic": "After the if finishes, execution continues with the next statement either way.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -450,7 +457,8 @@
    "prune_score": 0.7000000000000001,
    "score": 0.385,
    "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom."
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -499,8 +507,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 38,
+ "llm_calls": 5,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25
