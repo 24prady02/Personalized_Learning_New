@@ -200,11 +200,51 @@
  ],
  "concept_edges": [
   {
+   "id": "pre:array_declaration->array_initializer",
+   "type": "prerequisite",
+   "source": "array_declaration",
+   "target": "array_initializer",
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:array_declaration->array_reference",
+   "type": "prerequisite",
+   "source": "array_declaration",
+   "target": "array_reference",
+   "logic": "Declaring an array variable creates only a variable that holds a reference to an array; the array itself is a separate object.",
+   "grounding": "spec_passage"
+  },
+  {
+   "id": "pre:array_initializer->indexing",
+   "type": "prerequisite",
+   "source": "array_initializer",
+   "target": "indexing",
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "grounding": "spec_passage"
+  },
+  {
+   "id": "pre:array_reference->array_aliasing",
+   "type": "prerequisite",
+   "source": "array_reference",
+   "target": "array_aliasing",
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "grounding": "book_passage"
+  },
+  {
    "id": "pre:array_reference->primitive_vs_reference",
    "type": "prerequisite",
    "source": "array_reference",
    "target": "primitive_vs_reference",
    "logic": "An array variable stores the memory address of the array, not its elements.",
+   "grounding": "book_passage"
+  },
+  {
+   "id": "pre:data_structure->array_declaration",
+   "type": "prerequisite",
+   "source": "data_structure",
+   "target": "array_declaration",
+   "logic": "An array is a data structure: one name for a sequence of values of the same type, organised by index.",
    "grounding": "book_passage"
   },
   {
@@ -708,7 +748,7 @@
    "type": "misconception",
    "source": "primitive_type",
    "target": "NewArrayHoldsGarbage",
-   "role": "primary",
+   "role": "context",
    "logic": "The slots of a new int[n] hold unpredictable values until assigned.",
    "twin_logic": "new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
   },
@@ -744,7 +784,7 @@
    "type": "misconception",
    "source": "primitive_vs_reference",
    "target": "VariablesHoldObjects",
-   "role": "primary",
+   "role": "context",
    "logic": "a reference variable holds the whole object, not a reference",
    "twin_logic": "A reference variable holds only a reference to the object, which is stored separately."
   },
@@ -753,7 +793,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -15012,23 +15052,15 @@
  ],
  "components": [
   [
-   "array_aliasing"
-  ],
-  [
-   "array_declaration"
-  ],
-  [
-   "array_initializer"
-  ],
-  [
+   "array_aliasing",
+   "array_declaration",
+   "array_initializer",
    "array_reference",
    "data_structure",
    "data_type",
+   "indexing",
    "primitive_type",
    "primitive_vs_reference"
-  ],
-  [
-   "indexing"
   ],
   [
    "println",
@@ -15045,15 +15077,15 @@
   "concepts": 14,
   "generic": 4,
   "from_hop": 0,
-  "concept_edges": 7,
+  "concept_edges": 12,
   "misconceptions": 38,
   "mis_edges": 43,
   "levels": 70,
   "level_edges": 70,
   "level_mis_links": 56,
-  "components": 7
+  "components": 3
  },
  "warnings": [
-  "concept nodes form 7 pieces (the KG has no edge between them): array_aliasing | array_declaration | array_initializer | array_reference,data_structure,data_type,primitive_type,primitive_vs_reference | indexing | println,statement,string_literal | string_concatenation,string_conversion"
+  "concept nodes form 3 pieces (the KG has no edge between them): array_aliasing,array_declaration,array_initializer,array_reference,data_structure,data_type,indexing,primitive_type,primitive_vs_reference | println,statement,string_literal | string_concatenation,string_conversion"
  ]
 }

@@ -37,13 +37,18 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | string_conversion | False | pattern | '" + b' | 4 |
 | string_literal | True | pattern | '" "' | 4 |
 
-G: 14 concept nodes (4 generic), 7 concept edges, 43 misconception / error edges, 38 misconception / error nodes, 70 level nodes, 56 level-misconception links, 7 connected piece(s).
-Note: concept nodes form 7 pieces (the KG has no edge between them): array_aliasing | array_declaration | array_initializer | array_reference,data_structure,data_type,primitive_type,primitive_vs_reference | indexing | println,statement,string_literal | string_concatenation,string_conversion
+G: 14 concept nodes (4 generic), 12 concept edges, 43 misconception / error edges, 38 misconception / error nodes, 70 level nodes, 56 level-misconception links, 3 connected piece(s).
+Note: concept nodes form 3 pieces (the KG has no edge between them): array_aliasing,array_declaration,array_initializer,array_reference,data_structure,data_type,indexing,primitive_type,primitive_vs_reference | println,statement,string_literal | string_concatenation,string_conversion
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
+| pre:array_declaration->array_initializer | prerequisite | int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_declaration->array_reference | prerequisite | Declaring an array variable creates only a variable that holds a reference to an array; the array itself is a separate object. |
+| pre:array_initializer->indexing | prerequisite | The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+| pre:array_reference->array_aliasing | prerequisite | Because an array variable holds a reference, b = a copies the reference, so a and b name the same array. |
 | pre:array_reference->primitive_vs_reference | prerequisite | An array variable stores the memory address of the array, not its elements. |
+| pre:data_structure->array_declaration | prerequisite | An array is a data structure: one name for a sequence of values of the same type, organised by index. |
 | pre:data_type->data_structure | prerequisite | A data structure organizes many values of a data type; the array holds a sequence of values of one type. |
 | pre:data_type->primitive_type | prerequisite | Java has eight primitive data types (boolean, char, byte, short, int, long, float, double); each, like any data type, is a set of values and a set of operations on those values. |
 | pre:primitive_type->primitive_vs_reference | prerequisite | A variable of a primitive type stores the value itself in its own memory. |
@@ -82,20 +87,20 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c3 | so b is a separate array |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 |
 
-start: BM25 of the answer against each tagged concept: array_aliasing 32.58 (hits 1), indexing 27.65 (hits 1), string_concatenation 22.00 (hits 1), println 15.38 (hits 1), array_declaration 13.84 (hits 1), array_initializer 12.24 (hits 1), primitive_vs_reference 8.93 (hits 1), string_conversion 4.73 (hits 1), data_structure 2.75 (hits 1), array_reference 1.85 (hits 1)
+start: BM25 of the answer against each tagged concept: array_aliasing 25.83 (hits 1), indexing 22.43 (hits 1), array_initializer 17.18 (hits 1), array_reference 16.57 (hits 1), array_declaration 15.58 (hits 1), string_concatenation 15.20 (hits 1), println 11.96 (hits 1), primitive_vs_reference 5.23 (hits 1), data_structure 2.15 (hits 1), string_conversion 1.91 (hits 1)
 
-start: chosen array_aliasing, indexing, string_concatenation
+start: chosen array_aliasing, indexing, array_initializer
 
-start concepts (3): array_aliasing, indexing, string_concatenation
+start concepts (3): array_aliasing, indexing, array_initializer
 
-Start concepts: array_aliasing, indexing, string_concatenation
+Start concepts: array_aliasing, indexing, array_initializer
 
 Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure03.png
 
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
-### Depth 1: current concepts 'array_aliasing', 'indexing', 'string_concatenation'
+### Depth 1: current concepts 'array_aliasing', 'indexing', 'array_initializer'
 
 #### array_aliasing, misconceptions: 3 edges offered
 Edges offered:
@@ -300,107 +305,99 @@ Parsed labels:
 | lvl:indexing@L1#0 | shown | 0.35 | 0.6 | 0.21 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 |
 | lvl:indexing@L2#1 | shown | 0.2 | 0.6 | 0.12 | c1, c4 | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
 
-#### string_concatenation, misconceptions: 3 edges offered
+#### array_initializer, misconceptions: 2 edges offered
 Edges offered:
 | edge |
 |---|
-| mis:string_concatenation->ArithmeticPlusPrecedes \| wrong rule: In "s" + a + b, the numbers a and b are added first and their sum is joined to s. \| right rule: Both uses of + have the same precedence and are evaluated left to right, so "s" + a + b joins a and then b as text; only "s" + (a + b) adds them first. |
-| mis:string_concatenation->StringPlusLeftToRight \| wrong rule: 2 + 3 + "bc" and "bc" + 2 + 3 give the same text. \| right rule: + is evaluated left to right: 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |
-| mis:string_concatenation->StringPlusStringifiesExpression \| wrong rule: In "s" + (a + b), the text a + b is joined to s instead of its value. \| right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s. |
+| mis:array_initializer->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
+| mis:array_initializer->ArrayInitializerContentsInBrackets \| wrong rule: Starting values go in square brackets, like int[] a = [v0, v1];. \| right rule: Starting values go in braces, like int[] a = {v0, v1};. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{mis:string_concatenation->ArithmeticPlusPrecedes (Score: 0.5)}
-{mis:string_concatenation->StringPlusLeftToRight (Score: 0.35)}
-{mis:string_concatenation->StringPlusStringifiesExpression (Score: 0.15)}
+mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
 ```
-Kept by pruning: mis:string_concatenation->ArithmeticPlusPrecedes (0.50), mis:string_concatenation->StringPlusLeftToRight (0.35), mis:string_concatenation->StringPlusStringifiesExpression (0.15)
+Kept by pruning: mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:string_concatenation->ArithmeticPlusPrecedes \| wrong rule: In "s" + a + b, the numbers a and b are added first and their sum is joined to s. \| right rule: Both uses of + have the same precedence and are evaluated left to right, so "s" + a + b joins a and then b as text; only "s" + (a + b) adds them first. |
-| mis:string_concatenation->StringPlusLeftToRight \| wrong rule: 2 + 3 + "bc" and "bc" + 2 + 3 give the same text. \| right rule: + is evaluated left to right: 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |
-| mis:string_concatenation->StringPlusStringifiesExpression \| wrong rule: In "s" + (a + b), the text a + b is joined to s instead of its value. \| right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s. |
+| mis:array_initializer->ArrayInitializerContentsInBrackets \| wrong rule: Starting values go in square brackets, like int[] a = [v0, v1];. \| right rule: Starting values go in braces, like int[] a = {v0, v1};. |
+| mis:array_initializer->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
 Model's reply:
 ```
-mis:string_concatenation->ArithmeticPlusPrecedes | not applied | clauses: none | confidence: 0.85
-mis:string_concatenation->StringPlusLeftToRight | not applied | clauses: none | confidence: 0.85
-mis:string_concatenation->StringPlusStringifiesExpression | not applied | clauses: none | confidence: 0.9
+mis:array_initializer->ArrayInitializerContentsInBrackets | not applied | clauses: none | confidence: 0.9
+mis:array_initializer->ArrayBracketCountIsLength | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:string_concatenation->ArithmeticPlusPrecedes | not applied |  |  | 0.0 |  |  |
-| mis:string_concatenation->StringPlusLeftToRight | not applied |  |  | 0.0 |  |  |
-| mis:string_concatenation->StringPlusStringifiesExpression | not applied |  |  | 0.0 |  |  |
+| mis:array_initializer->ArrayInitializerContentsInBrackets | not applied |  |  | 0.0 |  |  |
+| mis:array_initializer->ArrayBracketCountIsLength | not applied |  |  | 0.0 |  |  |
 
-#### string_concatenation, level ways: 16 edges offered
+#### array_initializer, level ways: 14 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:string_concatenation@L0#0 \| level L0 way everyday_reading: In arithmetic, + always means 'add', and 'plus' combines quantities, so novices expect "1" + 2 to be 3. In Java, + with a String operand joins text end to end, and a chain of + is processed left to right, one operator at a time. |
-| lvl:string_concatenation@L0#3 \| level L0 way inconsistent_trace: Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + "x" as "12x"). (here mixing in: "+ with a String turns the whole other side into a string first") |
-| lvl:string_concatenation@L1#0 \| level L1 way names_the_element: String concatenation: the + operator with a String operand, which joins two values end to end into a new String. |
-| lvl:string_concatenation@L1#1 \| level L1 way states_the_rule: If either operand of + is a String, the other is converted to a String, and the result is a new String made of the first operand's characters followed by the second's. |
-| lvl:string_concatenation@L2#0 \| level L2 way line_by_line_trace: A chain of + is evaluated left to right, after any parenthesized parts. At each + the current operand types decide: two numbers are added, otherwise the values are concatenated. |
-| lvl:string_concatenation@L2#1 \| level L2 way output_prediction: The result is a String: 2 + "bc" is "2bc", 2 + 3 + "bc" is "5bc", "bc" + 2 + 3 is "bc23", and "bc" + (2+3) is "bc5". |
-| lvl:string_concatenation@L2#2 \| level L2 way one_step_execution: Concatenation creates a new String and changes no operand. A variable changes only if the result is assigned, as in ruler = ruler + i + ruler;. |
-| lvl:string_concatenation@L3#0 \| level L3 way relation_to_neighbour: Concatenation always yields a String, even when one operand is a number, so its result cannot be used in arithmetic without parsing. |
-| lvl:string_concatenation@L3#1 \| level L3 way relation_to_neighbour: The non-String operand is converted to its printed form (int 99 to "99", double 1.0 to "1.0", char 'a' to "a") before joining. |
-| lvl:string_concatenation@L3#2 \| level L3 way relation_to_neighbour: + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123". |
-| lvl:string_concatenation@L3#3 \| level L3 way purpose_of_the_whole: Concatenation builds output lines and labels from computed values (a + " + " + b + " = " + c). Repeated s = s + piece makes s a gatherer of text. |
-| lvl:string_concatenation@L4#0 \| level L4 way predict_a_change: Parenthesizing numeric parts changes the result ("sum " + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs. |
-| lvl:string_concatenation@L4#1 \| level L4 way transfer_to_a_new_program: Use + concatenation for simple output and labels, putting parentheses around any arithmetic inside. Use printf when numbers need formatting, and parse Strings before using them as numbers. |
-| lvl:string_concatenation@L4#2 \| level L4 way diagnose_an_error: rule broken: Once a String appears in a + chain, every later + concatenates. Kind: silent logic error. Trigger class: "Sum: " + a + b with numbers a and b prints both digit strings side by side (e.g. Sum: 23). |
-| lvl:string_concatenation@L4#3 \| level L4 way diagnose_an_error: rule broken: char + char is numeric addition, not concatenation. Kind: silent logic error. Trigger class: Joining two chars with + when no String is involved ('b' + 'c' prints 197). |
-| lvl:string_concatenation@L4#4 \| level L4 way diagnose_an_error: rule broken: printf needs its values as separate arguments matching the format specifiers. Kind: run-time exception. Trigger class: Concatenating the value into the format (printf("inches = %d" + inch)): MissingFormatArgumentException. |
+| lvl:array_initializer@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths, braces {1, 2, 3} denote a set (unordered, no repeats) and brackets [1, 2, 3] a list, so novices write int[] a = [1, 2, 3] or expect {1, 1, 2} to have 2 elements. Java rule: braces enclose an ordered, comma-separated list whose count (repeats included) is the length. |
+| lvl:array_initializer@L0#2 \| level L0 way inconsistent_trace: Points to LT: an array of length k+1 is created, then v0..vk are stored at indices 0..k in order. Inconsistent application: the trace puts the first value at index 1 for one initializer but at index 0 for another, or counts the length differently. (here mixing in: "initializer values go in [] instead of {}") |
+| lvl:array_initializer@L1#0 \| level L1 way names_the_element: Identity: an array initializer is a brace-enclosed, comma-separated list of values that creates and fills an array in one step. |
+| lvl:array_initializer@L1#1 \| level L1 way states_the_rule: Declarative: 'T[] a = {v0, ..., vk};' declares, creates (no new needed) and initializes an array of length k+1. For 2-D arrays each row is its own brace list. The bare form is legal only in a declaration; elsewhere write new T[]{...}. |
+| lvl:array_initializer@L2#0 \| level L2 way line_by_line_trace: Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a. |
+| lvl:array_initializer@L2#1 \| level L2 way output_prediction: Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4. |
+| lvl:array_initializer@L2#2 \| level L2 way one_step_execution: State transition: one execution creates one array holding the listed values and sets the variable to its reference. |
+| lvl:array_initializer@L3#0 \| level L3 way relation_to_neighbour: An initializer implies array creation: it is shorthand for new T[k+1] followed by k+1 element assignments, so new is not written. |
+| lvl:array_initializer@L3#1 \| level L3 way purpose_of_the_whole: Plan/role: build small fixed tables of constants known when the program is written (suits, ranks, month names), usually used as fixed-value lookup tables. |
+| lvl:array_initializer@L4#0 \| level L4 way predict_a_change: Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value. |
+| lvl:array_initializer@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: use an initializer when all values are known at compile time and the array is small. When the values must be computed at run time, create the array with new and fill it in a loop. |
+| lvl:array_initializer@L4#2 \| level L4 way diagnose_an_error: rule broken: Initializer values are enclosed in braces. Kind: compile-time. Trigger class: brackets are used, as in int[] a = [1, 2, 3]; (illegal start of expression) |
+| lvl:array_initializer@L4#3 \| level L4 way diagnose_an_error: rule broken: The bare {...} form is allowed only in a declaration. Kind: compile-time. Trigger class: a = {1, 2, 3}; used as a later assignment (array constants can only be used in initializers) |
+| lvl:array_initializer@L4#4 \| level L4 way diagnose_an_error: rule broken: Each value must be assignable to the element type. Kind: compile-time. Trigger class: int[] a = {1, 2.5}; (incompatible types: possible lossy conversion from double to int) |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:string_concatenation@L2#1 (Score: 0.5)}
-{lvl:string_concatenation@L2#0 (Score: 0.3)}
-{lvl:string_concatenation@L3#1 (Score: 0.2)}
+{lvl:array_initializer@L2#1 (Score: 0.5)}
+{lvl:array_initializer@L2#2 (Score: 0.3)}
+{lvl:array_initializer@L2#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:string_concatenation@L2#1 (0.50), lvl:string_concatenation@L2#0 (0.30), lvl:string_concatenation@L3#1 (0.20)
+Kept by pruning: lvl:array_initializer@L2#1 (0.50), lvl:array_initializer@L2#2 (0.30), lvl:array_initializer@L2#0 (0.20)
 
-Label prompt for level way lvl:string_concatenation@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> The result is a String: 2 + "bc" is "2bc", 2 + 3 + "bc" is "5bc", "bc" + 2 + 3 is "bc23", and "bc" + (2+3) is "bc5".
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.75
-```
-
-Label prompt for level way lvl:string_concatenation@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> A chain of + is evaluated left to right, after any parenthesized parts. At each + the current operand types decide: two numbers are added, otherwise the values are concatenated.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.75
-```
-
-Label prompt for level way lvl:string_concatenation@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> The non-String operand is converted to its printed form (int 99 to "99", double 1.0 to "1.0", char 'a' to "a") before joining.
+Label prompt for level way lvl:array_initializer@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1
-Confidence: 0.55
+Clauses: 1, 4
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:array_initializer@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> State transition: one execution creates one array holding the listed values and sets the variable to its reference.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:array_initializer@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.93
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:string_concatenation@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_concatenation@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:string_concatenation@L3#1 | shown | 0.2 | 0.55 | 0.11 | c1 | It prints 1 9 |
+| lvl:array_initializer@L2#1 | shown | 0.5 | 0.6 | 0.3 | c1, c4 | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+| lvl:array_initializer@L2#2 | not applied |  |  | 0.0 |  |  |
+| lvl:array_initializer@L2#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -414,44 +411,99 @@ mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_alias
 | c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:string_concatenation->string_conversion
+**Graph check, not yet read (the walk may not stop while these remain):** pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_reference->array_aliasing
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure04.png
 
-### Depth 2: current concepts 'array_aliasing', 'string_concatenation'
+### Depth 2: current concepts 'array_aliasing', 'indexing', 'array_initializer'
 
-#### string_concatenation, concept edges: 1 edges offered
+#### array_aliasing, concept edges: 1 edges offered
 Edges offered:
 | edge |
 |---|
-| pre:string_concatenation->string_conversion \| rule: When one operand of + is a String, Java converts the other operand to a String before concatenating. |
+| pre:array_reference->array_aliasing \| rule: Because an array variable holds a reference, b = a copies the reference, so a and b name the same array. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:string_concatenation->string_conversion (Score: 1.0)}
+{pre:array_reference->array_aliasing (Score: 1.0)}
 ```
-Kept by pruning: pre:string_concatenation->string_conversion (1.00)
+Kept by pruning: pre:array_reference->array_aliasing (1.00)
 
-Label prompt for concept edge pre:string_concatenation->string_conversion (string_concatenation -> string_conversion, prerequisite):
-> When one operand of + is a String, Java converts the other operand to a String before concatenating.
+Label prompt for concept edge pre:array_reference->array_aliasing (array_reference -> array_aliasing, prerequisite):
+> Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.
+
+Model's reply:
+```
+Label: broken
+Clauses: 2, 3, 4
+Confidence: 0.95
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:array_reference->array_aliasing | broken | 1.0 | 0.95 | 0.95 | c2, c3, c4 | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+
+#### indexing, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:array_initializer->indexing (Score: 1.0)}
+```
+Kept by pruning: pre:array_initializer->indexing (1.00)
+
+Label prompt for concept edge pre:array_initializer->indexing (array_initializer -> indexing, prerequisite):
+> The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.
 
 Model's reply:
 ```
 Label: confirmed
-Clauses: 1
-Confidence: 0.6
+Clauses: 1, 4
+Confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:string_concatenation->string_conversion | confirmed | 1.0 | 0.6 | 0.6 | c1 | It prints 1 9 |
+| pre:array_initializer->indexing | confirmed | 1.0 | 0.75 | 0.75 | c1, c4 | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+
+#### array_initializer, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:array_declaration->array_initializer \| rule: int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:array_declaration->array_initializer (Score: 1.0)}
+```
+Kept by pruning: pre:array_declaration->array_initializer (1.00)
+
+Label prompt for concept edge pre:array_declaration->array_initializer (array_declaration -> array_initializer, prerequisite):
+> int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:array_declaration->array_initializer | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:string_concatenation->string_conversion [confirmed, tier 2, 0.60]
+pre:array_reference->array_aliasing [broken, tier 0, 0.95], pre:array_initializer->indexing [confirmed, tier 2, 0.75]
 
-reached across pre:string_concatenation->string_conversion, entered next: string_conversion
+reached across pre:array_reference->array_aliasing, entered next: array_reference
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -461,104 +513,105 @@ reached across pre:string_concatenation->string_conversion, entered next: string
 | c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of string_conversion
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_reference
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure05.png
 
-### Depth 3: current concepts 'string_conversion', 'string_concatenation'
+### Depth 3: current concepts 'array_reference', 'array_aliasing', 'array_initializer', 'indexing'
 
-#### string_conversion, misconceptions: 1 edges offered
+#### array_reference, level ways: 12 edges offered
 Edges offered:
 | edge |
 |---|
-| mis:string_conversion->StringPlusLeftToRight \| wrong rule: 2 + 3 + "bc" and "bc" + 2 + 3 give the same text. \| right rule: + is evaluated left to right: 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |
+| lvl:array_reference@L0#0 \| level L0 way everyday_reading: Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere. |
+| lvl:array_reference@L1#0 \| level L1 way names_the_element: Identity: an array reference, the value of an array variable; it is the memory address of the array, called a pointer. |
+| lvl:array_reference@L1#1 \| level L1 way states_the_rule: Declarative: a variable of array type holds a reference to an array object; operations on the name itself (assignment, ==, printing) act on that address. |
+| lvl:array_reference@L2#0 \| level L2 way line_by_line_trace: Sequencing: for a[i], the address stored in a is read, the index i is added (scaled by the element size), and the memory at the resulting address is accessed: two elementary operations. |
+| lvl:array_reference@L2#1 \| level L2 way output_prediction: Result: the value of a is a reference (printed as hexadecimal). With the array at locations 523..530, a[4] is found at location 523 + 4 = 527. |
+| lvl:array_reference@L2#2 \| level L2 way one_step_execution: State transition: assigning a reference (a = b, or a = new ...) changes only which array the variable points to; the arrays themselves are unchanged. |
+| lvl:array_reference@L3#0 \| level L3 way relation_to_neighbour: new reserves the memory and yields the array's address, which the array variable then stores. |
+| lvl:array_reference@L3#1 \| level L3 way relation_to_neighbour: An array variable stores the memory address of the array, not its elements. |
+| lvl:array_reference@L3#2 \| level L3 way purpose_of_the_whole: Plan/role: the model that explains constant-time indexing, aliasing, reference equality and printing of arrays. |
+| lvl:array_reference@L4#0 \| level L4 way predict_a_change: Conservation: copying a reference keeps one shared array (changes through either name are seen by both); assigning a new reference breaks the link without changing either array. |
+| lvl:array_reference@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: reason in terms of references whenever arrays are assigned, compared, printed or passed to methods. Reason in terms of elements when indexing. |
+| lvl:array_reference@L4#2 \| level L4 way diagnose_an_error: rule broken: A reference must point to an array before it is indexed. Kind: run-time exception. Trigger class: an array variable holding null (e.g. an element of a String[][] row not yet created, or a field never assigned) is indexed (NullPointerException) |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{mis:string_conversion->StringPlusLeftToRight (Score: 1.0)}
+{lvl:array_reference@L4#0 (Score: 0.5)}
+{lvl:array_reference@L0#0 (Score: 0.3)}
+{lvl:array_reference@L2#2 (Score: 0.2)}
 ```
-Kept by pruning: mis:string_conversion->StringPlusLeftToRight (1.00)
+Kept by pruning: lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:string_conversion->StringPlusLeftToRight \| wrong rule: 2 + 3 + "bc" and "bc" + 2 + 3 give the same text. \| right rule: + is evaluated left to right: 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |
-Model's reply:
-```
-mis:string_conversion->StringPlusLeftToRight | not applied | clauses: none | confidence: 0.85
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:string_conversion->StringPlusLeftToRight | not applied |  |  | 0.0 |  |  |
-
-#### string_conversion, level ways: 13 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:string_conversion@L0#0 \| level L0 way everyday_reading: Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + "bc" and "bc" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |
-| lvl:string_conversion@L0#2 \| level L0 way inconsistent_trace: Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: "2 + 3 + "bc" and "bc" + 2 + 3 give the same text") |
-| lvl:string_conversion@L1#0 \| level L1 way names_the_element: String conversion is the automatic conversion of a non-String operand of + into its String form when the other operand is a String (also done for print/println arguments). |
-| lvl:string_conversion@L1#1 \| level L1 way states_the_rule: When either operand of + is a String, the other operand is converted to a String and the result is the characters of the first followed by those of the second; System.out.print and println also convert any argument to a String. |
-| lvl:string_conversion@L2#0 \| level L2 way line_by_line_trace: Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first. |
-| lvl:string_conversion@L2#1 \| level L2 way output_prediction: A String: 2 + "bc" is "2bc", 2 + 3 + "bc" is "5bc", "bc" + (2+3) is "bc5", "bc" + 2 + 3 is "bc23", "1234" + 99 is "123499". |
-| lvl:string_conversion@L2#2 \| level L2 way one_step_execution: Concatenation creates a new String and changes no variable; state changes only by assignment, e.g. String c = a + b; with a = "1234" and int b = 99 gives c the value "123499". |
-| lvl:string_conversion@L3#0 \| level L3 way relation_to_neighbour: Conversion happens first, then concatenation: the non-String operand is turned into its characters before the two Strings are joined. |
-| lvl:string_conversion@L3#1 \| level L3 way purpose_of_the_whole: Used to build output messages and labels from computed values, e.g. System.out.println(a + " + " + b + " = " + c);. |
-| lvl:string_conversion@L4#0 \| level L4 way predict_a_change: Adding parentheses around the numeric part changes "bc23" into "bc5"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition. |
-| lvl:string_conversion@L4#1 \| level L4 way transfer_to_a_new_program: Use string conversion with + to produce output and labels; do not use it to do arithmetic on numeric text (parse first), and parenthesize numeric parts that must be added before concatenation. |
-| lvl:string_conversion@L4#2 \| level L4 way diagnose_an_error: rule broken: + is left-associative, so terms after a String are concatenated, not added. Kind: silent logic error. Trigger class: A numeric sum written after a String without parentheses, e.g. "Sum: " + a + b printing "Sum: 34" for a = 3, b = 4. |
-| lvl:string_conversion@L4#3 \| level L4 way diagnose_an_error: rule broken: Only + converts to String; other arithmetic operators are not defined on Strings. Kind: compile-time. Trigger class: Using -, *, / with a String operand, e.g. "Hello" - 1 or "12" * 2. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:string_conversion@L2#1 (Score: 0.5)}
-{lvl:string_conversion@L3#1 (Score: 0.3)}
-{lvl:string_conversion@L2#0 (Score: 0.2)}
-```
-Kept by pruning: lvl:string_conversion@L2#1 (0.50), lvl:string_conversion@L3#1 (0.30), lvl:string_conversion@L2#0 (0.20)
-
-Label prompt for level way lvl:string_conversion@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> A String: 2 + "bc" is "2bc", 2 + 3 + "bc" is "5bc", "bc" + (2+3) is "bc5", "bc" + 2 + 3 is "bc23", "1234" + 99 is "123499".
+Label prompt for level way lvl:array_reference@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+> Conservation: copying a reference keeps one shared array (changes through either name are seen by both); assigning a new reference breaks the link without changing either array.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.97
+Confidence: 0.95
 ```
 
-Label prompt for level way lvl:string_conversion@L3#1 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Used to build output messages and labels from computed values, e.g. System.out.println(a + " + " + b + " = " + c);.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.75
-```
-
-Label prompt for level way lvl:string_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.
+Label prompt for level way lvl:array_reference@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1
-Confidence: 0.55
+Clauses: 2, 3, 4
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:array_reference@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> State transition: assigning a reference (a = b, or a = new ...) changes only which array the variable points to; the arrays themselves are unchanged.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:string_conversion@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_conversion@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_conversion@L2#0 | shown | 0.2 | 0.55 | 0.11 | c1 | It prints 1 9 |
+| lvl:array_reference@L4#0 | not applied |  |  | 0.0 |  |  |
+| lvl:array_reference@L0#0 | shown | 0.3 | 0.8 | 0.24 | c2, c3, c4 | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+| lvl:array_reference@L2#2 | not applied |  |  | 0.0 |  |  |
+
+#### array_initializer, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:array_declaration->array_initializer \| rule: int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:array_declaration->array_initializer (Score: 1.0)}
+```
+Kept by pruning: pre:array_declaration->array_initializer (1.00)
+
+Label prompt for concept edge pre:array_declaration->array_initializer (array_declaration -> array_initializer, prerequisite):
+> int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:array_declaration->array_initializer | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
+lvl:array_reference@L0#0 [shown, tier 2, 0.24]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -568,16 +621,18 @@ lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
 | c3 | so b is a separate array | mis:array_aliasing->AssignmentCopiesObject |
 | c4 | Changing b[0] to 9 only changes b, and a[0] is still 1 | mis:array_aliasing->AssignmentCopiesObject |
 
+**Graph check, not yet read (the walk may not stop while these remain):** pre:array_declaration->array_reference, pre:array_reference->primitive_vs_reference
+
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY03_figure06.png
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primitive_vs_reference': ['array_reference', 'primitive_type'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+Root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:array_reference->array_aliasing), prerequisites {'array_initializer': ['array_declaration'], 'array_reference': ['array_declaration'], 'indexing': ['array_initializer'], 'array_aliasing': ['array_reference'], 'primitive_vs_reference': ['array_reference', 'primitive_type'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
 - array_aliasing: L0 via misconception "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
+- array_initializer: L2 via output_prediction "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
+- array_reference: L0 via everyday_reading "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
 - indexing: L2 via one_step_execution "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
-- string_concatenation: L3 via relation_to_neighbour "It prints 1 9"
-- string_conversion: L2 via line_by_line_trace "It prints 1 9"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 9, 'label': 17}, fresh model calls 0, cache hits 26
+**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 19}, fresh model calls 0, cache hits 30
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -585,7 +640,9 @@ Root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primi
 | array_aliasing | AssignmentCopiesObject | misconception | It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 | 0.97 |  |
 
 ### Broken concept edges
-(none)
+| edge | quote | score | consequence_of |
+|---|---|---|---|
+| pre:array_reference->array_aliasing | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 | 0.95 | mis:array_aliasing->AssignmentCopiesObject |
 
 ### Root cause: array_aliasing / AssignmentCopiesObject
 
@@ -593,9 +650,9 @@ Root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primi
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | array_aliasing | L0 | misconception | AssignmentCopiesObject | level_mis_links | It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 | wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]. |  |  |
+| array_initializer | L2 | output_prediction |  | level_way | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |  |  |  |
+| array_reference | L0 | everyday_reading |  | level_way | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |  |  |  |
 | indexing | L2 | one_step_execution |  | level_way | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |  | L2 output_prediction, L1 names_the_element |  |
-| string_concatenation | L3 | relation_to_neighbour |  | level_way | It prints 1 9 |  |  |  |
-| string_conversion | L2 | line_by_line_trace |  | level_way | It prints 1 9 |  |  |  |
 
 ### Overall level: L0
 
@@ -619,9 +676,10 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | indexing | lvl:indexing@L2#2 | level | shown | 0.45 | 0.6 | 0.27 | [1, 4] | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
 | 1 | indexing | lvl:indexing@L1#0 | level | shown | 0.35 | 0.6 | 0.21 | [4] | Changing b[0] to 9 only changes b, and a[0] is still 1 |
 | 1 | indexing | lvl:indexing@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1, 4] | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
-| 1 | string_concatenation | lvl:string_concatenation@L3#1 | level | shown | 0.2 | 0.55 | 0.11 | [1] | It prints 1 9 |
-| 2 | string_concatenation | pre:string_concatenation->string_conversion | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [1] | It prints 1 9 |
-| 3 | string_conversion | lvl:string_conversion@L2#0 | level | shown | 0.2 | 0.55 | 0.11 | [1] | It prints 1 9 |
+| 1 | array_initializer | lvl:array_initializer@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1, 4] | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+| 2 | array_aliasing | pre:array_reference->array_aliasing | prerequisite | broken | 1.0 | 0.95 | 0.95 | [2, 3, 4] | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+| 2 | indexing | pre:array_initializer->indexing | prerequisite | confirmed | 1.0 | 0.75 | 0.75 | [1, 4] | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |
+| 3 | array_reference | lvl:array_reference@L0#0 | level | shown | 0.3 | 0.8 | 0.24 | [2, 3, 4] | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -629,16 +687,17 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | array_aliasing | mis:array_aliasing->AssignmentCopiesObject | misconception | held | 0.97 | [1, 2, 3, 4] |
 | 1 | array_aliasing | lvl:array_aliasing@L0#0 | level | shown | 0.45 | [1, 2, 3, 4] |
 | 1 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | correct | 0.3 | [1, 4] |
-| 2 | string_concatenation | pre:string_concatenation->string_conversion | prerequisite | confirmed | 0.6 | [1] |
-| 3 | string_conversion | lvl:string_conversion@L2#0 | level | shown | 0.11 | [1] |
+| 2 | array_aliasing | pre:array_reference->array_aliasing | prerequisite | broken | 0.95 | [2, 3, 4] |
+| 2 | indexing | pre:array_initializer->indexing | prerequisite | confirmed | 0.75 | [1, 4] |
+| 3 | array_reference | lvl:array_reference@L0#0 | level | shown | 0.24 | [2, 3, 4] |
 
 ## 7. Raw traversal log
 ```
 clauses: It prints 1 9 | The line b = a makes b a copy of a | so b is a separate array | Changing b[0] to 9 only changes b, and a[0] is still 1
-start: BM25 of the answer against each tagged concept: array_aliasing 32.58 (hits 1), indexing 27.65 (hits 1), string_concatenation 22.00 (hits 1), println 15.38 (hits 1), array_declaration 13.84 (hits 1), array_initializer 12.24 (hits 1), primitive_vs_reference 8.93 (hits 1), string_conversion 4.73 (hits 1), data_structure 2.75 (hits 1), array_reference 1.85 (hits 1)
-start: chosen array_aliasing, indexing, string_concatenation
-start concepts (3): array_aliasing, indexing, string_concatenation
---- depth 1: current concepts ['array_aliasing', 'indexing', 'string_concatenation']
+start: BM25 of the answer against each tagged concept: array_aliasing 25.83 (hits 1), indexing 22.43 (hits 1), array_initializer 17.18 (hits 1), array_reference 16.57 (hits 1), array_declaration 15.58 (hits 1), string_concatenation 15.20 (hits 1), println 11.96 (hits 1), primitive_vs_reference 5.23 (hits 1), data_structure 2.15 (hits 1), string_conversion 1.91 (hits 1)
+start: chosen array_aliasing, indexing, array_initializer
+start concepts (3): array_aliasing, indexing, array_initializer
+--- depth 1: current concepts ['array_aliasing', 'indexing', 'array_initializer']
   array_aliasing (misconceptions): 3 candidates -> kept mis:array_aliasing->AssignmentCopiesObject (1.00)
     mis:array_aliasing->AssignmentCopiesObject -> held (0.97) "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
   array_aliasing (level ways): 15 candidates -> kept lvl:array_aliasing@L0#0 (0.50), lvl:array_aliasing@L4#2 (0.30), lvl:array_aliasing@L2#2 (0.20)
@@ -653,38 +712,42 @@ start concepts (3): array_aliasing, indexing, string_concatenation
     lvl:indexing@L2#2 -> shown (0.27) "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
     lvl:indexing@L1#0 -> shown (0.21) "Changing b[0] to 9 only changes b, and a[0] is still 1"
     lvl:indexing@L2#1 -> shown (0.12) "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
-  string_concatenation (misconceptions): 3 candidates -> kept mis:string_concatenation->ArithmeticPlusPrecedes (0.50), mis:string_concatenation->StringPlusLeftToRight (0.35), mis:string_concatenation->StringPlusStringifiesExpression (0.15)
-    mis:string_concatenation->ArithmeticPlusPrecedes -> not applied (0.00) ""
-    mis:string_concatenation->StringPlusLeftToRight -> not applied (0.00) ""
-    mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
-  string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#1 (0.50), lvl:string_concatenation@L2#0 (0.30), lvl:string_concatenation@L3#1 (0.20)
-    lvl:string_concatenation@L2#1 -> not applied (0.00) ""
-    lvl:string_concatenation@L2#0 -> not applied (0.00) ""
-    lvl:string_concatenation@L3#1 -> shown (0.11) "It prints 1 9"
+  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
+    mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
+    mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
+  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L2#1 (0.50), lvl:array_initializer@L2#2 (0.30), lvl:array_initializer@L2#0 (0.20)
+    lvl:array_initializer@L2#1 -> shown (0.30) "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
+    lvl:array_initializer@L2#2 -> not applied (0.00) ""
+    lvl:array_initializer@L2#0 -> not applied (0.00) ""
   kept: mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_aliasing@L0#0 [shown, tier 2, 0.45], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.30]
   clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
-  not yet read: pre:string_concatenation->string_conversion
---- depth 2: current concepts ['array_aliasing', 'string_concatenation']
-  string_concatenation (concept edges): 1 candidates -> kept pre:string_concatenation->string_conversion (1.00)
-    pre:string_concatenation->string_conversion -> confirmed (0.60) "It prints 1 9"
-  kept: pre:string_concatenation->string_conversion [confirmed, tier 2, 0.60]
-  reached across pre:string_concatenation->string_conversion, entered next: string_conversion
+  not yet read: pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_reference->array_aliasing
+--- depth 2: current concepts ['array_aliasing', 'indexing', 'array_initializer']
+  array_aliasing (concept edges): 1 candidates -> kept pre:array_reference->array_aliasing (1.00)
+    pre:array_reference->array_aliasing -> broken (0.95) "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
+  indexing (concept edges): 1 candidates -> kept pre:array_initializer->indexing (1.00)
+    pre:array_initializer->indexing -> confirmed (0.75) "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: pre:array_reference->array_aliasing [broken, tier 0, 0.95], pre:array_initializer->indexing [confirmed, tier 2, 0.75]
+  reached across pre:array_reference->array_aliasing, entered next: array_reference
   clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
-  not yet read: own edges of string_conversion
---- depth 3: current concepts ['string_conversion', 'string_concatenation']
-  string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
-    mis:string_conversion->StringPlusLeftToRight -> not applied (0.00) ""
-  string_conversion (level ways): 13 candidates -> kept lvl:string_conversion@L2#1 (0.50), lvl:string_conversion@L3#1 (0.30), lvl:string_conversion@L2#0 (0.20)
-    lvl:string_conversion@L2#1 -> not applied (0.00) ""
-    lvl:string_conversion@L3#1 -> not applied (0.00) ""
-    lvl:string_conversion@L2#0 -> shown (0.11) "It prints 1 9"
-  kept: lvl:string_conversion@L2#0 [shown, tier 2, 0.11]
+  not yet read: own edges of array_reference
+--- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
+  array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0 -> not applied (0.00) ""
+    lvl:array_reference@L0#0 -> shown (0.24) "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
+    lvl:array_reference@L2#2 -> not applied (0.00) ""
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: lvl:array_reference@L0#0 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject; c4 <- mis:array_aliasing->AssignmentCopiesObject
-  root-cause walk: held on ['array_aliasing'], broken at [], prerequisites {'primitive_vs_reference': ['array_reference', 'primitive_type'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  not yet read: pre:array_declaration->array_reference, pre:array_reference->primitive_vs_reference
+  root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:array_reference->array_aliasing), prerequisites {'array_initializer': ['array_declaration'], 'array_reference': ['array_declaration'], 'indexing': ['array_initializer'], 'array_aliasing': ['array_reference'], 'primitive_vs_reference': ['array_reference', 'primitive_type'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
   level array_aliasing: L0 via misconception "It prints 1 9; The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
+  level array_initializer: L2 via output_prediction "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
+  level array_reference: L0 via everyday_reading "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
   level indexing: L2 via one_step_execution "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1"
-  level string_concatenation: L3 via relation_to_neighbour "It prints 1 9"
-  level string_conversion: L2 via line_by_line_trace "It prints 1 9"
 ```
 
 ## 8. Full diagnosis JSON
@@ -707,7 +770,7 @@ start concepts (3): array_aliasing, indexing, string_concatenation
  "start_concepts": [
   "array_aliasing",
   "indexing",
-  "string_concatenation"
+  "array_initializer"
  ],
  "held_misconceptions": [
   {
@@ -720,7 +783,14 @@ start concepts (3): array_aliasing, indexing, string_concatenation
  ],
  "error_evidence": [],
  "shadowed": [],
- "broken_edges": [],
+ "broken_edges": [
+  {
+   "edge": "pre:array_reference->array_aliasing",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "score": 0.95,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  }
+ ],
  "root_cause": {
   "concept": "array_aliasing",
   "misconception": "AssignmentCopiesObject"
@@ -735,6 +805,22 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "rule": "wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
    "source": "level_mis_links"
   },
+  "array_initializer": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "edge": "lvl:array_initializer@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "array_reference": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "edge": "lvl:array_reference@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
   "indexing": {
    "level": "L2",
    "way": "one_step_execution",
@@ -745,22 +831,6 @@ start concepts (3): array_aliasing, indexing, string_concatenation
     "L2 output_prediction",
     "L1 names_the_element"
    ]
-  },
-  "string_concatenation": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints 1 9",
-   "edge": "lvl:string_concatenation@L3#1",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "string_conversion": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "It prints 1 9",
-   "edge": "lvl:string_conversion@L2#0",
-   "source": "level_way",
-   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -783,7 +853,8 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "assigning a reference copies the object",
-   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -823,43 +894,67 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "prune_score": 0.4,
    "score": 0.3,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 2,
-   "source": "string_concatenation",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_conversion",
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.6,
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.75,
    "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "score": 0.75,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
    "depth": 3,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L2#0",
-   "target": "string_conversion@L2",
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2,
+    3,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "evidence": [
@@ -881,7 +976,8 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "assigning a reference copies the object",
-   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -921,7 +1017,8 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "prune_score": 0.4,
    "score": 0.3,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -938,7 +1035,8 @@ start concepts (3): array_aliasing, indexing, string_concatenation
    "prune_score": 0.35,
    "score": 0.1925,
    "logic": "X[i] names the whole array, not one element.",
-   "twin_logic": "The array is a; a[i] is the single element at index i."
+   "twin_logic": "The array is a; a[i] is the single element at index i.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1001,58 +1099,82 @@ start concepts (3): array_aliasing, indexing, string_concatenation
   },
   {
    "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L3#1",
-   "target": "string_concatenation@L3",
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "The non-String operand is converted to its printed form (int 99 to \"99\", double 1.0 to \"1.0\", char 'a' to \"a\") before joining.",
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 2,
-   "source": "string_concatenation",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_conversion",
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.6,
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.75,
    "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "score": 0.75,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
    "depth": 3,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L2#0",
-   "target": "string_conversion@L2",
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2,
+    3,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "clause_coverage": {
@@ -1062,13 +1184,13 @@ start concepts (3): array_aliasing, indexing, string_concatenation
   "Changing b[0] to 9 only changes b, and a[0] is still 1": "mis:array_aliasing->AssignmentCopiesObject"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 26,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 9,
-  "label": 17
+  "prune": 11,
+  "label": 19
  }
 }
 ```

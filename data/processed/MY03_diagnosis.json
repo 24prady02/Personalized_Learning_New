@@ -16,7 +16,7 @@
  "start_concepts": [
   "array_aliasing",
   "indexing",
-  "string_concatenation"
+  "array_initializer"
  ],
  "held_misconceptions": [
   {
@@ -29,7 +29,14 @@
  ],
  "error_evidence": [],
  "shadowed": [],
- "broken_edges": [],
+ "broken_edges": [
+  {
+   "edge": "pre:array_reference->array_aliasing",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "score": 0.95,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  }
+ ],
  "root_cause": {
   "concept": "array_aliasing",
   "misconception": "AssignmentCopiesObject"
@@ -44,6 +51,22 @@
    "rule": "wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
    "source": "level_mis_links"
   },
+  "array_initializer": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "edge": "lvl:array_initializer@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "array_reference": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "edge": "lvl:array_reference@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
   "indexing": {
    "level": "L2",
    "way": "one_step_execution",
@@ -54,22 +77,6 @@
     "L2 output_prediction",
     "L1 names_the_element"
    ]
-  },
-  "string_concatenation": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints 1 9",
-   "edge": "lvl:string_concatenation@L3#1",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "string_conversion": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "It prints 1 9",
-   "edge": "lvl:string_conversion@L2#0",
-   "source": "level_way",
-   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -92,7 +99,8 @@
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "assigning a reference copies the object",
-   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -132,43 +140,67 @@
    "prune_score": 0.4,
    "score": 0.3,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 2,
-   "source": "string_concatenation",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_conversion",
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.6,
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.75,
    "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "score": 0.75,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
    "depth": 3,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L2#0",
-   "target": "string_conversion@L2",
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2,
+    3,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "evidence": [
@@ -190,7 +222,8 @@
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "assigning a reference copies the object",
-   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -230,7 +263,8 @@
    "prune_score": 0.4,
    "score": 0.3,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -247,7 +281,8 @@
    "prune_score": 0.35,
    "score": 0.1925,
    "logic": "X[i] names the whole array, not one element.",
-   "twin_logic": "The array is a; a[i] is the single element at index i."
+   "twin_logic": "The array is a; a[i] is the single element at index i.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -310,58 +345,82 @@
   },
   {
    "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L3#1",
-   "target": "string_concatenation@L3",
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "The non-String operand is converted to its printed form (int 99 to \"99\", double 1.0 to \"1.0\", char 'a' to \"a\") before joining.",
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 2,
-   "source": "string_concatenation",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_conversion",
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.6,
+   "quote": "It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.75,
    "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "score": 0.75,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
    "depth": 3,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L2#0",
-   "target": "string_conversion@L2",
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2,
+    3,
+    4
    ],
-   "quote": "It prints 1 9",
-   "confidence": 0.55,
-   "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.",
+   "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "clause_coverage": {
@@ -371,12 +430,12 @@
   "Changing b[0] to 9 only changes b, and a[0] is still 1": "mis:array_aliasing->AssignmentCopiesObject"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 26,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 9,
-  "label": 17
+  "prune": 11,
+  "label": 19
  }
 }
