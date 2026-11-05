@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 9;\nSystem.out.println(a[0]);\n\nQuestion: What is printed? Explain what int[] b = a; does.\n\nStudent's answer, split into clauses:\nc1: 1\nc2: b is a copy of a\nc3: so changing b[0] doesnt touch a\n\nConcept: array_aliasing\nWay: everyday reading\nWhat an answer that shows this way does: Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: shown\nClauses: 1, 2, 3\nConfidence: 0.93"
+}

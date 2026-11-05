@@ -1,0 +1,55 @@
+clauses: 1 | b is a copy of a | so changing b[0] doesnt touch a
+start: BM25 of the answer against each tagged concept: array_aliasing 9.87 (hits 1), indexing 8.26 (hits 1), array_initializer 6.59 (hits 1), array_reference 6.40 (hits 1), array_declaration 4.44 (hits 1), primitive_vs_reference 4.08 (hits 1), println 2.01 (hits 1), data_structure 1.05 (hits 1)
+start: chosen array_aliasing, indexing, array_initializer
+start concepts (3): array_aliasing, indexing, array_initializer
+--- depth 1: current concepts ['array_aliasing', 'indexing', 'array_initializer']
+  array_aliasing (misconceptions): 3 candidates -> kept mis:array_aliasing->AssignmentCopiesObject (1.00)
+    mis:array_aliasing->AssignmentCopiesObject -> held (0.97) "1; b is a copy of a; so changing b[0] doesnt touch a"
+  array_aliasing (level ways): 15 candidates -> kept lvl:array_aliasing@L0#0 (0.60), lvl:array_aliasing@L4#2 (0.25), lvl:array_aliasing@L3#2 (0.15)
+    lvl:array_aliasing@L0#0 -> shown (0.56) "1; b is a copy of a; so changing b[0] doesnt touch a"
+    lvl:array_aliasing@L4#2 -> not applied (0.00) ""
+    lvl:array_aliasing@L3#2 -> not applied (0.00) ""
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.40), mis:indexing->ElementNameIsWholeArray (0.30), mis:indexing->ArrayElementNotVariable (0.30)
+    mis:indexing->ArrayIndexStartsAtOne -> correct (0.24) "1"
+    mis:indexing->ElementNameIsWholeArray -> not applied (0.00) ""
+    mis:indexing->ArrayElementNotVariable -> not applied (0.00) ""
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L2#2 (0.50), lvl:indexing@L2#1 (0.30), lvl:indexing@L1#0 (0.20)
+    lvl:indexing@L2#2 -> not applied (0.00) ""
+    lvl:indexing@L2#1 -> shown (0.18) "1"
+    lvl:indexing@L1#0 -> shown (0.12) "so changing b[0] doesnt touch a"
+  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayInitializerContentsInBrackets (0.60), mis:array_initializer->ArrayBracketCountIsLength (0.40)
+    mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
+    mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
+  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L2#1 (0.50), lvl:array_initializer@L2#2 (0.30), lvl:array_initializer@L2#0 (0.20)
+    lvl:array_initializer@L2#1 -> shown (0.30) "1"
+    lvl:array_initializer@L2#2 -> not applied (0.00) ""
+    lvl:array_initializer@L2#0 -> not applied (0.00) ""
+  kept: mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_aliasing@L0#0 [shown, tier 2, 0.56], lvl:array_initializer@L2#1 [shown, tier 2, 0.30]
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_reference->array_aliasing
+--- depth 2: current concepts ['array_aliasing', 'indexing', 'array_initializer']
+  array_aliasing (concept edges): 1 candidates -> kept pre:array_reference->array_aliasing (1.00)
+    pre:array_reference->array_aliasing -> broken (0.97) "1; b is a copy of a; so changing b[0] doesnt touch a"
+  indexing (concept edges): 1 candidates -> kept pre:array_initializer->indexing (1.00)
+    pre:array_initializer->indexing -> confirmed (0.70) "1"
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: pre:array_reference->array_aliasing [broken, tier 0, 0.97], pre:array_initializer->indexing [confirmed, tier 2, 0.70]
+  reached across pre:array_reference->array_aliasing, entered next: array_reference
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: own edges of array_reference
+--- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
+  array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0 -> not applied (0.00) ""
+    lvl:array_reference@L0#0 -> shown (0.27) "1; b is a copy of a; so changing b[0] doesnt touch a"
+    lvl:array_reference@L2#2 -> not applied (0.00) ""
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: lvl:array_reference@L0#0 [shown, tier 2, 0.27]
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: pre:array_declaration->array_reference, pre:array_reference->primitive_vs_reference
+  root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:array_reference->array_aliasing), prerequisites {'array_initializer': ['array_declaration'], 'array_reference': ['array_declaration'], 'indexing': ['array_initializer'], 'array_aliasing': ['array_reference'], 'primitive_vs_reference': ['array_reference', 'primitive_type'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement']}
+  level array_aliasing: L0 via misconception "1; b is a copy of a; so changing b[0] doesnt touch a"
+  level array_initializer: L2 via output_prediction "1"
+  level array_reference: L0 via everyday_reading "1; b is a copy of a; so changing b[0] doesnt touch a"
+  level indexing: L2 via output_prediction "1"

@@ -1,0 +1,391 @@
+{
+ "scenario": "MY37",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "1",
+  "b is a copy of a",
+  "so changing b[0] doesnt touch a"
+ ],
+ "start_concepts": [
+  "array_aliasing",
+  "indexing",
+  "array_initializer"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "array_aliasing",
+   "misconception": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "score": 0.97
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:array_reference->array_aliasing",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "score": 0.97,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  }
+ ],
+ "root_cause": {
+  "concept": "array_aliasing",
+  "misconception": "AssignmentCopiesObject"
+ },
+ "levels": {
+  "array_aliasing": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "AssignmentCopiesObject",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "rule": "wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "source": "level_mis_links"
+  },
+  "array_initializer": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1",
+   "edge": "lvl:array_initializer@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "array_reference": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "edge": "lvl:array_reference@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "indexing": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1",
+   "edge": "lvl:indexing@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 names_the_element"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "target": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "assigning a reference copies the object",
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "lvl:array_aliasing@L0#0",
+   "target": "array_aliasing@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "target": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "assigning a reference copies the object",
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "lvl:array_aliasing@L0#0",
+   "target": "array_aliasing@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L2#1",
+   "target": "indexing@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L1#0",
+   "target": "indexing@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so changing b[0] doesnt touch a",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  }
+ ],
+ "clause_coverage": {
+  "1": "mis:array_aliasing->AssignmentCopiesObject",
+  "b is a copy of a": "mis:array_aliasing->AssignmentCopiesObject",
+  "so changing b[0] doesnt touch a": "mis:array_aliasing->AssignmentCopiesObject"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 30,
+ "llm_calls_by_step": {
+  "prune": 11,
+  "label": 19
+ }
+}
