@@ -36,7 +36,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | control_flow | False | pattern | 'for (' | 2 |
 | data_structure | False | pattern | 'int[]' | 1 |
 | data_type | True | pattern | 'int' | 1 |
-| expression | True | pattern | 'i <= a' | 2 |
+| expression | True | pattern | 'i <=' | 2 |
 | expression | True | pattern | '= {5, 10, 15};' | 1 |
 | for_loop | False | pattern | 'for (' | 2 |
 | increment_operators | False | pattern | '++' | 2 |
@@ -51,22 +51,29 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | run_time_error | False | pattern | '<= a.length' | 2 |
 | statement | True | pattern | ';' | 1 |
 
-G: 23 concept nodes (4 generic), 16 concept edges, 159 misconception / error edges, 116 misconception / error nodes, 115 level nodes, 173 level-misconception links, 8 connected piece(s).
-Note: concept nodes form 8 pieces (the KG has no edge between them): array_bounds,array_traversal,assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,indexing,loop_control,loop_scope,loop_variable,off_by_one_error | array_declaration | array_initializer | control_flow,println,statement | data_structure,data_type | length_field | loop_body | run_time_error
+G: 23 concept nodes (4 generic), 23 concept edges, 159 misconception / error edges, 116 misconception / error nodes, 115 level nodes, 173 level-misconception links, 2 connected piece(s).
+Note: concept nodes form 2 pieces (the KG has no edge between them): array_bounds,array_declaration,array_initializer,array_traversal,assignment,boolean_expression,comparison_operators,data_structure,data_type,expression,for_loop,increment_operators,indexing,length_field,loop_body,loop_control,loop_scope,loop_variable,off_by_one_error,run_time_error | control_flow,println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
+| pre:array_bounds->run_time_error | prerequisite | An index outside 0 .. length-1 is not caught by the compiler; the access is checked when the program runs and stops it with ArrayIndexOutOfBoundsException. |
+| pre:array_declaration->array_initializer | prerequisite | int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing | prerequisite | The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+| pre:array_initializer->length_field | prerequisite | An array made from a literal has as many elements as values listed, and a.length gives that number. |
 | pre:assignment->increment_operators | prerequisite | i++ is shorthand for the assignment i = i + 1. |
 | pre:comparison_operators->boolean_expression | prerequisite | A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
+| pre:data_structure->array_declaration | prerequisite | An array is a data structure: one name for a sequence of values of the same type, organised by index. |
 | pre:data_type->data_structure | prerequisite | A data structure organizes many values of a data type; the array holds a sequence of values of one type. |
 | pre:expression->comparison_operators | prerequisite | Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
 | pre:for_loop->array_traversal | prerequisite | for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
+| pre:for_loop->loop_body | prerequisite | The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope | prerequisite | A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:indexing->array_bounds | prerequisite | Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used. |
 | pre:indexing->array_traversal | prerequisite | A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
 | pre:indexing->off_by_one_error | prerequisite | Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors. |
+| pre:length_field->array_traversal | prerequisite | A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
 | pre:loop_control->for_loop | prerequisite | The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 | pre:loop_control->increment_operators | prerequisite | The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
 | pre:loop_control->off_by_one_error | prerequisite | The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few. |
@@ -116,13 +123,13 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c3 | so a[0] is before the first element and just gives 0 |
 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
-start: BM25 of the answer against each tagged concept: indexing 35.54 (hits 1), array_traversal 34.58 (hits 2), run_time_error 28.43 (hits 1), loop_control 26.24 (hits 1), off_by_one_error 25.47 (hits 1), array_bounds 24.89 (hits 1), array_declaration 21.43 (hits 1), for_loop 21.24 (hits 1), loop_body 20.32 (hits 1), println 19.62 (hits 1), increment_operators 17.90 (hits 1), array_initializer 16.65 (hits 1), length_field 15.96 (hits 1), loop_variable 13.95 (hits 1), control_flow 11.28 (hits 1), boolean_expression 10.07 (hits 1), comparison_operators 6.88 (hits 1), loop_scope 6.53 (hits 1), data_structure 1.11 (hits 1)
+start: BM25 of the answer against each tagged concept: indexing 32.62 (hits 1), array_traversal 30.37 (hits 2), array_initializer 26.80 (hits 1), run_time_error 26.08 (hits 1), array_declaration 25.47 (hits 1), loop_control 22.08 (hits 1), off_by_one_error 21.39 (hits 1), array_bounds 20.81 (hits 1), length_field 18.81 (hits 1), loop_body 18.48 (hits 1), for_loop 17.37 (hits 1), println 17.21 (hits 1), increment_operators 13.71 (hits 1), loop_variable 10.85 (hits 1), control_flow 9.00 (hits 1), boolean_expression 7.15 (hits 1), loop_scope 4.40 (hits 1), comparison_operators 4.35 (hits 1), data_structure 1.76 (hits 1)
 
-start: chosen indexing, array_traversal, run_time_error
+start: chosen indexing, array_traversal, array_initializer
 
-start concepts (3): indexing, array_traversal, run_time_error
+start concepts (3): indexing, array_traversal, array_initializer
 
-Start concepts: indexing, array_traversal, run_time_error
+Start concepts: indexing, array_traversal, array_initializer
 
 **Figure 3**
 
@@ -130,7 +137,7 @@ Start concepts: indexing, array_traversal, run_time_error
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
-### Depth 1: current concepts 'indexing', 'array_traversal', 'run_time_error'
+### Depth 1: current concepts 'indexing', 'array_traversal', 'array_initializer'
 
 #### indexing, misconceptions: 8 edges offered
 Edges offered:
@@ -255,9 +262,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.25), mis:array_traversal->ElementBoundToOldIndex (0.15)
+mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.30), mis:array_traversal->ElementBoundToOldIndex (0.10)
 ```
-Kept by pruning: mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.25), mis:array_traversal->ElementBoundToOldIndex (0.15)
+Kept by pruning: mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.30), mis:array_traversal->ElementBoundToOldIndex (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -275,9 +282,9 @@ mis:array_traversal->ElementBoundToOldIndex | correct | clauses: 4 | confidence:
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:array_traversal->OffByOneBound | correct | 0.6 | 0.75 | 0.45 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| mis:array_traversal->IdiomOverridesCode | correct | 0.25 | 0.7 | 0.17 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| mis:array_traversal->ElementBoundToOldIndex | correct | 0.15 | 0.55 | 0.08 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| mis:array_traversal->OffByOneBound | correct | 0.6000000000000001 | 0.75 | 0.45 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| mis:array_traversal->IdiomOverridesCode | correct | 0.30000000000000004 | 0.7 | 0.21 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| mis:array_traversal->ElementBoundToOldIndex | correct | 0.10000000000000002 | 0.55 | 0.06 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 #### array_traversal, level ways: 22 edges offered
 Edges offered:
@@ -351,112 +358,99 @@ Parsed labels:
 | lvl:array_traversal@L2#0 | not applied |  |  | 0.0 |  |  |
 | lvl:array_traversal@L3#0 | shown | 0.2 | 0.7 | 0.14 | c3, c4 | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
-#### run_time_error, misconceptions: 7 edges offered
+#### array_initializer, misconceptions: 2 edges offered
 Edges offered:
 | edge |
 |---|
-| err:run_time_error->ArgsAlwaysPresent \| wrong rule: args[0] can always be read. \| right rule: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0. |
-| err:run_time_error->InputTypeMismatch \| wrong rule: StdIn.readInt() accepts any typed text such as abc or 12.2. \| right rule: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException). |
-| err:run_time_error->MainWithoutStringArgs \| wrong rule: public static void main() is an acceptable entry point. \| right rule: main is written public static void main(String[] args); these keywords and the args parameter are required. |
-| err:run_time_error->NegativeArraySize \| wrong rule: new int[n] with a negative n creates an empty array. \| right rule: Creating an array with a negative length throws NegativeArraySizeException at run time. |
-| mis:run_time_error->CompilesMeansWorks \| wrong rule: Code that compiles is code that works. \| right rule: Code that compiles can still have run-time and logical errors. |
-| mis:run_time_error->DivisionByZeroIsCompileError \| wrong rule: System.out.println(5 / 0); is rejected by the compiler. \| right rule: It compiles; the ArithmeticException happens when the program runs. |
-| mis:run_time_error->ParseAnyString \| wrong rule: Integer.parseInt works on any text, e.g. "five" or "12.2". \| right rule: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits. |
+| mis:array_initializer->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
+| mis:array_initializer->ArrayInitializerContentsInBrackets \| wrong rule: Starting values go in square brackets, like int[] a = [v0, v1];. \| right rule: Starting values go in braces, like int[] a = {v0, v1};. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:run_time_error->CompilesMeansWorks (0.50), err:run_time_error->ArgsAlwaysPresent (0.35), err:run_time_error->NegativeArraySize (0.15)
+mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
 ```
-Kept by pruning: mis:run_time_error->CompilesMeansWorks (0.50), err:run_time_error->ArgsAlwaysPresent (0.35), err:run_time_error->NegativeArraySize (0.15)
+Kept by pruning: mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:run_time_error->CompilesMeansWorks \| wrong rule: Code that compiles is code that works. \| right rule: Code that compiles can still have run-time and logical errors. |
-| err:run_time_error->ArgsAlwaysPresent \| wrong rule: args[0] can always be read. \| right rule: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0. |
-| err:run_time_error->NegativeArraySize \| wrong rule: new int[n] with a negative n creates an empty array. \| right rule: Creating an array with a negative length throws NegativeArraySizeException at run time. |
+| mis:array_initializer->ArrayInitializerContentsInBrackets \| wrong rule: Starting values go in square brackets, like int[] a = [v0, v1];. \| right rule: Starting values go in braces, like int[] a = {v0, v1};. |
+| mis:array_initializer->ArrayBracketCountIsLength \| wrong rule: The number of brackets in an array type or initializer is the array's length. \| right rule: Brackets give the number of dimensions; the length is set at creation. |
 Model's reply:
 ```
-mis:run_time_error->CompilesMeansWorks | not applied | clauses: none | confidence: 0.6
-err:run_time_error->ArgsAlwaysPresent | not applied | clauses: none | confidence: 0.95
-err:run_time_error->NegativeArraySize | not applied | clauses: none | confidence: 0.97
+mis:array_initializer->ArrayInitializerContentsInBrackets | not applied | clauses: none | confidence: 0.9
+mis:array_initializer->ArrayBracketCountIsLength | not applied | clauses: none | confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:run_time_error->CompilesMeansWorks | not applied |  |  | 0.0 |  |  |
-| err:run_time_error->ArgsAlwaysPresent | not applied |  |  | 0.0 |  |  |
-| err:run_time_error->NegativeArraySize | not applied |  |  | 0.0 |  |  |
+| mis:array_initializer->ArrayInitializerContentsInBrackets | not applied |  |  | 0.0 |  |  |
+| mis:array_initializer->ArrayBracketCountIsLength | not applied |  |  | 0.0 |  |  |
 
-#### run_time_error, level ways: 19 edges offered
+#### array_initializer, level ways: 14 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:run_time_error@L0#0 \| level L0 way everyday_reading: Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception. |
-| lvl:run_time_error@L0#3 \| level L0 way inconsistent_trace: Applies the exception rule (LT: execution stops at the faulty statement) unevenly: lets the program keep printing after the failing statement on one trace, or reports the error before any earlier output on another. (here mixing in: "Code that compiles is code that works") |
-| lvl:run_time_error@L1#0 \| level L1 way names_the_element: A run-time error (exception) is an error that does not show up until the program is executed and makes it impossible to run to completion. |
-| lvl:run_time_error@L1#1 \| level L1 way states_the_rule: When a run-time error occurs, the program 'crashes' (terminates) and the JVM prints the exception name, a message, and the method, file and line where it happened. |
-| lvl:run_time_error@L2#0 \| level L2 way line_by_line_trace: Statements before the faulty one run normally (their output appears); the faulty statement throws; no later statement runs. |
-| lvl:run_time_error@L2#1 \| level L2 way output_prediction: Output: any earlier output, then Exception in thread "main" java.lang.<Name>: <detail> at Class.main(Class.java:<line>). |
-| lvl:run_time_error@L2#2 \| level L2 way one_step_execution: The throwing step changes no variable it was meant to set (the operation does not complete) and transfers control out of main, ending the program. |
-| lvl:run_time_error@L3#0 \| level L3 way relation_to_neighbour: A run-time error appears only while java Name executes, after compiling has succeeded. |
-| lvl:run_time_error@L3#1 \| level L3 way relation_to_neighbour: javac cannot detect it because it depends on run-time values (the argument typed, the divisor's value). |
-| lvl:run_time_error@L3#2 \| level L3 way relation_to_neighbour: A run-time error stops the program with an exception message; a logic error lets it finish with wrong output and no message. |
-| lvl:run_time_error@L3#3 \| level L3 way purpose_of_the_whole: Purpose (of exceptions): stop the program at the point where something impossible was asked, instead of continuing with an undefined value, and report what and where. |
-| lvl:run_time_error@L4#0 \| level L4 way predict_a_change: The same compiled program may run fine on one input and throw on another (UseArgument with and without an argument); adding a guard such as checking args.length removes the trigger without changing correct runs. |
-| lvl:run_time_error@L4#1 \| level L4 way diagnose_an_error: rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header public static void main(): compiles, but java Name cannot find the main method |
-| lvl:run_time_error@L4#2 \| level L4 way diagnose_an_error: rule broken: Array length must be >= 0. Kind: run-time exception. Trigger class: new int[n] with n < 0: NegativeArraySizeException |
-| lvl:run_time_error@L4#3 \| level L4 way diagnose_an_error: rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: running without the expected argument: java.lang.ArrayIndexOutOfBoundsException: 0 |
-| lvl:run_time_error@L4#4 \| level L4 way transfer_to_a_new_program: Expect a run-time error when correctness depends on data (array indices, divisors, parsed input, presence of arguments); validate such data before use. Errors that depend only on the text are compile-time; wrong-but-legal results are logic errors. |
-| lvl:run_time_error@L4#5 \| level L4 way diagnose_an_error: rule broken: StdIn.readInt() needs the next token to be an int. Kind: run-time exception. Trigger class: next token abc, 12.2 or true (StdIn: InputMismatchException/NumberFormatException depending on version; Scanner.nextInt: InputMismatchException) |
-| lvl:run_time_error@L4#6 \| level L4 way diagnose_an_error: rule broken: Integer division and remainder by zero are undefined. Kind: run-time exception. Trigger class: a / b or a % b with int b == 0: ArithmeticException: / by zero |
-| lvl:run_time_error@L4#7 \| level L4 way diagnose_an_error: rule broken: Integer.parseInt needs an integer written in digits. Kind: run-time exception. Trigger class: parsing "five" or "12.2": NumberFormatException |
+| lvl:array_initializer@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths, braces {1, 2, 3} denote a set (unordered, no repeats) and brackets [1, 2, 3] a list, so novices write int[] a = [1, 2, 3] or expect {1, 1, 2} to have 2 elements. Java rule: braces enclose an ordered, comma-separated list whose count (repeats included) is the length. |
+| lvl:array_initializer@L0#2 \| level L0 way inconsistent_trace: Points to LT: an array of length k+1 is created, then v0..vk are stored at indices 0..k in order. Inconsistent application: the trace puts the first value at index 1 for one initializer but at index 0 for another, or counts the length differently. (here mixing in: "initializer values go in [] instead of {}") |
+| lvl:array_initializer@L1#0 \| level L1 way names_the_element: Identity: an array initializer is a brace-enclosed, comma-separated list of values that creates and fills an array in one step. |
+| lvl:array_initializer@L1#1 \| level L1 way states_the_rule: Declarative: 'T[] a = {v0, ..., vk};' declares, creates (no new needed) and initializes an array of length k+1. For 2-D arrays each row is its own brace list. The bare form is legal only in a declaration; elsewhere write new T[]{...}. |
+| lvl:array_initializer@L2#0 \| level L2 way line_by_line_trace: Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a. |
+| lvl:array_initializer@L2#1 \| level L2 way output_prediction: Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4. |
+| lvl:array_initializer@L2#2 \| level L2 way one_step_execution: State transition: one execution creates one array holding the listed values and sets the variable to its reference. |
+| lvl:array_initializer@L3#0 \| level L3 way relation_to_neighbour: An initializer implies array creation: it is shorthand for new T[k+1] followed by k+1 element assignments, so new is not written. |
+| lvl:array_initializer@L3#1 \| level L3 way purpose_of_the_whole: Plan/role: build small fixed tables of constants known when the program is written (suits, ranks, month names), usually used as fixed-value lookup tables. |
+| lvl:array_initializer@L4#0 \| level L4 way predict_a_change: Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value. |
+| lvl:array_initializer@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: use an initializer when all values are known at compile time and the array is small. When the values must be computed at run time, create the array with new and fill it in a loop. |
+| lvl:array_initializer@L4#2 \| level L4 way diagnose_an_error: rule broken: Initializer values are enclosed in braces. Kind: compile-time. Trigger class: brackets are used, as in int[] a = [1, 2, 3]; (illegal start of expression) |
+| lvl:array_initializer@L4#3 \| level L4 way diagnose_an_error: rule broken: The bare {...} form is allowed only in a declaration. Kind: compile-time. Trigger class: a = {1, 2, 3}; used as a later assignment (array constants can only be used in initializers) |
+| lvl:array_initializer@L4#4 \| level L4 way diagnose_an_error: rule broken: Each value must be assignable to the element type. Kind: compile-time. Trigger class: int[] a = {1, 2.5}; (incompatible types: possible lossy conversion from double to int) |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:run_time_error@L2#1 (Score: 0.4)}
-{lvl:run_time_error@L0#0 (Score: 0.35)}
-{lvl:run_time_error@L4#4 (Score: 0.25)}
+{lvl:array_initializer@L0#2 (Score: 0.5)}
+{lvl:array_initializer@L2#0 (Score: 0.3)}
+{lvl:array_initializer@L2#1 (Score: 0.2)}
 ```
-Kept by pruning: lvl:run_time_error@L2#1 (0.40), lvl:run_time_error@L0#0 (0.35), lvl:run_time_error@L4#4 (0.25)
+Kept by pruning: lvl:array_initializer@L0#2 (0.50), lvl:array_initializer@L2#0 (0.30), lvl:array_initializer@L2#1 (0.20)
 
-Label prompt for level way lvl:run_time_error@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Output: any earlier output, then Exception in thread "main" java.lang.<Name>: <detail> at Class.main(Class.java:<line>).
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:run_time_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
-> Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.
+Label prompt for level way lvl:array_initializer@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT: an array of length k+1 is created, then v0..vk are stored at indices 0..k in order. Inconsistent application: the trace puts the first value at index 1 for one initializer but at index 0 for another, or counts the length differently. (here mixing in: "initializer values go in [] instead of {}")
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.75
+Confidence: 0.7
 ```
 
-Label prompt for level way lvl:run_time_error@L4#4 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
-> Expect a run-time error when correctness depends on data (array indices, divisors, parsed input, presence of arguments); validate such data before use. Errors that depend only on the text are compile-time; wrong-but-legal results are logic errors.
+Label prompt for level way lvl:array_initializer@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Sequencing: the array of length k+1 is created, the initializer expressions are evaluated left to right and stored in a[0], a[1], ..., a[k], and then the reference is assigned to a.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:array_initializer@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"}; gives suit.length == 4.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:run_time_error@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L4#4 | not applied |  |  | 0.0 |  |  |
+| lvl:array_initializer@L0#2 | not applied |  |  | 0.0 |  |  |
+| lvl:array_initializer@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:array_initializer@L2#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -470,28 +464,39 @@ mis:indexing->ArrayIndexStartsAtOne [held, tier 0, 0.62], lvl:indexing@L0#0 [sho
 | c3 | so a[0] is before the first element and just gives 0 | mis:indexing->ArrayIndexStartsAtOne |
 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 | mis:indexing->ArrayIndexStartsAtOne |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_initializer->length_field, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->off_by_one_error, pre:length_field->array_traversal
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'indexing', 'array_traversal'
+### Depth 2: current concepts 'indexing', 'array_traversal', 'array_initializer'
 
-#### indexing, concept edges: 3 edges offered
+#### indexing, concept edges: 4 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
 | pre:indexing->array_bounds \| rule: Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used. |
 | pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
 | pre:indexing->off_by_one_error \| rule: Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:indexing->off_by_one_error (Score: 0.45)}
-{pre:indexing->array_bounds (Score: 0.35)}
-{pre:indexing->array_traversal (Score: 0.2)}
+{pre:array_initializer->indexing (Score: 0.4)}
+{pre:indexing->off_by_one_error (Score: 0.35)}
+{pre:indexing->array_bounds (Score: 0.25)}
 ```
-Kept by pruning: pre:indexing->off_by_one_error (0.45), pre:indexing->array_bounds (0.35), pre:indexing->array_traversal (0.20)
+Kept by pruning: pre:array_initializer->indexing (0.40), pre:indexing->off_by_one_error (0.35), pre:indexing->array_bounds (0.25)
+
+Label prompt for concept edge pre:array_initializer->indexing (array_initializer -> indexing, prerequisite):
+> The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.
+
+Model's reply:
+```
+Label: broken
+Clauses: 2, 3, 4
+Confidence: 0.95
+```
 
 Label prompt for concept edge pre:indexing->off_by_one_error (indexing -> off_by_one_error, prerequisite):
 > Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.
@@ -513,35 +518,26 @@ Clauses: 2, 3, 4
 Confidence: 0.9
 ```
 
-Label prompt for concept edge pre:indexing->array_traversal (indexing -> array_traversal, prerequisite):
-> A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.
-
-Model's reply:
-```
-Label: confirmed
-Clauses: 3, 4
-Confidence: 0.6
-```
-
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:indexing->off_by_one_error | broken | 0.45 | 0.93 | 0.42 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| pre:indexing->array_bounds | broken | 0.35 | 0.9 | 0.32 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| pre:indexing->array_traversal | confirmed | 0.2 | 0.6 | 0.12 | c3, c4 | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:array_initializer->indexing | broken | 0.4 | 0.95 | 0.38 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:indexing->off_by_one_error | broken | 0.35 | 0.93 | 0.33 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:indexing->array_bounds | broken | 0.25 | 0.9 | 0.23 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
-#### array_traversal, concept edges: 1 edges offered
+#### array_traversal, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
 | pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
 | pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
+| pre:length_field->array_traversal \| rule: A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:for_loop->array_traversal (Score: 1.0)}
+pre:for_loop->array_traversal (0.50), pre:length_field->array_traversal (0.50)
 ```
-Kept by pruning: pre:for_loop->array_traversal (1.00)
+Kept by pruning: pre:for_loop->array_traversal (0.50), pre:length_field->array_traversal (0.50)
 
 Label prompt for concept edge pre:for_loop->array_traversal (for_loop -> array_traversal, prerequisite):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.
@@ -553,16 +549,69 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.85
 ```
 
+Label prompt for concept edge pre:length_field->array_traversal (length_field -> array_traversal, prerequisite):
+> A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.
+
+Model's reply:
+```
+Label: broken
+Clauses: 1, 2, 3, 4
+Confidence: 0.85
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:for_loop->array_traversal | broken | 1.0 | 0.85 | 0.85 | c1, c2, c3, c4 | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:for_loop->array_traversal | broken | 0.5 | 0.85 | 0.42 | c1, c2, c3, c4 | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:length_field->array_traversal | broken | 0.5 | 0.85 | 0.42 | c1, c2, c3, c4 | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+
+#### array_initializer, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:array_declaration->array_initializer \| rule: int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+| pre:array_initializer->length_field \| rule: An array made from a literal has as many elements as values listed, and a.length gives that number. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+```
+Kept by pruning: pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+
+Label prompt for concept edge pre:array_initializer->length_field (array_initializer -> length_field, prerequisite):
+> An array made from a literal has as many elements as values listed, and a.length gives that number.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1, 4
+Confidence: 0.6
+```
+
+Label prompt for concept edge pre:array_declaration->array_initializer (array_declaration -> array_initializer, prerequisite):
+> int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 4
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:array_initializer->length_field | confirmed | 0.6 | 0.6 | 0.36 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:array_declaration->array_initializer | confirmed | 0.4 | 0.6 | 0.24 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:for_loop->array_traversal [broken, tier 0, 0.85], pre:indexing->off_by_one_error [broken, tier 0, 0.42], pre:indexing->array_bounds [broken, tier 0, 0.32]
+pre:for_loop->array_traversal [broken, tier 0, 0.42], pre:length_field->array_traversal [broken, tier 0, 0.42], pre:array_initializer->indexing [broken, tier 0, 0.38], pre:indexing->off_by_one_error [broken, tier 0, 0.33], pre:indexing->array_bounds [broken, tier 0, 0.23]
 
 reached across pre:for_loop->array_traversal, entered next: for_loop
+
+reached across pre:length_field->array_traversal, entered next: length_field
 
 reached across pre:indexing->off_by_one_error, entered next: off_by_one_error
 
@@ -576,12 +625,12 @@ reached across pre:indexing->array_bounds, entered next: array_bounds
 | c3 | so a[0] is before the first element and just gives 0 | mis:indexing->ArrayIndexStartsAtOne |
 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 | mis:indexing->ArrayIndexStartsAtOne |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_bounds, own edges of for_loop, own edges of off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of array_bounds, own edges of for_loop, own edges of length_field, own edges of off_by_one_error
 
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'for_loop', 'array_traversal', 'off_by_one_error', 'indexing', 'array_bounds'
+### Depth 3: current concepts 'for_loop', 'array_traversal', 'length_field', 'array_initializer', 'indexing', 'off_by_one_error', 'array_bounds'
 
 #### for_loop, misconceptions: 21 edges offered
 Edges offered:
@@ -715,6 +764,7 @@ Edges offered:
 |---|
 | pre:for_loop->array_traversal \| rule: for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order. |
 | pre:indexing->array_traversal \| rule: A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass. |
+| pre:length_field->array_traversal \| rule: A traversal loop runs its index from 0 while it is below a.length, so it visits every element once. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
@@ -736,6 +786,142 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:indexing->array_traversal | confirmed | 1.0 | 0.6 | 0.6 | c3, c4 | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+
+#### length_field, misconceptions: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:length_field->ArrayHasLengthMethod \| wrong rule: The size of an array is found by calling a.length(). \| right rule: An array's size is the field a.length, written without parentheses. |
+| mis:length_field->ArrayLengthCannotBeZero \| wrong rule: An array cannot have length 0. \| right rule: new int[0] is a legal array of length 0. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:length_field->ArrayHasLengthMethod (Score: 0.7)}
+{mis:length_field->ArrayLengthCannotBeZero (Score: 0.3)}
+```
+Kept by pruning: mis:length_field->ArrayHasLengthMethod (0.70), mis:length_field->ArrayLengthCannotBeZero (0.30)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:length_field->ArrayHasLengthMethod \| wrong rule: The size of an array is found by calling a.length(). \| right rule: An array's size is the field a.length, written without parentheses. |
+| mis:length_field->ArrayLengthCannotBeZero \| wrong rule: An array cannot have length 0. \| right rule: new int[0] is a legal array of length 0. |
+Model's reply:
+```
+mis:length_field->ArrayHasLengthMethod | not applied | clauses: none | confidence: 0.9
+mis:length_field->ArrayLengthCannotBeZero | not applied | clauses: none | confidence: 0.9
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:length_field->ArrayHasLengthMethod | not applied |  |  | 0.0 |  |  |
+| mis:length_field->ArrayLengthCannotBeZero | not applied |  |  | 0.0 |  |  |
+
+#### length_field, level ways: 15 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:length_field@L0#0 \| level L0 way everyday_reading: Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1. |
+| lvl:length_field@L0#2 \| level L0 way inconsistent_trace: Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: "you call length() instead of using the length field") |
+| lvl:length_field@L1#0 \| level L1 way names_the_element: Identity: a.length is the public final instance field that every array has, holding its number of elements. |
+| lvl:length_field@L1#1 \| level L1 way states_the_rule: Declarative: the length of array a is written a.length (no parentheses); it equals the size given at creation, may be zero, cannot be assigned, and the last element is a[a.length-1]. |
+| lvl:length_field@L2#0 \| level L2 way line_by_line_trace: Sequencing: a is evaluated first (a null a throws NullPointerException), then the length field of the array a refers to now is read. In 'for (int i = 0; i < a.length; i++)' it is re-read at each test. |
+| lvl:length_field@L2#1 \| level L2 way output_prediction: Result: an int >= 0 equal to the number of elements: new double[8].length is 8, {1, 2, 3}.length is 3, and the last element is a[a.length-1]. |
+| lvl:length_field@L2#2 \| level L2 way one_step_execution: State transition: reading a.length changes nothing. Assigning 'a.length = 5' is impossible (a final field), so only making a refer to a different array changes the value later read as a.length. |
+| lvl:length_field@L3#0 \| level L3 way relation_to_neighbour: The n given to new becomes a.length and stays fixed for that array object. |
+| lvl:length_field@L3#1 \| level L3 way relation_to_neighbour: args is an ordinary String[], so args.length is its length field and counts the command-line arguments (0 when none are typed). |
+| lvl:length_field@L3#2 \| level L3 way purpose_of_the_whole: Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element. |
+| lvl:length_field@L4#0 \| level L4 way predict_a_change: Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length. |
+| lvl:length_field@L4#1 \| level L4 way transfer_to_a_new_program: Applicability: use a.length wherever code must follow the array's real size (loop bounds, last element, copying); use a[i].length for each row of a possibly ragged 2-D array; use s.length() for Strings. |
+| lvl:length_field@L4#2 \| level L4 way diagnose_an_error: rule broken: length is a field, not a method. Kind: compile-time. Trigger class: a.length() is written for an array (cannot find symbol: method length()) |
+| lvl:length_field@L4#3 \| level L4 way diagnose_an_error: rule broken: length is final and cannot be assigned. Kind: compile-time. Trigger class: 'a.length = n;' (cannot assign a value to final variable length) |
+| lvl:length_field@L4#4 \| level L4 way diagnose_an_error: rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException) |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:length_field@L0#0 (Score: 0.5)}
+{lvl:length_field@L4#4 (Score: 0.3)}
+{lvl:length_field@L0#2 (Score: 0.2)}
+```
+Kept by pruning: lvl:length_field@L0#0 (0.50), lvl:length_field@L4#4 (0.30), lvl:length_field@L0#2 (0.20)
+
+Label prompt for level way lvl:length_field@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 4
+Confidence: 0.55
+```
+
+Label prompt for level way lvl:length_field@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException)
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.93
+```
+
+Label prompt for level way lvl:length_field@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: "you call length() instead of using the length field")
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:length_field@L0#0 | shown | 0.5 | 0.55 | 0.28 | c2, c4 | Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| lvl:length_field@L4#4 | not applied |  |  | 0.0 |  |  |
+| lvl:length_field@L0#2 | not applied |  |  | 0.0 |  |  |
+
+#### array_initializer, concept edges: 2 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:array_declaration->array_initializer \| rule: int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement. |
+| pre:array_initializer->indexing \| rule: The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i. |
+| pre:array_initializer->length_field \| rule: An array made from a literal has as many elements as values listed, and a.length gives that number. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+```
+Kept by pruning: pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+
+Label prompt for concept edge pre:array_initializer->length_field (array_initializer -> length_field, prerequisite):
+> An array made from a literal has as many elements as values listed, and a.length gives that number.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1, 4
+Confidence: 0.6
+```
+
+Label prompt for concept edge pre:array_declaration->array_initializer (array_declaration -> array_initializer, prerequisite):
+> int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 4
+Confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:array_initializer->length_field | confirmed | 0.6 | 0.6 | 0.36 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| pre:array_declaration->array_initializer | confirmed | 0.4 | 0.6 | 0.24 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 #### off_by_one_error, misconceptions: 4 edges offered
 Edges offered:
@@ -850,7 +1036,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:array_bounds->OutOfBoundsElementsAreNull (Score: 0.65)}
 {mis:array_bounds->OffByOneBound (Score: 0.35)}
 ```
-Kept by pruning: mis:array_bounds->OutOfBoundsElementsAreNull (0.65), mis:array_bounds->OffByOneBound (0.35)
+Kept by pruning: mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -866,8 +1052,8 @@ mis:array_bounds->OffByOneBound | correct | clauses: 1, 4 | confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:array_bounds->OutOfBoundsElementsAreNull | held | 0.65 | 0.7 | 0.45 | c2, c3 | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
-| mis:array_bounds->OffByOneBound | correct | 0.35 | 0.7 | 0.24 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| mis:array_bounds->OutOfBoundsElementsAreNull | held | 0.6 | 0.7 | 0.42 | c2, c3 | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
+| mis:array_bounds->OffByOneBound | correct | 0.4 | 0.7 | 0.28 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 #### array_bounds, level ways: 14 edges offered
 Edges offered:
@@ -935,7 +1121,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.46], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
+mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.42], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -945,33 +1131,36 @@ mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.46], pre:indexing-
 | c3 | so a[0] is before the first element and just gives 0 | mis:indexing->ArrayIndexStartsAtOne |
 | c4 | Then a[1], a[2] and a[3] are 5, 10 and 15 | mis:indexing->ArrayIndexStartsAtOne |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
+**Graph check, not yet read (the walk may not stop while these remain):** pre:array_bounds->run_time_error, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
 
 **Figure 6 (the graph after depth 3)**
 
 ![Figure 6](figure06.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:length_field->array_traversal, pre:array_initializer->indexing, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - array_bounds: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
 - array_traversal: L3 via relation_to_neighbour "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - for_loop: L2 via output_prediction "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - indexing: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+- length_field: L0 via everyday_reading "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - off_by_one_error: L0 via everyday_reading "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 
-**Stop:** max depth at depth 3; prompts {'prune': 15, 'label': 29}, fresh model calls 0, cache hits 44
+**Stop:** max depth at depth 3; prompts {'prune': 19, 'label': 38}, fresh model calls 12, cache hits 45
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | indexing | ArrayIndexStartsAtOne | misconception | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.6175 |  |
-| array_bounds | OutOfBoundsElementsAreNull | misconception | Arrays start at a[1]; so a[0] is before the first element and just gives 0 | 0.455 |  |
+| array_bounds | OutOfBoundsElementsAreNull | misconception | Arrays start at a[1]; so a[0] is before the first element and just gives 0 | 0.42 |  |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:for_loop->array_traversal | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.85 | mis:indexing->ArrayIndexStartsAtOne |
-| pre:indexing->off_by_one_error | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.4185 | mis:indexing->ArrayIndexStartsAtOne |
-| pre:indexing->array_bounds | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.315 | mis:indexing->ArrayIndexStartsAtOne |
+| pre:for_loop->array_traversal | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.425 | mis:indexing->ArrayIndexStartsAtOne |
+| pre:length_field->array_traversal | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.425 | mis:indexing->ArrayIndexStartsAtOne |
+| pre:array_initializer->indexing | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.38 | mis:indexing->ArrayIndexStartsAtOne |
+| pre:indexing->off_by_one_error | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.3255 | mis:indexing->ArrayIndexStartsAtOne |
+| pre:indexing->array_bounds | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | 0.225 | mis:indexing->ArrayIndexStartsAtOne |
 
 ### Root cause: indexing / ArrayIndexStartsAtOne
 
@@ -982,6 +1171,7 @@ Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequence
 | array_traversal | L3 | relation_to_neighbour |  | level_way | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
 | for_loop | L2 | output_prediction |  | level_way | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  | L2 line_by_line_trace |  |
 | indexing | L0 | misconception | ArrayIndexStartsAtOne | level_mis_links | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0]. |  |  |
+| length_field | L0 | everyday_reading |  | level_way | Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
 | off_by_one_error | L0 | everyday_reading |  | level_way | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
 
 ### Overall level: L0
@@ -1003,24 +1193,30 @@ Clause coverage (final):
 | 1 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | held | 0.65 | 0.95 | 0.6175 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 1 | indexing | mis:indexing->ElementBoundToOldIndex | misconception | correct | 0.1 | 0.6 | 0.06 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 1 | indexing | lvl:indexing@L0#0 | level | shown | 0.6 | 0.9 | 0.54 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.6 | 0.75 | 0.45 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 1 | array_traversal | mis:array_traversal->IdiomOverridesCode | misconception | correct | 0.25 | 0.7 | 0.175 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 1 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.15 | 0.55 | 0.0825 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.6000000000000001 | 0.75 | 0.45 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 1 | array_traversal | mis:array_traversal->IdiomOverridesCode | misconception | correct | 0.30000000000000004 | 0.7 | 0.21 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 1 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.10000000000000002 | 0.55 | 0.055 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 1 | array_traversal | lvl:array_traversal@L3#0 | level | shown | 0.2 | 0.7 | 0.14 | [3, 4] | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 2 | indexing | pre:indexing->off_by_one_error | prerequisite | broken | 0.45 | 0.93 | 0.4185 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 2 | indexing | pre:indexing->array_bounds | prerequisite | broken | 0.35 | 0.9 | 0.315 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 2 | indexing | pre:indexing->array_traversal | prerequisite | confirmed | 0.2 | 0.6 | 0.12 | [3, 4] | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 1.0 | 0.85 | 0.85 | [1, 2, 3, 4] | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | indexing | pre:array_initializer->indexing | prerequisite | broken | 0.4 | 0.95 | 0.38 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | indexing | pre:indexing->off_by_one_error | prerequisite | broken | 0.35 | 0.93 | 0.3255 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | indexing | pre:indexing->array_bounds | prerequisite | broken | 0.25 | 0.9 | 0.225 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.5 | 0.85 | 0.425 | [1, 2, 3, 4] | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | array_traversal | pre:length_field->array_traversal | prerequisite | broken | 0.5 | 0.85 | 0.425 | [1, 2, 3, 4] | It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | array_initializer | pre:array_initializer->length_field | prerequisite | confirmed | 0.6 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 2 | array_initializer | pre:array_declaration->array_initializer | prerequisite | confirmed | 0.4 | 0.6 | 0.24 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | for_loop | mis:for_loop->IdiomOverridesCode | misconception | correct | 0.45 | 0.7 | 0.315 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.35 | 0.6 | 0.21 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | for_loop | lvl:for_loop@L2#0 | level | shown | 0.25 | 0.6 | 0.15 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 4] | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | length_field | lvl:length_field@L0#0 | level | shown | 0.5 | 0.55 | 0.275 | [2, 4] | Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | array_initializer | pre:array_initializer->length_field | prerequisite | confirmed | 0.6 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | array_initializer | pre:array_declaration->array_initializer | prerequisite | confirmed | 0.4 | 0.6 | 0.24 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | off_by_one_error | mis:off_by_one_error->OffByOneBound | misconception | correct | 0.6 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | off_by_one_error | err:off_by_one_error->WrongIterationCount | error | correct | 0.35 | 0.55 | 0.1925 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | off_by_one_error | lvl:off_by_one_error@L0#0 | level | shown | 0.6 | 0.7 | 0.42 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 3 | array_bounds | mis:array_bounds->OutOfBoundsElementsAreNull | misconception | held | 0.65 | 0.7 | 0.455 | [2, 3] | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
-| 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.35 | 0.7 | 0.245 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | array_bounds | mis:array_bounds->OutOfBoundsElementsAreNull | misconception | held | 0.6 | 0.7 | 0.42 | [2, 3] | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
+| 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.4 | 0.7 | 0.28 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_bounds | lvl:array_bounds@L0#0 | level | shown | 0.5 | 0.8 | 0.4 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_bounds | lvl:array_bounds@L0#2 | level | shown | 0.3 | 0.6 | 0.18 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
@@ -1030,20 +1226,22 @@ Clause coverage (final):
 | 1 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | held | 0.6175 | [2, 3, 4] |
 | 1 | indexing | lvl:indexing@L0#0 | level | shown | 0.54 | [2, 3, 4] |
 | 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.45 | [1, 3, 4] |
-| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.85 | [1, 2, 3, 4] |
-| 2 | indexing | pre:indexing->off_by_one_error | prerequisite | broken | 0.4185 | [2, 3, 4] |
-| 2 | indexing | pre:indexing->array_bounds | prerequisite | broken | 0.315 | [2, 3, 4] |
-| 3 | array_bounds | mis:array_bounds->OutOfBoundsElementsAreNull | misconception | held | 0.455 | [2, 3] |
+| 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | broken | 0.425 | [1, 2, 3, 4] |
+| 2 | array_traversal | pre:length_field->array_traversal | prerequisite | broken | 0.425 | [1, 2, 3, 4] |
+| 2 | indexing | pre:array_initializer->indexing | prerequisite | broken | 0.38 | [2, 3, 4] |
+| 2 | indexing | pre:indexing->off_by_one_error | prerequisite | broken | 0.3255 | [2, 3, 4] |
+| 2 | indexing | pre:indexing->array_bounds | prerequisite | broken | 0.225 | [2, 3, 4] |
+| 3 | array_bounds | mis:array_bounds->OutOfBoundsElementsAreNull | misconception | held | 0.42 | [2, 3] |
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.6 | [3, 4] |
 | 3 | off_by_one_error | lvl:off_by_one_error@L0#0 | level | shown | 0.42 | [2, 3, 4] |
 
 ## 7. Raw traversal log
 ```
 clauses: It prints 0, then 5, 10 and 15 | Arrays start at a[1] | so a[0] is before the first element and just gives 0 | Then a[1], a[2] and a[3] are 5, 10 and 15
-start: BM25 of the answer against each tagged concept: indexing 35.54 (hits 1), array_traversal 34.58 (hits 2), run_time_error 28.43 (hits 1), loop_control 26.24 (hits 1), off_by_one_error 25.47 (hits 1), array_bounds 24.89 (hits 1), array_declaration 21.43 (hits 1), for_loop 21.24 (hits 1), loop_body 20.32 (hits 1), println 19.62 (hits 1), increment_operators 17.90 (hits 1), array_initializer 16.65 (hits 1), length_field 15.96 (hits 1), loop_variable 13.95 (hits 1), control_flow 11.28 (hits 1), boolean_expression 10.07 (hits 1), comparison_operators 6.88 (hits 1), loop_scope 6.53 (hits 1), data_structure 1.11 (hits 1)
-start: chosen indexing, array_traversal, run_time_error
-start concepts (3): indexing, array_traversal, run_time_error
---- depth 1: current concepts ['indexing', 'array_traversal', 'run_time_error']
+start: BM25 of the answer against each tagged concept: indexing 32.62 (hits 1), array_traversal 30.37 (hits 2), array_initializer 26.80 (hits 1), run_time_error 26.08 (hits 1), array_declaration 25.47 (hits 1), loop_control 22.08 (hits 1), off_by_one_error 21.39 (hits 1), array_bounds 20.81 (hits 1), length_field 18.81 (hits 1), loop_body 18.48 (hits 1), for_loop 17.37 (hits 1), println 17.21 (hits 1), increment_operators 13.71 (hits 1), loop_variable 10.85 (hits 1), control_flow 9.00 (hits 1), boolean_expression 7.15 (hits 1), loop_scope 4.40 (hits 1), comparison_operators 4.35 (hits 1), data_structure 1.76 (hits 1)
+start: chosen indexing, array_traversal, array_initializer
+start concepts (3): indexing, array_traversal, array_initializer
+--- depth 1: current concepts ['indexing', 'array_traversal', 'array_initializer']
   indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.65), mis:indexing->ArrayRangeInclusive (0.25), mis:indexing->ElementBoundToOldIndex (0.10)
     mis:indexing->ArrayIndexStartsAtOne -> held (0.62) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     mis:indexing->ArrayRangeInclusive -> not applied (0.00) ""
@@ -1052,39 +1250,43 @@ start concepts (3): indexing, array_traversal, run_time_error
     lvl:indexing@L0#0 -> shown (0.54) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:indexing@L3#6 -> not applied (0.00) ""
     lvl:indexing@L4#2 -> not applied (0.00) ""
-  array_traversal (misconceptions): 6 candidates -> kept mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.25), mis:array_traversal->ElementBoundToOldIndex (0.15)
+  array_traversal (misconceptions): 6 candidates -> kept mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.30), mis:array_traversal->ElementBoundToOldIndex (0.10)
     mis:array_traversal->OffByOneBound -> correct (0.45) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    mis:array_traversal->IdiomOverridesCode -> correct (0.17) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    mis:array_traversal->ElementBoundToOldIndex -> correct (0.08) "Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:array_traversal->IdiomOverridesCode -> correct (0.21) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    mis:array_traversal->ElementBoundToOldIndex -> correct (0.06) "Then a[1], a[2] and a[3] are 5, 10 and 15"
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L4#3 (0.55), lvl:array_traversal@L2#0 (0.25), lvl:array_traversal@L3#0 (0.20)
     lvl:array_traversal@L4#3 -> not applied (0.00) ""
     lvl:array_traversal@L2#0 -> not applied (0.00) ""
     lvl:array_traversal@L3#0 -> shown (0.14) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->CompilesMeansWorks (0.50), err:run_time_error->ArgsAlwaysPresent (0.35), err:run_time_error->NegativeArraySize (0.15)
-    mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
-    err:run_time_error->ArgsAlwaysPresent -> not applied (0.00) ""
-    err:run_time_error->NegativeArraySize -> not applied (0.00) ""
-  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L2#1 (0.40), lvl:run_time_error@L0#0 (0.35), lvl:run_time_error@L4#4 (0.25)
-    lvl:run_time_error@L2#1 -> not applied (0.00) ""
-    lvl:run_time_error@L0#0 -> not applied (0.00) ""
-    lvl:run_time_error@L4#4 -> not applied (0.00) ""
+  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
+    mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
+    mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
+  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L0#2 (0.50), lvl:array_initializer@L2#0 (0.30), lvl:array_initializer@L2#1 (0.20)
+    lvl:array_initializer@L0#2 -> not applied (0.00) ""
+    lvl:array_initializer@L2#0 -> not applied (0.00) ""
+    lvl:array_initializer@L2#1 -> not applied (0.00) ""
   kept: mis:indexing->ArrayIndexStartsAtOne [held, tier 0, 0.62], lvl:indexing@L0#0 [shown, tier 2, 0.54], mis:array_traversal->OffByOneBound [correct, tier 2, 0.45]
   clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
-  not yet read: pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->off_by_one_error
---- depth 2: current concepts ['indexing', 'array_traversal']
-  indexing (concept edges): 3 candidates -> kept pre:indexing->off_by_one_error (0.45), pre:indexing->array_bounds (0.35), pre:indexing->array_traversal (0.20)
-    pre:indexing->off_by_one_error -> broken (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    pre:indexing->array_bounds -> broken (0.32) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    pre:indexing->array_traversal -> confirmed (0.12) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-  array_traversal (concept edges): 1 candidates -> kept pre:for_loop->array_traversal (1.00)
-    pre:for_loop->array_traversal -> broken (0.85) "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
-  kept: pre:for_loop->array_traversal [broken, tier 0, 0.85], pre:indexing->off_by_one_error [broken, tier 0, 0.42], pre:indexing->array_bounds [broken, tier 0, 0.32]
+  not yet read: pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_initializer->length_field, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->off_by_one_error, pre:length_field->array_traversal
+--- depth 2: current concepts ['indexing', 'array_traversal', 'array_initializer']
+  indexing (concept edges): 4 candidates -> kept pre:array_initializer->indexing (0.40), pre:indexing->off_by_one_error (0.35), pre:indexing->array_bounds (0.25)
+    pre:array_initializer->indexing -> broken (0.38) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:indexing->off_by_one_error -> broken (0.33) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:indexing->array_bounds -> broken (0.23) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.50), pre:length_field->array_traversal (0.50)
+    pre:for_loop->array_traversal -> broken (0.42) "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:length_field->array_traversal -> broken (0.42) "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_initializer (concept edges): 2 candidates -> kept pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+    pre:array_initializer->length_field -> confirmed (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:array_declaration->array_initializer -> confirmed (0.24) "Then a[1], a[2] and a[3] are 5, 10 and 15"
+  kept: pre:for_loop->array_traversal [broken, tier 0, 0.42], pre:length_field->array_traversal [broken, tier 0, 0.42], pre:array_initializer->indexing [broken, tier 0, 0.38], pre:indexing->off_by_one_error [broken, tier 0, 0.33], pre:indexing->array_bounds [broken, tier 0, 0.23]
   reached across pre:for_loop->array_traversal, entered next: for_loop
+  reached across pre:length_field->array_traversal, entered next: length_field
   reached across pre:indexing->off_by_one_error, entered next: off_by_one_error
   reached across pre:indexing->array_bounds, entered next: array_bounds
   clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
-  not yet read: own edges of array_bounds, own edges of for_loop, own edges of off_by_one_error
---- depth 3: current concepts ['for_loop', 'array_traversal', 'off_by_one_error', 'indexing', 'array_bounds']
+  not yet read: own edges of array_bounds, own edges of for_loop, own edges of length_field, own edges of off_by_one_error
+--- depth 3: current concepts ['for_loop', 'array_traversal', 'length_field', 'array_initializer', 'indexing', 'off_by_one_error', 'array_bounds']
   for_loop (misconceptions): 21 candidates -> kept mis:for_loop->IdiomOverridesCode (0.45), err:for_loop->WrongIterationCount (0.35), mis:for_loop->ForLoopPartSkipped (0.20)
     mis:for_loop->IdiomOverridesCode -> correct (0.32) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     err:for_loop->WrongIterationCount -> correct (0.21) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
@@ -1095,6 +1297,16 @@ start concepts (3): indexing, array_traversal, run_time_error
     lvl:for_loop@L2#0 -> shown (0.15) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
     pre:indexing->array_traversal -> confirmed (0.60) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  length_field (misconceptions): 2 candidates -> kept mis:length_field->ArrayHasLengthMethod (0.70), mis:length_field->ArrayLengthCannotBeZero (0.30)
+    mis:length_field->ArrayHasLengthMethod -> not applied (0.00) ""
+    mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
+  length_field (level ways): 15 candidates -> kept lvl:length_field@L0#0 (0.50), lvl:length_field@L4#4 (0.30), lvl:length_field@L0#2 (0.20)
+    lvl:length_field@L0#0 -> shown (0.28) "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:length_field@L4#4 -> not applied (0.00) ""
+    lvl:length_field@L0#2 -> not applied (0.00) ""
+  array_initializer (concept edges): 2 candidates -> kept pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
+    pre:array_initializer->length_field -> confirmed (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    pre:array_declaration->array_initializer -> confirmed (0.24) "Then a[1], a[2] and a[3] are 5, 10 and 15"
   off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
     mis:off_by_one_error->OffByOneBound -> correct (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
     err:off_by_one_error->WrongIterationCount -> correct (0.19) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
@@ -1103,21 +1315,22 @@ start concepts (3): indexing, array_traversal, run_time_error
     lvl:off_by_one_error@L0#0 -> shown (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:off_by_one_error@L4#3 -> not applied (0.00) ""
     lvl:off_by_one_error@L3#0 -> not applied (0.00) ""
-  array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.65), mis:array_bounds->OffByOneBound (0.35)
-    mis:array_bounds->OutOfBoundsElementsAreNull -> held (0.45) "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
-    mis:array_bounds->OffByOneBound -> correct (0.24) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
+    mis:array_bounds->OutOfBoundsElementsAreNull -> held (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
+    mis:array_bounds->OffByOneBound -> correct (0.28) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L0#0 (0.50), lvl:array_bounds@L0#2 (0.30), lvl:array_bounds@L3#0 (0.20)
     lvl:array_bounds@L0#0 -> shown (0.40) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:array_bounds@L0#2 -> shown (0.18) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:array_bounds@L3#0 -> not applied (0.00) ""
-  kept: mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.46], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
+  kept: mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.42], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
-  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
-  root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  not yet read: pre:array_bounds->run_time_error, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
+  root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:length_field->array_traversal, pre:array_initializer->indexing, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level array_bounds: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
   level array_traversal: L3 via relation_to_neighbour "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level for_loop: L2 via output_prediction "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level indexing: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+  level length_field: L0 via everyday_reading "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level off_by_one_error: L0 via everyday_reading "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 ```
 
@@ -1141,7 +1354,7 @@ start concepts (3): indexing, array_traversal, run_time_error
  "start_concepts": [
   "indexing",
   "array_traversal",
-  "run_time_error"
+  "array_initializer"
  ],
  "held_misconceptions": [
   {
@@ -1156,7 +1369,7 @@ start concepts (3): indexing, array_traversal, run_time_error
    "misconception": "OutOfBoundsElementsAreNull",
    "kind": "misconception",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
-   "score": 0.455
+   "score": 0.42
   }
  ],
  "error_evidence": [],
@@ -1165,19 +1378,31 @@ start concepts (3): indexing, array_traversal, run_time_error
   {
    "edge": "pre:for_loop->array_traversal",
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.85,
+   "score": 0.425,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "edge": "pre:length_field->array_traversal",
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "score": 0.425,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "edge": "pre:array_initializer->indexing",
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "score": 0.38,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
   {
    "edge": "pre:indexing->off_by_one_error",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.4185,
+   "score": 0.3255,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
   {
    "edge": "pre:indexing->array_bounds",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.315,
+   "score": 0.225,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   }
  ],
@@ -1222,6 +1447,14 @@ start concepts (3): indexing, array_traversal, run_time_error
    "rule": "wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0].",
    "source": "level_mis_links"
   },
+  "length_field": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "edge": "lvl:length_field@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
   "off_by_one_error": {
    "level": "L0",
    "way": "everyday_reading",
@@ -1250,7 +1483,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.65,
    "score": 0.6175,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1287,10 +1521,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.75,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.45,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 2,
@@ -1307,9 +1542,50 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
@@ -1327,8 +1603,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.93,
-   "prune_score": 0.45,
-   "score": 0.4185,
+   "prune_score": 0.35,
+   "score": 0.3255,
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -1347,8 +1623,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.25,
+   "score": 0.225,
    "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -1366,10 +1642,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
    "confidence": 0.7,
-   "prune_score": 0.65,
-   "score": 0.455,
+   "prune_score": 0.6,
+   "score": 0.42,
    "logic": "Reading a[a.length] just gives null or 0.",
-   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException."
+   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1429,7 +1706,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.65,
    "score": 0.6175,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1447,7 +1725,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.1,
    "score": 0.06,
    "logic": "After i changes, X[i] still refers to the element at the old value of i.",
-   "twin_logic": "a[i] is evaluated with the current value of i each time it is used."
+   "twin_logic": "a[i] is evaluated with the current value of i each time it is used.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1484,10 +1763,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.75,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.45,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1503,10 +1783,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
+   "prune_score": 0.30000000000000004,
+   "score": 0.21,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1520,10 +1801,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.55,
-   "prune_score": 0.15,
-   "score": 0.0825,
+   "prune_score": 0.10000000000000002,
+   "score": 0.055,
    "logic": "After i changes, X[i] still refers to the element at the old value of i.",
-   "twin_logic": "a[i] is evaluated with the current value of i each time it is used."
+   "twin_logic": "a[i] is evaluated with the current value of i each time it is used.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1548,6 +1830,26 @@ start concepts (3): indexing, array_traversal, run_time_error
   {
    "depth": 2,
    "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
    "edge": "pre:indexing->off_by_one_error",
    "target": "off_by_one_error",
    "kind": "prerequisite",
@@ -1559,8 +1861,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.93,
-   "prune_score": 0.45,
-   "score": 0.4185,
+   "prune_score": 0.35,
+   "score": 0.3255,
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -1579,29 +1881,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.25,
+   "score": 0.225,
    "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:indexing->array_traversal",
-   "target": "array_traversal",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
-   "twin_logic": null
   },
   {
    "depth": 2,
@@ -1618,11 +1902,67 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_initializer",
+   "edge": "pre:array_initializer->length_field",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "array_initializer",
+   "edge": "pre:array_declaration->array_initializer",
+   "target": "array_declaration",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "twin_logic": null
   },
   {
    "depth": 3,
@@ -1641,7 +1981,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.45,
    "score": 0.315,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1659,7 +2000,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.35,
    "score": 0.21,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1723,6 +2065,61 @@ start concepts (3): indexing, array_traversal, run_time_error
   },
   {
    "depth": 3,
+   "source": "length_field",
+   "edge": "lvl:length_field@L0#0",
+   "target": "length_field@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "array_initializer",
+   "edge": "pre:array_initializer->length_field",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "array_initializer",
+   "edge": "pre:array_declaration->array_initializer",
+   "target": "array_declaration",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
    "source": "off_by_one_error",
    "edge": "mis:off_by_one_error->OffByOneBound",
    "target": "OffByOneBound",
@@ -1737,7 +2134,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1755,7 +2153,8 @@ start concepts (3): indexing, array_traversal, run_time_error
    "prune_score": 0.35,
    "score": 0.1925,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1791,10 +2190,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
    "confidence": 0.7,
-   "prune_score": 0.65,
-   "score": 0.455,
+   "prune_score": 0.6,
+   "score": 0.42,
    "logic": "Reading a[a.length] just gives null or 0.",
-   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException."
+   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1809,10 +2209,11 @@ start concepts (3): indexing, array_traversal, run_time_error
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
+   "prune_score": 0.4,
+   "score": 0.28,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1866,11 +2267,11 @@ start concepts (3): indexing, array_traversal, run_time_error
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_calls": 12,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 29
+  "prune": 19,
+  "label": 38
  }
 }
 ```

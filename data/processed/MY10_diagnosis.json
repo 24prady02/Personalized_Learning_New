@@ -16,7 +16,7 @@
  "start_concepts": [
   "indexing",
   "array_traversal",
-  "run_time_error"
+  "array_initializer"
  ],
  "held_misconceptions": [
   {
@@ -31,7 +31,7 @@
    "misconception": "OutOfBoundsElementsAreNull",
    "kind": "misconception",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
-   "score": 0.455
+   "score": 0.42
   }
  ],
  "error_evidence": [],
@@ -40,19 +40,31 @@
   {
    "edge": "pre:for_loop->array_traversal",
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.85,
+   "score": 0.425,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "edge": "pre:length_field->array_traversal",
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "score": 0.425,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "edge": "pre:array_initializer->indexing",
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "score": 0.38,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
   {
    "edge": "pre:indexing->off_by_one_error",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.4185,
+   "score": 0.3255,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
   {
    "edge": "pre:indexing->array_bounds",
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "score": 0.315,
+   "score": 0.225,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   }
  ],
@@ -97,6 +109,14 @@
    "rule": "wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0].",
    "source": "level_mis_links"
   },
+  "length_field": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "edge": "lvl:length_field@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
   "off_by_one_error": {
    "level": "L0",
    "way": "everyday_reading",
@@ -125,7 +145,8 @@
    "prune_score": 0.65,
    "score": 0.6175,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -162,10 +183,11 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.75,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.45,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 2,
@@ -182,9 +204,50 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
   },
@@ -202,8 +265,8 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.93,
-   "prune_score": 0.45,
-   "score": 0.4185,
+   "prune_score": 0.35,
+   "score": 0.3255,
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -222,8 +285,8 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.25,
+   "score": 0.225,
    "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -241,10 +304,11 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
    "confidence": 0.7,
-   "prune_score": 0.65,
-   "score": 0.455,
+   "prune_score": 0.6,
+   "score": 0.42,
    "logic": "Reading a[a.length] just gives null or 0.",
-   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException."
+   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -304,7 +368,8 @@
    "prune_score": 0.65,
    "score": 0.6175,
    "logic": "The first element of a is a[1].",
-   "twin_logic": "Numbering begins with 0; the first element is a[0]."
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -322,7 +387,8 @@
    "prune_score": 0.1,
    "score": 0.06,
    "logic": "After i changes, X[i] still refers to the element at the old value of i.",
-   "twin_logic": "a[i] is evaluated with the current value of i each time it is used."
+   "twin_logic": "a[i] is evaluated with the current value of i each time it is used.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -359,10 +425,11 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.75,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.45,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -378,10 +445,11 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
+   "prune_score": 0.30000000000000004,
+   "score": 0.21,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -395,10 +463,11 @@
    ],
    "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.55,
-   "prune_score": 0.15,
-   "score": 0.0825,
+   "prune_score": 0.10000000000000002,
+   "score": 0.055,
    "logic": "After i changes, X[i] still refers to the element at the old value of i.",
-   "twin_logic": "a[i] is evaluated with the current value of i each time it is used."
+   "twin_logic": "a[i] is evaluated with the current value of i each time it is used.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -423,6 +492,26 @@
   {
    "depth": 2,
    "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
    "edge": "pre:indexing->off_by_one_error",
    "target": "off_by_one_error",
    "kind": "prerequisite",
@@ -434,8 +523,8 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.93,
-   "prune_score": 0.45,
-   "score": 0.4185,
+   "prune_score": 0.35,
+   "score": 0.3255,
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
@@ -454,29 +543,11 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.25,
+   "score": 0.225,
    "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:indexing->array_traversal",
-   "target": "array_traversal",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass.",
-   "twin_logic": null
   },
   {
    "depth": 2,
@@ -493,11 +564,67 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
    "logic": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order.",
    "twin_logic": null,
    "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_traversal",
+   "edge": "pre:length_field->array_traversal",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.",
+   "twin_logic": null,
+   "consequence_of": "mis:indexing->ArrayIndexStartsAtOne"
+  },
+  {
+   "depth": 2,
+   "source": "array_initializer",
+   "edge": "pre:array_initializer->length_field",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "array_initializer",
+   "edge": "pre:array_declaration->array_initializer",
+   "target": "array_declaration",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "twin_logic": null
   },
   {
    "depth": 3,
@@ -516,7 +643,8 @@
    "prune_score": 0.45,
    "score": 0.315,
    "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
-   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -534,7 +662,8 @@
    "prune_score": 0.35,
    "score": 0.21,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -598,6 +727,61 @@
   },
   {
    "depth": 3,
+   "source": "length_field",
+   "edge": "lvl:length_field@L0#0",
+   "target": "length_field@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    4
+   ],
+   "quote": "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "array_initializer",
+   "edge": "pre:array_initializer->length_field",
+   "target": "length_field",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "An array made from a literal has as many elements as values listed, and a.length gives that number.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "array_initializer",
+   "edge": "pre:array_declaration->array_initializer",
+   "target": "array_declaration",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    4
+   ],
+   "quote": "Then a[1], a[2] and a[3] are 5, 10 and 15",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
    "source": "off_by_one_error",
    "edge": "mis:off_by_one_error->OffByOneBound",
    "target": "OffByOneBound",
@@ -612,7 +796,8 @@
    "prune_score": 0.6,
    "score": 0.36,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -630,7 +815,8 @@
    "prune_score": 0.35,
    "score": 0.1925,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -666,10 +852,11 @@
    ],
    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
    "confidence": 0.7,
-   "prune_score": 0.65,
-   "score": 0.455,
+   "prune_score": 0.6,
+   "score": 0.42,
    "logic": "Reading a[a.length] just gives null or 0.",
-   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException."
+   "twin_logic": "Reading any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -684,10 +871,11 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
+   "prune_score": 0.4,
+   "score": 0.28,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -741,10 +929,10 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_calls": 12,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
-  "prune": 15,
-  "label": 29
+  "prune": 19,
+  "label": 38
  }
 }
