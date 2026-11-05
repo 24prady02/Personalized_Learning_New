@@ -16,10 +16,10 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:char_arithmetic@L0#0 -> shown (0.63) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
     lvl:char_arithmetic@L4#2 -> not applied (0.00) ""
     lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->IdentifierCaseInsensitive (0.30), mis:println->ParenthesesOnlyIfArgument (0.30)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
     mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) ""
+    mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L0#0 (0.30), lvl:println@L4#3 (0.20)
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L0#0 -> not applied (0.00) ""
@@ -46,7 +46,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
     lvl:char@L3#0 -> not applied (0.00) ""
     lvl:char@L2#0 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.25), mis:expression->VariablesHoldExpressions (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
