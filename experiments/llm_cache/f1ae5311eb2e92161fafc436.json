@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint[] data = {4, 7, 2, 9, 5, 3};\nint[] counts = new int[3];\nfor (int i = 0; i < data.length; i++) {\n    counts[data[i] % 3]++;\n}\nfor (int r = 0; r < 3; r++) {\n    System.out.println(r + \": \" + counts[r]);\n}\n\nQuestion: Without tracing line by line, explain what counts holds at the end and why the code uses % 3\n\nStudent's answer, split into clauses:\nc1: counts[r] is how many numbers leave remainder r when divided by 3\nc2: The % 3 turns each number into an index 0, 1 or 2\nc3: so it fits the array\n\nEdge: pre:length_field->array_traversal  (length_field -> array_traversal, prerequisite)\nRule (logic): A traversal loop runs its index from 0 while it is below a.length, so it visits every element once.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: not applied\nClauses: none\nConfidence: 0.7"
+}
