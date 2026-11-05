@@ -1,0 +1,5 @@
+{
+ "code": "int n = 10;\ndo {\n    System.out.println(n);\n    n++;\n} while (n < 5);",
+ "question": "How many times does the body run? Explain your reasoning.",
+ "answer": "Zero times. 10 < 5 is false, so the loop never starts."
+}
