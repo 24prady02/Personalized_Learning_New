@@ -16,7 +16,7 @@ Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
 ## 1. Stage 1: the subgraph G from the code (no model)
 Masked code (string and char literals and comments blanked; this is what the patterns see):
 ```
-char c = ' ';
+char c = 'A';
 int n = c + 1;
 System.out.println(n);
 ```
@@ -28,8 +28,8 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | char | True | pattern | "'A'" | 1 |
 | char | True | type | 'char' | 1 |
 | char_arithmetic | False | signal | "char c = 'A';\nint n = c + 1" | 1 |
-| expression | True | pattern | 'c + 1' | 2 |
-| expression | True | pattern | "= ' ';" | 1 |
+| expression | True | pattern | 'c +' | 2 |
+| expression | True | pattern | "= 'A';" | 1 |
 | println | False | pattern | 'System.out.println(' | 3 |
 | statement | True | pattern | ';' | 1 |
 
@@ -99,29 +99,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
+mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.30)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
+Kept by pruning: mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.30)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
+| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
+| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
 Model's reply:
 ```
 mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.95
-mis:println->ParenthesesOnlyIfArgument | not applied | clauses: none | confidence: 0.97
-mis:println->IdentifierCaseInsensitive | not applied | clauses: none | confidence: 0.97
+mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.95
+mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-| mis:println->ParenthesesOnlyIfArgument | not applied |  |  | 0.0 |  |  |
-| mis:println->IdentifierCaseInsensitive | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
 
 #### println, level ways: 17 edges offered
 Edges offered:
@@ -615,9 +615,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.15)
+mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.15)
+Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -725,7 +725,7 @@ mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0
 ![Figure 6](figure06.png)
 Held set after the one-fault rules: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
 
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
@@ -803,10 +803,10 @@ start: BM25 of the answer against each tagged concept: println 9.77 (hits 1), ar
 start: chosen println, arithmetic_operators, char
 start concepts (3): println, arithmetic_operators, char
 --- depth 1: current concepts ['println', 'arithmetic_operators', 'char']
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.30)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) ""
-    mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L2#0 (0.30), lvl:println@L2#2 (0.20)
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
@@ -847,7 +847,7 @@ start concepts (3): println, arithmetic_operators, char
     lvl:char_arithmetic@L0#0 -> shown (0.54) "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
     lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
     lvl:char_arithmetic@L4#2 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.15)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->VariablesHoldExpressions (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
@@ -971,7 +971,8 @@ start concepts (3): println, arithmetic_operators, char
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "A char is only a letter, so c + k is an error.",
-   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1051,7 +1052,8 @@ start concepts (3): println, arithmetic_operators, char
    "prune_score": 1.0,
    "score": 0.95,
    "logic": "char is not a numeric type",
-   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1116,7 +1118,8 @@ start concepts (3): println, arithmetic_operators, char
    "prune_score": 1.0,
    "score": 0.97,
    "logic": "A char is only a letter, so c + k is an error.",
-   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1196,7 +1199,8 @@ start concepts (3): println, arithmetic_operators, char
    "prune_score": 1.0,
    "score": 0.95,
    "logic": "char is not a numeric type",
-   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "primary"
   },
   {
    "depth": 3,
