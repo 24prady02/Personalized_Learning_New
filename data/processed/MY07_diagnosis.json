@@ -112,7 +112,8 @@
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -207,7 +208,8 @@
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -289,7 +291,8 @@
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -403,7 +406,8 @@
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -441,7 +445,8 @@
    "prune_score": 0.2,
    "score": 0.12,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
-   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -458,7 +463,8 @@
    "prune_score": 0.2,
    "score": 0.12,
    "logic": "= stores the expression itself, not its computed value",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
+   "role": "context"
   },
   {
    "depth": 3,

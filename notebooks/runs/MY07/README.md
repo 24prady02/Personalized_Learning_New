@@ -24,7 +24,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | arithmetic_operators | False | pattern | 'g + 1' | 2 |
-| expression | True | pattern | 'g + 1' | 2 |
+| expression | True | pattern | 'g +' | 2 |
 | expression | True | pattern | '= 2147483647;' | 1 |
 | int | True | pattern | 'int' | 1 |
 | int | True | type | 'int' | 1 |
@@ -727,7 +727,7 @@ mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [show
 ![Figure 6](figure06.png)
 Held set after the one-fault rules: mis:overflow->IntOverflowWidensAutomatically; filed at the dependent concept: mis:int->IntOverflowWidensAutomatically
 
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:int->IntOverflowWidensAutomatically (shadow of mis:overflow->IntOverflowWidensAutomatically)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->overflow), prerequisites {'expression': ['arithmetic_operators'], 'overflow': ['int'], 'println': ['statement']}
@@ -993,7 +993,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1088,7 +1089,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1170,7 +1172,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1284,7 +1287,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.95,
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
-   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
+   "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1322,7 +1326,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.2,
    "score": 0.12,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
-   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable."
+   "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1339,7 +1344,8 @@ start concepts (3): arithmetic_operators, overflow, println
    "prune_score": 0.2,
    "score": 0.12,
    "logic": "= stores the expression itself, not its computed value",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y."
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
+   "role": "context"
   },
   {
    "depth": 3,
