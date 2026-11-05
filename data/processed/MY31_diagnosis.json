@@ -1,0 +1,793 @@
+{
+ "scenario": "MY31",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "b",
+  "because c++ moves to the next letter",
+  "Then k = c + 1 is the letter after b",
+  "so it prints c"
+ ],
+ "start_concepts": [
+  "assignment",
+  "expression",
+  "arithmetic_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "char_arithmetic",
+   "misconception": "CharNotNumeric",
+   "kind": "misconception",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "score": 0.6
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:char->char_arithmetic",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "score": 0.9,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  }
+ ],
+ "root_cause": {
+  "concept": "char_arithmetic",
+  "misconception": "CharNotNumeric"
+ },
+ "levels": {
+  "assignment": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "edge": "lvl:assignment@L2#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "char": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "b; because c++ moves to the next letter",
+   "edge": "lvl:char@L2#2",
+   "source": "level_way",
+   "also_shown": [
+    "L0 everyday_reading"
+   ]
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CharNotNumeric",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "source": "level_mis_links"
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Then k = c + 1 is the letter after b",
+   "edge": "lvl:expression@L3#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "increment_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "b; because c++ moves to the next letter",
+   "edge": "lvl:increment_operators@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 output_prediction"
+   ]
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "b; so it prints c",
+   "edge": "lvl:println@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "statement": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "edge": "lvl:statement@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 output_prediction"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "expression",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#0",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L2#2",
+   "target": "char_arithmetic@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "For char c = 'A', c++ sets c to 'B'. c = c + 1; is rejected, because the right side is an int.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#1",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#2",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L2#2",
+   "target": "char@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.75,
+   "prune_score": 0.3,
+   "score": 0.225,
+   "logic": "c++ on char c = 'A' makes c 'B', because increment works on chars directly. c = c + 1; does not compile, because the right side is an int.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#2",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#1",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "b": "mis:assignment->VariableKeepsOldValue",
+  "because c++ moves to the next letter": "mis:assignment->VariableKeepsOldValue",
+  "Then k = c + 1 is the letter after b": "mis:assignment->VariableKeepsOldValue",
+  "so it prints c": "pre:arithmetic_operators->expression"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 4,
+ "llm_calls": 0,
+ "llm_cache_hits": 56,
+ "llm_calls_by_step": {
+  "prune": 20,
+  "label": 36
+ }
+}

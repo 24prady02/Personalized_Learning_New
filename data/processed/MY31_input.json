@@ -1,0 +1,5 @@
+{
+ "code": "char c = 'a';\nc++;\nint k = c + 1;\nSystem.out.println(c);\nSystem.out.println(k);",
+ "question": "What are the two lines of output? Explain each one.",
+ "answer": "b, because c++ moves to the next letter. Then k = c + 1 is the letter after b, so it prints c"
+}
