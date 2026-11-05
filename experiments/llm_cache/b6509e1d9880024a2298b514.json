@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nSystem.out.println(1 + 2 + \"3\" + 4 + 5);\n\nQuestion: What is printed? Explain how Java works out each +\n\nStudent's answer, split into clauses:\nc1: 339\nc2: Java adds the numbers first\nc3: so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3\n\nEdge: par:string_concatenation~arithmetic_operators  (string_concatenation -> arithmetic_operators, parallel)\nRule (logic): + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: broken\nClauses: 1, 2, 3\nConfidence: 0.95"
+}

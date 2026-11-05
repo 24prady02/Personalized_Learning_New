@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nSystem.out.println(1 + 2 + \"3\" + 4 + 5);\n\nQuestion: What is printed? Explain how Java works out each +\n\nStudent's answer, split into clauses:\nc1: 339\nc2: Java adds the numbers first\nc3: so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3\n\nConcept: string_conversion\nWay: everyday reading\nWhat an answer that shows this way does: Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + \"bc\" and \"bc\" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: shown\nClauses: 1, 2, 3\nConfidence: 0.85"
+}

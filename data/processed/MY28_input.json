@@ -1,0 +1,5 @@
+{
+ "code": "System.out.println(1 + 2 + \"3\" + 4 + 5);",
+ "question": "What is printed? Explain how Java works out each +",
+ "answer": "339. Java adds the numbers first, so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the “3”."
+}

@@ -1,0 +1,460 @@
+{
+ "scenario": "MY28",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "339",
+  "Java adds the numbers first",
+  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
+ ],
+ "start_concepts": [
+  "arithmetic_operators",
+  "string_concatenation",
+  "string_conversion"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "string_conversion",
+   "misconception": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.9
+  },
+  {
+   "concept": "string_concatenation",
+   "misconception": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.651
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.95,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "edge": "pre:string_concatenation->string_conversion",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.85,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  }
+ ],
+ "root_cause": {
+  "concept": "string_concatenation",
+  "misconception": "ArithmeticPlusPrecedes"
+ },
+ "levels": {
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "lvl:expression@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace"
+   ]
+  },
+  "string_concatenation": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ArithmeticPlusPrecedes",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "source": "level_mis_links"
+  },
+  "string_conversion": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "StringPlusLeftToRight",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L0#3",
+   "target": "string_concatenation@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "target": "arithmetic_operators",
+   "kind": "parallel",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "depth": 2,
+   "source": "string_conversion",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_concatenation",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#2",
+   "target": "expression@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L0#3",
+   "target": "string_concatenation@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L0#2",
+   "target": "string_conversion@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.8,
+   "prune_score": 0.55,
+   "score": 0.44,
+   "logic": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L0#0",
+   "target": "string_conversion@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + \"bc\" and \"bc\" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "string_conversion",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_concatenation",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "twin_logic": null,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "depth": 2,
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "target": "arithmetic_operators",
+   "kind": "parallel",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "depth": 2,
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#2",
+   "target": "expression@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "clause_coverage": {
+  "339": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "Java adds the numbers first": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3": "mis:string_concatenation->ArithmeticPlusPrecedes"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 30,
+ "llm_calls_by_step": {
+  "prune": 11,
+  "label": 19
+ }
+}
