@@ -1,6 +1,6 @@
 {
  "title": "Chapter 1 knowledge graph: concepts, prerequisites, parallels, misconceptions",
- "version": "3.9.7 (3.9.6 + reader fixes 2026-11-04: windows, overflow guard, char_arithmetic on masked text, missing forms; listed in reader.pattern_fixes_reader7)",
+ "version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
  "source": "R. Sedgewick and K. Wayne, Introduction to Programming in Java, 1st ed. (2008), Chapter 1 (Sections 1.1-1.6), checked page by page; A. B. Downey and C. Mayfield, Think Java, 2nd ed. (2020), for what S&W Chapter 1 does not cover",
  "schema": {
   "description": "Chapter 1 knowledge graph (Sedgewick & Wayne, Introduction to Programming in Java, 1.1-1.6), checked against the 1st-ed. book (2008) and Think Java 2nd ed. Six node types: section, topic, concept, misconception, error, learning level. Each concept has its 5 learning-progression levels (L0-L4) attached by has_level edges; the edge logic of a has_level edge states the ways of reaching that level (each way has its edge_logic: the exact rule of the concept that the way tests, of one of 13 rule categories; exact_rule holds the same text). Ways are edge logic, not nodes. concept.rules_by_type holds all 13 rule categories with verified sources.",
@@ -113251,7 +113251,7 @@
    "violates_rule": [
     "compile.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.1",
@@ -113259,7 +113259,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "textbook"
+   "evidence_type": "textbook",
+   "role_note": "v3.9.8 S9c (one primary): primary only at compile; compile owns the rule the misconception violates"
   },
   {
    "source": "assignment",
@@ -114006,7 +114007,7 @@
     "parsing.R1",
     "parsing.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.5",
@@ -114014,7 +114015,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "textbook"
+   "evidence_type": "textbook",
+   "role_note": "v3.9.8 S9c (one primary): primary only at parsing; parsing owns the rule the misconception violates"
   },
   {
    "source": "parsing",
@@ -117713,7 +117715,7 @@
    "violates_rule": [
     "method_call.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -117722,7 +117724,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at method_call; method_call owns the rule the misconception violates"
   },
   {
    "source": "standard_output",
@@ -117753,7 +117756,7 @@
     "class_declaration.R1",
     "class_declaration.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.1",
@@ -117761,7 +117764,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at class_declaration; class_declaration owns the rule the misconception violates"
   },
   {
    "source": "compile_time_error",
@@ -117793,7 +117797,7 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -117803,7 +117807,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at assignment; assignment owns the rule the misconception violates"
   },
   {
    "source": "expression",
@@ -117886,13 +117891,14 @@
     "assignment.R1",
     "assignment.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at assignment; assignment owns the rule the misconception violates"
   },
   {
    "source": "char_arithmetic",
@@ -117903,14 +117909,15 @@
    "violates_rule": [
     "char.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at char; char owns the rule the misconception violates"
   },
   {
    "source": "long_type",
@@ -117947,13 +117954,14 @@
     "literal.R4",
     "literal.R5"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at literal; literal owns the rule the misconception violates"
   },
   {
    "source": "comparison_operators",
@@ -118002,14 +118010,15 @@
    "violates_rule": [
     "boolean_expression.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at boolean_expression; boolean_expression owns the rule the misconception violates"
   },
   {
    "source": "if_statement",
@@ -118020,13 +118029,14 @@
    "violates_rule": [
     "boolean_expression.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at boolean_expression; boolean_expression owns the rule the misconception violates"
   },
   {
    "source": "conditional_operator",
@@ -118037,13 +118047,14 @@
    "violates_rule": [
     "boolean_expression.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at boolean_expression; boolean_expression owns the rule the misconception violates"
   },
   {
    "source": "control_flow",
@@ -118074,7 +118085,7 @@
    "violates_rule": [
     "loop_control.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
@@ -118082,7 +118093,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at loop_control; loop_control owns the rule the misconception violates"
   },
   {
    "source": "variable",
@@ -118095,12 +118107,13 @@
     "loop_scope.R2",
     "loop_scope.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at loop_scope; loop_scope owns the rule the misconception violates"
   },
   {
    "source": "accumulator_pattern",
@@ -118132,13 +118145,14 @@
     "loop_scope.R2",
     "loop_scope.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at loop_scope; loop_scope owns the rule the misconception violates"
   },
   {
    "source": "array_traversal",
@@ -118284,13 +118298,14 @@
     "redirection.R1",
     "redirection.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.5",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at redirection; redirection owns the rule the misconception violates"
   },
   {
    "source": "filter",
@@ -118302,13 +118317,14 @@
     "redirection.R1",
     "redirection.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.5",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at redirection; redirection owns the rule the misconception violates"
   },
   {
    "source": "for_loop",
@@ -118497,14 +118513,15 @@
     "type_conversion.R1",
     "type_conversion.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at type_conversion; type_conversion owns the rule the misconception violates"
   },
   {
    "source": "if_statement",
@@ -118558,7 +118575,7 @@
     "while_loop.R1",
     "while_loop.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Swidan2018",
@@ -118566,7 +118583,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at while_loop; while_loop owns the rule the misconception violates"
   },
   {
    "source": "nested_loops",
@@ -118632,14 +118650,15 @@
    "violates_rule": [
     "compile.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Holdener2023",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at compile; compile owns the rule the misconception violates"
   },
   {
    "source": "run_time_error",
@@ -118650,14 +118669,15 @@
    "violates_rule": [
     "compile.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Holdener2023",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at compile; compile owns the rule the misconception violates"
   },
   {
    "source": "logical_error",
@@ -118668,14 +118688,15 @@
    "violates_rule": [
     "compile.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Holdener2023",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at compile; compile owns the rule the misconception violates"
   },
   {
    "source": "comment",
@@ -118768,7 +118789,7 @@
    "violates_rule": [
     "block.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.1",
@@ -118778,7 +118799,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at block; block owns the rule the misconception violates"
   },
   {
    "source": "compile_time_error",
@@ -119051,7 +119073,7 @@
    "violates_rule": [
     "floating_point_precision.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
@@ -119061,7 +119083,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at floating_point_precision; floating_point_precision owns the rule the misconception violates"
   },
   {
    "source": "convergence_test",
@@ -119072,7 +119095,7 @@
    "violates_rule": [
     "floating_point_precision.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
@@ -119082,7 +119105,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at floating_point_precision; floating_point_precision owns the rule the misconception violates"
   },
   {
    "source": "overflow",
@@ -119111,14 +119135,15 @@
    "violates_rule": [
     "overflow.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "OT-Datatypes",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at overflow; overflow owns the rule the misconception violates"
   },
   {
    "source": "comparison_operators",
@@ -119146,13 +119171,14 @@
    "violates_rule": [
     "comparison_operators.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at comparison_operators; comparison_operators owns the rule the misconception violates"
   },
   {
    "source": "explicit_cast",
@@ -119246,7 +119272,7 @@
     "parsing.R1",
     "parsing.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "OT-CmdLine",
@@ -119254,7 +119280,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at parsing; parsing owns the rule the misconception violates"
   },
   {
    "source": "math_library",
@@ -119265,7 +119292,7 @@
    "violates_rule": [
     "method_call.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.2",
@@ -119273,7 +119300,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at method_call; method_call owns the rule the misconception violates"
   },
   {
    "source": "method_call",
@@ -119675,14 +119703,15 @@
    "violates_rule": [
     "control_flow.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Swidan2018",
     "Sorva2012",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at control_flow; control_flow owns the rule the misconception violates"
   },
   {
    "source": "array_declaration",
@@ -119711,14 +119740,15 @@
    "violates_rule": [
     "array_declaration.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.4",
     "OT-Arrays",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at array_declaration; array_declaration owns the rule the misconception violates"
   },
   {
    "source": "array_aliasing",
@@ -119764,14 +119794,15 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "OT-Arrays",
     "SW-1.4",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at indexing; indexing owns the rule the misconception violates"
   },
   {
    "source": "array_exchange",
@@ -119801,7 +119832,7 @@
    "violates_rule": [
     "array_exchange.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.4",
@@ -119809,7 +119840,8 @@
     "SW-1.2",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at array_exchange; array_exchange owns the rule the misconception violates"
   },
   {
    "source": "variable_swap",
@@ -119875,14 +119907,15 @@
    "violates_rule": [
     "array_creation.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.4",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at array_creation; array_creation owns the rule the misconception violates"
   },
   {
    "source": "matrix_operations",
@@ -119947,13 +119980,14 @@
     "standard_input.R1",
     "standard_input.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.5",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at standard_input; standard_input owns the rule the misconception violates"
   },
   {
    "source": "animation",
@@ -119982,14 +120016,15 @@
    "violates_rule": [
     "animation.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.5",
     "StdDraw-API",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at animation; animation owns the rule the misconception violates"
   },
   {
    "source": "standard_drawing",
@@ -120017,13 +120052,14 @@
    "violates_rule": [
     "standard_drawing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.5",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at standard_drawing; standard_drawing owns the rule the misconception violates"
   },
   {
    "source": "markov_chain",
@@ -120051,13 +120087,14 @@
    "violates_rule": [
     "markov_chain.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.6",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at markov_chain; markov_chain owns the rule the misconception violates"
   },
   {
    "source": "two_models",
@@ -120068,13 +120105,14 @@
    "violates_rule": [
     "markov_chain.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.6",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at markov_chain; markov_chain owns the rule the misconception violates"
   },
   {
    "source": "frequency_counting",
@@ -120105,14 +120143,15 @@
     "frequency_counting.R1",
     "frequency_counting.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.6",
     "TverskyKahneman1971",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at frequency_counting; frequency_counting owns the rule the misconception violates"
   },
   {
    "source": "two_models",
@@ -120124,14 +120163,15 @@
     "frequency_counting.R1",
     "frequency_counting.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.6",
     "TverskyKahneman1971",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at frequency_counting; frequency_counting owns the rule the misconception violates"
   },
   {
    "source": "monte_carlo_simulation",
@@ -120238,14 +120278,15 @@
    "violates_rule": [
     "array_default_values.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "SW-1.4",
     "Kaczmarczyk2010",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at array_default_values; array_default_values owns the rule the misconception violates"
   },
   {
    "source": "primitive_type",
@@ -120328,14 +120369,15 @@
    "violates_rule": [
     "naming_convention.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "FOPP-Names",
     "Sorva2012",
     "Kaczmarczyk2010"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at naming_convention; naming_convention owns the rule the misconception violates"
   },
   {
    "source": "escape_sequences",
@@ -120418,14 +120460,15 @@
    "violates_rule": [
     "string_conversion.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at string_conversion; string_conversion owns the rule the misconception violates"
   },
   {
    "source": "string_conversion",
@@ -120490,13 +120533,14 @@
    "violates_rule": [
     "explicit_cast.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at explicit_cast; explicit_cast owns the rule the misconception violates"
   },
   {
    "source": "math_random",
@@ -120626,13 +120670,14 @@
    "violates_rule": [
     "side_effect_order.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.3",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at side_effect_order; side_effect_order owns the rule the misconception violates"
   },
   {
    "source": "args_length",
@@ -120661,14 +120706,15 @@
    "violates_rule": [
     "args_length.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "SW-1.2",
     "SW-1.4",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at args_length; args_length owns the rule the misconception violates"
   },
   {
    "source": "run_time_error",
@@ -120945,13 +120991,14 @@
    "violates_rule": [
     "convergence_rate.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "derived",
    "sources": [
     "SW-1.6",
     "SW-1e"
    ],
-   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it"
+   "evidence_type": "the believable negation of a cited rule; a candidate until a second coder or student data confirms it",
+   "role_note": "v3.9.8 S9c (one primary): primary only at convergence_rate; convergence_rate owns the rule the misconception violates"
   },
   {
    "source": "assignment",
@@ -121017,13 +121064,14 @@
    "violates_rule": [
     "loop_scope.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at loop_scope; loop_scope owns the rule the misconception violates"
   },
   {
    "source": "block",
@@ -121085,13 +121133,14 @@
    "violates_rule": [
     "boolean.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at boolean; boolean owns the rule the misconception violates"
   },
   {
    "source": "boolean",
@@ -121172,13 +121221,14 @@
    "violates_rule": [
     "if_else_statement.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at if_else_statement; if_else_statement owns the rule the misconception violates"
   },
   {
    "source": "if_else_statement",
@@ -121245,13 +121295,14 @@
     "if_statement.R1",
     "if_statement.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Sorva2012",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at if_statement; if_statement owns the rule the misconception violates"
   },
   {
    "source": "if_statement",
@@ -121282,13 +121333,14 @@
     "for_loop.R2",
     "for_loop.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at for_loop; for_loop owns the rule the misconception violates"
   },
   {
    "source": "for_loop",
@@ -121353,13 +121405,14 @@
    "violates_rule": [
     "while_loop.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Caceffo2019",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at while_loop; while_loop owns the rule the misconception violates"
   },
   {
    "source": "for_loop",
@@ -121390,7 +121443,7 @@
    "violates_rule": [
     "while_loop.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "EckertKautz2026",
@@ -121398,7 +121451,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at while_loop; while_loop owns the rule the misconception violates"
   },
   {
    "source": "while_loop",
@@ -121552,13 +121606,14 @@
    "violates_rule": [
     "indexing.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at indexing; indexing owns the rule the misconception violates"
   },
   {
    "source": "indexing",
@@ -121621,13 +121676,14 @@
    "violates_rule": [
     "array_creation.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "ProgMiscon2021",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at two_dimensional_array; violates array_creation, which is not attached; Chapter 1 code uses int[][], which the reader tags as two_dimensional_array, and two_dimensional_array precedes multidimensional_array"
   },
   {
    "source": "two_dimensional_array",
@@ -121690,14 +121746,15 @@
    "violates_rule": [
     "method_call.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "BrownAltadmri2017",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at method_call; method_call owns the rule the misconception violates"
   },
   {
    "source": "reading_error_messages",
@@ -121726,14 +121783,15 @@
    "violates_rule": [
     "reading_error_messages.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at reading_error_messages; reading_error_messages owns the rule the misconception violates"
   },
   {
    "source": "reading_error_messages",
@@ -121804,14 +121862,15 @@
     "main_method.R1",
     "main_method.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at main_method; main_method owns the rule the misconception violates"
   },
   {
    "source": "main_method",
@@ -122027,14 +122086,15 @@
    "violates_rule": [
     "integer_division.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at integer_division; integer_division owns the rule the misconception violates"
   },
   {
    "source": "data_type",
@@ -122097,13 +122157,14 @@
    "violates_rule": [
     "declaration.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at declaration; declaration owns the rule the misconception violates"
   },
   {
    "source": "declaration",
@@ -122131,14 +122192,15 @@
    "violates_rule": [
     "widening_conversion.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "RS",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at widening_conversion; widening_conversion owns the rule the misconception violates"
   },
   {
    "source": "widening_conversion",
@@ -122185,14 +122247,15 @@
    "violates_rule": [
     "division_by_zero.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "CSA",
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at division_by_zero; division_by_zero owns the rule the misconception violates"
   },
   {
    "source": "named_constants",
@@ -122221,14 +122284,15 @@
    "violates_rule": [
     "named_constants.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "rule_dictionary",
    "sources": [
     "HO",
     "RS",
     "TJ-2e"
    ],
-   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)"
+   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
+   "role_note": "v3.9.8 S9c (one primary): primary only at named_constants; named_constants owns the rule the misconception violates"
   },
   {
    "source": "dangling_else",
@@ -122257,14 +122321,15 @@
    "violates_rule": [
     "dangling_else.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "LI",
     "HO",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at dangling_else; dangling_else owns the rule the misconception violates"
   },
   {
    "source": "for_loop",
@@ -122298,7 +122363,7 @@
     "for_loop.R2",
     "for_loop.R3"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "LI",
@@ -122306,7 +122371,8 @@
     "SW-1e",
     "TJ-2e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at for_loop; for_loop owns the rule the misconception violates"
   },
   {
    "source": "empty_statement",
@@ -122423,14 +122489,15 @@
    "violates_rule": [
     "token_vs_line_input.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "TJ",
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at token_vs_line_input; token_vs_line_input owns the rule the misconception violates"
   },
   {
    "source": "math_random",
@@ -122441,12 +122508,13 @@
    "violates_rule": [
     "monte_carlo_simulation.R1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Konold1989"
    ],
-   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study"
+   "evidence_type": "named in a misconception catalogue (ProgMiscon) or an empirical study",
+   "role_note": "v3.9.8 S9c (one primary): primary only at monte_carlo_simulation; monte_carlo_simulation owns the rule the misconception violates"
   },
   {
    "source": "monte_carlo_simulation",
@@ -122489,12 +122557,13 @@
    "violates_rule": [
     "matrix_operations.R2"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "LA-Nicholson"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at matrix_operations; matrix_operations owns the rule the misconception violates"
   },
   {
    "source": "method_call",
@@ -122558,13 +122627,14 @@
    "violates_rule": [
     "variable.B1"
    ],
-   "role": "primary",
+   "role": "context",
    "provenance": "textbook",
    "sources": [
     "CSA",
     "SW-1e"
    ],
-   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning"
+   "evidence_type": "a mistake the book itself raises in an exercise, Q&A or warning",
+   "role_note": "v3.9.8 S9c (one primary): primary only at variable; variable owns the rule the misconception violates"
   },
   {
    "source": "declaration",
@@ -127802,7 +127872,7 @@
    "type": "misconception",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "role": "primary",
+   "role": "context",
    "provenance": "published",
    "sources": [
     "Kaczmarczyk2010",
@@ -127812,7 +127882,8 @@
     "CSA",
     "HO"
    ],
-   "evidence_type": "linked in v3.9 coverage audit"
+   "evidence_type": "linked in v3.9 coverage audit",
+   "role_note": "v3.9.8 S9c (one primary): primary only at loop_control; violates indexing, which is not attached; the bound sits in the loop condition, loop_control is the gold root concept of S007 and T006, and off_by_one_error is rarely tagged from code"
   },
   {
    "source": "off_by_one_error",
@@ -290047,13 +290118,161 @@
     "verdict": "confirmed",
     "note": "second textbook (Think Java 2e) states the same link"
    }
+  },
+  {
+   "source": "do_while_loop",
+   "target": "break_statement",
+   "type": "prerequisite",
+   "logic": "break leaves the do-while loop at once, exactly as it leaves a while or for loop.",
+   "sources": [
+    "JLS21-ch14"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.15",
+     "quote": "A break statement with no label attempts to transfer control to the innermost enclosing switch, while, do, or for statement",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> break_statement and for_loop -> break_statement.",
+   "revision": {
+    "version": "3.9.8",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e / JLS SE 21 PDFs; Think Java 2e has no do-while loop and no infinite-for example"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no do-while loop"
+   }
+  },
+  {
+   "source": "do_while_loop",
+   "target": "continue_statement",
+   "type": "prerequisite",
+   "logic": "continue ends the current pass of the do-while loop and goes on to the loop test.",
+   "sources": [
+    "JLS21-ch14"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.16",
+     "quote": "A continue statement with no label attempts to transfer control to the innermost enclosing while, do, or for statement",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> continue_statement and for_loop -> continue_statement.",
+   "revision": {
+    "version": "3.9.8",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e / JLS SE 21 PDFs; Think Java 2e has no do-while loop and no infinite-for example"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no do-while loop"
+   }
+  },
+  {
+   "source": "do_while_loop",
+   "target": "loop_control",
+   "type": "prerequisite",
+   "logic": "A do-while loop has the same control parts as a while loop (the variable set before, the condition, the update in the body); only the test is moved after the body.",
+   "sources": [
+    "JLS21-ch14",
+    "SW-1e"
+   ],
+   "evidence_type": "textbook",
+   "grounding": "book_passage",
+   "book_support": [
+    {
+     "book": "SW-1e",
+     "pdf_page": 81,
+     "page": 71,
+     "quote": "The meaning of this statement is the same as while (<boolean expression>) { <statements> } except that the first test of the condition is omitted.",
+     "match": "exact"
+    },
+    {
+     "book": "JLS21-ch14",
+     "section": "14.13",
+     "quote": "The do statement executes a Statement and an Expression repeatedly until the value of the Expression is false.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> loop_control.",
+   "revision": {
+    "version": "3.9.8",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e / JLS SE 21 PDFs; Think Java 2e has no do-while loop and no infinite-for example"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e has no do-while loop"
+   }
+  },
+  {
+   "source": "for_loop",
+   "target": "infinite_loop",
+   "type": "prerequisite",
+   "logic": "A for loop whose condition never becomes false (or is left out) repeats forever unless a break ends it.",
+   "sources": [
+    "JLS21-ch14"
+   ],
+   "evidence_type": "language_specification",
+   "grounding": "spec_passage",
+   "book_support": [
+    {
+     "book": "JLS21-ch14",
+     "section": "14.14.1.2",
+     "quote": "If the Expression is not present, then the only way a for statement can complete normally is by use of a break statement.",
+     "match": "exact"
+    }
+   ],
+   "book_note": "Sibling of while_loop -> infinite_loop.",
+   "revision": {
+    "version": "3.9.8",
+    "date": "2026-11-04",
+    "fix": 2,
+    "rule": "S9b shared part for every sibling construct"
+   },
+   "final_check": {
+    "verdict": "matches",
+    "action": "added",
+    "note": "quote checked against the uploaded SW-1e / JLS SE 21 PDFs; Think Java 2e has no do-while loop and no infinite-for example"
+   },
+   "tj_check": {
+    "verdict": "not in TJ-2e",
+    "note": "TJ-2e shows infinite loops only with while"
+   }
   }
  ],
  "counts": {
   "concepts": 173,
   "misconception_nodes": 255,
   "error_nodes": 41,
-  "prerequisite": 249,
+  "prerequisite": 253,
   "parallel": 35,
   "misconception": 476,
   "error": 93,
@@ -291582,7 +291801,7 @@
   "design_rules_added": {
    "S9a": "A concept that appears in a program with others is joined to them by a path: no concept sits alone in its piece. A direct edge that a longer path already implies is allowed when the intermediate concept does not appear in the programs where the two do (exception to S6d).",
    "S9b": "If one construct has an edge to a shared part, every sibling construct with that part gets the same edge.",
-   "S9c": "A misconception attached to several concepts is either joined to them by prerequisite paths, or it is primary only at the concept whose rule it violates (and at attached concepts on a prerequisite path with that one); its other attachments are context.",
+   "S9c": "A misconception or error is primary at exactly one concept: the concept that owns the rule it violates (two cases with no attached owner are decided in revision_3_9_8). Its other attachments are context.",
    "S9d": "Every reader pattern that names a literal value also has a program-scope signal for the same value held in a variable.",
    "S9e": "The text a pattern matches is exactly the construct; trailing anchors are lookaheads.",
    "S9f": "Prerequisite depth reflects specificity only where one concept is a case of the other; genuine ties are left to the traversal code (label confidence), not to name order.",
@@ -291730,5 +291949,98 @@
    "contradicted": 0,
    "method": "each new edge searched in the uploaded Think Java 2e PDF; quotes are verbatim and checked against the page text (printed page = pdf page - 22)"
   }
+ },
+ "revision_3_9_8": {
+  "date": "2026-11-04",
+  "based_on": "3.9.7",
+  "decisions": {
+   "OffByOneBound": {
+    "primary": "loop_control",
+    "why": "violates indexing, which is not attached; the bound sits in the loop condition, loop_control is the gold root concept of S007 and T006, and off_by_one_error is rarely tagged from code"
+   },
+   "ArrayRankIsLength": {
+    "primary": "two_dimensional_array",
+    "why": "violates array_creation, which is not attached; Chapter 1 code uses int[][], which the reader tags as two_dimensional_array, and two_dimensional_array precedes multidimensional_array"
+   }
+  },
+  "roles_changed": [
+   "ParenthesesOnlyIfArgument: expression primary -> context (primary at method_call)",
+   "ClassNameMatchesFile: program_text primary -> context (primary at class_declaration)",
+   "CompileRunsProgram: run primary -> context (primary at compile)",
+   "VariablesHoldExpressions: variable primary -> context (primary at assignment)",
+   "AssignmentNotExpression: chained_assignment primary -> context (primary at assignment)",
+   "CharNotNumeric: char_arithmetic primary -> context (primary at char)",
+   "LargeIntegerLong: int_literal_limit primary -> context (primary at literal)",
+   "ComparisonWithBooleanLiteral: comparison_operators primary -> context (primary at boolean_expression)",
+   "MapToBooleanWithIf: if_statement primary -> context (primary at boolean_expression)",
+   "MapToBooleanWithConditionalOperator: conditional_operator primary -> context (primary at boolean_expression)",
+   "PreIncrementBeforeLoop: increment_operators primary -> context (primary at loop_control)",
+   "LoopBodyScopeImpliesLoopLifetime: variable primary -> context (primary at loop_scope)",
+   "LoopVariableLifetimeScope: loop_variable primary -> context (primary at loop_scope)",
+   "OffByOneBound: off_by_one_error primary -> context (primary at loop_control)",
+   "ArgsAreNumbers: command_line_args primary -> context (primary at parsing)",
+   "RedirectionIsArgument: piping primary -> context (primary at redirection)",
+   "RedirectionIsArgument: filter primary -> context (primary at redirection)",
+   "NoCastIfSameSize: widening_conversion primary -> context (primary at type_conversion)",
+   "WhileStopsMidBody: loop_body primary -> context (primary at while_loop)",
+   "CompilesMeansWorks: compile_time_error primary -> context (primary at compile)",
+   "CompilesMeansWorks: run_time_error primary -> context (primary at compile)",
+   "CompilesMeansWorks: logical_error primary -> context (primary at compile)",
+   "UnbalancedBraces: class_declaration primary -> context (primary at block)",
+   "FloatingPointIsExact: double primary -> context (primary at floating_point_precision)",
+   "FloatingPointIsExact: convergence_test primary -> context (primary at floating_point_precision)",
+   "IntOverflowWidensAutomatically: int primary -> context (primary at overflow)",
+   "ChainedComparison: boolean_expression primary -> context (primary at comparison_operators)",
+   "CastParsesString: explicit_cast primary -> context (primary at parsing)",
+   "MathMethodWithoutClassName: math_library primary -> context (primary at method_call)",
+   "StatementsRunInAnyOrder: statement primary -> context (primary at control_flow)",
+   "DeclarationCreatesArray: array_creation primary -> context (primary at array_declaration)",
+   "ArrayIndexStartsAtOne: lookup_table primary -> context (primary at indexing)",
+   "SwapWithoutTemp: assignment primary -> context (primary at array_exchange)",
+   "NegativeArraySize: run_time_error primary -> context (primary at array_creation)",
+   "StdInRereads: stream_model primary -> context (primary at standard_input)",
+   "DrawWithoutShow: standard_drawing primary -> context (primary at animation)",
+   "PixelCoordinates: coordinate_scaling primary -> context (primary at standard_drawing)",
+   "StartPageMatters: power_method primary -> context (primary at markov_chain)",
+   "StartPageMatters: two_models primary -> context (primary at markov_chain)",
+   "FewTrialsAreExact: simulation_loop primary -> context (primary at frequency_counting)",
+   "FewTrialsAreExact: two_models primary -> context (primary at frequency_counting)",
+   "NewArrayHoldsGarbage: boolean_flag_array primary -> context (primary at array_default_values)",
+   "NameGivesMeaning: variable primary -> context (primary at naming_convention)",
+   "StringPlusLeftToRight: string_concatenation primary -> context (primary at string_conversion)",
+   "CastAfterIntDivision: integer_division primary -> context (primary at explicit_cast)",
+   "PostIncrementAssignsLater: increment_operators primary -> context (primary at side_effect_order)",
+   "ArgsAlwaysPresent: command_line_args primary -> context (primary at args_length)",
+   "OneIterationSuffices: power_method primary -> context (primary at convergence_rate)",
+   "LocalVarOutsideScope: variable primary -> context (primary at loop_scope)",
+   "ArithmeticInsteadOfBoolean: boolean_expression primary -> context (primary at boolean)",
+   "ElseWithCondition: boolean_expression primary -> context (primary at if_else_statement)",
+   "CodeAfterIfSkipped: control_flow primary -> context (primary at if_statement)",
+   "WrongIterationCount: loop_control primary -> context (primary at for_loop)",
+   "LoopForOneTimeTest: boolean_expression primary -> context (primary at while_loop)",
+   "LoopBodyAlwaysOnce: loop_body primary -> context (primary at while_loop)",
+   "ArrayRangeInclusive: array_creation primary -> context (primary at indexing)",
+   "ArrayRankIsLength: multidimensional_array primary -> context (primary at two_dimensional_array)",
+   "WrongArgumentType: math_library primary -> context (primary at method_call)",
+   "ErrorLineIsFaultLine: compile_time_error primary -> context (primary at reading_error_messages)",
+   "MissingKeyword: class_declaration primary -> context (primary at main_method)",
+   "LaterDoubleLiteralFixesDivision: explicit_cast primary -> context (primary at integer_division)",
+   "RedeclareToReassign: assignment primary -> context (primary at declaration)",
+   "NarrowingAssignmentAllowed: type_conversion primary -> context (primary at widening_conversion)",
+   "DivisionByZeroIsCompileError: run_time_error primary -> context (primary at division_by_zero)",
+   "MagicNumbers: naming_convention primary -> context (primary at named_constants)",
+   "ElseMatchesIndentation: nested_conditionals primary -> context (primary at dangling_else)",
+   "SemicolonAfterLoopHeader: while_loop primary -> context (primary at for_loop)",
+   "NextLineAfterNextInt: standard_input primary -> context (primary at token_vs_line_input)",
+   "ProbabilityIsPrediction: math_random primary -> context (primary at monte_carlo_simulation)",
+   "MatrixProductCommutes: power_method primary -> context (primary at matrix_operations)",
+   "UndeclaredOrRenamedVariable: identifier primary -> context (primary at variable)"
+  ],
+  "edges_added": [
+   "prerequisite do_while_loop -> break_statement (S9b)",
+   "prerequisite do_while_loop -> continue_statement (S9b)",
+   "prerequisite do_while_loop -> loop_control (S9b)",
+   "prerequisite for_loop -> infinite_loop (S9b)"
+  ]
  }
 }
