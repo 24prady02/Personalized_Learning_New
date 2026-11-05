@@ -83,7 +83,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -100,7 +101,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -141,6 +143,23 @@
   {
    "depth": 2,
    "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
    "target": "loop_control",
    "kind": "prerequisite",
@@ -150,8 +169,8 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.75,
-   "prune_score": 0.85,
-   "score": 0.6375,
+   "prune_score": 0.45,
+   "score": 0.3375,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
@@ -189,7 +208,8 @@
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -206,27 +226,11 @@
    "prune_score": 0.3,
    "score": 0.255,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   }
  ],
  "evidence": [
-  {
-   "depth": 1,
-   "source": "for_loop",
-   "edge": "err:for_loop->WrongIterationCount",
-   "target": "WrongIterationCount",
-   "kind": "error",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
-  },
   {
    "depth": 1,
    "source": "for_loop",
@@ -239,10 +243,29 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -255,11 +278,12 @@
     1
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.9,
-   "prune_score": 0.25,
-   "score": 0.225,
+   "confidence": 0.95,
+   "prune_score": 0.3,
+   "score": 0.285,
    "logic": "The body of a for statement executes at most once.",
-   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times."
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -333,7 +357,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -350,7 +375,8 @@
    "prune_score": 0.25,
    "score": 0.15,
    "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
-   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -367,7 +393,8 @@
    "prune_score": 0.15,
    "score": 0.1125,
    "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
-   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass."
+   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -441,7 +468,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -458,7 +486,8 @@
    "prune_score": 0.2,
    "score": 0.16,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -475,7 +504,8 @@
    "prune_score": 0.2,
    "score": 0.14,
    "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
-   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -537,6 +567,23 @@
   {
    "depth": 2,
    "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
    "target": "loop_control",
    "kind": "prerequisite",
@@ -546,8 +593,8 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.75,
-   "prune_score": 0.85,
-   "score": 0.6375,
+   "prune_score": 0.45,
+   "score": 0.3375,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
@@ -583,7 +630,8 @@
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -600,7 +648,8 @@
    "prune_score": 0.3,
    "score": 0.255,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -617,7 +666,8 @@
    "prune_score": 0.25,
    "score": 0.2125,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -678,15 +728,15 @@
   }
  ],
  "clause_coverage": {
-  "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends": "err:for_loop->WrongIterationCount"
+  "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends": "mis:for_loop->ForUpdateBeforeBody"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 31,
+ "llm_calls": 4,
+ "llm_cache_hits": 28,
  "llm_calls_by_step": {
   "prune": 11,
-  "label": 20
+  "label": 21
  }
 }

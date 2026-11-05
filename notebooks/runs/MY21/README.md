@@ -27,7 +27,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | boolean_expression | False | pattern | 'for (int i = 0; i < 3;' | 1 |
 | comparison_operators | False | pattern | 'for (int i = 0; i <' | 1 |
 | control_flow | False | pattern | 'for (' | 1 |
-| expression | True | pattern | 'i < 3' | 1 |
+| expression | True | pattern | 'i <' | 1 |
 | expression | True | pattern | '= 0;' | 1 |
 | for_loop | False | pattern | 'for (' | 1 |
 | increment_operators | False | pattern | '++' | 1 |
@@ -38,8 +38,8 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 2 |
 | statement | True | pattern | ';' | 1 |
 
-G: 13 concept nodes (3 generic), 10 concept edges, 122 misconception / error edges, 89 misconception / error nodes, 65 level nodes, 126 level-misconception links, 3 connected piece(s).
-Note: concept nodes form 3 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_control,loop_scope,loop_variable | control_flow,println,statement | loop_body
+G: 13 concept nodes (3 generic), 11 concept edges, 122 misconception / error edges, 89 misconception / error nodes, 65 level nodes, 126 level-misconception links, 2 connected piece(s).
+Note: concept nodes form 2 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_scope,loop_variable | control_flow,println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
@@ -48,6 +48,7 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:assignment->increment_operators | prerequisite | i++ is shorthand for the assignment i = i + 1. |
 | pre:comparison_operators->boolean_expression | prerequisite | A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
 | pre:expression->comparison_operators | prerequisite | Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
+| pre:for_loop->loop_body | prerequisite | The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope | prerequisite | A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop | prerequisite | The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 | pre:loop_control->increment_operators | prerequisite | The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
@@ -84,7 +85,7 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 |---|---|
 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 
-start: BM25 of the answer against each tagged concept: for_loop 10.15 (hits 1), loop_body 9.53 (hits 1), loop_variable 8.36 (hits 1), loop_control 8.28 (hits 1), println 7.56 (hits 1), increment_operators 7.45 (hits 1), control_flow 4.56 (hits 1), boolean_expression 3.31 (hits 1), loop_scope 2.29 (hits 1), comparison_operators 0.87 (hits 1)
+start: BM25 of the answer against each tagged concept: for_loop 10.10 (hits 1), loop_body 9.41 (hits 1), loop_variable 8.39 (hits 1), loop_control 8.31 (hits 1), println 7.59 (hits 1), increment_operators 7.47 (hits 1), control_flow 4.57 (hits 1), boolean_expression 3.32 (hits 1), loop_scope 2.29 (hits 1), comparison_operators 0.87 (hits 1)
 
 start: chosen for_loop, loop_body, loop_variable
 
@@ -128,29 +129,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-err:for_loop->WrongIterationCount (0.40), mis:for_loop->ForUpdateBeforeBody (0.35), mis:for_loop->ForIsConditional (0.25)
+mis:for_loop->ForUpdateBeforeBody (0.40), mis:for_loop->ForInitRepeats (0.30), mis:for_loop->ForIsConditional (0.30)
 ```
-Kept by pruning: err:for_loop->WrongIterationCount (0.40), mis:for_loop->ForUpdateBeforeBody (0.35), mis:for_loop->ForIsConditional (0.25)
+Kept by pruning: mis:for_loop->ForUpdateBeforeBody (0.40), mis:for_loop->ForInitRepeats (0.30), mis:for_loop->ForIsConditional (0.30)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| err:for_loop->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
 | mis:for_loop->ForUpdateBeforeBody \| wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. \| right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |
+| mis:for_loop->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
 | mis:for_loop->ForIsConditional \| wrong rule: The body of a for statement executes at most once. \| right rule: The body of a for statement runs once for every pass on which the condition is true, which can be many times. |
 Model's reply:
 ```
-err:for_loop->WrongIterationCount | correct | clauses: 1 | confidence: 0.9
 mis:for_loop->ForUpdateBeforeBody | correct | clauses: 1 | confidence: 0.9
-mis:for_loop->ForIsConditional | correct | clauses: 1 | confidence: 0.9
+mis:for_loop->ForInitRepeats | correct | clauses: 1 | confidence: 0.85
+mis:for_loop->ForIsConditional | correct | clauses: 1 | confidence: 0.95
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| err:for_loop->WrongIterationCount | correct | 0.4 | 0.9 | 0.36 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| mis:for_loop->ForUpdateBeforeBody | correct | 0.35 | 0.9 | 0.32 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| mis:for_loop->ForIsConditional | correct | 0.25 | 0.9 | 0.23 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| mis:for_loop->ForUpdateBeforeBody | correct | 0.4 | 0.9 | 0.36 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| mis:for_loop->ForInitRepeats | correct | 0.3 | 0.85 | 0.26 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| mis:for_loop->ForIsConditional | correct | 0.3 | 0.95 | 0.28 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 
 #### for_loop, level ways: 24 edges offered
 Edges offered:
@@ -441,28 +442,40 @@ mis:loop_body->LoopOutputSameEachPass [correct, tier 2, 0.57], mis:loop_variable
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | err:for_loop->WrongIterationCount |
+| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | mis:for_loop->ForUpdateBeforeBody |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 
 **Figure 4 (the graph after depth 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'for_loop', 'loop_variable'
+### Depth 2: current concepts 'for_loop', 'loop_body', 'loop_variable'
 
-#### for_loop, concept edges: 2 edges offered
+#### for_loop, concept edges: 3 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:loop_control->for_loop (Score: 0.85)}
-{pre:for_loop->loop_scope (Score: 0.15)}
+{pre:for_loop->loop_body (Score: 0.5)}
+{pre:loop_control->for_loop (Score: 0.45)}
+{pre:for_loop->loop_scope (Score: 0.05)}
 ```
-Kept by pruning: pre:loop_control->for_loop (0.85), pre:for_loop->loop_scope (0.15)
+Kept by pruning: pre:for_loop->loop_body (0.50), pre:loop_control->for_loop (0.45), pre:for_loop->loop_scope (0.05)
+
+Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+> The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1
+Confidence: 0.85
+```
 
 Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
@@ -487,7 +500,8 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:loop_control->for_loop | confirmed | 0.85 | 0.75 | 0.64 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| pre:for_loop->loop_body | confirmed | 0.5 | 0.85 | 0.42 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| pre:loop_control->for_loop | confirmed | 0.45 | 0.75 | 0.34 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
 
 #### loop_variable, concept edges: 1 edges offered
@@ -519,21 +533,21 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:loop_variable->loop_control [confirmed, tier 2, 0.75], pre:loop_control->for_loop [confirmed, tier 2, 0.64]
+pre:loop_variable->loop_control [confirmed, tier 2, 0.75], pre:for_loop->loop_body [confirmed, tier 2, 0.42], pre:loop_control->for_loop [confirmed, tier 2, 0.34]
 
 reached across pre:loop_variable->loop_control, entered next: loop_control
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | err:for_loop->WrongIterationCount |
+| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | mis:for_loop->ForUpdateBeforeBody |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of loop_control
 
 **Figure 5 (the graph after depth 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'loop_control', 'loop_variable', 'for_loop'
+### Depth 3: current concepts 'loop_control', 'loop_variable', 'loop_body', 'for_loop'
 
 #### loop_control, misconceptions: 11 edges offered
 Edges offered:
@@ -650,12 +664,13 @@ Parsed labels:
 Edges offered:
 | edge |
 |---|
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:for_loop->loop_scope (Score: 1.0)}
+pre:for_loop->loop_scope (1.00)
 ```
 Kept by pruning: pre:for_loop->loop_scope (1.00)
 
@@ -681,7 +696,7 @@ lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [co
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | err:for_loop->WrongIterationCount |
+| c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | mis:for_loop->ForUpdateBeforeBody |
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:loop_control->increment_operators
 
@@ -689,13 +704,13 @@ lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [co
 
 ![Figure 6](figure06.png)
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - for_loop: L3 via relation_to_neighbour "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_variable: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 
-**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 20}, fresh model calls 0, cache hits 31
+**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 4, cache hits 28
 
 ### Held misconceptions
 (none)
@@ -718,7 +733,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 Clause coverage (final):
 | clause | covered by |
 |---|---|
-| The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | err:for_loop->WrongIterationCount |
+| The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends | mis:for_loop->ForUpdateBeforeBody |
 
 **Figure 7 (final picture)**
 
@@ -726,9 +741,9 @@ Clause coverage (final):
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.4 | 0.9 | 0.36 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| 1 | for_loop | mis:for_loop->ForUpdateBeforeBody | misconception | correct | 0.35 | 0.9 | 0.315 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| 1 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.25 | 0.9 | 0.225 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| 1 | for_loop | mis:for_loop->ForUpdateBeforeBody | misconception | correct | 0.4 | 0.9 | 0.36 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| 1 | for_loop | mis:for_loop->ForInitRepeats | misconception | correct | 0.3 | 0.85 | 0.255 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| 1 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.3 | 0.95 | 0.285 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.5 | 0.95 | 0.475 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | for_loop | lvl:for_loop@L2#0 | level | shown | 0.3 | 0.75 | 0.225 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.2 | 0.75 | 0.15 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
@@ -744,7 +759,8 @@ Clause coverage (final):
 | 1 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.5 | 0.9 | 0.45 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | loop_variable | lvl:loop_variable@L2#0 | level | shown | 0.3 | 0.6 | 0.18 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | loop_variable | lvl:loop_variable@L1#1 | level | shown | 0.2 | 0.7 | 0.14 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| 2 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.85 | 0.75 | 0.6375 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| 2 | for_loop | pre:for_loop->loop_body | prerequisite | confirmed | 0.5 | 0.85 | 0.425 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| 2 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.45 | 0.75 | 0.3375 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 2 | loop_variable | pre:loop_variable->loop_control | prerequisite | confirmed | 1.0 | 0.75 | 0.75 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 3 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.45 | 0.9 | 0.405 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 3 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | correct | 0.3 | 0.85 | 0.255 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
@@ -760,7 +776,8 @@ Clause coverage (final):
 | 1 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.57 | [1] |
 | 1 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.475 | [1] |
 | 2 | loop_variable | pre:loop_variable->loop_control | prerequisite | confirmed | 0.75 | [1] |
-| 2 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.6375 | [1] |
+| 2 | for_loop | pre:for_loop->loop_body | prerequisite | confirmed | 0.425 | [1] |
+| 2 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.3375 | [1] |
 | 3 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.425 | [1] |
 | 3 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.405 | [1] |
 | 3 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | correct | 0.255 | [1] |
@@ -768,14 +785,14 @@ Clause coverage (final):
 ## 7. Raw traversal log
 ```
 clauses: The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends
-start: BM25 of the answer against each tagged concept: for_loop 10.15 (hits 1), loop_body 9.53 (hits 1), loop_variable 8.36 (hits 1), loop_control 8.28 (hits 1), println 7.56 (hits 1), increment_operators 7.45 (hits 1), control_flow 4.56 (hits 1), boolean_expression 3.31 (hits 1), loop_scope 2.29 (hits 1), comparison_operators 0.87 (hits 1)
+start: BM25 of the answer against each tagged concept: for_loop 10.10 (hits 1), loop_body 9.41 (hits 1), loop_variable 8.39 (hits 1), loop_control 8.31 (hits 1), println 7.59 (hits 1), increment_operators 7.47 (hits 1), control_flow 4.57 (hits 1), boolean_expression 3.32 (hits 1), loop_scope 2.29 (hits 1), comparison_operators 0.87 (hits 1)
 start: chosen for_loop, loop_body, loop_variable
 start concepts (3): for_loop, loop_body, loop_variable
 --- depth 1: current concepts ['for_loop', 'loop_body', 'loop_variable']
-  for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.40), mis:for_loop->ForUpdateBeforeBody (0.35), mis:for_loop->ForIsConditional (0.25)
-    err:for_loop->WrongIterationCount -> correct (0.36) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-    mis:for_loop->ForUpdateBeforeBody -> correct (0.32) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-    mis:for_loop->ForIsConditional -> correct (0.23) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ForUpdateBeforeBody (0.40), mis:for_loop->ForInitRepeats (0.30), mis:for_loop->ForIsConditional (0.30)
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.36) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:for_loop->ForInitRepeats -> correct (0.26) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    mis:for_loop->ForIsConditional -> correct (0.28) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L3#2 (0.20)
     lvl:for_loop@L2#1 -> shown (0.47) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:for_loop@L2#0 -> shown (0.22) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -797,19 +814,20 @@ start concepts (3): for_loop, loop_body, loop_variable
     lvl:loop_variable@L2#0 -> shown (0.18) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:loop_variable@L1#1 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   kept: mis:loop_body->LoopOutputSameEachPass [correct, tier 2, 0.57], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.57], lvl:for_loop@L2#1 [shown, tier 2, 0.47]
-  clause coverage: c1 <- err:for_loop->WrongIterationCount
-  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
---- depth 2: current concepts ['for_loop', 'loop_variable']
-  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.85), pre:for_loop->loop_scope (0.15)
-    pre:loop_control->for_loop -> confirmed (0.64) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
+  not yet read: pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+--- depth 2: current concepts ['for_loop', 'loop_body', 'loop_variable']
+  for_loop (concept edges): 3 candidates -> kept pre:for_loop->loop_body (0.50), pre:loop_control->for_loop (0.45), pre:for_loop->loop_scope (0.05)
+    pre:for_loop->loop_body -> confirmed (0.42) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    pre:loop_control->for_loop -> confirmed (0.34) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     pre:for_loop->loop_scope -> not applied (0.00) ""
   loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
     pre:loop_variable->loop_control -> confirmed (0.75) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-  kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.75], pre:loop_control->for_loop [confirmed, tier 2, 0.64]
+  kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.75], pre:for_loop->loop_body [confirmed, tier 2, 0.42], pre:loop_control->for_loop [confirmed, tier 2, 0.34]
   reached across pre:loop_variable->loop_control, entered next: loop_control
-  clause coverage: c1 <- err:for_loop->WrongIterationCount
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
   not yet read: own edges of loop_control
---- depth 3: current concepts ['loop_control', 'loop_variable', 'for_loop']
+--- depth 3: current concepts ['loop_control', 'loop_variable', 'loop_body', 'for_loop']
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.25)
     mis:loop_control->OffByOneBound -> correct (0.41) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     mis:loop_control->ForUpdateBeforeBody -> correct (0.26) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -821,9 +839,9 @@ start concepts (3): for_loop, loop_body, loop_variable
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
   kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.41], mis:loop_control->ForUpdateBeforeBody [correct, tier 2, 0.26]
-  clause coverage: c1 <- err:for_loop->WrongIterationCount
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
   not yet read: pre:loop_control->increment_operators
-  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level for_loop: L3 via relation_to_neighbour "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   level loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   level loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -917,7 +935,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -934,7 +953,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -975,6 +995,23 @@ start concepts (3): for_loop, loop_body, loop_variable
   {
    "depth": 2,
    "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
    "target": "loop_control",
    "kind": "prerequisite",
@@ -984,8 +1021,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.75,
-   "prune_score": 0.85,
-   "score": 0.6375,
+   "prune_score": 0.45,
+   "score": 0.3375,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
@@ -1023,7 +1060,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1040,27 +1078,11 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.3,
    "score": 0.255,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   }
  ],
  "evidence": [
-  {
-   "depth": 1,
-   "source": "for_loop",
-   "edge": "err:for_loop->WrongIterationCount",
-   "target": "WrongIterationCount",
-   "kind": "error",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
-  },
   {
    "depth": 1,
    "source": "for_loop",
@@ -1073,10 +1095,29 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1089,11 +1130,12 @@ start concepts (3): for_loop, loop_body, loop_variable
     1
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.9,
-   "prune_score": 0.25,
-   "score": 0.225,
+   "confidence": 0.95,
+   "prune_score": 0.3,
+   "score": 0.285,
    "logic": "The body of a for statement executes at most once.",
-   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times."
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1167,7 +1209,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1184,7 +1227,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.25,
    "score": 0.15,
    "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
-   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1201,7 +1245,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.15,
    "score": 0.1125,
    "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
-   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass."
+   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1275,7 +1320,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
-   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass."
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1292,7 +1338,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.2,
    "score": 0.16,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1309,7 +1356,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.2,
    "score": 0.14,
    "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
-   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update."
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -1371,6 +1419,23 @@ start concepts (3): for_loop, loop_body, loop_variable
   {
    "depth": 2,
    "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
    "target": "loop_control",
    "kind": "prerequisite",
@@ -1380,8 +1445,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.75,
-   "prune_score": 0.85,
-   "score": 0.6375,
+   "prune_score": 0.45,
+   "score": 0.3375,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
   },
@@ -1417,7 +1482,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.45,
    "score": 0.405,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
-   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1434,7 +1500,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.3,
    "score": 0.255,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value."
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1451,7 +1518,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    "prune_score": 0.25,
    "score": 0.2125,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -1512,16 +1580,16 @@ start concepts (3): for_loop, loop_body, loop_variable
   }
  ],
  "clause_coverage": {
-  "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends": "err:for_loop->WrongIterationCount"
+  "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends": "mis:for_loop->ForUpdateBeforeBody"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 31,
+ "llm_calls": 4,
+ "llm_cache_hits": 28,
  "llm_calls_by_step": {
   "prune": 11,
-  "label": 20
+  "label": 21
  }
 }
 ```
