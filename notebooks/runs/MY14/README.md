@@ -29,7 +29,7 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | comparison_operators | False | pattern | 'for (int i = 0; i <' | 1 |
 | compound_assignment | False | pattern | '+=' | 1 |
 | control_flow | False | pattern | 'for (' | 1 |
-| expression | True | pattern | 'i < 1' | 1 |
+| expression | True | pattern | 'i <' | 1 |
 | expression | True | pattern | '= 0;' | 1 |
 | for_loop | False | pattern | 'for (' | 1 |
 | loop_body | False | pattern | 'for (' | 1 |
@@ -39,8 +39,8 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 2 |
 | statement | True | pattern | ';' | 1 |
 
-G: 14 concept nodes (3 generic), 10 concept edges, 123 misconception / error edges, 89 misconception / error nodes, 70 level nodes, 128 level-misconception links, 4 connected piece(s).
-Note: concept nodes form 4 pieces (the KG has no edge between them): accumulator_pattern,loop_body | assignment,boolean_expression,comparison_operators,compound_assignment,expression | control_flow,println,statement | for_loop,loop_control,loop_scope,loop_variable
+G: 14 concept nodes (3 generic), 12 concept edges, 123 misconception / error edges, 89 misconception / error nodes, 70 level nodes, 128 level-misconception links, 2 connected piece(s).
+Note: concept nodes form 2 pieces (the KG has no edge between them): accumulator_pattern,assignment,boolean_expression,comparison_operators,compound_assignment,expression,for_loop,loop_body,loop_control,loop_scope,loop_variable | control_flow,println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
@@ -48,7 +48,9 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:assignment->compound_assignment | prerequisite | x op= e is shorthand for the assignment x = x op e. |
 | pre:comparison_operators->boolean_expression | prerequisite | A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
+| pre:compound_assignment->accumulator_pattern | prerequisite | sum += x is the usual way a running total is updated on each pass. |
 | pre:expression->comparison_operators | prerequisite | Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
+| pre:for_loop->loop_body | prerequisite | The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope | prerequisite | A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_body->accumulator_pattern | prerequisite | The accumulator update sum += x sits inside the body, so it runs once on every pass. |
 | pre:loop_control->for_loop | prerequisite | The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
@@ -88,7 +90,7 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c2 | so i goes 0, 1, 2 and |
 | c3 | so on up to 9 |
 
-start: BM25 of the answer against each tagged concept: loop_control 17.91 (hits 1), for_loop 15.17 (hits 1), loop_variable 11.17 (hits 1), loop_scope 8.35 (hits 1), compound_assignment 6.28 (hits 1), loop_body 6.04 (hits 1), accumulator_pattern 5.62 (hits 1), control_flow 5.15 (hits 1), boolean_expression 5.13 (hits 1), println 1.90 (hits 1), comparison_operators 1.52 (hits 1)
+start: BM25 of the answer against each tagged concept: loop_control 17.13 (hits 1), for_loop 14.40 (hits 1), loop_variable 10.38 (hits 1), compound_assignment 7.78 (hits 1), loop_scope 7.73 (hits 1), loop_body 5.16 (hits 1), boolean_expression 4.95 (hits 1), accumulator_pattern 4.87 (hits 1), control_flow 4.48 (hits 1), println 1.58 (hits 1), comparison_operators 1.53 (hits 1)
 
 start: chosen loop_control, for_loop, loop_variable
 
@@ -453,7 +455,7 @@ mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStep
 | c2 | so i goes 0, 1, 2 and | mis:loop_control->LoopStepAlwaysOne |
 | c3 | so on up to 9 | mis:loop_control->LoopStepAlwaysOne |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 
 **Figure 4 (the graph after depth 1)**
 
@@ -500,18 +502,30 @@ Parsed labels:
 | pre:loop_variable->loop_control | broken | 0.65 | 0.8 | 0.52 | c1, c2, c3 | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 |
 | pre:loop_control->for_loop | broken | 0.35 | 0.8 | 0.28 | c1, c2, c3 | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 |
 
-#### for_loop, concept edges: 1 edges offered
+#### for_loop, concept edges: 2 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:for_loop->loop_scope (Score: 1.0)}
+{pre:for_loop->loop_body (Score: 0.8)}
+{pre:for_loop->loop_scope (Score: 0.2)}
 ```
-Kept by pruning: pre:for_loop->loop_scope (1.00)
+Kept by pruning: pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+
+Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+> The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.7
+```
 
 Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
 > A variable declared in the for header exists only from its declaration to the end of the for statement's block.
@@ -526,6 +540,7 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
+| pre:for_loop->loop_body | not applied |  |  | 0.0 |  |  |
 | pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
@@ -544,14 +559,14 @@ pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_lo
 ![Figure 5](figure05.png)
 Held set after the one-fault rules: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
 
-Shadows (a held label on a prerequisite or a generic concept that rests on the words of a stronger label at the specific concept is one wrong sentence read twice; it marks no root cause and sets no level): mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
 - loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"
 
-**Stop:** sufficient at depth 2; prompts {'prune': 8, 'label': 15}, fresh model calls 0, cache hits 23
+**Stop:** sufficient at depth 2; prompts {'prune': 8, 'label': 16}, fresh model calls 3, cache hits 21
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -618,7 +633,7 @@ Clause coverage (final):
 ## 7. Raw traversal log
 ```
 clauses: A for loop moves i on by one each pass | so i goes 0, 1, 2 and | so on up to 9
-start: BM25 of the answer against each tagged concept: loop_control 17.91 (hits 1), for_loop 15.17 (hits 1), loop_variable 11.17 (hits 1), loop_scope 8.35 (hits 1), compound_assignment 6.28 (hits 1), loop_body 6.04 (hits 1), accumulator_pattern 5.62 (hits 1), control_flow 5.15 (hits 1), boolean_expression 5.13 (hits 1), println 1.90 (hits 1), comparison_operators 1.52 (hits 1)
+start: BM25 of the answer against each tagged concept: loop_control 17.13 (hits 1), for_loop 14.40 (hits 1), loop_variable 10.38 (hits 1), compound_assignment 7.78 (hits 1), loop_scope 7.73 (hits 1), loop_body 5.16 (hits 1), boolean_expression 4.95 (hits 1), accumulator_pattern 4.87 (hits 1), control_flow 4.48 (hits 1), println 1.58 (hits 1), comparison_operators 1.53 (hits 1)
 start: chosen loop_control, for_loop, loop_variable
 start concepts (3): loop_control, for_loop, loop_variable
 --- depth 1: current concepts ['loop_control', 'for_loop', 'loop_variable']
@@ -648,18 +663,19 @@ start concepts (3): loop_control, for_loop, loop_variable
     lvl:loop_variable@L2#2 -> shown (0.17) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
   kept: mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.57], mis:for_loop->LoopStepAlwaysOne [held, tier 0, 0.57], err:loop_control->WrongIterationCount [held, tier 1, 0.09]
   clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
-  not yet read: pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
+  not yet read: pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_variable->loop_control
 --- depth 2: current concepts ['loop_control', 'for_loop', 'loop_variable']
   loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.65), pre:loop_control->for_loop (0.35)
     pre:loop_variable->loop_control -> broken (0.52) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
     pre:loop_control->for_loop -> broken (0.28) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.80), pre:for_loop->loop_scope (0.20)
+    pre:for_loop->loop_body -> not applied (0.00) ""
     pre:for_loop->loop_scope -> not applied (0.00) ""
   kept: pre:loop_variable->loop_control [broken, tier 0, 0.52], pre:loop_control->for_loop [broken, tier 0, 0.28]
   clause coverage: c1 <- mis:loop_control->LoopStepAlwaysOne; c2 <- mis:loop_control->LoopStepAlwaysOne; c3 <- mis:loop_control->LoopStepAlwaysOne
   held: mis:for_loop->LoopStepAlwaysOne; filed at the dependent concept: mis:loop_control->LoopStepAlwaysOne
   shadows: mis:loop_control->LoopStepAlwaysOne (shadow of mis:for_loop->LoopStepAlwaysOne)
-  root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_scope': ['for_loop'], 'accumulator_pattern': ['loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop), prerequisites {'compound_assignment': ['assignment'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
   level loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"
 ```
@@ -768,7 +784,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -787,7 +804,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -805,7 +823,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -866,7 +885,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -884,7 +904,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -903,7 +924,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -921,7 +943,8 @@ start concepts (3): loop_control, for_loop, loop_variable
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1012,11 +1035,11 @@ start concepts (3): loop_control, for_loop, loop_variable
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 23,
+ "llm_calls": 3,
+ "llm_cache_hits": 21,
  "llm_calls_by_step": {
   "prune": 8,
-  "label": 15
+  "label": 16
  }
 }
 ```

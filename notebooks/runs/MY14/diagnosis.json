@@ -100,7 +100,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -119,7 +120,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -137,7 +139,8 @@
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -198,7 +201,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -216,7 +220,8 @@
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
-   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -235,7 +240,8 @@
    "prune_score": 0.6,
    "score": 0.57,
    "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
-   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...)."
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -253,7 +259,8 @@
    "prune_score": 0.15,
    "score": 0.09,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test."
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -344,10 +351,10 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 0,
- "llm_cache_hits": 23,
+ "llm_calls": 3,
+ "llm_cache_hits": 21,
  "llm_calls_by_step": {
   "prune": 8,
-  "label": 15
+  "label": 16
  }
 }
