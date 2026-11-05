@@ -95,6 +95,14 @@
  ],
  "concept_edges": [
   {
+   "id": "pre:control_flow->switch_statement",
+   "type": "prerequisite",
+   "source": "control_flow",
+   "target": "switch_statement",
+   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
+   "grounding": "book_passage"
+  },
+  {
    "id": "pre:statement->control_flow",
    "type": "prerequisite",
    "source": "statement",
@@ -370,7 +378,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "NoShortCircuit",
-   "role": "primary",
+   "role": "context",
    "logic": "logical AND/OR always evaluate both sides (Java short-circuits them)",
    "twin_logic": "In p && q, q is evaluated only when p is true; in p || q, q is evaluated only when p is false."
   },
@@ -415,7 +423,7 @@
    "type": "misconception",
    "source": "println",
    "target": "IdentifierCaseInsensitive",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.Println and System.out.println name the same method.",
    "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names."
   },
@@ -6400,9 +6408,7 @@
    "control_flow",
    "println",
    "statement",
-   "string_literal"
-  ],
-  [
+   "string_literal",
    "switch_statement"
   ]
  ],
@@ -6411,15 +6417,13 @@
   "concepts": 5,
   "generic": 2,
   "from_hop": 0,
-  "concept_edges": 3,
+  "concept_edges": 4,
   "misconceptions": 24,
   "mis_edges": 27,
   "levels": 25,
   "level_edges": 25,
   "level_mis_links": 27,
-  "components": 2
+  "components": 1
  },
- "warnings": [
-  "concept nodes form 2 pieces (the KG has no edge between them): control_flow,println,statement,string_literal | switch_statement"
- ]
+ "warnings": []
 }

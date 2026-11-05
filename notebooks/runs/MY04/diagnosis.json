@@ -117,7 +117,8 @@
    "prune_score": 1.0,
    "score": 0.96,
    "logic": "After the matching case runs, the switch ends even without break.",
-   "twin_logic": "Without break, statements in switch blocks fall through into the following cases."
+   "twin_logic": "Without break, statements in switch blocks fall through into the following cases.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -185,6 +186,24 @@
   },
   {
    "depth": 2,
+   "source": "switch_statement",
+   "edge": "pre:control_flow->switch_statement",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
    "source": "println",
    "edge": "pre:string_literal->println",
    "target": "string_literal",
@@ -217,7 +236,8 @@
    "prune_score": 0.5,
    "score": 0.275,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
-   "twin_logic": "The computer executes only what the code states; every needed step and value must be written."
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -342,7 +362,8 @@
    "prune_score": 1.0,
    "score": 0.96,
    "logic": "After the matching case runs, the switch ends even without break.",
-   "twin_logic": "Without break, statements in switch blocks fall through into the following cases."
+   "twin_logic": "Without break, statements in switch blocks fall through into the following cases.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -409,6 +430,24 @@
   },
   {
    "depth": 2,
+   "source": "switch_statement",
+   "edge": "pre:control_flow->switch_statement",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
    "source": "control_flow",
    "edge": "pre:statement->control_flow",
    "target": "statement",
@@ -461,7 +500,8 @@
    "prune_score": 0.5,
    "score": 0.275,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
-   "twin_logic": "The computer executes only what the code states; every needed step and value must be written."
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
+   "role": "primary"
   },
   {
    "depth": 3,
@@ -533,12 +573,12 @@
   "because they do not match": "lvl:control_flow@L0#0"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
+ "stop_reason": "sufficient",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 37,
+ "llm_cache_hits": 39,
  "llm_calls_by_step": {
-  "prune": 13,
-  "label": 24
+  "prune": 14,
+  "label": 25
  }
 }
