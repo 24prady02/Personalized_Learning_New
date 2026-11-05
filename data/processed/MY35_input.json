@@ -1,0 +1,5 @@
+{
+ "code": "int x = 5;\nif (x > 0)\n    if (x > 10)\n        System.out.println(\"big\");\nelse\n    System.out.println(\"small\");",
+ "question": "What is printed? Explain which if the else belongs to.",
+ "answer": "Nothing. The else lines up with if (x > 0), and that’s true, so the else is skipped. x > 10 is false, so big isn’t printed either"
+}

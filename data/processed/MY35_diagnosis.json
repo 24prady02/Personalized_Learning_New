@@ -1,0 +1,1059 @@
+{
+ "scenario": "MY35",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "Nothing",
+  "The else lines up with if",
+  "x > 0",
+  "and thats true",
+  "so the else is skipped",
+  "x > 10 is false",
+  "so big isnt printed either"
+ ],
+ "start_concepts": [
+  "comparison_operators",
+  "println",
+  "if_statement"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "dangling_else",
+   "misconception": "ElseMatchesIndentation",
+   "kind": "misconception",
+   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "score": 0.93
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "nested_conditionals",
+   "misconception": "ElseMatchesIndentation",
+   "shadow_of": "mis:dangling_else->ElseMatchesIndentation",
+   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "score": 0.651
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:nested_conditionals->dangling_else",
+   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
+   "score": 0.8,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  },
+  {
+   "edge": "pre:if_else_statement->nested_conditionals",
+   "quote": "Nothing; The else lines up with if; so the else is skipped",
+   "score": 0.51,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  }
+ ],
+ "root_cause": {
+  "concept": "dangling_else",
+  "misconception": "ElseMatchesIndentation"
+ },
+ "levels": {
+  "comparison_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "edge": "lvl:comparison_operators@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "control_flow": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "edge": "lvl:control_flow@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "dangling_else": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ElseMatchesIndentation",
+   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "edge": "mis:dangling_else->ElseMatchesIndentation",
+   "rule": "wrong rule: The else belongs to the if it is lined up with. Right rule: The else belongs to the most recent unmatched if, whatever the indentation.",
+   "source": "level_mis_links"
+  },
+  "if_else_statement": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "edge": "lvl:if_else_statement@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "if_statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "edge": "lvl:if_statement@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "nested_conditionals": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "The else lines up with if; so the else is skipped",
+   "edge": "lvl:nested_conditionals@L0#3",
+   "source": "level_way",
+   "also_shown": [
+    "L0 everyday_reading"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L3#1",
+   "target": "comparison_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "dangling_else",
+   "edge": "mis:dangling_else->ElseMatchesIndentation",
+   "target": "ElseMatchesIndentation",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.93,
+   "prune_score": 1.0,
+   "score": 0.93,
+   "logic": "The else belongs to the if it is lined up with.",
+   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "nested_conditionals",
+   "edge": "mis:nested_conditionals->ElseMatchesIndentation",
+   "target": "ElseMatchesIndentation",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "The else belongs to the if it is lined up with.",
+   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "dangling_else",
+   "edge": "lvl:dangling_else@L0#0",
+   "target": "dangling_else@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "Folk meaning: on paper the layout shows which 'if' an 'otherwise' answers, so an else lined up with the outer if is read as belonging to it. Java ignores indentation and attaches each else to the innermost if to which it might possibly belong.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "dangling_else",
+   "edge": "pre:nested_conditionals->dangling_else",
+   "target": "nested_conditionals",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    5,
+    7
+   ],
+   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The dangling else arises when ifs are nested without braces.",
+   "twin_logic": null,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  },
+  {
+   "depth": 3,
+   "source": "nested_conditionals",
+   "edge": "pre:if_else_statement->nested_conditionals",
+   "target": "if_else_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    5
+   ],
+   "quote": "Nothing; The else lines up with if; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Nesting puts an if or if-else inside a branch of another if-else; an else-if chain is the common case where the else branch is itself an if.",
+   "twin_logic": null,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:control_flow->if_statement",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->ElseAlwaysExecutes",
+   "target": "ElseAlwaysExecutes",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The else branch of an if-else statement always executes.",
+   "twin_logic": "The else branch runs only when the if condition is false.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BranchChosenByIntent",
+   "target": "BranchChosenByIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
+   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
+   "role": "context"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "lvl:if_else_statement@L2#0",
+   "target": "if_else_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L3#1",
+   "target": "comparison_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#0",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->BranchChosenByIntent",
+   "target": "BranchChosenByIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
+   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "mis:if_statement->ThenAlwaysExecutes",
+   "target": "ThenAlwaysExecutes",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    6,
+    7
+   ],
+   "quote": "x > 10 is false; so big isnt printed either",
+   "confidence": 0.85,
+   "prune_score": 0.2,
+   "score": 0.17,
+   "logic": "The then branch always runs.",
+   "twin_logic": "The then branch runs only when the condition is true.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "lvl:if_statement@L3#1",
+   "target": "if_statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "if_statement",
+   "edge": "lvl:if_statement@L2#0",
+   "target": "if_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "Evaluate the condition once; if true, execute the body; then, in either case, continue with the statement after the if.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:comparison_operators->boolean_expression",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.6000000000000001,
+   "score": 0.48,
+   "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "comparison_operators",
+   "edge": "pre:expression->comparison_operators",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "confidence": 0.8,
+   "prune_score": 0.30000000000000004,
+   "score": 0.24,
+   "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    7
+   ],
+   "quote": "so big isnt printed either",
+   "confidence": 0.55,
+   "prune_score": 0.7,
+   "score": 0.385,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:if_statement->nested_conditionals",
+   "target": "nested_conditionals",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "An if statement can sit inside the body of another if; the inner one is tested only when the outer condition is true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:if_statement->if_else_statement",
+   "target": "if_else_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "if-else extends if with a second block that runs exactly when the condition is false.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "if_statement",
+   "edge": "pre:boolean_expression->if_statement",
+   "target": "boolean_expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "An if runs its block only when its boolean expression evaluates to true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseConditionRestartsProgram",
+   "target": "FalseConditionRestartsProgram",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    6,
+    7
+   ],
+   "quote": "x > 10 is false; so big isnt printed either",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
+   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "Nothing; x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "dangling_else",
+   "edge": "mis:dangling_else->ElseMatchesIndentation",
+   "target": "ElseMatchesIndentation",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.93,
+   "prune_score": 1.0,
+   "score": 0.93,
+   "logic": "The else belongs to the if it is lined up with.",
+   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "dangling_else",
+   "edge": "lvl:dangling_else@L0#0",
+   "target": "dangling_else@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "Folk meaning: on paper the layout shows which 'if' an 'otherwise' answers, so an else lined up with the outer if is read as belonging to it. Java ignores indentation and attaches each else to the innermost if to which it might possibly belong.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "nested_conditionals",
+   "edge": "mis:nested_conditionals->ElseMatchesIndentation",
+   "target": "ElseMatchesIndentation",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "The else belongs to the if it is lined up with.",
+   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "nested_conditionals",
+   "edge": "lvl:nested_conditionals@L0#3",
+   "target": "nested_conditionals@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    5
+   ],
+   "quote": "The else lines up with if; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "Applies the nesting rule (LT) unevenly: on some inputs tests the inner condition even though the outer one was false, or matches an else to the if it is lined up with. (here mixing in: \"An inner if runs its body whenever its own condition is true, even if the outer if condition is false\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "nested_conditionals",
+   "edge": "lvl:nested_conditionals@L0#0",
+   "target": "nested_conditionals@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    5
+   ],
+   "quote": "Nothing; The else lines up with if; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "Folk meaning: in prose, indentation and line layout show what belongs to what, and two consecutive 'if' sentences can be heard as one combined condition. The Java compiler ignores indentation: an inner if belongs to the branch that syntactically contains it, and an else pairs with the innermost unmatched if.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "dangling_else",
+   "edge": "pre:nested_conditionals->dangling_else",
+   "target": "nested_conditionals",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    5,
+    7
+   ],
+   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The dangling else arises when ifs are nested without braces.",
+   "twin_logic": null,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  },
+  {
+   "depth": 3,
+   "source": "nested_conditionals",
+   "edge": "pre:if_else_statement->nested_conditionals",
+   "target": "if_else_statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    5
+   ],
+   "quote": "Nothing; The else lines up with if; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Nesting puts an if or if-else inside a branch of another if-else; an else-if chain is the common case where the else branch is itself an if.",
+   "twin_logic": null,
+   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+  },
+  {
+   "depth": 3,
+   "source": "nested_conditionals",
+   "edge": "pre:if_statement->nested_conditionals",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "An if statement can sit inside the body of another if; the inner one is tested only when the outer condition is true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:control_flow->if_statement",
+   "target": "if_statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BranchChosenByIntent",
+   "target": "BranchChosenByIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
+   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
+   "role": "context"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->ElseAlwaysExecutes",
+   "target": "ElseAlwaysExecutes",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The else branch of an if-else statement always executes.",
+   "twin_logic": "The else branch runs only when the if condition is false.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "mis:if_else_statement->BothBranchesExecute",
+   "target": "BothBranchesExecute",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "and thats true; so the else is skipped",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "Both the then branch and the else branch run.",
+   "twin_logic": "Exactly one of the two branches runs.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "lvl:if_else_statement@L2#0",
+   "target": "if_else_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "if_else_statement",
+   "edge": "lvl:if_else_statement@L2#1",
+   "target": "if_else_statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "x > 0; and thats true; so the else is skipped",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Exactly one branch's effects occur; e.g. if (x > y) max = x; else max = y; leaves max equal to the larger value, and the coin flip prints either Heads or Tails, never both.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "Nothing": "lvl:control_flow@L2#1",
+  "The else lines up with if": "mis:dangling_else->ElseMatchesIndentation",
+  "x > 0": "mis:comparison_operators->LessGreaterSwapped",
+  "and thats true": "mis:comparison_operators->LessGreaterSwapped",
+  "so the else is skipped": "lvl:comparison_operators@L3#1",
+  "x > 10 is false": "mis:comparison_operators->LessGreaterSwapped",
+  "so big isnt printed either": "lvl:comparison_operators@L3#1"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 4,
+ "llm_calls": 0,
+ "llm_cache_hits": 61,
+ "llm_calls_by_step": {
+  "prune": 20,
+  "label": 41
+ }
+}

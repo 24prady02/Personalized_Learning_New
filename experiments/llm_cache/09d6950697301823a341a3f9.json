@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer shows one way of understanding a Java concept.\n\nProgram:\nint x = 5;\nif (x > 0)\n    if (x > 10)\n        System.out.println(\"big\");\nelse\n    System.out.println(\"small\");\n\nQuestion: What is printed? Explain which if the else belongs to.\n\nStudent's answer, split into clauses:\nc1: Nothing\nc2: The else lines up with if\nc3: x > 0\nc4: and thats true\nc5: so the else is skipped\nc6: x > 10 is false\nc7: so big isnt printed either\n\nConcept: dangling_else\nWay: everyday reading\nWhat an answer that shows this way does: Folk meaning: on paper the layout shows which 'if' an 'otherwise' answers, so an else lined up with the outer if is read as belonging to it. Java ignores indentation and attaches each else to the innermost if to which it might possibly belong.\n\nDecide:\n- shown: the answer does what this way describes, in its own words or in code (states that rule, traces it, predicts it, relates it, applies it);\n- not shown: the answer does not do this.\n\nReply in exactly three lines and nothing else:\nLabel: shown | not shown\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: shown\nClauses: 2, 3, 4, 5\nConfidence: 0.85"
+}
