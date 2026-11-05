@@ -1,0 +1,577 @@
+{
+ "scenario": "MY40",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli"
+ },
+ "clauses": [
+  "21",
+  "t[0].length is 3, and every row of a 2D array has the same length",
+  "so it visits three columns in every row and adds all six numbers"
+ ],
+ "start_concepts": [
+  "two_dimensional_array",
+  "ragged_array",
+  "indexing"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "ragged_array",
+   "misconception": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "score": 0.57
+  },
+  {
+   "concept": "ragged_array",
+   "misconception": "NoJaggedArrays",
+   "kind": "misconception",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "score": 0.22,
+   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "two_dimensional_array",
+   "misconception": "RaggedRowsSameLength",
+   "shadow_of": "mis:ragged_array->RaggedRowsSameLength",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "score": 0.465
+  },
+  {
+   "concept": "two_dimensional_array",
+   "misconception": "NoJaggedArrays",
+   "shadow_of": "mis:ragged_array->NoJaggedArrays",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "score": 0.28
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:two_dimensional_array->ragged_array",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "score": 0.95,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "edge": "pre:indexing->two_dimensional_array",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "score": 0.49,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "edge": "pre:indexing->array_bounds",
+   "quote": "21; so it visits three columns in every row and adds all six numbers",
+   "score": 0.425,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "edge": "pre:array_initializer->indexing",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "score": 0.18,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  }
+ ],
+ "root_cause": {
+  "concept": "ragged_array",
+  "misconception": "RaggedRowsSameLength"
+ },
+ "levels": {
+  "ragged_array": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "RaggedRowsSameLength",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "edge": "mis:ragged_array->RaggedRowsSameLength",
+   "rule": "wrong rule: All rows of a 2-D array have the same length, so one N works for every row. Right rule: Rows may differ in length; use a[i].length for row i.",
+   "source": "level_mis_links",
+   "also_held": [
+    "NoJaggedArrays"
+   ]
+  },
+  "two_dimensional_array": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "edge": "lvl:two_dimensional_array@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "mis:ragged_array->RaggedRowsSameLength",
+   "target": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
+   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "mis:two_dimensional_array->RaggedRowsSameLength",
+   "target": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
+   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "mis:two_dimensional_array->NoJaggedArrays",
+   "target": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Every row of a 2-D array must have the same length.",
+   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
+   "role": "context",
+   "shares_evidence_with": "mis:two_dimensional_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "mis:ragged_array->NoJaggedArrays",
+   "target": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "multi-dimensional arrays must be rectangular",
+   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
+   "role": "primary",
+   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "ragged_array",
+   "edge": "pre:two_dimensional_array->ragged_array",
+   "target": "two_dimensional_array",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "two_dimensional_array",
+   "edge": "pre:indexing->two_dimensional_array",
+   "target": "indexing",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.7,
+   "prune_score": 0.7,
+   "score": 0.49,
+   "logic": "A 1-D array uses one index a[i]; a 2-D array uses two, a[i][j], where the first index chooses the row array.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:indexing->array_bounds",
+   "target": "array_bounds",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "21; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 3,
+   "source": "two_dimensional_array",
+   "edge": "pre:two_dimensional_array->row_major_order",
+   "target": "row_major_order",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "mis:two_dimensional_array->RaggedRowsSameLength",
+   "target": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
+   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "mis:two_dimensional_array->NoJaggedArrays",
+   "target": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "Every row of a 2-D array must have the same length.",
+   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
+   "role": "context",
+   "shares_evidence_with": "mis:two_dimensional_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "mis:two_dimensional_array->MultidimensionalArray",
+   "target": "MultidimensionalArray",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "confidence": 0.6,
+   "prune_score": 0.1,
+   "score": 0.06,
+   "logic": "int[m][n] is one block of m * n values, so a[i] on its own means nothing.",
+   "twin_logic": "A 2-D array is an array of m row arrays, so a[i] is a 1-D array of length n.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "two_dimensional_array",
+   "edge": "lvl:two_dimensional_array@L0#0",
+   "target": "two_dimensional_array@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: a table or matrix is one grid in which rows and columns are symmetric, so a column should be as easy to pick out as a row. Java rule: a 2-D array is an array of row arrays; a[i] is row i, a[i][j] an element, and there is no expression for a column.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "mis:ragged_array->RaggedRowsSameLength",
+   "target": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
+   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "mis:ragged_array->NoJaggedArrays",
+   "target": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
+   "confidence": 0.55,
+   "prune_score": 0.4,
+   "score": 0.22,
+   "logic": "multi-dimensional arrays must be rectangular",
+   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
+   "role": "primary",
+   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "lvl:ragged_array@L0#0",
+   "target": "ragged_array@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "Folk meaning: a 'table' has the same number of columns in every row, so one width N serves all rows. Java rule: each row is a separate array, so rows may have different lengths, and code must use a[i].length for row i.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "ragged_array",
+   "edge": "lvl:ragged_array@L0#3",
+   "target": "ragged_array@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "Points to LT: the inner bound a[i].length is re-evaluated for each row. Inconsistent application: the trace uses row 0's length (or N) for every row, sometimes over-running a short row and sometimes stopping early in a long one. (here mixing in: \"All rows of a 2-D array have the same length, so one N works for every row\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "target": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "new int[n] has slots 0 to n, inclusive.",
+   "twin_logic": "The slots are 0 to n - 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "ragged_array",
+   "edge": "pre:two_dimensional_array->ragged_array",
+   "target": "two_dimensional_array",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "two_dimensional_array",
+   "edge": "pre:indexing->two_dimensional_array",
+   "target": "indexing",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.7,
+   "prune_score": 0.7,
+   "score": 0.49,
+   "logic": "A 1-D array uses one index a[i]; a 2-D array uses two, a[i][j], where the first index chooses the row array.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "two_dimensional_array",
+   "edge": "pre:two_dimensional_array->row_major_order",
+   "target": "row_major_order",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:indexing->array_bounds",
+   "target": "array_bounds",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "21; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null,
+   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+  },
+  {
+   "depth": 3,
+   "source": "two_dimensional_array",
+   "edge": "pre:two_dimensional_array->row_major_order",
+   "target": "row_major_order",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it visits three columns in every row and adds all six numbers",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
+   "twin_logic": null
+  }
+ ],
+ "clause_coverage": {
+  "21": "pre:indexing->array_bounds",
+  "t[0].length is 3, and every row of a 2D array has the same length": "mis:two_dimensional_array->RaggedRowsSameLength",
+  "so it visits three columns in every row and adds all six numbers": "mis:two_dimensional_array->RaggedRowsSameLength"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 4,
+ "llm_calls": 0,
+ "llm_cache_hits": 47,
+ "llm_calls_by_step": {
+  "prune": 16,
+  "label": 31
+ }
+}
