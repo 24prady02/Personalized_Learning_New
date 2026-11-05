@@ -187,9 +187,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.25)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+Kept by pruning: mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -506,7 +506,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 - assignment: L2 via one_step_execution "Probably it makes i 6"
 - increment_operators: L2 via output_prediction "Probably it makes i 6"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 0, cache hits 22
+**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 1, cache hits 21
 
 ### Held misconceptions
 (none)
@@ -568,7 +568,7 @@ start concepts (2): increment_operators, println
     lvl:increment_operators@L0#0 -> shown (0.25) "I think i++ adds 1 to i, though it might add 2, Im not sure"
     lvl:increment_operators@L1#0 -> shown (0.18) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     lvl:increment_operators@L2#1 -> shown (0.15) "Probably it makes i 6"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.25)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
@@ -667,7 +667,8 @@ start concepts (2): increment_operators, println
    "prune_score": 0.8,
    "score": 0.48,
    "logic": "i++ increases i by 2.",
-   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -741,7 +742,8 @@ start concepts (2): increment_operators, println
    "prune_score": 0.5,
    "score": 0.4,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
-   "twin_logic": "Each assignment or read replaces the variable's current value."
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -780,7 +782,8 @@ start concepts (2): increment_operators, println
    "prune_score": 0.8,
    "score": 0.48,
    "logic": "i++ increases i by 2.",
-   "twin_logic": "i++ (and ++i) increases i by exactly 1."
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
   },
   {
    "depth": 1,
@@ -873,7 +876,8 @@ start concepts (2): increment_operators, println
    "prune_score": 0.5,
    "score": 0.4,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
-   "twin_logic": "Each assignment or read replaces the variable's current value."
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
   },
   {
    "depth": 3,
@@ -902,8 +906,8 @@ start concepts (2): increment_operators, println
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 22,
+ "llm_calls": 1,
+ "llm_cache_hits": 21,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 14

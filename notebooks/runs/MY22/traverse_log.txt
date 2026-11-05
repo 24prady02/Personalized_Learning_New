@@ -10,7 +10,7 @@ start concepts (2): increment_operators, println
     lvl:increment_operators@L0#0 -> shown (0.25) "I think i++ adds 1 to i, though it might add 2, Im not sure"
     lvl:increment_operators@L1#0 -> shown (0.18) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     lvl:increment_operators@L2#1 -> shown (0.15) "Probably it makes i 6"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintNewLineFirst (0.25), mis:println->PrintEqualsPrintln (0.25)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
