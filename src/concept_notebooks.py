@@ -110,9 +110,9 @@ by = {}
 for u, v, d in H.edges(data=True):
     by[d['etype']] = by.get(d['etype'], 0) + 1
 display(HTML(
-    f"<div style='background:#fff;color:#111;padding:8px;font-family:monospace'><b>{_esc(CONCEPT)}</b>: "
+    f"<div style='background:#fff;color:#111;padding:10px;font:16px/1.6 arial'><b>{_esc(CONCEPT)}</b>: "
     f"{H.number_of_nodes()} nodes / {H.number_of_edges()} edges ("
-    + ', '.join(f'{k} {n}' for k, n in sorted(by.items())) + "). Interactive graph: "
+    + ', '.join(f'{k} {n}' for k, n in sorted(by.items())) + "). <b>Click an edge to read its exact reasoning</b>; click a node for its rules. Interactive graph: "
     f"<a href='/files/{rel}/{CONCEPT}.html' target='_blank'>{CONCEPT}.html</a> "
     "(shown below when the notebook server is running from the repository folder)</div>"
     f"<iframe src='/files/{rel}/{CONCEPT}.html' style='width:100%;height:1040px;border:1px solid #ddd;background:#fff'></iframe>"))
