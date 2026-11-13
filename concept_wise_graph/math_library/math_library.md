@@ -2,475 +2,57 @@
 
 Math.abs, Math.sqrt, Math.max, Math.random, Math.round ...
 
-Section 1.2 Built-in Types of Data, topic 1.2.g Library methods and APIs (Math).
+Section 1.2 Built-in Types of Data, topic 1.2.g Library methods and APIs (Math). From the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`).
 
 ![The knowledge graph around math_library](math_library.png)
 
-## At a glance
-
-- **Needs first:** `method_call`
-- **Leads to:** `math_random`, `math_round`, `random_move`, `shuffle`, `standard_audio`, `trig_functions`
-- **Learned alongside:** nothing
-- **Misconceptions:** `AbsAlwaysNonNegative`, `CastRounds`
-- **Errors:** `MathMethodWithoutClassName`, `WrongArgumentType`
-- **Levels:** L0, L1, L2, L3, L4
-
-Everything below comes from the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`): 29 edges around this concept. The edge logic, the wrong and right rules and the exact rules of the ways are copied word for word from the graph.
-
-## To work on (1)
-
-- misconceptions with no L0 way linked to them: AbsAlwaysNonNegative
-
-## What it needs first (1)
-
-A prerequisite edge means the other concept has to be understood before `math_library`.
-
-### `method_call` comes before `math_library`
-
-*name(arguments) -- invokes a library method and uses its return value*
-
-- **Edge:** `pre:method_call->math_library`
-- **Exact edge logic:** Math.sqrt(x) and other Math methods are used through method calls.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `method_call`:** Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).
-- **Composition rule (R) of `method_call` with `math_library`:** Math methods are called through the class name, Math.sqrt(x); without the prefix the compiler looks for the method in the current class and reports cannot find symbol.
-
-## What it leads to (6)
-
-These concepts need `math_library` first.
-
-### `math_library` comes before `math_random`
-
-*Math.random() and scaling to an int range*
-
-- **Edge:** `pre:math_library->math_random`
-- **Exact edge logic:** Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `math_random`:** Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
-- **Composition rule (R) of `math_random` with `math_library`:** Math.random() is the Math method that takes no argument and, unlike the others, is not a function of its input: it returns a random double in [0, 1).
-
-### `math_library` comes before `math_round`
-
-*Math.round rounds to the nearest integer and returns a long*
-
-- **Edge:** `pre:math_library->math_round`
-- **Exact edge logic:** Math.round is a Math library method.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `math_round`:** Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.
-- **Composition rule (R) of `math_round` with `math_library`:** Math.round is listed in the Math API with return type long, which is what forces the cast when the result goes to an int (unlike the other Math methods, which return double).
-
-### `math_library` comes before `random_move`
-
-*pick the next page from a cumulative-probability test*
-
-- **Edge:** `pre:math_library->random_move`
-- **Exact edge logic:** The random move draws r with Math.random() and then finds the interval of row p[page] that contains r.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `random_move`:** The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
-- **Composition rule (R) of `random_move` with `math_library`:** Math.random() supplies one uniform double in [0, 1) per move; it must be called once before the j loop, not inside it.
-
-### `math_library` comes before `shuffle`
-
-*Knuth shuffle -- swap a[i] with a random a[r], r in i..n-1*
-
-- **Edge:** `pre:math_library->shuffle`
-- **Exact edge logic:** The random position r between i and N-1 is computed with Math.random(), so each remaining card is equally likely to be chosen.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `shuffle`:** In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
-- **Composition rule (R) of `shuffle` with `math_library`:** (int) (Math.random() \* (N-i)) is a uniform int in 0..N-i-1, so r = i + that value is uniform in i..N-1.
-
-### `math_library` comes before `standard_audio`
-
-*StdAudio: sound as an array of samples*
-
-- **Edge:** `pre:math_library->standard_audio`
-- **Exact edge logic:** To play a tone, each sample a[i] of the sound array is computed with Math.sin at evenly spaced times.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `standard_audio`:** Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.
-- **Composition rule (R) of `standard_audio` with `math_library`:** Each sample is computed with Math.sin at evenly spaced times t = i/sps. The note's frequency comes from Math.pow(2, pitch/12.0).
-
-### `math_library` comes before `trig_functions`
-
-*Math.sin, Math.cos, Math.atan2 work in radians*
-
-- **Edge:** `pre:math_library->trig_functions`
-- **Exact edge logic:** The trig functions are Math library methods.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `trig_functions`:** The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.
-- **Composition rule (R) of `trig_functions` with `math_library`:** The trig functions belong to the Math API, whose note fixes the unit: angles are in radians, with toDegrees() and toRadians() for conversion.
-
-## Learned alongside (0)
-
-A parallel edge joins two concepts that sit side by side: neither is needed before the other.
-
-No parallel edge touches this concept.
-
-## Misconceptions (2)
-
-A misconception edge states the wrong rule a student may hold about this concept, and the right rule.
-
-### AbsAlwaysNonNegative
-
-- **Edge:** `math_library` &rarr; `AbsAlwaysNonNegative` (misconception)
-- **Exact edge logic (the wrong rule):** Math.abs always returns a non-negative number.
-- **Twin logic (the right rule):** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.
-- **Wrong belief (on the node):** Math.abs always returns a non-negative number.
-- **Correct rule (on the node):** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.
-- **Provenance:** rule\_dictionary
-- **Role of this concept:** primary
-- **L0 way linked to it:** no
-- **Edge `integer_constants` &rarr; `AbsAlwaysNonNegative`, exact edge logic:** Math.abs always returns a non-negative number. **Twin logic:** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative. (role: context)
-- **Edge `overflow` &rarr; `AbsAlwaysNonNegative`, exact edge logic:** Math.abs always returns a non-negative number. **Twin logic:** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative. (role: context)
-
-### CastRounds
-
-- **Edge:** `math_library` &rarr; `CastRounds` (misconception)
-- **Exact edge logic (the wrong rule):** (int) 2.7 evaluates to 3.
-- **Twin logic (the right rule):** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **Wrong belief (on the node):** (int) 2.7 evaluates to 3.
-- **Correct rule (on the node):** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **Provenance:** textbook
-- **Role of this concept:** context
-- **L0 way linked to it:** yes
-- **L0 way [1] misconception, exact rule:** wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **L0 way [2] inconsistent\_trace, exact rule:** Points to LT (the argument is evaluated, then the method computes from it). Applied unevenly: within one trace the student feeds degrees to Math.sin on one call and radians on another, or rounds the result of one call and truncates another. (here mixing in: "(int) 2.7 evaluates to 3")
-- **Edge `explicit_cast` &rarr; `CastRounds`, exact edge logic:** (int) 2.7 evaluates to 3. **Twin logic:** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer. (role: primary)
-- **Edge `math_round` &rarr; `CastRounds`, exact edge logic:** (int) 2.7 evaluates to 3. **Twin logic:** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer. (role: context)
-
-## Errors (2)
-
-An error edge states the rule that gets broken in a program, and the right rule.
-
-### MathMethodWithoutClassName
-
-- **Edge:** `math_library` &rarr; `MathMethodWithoutClassName` (error)
-- **Exact edge logic (the wrong rule):** sqrt(x) calls the square-root method.
-- **Twin logic (the right rule):** Library methods are called with the class name, e.g. Math.sqrt(x).
-- **Wrong belief (on the node):** sqrt(x) calls the square-root method.
-- **Correct rule (on the node):** Library methods are called with the class name, e.g. Math.sqrt(x).
-- **Provenance:** published
-- **Role of this concept:** context
-- **Edge `compile_time_error` &rarr; `MathMethodWithoutClassName`, exact edge logic:** sqrt(x) calls the square-root method. **Twin logic:** Library methods are called with the class name, e.g. Math.sqrt(x). (role: context)
-- **Edge `method_call` &rarr; `MathMethodWithoutClassName`, exact edge logic:** sqrt(x) calls the square-root method. **Twin logic:** Library methods are called with the class name, e.g. Math.sqrt(x). (role: primary)
-
-### WrongArgumentType
-
-- **Edge:** `math_library` &rarr; `WrongArgumentType` (error)
-- **Exact edge logic (the wrong rule):** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").
-- **Twin logic (the right rule):** Each argument must have the type the method's API lists.
-- **Wrong belief (on the node):** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").
-- **Correct rule (on the node):** Each argument must have the type the method's API lists.
-- **Provenance:** published
-- **Role of this concept:** context
-- **Edge `method_call` &rarr; `WrongArgumentType`, exact edge logic:** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2"). **Twin logic:** Each argument must have the type the method's API lists. (role: primary)
-
-## Levels L0 to L4 (5 of 5)
-
-Each level edge lists the ways a student shows that level, each with its exact rule.
-
-### L0: Prestructural / sensorimotor
-
-L0 for math library: the answer holds a rule that contradicts Java.
-
-*Deciding question: Does every rule the answer applies to math library agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0.*
-
-- **Edge:** `math_library` &rarr; `math_library@L0` (has_level)
-- **Exact edge logic:** math library -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
-
-Ways (3), each with its exact rule:
-
-- **[0] everyday\_reading** (rule type E, folk-meaning rule): Folk meaning: the calculator's function buttons, which work in degrees, round 2.7 to 3 when 'converting to a whole number', and always give a non-negative absolute value. Java rule: Math's trigonometric methods take radians, a cast to int truncates (only Math.round rounds, returning a long), and integer overflow makes Math.abs(-2147483648) negative.
-- **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `CastRounds`: wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `CastRounds`: Points to LT (the argument is evaluated, then the method computes from it). Applied unevenly: within one trace the student feeds degrees to Math.sin on one call and radians on another, or rounds the result of one call and truncates another. (here mixing in: "(int) 2.7 evaluates to 3")
-
-### L1: Unistructural / atom x text surface
-
-L1 for math library: the answer states one correct rule without applying it.
-
-*Deciding question: Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1.*
-
-- **Edge:** `math_library` &rarr; `math_library@L1` (has_level)
-- **Exact edge logic:** math library -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
-
-Ways (2), each with its exact rule:
-
-- **[0] names\_the\_element** (rule type N, identity rule): The Math library is Java's class Math (in java.lang, no import needed) of static methods for mathematical functions (abs, max, min, sin, cos, tan, exp, log, pow, sqrt, round, random) and the constants PI and E.
-- **[1] states\_the\_rule** (rule type S, declarative rule): Per the API: double abs/max/min (also for int, long, float), double sin/cos/tan(double theta) with theta in radians, double exp, log (natural), pow(a, b), sqrt; long round(double); double random() in [0, 1); constants Math.PI and Math.E.
-
-### L2: Multistructural / block x execution / preoperational
-
-L2 for math library: the answer applies these rules to every part of the code, in order.
-
-*Deciding question: Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled.*
-
-- **Edge:** `math_library` &rarr; `math_library@L2` (has_level)
-- **Exact edge logic:** math library -&gt; L2 (Multistructural): the answer applies the rules of math library to every part of the code, in order (3 ways).
-
-Ways (3), each with its exact rule:
-
-- **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): For Math.f(arg): evaluate arg (an int argument is widened to double), call the method, use the returned double in the enclosing expression; in nested calls the innermost runs first.
-- **[1] output\_prediction** (rule type OP, evaluation / result rule): Math.sqrt(2.0) is 1.4142135623730951, Math.sqrt(-1.0) is NaN, Math.sin(Math.PI/2) is 1.0, Math.log(Math.E) is 1.0, Math.pow(2.0, 10.0) is 1024.0, and Math.abs(-2147483648) is -2147483648.
-- **[2] one\_step\_execution** (rule type OS, state-transition rule): All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call.
-
-### L3: Relational / relations x function (concrete operational begins)
-
-L3 for math library: the answer relates the parts by these rules.
-
-*Deciding question: Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?*
-
-- **Edge:** `math_library` &rarr; `math_library@L3` (has_level)
-- **Exact edge logic:** math library -&gt; L3 (Relational): the answer relates the parts (8 ways).
-
-Ways (8), each with its exact rule:
-
-- **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).
-- **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
-- **[2] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.
-- **[3] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
-- **[4] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.
-- **[5] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.
-- **[6] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
-- **[7] purpose\_of\_the\_whole** (rule type P, plan / role rule): Used as a black box for standard numeric computations so that a program reads like the formula, e.g. Quadratic computes double d = Math.sqrt(discriminant);.
-
-### L4: Extended abstract (concrete-operational reversibility and conservation)
-
-L4 for math library: the answer reasons beyond the given code by these rules.
-
-*Deciding question: Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3.*
-
-- **Edge:** `math_library` &rarr; `math_library@L4` (has_level)
-- **Exact edge logic:** math library -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).
-
-Ways (5), each with its exact rule:
-
-- **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `CastRounds`: Replacing Math.pow(x, 2) by x \* x keeps the value (up to rounding) and is cheaper; replacing Math.round(x) by (int) x changes results whenever the fractional part is at least .5 (and for negatives); replacing Math.sin(x)/Math.cos(x) by Math.tan(x) keeps the value.
-- **[1] diagnose\_an\_error** (rule type D, error rule): rule broken: Library methods are called with the class name, e.g. Math.sqrt(x). Kind: compile-time. Trigger class: Calling sqrt(x) or pow(a, b) without Math. (cannot find symbol).
-- **[2] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Use Math for standard functions (roots, logs, trig, extremes, rounding, randomness); for squaring or small known integer powers multiply instead of calling Math.pow, and write known powers of ten as literals such as 1e6.
-- **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: Each argument must have the type the method's API lists. Kind: compile-time. Trigger class: Passing a String (Math.sqrt("2")) or a boolean to a Math method; numeric arguments are widened automatically.
-- **[4] diagnose\_an\_error** (rule type D, error rule): rule broken: Math.sqrt and Math.log are undefined for negative arguments and return NaN. Kind: silent logic error. Trigger class: A negative argument (e.g. a negative discriminant in Quadratic, Math.log(-1)); NaN then propagates to the output.
-
-## Same topic
-
-`math_library` belongs to the topic **Library methods and APIs (Math)** (`topic1.2.g`). The topic also contains: `api`, `math_random`, `math_round`, `method_call`, `trig_functions`.
-
-## Rules of the concept (21)
-
-- **Book** (SW-1e, p. 29 (pdf 39)): "Such a table is known as an application programming interface (API)."
-- **Book** (SW-1.2, ): "An application programming interface is a table summarizing the methods in a library."
-- **E** (folk-meaning rule): Folk meaning: the calculator's function buttons, which work in degrees, round 2.7 to 3 when 'converting to a whole number', and always give a non-negative absolute value. Java rule: Math's trigonometric methods take radians, a cast to int truncates (only Math.round rounds, returning a long), and integer overflow makes Math.abs(-2147483648) negative.
-- **M** (wrong rule / right rule): CastRounds: wrong: (int) 2.7 evaluates to 3. \| right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **T** (uneven-application rule): Points to LT (the argument is evaluated, then the method computes from it). Applied unevenly: within one trace the student feeds degrees to Math.sin on one call and radians on another, or rounds the result of one call and truncates another.
-- **N** (identity rule): The Math library is Java's class Math (in java.lang, no import needed) of static methods for mathematical functions (abs, max, min, sin, cos, tan, exp, log, pow, sqrt, round, random) and the constants PI and E.
-- **S** (declarative rule): Per the API: double abs/max/min (also for int, long, float), double sin/cos/tan(double theta) with theta in radians, double exp, log (natural), pow(a, b), sqrt; long round(double); double random() in [0, 1); constants Math.PI and Math.E.
-- **LT** (operational sequencing rule): For Math.f(arg): evaluate arg (an int argument is widened to double), call the method, use the returned double in the enclosing expression; in nested calls the innermost runs first.
-- **OP** (evaluation / result rule): Math.sqrt(2.0) is 1.4142135623730951, Math.sqrt(-1.0) is NaN, Math.sin(Math.PI/2) is 1.0, Math.log(Math.E) is 1.0, Math.pow(2.0, 10.0) is 1024.0, and Math.abs(-2147483648) is -2147483648.
-- **OS** (state-transition rule): All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call.
-- **R** (composition rule (with a neighbour)): with method\_call: Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).
-- **R** (composition rule (with a neighbour)): with shuffle: In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
-- **R** (composition rule (with a neighbour)): with standard\_audio: Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.
-- **R** (composition rule (with a neighbour)): with math\_random: Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
-- **R** (composition rule (with a neighbour)): with math\_round: Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.
-- **R** (composition rule (with a neighbour)): with trig\_functions: The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.
-- **R** (composition rule (with a neighbour)): with random\_move: The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
-- **P** (plan / role rule): Used as a black box for standard numeric computations so that a program reads like the formula, e.g. Quadratic computes double d = Math.sqrt(discriminant);.
-- **C** (conservation rule): Replacing Math.pow(x, 2) by x \* x keeps the value (up to rounding) and is cheaper; replacing Math.round(x) by (int) x changes results whenever the fractional part is at least .5 (and for negatives); replacing Math.sin(x)/Math.cos(x) by Math.tan(x) keeps the value.
-- **D** (error rule): rule broken: Library methods are called with the class name, e.g. Math.sqrt(x). (compile-time)
-- **D** (error rule): rule broken: Each argument must have the type the method's API lists. (compile-time)
-- **D** (error rule): rule broken: Math.sqrt and Math.log are undefined for negative arguments and return NaN. (silent logic error)
-- **X** (applicability rule): Use Math for standard functions (roots, logs, trig, extremes, rounding, randomness); for squaring or small known integer powers multiply instead of calling Math.pow, and write known powers of ten as literals such as 1e6.
-
-## How it is found in code and answers (reader block)
-
-- **Aliases:** math library, math.
-- **Code patterns:** `\bMath\.\w+`
-- **Operator symbols:** none
-- **Java types:** none
-
-## The whole prerequisite chain
-
-- **Everything it builds on (8):** `arithmetic_operators`, `data_type`, `expression`, `identifier`, `literal`, `method_call`, `primitive_type`, `variable`
-- **Everything that builds on it (11):** `frequency_counting`, `math_random`, `math_round`, `monte_carlo_simulation`, `random_move`, `sampling_without_replacement`, `shuffle`, `simulation_loop`, `standard_audio`, `trig_functions`, `two_models`
-
-## Every edge in this view and its exact edge logic (29)
-
-All the edges drawn in the picture, in the order: prerequisite, parallel, misconception, error, has_level, contains.
-
-**1. `math_library` &rarr; `math_random`** (prerequisite)
-
-- **Exact edge logic:** Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `math_random`:** Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
-- **Composition rule (R) of `math_random` with `math_library`:** Math.random() is the Math method that takes no argument and, unlike the others, is not a function of its input: it returns a random double in [0, 1).
-
-**2. `math_library` &rarr; `math_round`** (prerequisite)
-
-- **Exact edge logic:** Math.round is a Math library method.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `math_round`:** Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.
-- **Composition rule (R) of `math_round` with `math_library`:** Math.round is listed in the Math API with return type long, which is what forces the cast when the result goes to an int (unlike the other Math methods, which return double).
-
-**3. `math_library` &rarr; `random_move`** (prerequisite)
-
-- **Exact edge logic:** The random move draws r with Math.random() and then finds the interval of row p[page] that contains r.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `random_move`:** The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
-- **Composition rule (R) of `random_move` with `math_library`:** Math.random() supplies one uniform double in [0, 1) per move; it must be called once before the j loop, not inside it.
-
-**4. `math_library` &rarr; `shuffle`** (prerequisite)
-
-- **Exact edge logic:** The random position r between i and N-1 is computed with Math.random(), so each remaining card is equally likely to be chosen.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `shuffle`:** In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
-- **Composition rule (R) of `shuffle` with `math_library`:** (int) (Math.random() \* (N-i)) is a uniform int in 0..N-i-1, so r = i + that value is uniform in i..N-1.
-
-**5. `math_library` &rarr; `standard_audio`** (prerequisite)
-
-- **Exact edge logic:** To play a tone, each sample a[i] of the sound array is computed with Math.sin at evenly spaced times.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `standard_audio`:** Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.
-- **Composition rule (R) of `standard_audio` with `math_library`:** Each sample is computed with Math.sin at evenly spaced times t = i/sps. The note's frequency comes from Math.pow(2, pitch/12.0).
-
-**6. `math_library` &rarr; `trig_functions`** (prerequisite)
-
-- **Exact edge logic:** The trig functions are Math library methods.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `math_library` with `trig_functions`:** The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.
-- **Composition rule (R) of `trig_functions` with `math_library`:** The trig functions belong to the Math API, whose note fixes the unit: angles are in radians, with toDegrees() and toRadians() for conversion.
-
-**7. `method_call` &rarr; `math_library`** (prerequisite)
-
-- **Exact edge logic:** Math.sqrt(x) and other Math methods are used through method calls.
-- **Grounding:** book\_passage
-- **Composition rule (R) of `method_call` with `math_library`:** Math methods are called through the class name, Math.sqrt(x); without the prefix the compiler looks for the method in the current class and reports cannot find symbol.
-- **Composition rule (R) of `math_library` with `method_call`:** Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).
-
-**8. `math_library` &rarr; `AbsAlwaysNonNegative`** (misconception)
-
-- **Exact edge logic (the wrong rule):** Math.abs always returns a non-negative number.
-- **Twin logic (the right rule):** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.
-- **Role:** primary
-
-**9. `math_library` &rarr; `CastRounds`** (misconception)
-
-- **Exact edge logic (the wrong rule):** (int) 2.7 evaluates to 3.
-- **Twin logic (the right rule):** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **Role:** context
-
-**10. `explicit_cast` &rarr; `CastRounds`** (misconception)
-
-- **Exact edge logic (the wrong rule):** (int) 2.7 evaluates to 3.
-- **Twin logic (the right rule):** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **Role:** primary
-
-**11. `integer_constants` &rarr; `AbsAlwaysNonNegative`** (misconception)
-
-- **Exact edge logic (the wrong rule):** Math.abs always returns a non-negative number.
-- **Twin logic (the right rule):** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.
-- **Role:** context
-
-**12. `math_round` &rarr; `CastRounds`** (misconception)
-
-- **Exact edge logic (the wrong rule):** (int) 2.7 evaluates to 3.
-- **Twin logic (the right rule):** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-- **Role:** context
-
-**13. `overflow` &rarr; `AbsAlwaysNonNegative`** (misconception)
-
-- **Exact edge logic (the wrong rule):** Math.abs always returns a non-negative number.
-- **Twin logic (the right rule):** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.
-- **Role:** context
-
-**14. `math_library` &rarr; `MathMethodWithoutClassName`** (error)
-
-- **Exact edge logic (the wrong rule):** sqrt(x) calls the square-root method.
-- **Twin logic (the right rule):** Library methods are called with the class name, e.g. Math.sqrt(x).
-- **Role:** context
-
-**15. `math_library` &rarr; `WrongArgumentType`** (error)
-
-- **Exact edge logic (the wrong rule):** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").
-- **Twin logic (the right rule):** Each argument must have the type the method's API lists.
-- **Role:** context
-
-**16. `compile_time_error` &rarr; `MathMethodWithoutClassName`** (error)
-
-- **Exact edge logic (the wrong rule):** sqrt(x) calls the square-root method.
-- **Twin logic (the right rule):** Library methods are called with the class name, e.g. Math.sqrt(x).
-- **Role:** context
-
-**17. `method_call` &rarr; `MathMethodWithoutClassName`** (error)
-
-- **Exact edge logic (the wrong rule):** sqrt(x) calls the square-root method.
-- **Twin logic (the right rule):** Library methods are called with the class name, e.g. Math.sqrt(x).
-- **Role:** primary
-
-**18. `method_call` &rarr; `WrongArgumentType`** (error)
-
-- **Exact edge logic (the wrong rule):** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").
-- **Twin logic (the right rule):** Each argument must have the type the method's API lists.
-- **Role:** primary
-
-**19. `math_library` &rarr; `math_library@L0`** (has_level)
-
-- **Exact edge logic:** math library -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
-  - **[0] everyday\_reading** (rule type E, folk-meaning rule): Folk meaning: the calculator's function buttons, which work in degrees, round 2.7 to 3 when 'converting to a whole number', and always give a non-negative absolute value. Java rule: Math's trigonometric methods take radians, a cast to int truncates (only Math.round rounds, returning a long), and integer overflow makes Math.abs(-2147483648) negative.
-  - **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `CastRounds`: wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.
-  - **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `CastRounds`: Points to LT (the argument is evaluated, then the method computes from it). Applied unevenly: within one trace the student feeds degrees to Math.sin on one call and radians on another, or rounds the result of one call and truncates another. (here mixing in: "(int) 2.7 evaluates to 3")
-
-**20. `math_library` &rarr; `math_library@L1`** (has_level)
-
-- **Exact edge logic:** math library -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
-  - **[0] names\_the\_element** (rule type N, identity rule): The Math library is Java's class Math (in java.lang, no import needed) of static methods for mathematical functions (abs, max, min, sin, cos, tan, exp, log, pow, sqrt, round, random) and the constants PI and E.
-  - **[1] states\_the\_rule** (rule type S, declarative rule): Per the API: double abs/max/min (also for int, long, float), double sin/cos/tan(double theta) with theta in radians, double exp, log (natural), pow(a, b), sqrt; long round(double); double random() in [0, 1); constants Math.PI and Math.E.
-
-**21. `math_library` &rarr; `math_library@L2`** (has_level)
-
-- **Exact edge logic:** math library -&gt; L2 (Multistructural): the answer applies the rules of math library to every part of the code, in order (3 ways).
-  - **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): For Math.f(arg): evaluate arg (an int argument is widened to double), call the method, use the returned double in the enclosing expression; in nested calls the innermost runs first.
-  - **[1] output\_prediction** (rule type OP, evaluation / result rule): Math.sqrt(2.0) is 1.4142135623730951, Math.sqrt(-1.0) is NaN, Math.sin(Math.PI/2) is 1.0, Math.log(Math.E) is 1.0, Math.pow(2.0, 10.0) is 1024.0, and Math.abs(-2147483648) is -2147483648.
-  - **[2] one\_step\_execution** (rule type OS, state-transition rule): All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call.
-
-**22. `math_library` &rarr; `math_library@L3`** (has_level)
-
-- **Exact edge logic:** math library -&gt; L3 (Relational): the answer relates the parts (8 ways).
-  - **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).
-  - **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
-  - **[2] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.
-  - **[3] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
-  - **[4] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.
-  - **[5] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.
-  - **[6] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
-  - **[7] purpose\_of\_the\_whole** (rule type P, plan / role rule): Used as a black box for standard numeric computations so that a program reads like the formula, e.g. Quadratic computes double d = Math.sqrt(discriminant);.
-
-**23. `math_library` &rarr; `math_library@L4`** (has_level)
-
-- **Exact edge logic:** math library -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).
-  - **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `CastRounds`: Replacing Math.pow(x, 2) by x \* x keeps the value (up to rounding) and is cheaper; replacing Math.round(x) by (int) x changes results whenever the fractional part is at least .5 (and for negatives); replacing Math.sin(x)/Math.cos(x) by Math.tan(x) keeps the value.
-  - **[1] diagnose\_an\_error** (rule type D, error rule): rule broken: Library methods are called with the class name, e.g. Math.sqrt(x). Kind: compile-time. Trigger class: Calling sqrt(x) or pow(a, b) without Math. (cannot find symbol).
-  - **[2] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Use Math for standard functions (roots, logs, trig, extremes, rounding, randomness); for squaring or small known integer powers multiply instead of calling Math.pow, and write known powers of ten as literals such as 1e6.
-  - **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: Each argument must have the type the method's API lists. Kind: compile-time. Trigger class: Passing a String (Math.sqrt("2")) or a boolean to a Math method; numeric arguments are widened automatically.
-  - **[4] diagnose\_an\_error** (rule type D, error rule): rule broken: Math.sqrt and Math.log are undefined for negative arguments and return NaN. Kind: silent logic error. Trigger class: A negative argument (e.g. a negative discriminant in Quadratic, Math.log(-1)); NaN then propagates to the output.
-
-**24. `topic1.2.g` &rarr; `math_library`** (contains)
-
-- topic `topic1.2.g` contains `math_library`
-
-**25. `topic1.2.g` &rarr; `api`** (contains)
-
-- topic `topic1.2.g` contains `api`
-
-**26. `topic1.2.g` &rarr; `math_random`** (contains)
-
-- topic `topic1.2.g` contains `math_random`
-
-**27. `topic1.2.g` &rarr; `math_round`** (contains)
-
-- topic `topic1.2.g` contains `math_round`
-
-**28. `topic1.2.g` &rarr; `method_call`** (contains)
-
-- topic `topic1.2.g` contains `method_call`
-
-**29. `topic1.2.g` &rarr; `trig_functions`** (contains)
-
-- topic `topic1.2.g` contains `trig_functions`
+## Concepts associated with math\_library (12)
+
+| Concept | Description | How it is associated |
+| --- | --- | --- |
+| **api** | a table of library methods giving each method's signature and a short description of what it computes | same topic (topic1.2.g) |
+| **compile\_time\_error** | an error javac reports before the program can run (syntax, types) | shares error MathMethodWithoutClassName |
+| **explicit\_cast** | (int) x -- converts between numeric types, truncating toward zero | shares misconception CastRounds |
+| **integer\_constants** | Integer.MAX\_VALUE, Integer.MIN\_VALUE and their edge cases | shares misconception AbsAlwaysNonNegative |
+| **math\_random** | Math.random() and scaling to an int range | builds on it (needs it)<br>composition rule (R) with it<br>same topic (topic1.2.g) |
+| **math\_round** | Math.round rounds to the nearest integer and returns a long | builds on it (needs it)<br>composition rule (R) with it<br>shares misconception CastRounds<br>same topic (topic1.2.g) |
+| **method\_call** | name(arguments) -- invokes a library method and uses its return value | prerequisite of it (it needs this)<br>composition rule (R) with it<br>shares error MathMethodWithoutClassName<br>shares error WrongArgumentType<br>same topic (topic1.2.g) |
+| **overflow** | int arithmetic wraps around outside the 32-bit range | shares misconception AbsAlwaysNonNegative |
+| **random\_move** | pick the next page from a cumulative-probability test | builds on it (needs it)<br>composition rule (R) with it |
+| **shuffle** | Knuth shuffle -- swap a[i] with a random a[r], r in i..n-1 | builds on it (needs it)<br>composition rule (R) with it |
+| **standard\_audio** | StdAudio: sound as an array of samples | builds on it (needs it)<br>composition rule (R) with it |
+| **trig\_functions** | Math.sin, Math.cos, Math.atan2 work in radians | builds on it (needs it)<br>composition rule (R) with it<br>same topic (topic1.2.g) |
+
+## Every edge in this view and its full label (29)
+
+| From | Edge | To | Full edge label |
+| --- | --- | --- | --- |
+| **math\_library** | prerequisite | **math\_random** | Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).<br>grounding: book\_passage<br>composition rule (R) of math\_library with math\_random: Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).<br>composition rule (R) of math\_random with math\_library: Math.random() is the Math method that takes no argument and, unlike the others, is not a function of its input: it returns a random double in [0, 1). |
+| **math\_library** | prerequisite | **math\_round** | Math.round is a Math library method.<br>grounding: book\_passage<br>composition rule (R) of math\_library with math\_round: Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.<br>composition rule (R) of math\_round with math\_library: Math.round is listed in the Math API with return type long, which is what forces the cast when the result goes to an int (unlike the other Math methods, which return double). |
+| **math\_library** | prerequisite | **random\_move** | The random move draws r with Math.random() and then finds the interval of row p[page] that contains r.<br>grounding: book\_passage<br>composition rule (R) of math\_library with random\_move: The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.<br>composition rule (R) of random\_move with math\_library: Math.random() supplies one uniform double in [0, 1) per move; it must be called once before the j loop, not inside it. |
+| **math\_library** | prerequisite | **shuffle** | The random position r between i and N-1 is computed with Math.random(), so each remaining card is equally likely to be chosen.<br>grounding: book\_passage<br>composition rule (R) of math\_library with shuffle: In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.<br>composition rule (R) of shuffle with math\_library: (int) (Math.random() \* (N-i)) is a uniform int in 0..N-i-1, so r = i + that value is uniform in i..N-1. |
+| **math\_library** | prerequisite | **standard\_audio** | To play a tone, each sample a[i] of the sound array is computed with Math.sin at evenly spaced times.<br>grounding: book\_passage<br>composition rule (R) of math\_library with standard\_audio: Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.<br>composition rule (R) of standard\_audio with math\_library: Each sample is computed with Math.sin at evenly spaced times t = i/sps. The note's frequency comes from Math.pow(2, pitch/12.0). |
+| **math\_library** | prerequisite | **trig\_functions** | The trig functions are Math library methods.<br>grounding: book\_passage<br>composition rule (R) of math\_library with trig\_functions: The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.<br>composition rule (R) of trig\_functions with math\_library: The trig functions belong to the Math API, whose note fixes the unit: angles are in radians, with toDegrees() and toRadians() for conversion. |
+| **method\_call** | prerequisite | **math\_library** | Math.sqrt(x) and other Math methods are used through method calls.<br>grounding: book\_passage<br>composition rule (R) of method\_call with math\_library: Math methods are called through the class name, Math.sqrt(x); without the prefix the compiler looks for the method in the current class and reports cannot find symbol.<br>composition rule (R) of math\_library with method\_call: Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses). |
+| **explicit\_cast** | misconception | **CastRounds** | **wrong rule:** (int) 2.7 evaluates to 3.<br>**right rule:** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.<br>role: primary |
+| **integer\_constants** | misconception | **AbsAlwaysNonNegative** | **wrong rule:** Math.abs always returns a non-negative number.<br>**right rule:** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.<br>role: context |
+| **math\_library** | misconception | **AbsAlwaysNonNegative** | **wrong rule:** Math.abs always returns a non-negative number.<br>**right rule:** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.<br>role: primary |
+| **math\_library** | misconception | **CastRounds** | **wrong rule:** (int) 2.7 evaluates to 3.<br>**right rule:** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.<br>role: context |
+| **math\_round** | misconception | **CastRounds** | **wrong rule:** (int) 2.7 evaluates to 3.<br>**right rule:** A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.<br>role: context |
+| **overflow** | misconception | **AbsAlwaysNonNegative** | **wrong rule:** Math.abs always returns a non-negative number.<br>**right rule:** Math.abs(Integer.MIN\_VALUE) returns Integer.MIN\_VALUE, which is negative.<br>role: context |
+| **compile\_time\_error** | error | **MathMethodWithoutClassName** | **wrong rule:** sqrt(x) calls the square-root method.<br>**right rule:** Library methods are called with the class name, e.g. Math.sqrt(x).<br>role: context |
+| **math\_library** | error | **MathMethodWithoutClassName** | **wrong rule:** sqrt(x) calls the square-root method.<br>**right rule:** Library methods are called with the class name, e.g. Math.sqrt(x).<br>role: context |
+| **math\_library** | error | **WrongArgumentType** | **wrong rule:** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").<br>**right rule:** Each argument must have the type the method's API lists.<br>role: context |
+| **method\_call** | error | **MathMethodWithoutClassName** | **wrong rule:** sqrt(x) calls the square-root method.<br>**right rule:** Library methods are called with the class name, e.g. Math.sqrt(x).<br>role: primary |
+| **method\_call** | error | **WrongArgumentType** | **wrong rule:** Calls a method with arguments of the wrong type, e.g. Math.sqrt("2").<br>**right rule:** Each argument must have the type the method's API lists.<br>role: primary |
+| **math\_library** | has\_level | **math\_library@L0** | math library -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).<br>**[0] everyday\_reading** (E): Folk meaning: the calculator's function buttons, which work in degrees, round 2.7 to 3 when 'converting to a whole number', and always give a non-negative absolute value. Java rule: Math's trigonometric methods take radians, a cast to int truncates (only Math.round rounds, returning a long), and integer overflow makes Math.abs(-2147483648) negative.<br>**[1] misconception** (M) &rarr; CastRounds: wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.<br>**[2] inconsistent\_trace** (T) &rarr; CastRounds: Points to LT (the argument is evaluated, then the method computes from it). Applied unevenly: within one trace the student feeds degrees to Math.sin on one call and radians on another, or rounds the result of one call and truncates another. (here mixing in: "(int) 2.7 evaluates to 3") |
+| **math\_library** | has\_level | **math\_library@L1** | math library -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).<br>**[0] names\_the\_element** (N): The Math library is Java's class Math (in java.lang, no import needed) of static methods for mathematical functions (abs, max, min, sin, cos, tan, exp, log, pow, sqrt, round, random) and the constants PI and E.<br>**[1] states\_the\_rule** (S): Per the API: double abs/max/min (also for int, long, float), double sin/cos/tan(double theta) with theta in radians, double exp, log (natural), pow(a, b), sqrt; long round(double); double random() in [0, 1); constants Math.PI and Math.E. |
+| **math\_library** | has\_level | **math\_library@L2** | math library -&gt; L2 (Multistructural): the answer applies the rules of math library to every part of the code, in order (3 ways).<br>**[0] line\_by\_line\_trace** (LT): For Math.f(arg): evaluate arg (an int argument is widened to double), call the method, use the returned double in the enclosing expression; in nested calls the innermost runs first.<br>**[1] output\_prediction** (OP): Math.sqrt(2.0) is 1.4142135623730951, Math.sqrt(-1.0) is NaN, Math.sin(Math.PI/2) is 1.0, Math.log(Math.E) is 1.0, Math.pow(2.0, 10.0) is 1024.0, and Math.abs(-2147483648) is -2147483648.<br>**[2] one\_step\_execution** (OS): All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call. |
+| **math\_library** | has\_level | **math\_library@L3** | math library -&gt; L3 (Relational): the answer relates the parts (8 ways).<br>**[0] relation\_to\_neighbour** (R): Every Math facility is used through a method call with the Math. prefix and parentheses (the constants Math.PI and Math.E are written without parentheses).<br>**[1] relation\_to\_neighbour** (R): In the shuffle, r = i + (int) (Math.random() \* (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.<br>**[2] relation\_to\_neighbour** (R): Each sample a[i] = Math.sin(2\*Math.PI \* i \* hz / sps) is taken at evenly spaced times; the 2\*Math.PI factor is needed because Math.sin works in radians, one cycle being 2 pi.<br>**[3] relation\_to\_neighbour** (R): Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).<br>**[4] relation\_to\_neighbour** (R): Math.round is the Math method that rounds to the nearest integer, but it returns a long, so storing it in an int needs a cast.<br>**[5] relation\_to\_neighbour** (R): The trigonometric functions are Math methods whose angles are in radians; Math.toRadians and Math.toDegrees convert.<br>**[6] relation\_to\_neighbour** (R): The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.<br>**[7] purpose\_of\_the\_whole** (P): Used as a black box for standard numeric computations so that a program reads like the formula, e.g. Quadratic computes double d = Math.sqrt(discriminant);. |
+| **math\_library** | has\_level | **math\_library@L4** | math library -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).<br>**[0] predict\_a\_change** (C) &rarr; CastRounds: Replacing Math.pow(x, 2) by x \* x keeps the value (up to rounding) and is cheaper; replacing Math.round(x) by (int) x changes results whenever the fractional part is at least .5 (and for negatives); replacing Math.sin(x)/Math.cos(x) by Math.tan(x) keeps the value.<br>**[1] diagnose\_an\_error** (D): rule broken: Library methods are called with the class name, e.g. Math.sqrt(x). Kind: compile-time. Trigger class: Calling sqrt(x) or pow(a, b) without Math. (cannot find symbol).<br>**[2] transfer\_to\_a\_new\_program** (X): Use Math for standard functions (roots, logs, trig, extremes, rounding, randomness); for squaring or small known integer powers multiply instead of calling Math.pow, and write known powers of ten as literals such as 1e6.<br>**[3] diagnose\_an\_error** (D): rule broken: Each argument must have the type the method's API lists. Kind: compile-time. Trigger class: Passing a String (Math.sqrt("2")) or a boolean to a Math method; numeric arguments are widened automatically.<br>**[4] diagnose\_an\_error** (D): rule broken: Math.sqrt and Math.log are undefined for negative arguments and return NaN. Kind: silent logic error. Trigger class: A negative argument (e.g. a negative discriminant in Quadratic, Math.log(-1)); NaN then propagates to the output. |
+| **topic1.2.g** | contains | **api** | topic topic1.2.g contains api |
+| **topic1.2.g** | contains | **math\_library** | topic topic1.2.g contains math\_library |
+| **topic1.2.g** | contains | **math\_random** | topic topic1.2.g contains math\_random |
+| **topic1.2.g** | contains | **math\_round** | topic topic1.2.g contains math\_round |
+| **topic1.2.g** | contains | **method\_call** | topic topic1.2.g contains method\_call |
+| **topic1.2.g** | contains | **trig\_functions** | topic topic1.2.g contains trig\_functions |

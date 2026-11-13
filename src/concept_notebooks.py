@@ -77,216 +77,65 @@ ax.axis('off')
 fig.savefig(HERE / f'{CONCEPT}.png', dpi=110, bbox_inches='tight')
 plt.show()
 
-# ---- the explanation (<concept>.md): plain text, no tables ----
+# ---- the explanation (<concept>.md): the two tables of the concept view ----
+#   1. Concepts associated with the concept: concept, description, how it is associated
+#   2. Every edge in this view and its full label: from, edge, to, full edge label (the exact edge logic)
 def md(t):
-    """Text from the graph, safe to put in markdown."""
+    """Text from the graph, safe inside a markdown table cell."""
     t = str(t or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-    return re.sub(r'([*_`|])', r'\\\1', t).strip()
+    return re.sub(r'([*_`|])', r'\\\1', t).strip().replace('\n', '<br>')
 
-def way(w):
-    return md(w.get('way'))
-
-def code(t):
-    """A code pattern or id, shown exactly."""
-    t = str(t)
-    return ('`` ' + t + ' ``') if '`' in t else ('`' + t + '`')
-
-def way_line(i, w):
-    """One way of a level edge, exactly as stored: [index] way (rule type) -> linked misconception: exact rule."""
-    link = w.get('linked_misconception') or []
-    return (f"- **[{i}] {way(w)}** (rule type {md(w.get('rule_type'))}, {md(RULE_TYPE_NAMES.get(w.get('rule_type'), ''))})"
-            + (' &rarr; ' + ids(link) if link else '') + ': ' + (md(w.get('exact_rule')) or 'no exact rule stored'))
-
-def ids(xs):
-    return ', '.join('`' + str(x) + '`' for x in xs)
-
-def about(o):
-    """One line saying what another concept is."""
-    d = _CONCEPT.get(o, {})
-    lab, desc = d.get('label', o), d.get('description', '')
-    if lab == o:                       # no separate label: the description says what it is
-        return '*' + md(desc or o) + '*'
-    return '*' + md(lab) + (': ' + md(desc) if desc and desc != lab else '') + '*'
-
-def relation(e, other, heading):
-    out = [f"### {heading}", '', about(other), '',
-           '- **Edge:** ' + code(edge_id(e)),
-           '- **Exact edge logic:** ' + (md(e.get('logic') or e.get('edge_logic')) or 'no edge logic is stored on this edge')]
-    if e.get('grounding'):
-        out.append('- **Grounding:** ' + md(e['grounding']))
-    for a, b in ((CONCEPT, other), (other, CONCEPT)):
-        if (a, b) in _R_RULE:
-            out.append(f"- **Composition rule (R) of `{a}` with `{b}`:** {md(_R_RULE[(a, b)])}")
-    return out + ['']
+def full_label(u, v, et):
+    """The full label of an edge, word for word from the graph, one part per line."""
+    if et in ('prerequisite', 'parallel'):
+        e = _REL_EDGE.get(frozenset((u, v)), {})
+        lines = [md(e.get('logic') or e.get('edge_logic'))]
+        if e.get('grounding'):
+            lines.append('grounding: ' + md(e['grounding']))
+        for x, y in ((u, v), (v, u)):
+            if (x, y) in _R_RULE:
+                lines.append(f"composition rule (R) of {md(x)} with {md(y)}: {md(_R_RULE[(x, y)])}")
+        return lines
+    if et in ('misconception', 'error'):
+        e = _MIS_EDGE.get((u, v), {})
+        return (['**wrong rule:** ' + md(e.get('logic')), '**right rule:** ' + md(e.get('twin_logic'))]
+                + (['role: ' + md(e['role'])] if e.get('role') else []))
+    if et == 'has_level':
+        e = _HAS_LEVEL.get((u, str(v).split('@')[-1]), {})
+        lines = [md(e.get('logic'))]
+        for i, w in enumerate(e.get('ways', [])):
+            link = w.get('linked_misconception') or []
+            lines.append(f"**[{i}] {md(w.get('way'))}** ({md(w.get('rule_type'))})"
+                         + (' &rarr; ' + md(', '.join(link)) if link else '') + ': ' + md(w.get('exact_rule')))
+        return lines
+    if et == 'contains':
+        return [f"topic {md(u)} contains {md(v)}"]
+    return ['']
 
 d0 = _CONCEPT[CONCEPT]
-rel = concept_related(CONCEPT)
-shown = set(H.nodes())
-siblings = sorted({v for u, v, d in H.edges(data=True) if d['etype'] == 'contains' and v != CONCEPT})
-needs = sorted(rel['needs'], key=lambda e: e['source'])
-leads = sorted(rel['unlocks'], key=lambda e: e['target'])
-par = sorted(rel['parallel'], key=lambda e: str(sorted((e['source'], e['target']))))
-par_other = [e['target'] if e['source'] == CONCEPT else e['source'] for e in par]
-L0 = rel['levels'].get('L0', {})
+assoc = {o: w for o, w in concept_associations(CONCEPT, 1).items() if o in H}
+ORDER = ['prerequisite', 'parallel', 'misconception', 'error', 'has_level', 'contains', 'precedes', 'section_prerequisite']
+every = sorted(((u, v, d['etype']) for u, v, d in H.edges(data=True)),
+               key=lambda x: (ORDER.index(x[2]) if x[2] in ORDER else 99, x[0], str(x[1])))
 
 out = [f"# {d0.get('label', CONCEPT)} (`{CONCEPT}`)", '',
        md(d0.get('description', '')), '',
        f"Section {md(d0.get('section', ''))} {md(d0.get('section_title', ''))}, "
-       f"topic {md(d0.get('topic', ''))} {md(d0.get('topic_title', ''))}.", '',
+       f"topic {md(d0.get('topic', ''))} {md(d0.get('topic_title', ''))}. "
+       f"From the knowledge graph {str(DATA.get('version'))[:5]} (`data/raw/chapter1_kg_updated.json`).", '',
        f"![The knowledge graph around {CONCEPT}]({CONCEPT}.png)", '',
-       '## At a glance', '',
-       '- **Needs first:** ' + (ids(e['source'] for e in needs) or 'nothing'),
-       '- **Leads to:** ' + (ids(e['target'] for e in leads) or 'nothing'),
-       '- **Learned alongside:** ' + (ids(par_other) or 'nothing'),
-       '- **Misconceptions:** ' + (ids(sorted(e['target'] for e in rel['mis'])) or 'none'),
-       '- **Errors:** ' + (ids(sorted(e['target'] for e in rel['err'])) or 'none'),
-       '- **Levels:** ' + (', '.join(L for L in LEVELS if L in rel['levels']) or 'none'), '',
-       f"Everything below comes from the knowledge graph {str(DATA.get('version'))[:5]} "
-       f"(`data/raw/chapter1_kg_updated.json`): {H.number_of_edges()} edges around this concept. The edge logic, the "
-       "wrong and right rules and the exact rules of the ways are copied word for word from the graph.", '']
-gaps = concept_gaps(CONCEPT, rel)
-out += [f"## To work on ({len(gaps)})", ''] + (['- ' + md(g) for g in gaps] or ['Nothing is missing for this concept.']) + ['']
-
-out += [f"## What it needs first ({len(needs)})", '',
-        f"A prerequisite edge means the other concept has to be understood before `{CONCEPT}`.", '']
-for e in needs:
-    out += relation(e, e['source'], f"`{e['source']}` comes before `{CONCEPT}`")
-if not needs:
-    out += ['No prerequisite edge leads into this concept.', '']
-
-out += [f"## What it leads to ({len(leads)})", '', f"These concepts need `{CONCEPT}` first.", '']
-for e in leads:
-    out += relation(e, e['target'], f"`{CONCEPT}` comes before `{e['target']}`")
-if not leads:
-    out += ['No concept has this one as a prerequisite.', '']
-
-out += [f"## Learned alongside ({len(par)})", '',
-        "A parallel edge joins two concepts that sit side by side: neither is needed before the other.", '']
-for e, o in zip(par, par_other):
-    out += relation(e, o, f"`{CONCEPT}` alongside `{o}`")
-if not par:
-    out += ['No parallel edge touches this concept.', '']
-
-for title, one, edges, intro in (
-        ('Misconceptions', 'misconception', rel['mis'],
-         'A misconception edge states the wrong rule a student may hold about this concept, and the right rule.'),
-        ('Errors', 'error', rel['err'],
-         'An error edge states the rule that gets broken in a program, and the right rule.')):
-    out += [f"## {title} ({len(edges)})", '', intro, '']
-    for e in sorted(edges, key=lambda e: e['target']):
-        m = e['target']
-        node = _MISNODE.get(m, {})
-        out += [f"### {m}", '']
-        if node.get('label') and node['label'] != m:
-            out += ['*' + md(node['label']) + '*', '']
-        out += [f"- **Edge:** `{CONCEPT}` &rarr; `{m}` ({one})",
-                '- **Exact edge logic (the wrong rule):** ' + (md(e.get('logic')) or 'not stated on the edge'),
-                '- **Twin logic (the right rule):** ' + (md(e.get('twin_logic')) or 'not stated on the edge')]
-        if node.get('wrong_belief'):
-            out.append('- **Wrong belief (on the node):** ' + md(node['wrong_belief']))
-        if node.get('correct_rule'):
-            out.append('- **Correct rule (on the node):** ' + md(node['correct_rule']))
-        if node.get('provenance'):
-            out.append('- **Provenance:** ' + md(node['provenance']))
-        if e.get('role'):
-            out.append('- **Role of this concept:** ' + md(e['role']))
-        if one == 'misconception':
-            out.append('- **L0 way linked to it:** ' + ('yes' if m in rel['l0_linked'] else 'no'))
-        for i, w in enumerate(L0.get('ways', [])):
-            if m in (w.get('linked_misconception') or []):
-                out.append(f"- **L0 way [{i}] {way(w)}, exact rule:** " + md(w.get('exact_rule')))
-        for o in sorted(_MIS_OWNERS.get(m, set()) - {CONCEPT}):
-            if o in shown:
-                oe = _MIS_EDGE.get((o, m), {})
-                out.append(f"- **Edge `{o}` &rarr; `{m}`, exact edge logic:** " + (md(oe.get('logic')) or 'not stated')
-                           + (' **Twin logic:** ' + md(oe['twin_logic']) if oe.get('twin_logic') else '')
-                           + (f" (role: {md(oe['role'])})" if oe.get('role') else ''))
-        out.append('')
-    if not edges:
-        out += [f"The graph has no {one} edge from this concept.", '']
-
-out += [f"## Levels L0 to L4 ({len(rel['levels'])} of 5)", '',
-        "Each level edge lists the ways a student shows that level, each with its exact rule.", '']
-for L in LEVELS:
-    ln, e = _LEVEL_NODE.get(f'{CONCEPT}@{L}'), rel['levels'].get(L)
-    if not (ln or e):
-        out += [f"### {L}", '', 'The graph has no node for this level.', '']
-        continue
-    out += [f"### {L}: {md((ln or {}).get('name', ''))}", '']
-    if ln and ln.get('criterion'):
-        out += [md(ln['criterion']), '']
-    if ln and ln.get('deciding_question'):
-        out += ['*Deciding question: ' + md(ln['deciding_question']) + '*', '']
-    if not e:
-        out += ['The graph has no has_level edge to this level.', '']
-        continue
-    out += [f"- **Edge:** `{CONCEPT}` &rarr; `{CONCEPT}@{L}` (has_level)",
-            '- **Exact edge logic:** ' + (md(e.get('logic')) or 'no edge logic is stored on this edge'), '',
-            f"Ways ({len(e.get('ways', []))}), each with its exact rule:", '']
-    out += [way_line(i, w) for i, w in enumerate(e.get('ways', []))] or ['No ways are stored on this edge.']
-    out.append('')
-
-out += ['## Same topic', '']
-if rel['topics']:
-    t = rel['topics'][0]
-    out += [f"`{CONCEPT}` belongs to the topic **{md(G.nodes[t]['label'] if t in G else t)}** (`{t}`). "
-            + ('The topic also contains: ' + ids(siblings) + '.' if siblings else 'It is the only concept of that topic.'), '']
+       f"## Concepts associated with {md(CONCEPT)} ({len(assoc)})", '']
+if assoc:
+    out += ['| Concept | Description | How it is associated |', '| --- | --- | --- |']
+    out += [f"| **{md(o)}** | {md(_CONCEPT[o].get('description', ''))} | {'<br>'.join(md(x) for x in w)} |"
+            for o, w in sorted(assoc.items())]
 else:
-    out += ['No topic contains this concept.', '']
-
-rules = G.nodes[CONCEPT].get('rules', [])
-out += [f"## Rules of the concept ({len(rules)})", '']
-for q in d0.get('rules') or []:
-    out.append(f"- **Book** ({md(q.get('source'))}, {md(q.get('locator') or q.get('pdf_page'))}): \"{md(q.get('quote'))}\"")
-out += ['- **' + md(t) + '** (' + md(RULE_TYPE_NAMES.get(t, t)) + '): ' + md(r) for t, r in rules] or ['No rule is stated on the concept.']
+    out.append('No other concept is associated with this one in the graph.')
+out += ['', f"## Every edge in this view and its full label ({len(every)})", '',
+        '| From | Edge | To | Full edge label |', '| --- | --- | --- | --- |']
+out += [f"| **{md(u)}** | {md(et)} | **{md(v)}** | {'<br>'.join(x for x in full_label(u, v, et) if x)} |"
+        for u, v, et in every]
 out.append('')
-
-rd = READER.get(CONCEPT) or {}
-out += ['## How it is found in code and answers (reader block)', '']
-if rd:
-    out += ['- **Aliases:** ' + (md(', '.join(rd.get('aliases', []))) or 'none'),
-            '- **Code patterns:** ' + (', '.join(code(x) for x in rd.get('code_patterns', [])) or 'none'),
-            '- **Operator symbols:** ' + (', '.join(code(x) for x in rd.get('operator_symbols', [])) or 'none'),
-            '- **Java types:** ' + (', '.join(code(x) for x in rd.get('java_types', [])) or 'none')]
-    out += [f"- **Signal {md(x.get('name'))}** (scope {md(x.get('scope'))}{', decisive' if x.get('decisive') else ''}): "
-            + code(x.get('regex')) for x in rd.get('signals', [])]
-else:
-    out.append('No reader block is stored for this concept.')
-out += ['', '## The whole prerequisite chain', '',
-        f"- **Everything it builds on ({len(rel['all_needs'])}):** " + (ids(rel['all_needs']) or 'nothing'),
-        f"- **Everything that builds on it ({len(rel['all_unlocks'])}):** " + (ids(rel['all_unlocks']) or 'nothing'),
-        '']
-
-# every edge of the view, one after the other, with its exact edge logic (the table of the earlier notebook, as a list)
-ORDER = ['prerequisite', 'parallel', 'misconception', 'error', 'has_level', 'contains']
-every = sorted(((u, v, d['etype']) for u, v, d in H.edges(data=True)),
-               key=lambda x: (ORDER.index(x[2]) if x[2] in ORDER else 99, CONCEPT not in (x[0], x[1]), str(x[0]), str(x[1])))
-out += [f"## Every edge in this view and its exact edge logic ({len(every)})", '',
-        'All the edges drawn in the picture, in the order: prerequisite, parallel, misconception, error, has_level, contains.', '']
-for n, (u, v, et) in enumerate(every, 1):
-    arrow = ' &harr; ' if et == 'parallel' else ' &rarr; '
-    head = f"**{n}. `{u}`{arrow}`{v}`** ({et})"
-    if et in ('prerequisite', 'parallel'):
-        e = _REL_EDGE.get(frozenset((u, v)), {})
-        out += [head, '', '- **Exact edge logic:** ' + (md(e.get('logic') or e.get('edge_logic')) or 'none stored')]
-        if e.get('grounding'):
-            out.append('- **Grounding:** ' + md(e['grounding']))
-        for a, b in ((u, v), (v, u)):
-            if (a, b) in _R_RULE:
-                out.append(f"- **Composition rule (R) of `{a}` with `{b}`:** {md(_R_RULE[(a, b)])}")
-    elif et in ('misconception', 'error'):
-        e = _MIS_EDGE.get((u, v), {})
-        out += [head, '', '- **Exact edge logic (the wrong rule):** ' + (md(e.get('logic')) or 'none stored'),
-                '- **Twin logic (the right rule):** ' + (md(e.get('twin_logic')) or 'none stored')]
-        if e.get('role'):
-            out.append('- **Role:** ' + md(e['role']))
-    elif et == 'has_level':
-        e = _HAS_LEVEL.get((u, str(v).split('@')[-1]), {})
-        out += [head, '', '- **Exact edge logic:** ' + (md(e.get('logic')) or 'none stored')]
-        out += ['  ' + way_line(i, w) for i, w in enumerate(e.get('ways', []))]
-    else:
-        out += [head, '', f"- topic `{u}` contains `{v}`"]
-    out.append('')
 (HERE / f'{CONCEPT}.md').write_text('\n'.join(out), encoding='utf-8')
 print(f"{CONCEPT}: {H.number_of_nodes()} nodes, {H.number_of_edges()} edges. Written: {CONCEPT}.png, {CONCEPT}.md")
 '''
@@ -301,17 +150,24 @@ def run_concept(c, label):
     """Build the notebook of one concept, run it, save it with its outputs."""
     folder = OUT_DIR / c
     folder.mkdir(parents=True, exist_ok=True)
-    nb = nbformat.v4.new_notebook()
-    nb.metadata["kernelspec"] = {"display_name": "Python 3", "language": "python", "name": "python3"}
-    nb.cells = [
-        nbformat.v4.new_markdown_cell(
-            f"# {label} (`{c}`)\n\n"
-            f"The knowledge graph around `{c}`. This notebook draws the picture (`{c}.png`) and writes the explanation of "
-            f"every relation of the concept: read it in [{c}.md]({c}.md)."),
-        nbformat.v4.new_code_cell(LOAD_CODE),
-        nbformat.v4.new_code_cell(f"CONCEPT = {c!r}\n" + VIEW_CODE),
-    ]
-    NotebookClient(nb, timeout=600, kernel_name="python3", resources={"metadata": {"path": str(folder)}}).execute()
+    for attempt in (1, 2, 3):
+        nb = nbformat.v4.new_notebook()
+        nb.metadata["kernelspec"] = {"display_name": "Python 3", "language": "python", "name": "python3"}
+        nb.cells = [
+            nbformat.v4.new_markdown_cell(
+                f"# {label} (`{c}`)\n\n"
+                f"The knowledge graph around `{c}`. This notebook draws the picture (`{c}.png`) and writes the explanation of "
+                f"every relation of the concept: read it in [{c}.md]({c}.md)."),
+            nbformat.v4.new_code_cell(LOAD_CODE),
+            nbformat.v4.new_code_cell(f"CONCEPT = {c!r}\n" + VIEW_CODE),
+        ]
+        try:
+            NotebookClient(nb, timeout=240, kernel_name="python3", resources={"metadata": {"path": str(folder)}}).execute()
+            break
+        except Exception as err:                         # a kernel that hangs or dies: say why, then run it again
+            print(f"    {c}: attempt {attempt} failed with {type(err).__name__}: {' '.join(str(err).split())[:300]}", flush=True)
+            if attempt == 3:
+                raise
     # the visualizer's control panel is of no use in a saved notebook: keep only the line that says what was loaded
     nb.cells[1].outputs = [o for o in nb.cells[1].outputs if o.output_type == "stream"]
     nb.metadata.pop("widgets", None)
