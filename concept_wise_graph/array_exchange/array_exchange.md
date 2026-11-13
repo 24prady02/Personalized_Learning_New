@@ -15,7 +15,11 @@ Section 1.4 Arrays, topic 1.4.d Exchange, shuffling and sampling.
 - **Errors:** none
 - **Levels:** L0, L1, L2, L3, L4
 
-Everything below comes from the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`): 15 edges around this concept, each explained in the graph's own words.
+Everything below comes from the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`): 15 edges around this concept. The edge logic, the wrong and right rules and the exact rules of the ways are copied word for word from the graph.
+
+## To work on (1)
+
+- no aliases: a student's words cannot name this concept
 
 ## What it needs first (2)
 
@@ -25,21 +29,21 @@ A prerequisite edge means the other concept has to be understood before `array_e
 
 *= stores the computed value of the right side*
 
-The exchange is three assignments in a fixed order through a temporary variable.
-
-- **Grounding:** book passage
-- **How `array_exchange` combines with `assignment`:** Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
-- **How `assignment` combines with `array_exchange`:** Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
+- **Edge:** `pre:assignment->array_exchange`
+- **Exact edge logic:** The exchange is three assignments in a fixed order through a temporary variable.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `assignment`:** Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+- **Composition rule (R) of `assignment` with `array_exchange`:** Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
 
 ### `indexing` comes before `array_exchange`
 
 *a[i] -- 0-based access*
 
-An exchange reads and writes a[i] and a[j] by index.
-
-- **Grounding:** book passage
-- **How `array_exchange` combines with `indexing`:** The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
-- **How `indexing` combines with `array_exchange`:** The exchange reads and writes elements only through their indices: t = a[i]; a[i] = a[j]; a[j] = t.
+- **Edge:** `pre:indexing->array_exchange`
+- **Exact edge logic:** An exchange reads and writes a[i] and a[j] by index.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `indexing`:** The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+- **Composition rule (R) of `indexing` with `array_exchange`:** The exchange reads and writes elements only through their indices: t = a[i]; a[i] = a[j]; a[j] = t.
 
 ## What it leads to (2)
 
@@ -49,21 +53,21 @@ These concepts need `array_exchange` first.
 
 *reversing an array in place*
 
-Reversal exchanges a[i] with a[N-1-i] for each i in the first half of the array.
-
-- **Grounding:** book passage
-- **How `array_exchange` combines with `array_reversal`:** Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
-- **How `array_reversal` combines with `array_exchange`:** Reversal is a loop of exchanges a[i] &lt;-&gt; a[N-1-i], so it inherits the exchange idiom and its temporary variable.
+- **Edge:** `pre:array_exchange->array_reversal`
+- **Exact edge logic:** Reversal exchanges a[i] with a[N-1-i] for each i in the first half of the array.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `array_reversal`:** Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+- **Composition rule (R) of `array_reversal` with `array_exchange`:** Reversal is a loop of exchanges a[i] &lt;-&gt; a[N-1-i], so it inherits the exchange idiom and its temporary variable.
 
 ### `array_exchange` comes before `shuffle`
 
 *Knuth shuffle -- swap a[i] with a random a[r], r in i..n-1*
 
-Shuffling is a loop of exchanges with randomly chosen positions.
-
-- **Grounding:** book passage
-- **How `array_exchange` combines with `shuffle`:** Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
-- **How `shuffle` combines with `array_exchange`:** Using the exchange idiom guarantees the deck holds the same cards after the shuffle.
+- **Edge:** `pre:array_exchange->shuffle`
+- **Exact edge logic:** Shuffling is a loop of exchanges with randomly chosen positions.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `shuffle`:** Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+- **Composition rule (R) of `shuffle` with `array_exchange`:** Using the exchange idiom guarantees the deck holds the same cards after the shuffle.
 
 ## Learned alongside (0)
 
@@ -77,13 +81,18 @@ A misconception edge states the wrong rule a student may hold about this concept
 
 ### SwapWithoutTemp
 
-- **Wrong rule:** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
-- **Right rule:** A temporary variable must save a[i] before it is overwritten.
+- **Edge:** `array_exchange` &rarr; `SwapWithoutTemp` (misconception)
+- **Exact edge logic (the wrong rule):** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **Twin logic (the right rule):** A temporary variable must save a[i] before it is overwritten.
+- **Wrong belief (on the node):** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **Correct rule (on the node):** A temporary variable must save a[i] before it is overwritten.
+- **Provenance:** textbook
 - **Role of this concept:** primary
-- **Shows at level L0 as:** misconception: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
-- **Shows at level L0 as:** inconsistent trace: Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes. (here mixing in: "a[i] = a[j]; a[j] = a[i]; exchanges the two values")
-- **Also an edge from `assignment`:** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
-- **Also an edge from `variable_swap`:** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **L0 way linked to it:** yes
+- **L0 way [1] misconception, exact rule:** wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
+- **L0 way [2] inconsistent\_trace, exact rule:** Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes. (here mixing in: "a[i] = a[j]; a[j] = a[i]; exchanges the two values")
+- **Edge `assignment` &rarr; `SwapWithoutTemp`, exact edge logic:** a[i] = a[j]; a[j] = a[i]; exchanges the two values. **Twin logic:** A temporary variable must save a[i] before it is overwritten. (role: context)
+- **Edge `variable_swap` &rarr; `SwapWithoutTemp`, exact edge logic:** a[i] = a[j]; a[j] = a[i]; exchanges the two values. **Twin logic:** A temporary variable must save a[i] before it is overwritten. (role: context)
 
 ## Errors (0)
 
@@ -101,11 +110,14 @@ L0 for array exchange: the answer holds a rule that contradicts Java.
 
 *Deciding question: Does every rule the answer applies to array exchange agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0.*
 
-array exchange -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
+- **Edge:** `array_exchange` &rarr; `array_exchange@L0` (has_level)
+- **Exact edge logic:** array exchange -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
 
-- **everyday reading** (folk-meaning rule): Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. Java rule: assignments run one at a time, so the first overwrites a value that must be saved in a temporary first.
-- **misconception** (wrong rule / right rule; shows `SwapWithoutTemp`): wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
-- **inconsistent trace** (uneven-application rule; shows `SwapWithoutTemp`): Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes. (here mixing in: "a[i] = a[j]; a[j] = a[i]; exchanges the two values")
+Ways (3), each with its exact rule:
+
+- **[0] everyday\_reading** (rule type E, folk-meaning rule): Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. Java rule: assignments run one at a time, so the first overwrites a value that must be saved in a temporary first.
+- **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `SwapWithoutTemp`: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
+- **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `SwapWithoutTemp`: Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes. (here mixing in: "a[i] = a[j]; a[j] = a[i]; exchanges the two values")
 
 ### L1: Unistructural / atom x text surface
 
@@ -113,10 +125,13 @@ L1 for array exchange: the answer states one correct rule without applying it.
 
 *Deciding question: Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1.*
 
-array exchange -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
+- **Edge:** `array_exchange` &rarr; `array_exchange@L1` (has_level)
+- **Exact edge logic:** array exchange -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
 
-- **names the element** (identity rule): Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
-- **states the rule** (declarative rule): Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
+Ways (2), each with its exact rule:
+
+- **[0] names\_the\_element** (rule type N, identity rule): Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
+- **[1] states\_the\_rule** (rule type S, declarative rule): Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
 
 ### L2: Multistructural / block x execution / preoperational
 
@@ -124,11 +139,14 @@ L2 for array exchange: the answer applies these rules to every part of the code,
 
 *Deciding question: Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled.*
 
-array exchange -&gt; L2 (Multistructural): the answer applies the rules of array exchange to every part of the code, in order (3 ways).
+- **Edge:** `array_exchange` &rarr; `array_exchange@L2` (has_level)
+- **Exact edge logic:** array exchange -&gt; L2 (Multistructural): the answer applies the rules of array exchange to every part of the code, in order (3 ways).
 
-- **line by line trace** (operational sequencing rule): Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
-- **output prediction** (evaluation / result rule): Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
-- **one step execution** (state-transition rule): State transition: exactly two elements (and t) change; when i == j nothing changes.
+Ways (3), each with its exact rule:
+
+- **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
+- **[1] output\_prediction** (rule type OP, evaluation / result rule): Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
+- **[2] one\_step\_execution** (rule type OS, state-transition rule): State transition: exactly two elements (and t) change; when i == j nothing changes.
 
 ### L3: Relational / relations x function (concrete operational begins)
 
@@ -136,13 +154,16 @@ L3 for array exchange: the answer relates the parts by these rules.
 
 *Deciding question: Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?*
 
-array exchange -&gt; L3 (Relational): the answer relates the parts (5 ways).
+- **Edge:** `array_exchange` &rarr; `array_exchange@L3` (has_level)
+- **Exact edge logic:** array exchange -&gt; L3 (Relational): the answer relates the parts (5 ways).
 
-- **relation to neighbour** (composition rule (with a neighbour)): The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
-- **relation to neighbour** (composition rule (with a neighbour)): Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
-- **relation to neighbour** (composition rule (with a neighbour)): Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
-- **relation to neighbour** (composition rule (with a neighbour)): Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
-- **purpose of the whole** (plan / role rule): Plan/role: t is a Sajaniemi temporary. The exchange reorders an array (the array as organizer) without changing its set of values, the building block of shuffling, reversing and sorting.
+Ways (5), each with its exact rule:
+
+- **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+- **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+- **[2] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+- **[3] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+- **[4] purpose\_of\_the\_whole** (rule type P, plan / role rule): Plan/role: t is a Sajaniemi temporary. The exchange reorders an array (the array as organizer) without changing its set of values, the building block of shuffling, reversing and sorting.
 
 ### L4: Extended abstract (concrete-operational reversibility and conservation)
 
@@ -150,13 +171,16 @@ L4 for array exchange: the answer reasons beyond the given code by these rules.
 
 *Deciding question: Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3.*
 
-array exchange -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).
+- **Edge:** `array_exchange` &rarr; `array_exchange@L4` (has_level)
+- **Exact edge logic:** array exchange -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).
 
-- **predict a change** (conservation rule; shows `SwapWithoutTemp`): Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
-- **transfer to a new program** (applicability rule): Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
-- **diagnose an error** (error rule): rule broken: The old value must be saved before it is overwritten. Kind: silent logic error. Trigger class: a[i] = a[j]; a[j] = a[i]; (or the three statements reordered), with a[i] != a[j], leaves both elements equal to the old a[j]
-- **diagnose an error** (error rule): rule broken: The temporary must have the element type. Kind: compile-time. Trigger class: int t = deck[i]; for a String[] deck (incompatible types)
-- **diagnose an error** (error rule): rule broken: Both indices must be legal. Kind: run-time exception. Trigger class: i or j outside 0..a.length-1 (ArrayIndexOutOfBoundsException)
+Ways (5), each with its exact rule:
+
+- **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `SwapWithoutTemp`: Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
+- **[1] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
+- **[2] diagnose\_an\_error** (rule type D, error rule): rule broken: The old value must be saved before it is overwritten. Kind: silent logic error. Trigger class: a[i] = a[j]; a[j] = a[i]; (or the three statements reordered), with a[i] != a[j], leaves both elements equal to the old a[j]
+- **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: The temporary must have the element type. Kind: compile-time. Trigger class: int t = deck[i]; for a String[] deck (incompatible types)
+- **[4] diagnose\_an\_error** (rule type D, error rule): rule broken: Both indices must be legal. Kind: run-time exception. Trigger class: i or j outside 0..a.length-1 (ArrayIndexOutOfBoundsException)
 
 ## Same topic
 
@@ -164,26 +188,136 @@ array exchange -&gt; L4 (Extended abstract): the answer reasons beyond the given
 
 ## Rules of the concept (18)
 
-- **folk-meaning rule:** Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. Java rule: assignments run one at a time, so the first overwrites a value that must be saved in a temporary first.
-- **wrong rule / right rule:** SwapWithoutTemp: wrong: a[i] = a[j]; a[j] = a[i]; exchanges the two values. \| right: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
-- **uneven-application rule:** Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes.
-- **identity rule:** Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
-- **declarative rule:** Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
-- **operational sequencing rule:** Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
-- **evaluation / result rule:** Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
-- **state-transition rule:** State transition: exactly two elements (and t) change; when i == j nothing changes.
-- **composition rule (with a neighbour):** with indexing: The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
-- **composition rule (with a neighbour):** with assignment: Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
-- **composition rule (with a neighbour):** with shuffle: Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
-- **composition rule (with a neighbour):** with array\_reversal: Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
-- **plan / role rule:** Plan/role: t is a Sajaniemi temporary. The exchange reorders an array (the array as organizer) without changing its set of values, the building block of shuffling, reversing and sorting.
-- **conservation rule:** Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
-- **error rule:** rule broken: The old value must be saved before it is overwritten. (silent logic error)
-- **error rule:** rule broken: The temporary must have the element type. (compile-time)
-- **error rule:** rule broken: Both indices must be legal. (run-time exception)
-- **applicability rule:** Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
+- **Book** (SW-1e, p. 92 (pdf 102)): "Frequently, we wish to exchange two values in an array."
+- **Book** (SW-1e, p. 92 (pdf 102)): "When i and j are equal, the array is unchanged."
+- **Book** (SW-1.4, p. 92 (pdf 102)): "Frequently, we wish to exchange two values in an array."
+- **E** (folk-meaning rule): Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. Java rule: assignments run one at a time, so the first overwrites a value that must be saved in a temporary first.
+- **M** (wrong rule / right rule): SwapWithoutTemp: wrong: a[i] = a[j]; a[j] = a[i]; exchanges the two values. \| right: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
+- **T** (uneven-application rule): Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes.
+- **N** (identity rule): Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
+- **S** (declarative rule): Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
+- **LT** (operational sequencing rule): Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
+- **OP** (evaluation / result rule): Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
+- **OS** (state-transition rule): State transition: exactly two elements (and t) change; when i == j nothing changes.
+- **R** (composition rule (with a neighbour)): with indexing: The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+- **R** (composition rule (with a neighbour)): with assignment: Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+- **R** (composition rule (with a neighbour)): with shuffle: Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+- **R** (composition rule (with a neighbour)): with array\_reversal: Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+- **P** (plan / role rule): Plan/role: t is a Sajaniemi temporary. The exchange reorders an array (the array as organizer) without changing its set of values, the building block of shuffling, reversing and sorting.
+- **C** (conservation rule): Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
+- **D** (error rule): rule broken: The old value must be saved before it is overwritten. (silent logic error)
+- **D** (error rule): rule broken: The temporary must have the element type. (compile-time)
+- **D** (error rule): rule broken: Both indices must be legal. (run-time exception)
+- **X** (applicability rule): Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
+
+## How it is found in code and answers (reader block)
+
+- **Aliases:** none
+- **Code patterns:** `=\s*\w+\s*\[[^\]]+\]\s*;\s*\w+\s*\[[^\]]+\]\s*=\s*\w+\s*\[[^\]]+\]\s*;\s*\w+\s*\[[^\]]+\]\s*=\s*\w+\s*;`
+- **Operator symbols:** none
+- **Java types:** none
 
 ## The whole prerequisite chain
 
 - **Everything it builds on (12):** `array_creation`, `array_declaration`, `array_initializer`, `assignment`, `data_structure`, `data_type`, `declaration`, `identifier`, `indexing`, `literal`, `primitive_type`, `variable`
 - **Everything that builds on it (3):** `array_reversal`, `sampling_without_replacement`, `shuffle`
+
+## Every edge in this view and its exact edge logic (15)
+
+All the edges drawn in the picture, in the order: prerequisite, parallel, misconception, error, has_level, contains.
+
+**1. `array_exchange` &rarr; `array_reversal`** (prerequisite)
+
+- **Exact edge logic:** Reversal exchanges a[i] with a[N-1-i] for each i in the first half of the array.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `array_reversal`:** Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+- **Composition rule (R) of `array_reversal` with `array_exchange`:** Reversal is a loop of exchanges a[i] &lt;-&gt; a[N-1-i], so it inherits the exchange idiom and its temporary variable.
+
+**2. `array_exchange` &rarr; `shuffle`** (prerequisite)
+
+- **Exact edge logic:** Shuffling is a loop of exchanges with randomly chosen positions.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `array_exchange` with `shuffle`:** Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+- **Composition rule (R) of `shuffle` with `array_exchange`:** Using the exchange idiom guarantees the deck holds the same cards after the shuffle.
+
+**3. `assignment` &rarr; `array_exchange`** (prerequisite)
+
+- **Exact edge logic:** The exchange is three assignments in a fixed order through a temporary variable.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `assignment` with `array_exchange`:** Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target.
+- **Composition rule (R) of `array_exchange` with `assignment`:** Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+
+**4. `indexing` &rarr; `array_exchange`** (prerequisite)
+
+- **Exact edge logic:** An exchange reads and writes a[i] and a[j] by index.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `indexing` with `array_exchange`:** The exchange reads and writes elements only through their indices: t = a[i]; a[i] = a[j]; a[j] = t.
+- **Composition rule (R) of `array_exchange` with `indexing`:** The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+
+**5. `array_exchange` &rarr; `SwapWithoutTemp`** (misconception)
+
+- **Exact edge logic (the wrong rule):** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **Twin logic (the right rule):** A temporary variable must save a[i] before it is overwritten.
+- **Role:** primary
+
+**6. `assignment` &rarr; `SwapWithoutTemp`** (misconception)
+
+- **Exact edge logic (the wrong rule):** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **Twin logic (the right rule):** A temporary variable must save a[i] before it is overwritten.
+- **Role:** context
+
+**7. `variable_swap` &rarr; `SwapWithoutTemp`** (misconception)
+
+- **Exact edge logic (the wrong rule):** a[i] = a[j]; a[j] = a[i]; exchanges the two values.
+- **Twin logic (the right rule):** A temporary variable must save a[i] before it is overwritten.
+- **Role:** context
+
+**8. `array_exchange` &rarr; `array_exchange@L0`** (has_level)
+
+- **Exact edge logic:** array exchange -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
+  - **[0] everyday\_reading** (rule type E, folk-meaning rule): Folk meaning: in everyday life two people swap objects simultaneously, and in maths 'a = b, b = a' reads as a symmetric relation. Java rule: assignments run one at a time, so the first overwrites a value that must be saved in a temporary first.
+  - **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `SwapWithoutTemp`: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten: t = a[i]; a[i] = a[j]; a[j] = t;.
+  - **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `SwapWithoutTemp`: Points to LT: save a[i] in t, copy a[j] into a[i], copy t into a[j], in that order. Inconsistent application: the trace performs the second assignment with the old a[i] (as if both happened at once) on some passes. (here mixing in: "a[i] = a[j]; a[j] = a[i]; exchanges the two values")
+
+**9. `array_exchange` &rarr; `array_exchange@L1`** (has_level)
+
+- **Exact edge logic:** array exchange -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
+  - **[0] names\_the\_element** (rule type N, identity rule): Identity: the exchange idiom, three assignments through a temporary variable that trade the values of two array elements.
+  - **[1] states\_the\_rule** (rule type S, declarative rule): Declarative: T t = a[i]; a[i] = a[j]; a[j] = t; where t has the element type T.
+
+**10. `array_exchange` &rarr; `array_exchange@L2`** (has_level)
+
+- **Exact edge logic:** array exchange -&gt; L2 (Multistructural): the answer applies the rules of array exchange to every part of the code, in order (3 ways).
+  - **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): Sequencing: (1) t receives a[i]; (2) a[i] receives a[j]; (3) a[j] receives t. Each statement uses the state left by the previous one.
+  - **[1] output\_prediction** (rule type OP, evaluation / result rule): Result: the values at i and j have traded places. With i = 1 and j = 4 in the deck, 3 of Clubs ends in deck[1] and 2 of Diamonds in deck[4].
+  - **[2] one\_step\_execution** (rule type OS, state-transition rule): State transition: exactly two elements (and t) change; when i == j nothing changes.
+
+**11. `array_exchange` &rarr; `array_exchange@L3`** (has_level)
+
+- **Exact edge logic:** array exchange -&gt; L3 (Relational): the answer relates the parts (5 ways).
+  - **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The exchange reads and writes elements only through their indices a[i] and a[j], which must both be in bounds.
+  - **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Each of the three steps is an ordinary assignment whose left side is a single variable (here an array element), executed in order.
+  - **[2] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Shuffling is a loop of exchanges with random partner positions; using exchanges guarantees the same cards before and after.
+  - **[3] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+  - **[4] purpose\_of\_the\_whole** (rule type P, plan / role rule): Plan/role: t is a Sajaniemi temporary. The exchange reorders an array (the array as organizer) without changing its set of values, the building block of shuffling, reversing and sorting.
+
+**12. `array_exchange` &rarr; `array_exchange@L4`** (has_level)
+
+- **Exact edge logic:** array exchange -&gt; L4 (Extended abstract): the answer reasons beyond the given code (5 ways).
+  - **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `SwapWithoutTemp`: Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
+  - **[1] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Applicability: use the exchange whenever two elements must change places (shuffle, reverse, sort, permute). It is not a copy: to duplicate a value, use one assignment.
+  - **[2] diagnose\_an\_error** (rule type D, error rule): rule broken: The old value must be saved before it is overwritten. Kind: silent logic error. Trigger class: a[i] = a[j]; a[j] = a[i]; (or the three statements reordered), with a[i] != a[j], leaves both elements equal to the old a[j]
+  - **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: The temporary must have the element type. Kind: compile-time. Trigger class: int t = deck[i]; for a String[] deck (incompatible types)
+  - **[4] diagnose\_an\_error** (rule type D, error rule): rule broken: Both indices must be legal. Kind: run-time exception. Trigger class: i or j outside 0..a.length-1 (ArrayIndexOutOfBoundsException)
+
+**13. `topic1.4.d` &rarr; `array_exchange`** (contains)
+
+- topic `topic1.4.d` contains `array_exchange`
+
+**14. `topic1.4.d` &rarr; `sampling_without_replacement`** (contains)
+
+- topic `topic1.4.d` contains `sampling_without_replacement`
+
+**15. `topic1.4.d` &rarr; `shuffle`** (contains)
+
+- topic `topic1.4.d` contains `shuffle`

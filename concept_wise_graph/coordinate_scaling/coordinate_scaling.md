@@ -15,7 +15,11 @@ Section 1.5 Input and Output, topic 1.5.e Standard drawing and animation.
 - **Errors:** none
 - **Levels:** L0, L1, L2, L3, L4
 
-Everything below comes from the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`): 15 edges around this concept, each explained in the graph's own words.
+Everything below comes from the knowledge graph 3.9.8 (`data/raw/chapter1_kg_updated.json`): 15 edges around this concept. The edge logic, the wrong and right rules and the exact rules of the ways are copied word for word from the graph.
+
+## To work on (1)
+
+- no aliases: a student's words cannot name this concept
 
 ## What it needs first (1)
 
@@ -25,11 +29,11 @@ A prerequisite edge means the other concept has to be understood before `coordin
 
 *StdDraw -- graphical output (book-specific)*
 
-Scaling sets the coordinate system StdDraw uses.
-
-- **Grounding:** book passage
-- **How `coordinate_scaling` combines with `standard_drawing`:** The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
-- **How `standard_drawing` combines with `coordinate_scaling`:** setXscale and setYscale set the coordinate system that every later StdDraw command uses.
+- **Edge:** `pre:standard_drawing->coordinate_scaling`
+- **Exact edge logic:** Scaling sets the coordinate system StdDraw uses.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `coordinate_scaling` with `standard_drawing`:** The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+- **Composition rule (R) of `standard_drawing` with `coordinate_scaling`:** setXscale and setYscale set the coordinate system that every later StdDraw command uses.
 
 ## What it leads to (1)
 
@@ -39,11 +43,11 @@ These concepts need `coordinate_scaling` first.
 
 *sampling a function and joining the points with lines*
 
-Before plotting, the x-scale is set to the interval and the y-scale to the range of function values so the curve fits the canvas.
-
-- **Grounding:** book passage
-- **How `coordinate_scaling` combines with `function_plotting`:** Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
-- **How `function_plotting` combines with `coordinate_scaling`:** The x-scale must match the sampled interval and the y-scale the function's range; otherwise the curve is clipped or squashed.
+- **Edge:** `pre:coordinate_scaling->function_plotting`
+- **Exact edge logic:** Before plotting, the x-scale is set to the interval and the y-scale to the range of function values so the curve fits the canvas.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `coordinate_scaling` with `function_plotting`:** Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+- **Composition rule (R) of `function_plotting` with `coordinate_scaling`:** The x-scale must match the sampled interval and the y-scale the function's range; otherwise the curve is clipped or squashed.
 
 ## Learned alongside (0)
 
@@ -57,12 +61,17 @@ A misconception edge states the wrong rule a student may hold about this concept
 
 ### PixelCoordinates
 
-- **Wrong rule:** StdDraw.point(256, 256) draws in the middle of the default window.
-- **Right rule:** The default coordinate scale is the unit square, so the middle is (0.5, 0.5).
+- **Edge:** `coordinate_scaling` &rarr; `PixelCoordinates` (misconception)
+- **Exact edge logic (the wrong rule):** StdDraw.point(256, 256) draws in the middle of the default window.
+- **Twin logic (the right rule):** The default coordinate scale is the unit square, so the middle is (0.5, 0.5).
+- **Wrong belief (on the node):** StdDraw.point(256, 256) draws in the middle of the default window.
+- **Correct rule (on the node):** The default coordinate scale is the unit square, so the middle is (0.5, 0.5).
+- **Provenance:** derived
 - **Role of this concept:** context
-- **Shows at level L0 as:** misconception: wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. Right rule: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
-- **Shows at level L0 as:** inconsistent trace: Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y. (here mixing in: "StdDraw.point(256, 256) draws in the middle of the default window")
-- **Also an edge from `standard_drawing`:** StdDraw.point(256, 256) draws in the middle of the default window.
+- **L0 way linked to it:** yes
+- **L0 way [1] misconception, exact rule:** wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. Right rule: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
+- **L0 way [2] inconsistent\_trace, exact rule:** Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y. (here mixing in: "StdDraw.point(256, 256) draws in the middle of the default window")
+- **Edge `standard_drawing` &rarr; `PixelCoordinates`, exact edge logic:** StdDraw.point(256, 256) draws in the middle of the default window. **Twin logic:** The default coordinate scale is the unit square, so the middle is (0.5, 0.5). (role: primary)
 
 ## Errors (0)
 
@@ -80,11 +89,14 @@ L0 for coordinate scaling: the answer holds a rule that contradicts Java.
 
 *Deciding question: Does every rule the answer applies to coordinate scaling agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0.*
 
-coordinate scaling -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
+- **Edge:** `coordinate_scaling` &rarr; `coordinate_scaling@L0` (has_level)
+- **Exact edge logic:** coordinate scaling -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
 
-- **everyday reading** (folk-meaning rule): Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
-- **misconception** (wrong rule / right rule; shows `PixelCoordinates`): wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. Right rule: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
-- **inconsistent trace** (uneven-application rule; shows `PixelCoordinates`): Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y. (here mixing in: "StdDraw.point(256, 256) draws in the middle of the default window")
+Ways (3), each with its exact rule:
+
+- **[0] everyday\_reading** (rule type E, folk-meaning rule): Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
+- **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `PixelCoordinates`: wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. Right rule: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
+- **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `PixelCoordinates`: Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y. (here mixing in: "StdDraw.point(256, 256) draws in the middle of the default window")
 
 ### L1: Unistructural / atom x text surface
 
@@ -92,10 +104,13 @@ L1 for coordinate scaling: the answer states one correct rule without applying i
 
 *Deciding question: Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1.*
 
-coordinate scaling -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
+- **Edge:** `coordinate_scaling` &rarr; `coordinate_scaling@L1` (has_level)
+- **Exact edge logic:** coordinate scaling -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
 
-- **names the element** (identity rule): Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
-- **states the rule** (declarative rule): setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
+Ways (2), each with its exact rule:
+
+- **[0] names\_the\_element** (rule type N, identity rule): Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
+- **[1] states\_the\_rule** (rule type S, declarative rule): setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
 
 ### L2: Multistructural / block x execution / preoperational
 
@@ -103,11 +118,14 @@ L2 for coordinate scaling: the answer applies these rules to every part of the c
 
 *Deciding question: Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled.*
 
-coordinate scaling -&gt; L2 (Multistructural): the answer applies the rules of coordinate scaling to every part of the code, in order (3 ways).
+- **Edge:** `coordinate_scaling` &rarr; `coordinate_scaling@L2` (has_level)
+- **Exact edge logic:** coordinate scaling -&gt; L2 (Multistructural): the answer applies the rules of coordinate scaling to every part of the code, in order (3 ways).
 
-- **line by line trace** (operational sequencing rule): The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
-- **output prediction** (evaluation / result rule): After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
-- **one step execution** (state-transition rule): One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
+Ways (3), each with its exact rule:
+
+- **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
+- **[1] output\_prediction** (rule type OP, evaluation / result rule): After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
+- **[2] one\_step\_execution** (rule type OS, state-transition rule): One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
 
 ### L3: Relational / relations x function (concrete operational begins)
 
@@ -115,11 +133,14 @@ L3 for coordinate scaling: the answer relates the parts by these rules.
 
 *Deciding question: Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?*
 
-coordinate scaling -&gt; L3 (Relational): the answer relates the parts (3 ways).
+- **Edge:** `coordinate_scaling` &rarr; `coordinate_scaling@L3` (has_level)
+- **Exact edge logic:** coordinate scaling -&gt; L3 (Relational): the answer relates the parts (3 ways).
 
-- **relation to neighbour** (composition rule (with a neighbour)): The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
-- **relation to neighbour** (composition rule (with a neighbour)): Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
-- **purpose of the whole** (plan / role rule): Scaling matches the drawing to the data, so values can be drawn in their own units.
+Ways (3), each with its exact rule:
+
+- **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+- **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+- **[2] purpose\_of\_the\_whole** (rule type P, plan / role rule): Scaling matches the drawing to the data, so values can be drawn in their own units.
 
 ### L4: Extended abstract (concrete-operational reversibility and conservation)
 
@@ -127,12 +148,15 @@ L4 for coordinate scaling: the answer reasons beyond the given code by these rul
 
 *Deciding question: Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3.*
 
-coordinate scaling -&gt; L4 (Extended abstract): the answer reasons beyond the given code (4 ways).
+- **Edge:** `coordinate_scaling` &rarr; `coordinate_scaling@L4` (has_level)
+- **Exact edge logic:** coordinate scaling -&gt; L4 (Extended abstract): the answer reasons beyond the given code (4 ways).
 
-- **predict a change** (conservation rule; shows `PixelCoordinates`): Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
-- **transfer to a new program** (applicability rule): Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
-- **diagnose an error** (error rule): rule broken: Data must fall inside the scaled box to be visible. Kind: silent logic error. Trigger class: The scale is not set, or set to the wrong range (e.g. the y-range misses the function's min and max), so parts of the plot fall off the canvas.
-- **diagnose an error** (error rule): rule broken: A scale applies only to drawing done after it. Kind: silent logic error. Trigger class: setXscale is called after the points are drawn, so they were placed in unit-square coordinates.
+Ways (4), each with its exact rule:
+
+- **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `PixelCoordinates`: Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
+- **[1] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
+- **[2] diagnose\_an\_error** (rule type D, error rule): rule broken: Data must fall inside the scaled box to be visible. Kind: silent logic error. Trigger class: The scale is not set, or set to the wrong range (e.g. the y-range misses the function's min and max), so parts of the plot fall off the canvas.
+- **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: A scale applies only to drawing done after it. Kind: silent logic error. Trigger class: setXscale is called after the points are drawn, so they were placed in unit-square coordinates.
 
 ## Same topic
 
@@ -140,23 +164,121 @@ coordinate scaling -&gt; L4 (Extended abstract): the answer reasons beyond the g
 
 ## Rules of the concept (15)
 
-- **folk-meaning rule:** Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
-- **wrong rule / right rule:** PixelCoordinates: wrong: StdDraw.point(256, 256) draws in the middle of the default window. \| right: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
-- **uneven-application rule:** Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y.
-- **identity rule:** Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
-- **declarative rule:** setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
-- **operational sequencing rule:** The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
-- **evaluation / result rule:** After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
-- **state-transition rule:** One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
-- **composition rule (with a neighbour):** with standard\_drawing: The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
-- **composition rule (with a neighbour):** with function\_plotting: Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
-- **plan / role rule:** Scaling matches the drawing to the data, so values can be drawn in their own units.
-- **conservation rule:** Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
-- **error rule:** rule broken: Data must fall inside the scaled box to be visible. (silent logic error)
-- **error rule:** rule broken: A scale applies only to drawing done after it. (silent logic error)
-- **applicability rule:** Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
+- **Book** (SW-1e, p. 138 (pdf 148)): "The default coordinate system for standard drawing is the unit square, but we often want to draw plots at different scales."
+- **Book** (SW-1.5, ): "The default canvas size is 512-by-512 pixels and the default coordinate system is the unit square"
+- **E** (folk-meaning rule): Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
+- **M** (wrong rule / right rule): PixelCoordinates: wrong: StdDraw.point(256, 256) draws in the middle of the default window. \| right: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
+- **T** (uneven-application rule): Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y.
+- **N** (identity rule): Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
+- **S** (declarative rule): setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
+- **LT** (operational sequencing rule): The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
+- **OP** (evaluation / result rule): After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
+- **OS** (state-transition rule): One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
+- **R** (composition rule (with a neighbour)): with standard\_drawing: The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+- **R** (composition rule (with a neighbour)): with function\_plotting: Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+- **P** (plan / role rule): Scaling matches the drawing to the data, so values can be drawn in their own units.
+- **C** (conservation rule): Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
+- **D** (error rule): rule broken: Data must fall inside the scaled box to be visible. (silent logic error)
+- **D** (error rule): rule broken: A scale applies only to drawing done after it. (silent logic error)
+- **X** (applicability rule): Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
+
+## How it is found in code and answers (reader block)
+
+- **Aliases:** none
+- **Code patterns:** `StdDraw\.set[XY]?[sS]cale\s*\(`
+- **Operator symbols:** none
+- **Java types:** none
 
 ## The whole prerequisite chain
 
 - **Everything it builds on (10):** `api`, `arithmetic_operators`, `data_type`, `expression`, `identifier`, `literal`, `method_call`, `primitive_type`, `standard_drawing`, `variable`
 - **Everything that builds on it (2):** `function_plotting`, `standard_audio`
+
+## Every edge in this view and its exact edge logic (15)
+
+All the edges drawn in the picture, in the order: prerequisite, parallel, misconception, error, has_level, contains.
+
+**1. `coordinate_scaling` &rarr; `function_plotting`** (prerequisite)
+
+- **Exact edge logic:** Before plotting, the x-scale is set to the interval and the y-scale to the range of function values so the curve fits the canvas.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `coordinate_scaling` with `function_plotting`:** Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+- **Composition rule (R) of `function_plotting` with `coordinate_scaling`:** The x-scale must match the sampled interval and the y-scale the function's range; otherwise the curve is clipped or squashed.
+
+**2. `standard_drawing` &rarr; `coordinate_scaling`** (prerequisite)
+
+- **Exact edge logic:** Scaling sets the coordinate system StdDraw uses.
+- **Grounding:** book\_passage
+- **Composition rule (R) of `standard_drawing` with `coordinate_scaling`:** setXscale and setYscale set the coordinate system that every later StdDraw command uses.
+- **Composition rule (R) of `coordinate_scaling` with `standard_drawing`:** The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+
+**3. `coordinate_scaling` &rarr; `PixelCoordinates`** (misconception)
+
+- **Exact edge logic (the wrong rule):** StdDraw.point(256, 256) draws in the middle of the default window.
+- **Twin logic (the right rule):** The default coordinate scale is the unit square, so the middle is (0.5, 0.5).
+- **Role:** context
+
+**4. `standard_drawing` &rarr; `PixelCoordinates`** (misconception)
+
+- **Exact edge logic (the wrong rule):** StdDraw.point(256, 256) draws in the middle of the default window.
+- **Twin logic (the right rule):** The default coordinate scale is the unit square, so the middle is (0.5, 0.5).
+- **Role:** primary
+
+**5. `coordinate_scaling` &rarr; `coordinate_scaling@L0`** (has_level)
+
+- **Exact edge logic:** coordinate scaling -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (3 ways).
+  - **[0] everyday\_reading** (rule type E, folk-meaning rule): Graph paper and screens suggest pixel coordinates, or axes that start wherever the data start. StdDraw's default coordinates are the unit square, and setXscale/setYscale map any chosen ranges onto the canvas.
+  - **[1] misconception** (rule type M, wrong rule / right rule) &rarr; `PixelCoordinates`: wrong rule: StdDraw.point(256, 256) draws in the middle of the default window. Right rule: In the default unit square the middle is (0.5, 0.5). Use setXscale(0, 512) and setYscale(0, 512) to work in pixel-like units.
+  - **[2] inconsistent\_trace** (rule type T, uneven-application rule) &rarr; `PixelCoordinates`: Points to LT (a scale applies to the drawing commands after it). An uneven trace maps some points with the old scale, or applies the x-scale to y. (here mixing in: "StdDraw.point(256, 256) draws in the middle of the default window")
+
+**6. `coordinate_scaling` &rarr; `coordinate_scaling@L1`** (has_level)
+
+- **Exact edge logic:** coordinate scaling -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).
+  - **[0] names\_the\_element** (rule type N, identity rule): Coordinate scaling is done by StdDraw control commands, setXscale(x0, x1) and setYscale(y0, y1), which choose the user-coordinate ranges mapped onto the canvas.
+  - **[1] states\_the\_rule** (rule type S, declarative rule): setXscale(x0, x1) followed by setYscale(y0, y1) makes the canvas the box with lower-left corner (x0, y0) and upper-right corner (x1, y1). The no-argument versions reset to the unit square.
+
+**7. `coordinate_scaling` &rarr; `coordinate_scaling@L2`** (has_level)
+
+- **Exact edge logic:** coordinate scaling -&gt; L2 (Multistructural): the answer applies the rules of coordinate scaling to every part of the code, in order (3 ways).
+  - **[0] line\_by\_line\_trace** (rule type LT, operational sequencing rule): The scale calls run first and change the mapping state. Every later drawing command converts its (x, y) through the current mapping. Integer arguments are converted to double.
+  - **[1] output\_prediction** (rule type OP, evaluation / result rule): After setXscale(0, N) and setYscale(0, N), line(0, N-i, i, 0) for i = 0..N draws lines spanning the whole canvas, and (N/2, N/2) is the centre. The methods return void.
+  - **[2] one\_step\_execution** (rule type OS, state-transition rule): One scale call changes only the coordinate mapping for one axis. It draws nothing and leaves the existing picture alone.
+
+**8. `coordinate_scaling` &rarr; `coordinate_scaling@L3`** (has_level)
+
+- **Exact edge logic:** coordinate scaling -&gt; L3 (Relational): the answer relates the parts (3 ways).
+  - **[0] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): The scale fixes how every later StdDraw coordinate is interpreted. The pen radius is unaffected by it.
+  - **[1] relation\_to\_neighbour** (rule type R, composition rule (with a neighbour)): Before plotting, set the x-scale to the sampled interval and the y-scale to the function's min and max, so the curve fits the canvas.
+  - **[2] purpose\_of\_the\_whole** (rule type P, plan / role rule): Scaling matches the drawing to the data, so values can be drawn in their own units.
+
+**9. `coordinate_scaling` &rarr; `coordinate_scaling@L4`** (has_level)
+
+- **Exact edge logic:** coordinate scaling -&gt; L4 (Extended abstract): the answer reasons beyond the given code (4 ways).
+  - **[0] predict\_a\_change** (rule type C, conservation rule) &rarr; `PixelCoordinates`: Scaling the data and the axis ranges by the same factor leaves the picture the same. The pen radius stays the same whatever the scale.
+  - **[1] transfer\_to\_a\_new\_program** (rule type X, applicability rule): Set the scales whenever the data's natural range is not [0, 1] (plots, maps such as USA.txt, integer grids). Data already normalized to [0, 1] need no scaling.
+  - **[2] diagnose\_an\_error** (rule type D, error rule): rule broken: Data must fall inside the scaled box to be visible. Kind: silent logic error. Trigger class: The scale is not set, or set to the wrong range (e.g. the y-range misses the function's min and max), so parts of the plot fall off the canvas.
+  - **[3] diagnose\_an\_error** (rule type D, error rule): rule broken: A scale applies only to drawing done after it. Kind: silent logic error. Trigger class: setXscale is called after the points are drawn, so they were placed in unit-square coordinates.
+
+**10. `topic1.5.e` &rarr; `coordinate_scaling`** (contains)
+
+- topic `topic1.5.e` contains `coordinate_scaling`
+
+**11. `topic1.5.e` &rarr; `animation`** (contains)
+
+- topic `topic1.5.e` contains `animation`
+
+**12. `topic1.5.e` &rarr; `drawing_shapes`** (contains)
+
+- topic `topic1.5.e` contains `drawing_shapes`
+
+**13. `topic1.5.e` &rarr; `function_plotting`** (contains)
+
+- topic `topic1.5.e` contains `function_plotting`
+
+**14. `topic1.5.e` &rarr; `mouse_interaction`** (contains)
+
+- topic `topic1.5.e` contains `mouse_interaction`
+
+**15. `topic1.5.e` &rarr; `standard_drawing`** (contains)
+
+- topic `topic1.5.e` contains `standard_drawing`
