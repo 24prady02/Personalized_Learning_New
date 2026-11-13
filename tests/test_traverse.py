@@ -13,7 +13,7 @@ from traverse import DEFAULT_TRAVERSAL, STEPS, Graph, covered_clauses, select_st
 from utils import load_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
-SCENARIOS = {s["id"]: s for s in load_scenarios(ROOT / "data/raw/scenarios_20.json")}
+SCENARIOS = {s["id"]: s for s in load_scenarios(ROOT / "tests/data/scenarios_gold.json")}
 S007_ANSWER = SCENARIOS["S007"]["answer"]
 S007_CLAUSES = ["3 2 1 / 2 1 / 1", "no empty line at the end", "because the loop stops at 1"]
 

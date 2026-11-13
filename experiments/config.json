@@ -1,7 +1,7 @@
 {
   "experiment": "think_on_the_graph",
-  "kg": "data/raw/chapter1_kg.json",
-  "scenarios": "data/raw/scenarios_20.json",
+  "kg": "data/raw/chapter1_kg_updated.json",
+  "scenarios": "data/raw/scenarios_41.json",
   "hops": 0,
   "keep_generic": false,
   "inputs_read": ["scenario code (stage 1)", "question and student answer (stage 2 only)"],

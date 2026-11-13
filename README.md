@@ -37,7 +37,7 @@ requirements.txt                             pytest; matplotlib, networkx (figur
 pytest.ini                                   testpaths = tests, pythonpath = src
 data/
   raw/chapter1_kg_updated.json                   knowledge graph v3.9.8 (173 concepts, 1943 edges, 296 misconception/error records, 865 level nodes)
-  raw/scenarios_20.json                      S000 reference case + 10 scenarios whose gold concepts the code alone shows + 5 test scenarios T001-T005 written for Stage 2
+  raw/scenarios_41.json                      the main set: the 41 scenarios MY01-MY41 (code, question, answer; 40 distinct, MY26 repeats MY18; no gold labels yet)
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
   processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step
@@ -56,7 +56,7 @@ experiments/
   config.json                                default paths and extractor settings (hops 0, keep_generic false)
   pattern_bank.json                          the compiled pattern bank summary written by train.py (the model "checkpoint")
   logs/train_log.txt                         pattern compile + pattern-test check
-  logs/subgraph_report.txt                   one line per scenario over scenarios_20.json, "fully covered: 10 / 10"
+  logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json, "fully covered: 10 / 10"
   logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
   logs/traverse_<sid>.txt                    Stage 2 trace: start ranking, candidates, kept edges, labels, quotes, clause coverage, levels
   llm_cache/<hash>.json                      every prompt sent in Stage 2 and the model's reply (re-runs are free and deterministic)
@@ -270,7 +270,7 @@ node ids) and then lists each scenario with its code, figure, concept nodes, edg
 nodes and level counts. `results/tables/summary.csv` holds the same per-scenario data. The order of every list in the outputs is
 fixed (sorted ids), so two runs produce identical files.
 
-Current run over `scenarios_20.json`:
+Current run over the earlier gold-labelled set (`tests/data/scenarios_gold.json`):
 
 | scenario | concept nodes | concept edges | misconception/error edges | misconception nodes | level nodes | pieces |
 |---|---|---|---|---|---|---|
@@ -290,7 +290,7 @@ Current run over `scenarios_20.json`:
 
 `evaluate.py` also prints one line per scenario (tagged concepts, node / edge / misconception / level counts,
 pieces, and the gold concepts not found) and ends with `fully covered: N / 10`; `results/metrics.json` holds
-the same as numbers (mean gold-concept recall, share of gold among the nodes, mean sizes, subgraphs in one piece). On `scenarios_20.json` every gold
+the same as numbers (mean gold-concept recall, share of gold among the nodes, mean sizes, subgraphs in one piece). On the earlier gold-labelled set (`tests/data/scenarios_gold.json`) every gold
 concept of all ten scenarios is found from the code: 10 / 10. The extra nodes relative to gold are
 non-generic constructs really present in the code (the loop around S057's division, for instance); only the
 question and answer, read in a later stage, can say which of them a scenario is about.
@@ -310,7 +310,7 @@ missing `break` in S023 and S073, compiling in S080). Running the report on that
 - the matcher stays fast on long inputs (per-regex time limit, best of three runs);
 - the S007 subgraph has the expected nodes, edges, misconception edges and levels; 23 small task snippets tag
   the right concepts;
-- every gold concept of every scenario in `scenarios_20.json` is found, and the concept nodes are exactly
+- every gold concept of every scenario in the earlier gold-labelled set (`tests/data/scenarios_gold.json`) is found, and the concept nodes are exactly
   the tagged concepts (no hop, no node the code did not show).
 
 ## Concepts the knowledge graph does not have

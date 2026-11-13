@@ -1,6 +1,6 @@
 """ToG traversal over the Stage 1 subgraph (Stage 2).
 
-Inputs: G = data/processed/<sid>_subgraph.json; the scenario (code, question, answer) from data/raw/scenarios_20.json;
+Inputs: G = data/processed/<sid>_subgraph.json; the scenario (code, question, answer) from data/raw/scenarios_41.json;
 the "traversal" block of experiments/config.json (width N, depth D, model, prune_tools, ...).
 Output: data/processed/<sid>_diagnosis.json.
 

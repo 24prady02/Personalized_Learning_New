@@ -1,4 +1,5 @@
-"""Compare Stage 2 diagnoses with the gold labels of data/raw/scenarios_20.json (checking only; gold is never an input).
+"""Compare Stage 2 diagnoses with the gold labels of the scenario file (checking only; gold is never an input).
+Scenarios without a gold block (the 41 in data/raw/scenarios_41.json have none yet) are skipped.
 
     python src/compare.py                  # data/processed/<sid>_diagnosis.json  (default settings)
     python src/compare.py --tag bm25       # data/processed/<sid>_diagnosis.bm25.json (a run made with --tag bm25)
@@ -68,7 +69,7 @@ def main(argv=None) -> None:
     ap.add_argument("--tag", nargs="*", default=[""], help="diagnosis file suffixes to compare ('' = default run)")
     ap.add_argument("--processed", default=str(PROCESSED_DIR))
     a = ap.parse_args(argv)
-    scenarios = [s for s in load_scenarios() if not s.get("reference_case")]
+    scenarios = [s for s in load_scenarios() if not s.get("reference_case") and s.get("gold")]
     rows, totals = [], {}
     for tag in a.tag:
         suffix = f".{tag}" if tag else ""

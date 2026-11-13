@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 KG = json.loads((ROOT / "data/raw/chapter1_kg_updated.json").read_text(encoding="utf-8"))
 READER = reader_blocks(KG)
 PATTERN_TESTS = json.loads((ROOT / "tests/data/concept_pattern_tests.json").read_text(encoding="utf-8"))
-SCENARIOS = load_gold(ROOT / "data/raw/scenarios_20.json")
+SCENARIOS = load_gold(ROOT / "tests/data/scenarios_gold.json")
 GOLD = [s for s in SCENARIOS if not s.get("reference_case")]
 
 

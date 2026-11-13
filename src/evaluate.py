@@ -10,7 +10,7 @@ For each scenario the code (and only the code) is run through the model and the 
 * results/tables/summary.csv               one row per scenario (counts, concept ids, edges traced, misconception ids)
 * results/results.md                       summary table, then per scenario: code, figure, nodes, edges with logic, misconceptions, levels
 
-    python src/evaluate.py                       # everything, on data/raw/scenarios_20.json
+    python src/evaluate.py                       # everything, on data/raw/scenarios_41.json
     python src/evaluate.py --no-figures          # report and JSON only (no matplotlib / networkx needed)
     python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 """
