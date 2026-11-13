@@ -1,4 +1,4 @@
 pytest
 matplotlib
 networkx
-# jupyter        # only for notebooks/explore_subgraph.ipynb
+# jupyter        # only for scenario_explanations/explore_subgraph.ipynb

@@ -50,7 +50,7 @@ src/
   traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
   prompts.py                                 the Stage 2 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
   compare.py                                 Stage 2 vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
-notebooks/
+scenario_explanations/
   explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
 experiments/
   config.json                                default paths and extractor settings (hops 0, keep_generic false)
@@ -83,7 +83,7 @@ pytest -q                      # 220 tests (Stage 2 tests use a mocked model, no
 python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
 python src/evaluate.py         # data/processed, experiments/logs/subgraph_report.txt, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
-jupyter notebook notebooks/explore_subgraph.ipynb
+jupyter notebook scenario_explanations/explore_subgraph.ipynb
 python src/traverse.py S007      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
 python src/traverse.py --all     # every scenario
 python src/compare.py            # Stage 2 diagnoses against the gold (gold is used for checking only)

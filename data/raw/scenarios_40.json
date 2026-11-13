@@ -1,5 +1,5 @@
 {
- "source": "The 40 scenarios run in notebooks/think_on_the_graph.ipynb (data/processed/MYnn_input.json), collected into one file",
+ "source": "The 40 scenarios run in scenario_explanations/think_on_the_graph.ipynb (data/processed/MYnn_input.json), collected into one file",
  "note": "40 scenarios, MY01 to MY40. An exact repeat of MY18 (first numbered MY26) was removed and the scenarios after it were renumbered, so MY26 to MY40 here were MY27 to MY41 before. No gold labels yet; the earlier gold-labelled set is in tests/data/scenarios_gold.json.",
  "scenarios": [
   {

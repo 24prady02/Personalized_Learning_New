@@ -8,7 +8,7 @@ For every concept <c> this writes concept_wise_graph/<c>/ with three files:
     <c>.png     the graph around the concept
     <c>.md      the explanation: every relation of the concept and its reasoning, written out as text
 
-The visualizer code stays in cell 1 of notebooks/kg_visualizer.ipynb; the concept notebooks load it from there.
+The visualizer code stays in cell 1 of scenario_explanations/kg_visualizer.ipynb; the concept notebooks load it from there.
 Every relation described is an edge of data/raw/chapter1_kg_updated.json.
 """
 import json
@@ -23,14 +23,14 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "concept_wise_graph"
 KG = ROOT / "data" / "raw" / "chapter1_kg_updated.json"
 
-LOAD_CODE = r'''# 1. Load the knowledge graph visualizer (cell 1 of notebooks/kg_visualizer.ipynb) and the graph itself.
+LOAD_CODE = r'''# 1. Load the knowledge graph visualizer (cell 1 of scenario_explanations/kg_visualizer.ipynb) and the graph itself.
 import json
 from pathlib import Path
 
 ROOT = Path.cwd().resolve()
 while not (ROOT / 'data' / 'raw').exists() and ROOT.parent != ROOT:
     ROOT = ROOT.parent
-_visualizer = json.load(open(ROOT / 'notebooks' / 'kg_visualizer.ipynb', encoding='utf-8'))
+_visualizer = json.load(open(ROOT / 'scenario_explanations' / 'kg_visualizer.ipynb', encoding='utf-8'))
 exec(''.join(_visualizer['cells'][1]['source']))
 print(_loaded)
 '''

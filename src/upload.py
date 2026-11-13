@@ -1,6 +1,6 @@
 """Upload one scenario run to GitHub as its own commit.
 
-    upload_run("MY03")           # builds results/viewer/MY03_demo.html and the scenario's own folder notebooks/runs/MY03/
+    upload_run("MY03")           # builds results/viewer/MY03_demo.html and the scenario's own folder scenario_explanations/runs/MY03/
                                  # (README.md = the step report with the figures, shown by GitHub when the folder is opened;
                                  # MY03.ipynb = the same as a notebook; input, diagnosis, subgraph, log, figures, HTML report)
                                  # from the cached prompts, commits the run's files, pushes
@@ -50,14 +50,14 @@ def _report(sid: str) -> str:
 
 
 def run_notebook(sid: str) -> Path:
-    """notebooks/runs/<sid>/<sid>.ipynb: the step report as markdown cells, one per section, figures as relative image links
+    """scenario_explanations/runs/<sid>/<sid>.ipynb: the step report as markdown cells, one per section, figures as relative image links
     (figureNN.png beside it), so the file stays small enough for GitHub to show."""
     import nbformat
     parts = re.split(r"(?m)^(?=## )", _report(sid))
     cells = [nbformat.v4.new_markdown_cell(p.rstrip() + NL) for p in parts if p.strip()]
     nb = nbformat.v4.new_notebook(cells=cells, metadata={"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"},
                                                          "language_info": {"name": "python"}})
-    out = ROOT / "notebooks/runs" / sid / f"{sid}.ipynb"
+    out = ROOT / "scenario_explanations/runs" / sid / f"{sid}.ipynb"
     out.parent.mkdir(parents=True, exist_ok=True)
     nbformat.validate(nb)
     nbformat.write(nb, out)
@@ -65,9 +65,9 @@ def run_notebook(sid: str) -> Path:
 
 
 def scenario_folder(sid: str) -> Path:
-    """notebooks/runs/<sid>/: everything of one scenario in one folder, with README.md (the step report with its figures),
+    """scenario_explanations/runs/<sid>/: everything of one scenario in one folder, with README.md (the step report with its figures),
     which GitHub shows as soon as the folder is opened."""
-    folder = ROOT / "notebooks/runs" / sid
+    folder = ROOT / "scenario_explanations/runs" / sid
     folder.mkdir(parents=True, exist_ok=True)
     pairs = [(PROCESSED_DIR / f"{sid}_input.json", "input.json"), (PROCESSED_DIR / f"{sid}_subgraph.json", "subgraph.json"),
              (PROCESSED_DIR / f"{sid}_diagnosis.json", "diagnosis.json"), (ROOT / "experiments/logs" / f"traverse_{sid}.txt", "traverse_log.txt"),
@@ -90,7 +90,7 @@ def scenario_folder(sid: str) -> Path:
 
 
 def run_files(sid: str) -> list[str]:
-    files = [f"notebooks/runs/{sid}", f"data/processed/{sid}_subgraph.json", f"data/processed/{sid}_input.json", f"data/processed/{sid}_diagnosis.json",
+    files = [f"scenario_explanations/runs/{sid}", f"data/processed/{sid}_subgraph.json", f"data/processed/{sid}_input.json", f"data/processed/{sid}_diagnosis.json",
              f"experiments/logs/traverse_{sid}.txt", f"results/viewer/{sid}_steps.md", f"results/viewer/{sid}_demo.html",
              f"results/viewer/{sid}_G.html", "experiments/llm_cache"]
     files += [str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "results/viewer").glob(f"{sid}_figure*.png"))]
@@ -118,7 +118,7 @@ def upload_run(sid: str, build_page: bool = True, extra: tuple[str, ...] = ()) -
 
 def upload_notebook() -> str:
     """Commit and push the notebook file as saved on disk (press Ctrl+S in the notebook first)."""
-    out = [_git("add", "--", "notebooks/think_on_the_graph.ipynb"),
+    out = [_git("add", "--", "scenario_explanations/think_on_the_graph.ipynb"),
            _git("commit", "-q", "-m", "Notebook saved with its latest run" + NL + NL + "Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" + NL),
            _push(), _git("log", "--oneline", "-1")]
     return NL.join(o for o in out if o)
