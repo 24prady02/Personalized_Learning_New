@@ -1,6 +1,6 @@
 # Think on the Graph: run MY10
 
-This page follows one answer through the algorithm and explains why it received this diagnosis. The method itself, with the meaning of every term (subgraph G, generic concept, clause, prune score, tier, shadow and so on), is explained once in [docs/ALGORITHM.md](../../../docs/ALGORITHM.md). Every output of every stage of this run is in `MY10.ipynb` and `report.html`; the interactive graph is `MY10_G.html`.
+This page explains, stage by stage, how the algorithm reached its result for this scenario. Each stage says what it does, why, and what its terms mean, and then shows one of the outputs of that stage from this run. Every output of every stage (all edges offered, all scores and labels, the figures) is in `MY10.ipynb` and `report.html`; the interactive graph is `MY10_G.html`.
 
 ## Input
 
@@ -24,61 +24,104 @@ for (int i = 0; i <= a.length; i++) {
 - **Overall level:** L0
 - **Level per concept:** `array_bounds` L0, `array_traversal` L3, `for_loop` L2, `indexing` L0, `length_field` L0, `off_by_one_error` L0
 
-**In one sentence.** The student numbers the array from 1 instead of 0, and everything else in the answer follows from that one belief.
-
 **Check of this result (read by hand, 2026-11-13).** The root cause matches the answer (ArrayIndexStartsAtOne). The second label, OutOfBoundsElementsAreNull, is only weakly supported: the student never talks about reading past the end.
 
-## Following the sentence "Arrays start at a[1]" through the algorithm
+## The idea
 
-The whole diagnosis hangs on this one sentence, so this section follows it from the code to the final level.
+The method is *Think on the Graph*. A language model is not asked "what is wrong with this answer?". Instead the program walks a **knowledge graph** of Java and asks the model only small questions about one edge at a time, each of which must be tied to the student's own words. The graph has three kinds of node: **concept** nodes (for example `integer_division`), **misconception** and **error** nodes (a wrong rule a student may believe, or a rule broken in a program), and five **level** nodes for every concept (L0 to L4). Its edges are: **prerequisite** (A must be understood before B), **parallel** (A and B are learned side by side), **misconception / error** (from a concept to a wrong rule; the edge stores the wrong rule and, as its *twin*, the right rule), and **has_level** (from a concept to one of its levels; the edge stores the *ways* a student can show that level, each with an exact rule).
 
-**Stage 1: the code makes the wrong rule available.** The student's answer is not read yet. The pattern `\w\s*\[[^\]]+\]` of the concept `indexing` matches `a[i]` on line 3, so `indexing` is tagged. In the same way `<= a.length` on line 2 tags `array_bounds`, and `= {` on line 1 tags `array_initializer`. In all 23 concepts are tagged, 4 of them generic (`assignment`, `data_type`, `expression`, `statement`). The subgraph G cut out for them has 23 concept edges and 159 misconception / error edges. Because `indexing` is in G, its 8 misconception edges are in G, and one of them is ArrayIndexStartsAtOne. Had the program contained no array access, this wrong rule could not have been named at all.
+Two numbers control the walk: the **width N = 3** (how many options survive each choice) and the **depth D = 3** (how many rounds the walk may take). The model here is `claude-opus-5-5`; it is used in stage 3 only.
 
-**Stage 2: the sentence becomes clause 2, and the walk starts at `indexing`.** The answer is cut into four clauses:
+## Stage 1. From the code to a subgraph G (no model)
 
-- c1: "It prints 0, then 5, 10 and 15"
-- c2: "Arrays start at a[1]"
-- c3: "so a[0] is before the first element and just gives 0"
-- c4: "Then a[1], a[2] and a[3] are 5, 10 and 15"
+This stage reads only the program, never the student's answer. Its job is to decide which part of the knowledge graph this scenario is allowed to use.
 
-c2 is the belief; c3 and c4 are what the student concludes from it. For the start, the 19 non-generic concepts are ranked by BM25 against the answer. `indexing` scores highest (32.62), then `array_traversal` (30.37) and `array_initializer` (26.80); `run_time_error` is fourth (26.08) and is left out. So the walk starts at the concept the sentence is about.
+**1.1 Prepare the code.** Pasted code often carries look-alike characters (curly quotes, non-breaking spaces); these are mapped to the plain ones. Then the code is **masked**: the inside of every string literal and every comment is replaced by spaces of the same length. Masking matters because the next step matches patterns: the word `for` inside a printed sentence must not count as a for loop. Lengths and line numbers stay the same, so a match can still be reported by line.
 
-**Stage 3, depth 1: the sentence is matched to a wrong rule.** At `indexing`, 8 misconception edges and 21 level ways are offered. The prune question keeps three misconception edges: ArrayIndexStartsAtOne with a prune score of 0.65, ArrayRangeInclusive with 0.25 and ElementBoundToOldIndex with 0.10. The label question then reads them against the clauses:
+*One of the outputs at this stage:* this program has no string literal or comment, so the masked code equals the original.
 
-- ArrayIndexStartsAtOne is labelled **held** on clauses 2, 3 and 4 with confidence 0.95. Its wrong rule in the graph is "The first element of a is a[1]." That is clause 2 almost word for word, and clauses 3 and 4 only make sense if it is believed (a[0] "before the first element", and 5, 10, 15 sitting at a[1], a[2], a[3]). Its score is 0.65 × 0.95 = 0.62. As a held misconception it is tier 0 and is always kept.
-- On the same concept the level way L0 "everyday reading" is labelled **shown** on the same three clauses (0.60 × 0.90 = 0.54). Its rule describes exactly this habit: everyday counting starts at 1, while Java's `a[i]` starts at 0.
+**1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
 
-**Stage 3, depth 2: the belief breaks the links to neighbouring concepts.** `indexing` is now read outwards. Three of its prerequisite edges are labelled **broken**, all on clauses 2 to 4:
+*One of the outputs at this stage:* `indexing` is tagged: its pattern `\w\s*\[[^\]]+\]` matches `a[i]` on line 3.
 
-- `array_initializer → indexing`, whose rule is "The values listed in braces are stored at indices 0, 1, 2, …": the student puts 5 at a[1], not a[0] (score 0.38).
-- `indexing → off_by_one_error`, whose rule is "Indices start at 0, so the last element is a[N-1]" (score 0.33).
-- `indexing → array_bounds`, whose rule is "Valid indexes run from 0 to a.length - 1" (score 0.23).
+**1.3 Handle generic concepts.** The graph marks some concepts **generic**: they are so basic (statement, expression, assignment, a literal, `int`) that their pattern fires on almost any line of Java. If all of them were kept, every program would seem to be "about" them and the diagnosis would drift to vague places. So a tagged generic concept is kept only when the code ties it to something specific: the graph has a prerequisite or parallel edge between it and a non-generic tagged concept, or one of its *decisive* signals fired (a pattern that by itself shows the concept is the point of the code). A kept generic concept stays marked generic: the walk can reach it and it can get a level, but it cannot be a starting point by itself, and a wrong-rule label on it is treated as a shadow of a more specific one (stage 4).
 
-Broken edges are tier 0, so all are kept, and the concepts at their far ends are entered: `off_by_one_error` and `array_bounds` (and, across two edges of `array_traversal`, `for_loop` and `length_field`).
+*One of the outputs at this stage:* 23 concepts are tagged and kept, 4 of them generic (`assignment`, `data_type`, `expression`, `statement`).
 
-**Stage 3, depth 3: a second wrong rule is found at `array_bounds`.** `array_bounds` is read inwards. OutOfBoundsElementsAreNull ("Reading a[a.length] just gives null or 0.") is labelled **held** on clauses 2 and 3 with confidence 0.70: score 0.60 × 0.70 = 0.42. The model connects it to "a[0] … just gives 0". The walk then stops because depth 3 is the limit; all four clauses are covered. In total the model answered 19 prune and 38 label questions.
+**1.4 Cut out the subgraph G.** G consists of the kept concepts, the graph's prerequisite and parallel edges whose two ends are both kept, every misconception and error edge of those concepts, and their level nodes with all their ways. From here on the algorithm sees only G, so it can only name wrong rules that belong to concepts the code really contains. The concepts of G fall into **pieces** (groups joined by edges); the graph has no edge between two pieces, so the walk never crosses from one to another.
 
-**Stage 4: two faults, five consequences.** The two held edges are the faults. All five broken edges rest on the same clauses as ArrayIndexStartsAtOne, so each is marked as its consequence and none counts as a fault of its own. There are no shadows in this run.
+*One of the outputs at this stage:* G has 23 concept edges, 159 misconception / error edges and 115 level edges, in 2 pieces (sizes 20, 3).
 
-**Stage 5: why `indexing` is the root and not `array_bounds`.** Both concepts carry a fault. In G, `array_bounds` has one prerequisite, `indexing`, and that prerequisite has a fault too, so the candidate moves back from `array_bounds` to `indexing`. The prerequisite of `indexing` is `array_initializer`, which has no fault, so the walk back ends there. The root cause is `indexing` with ArrayIndexStartsAtOne: teach where numbering starts first, because the bounds mistake depends on it.
+## Stage 2. Clauses and start concepts (no model)
 
-**Stage 6: the levels.** `indexing` and `array_bounds` each keep a fault, so they are L0. On `off_by_one_error` and `length_field` the only way shown is L0 "everyday reading", so they are L0 as well. On `for_loop` two L2 ways are shown (the student does trace the loop and predicts an output for each pass), so it is L2. On `array_traversal` an L3 way, "relation to neighbour", is shown, so it is L3: the student does relate the loop to the elements it visits, only with the wrong numbering.
+**2.1 Split the answer into clauses.** A **clause** is one statement the student makes. The answer is cut at sentence ends, at ';', and before 'because' and 'so' (a reason and its conclusion are separate claims); a remark in parentheses becomes its own clause. The clauses are numbered c1, c2, … This numbering is what keeps the model honest later: every label it gives must name the clause numbers it rests on, so each finding points at words the student actually wrote.
 
-**Stage 7: the overall level.** There is a root cause, so the overall level is the level of the root concept `indexing`: **L0**.
+*One of the outputs at this stage:* 4 clauses. c1: “It prints 0, then 5, 10 and 15” c2: “Arrays start at a[1]” …
 
-## What was considered and rejected
+**2.2 Choose the start concepts.** The walk has to begin somewhere; these are the **start concepts** (in Think on the Graph, the *topic entities*). The candidates are the non-generic concepts of G, plus a generic one when the answer itself repeats the code text that tagged it (for example the student writes `=`). If there are more than N, they are ranked by **BM25**, the standard search-engine score: it compares the words of the answer with the words of a concept's text (its name and the texts of its edges), counting shared words, giving rare words more weight and long texts less. The top N = 3 are the start concepts. No model is used, so the same answer always starts at the same place.
 
-These are the labels that came close. They show that the result is a choice between alternatives, not the only thing that was looked at.
+*One of the outputs at this stage:* `indexing` scores 32.62, the highest of 19 candidates; `run_time_error` is 4th with 26.08 and is left out. Start concepts: `indexing`, `array_traversal`, `array_initializer`.
 
-- **ArrayRangeInclusive at `indexing`** (prune score 0.25, labelled *not applied*). Its wrong rule is "new int[n] has slots 0 to n, inclusive." It was relevant enough to survive pruning, because the student does use four slots for three values. But the student's reason is about where numbering *starts*, not about how many slots `new int[n]` makes, and the program has no `new int[n]`. Under the label question a result reached by a different reason does not count, so it is not held.
-- **OffByOneBound at `array_traversal`** (prune score 0.60, labelled *correct* with confidence 0.75, score 0.45). Its wrong rule is "< vs <= … are interchangeable"; its right rule is that with `<=` the loop "runs n + 1 times and reaches i = n". The student lists four printed values and includes a[3], which is what the right rule predicts, so the answer is read as following the right rule here. The loop count is right; it is the numbering that is wrong.
-- **ElementBoundToOldIndex at `indexing`** (prune score 0.10, labelled *correct*, score 0.06). The student reads `a[i]` with a new value of i on every pass, which is the right rule.
+## Stage 3. The traversal: walking G (the model is asked here)
 
-## Where the result is weak
+The walk is a **beam search**. "Beam" means that at every choice only the best N = 3 options are followed, so the work stays small even when a concept has dozens of edges. It proceeds in rounds called **depths**, at most D = 3 of them plus one closing round. Throughout, the algorithm keeps four things: the **current concepts** (where it is now), the **paths** (the edges it has kept), the **evidence** (every edge that received a label, kept or not), and the set of edges it has already offered, so nothing is judged twice.
 
-OutOfBoundsElementsAreNull says that reading *past the end* gives null or 0. The student's "a[0] … just gives 0" is about an index *before* what they take to be the first element, and a[0] is in fact inside the array. The read that really goes out of bounds is a[3], and the student believes that one holds 15. So the label fits the words "just gives 0" but not the student's reasoning, which is why its confidence is the lowest of the held labels (0.70) and why it does not affect the root cause.
+At each depth, for each current concept, the following happens.
 
-The diagnosis also does not say that the student missed the exception at a[3]. That follows from the same belief (if numbering started at 1, a[3] would exist), so the root cause covers it, but no label states it directly.
+**3.1 Edge search (no model).** The edges of the concept are collected as **candidates**. A concept that has just been entered is read *inwards*: its misconception and error edges (the wrong rules a student could hold about it) and its **level ways** (each way of each level is treated as an edge of its own, whose text is the way's exact rule). These are two separate *families*. A concept that has already been read inwards is read *outwards*: its prerequisite and parallel edges to other concepts in the same piece. So depth 1 asks "what does the answer show about these concepts?" and the later depths ask "which neighbouring concepts does that involve?".
+
+*One of the outputs at this stage:* at `indexing`, 8 misconception / error edges and 21 level ways are offered when it is entered, and 4 concept edges when it is read outwards.
+
+**3.2 Prune (model, first question).** There are usually far more candidates than can be judged carefully, so they are first **pruned**. The model sees the program, the question, the answer and the text of each candidate edge of one family, and returns at most N of them with a relevance score. The scores are rescaled so they add up to 1: this is the **prune score**, the share of relevance the model gives to that edge. Each family is pruned separately, so a level way never pushes out a misconception or the other way round. Edge ids the model invents are ignored.
+
+*One of the outputs at this stage:* at `indexing` the misconception family is pruned to: ArrayIndexStartsAtOne 0.65, ArrayRangeInclusive 0.25, ElementBoundToOldIndex 0.10.
+
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+
+*One of the outputs at this stage:* ArrayIndexStartsAtOne at `indexing` is labelled **held** on clauses 2, 3, 4 (“Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[…”) with confidence 0.95. The rule on that edge: “The first element of a is a[1].”
+
+**3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
+
+*One of the outputs at this stage:* the score of ArrayIndexStartsAtOne is 0.65 × 0.95 = 0.62. At depth 1 the kept edges are: ArrayIndexStartsAtOne (held, tier 0, 0.62); L0 way “everyday reading” (shown, tier 2, 0.54); OffByOneBound (correct, tier 2, 0.45).
+
+**3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
+
+*One of the outputs at this stage:* `reached across pre:for_loop->array_traversal, entered next: for_loop`.
+
+**3.6 Stop test (no model).** After each depth two checks are made. The **graph check**: has every entered concept had both its inward and its outward edges read? The **clause coverage** check: is every clause covered by at least one labelled rule edge (a level way does not count here, since it describes how the student reads the code, not which rule a clause applies)? If both hold, the walk stops as *sufficient*. If some clauses are still uncovered, they are matched by BM25 against the concepts not visited yet and the best N are entered. Otherwise the walk continues to depth D = 3, followed by one **closing round** in which the concepts entered last have their inward edges read, so that no concept is left half-read. The model's replies are cached by the exact text of the question, so running the same scenario again gives the same result without asking again.
+
+*One of the outputs at this stage:* the walk stopped at depth 3 because the depth limit was reached. At the end 4 of 4 clauses were covered. The model was asked 19 prune questions and 38 label questions in all.
+
+## Stage 4. From labels to faults (rules, no model)
+
+The walk leaves a set of labelled edges. Each kept edge labelled *held* is a candidate **fault**, but one wrong sentence usually lights up several edges, so fixed rules remove the double counting. Nothing is deleted from the record; the rules only decide what counts as a fault.
+
+- **Error beside a misconception.** An error node describes a consequence in a program; a misconception describes the belief behind it. A held error on a concept that also has a held misconception is therefore kept as evidence, not as a second fault.
+- **One fault, one place.** The graph can attach the same misconception to two concepts joined by a prerequisite edge. On each such edge the graph gives the concept a **role**: *primary* (the concept whose rule the misconception violates) or *context* (a concept where it also shows up). If the misconception is held at both ends, it is filed once, at the primary concept, or at the dependent concept when the roles do not decide.
+- **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
+- **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
+
+*One of the outputs at this stage:* the faults are **ArrayIndexStartsAtOne** at `indexing`, **OutOfBoundsElementsAreNull** at `array_bounds`. For ArrayIndexStartsAtOne the graph's wrong rule is “The first element of a is a[1].” and its twin, the right rule, is “Numbering begins with 0; the first element is a[0].”. 5 broken edges, e.g. for_loop → array_traversal; 5 of them are consequences of a held misconception.
+
+## Stage 5. Root cause (rule, no model)
+
+Several concepts may carry a fault, and the **root cause** is the one to teach first. The rule uses the prerequisite edges of G. From each faulty concept it walks backwards (from a concept to what it depends on). Whenever a concept reached that way also has a fault of its own, the candidate moves back to it, because a fault in what a concept depends on explains the fault in the concept. Among the candidates found, the root is the one with the fewest prerequisites of its own in G, that is, the one furthest back; at a tie, the one whose label the model gave the higher confidence. Alphabetical order never decides.
+
+*One of the outputs at this stage:* `array_bounds` has 1 prerequisite in G and confidence 0.70; `indexing` has 1 prerequisite in G and confidence 0.95. The root is `indexing` with ArrayIndexStartsAtOne.
+
+## Stage 6. Level of each concept (rule, no model)
+
+Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestructural (the answer holds a rule that contradicts Java, or reads the code in an everyday sense), **L1** unistructural (it states one correct rule without applying it), **L2** multistructural (it applies the rules to the code step by step), **L3** relational (it relates the parts to each other and to the purpose of the whole), **L4** extended abstract (it reasons beyond the given code: predicts a change, transfers, diagnoses). Each level has **ways**, concrete things a student does at that level, such as "output prediction" at L2 or "predict a change" at L4.
+
+The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
+
+*One of the outputs at this stage:* `array_bounds` keeps OutOfBoundsElementsAreNull, so it is L0; on `array_traversal` the ways shown are L3 “relation to neighbour”, so it is L3.
+
+## Stage 7. Overall level (rule, no model)
+
+One level is reported for the whole answer. If there is a root cause, it is the level of the root concept: the student stands where the fault begins, however well the rest is handled. If there is no fault, it is the level reached on at least half of the concepts the answer touched (the levels are sorted from high to low and the middle one is taken), so that a single weaker concept does not pull the whole answer down and a single strong one does not lift it.
+
+*One of the outputs at this stage:* the root is `indexing` and its level is L0, so the overall level is **L0**.
 
 ## The final picture
 
