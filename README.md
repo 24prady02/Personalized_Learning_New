@@ -1,8 +1,106 @@
 # Think on the Graph
 
-Stage 1: subgraph extraction from code only.
+Diagnosing a student's answer about a short Java program by walking a knowledge graph. Stage 1 cuts a subgraph out
+of the graph from the code alone; Stage 2 walks that subgraph against the student's answer and reports the wrong
+rules held, the root cause and a level per concept.
 
-## What is being done
+## The 40 scenarios (MY01 to MY40)
+
+The main scenario set is `data/raw/scenarios_40.json`: 40 short Java programs, each with a question and a student's
+answer. They were entered and run one at a time in `scenario_explanations/think_on_the_graph.ipynb` (Stage 1, then
+Stage 2). They have no gold labels.
+
+Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
+
+| File | What it is |
+|---|---|
+| `README.md` | how the algorithm reached the result, stage by stage: each stage explained, with one output of that stage from the run |
+| `MYnn.ipynb`, `report.html` | every output of every stage (all edges offered, every score and label, the figures) |
+| `MYnn_G.html` | the interactive graph of the run |
+| `input.json`, `subgraph.json`, `diagnosis.json`, `traverse_log.txt` | the input, the Stage 1 subgraph, the Stage 2 result and the trace |
+| `figureNN.png` | the pictures of the walk, depth by depth |
+
+Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none. The last
+column is a reading of each stored result by hand against the student's answer (2026-11-13), not a gold label:
+35 correct, 3 partly right, 1 not right, 1 with a faulty input.
+
+| Scenario | Wrong rules held | Root cause | Overall level | Check by hand |
+|---|---|---|---|---|
+| [MY01](scenario_explanations/runs/MY01/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
+| [MY02](scenario_explanations/runs/MY02/) | NegativeRemainderSign | `remainder_operator` | L0 | Correct |
+| [MY03](scenario_explanations/runs/MY03/) | AssignmentCopiesObject | `array_aliasing` | L0 | Correct |
+| [MY04](scenario_explanations/runs/MY04/) | SwitchNoFallThrough | `switch_statement` | L0 | Correct |
+| [MY05](scenario_explanations/runs/MY05/) | CharNotNumeric | `char_arithmetic` | L0 | Correct |
+| [MY06](scenario_explanations/runs/MY06/) | LoopBodyStatementOutsideLoop, LoopBodyScopeImpliesLoopLifetime | `loop_body` | L0 | Partly right |
+| [MY07](scenario_explanations/runs/MY07/) | IntOverflowWidensAutomatically | `overflow` | L0 | Correct |
+| [MY08](scenario_explanations/runs/MY08/) | none | none | L3 | Correct |
+| [MY09](scenario_explanations/runs/MY09/) | TargetTyping | `integer_division` | L0 | Correct |
+| [MY10](scenario_explanations/runs/MY10/) | ArrayIndexStartsAtOne, OutOfBoundsElementsAreNull | `indexing` | L0 | Correct |
+| [MY11](scenario_explanations/runs/MY11/) | NestedLoopsSequential, LoopBodyStatementOutsideLoop, ForVariableScopeBeyondLoop | `nested_loops` | L0 | Correct |
+| [MY12](scenario_explanations/runs/MY12/) | CharNotNumeric | `char_arithmetic` | L0 | Correct |
+| [MY13](scenario_explanations/runs/MY13/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
+| [MY14](scenario_explanations/runs/MY14/) | LoopStepAlwaysOne | `for_loop` | L0 | Correct |
+| [MY15](scenario_explanations/runs/MY15/) | IncrementByTwo, ForInitRepeats, ForUpdateBeforeBody, PreIncrementBeforeLoop | `for_loop` | L0 | Correct |
+| [MY16](scenario_explanations/runs/MY16/) | CastAppliesToWholeExpression | `explicit_cast` | L0 | Correct |
+| [MY17](scenario_explanations/runs/MY17/) | none | none | L4 | Correct |
+| [MY18](scenario_explanations/runs/MY18/) | OffByOneBound | `off_by_one_error` | L0 | Correct |
+| [MY19](scenario_explanations/runs/MY19/) | TargetTyping | `integer_division` | L0 | Partly right |
+| [MY20](scenario_explanations/runs/MY20/) | none | none | L2 | Correct |
+| [MY21](scenario_explanations/runs/MY21/) | none | none | L3 | Correct |
+| [MY22](scenario_explanations/runs/MY22/) | none | none | L2 | Correct |
+| [MY23](scenario_explanations/runs/MY23/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
+| [MY24](scenario_explanations/runs/MY24/) | none | none | L3 | Correct |
+| [MY25](scenario_explanations/runs/MY25/) | ThenAlwaysExecutes | `if_statement` | L0 | Correct |
+| [MY26](scenario_explanations/runs/MY26/) | DivisionByZeroIsCompileError | `division_by_zero` | L0 | Correct |
+| [MY27](scenario_explanations/runs/MY27/) | StringPlusLeftToRight, ArithmeticPlusPrecedes | `string_concatenation` | L0 | Correct |
+| [MY28](scenario_explanations/runs/MY28/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
+| [MY29](scenario_explanations/runs/MY29/) | none | none | L4 | Faulty input |
+| [MY30](scenario_explanations/runs/MY30/) | CharNotNumeric | `char_arithmetic` | L0 | Not right |
+| [MY31](scenario_explanations/runs/MY31/) | none | none | L3 | Correct |
+| [MY32](scenario_explanations/runs/MY32/) | DoWhileTestsFirst | `do_while_loop` | L0 | Correct |
+| [MY33](scenario_explanations/runs/MY33/) | none | none | L1 | Correct |
+| [MY34](scenario_explanations/runs/MY34/) | ElseMatchesIndentation | `dangling_else` | L0 | Correct |
+| [MY35](scenario_explanations/runs/MY35/) | AverageWithoutZeroGuard | `division_by_zero` | None | Partly right |
+| [MY36](scenario_explanations/runs/MY36/) | AssignmentCopiesObject | `array_aliasing` | L0 | Correct |
+| [MY37](scenario_explanations/runs/MY37/) | none | none | L4 | Correct |
+| [MY38](scenario_explanations/runs/MY38/) | none | none | L4 | Correct |
+| [MY39](scenario_explanations/runs/MY39/) | RaggedRowsSameLength, NoJaggedArrays | `ragged_array` | L0 | Correct |
+| [MY40](scenario_explanations/runs/MY40/) | ProbabilityIsPrediction | `math_random` | L0 | Correct |
+
+The five that are not simply correct:
+
+| Scenario | What is wrong | Where it comes from |
+|---|---|---|
+| MY29 | the question and answer belong to the scenario before it, not to this program, so the result means nothing | the input |
+| MY30 | the student takes `char + int` to be a letter; `CharNotNumeric` says something else | the graph has no misconception for it |
+| MY19 | `TargetTyping` is right, but "7 % 2 is 0.5" is not picked up | the graph has no misconception for it |
+| MY35 | the right error is found, but the overall level is empty | the graph has no misconception for "0 / 0 is 0", and the level rule sets L0 only for a misconception |
+| MY06 | the fitting label, `LoopBodyScopeImpliesLoopLifetime`, is held but only second; the root went to a neighbour | how the root cause is chosen |
+
+Two more inputs carry a slip that does not change the diagnosis: in MY26 and MY40 a line beginning "Actual:" was
+pasted into the answer box.
+
+Notes on the set:
+
+- **Numbering.** An exact repeat of MY18 was removed and the scenarios after it were renumbered, so MY26 to MY40 were
+  MY27 to MY41 before. Commit messages before 2026-11-13 use the old numbers.
+- **Graph version.** MY01 to MY25 were run on graph 3.9.7 and MY26 to MY40 on 3.9.8, the graph in this repository.
+  For these scenarios the two differ only in the `primary` / `context` role of some misconception edges; no text,
+  concept or edge differs. Replaying the recorded model answers on the current graph gives the same held rules, root
+  cause and levels in 37 of the 40. The three that change are MY05 and MY12 (the same misconception, filed at `char`
+  instead of `char_arithmetic`) and MY18 (root cause `loop_control` instead of `off_by_one_error`). The stored
+  results were not re-run.
+
+## The knowledge graph, concept by concept
+
+`concept_wise_graph/<concept>/` has one folder for each of the 173 concepts of the graph, named by the concept id,
+with three files: `<concept>.ipynb` (the short notebook that was run for it), `<concept>.png` (the picture of the
+graph around the concept) and `<concept>.md` (the concepts associated with it, and every edge in the view with its
+full label: the exact edge logic, the wrong and right rules, every way of each level with its exact rule). They are
+written by `python src/concept_notebooks.py`. `scenario_explanations/kg_visualizer.ipynb` draws the same view
+interactively for any concept; every edge it draws is an edge of the graph.
+
+## Stage 1: what is being done
 
 A scenario is a short Java program (plus a question and a student's answer, which this stage never opens).
 The knowledge graph (KG) stores, on every concept node, the regular expressions that recognise that concept in
@@ -50,8 +148,18 @@ src/
   traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
   prompts.py                                 the Stage 2 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
   compare.py                                 Stage 2 vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
+  demo.py                                    Stage 1 and Stage 2 on one scenario, with the step report and the page of the run
+  steps_report.py, viz.py                    the step report of a run (results/viewer/<sid>_steps.md) and its figures
+  upload.py                                  builds scenario_explanations/runs/<sid>/ for a run and commits it
+  concept_notebooks.py                       runs one notebook per concept and writes concept_wise_graph/<concept>/
 scenario_explanations/
+  think_on_the_graph.ipynb                   enter a program, a question and an answer; runs Stage 1 and Stage 2 and shows every step
+  start_notebook.bat                         starts the notebook server and opens think_on_the_graph.ipynb
+  runs/MYnn/                                 one folder per scenario (see "The 40 scenarios" above)
+  kg_visualizer.ipynb                        the graph around any concept, interactive; lists the concept folders
   explore_subgraph.ipynb                     step through one scenario: code, masked code, hits, subgraph, figure
+concept_wise_graph/
+  <concept>/<concept>.ipynb, .png, .md       one folder per concept of the graph: notebook, picture, every edge with its full label
 experiments/
   config.json                                default paths and extractor settings (hops 0, keep_generic false)
   pattern_bank.json                          the compiled pattern bank summary written by train.py (the model "checkpoint")
@@ -66,27 +174,33 @@ results/
   tables/summary.csv                         one row per scenario (counts, concept ids, edges traced, misconception node ids)
   metrics.json                               coverage and size metrics
   stage2_results.md, tables/stage2_vs_gold.csv   Stage 2 diagnoses against the gold (checking only)
+  viewer/<sid>_steps.md, _demo.html, _G.html, _figureNN.png   the step report, page, interactive graph and figures of each run
 paper/
   main.tex, references.bib, main.pdf         mid-term progress report (ACM format)
   figures/                                   figures used by the paper
 slides/
   Pradhyumn_Nair_midterm_slides.pptx         mid-term presentation
 tests/
-  test_subgraph.py                           pytest -q  (208 tests)
+  test_subgraph.py                           Stage 1 (228 tests)
+  test_traverse.py                           Stage 2 with a mocked model (19 tests, 1 skipped)
+  data/scenarios_gold.json                   the earlier gold-labelled set, used by the tests and by compare.py
   data/concept_pattern_tests.json            must_tag / must_not_tag snippets for all 166 code-visible concepts
 ```
 
 ## Commands
 
 ```bash
-pytest -q                      # 220 tests (Stage 2 tests use a mocked model, no real call)
+pytest -q                      # 247 tests (Stage 2 tests use a mocked model, no real call)
 python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
 python src/evaluate.py         # data/processed, experiments/logs/subgraph_report.txt, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 jupyter notebook scenario_explanations/explore_subgraph.ipynb
-python src/traverse.py S007      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
+python src/traverse.py MY07      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
 python src/traverse.py --all     # every scenario
 python src/compare.py            # Stage 2 diagnoses against the gold (gold is used for checking only)
+python src/demo.py --scenario MY07   # Stage 1 and Stage 2 on one of the 40 scenarios, with its step report
+python src/concept_notebooks.py      # one notebook per concept into concept_wise_graph/ (or name concepts to run only those)
+scenario_explanations\start_notebook.bat   # open think_on_the_graph.ipynb to run a new scenario
 ```
 
 ## Stage 2: ToG traversal (`traverse.py`, `prompts.py`)
@@ -301,7 +415,7 @@ comes only from the student's answer (the while loop compared with a do-while in
 missing `break` in S023 and S073, compiling in S080). Running the report on that file marks those misses
 `xfail`.
 
-## Tests (`pytest -q`, 208 passing)
+## Tests (`pytest -q`, 247 passing: 228 for Stage 1, 19 for Stage 2)
 
 - masking keeps length and blanks literals and comments; statement splitting keeps a `for` header whole;
   shell segments are cut correctly;
