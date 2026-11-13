@@ -1,6 +1,6 @@
 # Think on the Graph: run MY33
 
-This page explains, stage by stage, how the algorithm reached its result for this scenario. Each stage says what it does, why, and what its terms mean, and then shows one of the outputs of that stage from this run. Every output of every stage (all edges offered, all scores and labels, the figures) is in `MY33.ipynb` and `report.html`; the interactive graph is `MY33_G.html`.
+This page explains, stage by stage, how the algorithm reached its result for this scenario. Each stage says what it does, why, and what its terms mean, and then shows two or three of the outputs of that stage from this run. Every output of every stage (all edges offered, all scores and labels, the figures) is in `MY33.ipynb` and `report.html`; the interactive graph is `MY33_G.html`.
 
 ## Input
 
@@ -40,29 +40,45 @@ This stage reads only the program, never the student's answer. Its job is to dec
 
 **1.1 Prepare the code.** Pasted code often carries look-alike characters (curly quotes, non-breaking spaces); these are mapped to the plain ones. Then the code is **masked**: the inside of every string literal and every comment is replaced by spaces of the same length. Masking matters because the next step matches patterns: the word `for` inside a printed sentence must not count as a for loop. Lengths and line numbers stay the same, so a match can still be reported by line.
 
-*One of the outputs at this stage:* this program has no string literal or comment, so the masked code equals the original.
+*One of the outputs at this stage:* this program has no string literal or comment, so the masked code is the same as the original.
 
 **1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
 
-*One of the outputs at this stage:* `break_statement` is tagged: its pattern `\bbreak\s*;` matches `break;` on line 4.
+*Some of the outputs at this stage:*
+
+- `break_statement` is tagged: its pattern `\bbreak\s*;` matches `break;` on line 4
+- `for_loop` is tagged: its pattern `\bfor\s*\(` matches `for (` on line 3
+- `loop_variable` is tagged: its pattern `\bfor\s*\(\s*(?:int|long|double|char)?\s*[A-…` matches `for (i =` on line 3
 
 **1.3 Handle generic concepts.** The graph marks some concepts **generic**: they are so basic (statement, expression, assignment, a literal, `int`) that their pattern fires on almost any line of Java. If all of them were kept, every program would seem to be "about" them and the diagnosis would drift to vague places. So a tagged generic concept is kept only when the code ties it to something specific: the graph has a prerequisite or parallel edge between it and a non-generic tagged concept, or one of its *decisive* signals fired (a pattern that by itself shows the concept is the point of the code). A kept generic concept stays marked generic: the walk can reach it and it can get a level, but it cannot be a starting point by itself, and a wrong-rule label on it is treated as a shadow of a more specific one (stage 4).
 
-*One of the outputs at this stage:* 20 concepts are tagged and kept, 4 of them generic (`assignment`, `expression`, `statement`, `variable`).
+*Some of the outputs at this stage:*
+
+- 20 concepts are tagged and kept, 4 of them generic
+- `assignment` is generic; it is kept because the code ties it to a specific concept (it matched `=` on line 1)
+- `expression` is generic; it is kept because the code ties it to a specific concept (it matched `i <=` on line 3)
 
 **1.4 Cut out the subgraph G.** G consists of the kept concepts, the graph's prerequisite and parallel edges whose two ends are both kept, every misconception and error edge of those concepts, and their level nodes with all their ways. From here on the algorithm sees only G, so it can only name wrong rules that belong to concepts the code really contains. The concepts of G fall into **pieces** (groups joined by edges); the graph has no edge between two pieces, so the walk never crosses from one to another.
 
-*One of the outputs at this stage:* G has 21 concept edges, 174 misconception / error edges and 100 level edges, in 1 piece.
+*Some of the outputs at this stage:*
+
+- G has 21 concept edges, 174 misconception / error edges and 100 level edges, in 1 piece
+- a concept edge of G: for_loop → break_statement (prerequisite): “break leaves the for loop at once, without running the rest of the body or the remaining passes.”
+- a misconception edge of G: `break_statement` → BreakEndsProgram: “break ends the whole program.”
 
 ## Stage 2. Clauses and start concepts (no model)
 
 **2.1 Split the answer into clauses.** A **clause** is one statement the student makes. The answer is cut at sentence ends, at ';', and before 'because' and 'so' (a reason and its conclusion are separate claims); a remark in parentheses becomes its own clause. The clauses are numbered c1, c2, … This numbering is what keeps the model honest later: every label it gives must name the clause numbers it rests on, so each finding points at words the student actually wrote.
 
-*One of the outputs at this stage:* 1 clauses. c1: “Im not sure what number, but break is the statement that ends the loop early”
+*One of the outputs at this stage:* c1: “Im not sure what number, but break is the statement that ends the loop early”
 
 **2.2 Choose the start concepts.** The walk has to begin somewhere; these are the **start concepts** (in Think on the Graph, the *topic entities*). The candidates are the non-generic concepts of G, plus a generic one when the answer itself repeats the code text that tagged it (for example the student writes `=`). If there are more than N, they are ranked by **BM25**, the standard search-engine score: it compares the words of the answer with the words of a concept's text (its name and the texts of its edges), counting shared words, giving rare words more weight and long texts less. The top N = 3 are the start concepts. No model is used, so the same answer always starts at the same place.
 
-*One of the outputs at this stage:* `for_loop` scores 10.44, the highest of 16 candidates; `loop_control` is 4th with 6.78 and is left out. Start concepts: `for_loop`, `break_statement`, `loop_variable`.
+*Some of the outputs at this stage:*
+
+- `for_loop` scores 10.44, the highest: chosen
+- `break_statement` scores 9.21: chosen
+- `loop_control` scores 6.78, which is 4th of 16: left out
 
 ## Stage 3. The traversal: walking G (the model is asked here)
 
@@ -72,19 +88,35 @@ At each depth, for each current concept, the following happens.
 
 **3.1 Edge search (no model).** The edges of the concept are collected as **candidates**. A concept that has just been entered is read *inwards*: its misconception and error edges (the wrong rules a student could hold about it) and its **level ways** (each way of each level is treated as an edge of its own, whose text is the way's exact rule). These are two separate *families*. A concept that has already been read inwards is read *outwards*: its prerequisite and parallel edges to other concepts in the same piece. So depth 1 asks "what does the answer show about these concepts?" and the later depths ask "which neighbouring concepts does that involve?".
 
-*One of the outputs at this stage:* at `break_statement`, 4 misconception / error edges and 19 level ways are offered when it is entered.
+*Some of the outputs at this stage:*
+
+- at `for_loop`, 21 misconception / error edges are offered
+- at `for_loop`, 24 level ways are offered
+- at `break_statement`, 4 misconception / error edges are offered
 
 **3.2 Prune (model, first question).** There are usually far more candidates than can be judged carefully, so they are first **pruned**. The model sees the program, the question, the answer and the text of each candidate edge of one family, and returns at most N of them with a relevance score. The scores are rescaled so they add up to 1: this is the **prune score**, the share of relevance the model gives to that edge. Each family is pruned separately, so a level way never pushes out a misconception or the other way round. Edge ids the model invents are ignored.
 
-*One of the outputs at this stage:* at `break_statement` the level ways family is pruned to: L1 way “names the element” 0.60, L1 way “states the rule” 0.25, L2 way “output prediction” 0.15.
+*Some of the outputs at this stage:*
+
+- at `break_statement` the level ways family is pruned to: L1 way “names the element” 0.60, L1 way “states the rule” 0.25, L2 way “output prediction” 0.15
+- at `for_loop` the misconception family is pruned to: ReturnDoesNotExitLoop 0.50, WrongIterationCount 0.30, ProgramEndsAfterLoop 0.20
+- at `for_loop` the level ways family is pruned to: L1 way “names the element” 0.50, L2 way “output prediction” 0.30, L2 way “line by line trace” 0.20
 
 **3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
-*One of the outputs at this stage:* L1 way “names the element” at `break_statement` is labelled **shown** on clause 1 (“Im not sure what number, but break is the statement that ends the loop early”) with confidence 0.85. The rule on that edge: “Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.”
+*Some of the outputs at this stage:*
+
+- L1 way “names the element” at `break_statement` is labelled **shown** on clause 1 with confidence 0.85. The rule on that edge: “Jump statement: `break;` immediately ends the innermost enclosing while, for, do or switch.”
+- BreakIgnored at `break_statement` is labelled **correct** on clause 1 with confidence 0.90. The rule on that edge: “break has no effect; the loop body just carries on.”
+- L1 way “states the rule” at `break_statement` is labelled **shown** on clause 1 with confidence 0.75. The rule on that edge: “`break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, an…”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of L1 way “names the element” is 0.60 × 0.85 = 0.51. At depth 1 the kept edges are: L1 way “names the element” (shown, tier 2, 0.51); BreakIgnored (correct, tier 2, 0.36); BreakIsContinue (correct, tier 2, 0.26).
+*Some of the outputs at this stage:*
+
+- the score of L1 way “names the element” at `break_statement` is 0.60 × 0.85 = 0.51
+- the score of BreakIgnored at `break_statement` is 0.40 × 0.90 = 0.36
+- kept at depth 1: L1 way “names the element” (shown, tier 2, 0.51); BreakIgnored (correct, tier 2, 0.36); BreakIsContinue (correct, tier 2, 0.26)
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -92,7 +124,11 @@ At each depth, for each current concept, the following happens.
 
 **3.6 Stop test (no model).** After each depth two checks are made. The **graph check**: has every entered concept had both its inward and its outward edges read? The **clause coverage** check: is every clause covered by at least one labelled rule edge (a level way does not count here, since it describes how the student reads the code, not which rule a clause applies)? If both hold, the walk stops as *sufficient*. If some clauses are still uncovered, they are matched by BM25 against the concepts not visited yet and the best N are entered. Otherwise the walk continues to depth D = 3, followed by one **closing round** in which the concepts entered last have their inward edges read, so that no concept is left half-read. The model's replies are cached by the exact text of the question, so running the same scenario again gives the same result without asking again.
 
-*One of the outputs at this stage:* the walk stopped at depth 2 because every clause was covered and no entered concept had an unread edge. At the end 1 of 1 clauses were covered. The model was asked 8 prune questions and 16 label questions in all.
+*Some of the outputs at this stage:*
+
+- after depth 1: 1 of 1 clauses covered
+- after depth 2: 1 of 1 clauses covered
+- the walk stopped at depth 2 because every clause was covered and no entered concept had an unread edge; the model was asked 8 prune questions and 16 label questions in all
 
 ## Stage 4. From labels to faults (rules, no model)
 
@@ -103,7 +139,11 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 - **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
 - **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
 
-*One of the outputs at this stage:* no edge is held. The 3 misconception / error edges that received a label were all labelled *correct*, so this run has no fault.
+*Some of the outputs at this stage:*
+
+- no edge is held, so this run has no fault (3 misconception / error edges were labelled *correct*)
+- BreakIgnored at `break_statement` is labelled correct: the answer states the right rule, “break leaves the innermost loop at once; the rest of the body and later passes do not run.”
+- BreakEndsProgram at `break_statement` is labelled correct: the answer states the right rule, “break ends only the innermost loop (or switch); execution continues after it.”
 
 ## Stage 5. Root cause (rule, no model)
 
@@ -117,13 +157,13 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
 
-*One of the outputs at this stage:* on `break_statement` the ways shown are L1 “names the element”, L1 “states the rule”, so it is L1.
+*One of the outputs at this stage:* on `break_statement` the ways shown are L1 “names the element”, L1 “states the rule”, so it is L1
 
 ## Stage 7. Overall level (rule, no model)
 
 One level is reported for the whole answer. If there is a root cause, it is the level of the root concept: the student stands where the fault begins, however well the rest is handled. If there is no fault, it is the level reached on at least half of the concepts the answer touched (the levels are sorted from high to low and the middle one is taken), so that a single weaker concept does not pull the whole answer down and a single strong one does not lift it.
 
-*One of the outputs at this stage:* there is no root. The levels from high to low are L1; the middle one (place 1 of 1) is **L1**.
+*The output of this stage:* there is no root. The levels from high to low are L1; the middle one (place 1 of 1) is **L1**.
 
 ## The final picture
 
